@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>SAITAE - INTEX #{loginController.year}</title>
+    </h:head>
+    <h:body>
+        <style>
+            .centred-form{
+                margin: 0 auto;
+                align-content: center;
+            }
+        </style>
+            <h:form id="frm">
+            <h:panelGrid columns="2" summary="Inicio de sesión"  styleClass="centred-form">
+                <h:outputLabel for="user" id="t1" value="Usuario: "/>
+                <p:inputText id="user" value="#{loginController.user}" required="true"
+                             requiredMessage="No deje vacío el campo usuario."/>
+
+                <h:outputLabel for="pass" value="Contraseña: "/>
+                <p:password id="pass" value="#{loginController.pass}" required="true" 
+                            requiredMessage="No deje vacío el campo contraseña."/>
+                <p:column/>
+            <p:commandButton actionListener="#{loginController.login()}" value="Ingresar"/>
+            </h:panelGrid>
+        </h:form>
+        
+    </h:body>
+</html>
+

@@ -1,0 +1,33 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package net.delsas.saitae.beans;
+
+import java.util.List;
+import javax.ejb.Local;
+import net.delsas.saitae.entities.EntregaUtiles;
+
+/**
+ *
+ * @author delsas
+ */
+@Local
+public interface EntregaUtilesFacadeLocal {
+
+    void create(EntregaUtiles entregaUtiles);
+
+    void edit(EntregaUtiles entregaUtiles);
+
+    void remove(EntregaUtiles entregaUtiles);
+
+    EntregaUtiles find(Object id);
+
+    List<EntregaUtiles> findAll();
+
+    List<EntregaUtiles> findRange(int[] range);
+
+    int count();
+    
+}
