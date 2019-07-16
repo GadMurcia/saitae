@@ -55,6 +55,7 @@ public class EstudianteController implements Serializable {
     @EJB
     private TipoPersonaFacadeLocal tpfl;
 
+    
     private Persona est1;
     private Persona resp1;
     private Persona padre;
@@ -79,10 +80,10 @@ public class EstudianteController implements Serializable {
 
     public void preinit() {
         FacesContext context = FacesContext.getCurrentInstance();
-        FacesMessage msj = (FacesMessage) context.getExternalContext().getApplicationMap().get("mensaje");
+        FacesMessage msj = (FacesMessage) context.getExternalContext().getSessionMap().get("mensaje");
         if (msj != null) {
             context.addMessage("growl", msj);
-            context.getExternalContext().getApplicationMap().remove("mensaje");
+            context.getExternalContext().getSessionMap().remove("mensaje");
         }
     }
 
@@ -153,7 +154,7 @@ public class EstudianteController implements Serializable {
         }
         FacesContext ci = FacesContext.getCurrentInstance();
         try {
-            ci.getExternalContext().getApplicationMap().put("mensaje", new FacesMessage(FacesMessage.SEVERITY_INFO, 
+            ci.getExternalContext().getSessionMap().put("mensaje", new FacesMessage(FacesMessage.SEVERITY_INFO, 
                     "Éxito!", "El estudiante "+est1.getPersonaNombre() + " " + est1.getPersonaApellido()
                             +" ha sido guardado."));
             ci.getExternalContext().redirect("perfil.intex");

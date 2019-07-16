@@ -60,19 +60,19 @@ public class permisoController implements Serializable {
     public void inicial() {
         try {
             FacesContext context = FacesContext.getCurrentInstance();
-            Persona u = (Persona) context.getExternalContext().getApplicationMap().get("usuario");
+            Persona u = (Persona) context.getExternalContext().getSessionMap().get("usuario");
             if (u == null) {
 
-                context.getExternalContext().getApplicationMap().put("mensaje", new FacesMessage(FacesMessage.SEVERITY_FATAL, 
+                context.getExternalContext().getSessionMap().put("mensaje", new FacesMessage(FacesMessage.SEVERITY_FATAL, 
                         "Falla!", "Esa vista no le está permitida aún porque usted no se a logueado."));
                 context.getExternalContext().redirect("./../");
 
-//            } else {
-//                FacesMessage ms = (FacesMessage) context.getExternalContext().getApplicationMap().get("mensaje");
+          } else {
+//                FacesMessage ms = (FacesMessage) context.getExternalContext().getSessionMap().get("mensaje");
 //                context.addMessage("growl", ms != null ? ms : new FacesMessage(FacesMessage.SEVERITY_INFO, "Bienvenido", 
 //                        "Gracias por iniciar Sesión " + u.getPersonaNombre()));
-//                this.setUs(u.getEstudiante());
-//                context.getExternalContext().getApplicationMap().remove("mensaje");
+                this.setUs(u.getEstudiante());
+//                context.getExternalContext().getSessionMap().remove("mensaje");
             }
         } catch (IOException ex) { }
     }
@@ -120,7 +120,7 @@ public class permisoController implements Serializable {
     public ArrayList<SelectItem> listaEstudiantes() {
         ArrayList<SelectItem> items = new ArrayList<>();
         items.add(new SelectItem(0, "Seleccione"));
-        if (e == null) {
+        if (e == null || e.isEmpty()) {
             items.add(new SelectItem(us.getIdestudiante(), us.getPersona().getPersonaNombre() + " "
                     + us.getPersona().getPersonaApellido()));
         }

@@ -44,12 +44,12 @@ public class loginController implements Serializable {
 
     public void preinit() {
         FacesContext context = FacesContext.getCurrentInstance();
-        FacesMessage fm = (FacesMessage) context.getExternalContext().getApplicationMap().get("mensaje");
+        FacesMessage fm = (FacesMessage) context.getExternalContext().getSessionMap().get("mensaje");
         if (fm == null) {
             fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bienvenido", "Inicie Sesión para más funcionalidades.");
         }
         context.addMessage("grolm", fm);
-        context.getExternalContext().getApplicationMap().remove("mensaje");
+        context.getExternalContext().getSessionMap().remove("mensaje");
 
     }
 
@@ -68,16 +68,16 @@ public class loginController implements Serializable {
         try {
             if (p != null && p.getPersonaActivo() && p.getPersonaContrasenya().equals(passwd)) {
                 System.out.println("logueado");
-                context.getExternalContext().getApplicationMap().put("usuario", p);
+                context.getExternalContext().getSessionMap().put("usuario", p);
                 context.getExternalContext().redirect("pages/perfil.intex");
             } else {
                 System.out.println("no logueado");
-                context.getExternalContext().getApplicationMap().put("mensaje", new FacesMessage(
+                context.getExternalContext().getSessionMap().put("mensaje", new FacesMessage(
                         FacesMessage.SEVERITY_ERROR, "Loggin Error", "Credenciales no validas"));
                 context.getExternalContext().redirect("index.intex");
             }
         } catch (IOException e) {
-            context.getExternalContext().getApplicationMap().put("mensaje", new FacesMessage(
+            context.getExternalContext().getSessionMap().put("mensaje", new FacesMessage(
                     FacesMessage.SEVERITY_FATAL, "Loggin Error", "Vaya! Hubo un problema inesperado."));
             try {
                 context.getExternalContext().redirect("index.intex");

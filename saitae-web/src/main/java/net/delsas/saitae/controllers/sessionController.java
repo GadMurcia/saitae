@@ -43,19 +43,19 @@ public class sessionController implements Serializable {
     public void log() {
         try {
             FacesContext context = FacesContext.getCurrentInstance();
-            Persona u = (Persona) context.getExternalContext().getApplicationMap().get("usuario");
+            Persona u = (Persona) context.getExternalContext().getSessionMap().get("usuario");
             if (u == null) {
 
-                context.getExternalContext().getApplicationMap().put("mensaje", new FacesMessage(FacesMessage.SEVERITY_FATAL, 
+                context.getExternalContext().getSessionMap().put("mensaje", new FacesMessage(FacesMessage.SEVERITY_FATAL, 
                         "Falla!", "Esa vista no le está permitida aún porque usted no se a logueado."));
                 context.getExternalContext().redirect("./../");
 
             } else {
-                FacesMessage ms = (FacesMessage) context.getExternalContext().getApplicationMap().get("mensaje");
+                FacesMessage ms = (FacesMessage) context.getExternalContext().getSessionMap().get("mensaje");
                 context.addMessage("growl", ms != null ? ms : new FacesMessage(FacesMessage.SEVERITY_INFO, "Bienvenido", 
                         "Gracias por iniciar Sesión " + u.getPersonaNombre()));
                 this.setUs(u);
-                context.getExternalContext().getApplicationMap().remove("mensaje");
+                context.getExternalContext().getSessionMap().remove("mensaje");
             }
             this.menu();
         } catch (IOException ex) { }
@@ -89,7 +89,7 @@ public class sessionController implements Serializable {
     public void cerrarSesion() {
         ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
         context.invalidateSession();
-        context.getApplicationMap().remove("usuario");
+        context.getSessionMap().remove("usuario");
         try {
             context.redirect("./../");
         } catch (IOException ex) {

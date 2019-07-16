@@ -34,7 +34,7 @@ public class EstudianteFacade extends AbstractFacade<Estudiante> implements Estu
     @Override
     public List<Estudiante> representados(int idRepresentante) {
         Query q = this.getEntityManager().createNamedQuery("Estudiante.findByIdRepresentante");
-        q.setParameter(1, idRepresentante);
+        q.setParameter("idRepresentante", new Estudiante(idRepresentante));
     return q.getResultList();
     }
     
