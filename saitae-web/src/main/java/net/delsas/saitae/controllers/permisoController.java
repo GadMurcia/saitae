@@ -5,12 +5,14 @@
  */
 package net.delsas.saitae.controllers;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.inject.Named;
@@ -56,12 +58,28 @@ public class permisoController implements Serializable {
      * Creates a new instance of permisoController
      */
     public void inicial() {
-        FacesContext context = FacesContext.getCurrentInstance();
-        us = ((Persona) context.getExternalContext().getApplicationMap().get("usuario")).getEstudiante();
+        try {
+            FacesContext context = FacesContext.getCurrentInstance();
+            Persona u = (Persona) context.getExternalContext().getApplicationMap().get("usuario");
+            if (u == null) {
+
+                context.getExternalContext().getApplicationMap().put("mensaje", new FacesMessage(FacesMessage.SEVERITY_FATAL, 
+                        "Falla!", "Esa vista no le está permitida aún porque usted no se a logueado."));
+                context.getExternalContext().redirect("./../");
+
+//            } else {
+//                FacesMessage ms = (FacesMessage) context.getExternalContext().getApplicationMap().get("mensaje");
+//                context.addMessage("growl", ms != null ? ms : new FacesMessage(FacesMessage.SEVERITY_INFO, "Bienvenido", 
+//                        "Gracias por iniciar Sesión " + u.getPersonaNombre()));
+//                this.setUs(u.getEstudiante());
+//                context.getExternalContext().getApplicationMap().remove("mensaje");
+            }
+        } catch (IOException ex) { }
     }
 
     @PostConstruct
     public void init() {
+        inicial();
         p = new Permisos();
         p.setPermisosPK(new PermisosPK((us == null ? 0 : us.getIdestudiante()), Calendar.getInstance().getTime(), 0));
         permisos = tpfl.findAll();
