@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:p="http://primefaces.org/ui">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+        <cc:attribute name="tipoPersona" required="true"/>
+        <cc:attribute name="estudiante" required="true"/>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        <p:panel header="Gestionar nuevo permiso">
+            <p:messages />
+            <h:panelGrid id="w" columns="2" columnClasses="label, value">
+                <p:outputLabel for="console" value="Motivo del permiso: *" />
+                <p:selectOneMenu id="console" value="#{permisoEstudianteController.p.permisosPK.tipoPermiso}" 
+                                 style="width:125px" title="Seleccione el permiso que necesita">
+                    <f:selectItems value="#{permisoEstudianteController.listaPermisos}"/>
+                    <f:ajax render="console1" execute="SeleccionPermiso"/>
+                </p:selectOneMenu>
+
+                <p:outputLabel for="console" value="¿Para quién es el permiso?: *" />
+                <p:selectOneMenu id="console1" value="#{permisoEstudianteController.p.permisosPK.ipPersona}" 
+                                 style="width:125px" title="Seleccione el permiso que necesita"
+                                 disabled="#{permisoEstudianteController.seleccionPermiso}">
+                    <f:selectItems value="#{permisoEstudianteController.listaEstudiantes}"/>
+                    <f:ajax render="m" execute="SeleccionEstudiante"/>
+
+                    <p:column/>
+                    <p:panelGrid id="m" columns="6" columnClasses="label, value, label, value, label, value">
+                        <h:outputText value="Bachillerato: "/>
+                        <h:outputText value="#{permisoEstudianteController.m.matriculaModalidad}"/>
+
+                        <h:outputText value="Grado: "/>
+                        <h:outputText value="#{permisoEstudianteController.m.matriculaNivel}"/>
+
+                        <h:outputText value="Sección: "/>
+                        <h:outputText value="#{permisoEstudianteController.m.matriculaSeccion}"/>
+                    </p:panelGrid>
+
+                    <h:outputText value="Motivo: *"/>
+                    <p:inputText value="#{permisoEstudianteController.p.permisoComentarios}" required="true"/>
+
+                    <h:outputText value="Solicitado por: "/>
+                    <h:outputText value="#{permisoEstudianteController.us.persona.personaNombre} #{permisoEstudianteController.us.persona.personaApellido}"/>
+
+                    <p:outputLabel for="spanish" value="Fecha de inicio (yyyy-mm-dd):" />
+                    <p:calendar id="spanish" value="#{permisoEstudianteController.p.permisoFechaInicio}" locale="es" 
+                                navigator="true" pattern="yyyy-mm-dd" />
+                    
+                    <p:outputLabel for="spanish1" value="Fecha de fin (yyyy-mm-dd):" />
+                    <p:calendar id="spanish1" value="#{permisoEstudianteController.p.permisoFechafin}" locale="es" 
+                                navigator="true" pattern="yyyy-mm-dd" />
+                    
+                    
+                </p:selectOneMenu>
+
+            </h:panelGrid>
+        </p:panel>
+    </cc:implementation>
+</html>

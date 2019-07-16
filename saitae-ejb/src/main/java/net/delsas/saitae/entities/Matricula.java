@@ -31,10 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Matricula.findAll", query = "SELECT m FROM Matricula m")
     , @NamedQuery(name = "Matricula.findByIdmatricula", query = "SELECT m FROM Matricula m WHERE m.matriculaPK.idmatricula = :idmatricula")
-    , @NamedQuery(name = "Matricula.findByMatriculaNivel", query = "SELECT m FROM Matricula m WHERE m.matriculaPK.matriculaNivel = :matriculaNivel")
-    , @NamedQuery(name = "Matricula.findByMatriculaSeccion", query = "SELECT m FROM Matricula m WHERE m.matriculaPK.matriculaSeccion = :matriculaSeccion")
     , @NamedQuery(name = "Matricula.findByMatriculaAnyo", query = "SELECT m FROM Matricula m WHERE m.matriculaPK.matriculaAnyo = :matriculaAnyo")
-    , @NamedQuery(name = "Matricula.findByMatriculaModalidad", query = "SELECT m FROM Matricula m WHERE m.matriculaModalidad = :matriculaModalidad")
     , @NamedQuery(name = "Matricula.findByMatriculaRepite", query = "SELECT m FROM Matricula m WHERE m.matriculaRepite = :matriculaRepite")
     , @NamedQuery(name = "Matricula.findByMatriculaComentario", query = "SELECT m FROM Matricula m WHERE m.matriculaComentario = :matriculaComentario")})
 public class Matricula implements Serializable {
@@ -42,11 +39,6 @@ public class Matricula implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected MatriculaPK matriculaPK;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "matriculaModalidad")
-    private String matriculaModalidad;
     @Basic(optional = false)
     @NotNull
     @Column(name = "matriculaRepite")
@@ -58,9 +50,10 @@ public class Matricula implements Serializable {
     @ManyToOne(optional = false)
     private Estudiante estudiante;
     @JoinColumns({
-        @JoinColumn(name = "matriculaNivel", referencedColumnName = "idgrado", insertable = false, updatable = false)
-        , @JoinColumn(name = "matriculaSeccion", referencedColumnName = "gradoSeccion", insertable = false, updatable = false)
-        , @JoinColumn(name = "matriculaAnyo", referencedColumnName = "gradoA\u00f1o", insertable = false, updatable = false)})
+        @JoinColumn(name = "matriculaNivel", referencedColumnName = "idgrado")
+        , @JoinColumn(name = "matriculaSeccion", referencedColumnName = "gradoSeccion")
+        , @JoinColumn(name = "matriculaAnyo", referencedColumnName = "gradoA\u00f1o", insertable = false, updatable = false)
+        , @JoinColumn(name = "gradoModalidad", referencedColumnName = "gradoModalidad")})
     @ManyToOne(optional = false)
     private Grado grado;
 
@@ -71,14 +64,13 @@ public class Matricula implements Serializable {
         this.matriculaPK = matriculaPK;
     }
 
-    public Matricula(MatriculaPK matriculaPK, String matriculaModalidad, boolean matriculaRepite) {
+    public Matricula(MatriculaPK matriculaPK, boolean matriculaRepite) {
         this.matriculaPK = matriculaPK;
-        this.matriculaModalidad = matriculaModalidad;
         this.matriculaRepite = matriculaRepite;
     }
 
-    public Matricula(int idmatricula, int matriculaNivel, String matriculaSeccion, Date matriculaAnyo) {
-        this.matriculaPK = new MatriculaPK(idmatricula, matriculaNivel, matriculaSeccion, matriculaAnyo);
+    public Matricula(int idmatricula, Date matriculaAnyo) {
+        this.matriculaPK = new MatriculaPK(idmatricula, matriculaAnyo);
     }
 
     public MatriculaPK getMatriculaPK() {
@@ -87,14 +79,6 @@ public class Matricula implements Serializable {
 
     public void setMatriculaPK(MatriculaPK matriculaPK) {
         this.matriculaPK = matriculaPK;
-    }
-
-    public String getMatriculaModalidad() {
-        return matriculaModalidad;
-    }
-
-    public void setMatriculaModalidad(String matriculaModalidad) {
-        this.matriculaModalidad = matriculaModalidad;
     }
 
     public boolean getMatriculaRepite() {

@@ -8,6 +8,7 @@ package net.delsas.saitae.entities;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -48,8 +49,18 @@ public class TipoPersona implements Serializable {
     @Size(max = 145)
     @Column(name = "tipoPersonaComentario")
     private String tipoPersonaComentario;
+    @OneToMany(mappedBy = "anuncioTipoPersona")
+    private List<Anuncio> anuncioList;
     @OneToMany(mappedBy = "tipoPersona")
     private List<Persona> personaList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTipoPersona")
+    private List<DelagacionCargo> delagacionCargoList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTipoPersona")
+    private List<AccesoTipoPersona> accesoTipoPersonaList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoPersona")
+    private List<TipopersonaPermiso> tipopersonaPermisoList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoPersona")
+    private List<Permisos> permisosList;
 
     public TipoPersona() {
     }
@@ -88,12 +99,57 @@ public class TipoPersona implements Serializable {
     }
 
     @XmlTransient
+    public List<Anuncio> getAnuncioList() {
+        return anuncioList;
+    }
+
+    public void setAnuncioList(List<Anuncio> anuncioList) {
+        this.anuncioList = anuncioList;
+    }
+
+    @XmlTransient
     public List<Persona> getPersonaList() {
         return personaList;
     }
 
     public void setPersonaList(List<Persona> personaList) {
         this.personaList = personaList;
+    }
+
+    @XmlTransient
+    public List<DelagacionCargo> getDelagacionCargoList() {
+        return delagacionCargoList;
+    }
+
+    public void setDelagacionCargoList(List<DelagacionCargo> delagacionCargoList) {
+        this.delagacionCargoList = delagacionCargoList;
+    }
+
+    @XmlTransient
+    public List<AccesoTipoPersona> getAccesoTipoPersonaList() {
+        return accesoTipoPersonaList;
+    }
+
+    public void setAccesoTipoPersonaList(List<AccesoTipoPersona> accesoTipoPersonaList) {
+        this.accesoTipoPersonaList = accesoTipoPersonaList;
+    }
+
+    @XmlTransient
+    public List<TipopersonaPermiso> getTipopersonaPermisoList() {
+        return tipopersonaPermisoList;
+    }
+
+    public void setTipopersonaPermisoList(List<TipopersonaPermiso> tipopersonaPermisoList) {
+        this.tipopersonaPermisoList = tipopersonaPermisoList;
+    }
+
+    @XmlTransient
+    public List<Permisos> getPermisosList() {
+        return permisosList;
+    }
+
+    public void setPermisosList(List<Permisos> permisosList) {
+        this.permisosList = permisosList;
     }
 
     @Override

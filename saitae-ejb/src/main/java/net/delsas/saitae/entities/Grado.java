@@ -35,6 +35,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Grado.findAll", query = "SELECT g FROM Grado g")
     , @NamedQuery(name = "Grado.findByIdgrado", query = "SELECT g FROM Grado g WHERE g.gradoPK.idgrado = :idgrado")
+    , @NamedQuery(name = "Grado.findByGradoModalidad", query = "SELECT g FROM Grado g WHERE g.gradoPK.gradoModalidad = :gradoModalidad")
     , @NamedQuery(name = "Grado.findByGradoSeccion", query = "SELECT g FROM Grado g WHERE g.gradoPK.gradoSeccion = :gradoSeccion")
     , @NamedQuery(name = "Grado.findByGradoA\u00f1o", query = "SELECT g FROM Grado g WHERE g.gradoPK.gradoA\u00f1o = :gradoA\u00f1o")
     , @NamedQuery(name = "Grado.findByGradoActivo", query = "SELECT g FROM Grado g WHERE g.gradoActivo = :gradoActivo")
@@ -51,12 +52,12 @@ public class Grado implements Serializable {
     @Size(max = 145)
     @Column(name = "gradoCoemntario")
     private String gradoCoemntario;
-    @JoinColumn(name = "aulaGrado", referencedColumnName = "idaula")
-    @ManyToOne(optional = false)
-    private Aula aulaGrado;
     @JoinColumn(name = "gradoMaestroGuia", referencedColumnName = "idmaestro")
     @ManyToOne(optional = false)
     private Maestro gradoMaestroGuia;
+    @JoinColumn(name = "aulaGrado", referencedColumnName = "idaula")
+    @ManyToOne(optional = false)
+    private Aula aulaGrado;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "grado")
     private List<MestroHorarioMaterias> mestroHorarioMateriasList;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "grado")
@@ -78,8 +79,8 @@ public class Grado implements Serializable {
         this.gradoActivo = gradoActivo;
     }
 
-    public Grado(int idgrado, String gradoSeccion, Date gradoAño) {
-        this.gradoPK = new GradoPK(idgrado, gradoSeccion, gradoAño);
+    public Grado(int idgrado, String gradoModalidad, String gradoSeccion, Date gradoAño) {
+        this.gradoPK = new GradoPK(idgrado, gradoModalidad, gradoSeccion, gradoAño);
     }
 
     public GradoPK getGradoPK() {
@@ -106,20 +107,20 @@ public class Grado implements Serializable {
         this.gradoCoemntario = gradoCoemntario;
     }
 
-    public Aula getAulaGrado() {
-        return aulaGrado;
-    }
-
-    public void setAulaGrado(Aula aulaGrado) {
-        this.aulaGrado = aulaGrado;
-    }
-
     public Maestro getGradoMaestroGuia() {
         return gradoMaestroGuia;
     }
 
     public void setGradoMaestroGuia(Maestro gradoMaestroGuia) {
         this.gradoMaestroGuia = gradoMaestroGuia;
+    }
+
+    public Aula getAulaGrado() {
+        return aulaGrado;
+    }
+
+    public void setAulaGrado(Aula aulaGrado) {
+        this.aulaGrado = aulaGrado;
     }
 
     @XmlTransient

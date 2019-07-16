@@ -29,5 +29,14 @@ public interface EstudianteFacadeLocal {
     List<Estudiante> findRange(int[] range);
 
     int count();
+
+    /**
+     *devuelve la lista de todos los estudiantes que la persona 
+     * identificada con éste id es su representante.
+     * @param idRepresentante
+     * @return
+     */
+    public List<Estudiante> representados(int idRepresentante);
+
     
 }

@@ -45,7 +45,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "EvaluacionMaestro.findByEvaluador", query = "SELECT e FROM EvaluacionMaestro e WHERE e.evaluador = :evaluador")
     , @NamedQuery(name = "EvaluacionMaestro.findByResumen", query = "SELECT e FROM EvaluacionMaestro e WHERE e.resumen = :resumen")
     , @NamedQuery(name = "EvaluacionMaestro.findByPropuestaMejora", query = "SELECT e FROM EvaluacionMaestro e WHERE e.propuestaMejora = :propuestaMejora")
-    , @NamedQuery(name = "EvaluacionMaestro.findByEvaluacionMaestroComentario", query = "SELECT e FROM EvaluacionMaestro e WHERE e.evaluacionMaestroComentario = :evaluacionMaestroComentario")})
+    , @NamedQuery(name = "EvaluacionMaestro.findByEvaluacionMaestroComentario", query = "SELECT e FROM EvaluacionMaestro e WHERE e.evaluacionMaestroComentario = :evaluacionMaestroComentario")
+    , @NamedQuery(name = "EvaluacionMaestro.findByGradoModalidad", query = "SELECT e FROM EvaluacionMaestro e WHERE e.evaluacionMaestroPK.gradoModalidad = :gradoModalidad")})
 public class EvaluacionMaestro implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -127,7 +128,8 @@ public class EvaluacionMaestro implements Serializable {
     @JoinColumns({
         @JoinColumn(name = "grado", referencedColumnName = "idgrado")
         , @JoinColumn(name = "seccion", referencedColumnName = "gradoSeccion")
-        , @JoinColumn(name = "a\u00f1o", referencedColumnName = "gradoA\u00f1o")})
+        , @JoinColumn(name = "a\u00f1o", referencedColumnName = "gradoA\u00f1o")
+        , @JoinColumn(name = "gradoModalidad", referencedColumnName = "gradoModalidad", insertable = false, updatable = false)})
     @ManyToOne(optional = false)
     private Grado grado;
 
@@ -154,8 +156,8 @@ public class EvaluacionMaestro implements Serializable {
         this.actitudicionales = actitudicionales;
     }
 
-    public EvaluacionMaestro(int idMaestro, Date fechaHora) {
-        this.evaluacionMaestroPK = new EvaluacionMaestroPK(idMaestro, fechaHora);
+    public EvaluacionMaestro(int idMaestro, Date fechaHora, String gradoModalidad) {
+        this.evaluacionMaestroPK = new EvaluacionMaestroPK(idMaestro, fechaHora, gradoModalidad);
     }
 
     public EvaluacionMaestroPK getEvaluacionMaestroPK() {

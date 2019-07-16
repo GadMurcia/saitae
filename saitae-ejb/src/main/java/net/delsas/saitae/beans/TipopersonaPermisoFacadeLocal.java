@@ -29,5 +29,8 @@ public interface TipopersonaPermisoFacadeLocal {
     List<TipopersonaPermiso> findRange(int[] range);
 
     int count();
+
+    public List<TipopersonaPermiso> tiposPermisosPorPersona(int idTipoPersona);
+    
     
 }

@@ -29,6 +29,11 @@ public class GradoPK implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 2)
+    @Column(name = "gradoModalidad")
+    private String gradoModalidad;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 2)
     @Column(name = "gradoSeccion")
     private String gradoSeccion;
     @Basic(optional = false)
@@ -40,8 +45,9 @@ public class GradoPK implements Serializable {
     public GradoPK() {
     }
 
-    public GradoPK(int idgrado, String gradoSeccion, Date gradoAño) {
+    public GradoPK(int idgrado, String gradoModalidad, String gradoSeccion, Date gradoAño) {
         this.idgrado = idgrado;
+        this.gradoModalidad = gradoModalidad;
         this.gradoSeccion = gradoSeccion;
         this.gradoAño = gradoAño;
     }
@@ -52,6 +58,14 @@ public class GradoPK implements Serializable {
 
     public void setIdgrado(int idgrado) {
         this.idgrado = idgrado;
+    }
+
+    public String getGradoModalidad() {
+        return gradoModalidad;
+    }
+
+    public void setGradoModalidad(String gradoModalidad) {
+        this.gradoModalidad = gradoModalidad;
     }
 
     public String getGradoSeccion() {
@@ -74,6 +88,7 @@ public class GradoPK implements Serializable {
     public int hashCode() {
         int hash = 0;
         hash += (int) idgrado;
+        hash += (gradoModalidad != null ? gradoModalidad.hashCode() : 0);
         hash += (gradoSeccion != null ? gradoSeccion.hashCode() : 0);
         hash += (gradoAño != null ? gradoAño.hashCode() : 0);
         return hash;
@@ -89,6 +104,9 @@ public class GradoPK implements Serializable {
         if (this.idgrado != other.idgrado) {
             return false;
         }
+        if ((this.gradoModalidad == null && other.gradoModalidad != null) || (this.gradoModalidad != null && !this.gradoModalidad.equals(other.gradoModalidad))) {
+            return false;
+        }
         if ((this.gradoSeccion == null && other.gradoSeccion != null) || (this.gradoSeccion != null && !this.gradoSeccion.equals(other.gradoSeccion))) {
             return false;
         }
@@ -100,7 +118,7 @@ public class GradoPK implements Serializable {
 
     @Override
     public String toString() {
-        return "net.delsas.saitae.entities.GradoPK[ idgrado=" + idgrado + ", gradoSeccion=" + gradoSeccion + ", gradoA\u00f1o=" + gradoAño + " ]";
+        return "net.delsas.saitae.entities.GradoPK[ idgrado=" + idgrado + ", gradoModalidad=" + gradoModalidad + ", gradoSeccion=" + gradoSeccion + ", gradoA\u00f1o=" + gradoAño + " ]";
     }
     
 }

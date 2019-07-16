@@ -46,6 +46,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "GradoEvaluacion.findByComites", query = "SELECT g FROM GradoEvaluacion g WHERE g.comites = :comites")
     , @NamedQuery(name = "GradoEvaluacion.findByBienvenidos", query = "SELECT g FROM GradoEvaluacion g WHERE g.bienvenidos = :bienvenidos")
     , @NamedQuery(name = "GradoEvaluacion.findByValores", query = "SELECT g FROM GradoEvaluacion g WHERE g.valores = :valores")
+    , @NamedQuery(name = "GradoEvaluacion.findByGradoModalidad", query = "SELECT g FROM GradoEvaluacion g WHERE g.gradoEvaluacionPK.gradoModalidad = :gradoModalidad")
     , @NamedQuery(name = "GradoEvaluacion.findByDirectiva", query = "SELECT g FROM GradoEvaluacion g WHERE g.directiva = :directiva")
     , @NamedQuery(name = "GradoEvaluacion.findByMaterial", query = "SELECT g FROM GradoEvaluacion g WHERE g.material = :material")
     , @NamedQuery(name = "GradoEvaluacion.findByObservacionesPositivas", query = "SELECT g FROM GradoEvaluacion g WHERE g.observacionesPositivas = :observacionesPositivas")
@@ -121,7 +122,8 @@ public class GradoEvaluacion implements Serializable {
     @JoinColumns({
         @JoinColumn(name = "idGrado", referencedColumnName = "idgrado", insertable = false, updatable = false)
         , @JoinColumn(name = "gradoSeccion", referencedColumnName = "gradoSeccion", insertable = false, updatable = false)
-        , @JoinColumn(name = "gradoA\u00f1o", referencedColumnName = "gradoA\u00f1o", insertable = false, updatable = false)})
+        , @JoinColumn(name = "gradoA\u00f1o", referencedColumnName = "gradoA\u00f1o", insertable = false, updatable = false)
+        , @JoinColumn(name = "gradoModalidad", referencedColumnName = "gradoModalidad", insertable = false, updatable = false)})
     @OneToOne(optional = false)
     private Grado grado;
     @JoinColumn(name = "evaluador", referencedColumnName = "idpersona")
@@ -151,8 +153,8 @@ public class GradoEvaluacion implements Serializable {
         this.material = material;
     }
 
-    public GradoEvaluacion(int idGrado, String gradoSeccion, Date gradoAño) {
-        this.gradoEvaluacionPK = new GradoEvaluacionPK(idGrado, gradoSeccion, gradoAño);
+    public GradoEvaluacion(int idGrado, String gradoSeccion, Date gradoAño, String gradoModalidad) {
+        this.gradoEvaluacionPK = new GradoEvaluacionPK(idGrado, gradoSeccion, gradoAño, gradoModalidad);
     }
 
     public GradoEvaluacionPK getGradoEvaluacionPK() {

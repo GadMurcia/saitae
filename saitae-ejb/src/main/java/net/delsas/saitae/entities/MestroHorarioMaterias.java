@@ -56,7 +56,8 @@ public class MestroHorarioMaterias implements Serializable {
     @JoinColumns({
         @JoinColumn(name = "idGrado", referencedColumnName = "idgrado", insertable = false, updatable = false)
         , @JoinColumn(name = "seccionGrado", referencedColumnName = "gradoSeccion", insertable = false, updatable = false)
-        , @JoinColumn(name = "a\u00f1oGrado", referencedColumnName = "gradoA\u00f1o", insertable = false, updatable = false)})
+        , @JoinColumn(name = "a\u00f1oGrado", referencedColumnName = "gradoA\u00f1o", insertable = false, updatable = false)
+        , @JoinColumn(name = "gradoModalidad", referencedColumnName = "gradoModalidad")})
     @ManyToOne(optional = false)
     private Grado grado;
 

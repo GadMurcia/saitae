@@ -1,8 +1,11 @@
 package net.delsas.saitae.controllers;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Calendar;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
@@ -39,6 +42,17 @@ public class loginController implements Serializable {
         this.user = user;
     }
 
+    public void preinit() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        FacesMessage fm = (FacesMessage) context.getExternalContext().getApplicationMap().get("mensaje");
+        if (fm == null) {
+            fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bienvenido", "Inicie Sesión para más funcionalidades.");
+        }
+        context.addMessage("grolm", fm);
+        context.getExternalContext().getApplicationMap().remove("mensaje");
+
+    }
+
     public void login() {
         String q[] = user.split("-");
         String u = 1 + (q.length > 0 ? q[0] : "0") + (q.length > 1 ? q[1] : "");
@@ -48,12 +62,27 @@ public class loginController implements Serializable {
         } catch (NumberFormatException e) {
             w = 0;
         }
-        String passwd=DigestUtils.md5Hex(pass);
+        String passwd = DigestUtils.md5Hex(pass);
         Persona p = pfl.find(w);
-        if (p != null && p.getPersonaActivo() && p.getPersonaContrasenya().equals(passwd)) {
-            System.out.println("logueado");
-        } else {
-            System.out.println("no logueado");
+        FacesContext context = FacesContext.getCurrentInstance();
+        try {
+            if (p != null && p.getPersonaActivo() && p.getPersonaContrasenya().equals(passwd)) {
+                System.out.println("logueado");
+                context.getExternalContext().getApplicationMap().put("usuario", p);
+                context.getExternalContext().redirect("pages/perfil.intex");
+            } else {
+                System.out.println("no logueado");
+                context.getExternalContext().getApplicationMap().put("mensaje", new FacesMessage(
+                        FacesMessage.SEVERITY_ERROR, "Loggin Error", "Credenciales no validas"));
+                context.getExternalContext().redirect("index.intex");
+            }
+        } catch (IOException e) {
+            context.getExternalContext().getApplicationMap().put("mensaje", new FacesMessage(
+                    FacesMessage.SEVERITY_FATAL, "Loggin Error", "Vaya! Hubo un problema inesperado."));
+            try {
+                context.getExternalContext().redirect("index.intex");
+            } catch (IOException ex) {
+            }
         }
     }
 

@@ -36,14 +36,20 @@ public class GradoEvaluacionPK implements Serializable {
     @Column(name = "gradoA\u00f1o")
     @Temporal(TemporalType.DATE)
     private Date gradoAño;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 2)
+    @Column(name = "gradoModalidad")
+    private String gradoModalidad;
 
     public GradoEvaluacionPK() {
     }
 
-    public GradoEvaluacionPK(int idGrado, String gradoSeccion, Date gradoAño) {
+    public GradoEvaluacionPK(int idGrado, String gradoSeccion, Date gradoAño, String gradoModalidad) {
         this.idGrado = idGrado;
         this.gradoSeccion = gradoSeccion;
         this.gradoAño = gradoAño;
+        this.gradoModalidad = gradoModalidad;
     }
 
     public int getIdGrado() {
@@ -70,12 +76,21 @@ public class GradoEvaluacionPK implements Serializable {
         this.gradoAño = gradoAño;
     }
 
+    public String getGradoModalidad() {
+        return gradoModalidad;
+    }
+
+    public void setGradoModalidad(String gradoModalidad) {
+        this.gradoModalidad = gradoModalidad;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (int) idGrado;
         hash += (gradoSeccion != null ? gradoSeccion.hashCode() : 0);
         hash += (gradoAño != null ? gradoAño.hashCode() : 0);
+        hash += (gradoModalidad != null ? gradoModalidad.hashCode() : 0);
         return hash;
     }
 
@@ -95,12 +110,15 @@ public class GradoEvaluacionPK implements Serializable {
         if ((this.gradoAño == null && other.gradoAño != null) || (this.gradoAño != null && !this.gradoAño.equals(other.gradoAño))) {
             return false;
         }
+        if ((this.gradoModalidad == null && other.gradoModalidad != null) || (this.gradoModalidad != null && !this.gradoModalidad.equals(other.gradoModalidad))) {
+            return false;
+        }
         return true;
     }
 
     @Override
     public String toString() {
-        return "net.delsas.saitae.entities.GradoEvaluacionPK[ idGrado=" + idGrado + ", gradoSeccion=" + gradoSeccion + ", gradoA\u00f1o=" + gradoAño + " ]";
+        return "net.delsas.saitae.entities.GradoEvaluacionPK[ idGrado=" + idGrado + ", gradoSeccion=" + gradoSeccion + ", gradoA\u00f1o=" + gradoAño + ", gradoModalidad=" + gradoModalidad + " ]";
     }
     
 }

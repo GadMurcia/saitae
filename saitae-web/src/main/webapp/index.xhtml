@@ -2,31 +2,43 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>SAITAE - INTEX #{loginController.year}</title>
+        <f:event listener="#{loginController.preinit()}" type="preRenderView"/>
     </h:head>
     <h:body>
         <style>
             .centred-form{
                 margin: 0 auto;
                 align-content: center;
+                align-items: center;
             }
         </style>
-            <h:form id="frm">
-            <h:panelGrid columns="2" summary="Inicio de sesión"  styleClass="centred-form">
+            <h:form id="frm" style="width: 200px;" styleClass="centred-form">
+            <p:growl id="growl" showDetail="true"/>
+            <h:panelGrid columns="3" summary="Inicio de sesión"  >
+                <p:column/>
+                <h:outputLabel value="SAITAE-INTEX #{loginController.year}"/>
+                <p:column/>
+
                 <h:outputLabel for="user" id="t1" value="Usuario: "/>
                 <p:inputText id="user" value="#{loginController.user}" required="true"
-                             requiredMessage="No deje vacío el campo usuario."/>
+                             requiredMessage="No deje vacío el campo usuario." alt="ingrese su NIE/DUI"/>
+                <p:message for="user" showSummary="true"/>
 
                 <h:outputLabel for="pass" value="Contraseña: "/>
                 <p:password id="pass" value="#{loginController.pass}" required="true" 
                             requiredMessage="No deje vacío el campo contraseña."/>
+                <p:message for="pass" showSummary="true"/>
+
                 <p:column/>
-            <p:commandButton actionListener="#{loginController.login()}" value="Ingresar"/>
+                <p:commandButton actionListener="#{loginController.login()}" value="Ingresar"/>
+                <p:column/>
             </h:panelGrid>
         </h:form>
-        
+
     </h:body>
 </html>
 

@@ -116,6 +116,10 @@ public class Estudiante implements Serializable {
     @Size(max = 145)
     @Column(name = "estudianteComentario")
     private String estudianteComentario;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEstudiante")
+    private List<Contribuciones> contribucionesList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "estudiante")
+    private List<Matricula> matriculaList;
     @JoinColumn(name = "idestudiante", referencedColumnName = "idpersona", insertable = false, updatable = false)
     @OneToOne(optional = false)
     private Persona persona;
@@ -130,8 +134,16 @@ public class Estudiante implements Serializable {
     @JoinColumn(name = "estudianteRepresentante", referencedColumnName = "idestudiante")
     @ManyToOne
     private Estudiante estudianteRepresentante;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEstudiante")
-    private List<Contribuciones> contribucionesList;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "estudiante")
+    private Documentos documentos;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "estudiante1")
+    private List<CitaPsicologia> citaPsicologiaList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "estudiante")
+    private List<EntregaUtiles> entregaUtilesList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idRepresentante")
+    private List<EntregaUtiles> entregaUtilesList1;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "estudiante")
+    private ExpedientePS expedientePS;
 
     public Estudiante() {
     }
@@ -300,6 +312,24 @@ public class Estudiante implements Serializable {
         this.estudianteComentario = estudianteComentario;
     }
 
+    @XmlTransient
+    public List<Contribuciones> getContribucionesList() {
+        return contribucionesList;
+    }
+
+    public void setContribucionesList(List<Contribuciones> contribucionesList) {
+        this.contribucionesList = contribucionesList;
+    }
+
+    @XmlTransient
+    public List<Matricula> getMatriculaList() {
+        return matriculaList;
+    }
+
+    public void setMatriculaList(List<Matricula> matriculaList) {
+        this.matriculaList = matriculaList;
+    }
+
     public Persona getPersona() {
         return persona;
     }
@@ -341,13 +371,47 @@ public class Estudiante implements Serializable {
         this.estudianteRepresentante = estudianteRepresentante;
     }
 
-    @XmlTransient
-    public List<Contribuciones> getContribucionesList() {
-        return contribucionesList;
+    public Documentos getDocumentos() {
+        return documentos;
     }
 
-    public void setContribucionesList(List<Contribuciones> contribucionesList) {
-        this.contribucionesList = contribucionesList;
+    public void setDocumentos(Documentos documentos) {
+        this.documentos = documentos;
+    }
+
+    @XmlTransient
+    public List<CitaPsicologia> getCitaPsicologiaList() {
+        return citaPsicologiaList;
+    }
+
+    public void setCitaPsicologiaList(List<CitaPsicologia> citaPsicologiaList) {
+        this.citaPsicologiaList = citaPsicologiaList;
+    }
+
+    @XmlTransient
+    public List<EntregaUtiles> getEntregaUtilesList() {
+        return entregaUtilesList;
+    }
+
+    public void setEntregaUtilesList(List<EntregaUtiles> entregaUtilesList) {
+        this.entregaUtilesList = entregaUtilesList;
+    }
+
+    @XmlTransient
+    public List<EntregaUtiles> getEntregaUtilesList1() {
+        return entregaUtilesList1;
+    }
+
+    public void setEntregaUtilesList1(List<EntregaUtiles> entregaUtilesList1) {
+        this.entregaUtilesList1 = entregaUtilesList1;
+    }
+
+    public ExpedientePS getExpedientePS() {
+        return expedientePS;
+    }
+
+    public void setExpedientePS(ExpedientePS expedientePS) {
+        this.expedientePS = expedientePS;
     }
 
     @Override
