@@ -25,36 +25,33 @@
                         <f:selectItems value="#{permisoEstudianteController.listaEstudiantes()}"/>
                         <f:ajax render="m" execute="SeleccionEstudiante"/>
                     </p:selectOneMenu>
-                        <p:column/>
-                        <p:panelGrid id="m" columns="6" columnClasses="label, value, label, value, label, value">
-                            <h:outputLabel value="Bachillerato: "/>
-                            <h:outputLabel value="#{permisoEstudianteController.m.grado.gradoPK.gradoModalidad}"/>
+                    
+                    <p:column/>
+                    <p:panelGrid id="m" columns="6" columnClasses="label, value, label, value, label, value">
+                        <h:outputLabel value="Bachillerato: "/>
+                        <h:outputLabel value="#{permisoEstudianteController.m.grado.gradoPK.gradoModalidad}"/>
 
-                            <h:outputLabel value="Grado: "/>
-                            <h:outputLabel value="#{permisoEstudianteController.m.grado.gradoPK.idgrado}"/>
+                        <h:outputLabel value="Grado: "/>
+                        <h:outputLabel value="#{permisoEstudianteController.m.grado.gradoPK.idgrado}"/>
 
-                            <h:outputLabel value="Sección: "/>
-                            <h:outputLabel value="#{permisoEstudianteController.m.grado.gradoPK.gradoSeccion}"/>
-                        </p:panelGrid>
+                        <h:outputLabel value="Sección: "/>
+                        <h:outputLabel value="#{permisoEstudianteController.m.grado.gradoPK.gradoSeccion}"/>
+                    </p:panelGrid>
 
-                        <h:outputLabel value="Motivo: *"/>
-                        <p:inputText value="#{permisoEstudianteController.p.permisosComentario}" required="true"/>
+                    <h:outputLabel value="Motivo: *"/>
+                    <p:inputText value="#{permisoEstudianteController.p.permisosComentario}" required="true"/>
 
-                        <h:outputLabel value="Solicitado por: "/>
-                        <h:outputLabel value="#{permisoEstudianteController.us.persona.personaNombre} #{permisoEstudianteController.us.persona.personaApellido}"/>
+                    <h:outputLabel value="Solicitado por: "/>
+                    <h:outputLabel value="#{permisoEstudianteController.us.persona.personaNombre} #{permisoEstudianteController.us.persona.personaApellido}"/>
 
-                        <p:outputLabel for="spanish" value="Fecha de inicio (yyyy-mm-dd):" />
-                        <p:calendar id="spanish" value="#{permisoEstudianteController.p.permisoFechaInicio}" locale="es" 
-                                    navigator="true" pattern="yyyy-mm-dd" />
+                    <p:outputLabel for="spanish" value="Fecha de inicio (yyyy-mm-dd):" />
+                    <p:calendar id="spanish" value="#{permisoEstudianteController.p.permisoFechaInicio}" locale="es" 
+                                navigator="true" pattern="yyyy-mm-dd" />
 
-                        <p:outputLabel for="spanish1" value="Fecha de fin (yyyy-mm-dd):" />
-                        <p:calendar id="spanish1" value="#{permisoEstudianteController.p.permisoFechafin}" locale="es" 
-                                    navigator="true" pattern="yyyy-mm-dd" />
-
-
-                    </p:selectOneMenu>
-
-                </h:panelGrid>
+                    <p:outputLabel for="spanish1" value="Fecha de fin (yyyy-mm-dd):" />
+                    <p:calendar id="spanish1" value="#{permisoEstudianteController.p.permisoFechafin}" locale="es" 
+                                navigator="true" pattern="yyyy-mm-dd" />
+               </h:panelGrid>
             </p:panel>
         </h:form>
     </h:body>
