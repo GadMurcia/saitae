@@ -18,14 +18,14 @@ import javax.faces.view.ViewScoped;
 import net.delsas.saitae.beans.EstudianteFacadeLocal;
 import net.delsas.saitae.beans.MatriculaFacadeLocal;
 import net.delsas.saitae.beans.PermisosFacadeLocal;
-import net.delsas.saitae.beans.TipoPermisoFacadeLocal;
+import net.delsas.saitae.beans.TipopersonaPermisoFacadeLocal;
 import net.delsas.saitae.entities.Permisos;
 import net.delsas.saitae.entities.PermisosPK;
 import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.Matricula;
-import net.delsas.saitae.entities.TipoPermiso;
 import net.delsas.saitae.entities.Estudiante;
 import net.delsas.saitae.entities.MatriculaPK;
+import net.delsas.saitae.entities.TipopersonaPermiso;
 
 /**
  *
@@ -41,14 +41,14 @@ public class permisoController implements Serializable {
     @EJB
     private PermisosFacadeLocal pfl;
     @EJB
-    private TipoPermisoFacadeLocal tpfl;
+    private TipopersonaPermisoFacadeLocal tpfl;
     @EJB
     private EstudianteFacadeLocal efl;
     @EJB
     private MatriculaFacadeLocal mfl;
     
     private Matricula m;
-    private List<TipoPermiso> permisos;
+    private List<TipopersonaPermiso> permisos;
     private Estudiante us;
     private List<Estudiante> e;
 
@@ -73,8 +73,8 @@ public class permisoController implements Serializable {
     public ArrayList<SelectItem> listaPermisos() {
         ArrayList<SelectItem> items = new ArrayList<>();
         items.add(new SelectItem(0, "Seleccione"));
-        for (TipoPermiso t : permisos) {
-            items.add(new SelectItem(t.getIdtipoPermiso(), t.getTipoPermisoNombre()));
+        for (TipopersonaPermiso t : permisos) {
+            items.add(new SelectItem(t.getTipoPermiso().getIdtipoPermiso(), t.getTipoPermiso().getTipoPermisoNombre()));
         }
         return items;
     }

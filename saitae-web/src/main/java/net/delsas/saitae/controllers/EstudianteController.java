@@ -29,6 +29,7 @@ import net.delsas.saitae.entities.MatriculaPK;
 import net.delsas.saitae.entities.Documentos;
 import net.delsas.saitae.entities.Grado;
 import net.delsas.saitae.entities.GradoPK;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.FlowEvent;
 import org.primefaces.model.UploadedFile;
@@ -132,7 +133,7 @@ public class EstudianteController implements Serializable {
         est.setEstudianteDependenciaEconomica(est.getEstudianteDependenciaEconomica() + "*" + (getOtradependencia() == null ? "" : getOtradependencia()));
         est1.setTipoPersona(tpfl.find(8));
         est.setPersona(est1);
-        est1.setPersonaContrasenya(getNie());
+        est1.setPersonaContrasenya(DigestUtils.md5Hex(getNie()));
         est1.setPersonaActivo(true);
         persist(est1, est1.getIdpersona());
         est1.setEstudiante(est);

@@ -58,9 +58,7 @@ public class sessionController implements Serializable {
                 context.getExternalContext().getApplicationMap().remove("mensaje");
             }
             this.menu();
-        } catch (IOException ex) {
-            Logger.getLogger(sessionController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } catch (IOException ex) { }
     }
 
     public Persona getUs() {
