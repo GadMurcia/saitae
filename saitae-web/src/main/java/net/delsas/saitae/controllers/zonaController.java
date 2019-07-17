@@ -20,10 +20,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.inject.Named;
 import javax.faces.view.ViewScoped;
+import javax.inject.Named;
 import net.delsas.saitae.beans.ZonaFacadeLocal;
 import net.delsas.saitae.entities.Zona;
 import org.primefaces.event.CellEditEvent;
@@ -42,23 +43,14 @@ public class zonaController implements Serializable {
     /**
      * Creates a new instance of zonaController
      */
-    private Zona zona;
+    @EJB
     private ZonaFacadeLocal zfl;
     private List<Zona> zonas;
 
     @PostConstruct
     public void zonaController() {
-        zona = new Zona();
         zonas = zfl.findAll();
         zonas = zonas != null || !zonas.isEmpty() ? zonas : new ArrayList<Zona>();
-    }
-
-    public Zona getZona() {
-        return zona;
-    }
-
-    public void setZona(Zona zona) {
-        this.zona = zona;
     }
 
     public List<Zona> getZonas() {
@@ -69,21 +61,18 @@ public class zonaController implements Serializable {
         this.zonas = zonas;
     }
 
-//    /**
-//     *
-//     * @param event
-//     */
-//    public void onCellEdit(CellEditEvent event) {
-//        Object oldValue = event.getOldValue();
-//        Object newValue = event.getNewValue();
-//
-//        if (newValue != null && !newValue.equals(oldValue)) {
-//            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Cell Changed",
-//                    "Old: " + oldValue + ", New:" + newValue);
-//            FacesContext.getCurrentInstance().addMessage(null, msg);
-//        }
-//    }
-
+    
+    public void onCellEdit(CellEditEvent event) {
+        Object oldValue = event.getOldValue();
+        Object newValue = event.getNewValue();
+        
+        if (newValue != null && !newValue.equals(oldValue)) {
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Cell Changed",
+                    "Old: " + oldValue + ", New:" + newValue);
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+    }
+    
     public void onAddNew() {
         // Add one new car to the table:
         Zona nzona = new Zona(zonas.size() + 1);
@@ -93,12 +82,17 @@ public class zonaController implements Serializable {
     }
 
     public void onRowEdit(RowEditEvent event) {
-        FacesMessage msg = new FacesMessage("Zone Edited", ((Zona) event.getObject()).getIdzona()+"");
+        zfl.edit((Zona) event.getObject());
+        FacesMessage msg = new FacesMessage("Zone Edited", ((Zona) event.getObject()).getIdzona() + "");
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
     public void onRowCancel(RowEditEvent event) {
-        FacesMessage msg = new FacesMessage("Edit Cancelled", ((Zona) event.getObject()).getIdzona()+"");
+        Zona z= (Zona) event.getObject();
+        if(z.getZonaNombre()==null || z.getZonaNombre().isEmpty()){
+            zonas.remove(zonas.indexOf(z));
+        }
+        FacesMessage msg = new FacesMessage("Edit Cancelled", ((Zona) event.getObject()).getIdzona() + "");
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
