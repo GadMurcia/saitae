@@ -10,54 +10,60 @@
     <h:body>
         <style type="text/css">
             .ui-row-editor .ui-row-editor-pencil {
-                margin-left:8px;
+                margin-left:8px;                
+            }
+            .centred-form{
+                margin: 0 auto;
+                align-content: center;
+                align-items: center;
+                width: 50%;
             }
         </style>
-        <h:form id="form">
+            <h:form id="form" styleClass="centred-form">
             <p:growl id="msgs" showDetail="true"/>
             <h3>Zonas</h3>
-            <p:dataTable var="z" value="#{zonaController.zonas}" reflow="true" rows="5" 
-                         paginator="true" widgetVar="c" editable="true" style="margin-bottom:20px">
+            <p:dataTable id="zona" var="z" value="#{zonaController.zonas}" editable="true" 
+                         widgetVar="zona" editMode="cell">
                 <f:facet name="header">
-                    Row Editing with add functionality
+                    Row Editing
                 </f:facet>
 
                 <p:ajax event="rowEdit" listener="#{zonaController.onRowEdit}" update=":form:msgs" />
                 <p:ajax event="rowEditCancel" listener="#{zonaController.onRowCancel}" update=":form:msgs" />
-                
+                <p:ajax event="cellEdit" listener="#{zonaController.onCellEdit}" update=":form:msgs" />
+
                 <p:column headerText="Id">
                     <h:outputText value="#{z.idzona}" />
                 </p:column>
 
                 <p:column headerText="Nombre">
                     <p:cellEditor>
-                        <f:facet name="output">
-                            <h:outputText value="#{z.zonaNombre}" />
-                        </f:facet>
-                        <f:facet name="input">
-                            <p:inputText value="#{z.zonaNombre}" style="width:96%" label="nombre-#{z.idzona}"/>
-                        </f:facet>
+                        <f:facet name="output"><h:outputText value="#{z.zonaNombre}" /></f:facet>
+                        <f:facet name="input"><p:inputText value="#{z.zonaNombre}" 
+                                                           style="width:100%" label="Nombre"/></f:facet>
                     </p:cellEditor>
                 </p:column>
 
                 <p:column headerText="Comentario">
                     <p:cellEditor>
-                        <f:facet name="output">
-                            <h:outputText value="#{z.zonaCoementario}" />
-                        </f:facet>
-                        <f:facet name="input">
-                            <p:inputText value="#{z.zonaCoementario}" style="width:96%" label="comentario"/>
-                        </f:facet>
+                        <f:facet name="output"><h:outputText value="#{z.zonaCoementario}" /></f:facet>
+                        <f:facet name="input"><p:inputText value="#{z.zonaCoementario}" 
+                                                           style="width:100%" label="Comentario"/></f:facet>
                     </p:cellEditor>
                 </p:column>
             </p:dataTable>
-
             <div class="ui-g">
                 <div class="ui-g-12">
-                    <p:commandButton value="Add new row" styleClass="ui-priority-primary" process="@this" update=":form:msgs"
-                                     action="#{zonaController.onAddNew()}" oncomplete="PF('c').addRow();"/>
+                    <p:commandButton value="Agregar Nuevo" styleClass="ui-priority-primary" 
+                                     process="@this" update=":form:msgs"
+                                     action="#{zonaController.onAddNew()}" 
+                                     oncomplete="PF('zona').addRow();"/>
                 </div>
             </div>
+            <p:contextMenu for="zona" widgetVar="cMenu">   
+                <p:menuitem value="Editar" icon="pi pi-search" onclick="PF('zona').showCellEditor();return false;"/>  
+                <p:menuitem value="Hide Menu" icon="pi pi-times" onclick="PF('cMenu').hide()"/>  
+            </p:contextMenu>
         </h:form>
     </h:body>
 </html>

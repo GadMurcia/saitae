@@ -10,7 +10,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -73,17 +72,19 @@ public class permisoController implements Serializable {
 //                        "Gracias por iniciar Sesión " + u.getPersonaNombre()));
 //                context.getExternalContext().getSessionMap().remove("mensaje");
                 this.setUs(u.getEstudiante());
-                p = new Permisos();
                 p.setPermisosPK(new PermisosPK((us == null ? 0 : us.getIdestudiante()), Calendar.getInstance().getTime(), 0));
-                permisos = tpfl.findAll();
+                permisos = tpfl.tiposPermisosPorPersona(u.getIdpersona());
                 e = efl.representados(u.getIdpersona());
             }
         } catch (IOException ex) {
         }
     }
 
-    @PostConstruct
-    public void init() {
+    
+    public permisoController() {
+        p = new Permisos();
+        e=new ArrayList<>();
+        us=new Estudiante();
 
     }
 
