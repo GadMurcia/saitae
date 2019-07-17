@@ -97,11 +97,11 @@ public class permisoController implements Serializable {
         return items;
     }
 
-    public boolean SeleccionPermiso() {
+    public boolean isSeleccionPermiso() {
         return p.getPermisosPK().getTipoPermiso() > 0;
     }
     
-    public boolean SeleccionEstudiante() {
+    public boolean isSeleccionEstudiante() {
         if(p.getPermisosPK().getIpPersona() > 0){
             m=mfl.find(new MatriculaPK(p.getPermisosPK().getIpPersona(), 
                     (p.getPermisosPK().getPermisoFechaSolicitud())));
@@ -147,6 +147,8 @@ public class permisoController implements Serializable {
         this.us = us;
     }
     
-    
+    public void guardar(){
+        pfl.create(p);
+    }
     
 }
