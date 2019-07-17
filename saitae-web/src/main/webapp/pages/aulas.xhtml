@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html>
+<html 
+    xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Administración de Aulas</title>
+        
+    </h:head>
+   
+    <h:body>
+        <style type="text/css">
+       
+            .centred-form{
+                margin: 0 auto;
+                align-content: center;
+                align-items: center;
+                width: 50%;
+            }
+            </style>
+            <h:form styleClass="centred-form" id="frm">
+            <p:panel header="Gestionar nueva aula">
+                
+                <h:panelGrid id="w" columns="2" columnClasses="label, value">
+                    <p:outputLabel for="console" value="Zona: *" />
+                    <p:selectOneMenu id="console" value="#{AulaController.aula.zonaAula}" 
+                                     style="width:125px" title="Seleccione una zona ">
+                        <f:selectItems value="#{AulaController.listaAulas()}"/>
+                        <f:ajax render="console1" execute="SeleccionAula"/>
+                    </p:selectOneMenu>
+                   <h:outputText value="Aula: *"/>
+                    <p:inputText id="txtaula" value="#{AulaController.aula.aulaComentario}" required="true" />
+               </h:panelGrid>
+            </p:panel>
+                <p:commandButton id="summit" value="Agregar"/>
+        </h:form>
+    </h:body>
+</html>
+

@@ -1,1 +1,4 @@
 /target/
+/saitae-ejb/target/
+/saitae-web/target/
+/saitae-ear/target/
