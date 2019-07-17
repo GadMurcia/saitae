@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Administración de zonas</title>
+    </h:head>
+    <h:body>
+        <style type="text/css">
+            .ui-row-editor .ui-row-editor-pencil {
+                margin-left:8px;
+            }
+        </style>
+        <h:form id="form">
+            <p:growl id="msgs" showDetail="true"/>
+            <h3>Zonas</h3>
+            <p:dataTable var="z" value="#{zonaController.zonas}" reflow="true" rows="5" 
+                         paginator="true" widgetVar="c" editable="true" style="margin-bottom:20px">
+                <f:facet name="header">
+                    Row Editing with add functionality
+                </f:facet>
+
+                <p:ajax event="rowEdit" listener="#{zonaController.onRowEdit}" update=":form:msgs" />
+                <p:ajax event="rowEditCancel" listener="#{zonaController.onRowCancel}" update=":form:msgs" />
+                
+                <p:column headerText="Id">
+                    <h:outputText value="#{z.idzona}" />
+                </p:column>
+
+                <p:column headerText="Nombre">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{z.zonaNombre}" />
+                        </f:facet>
+                        <f:facet name="input">
+                            <p:inputText value="#{z.zonaNombre}" style="width:96%" label="nombre-#{z.idzona}"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="Comentario">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{z.zonaCoementario}" />
+                        </f:facet>
+                        <f:facet name="input">
+                            <p:inputText value="#{z.zonaCoementario}" style="width:96%" label="comentario"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+            </p:dataTable>
+
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <p:commandButton value="Add new row" styleClass="ui-priority-primary" process="@this" update=":form:msgs"
+                                     action="#{zonaController.onAddNew()}" oncomplete="PF('c').addRow();"/>
+                </div>
+            </div>
+        </h:form>
+    </h:body>
+</html>
+

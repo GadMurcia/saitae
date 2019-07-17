@@ -48,7 +48,7 @@ public class permisoController implements Serializable {
     private EstudianteFacadeLocal efl;
     @EJB
     private MatriculaFacadeLocal mfl;
-    
+
     private Matricula m;
     private List<TipopersonaPermiso> permisos;
     private Estudiante us;
@@ -63,29 +63,28 @@ public class permisoController implements Serializable {
             Persona u = (Persona) context.getExternalContext().getSessionMap().get("usuario");
             if (u == null) {
 
-                context.getExternalContext().getSessionMap().put("mensaje", new FacesMessage(FacesMessage.SEVERITY_FATAL, 
+                context.getExternalContext().getSessionMap().put("mensaje", new FacesMessage(FacesMessage.SEVERITY_FATAL,
                         "Falla!", "Esa vista no le está permitida aún porque usted no se a logueado."));
                 context.getExternalContext().redirect("./../");
 
-          } else {
+            } else {
 //                FacesMessage ms = (FacesMessage) context.getExternalContext().getSessionMap().get("mensaje");
 //                context.addMessage("growl", ms != null ? ms : new FacesMessage(FacesMessage.SEVERITY_INFO, "Bienvenido", 
 //                        "Gracias por iniciar Sesión " + u.getPersonaNombre()));
-                this.setUs(u.getEstudiante());
 //                context.getExternalContext().getSessionMap().remove("mensaje");
+                this.setUs(u.getEstudiante());
+                p = new Permisos();
+                p.setPermisosPK(new PermisosPK((us == null ? 0 : us.getIdestudiante()), Calendar.getInstance().getTime(), 0));
+                permisos = tpfl.findAll();
+                e = efl.representados(u.getIdpersona());
             }
-        } catch (IOException ex) { }
+        } catch (IOException ex) {
+        }
     }
 
     @PostConstruct
     public void init() {
-        inicial();
-        p = new Permisos();
-        p.setPermisosPK(new PermisosPK((us == null ? 0 : us.getIdestudiante()), Calendar.getInstance().getTime(), 0));
-        permisos = tpfl.findAll();
-        e = efl.representados(us.getIdestudiante());
-        
-        
+
     }
 
     public ArrayList<SelectItem> listaPermisos() {
@@ -100,10 +99,10 @@ public class permisoController implements Serializable {
     public boolean isSeleccionPermiso() {
         return p.getPermisosPK().getTipoPermiso() > 0;
     }
-    
+
     public boolean isSeleccionEstudiante() {
-        if(p.getPermisosPK().getIpPersona() > 0){
-            m=mfl.find(new MatriculaPK(p.getPermisosPK().getIpPersona(), 
+        if (p.getPermisosPK().getIpPersona() > 0) {
+            m = mfl.find(new MatriculaPK(p.getPermisosPK().getIpPersona(),
                     (p.getPermisosPK().getPermisoFechaSolicitud())));
         }
         return p.getPermisosPK().getIpPersona() > 0;
@@ -125,8 +124,8 @@ public class permisoController implements Serializable {
                     + us.getPersona().getPersonaApellido()));
         }
         for (Estudiante e1 : e) {
-            items.add(new SelectItem(e1.getIdestudiante(), e1.getPersona().getPersonaNombre()+""+
-                    e1.getPersona().getPersonaApellido()));
+            items.add(new SelectItem(e1.getIdestudiante(), e1.getPersona().getPersonaNombre() + ""
+                    + e1.getPersona().getPersonaApellido()));
         }
         return items;
     }
@@ -146,9 +145,9 @@ public class permisoController implements Serializable {
     public void setUs(Estudiante us) {
         this.us = us;
     }
-    
-    public void guardar(){
+
+    public void guardar() {
         pfl.create(p);
     }
-    
+
 }
