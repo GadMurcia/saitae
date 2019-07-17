@@ -37,10 +37,10 @@ public class TipopersonaPermiso implements Serializable {
     @Size(max = 45)
     @Column(name = "tipopersonaPermisoComentario")
     private String tipopersonaPermisoComentario;
-    @JoinColumn(name = "idtipopersona", referencedColumnName = "idtipoPersona", insertable = true, updatable = true)
+    @JoinColumn(name = "idtipopersona", referencedColumnName = "idtipoPersona", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private TipoPersona tipoPersona;
-    @JoinColumn(name = "idtipoPermiso", referencedColumnName = "idtipoPermiso", insertable = true, updatable = true)
+    @JoinColumn(name = "idtipoPermiso", referencedColumnName = "idtipoPermiso", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private TipoPermiso tipoPermiso;
 
