@@ -34,6 +34,7 @@ public class tipoPersonaPermisoController implements Serializable {
 
     private TipoPermiso tipoPermiso;
     private TipoPersona tipoPersona;
+    private boolean seleccionado;
 
     private DualListModel<String> permisos;
     private List<TipoPersona> personas;
@@ -57,7 +58,7 @@ public class tipoPersonaPermisoController implements Serializable {
         tipoPersona = new TipoPersona();
         perm1 = tipoPermisoFL.findAll();
         personas = tipoPersonaFL.findAll();
-        perm3 = new ArrayList<>();        
+        perm3 = new ArrayList<>();
         rellenarPerm2();
         permisos = new DualListModel<>(perm2, perm3);
     }
@@ -104,24 +105,26 @@ public class tipoPersonaPermisoController implements Serializable {
 
     public void onRowSelect(SelectEvent event) {
         tipoPersona = (TipoPersona) event.getObject();
-        rellenarPerm2();
-        perm3=new ArrayList<>();
+        //rellenarPerm2();
+        perm3 = new ArrayList<>();
         for (TipopersonaPermiso tp : tipopersonaPermisoFL.tiposPermisosPorPersona(
                 tipoPersona.getIdtipoPersona())) {
             perm3.add(perm1.indexOf(tp.getTipoPermiso()), tp.getTipoPermiso().getTipoPermisoNombre());
         }
-        for(String f : perm3){
-            if(perm2.contains(f)){
+        for (String f : perm3) {
+            if (perm2.contains(f)) {
                 perm2.remove(f);
             }
         }
+        seleccionado = true;
         FacesMessage msg = new FacesMessage("Car Selected", ((TipoPersona) event.getObject()).getIdtipoPersona() + "");
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
     public void onRowUnselect(UnselectEvent event) {
         tipoPersona = new TipoPersona(0);
-        perm2=new ArrayList<>();
+        rellenarPerm2();
+        seleccionado = false;
         FacesMessage msg = new FacesMessage("Car Unselected", ((TipoPersona) event.getObject()).getIdtipoPersona() + "");
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
@@ -135,7 +138,12 @@ public class tipoPersonaPermisoController implements Serializable {
     }
 
     public void onRowEdit(RowEditEvent event) {
-        tipoPersonaFL.edit((TipoPersona) event.getObject());
+        TipoPersona name = (TipoPersona) event.getObject();
+        if (tipoPersonaFL.find(name.getIdtipoPersona()) == null) {
+            tipoPersonaFL.create(name);
+        } else {
+            tipoPersonaFL.edit(name);
+        }
         FacesMessage msg = new FacesMessage("tipo Persona Edited", ((TipoPersona) event.getObject()).getIdtipoPersona() + "");
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
@@ -145,7 +153,7 @@ public class tipoPersonaPermisoController implements Serializable {
         if (z.getTipoPersonaNombre() == null || z.getTipoPersonaNombre().isEmpty()) {
             personas.remove(personas.indexOf(z));
         }
-        FacesMessage msg = new FacesMessage("Edit Cancelled", ((Zona) event.getObject()).getIdzona() + "");
+        FacesMessage msg = new FacesMessage("Edit Cancelled", ((TipoPersona) event.getObject()).getIdtipoPersona() + "");
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
@@ -157,23 +165,42 @@ public class tipoPersonaPermisoController implements Serializable {
                                 idperm1DePerm3(g))));
             }
             rellenarPerm2();
+            seleccionado = false;
+            tipoPersona = new TipoPersona(0);
         }
     }
-    
-    private int idperm1DePerm3(String g){
-        for(TipoPermiso tp: perm1){
-            if(g.equals(tp.getTipoPermisoNombre())){
+
+    public void agregarNuevotipoPermiso() {
+        tipoPermiso.setIdtipoPermiso(perm1.size());
+        tipoPermiso.setTipoPermisoDiasMes(0);
+        perm1.add(tipoPermiso.getIdtipoPermiso(), tipoPermiso);
+        perm2.add(tipoPermiso.getTipoPermisoNombre());
+        tipoPermisoFL.create(tipoPermiso);
+        tipoPermiso = new TipoPermiso(0);
+    }
+
+    private int idperm1DePerm3(String g) {
+        for (TipoPermiso tp : perm1) {
+            if (g.equals(tp.getTipoPermisoNombre())) {
                 return tp.getIdtipoPermiso();
             }
         }
         return 0;
     }
-    
-    private void rellenarPerm2(){
-        perm2=new ArrayList<>();
+
+    private void rellenarPerm2() {
+        perm2 = new ArrayList<>();
         for (TipoPermiso tp : perm1) {
             perm2.add(perm1.indexOf(tp), tp.getTipoPermisoNombre());
         }
+    }
+
+    public boolean isSeleccionado() {
+        return seleccionado;
+    }
+
+    public void setSeleccionado(boolean seleccionado) {
+        this.seleccionado = seleccionado;
     }
 
 }

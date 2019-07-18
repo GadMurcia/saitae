@@ -31,6 +31,5 @@ public interface TipopersonaPermisoFacadeLocal {
     int count();
 
     public List<TipopersonaPermiso> tiposPermisosPorPersona(int idTipoPersona);
-    
-    
+
 }
