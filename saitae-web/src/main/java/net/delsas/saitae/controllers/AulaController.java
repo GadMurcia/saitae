@@ -37,6 +37,7 @@ import org.primefaces.event.RowEditEvent;
  */
 @Named(value = "aulaController")
 @ViewScoped
+
 public class AulaController implements Serializable {
  private static final long serialVersionUID = 1L;
 
@@ -49,9 +50,11 @@ public class AulaController implements Serializable {
 
     @PostConstruct
     public void aulaController() {
+       
         aulas= afl.findAll();
         aulas = aulas != null || !aulas.isEmpty() ? aulas : new ArrayList<Aula>();
     }
+    
 
     public List<Aula> getAulas() {
         return aulas;
@@ -61,6 +64,7 @@ public class AulaController implements Serializable {
         this.aulas= aulas;
     }
 
+    
     
     public void onCellEdit(CellEditEvent event) {
         Object oldValue = event.getOldValue();
@@ -73,23 +77,24 @@ public class AulaController implements Serializable {
         }
     }
     
-    public void onAddNew() {
+     public void onAddNew() {
         // Add one new car to the table:
         Aula naula = new Aula(aulas.size() + 1);
         aulas.add(naula);
-        FacesMessage msg = new FacesMessage("New Aula added", naula.getIdaula()+ "");
+        FacesMessage msg = new FacesMessage("New Aula added", naula.getIdaula() + "");
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
+
     public void onRowEdit(RowEditEvent event) {
         afl.edit((Aula) event.getObject());
-        FacesMessage msg = new FacesMessage("Zone Edited", ((Aula) event.getObject()).getIdaula() + "");
+        FacesMessage msg = new FacesMessage("Aula Edited", ((Aula) event.getObject()).getIdaula() + "");
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
     public void onRowCancel(RowEditEvent event) {
         Aula a= (Aula) event.getObject();
-        if(a.getZonaAula()==null){
+        if(a.getZonaAula().getZonaNombre()==null||a.getZonaAula().getZonaNombre().isEmpty()){
             aulas.remove(aulas.indexOf(a));
         }
         FacesMessage msg = new FacesMessage("Edit Cancelled", ((Aula) event.getObject()).getIdaula() + "");
