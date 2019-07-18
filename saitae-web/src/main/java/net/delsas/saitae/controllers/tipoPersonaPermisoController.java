@@ -57,11 +57,8 @@ public class tipoPersonaPermisoController implements Serializable {
         tipoPersona = new TipoPersona();
         perm1 = tipoPermisoFL.findAll();
         personas = tipoPersonaFL.findAll();
-        perm2 = new ArrayList<>();
         perm3 = new ArrayList<>();        
-        for (TipoPermiso tp : perm1) {
-            perm2.add(perm1.indexOf(tp), tp.getTipoPermisoNombre());
-        }        
+        rellenarPerm2();
         permisos = new DualListModel<>(perm2, perm3);
     }
 
@@ -107,10 +104,11 @@ public class tipoPersonaPermisoController implements Serializable {
 
     public void onRowSelect(SelectEvent event) {
         tipoPersona = (TipoPersona) event.getObject();
+        rellenarPerm2();
         perm3=new ArrayList<>();
         for (TipopersonaPermiso tp : tipopersonaPermisoFL.tiposPermisosPorPersona(
                 tipoPersona.getIdtipoPersona())) {
-            perm3.add(perm1.indexOf(tp), tp.getTipoPermiso().getTipoPermisoNombre());
+            perm3.add(perm1.indexOf(tp.getTipoPermiso()), tp.getTipoPermiso().getTipoPermisoNombre());
         }
         for(String f : perm3){
             if(perm2.contains(f)){
@@ -156,8 +154,25 @@ public class tipoPersonaPermisoController implements Serializable {
             for (String g : permisos.getTarget()) {
                 tipopersonaPermisoFL.create(new TipopersonaPermiso(
                         new TipopersonaPermisoPK(tipoPersona.getIdtipoPersona(),
-                                perm1.get(perm1.indexOf(g)).getIdtipoPermiso())));
+                                idperm1DePerm3(g))));
             }
+            rellenarPerm2();
+        }
+    }
+    
+    private int idperm1DePerm3(String g){
+        for(TipoPermiso tp: perm1){
+            if(g.equals(tp.getTipoPermisoNombre())){
+                return tp.getIdtipoPermiso();
+            }
+        }
+        return 0;
+    }
+    
+    private void rellenarPerm2(){
+        perm2=new ArrayList<>();
+        for (TipoPermiso tp : perm1) {
+            perm2.add(perm1.indexOf(tp), tp.getTipoPermisoNombre());
         }
     }
 

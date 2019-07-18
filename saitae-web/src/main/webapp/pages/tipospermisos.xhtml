@@ -15,12 +15,12 @@
             <p:panel id="pnl">
                 <p:dataTable id="eventsDT" var="tp" value="#{tipoPersonaPermisoController.personas}" 
                              selectionMode="single" selection="#{tipoPersonaPermisoController.selectedTipoPersona}" 
-                             rowKey="#{tp.idtipoPersona}" editable="true" style="width: inherit;" paginator="true">
+                             rowKey="#{tp.idtipoPersona}" editable="true" style="width: inherit;" paginator="true" widgetVar="zon">
                     <f:facet name="header">
                         Administración de los tipos de Usuario.
                     </f:facet>
-                    <p:ajax event="rowSelect" listener="#{tipoPersonaPermisoController.onRowSelect}" 
-                            update=":form:msgs" />
+                    <p:ajax event="rowSelect" listener="#{tipoPersonaPermisoController.onRowSelect}"
+                            update=":form:msgs :form:p2"/>
                     <p:ajax event="rowUnselect" listener="#{tipoPersonaPermisoController.onRowUnselect}" 
                             update=":form:msgs" />
                     <p:ajax event="rowEdit" listener="#{tipoPersonaPermisoController.onRowEdit}" update=":form:msgs" />
@@ -45,23 +45,27 @@
                                                                style="width:100%" label="Comentario"/></f:facet>
                         </p:cellEditor>
                     </p:column>
+
+                    <p:column style="width:35px">
+                        <p:rowEditor />
+                    </p:column>
                 </p:dataTable> 
                 <div class="ui-g">
                     <div class="ui-g-12">
                         <p:commandButton value="Agregar Nuevo" styleClass="ui-priority-primary" 
                                          process="@this" update=":form:msgs"
                                          action="#{tipoPersonaPermisoController.onAddNew()}" 
-                                         oncomplete="PF('eventsDT').addRow();"/>
+                                         oncomplete="PF('zon').addRow();"/>
                     </div>
                 </div>
             </p:panel>
-            <p:panel id="pnl2">
+            <p:panel id="p2">
                 <h:panelGrid id="pg1" columns="2">
                     <h:outputLabel value="Tipo de Usuario: "/>
                     <h:outputLabel id="t" value="#{tipoPersonaPermisoController.tipoPersona.tipoPersonaNombre}"/>
                 </h:panelGrid>
-                
-                <h:panelGrid columns="1">
+
+                <h:panelGrid id="pg3" columns="1">
                     <h3 style="margin-top: 0">Tipos de Permiso </h3>
                     <p:pickList id="pickList" value="#{tipoPersonaPermisoController.permisos}" var="p" 
                                 itemLabel="#{p}" itemValue="#{p}" />
