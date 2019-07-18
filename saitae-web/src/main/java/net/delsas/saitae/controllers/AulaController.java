@@ -27,6 +27,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import net.delsas.saitae.beans.AulaFacadeLocal;
 import net.delsas.saitae.entities.Aula;
+import net.delsas.saitae.entities.Zona;
 import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.RowEditEvent;
 
@@ -80,6 +81,7 @@ public class AulaController implements Serializable {
      public void onAddNew() {
         // Add one new car to the table:
         Aula naula = new Aula(aulas.size() + 1);
+        naula.setZonaAula(new Zona(0));
         aulas.add(naula);
         FacesMessage msg = new FacesMessage("New Aula added", naula.getIdaula() + "");
         FacesContext.getCurrentInstance().addMessage(null, msg);
