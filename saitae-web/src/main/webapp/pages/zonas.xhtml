@@ -13,7 +13,7 @@
             <p:growl id="msgs" showDetail="true"/>
             <h3>Zonas</h3>
             <p:dataTable id="zona" var="z" value="#{zonaController.zonas}" editable="true" 
-                         widgetVar="zona" >
+                         widgetVar="zona1" >
                 <f:facet name="header">
                     Administración de Zonas
                 </f:facet>
@@ -50,7 +50,7 @@
                     <p:commandButton value="Agregar Nuevo" styleClass="ui-priority-primary" 
                                      process="@this" update=":form:msgs"
                                      action="#{zonaController.onAddNew()}" 
-                                     oncomplete="PF('zona').addRow();"/>
+                                     oncomplete="PF('zona1').addRow();"/>
                 </div>
             </div>
             <p:contextMenu for="zona" widgetVar="cMenu">   
