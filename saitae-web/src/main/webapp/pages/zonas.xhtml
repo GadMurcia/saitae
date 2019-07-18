@@ -6,26 +6,16 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>Administración de zonas</title>
+        <h:outputStylesheet library="css" name="tpp.css"/>
     </h:head>
     <h:body>
-        <style type="text/css">
-            .ui-row-editor .ui-row-editor-pencil {
-                margin-left:8px;                
-            }
-            .centred-form{
-                margin: 0 auto;
-                align-content: center;
-                align-items: center;
-                width: 50%;
-            }
-        </style>
-            <h:form id="form" styleClass="centred-form">
+        <h:form id="form" styleClass="centred-form">
             <p:growl id="msgs" showDetail="true"/>
             <h3>Zonas</h3>
             <p:dataTable id="zona" var="z" value="#{zonaController.zonas}" editable="true" 
-                         widgetVar="zona" editMode="cell">
+                         widgetVar="zona" >
                 <f:facet name="header">
-                    Row Editing
+                    Administración de Zonas
                 </f:facet>
 
                 <p:ajax event="rowEdit" listener="#{zonaController.onRowEdit}" update=":form:msgs" />
@@ -50,6 +40,9 @@
                         <f:facet name="input"><p:inputText value="#{z.zonaCoementario}" 
                                                            style="width:100%" label="Comentario"/></f:facet>
                     </p:cellEditor>
+                </p:column>
+                <p:column style="width:35px">
+                    <p:rowEditor />
                 </p:column>
             </p:dataTable>
             <div class="ui-g">

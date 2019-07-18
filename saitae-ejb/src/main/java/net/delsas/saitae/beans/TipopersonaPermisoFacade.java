@@ -35,7 +35,7 @@ public class TipopersonaPermisoFacade extends AbstractFacade<TipopersonaPermiso>
     @Override
     public List<TipopersonaPermiso> tiposPermisosPorPersona(int idTipoPersona){
         Query q = this.getEntityManager().createNamedQuery("TipopersonaPermiso.findByIdtipopersona");
-        q.setParameter("idtipopersona", new TipoPersona(idTipoPersona));
+        q.setParameter("idtipopersona", idTipoPersona);
         return q.getResultList();
     }
     
