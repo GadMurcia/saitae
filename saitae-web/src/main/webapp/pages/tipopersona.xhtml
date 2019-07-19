@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Tipos de Permisos para los tipos de usuarios</title>
+        <h:outputStylesheet library="css" name="tpp.css"/>        
+    </h:head>
+    <h:body>
+        <h:form id="form" styleClass="centred-form">
+            <p:growl id="msgs" showDetail="true"/>
+            <p:panel id="pnl">
+                <p:dataTable id="eventsDT" var="tp" value="#{tipoPersonaController.personas}" 
+                             selectionMode="single" selection="#{tipoPersonaController.selectedTipoPersona}" 
+                             rowKey="#{tp.idtipoPersona}" editable="true" style="width: inherit;" paginator="true" 
+                             widgetVar="zon">
+                    <f:facet name="header">
+                        Administración de los tipos de Usuario.
+                    </f:facet>
+                    <p:ajax event="rowEdit" listener="#{tipoPersonaController.onRowEdit}" 
+                            update=":form:msgs" />
+                    <p:ajax event="rowEditCancel" listener="#{tipoPersonaController.onRowCancel}" 
+                            update=":form:msgs" />
+
+                    <p:column headerText="Id" style="width: 10px">
+                        <h:outputText value="#{tp.idtipoPersona}" />
+                    </p:column>
+
+                    <p:column headerText="Nombre">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{tp.tipoPersonaNombre}" /></f:facet>
+                            <f:facet name="input"><p:inputText value="#{tp.tipoPersonaNombre}" 
+                                                               style="width:100%" label="Nombre"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column headerText="Comentario">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{tp.tipoPersonaComentario}" /></f:facet>
+                            <f:facet name="input"><p:inputText value="#{tp.tipoPersonaComentario}" 
+                                                               style="width:100%" label="Comentario"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column style="width:35px">
+                        <p:rowEditor />
+                    </p:column>
+                </p:dataTable> 
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <p:commandButton value="Agregar Nuevo" styleClass="ui-priority-primary" 
+                                         process="@this" update=":form:msgs"
+                                         action="#{tipoPersonaController.onAddNew()}" 
+                                         oncomplete="PF('zon').addRow();"/>
+                    </div>
+                </div>
+            </p:panel>
+        </h:form>
+    </h:body>
+</html>
+
