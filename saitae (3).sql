@@ -38,15 +38,6 @@ CREATE TABLE `acceso` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `acceso`
---
-
-LOCK TABLES `acceso` WRITE;
-/*!40000 ALTER TABLE `acceso` DISABLE KEYS */;
-/*!40000 ALTER TABLE `acceso` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `accesoTipoPersona`
 --
 
@@ -63,15 +54,6 @@ CREATE TABLE `accesoTipoPersona` (
   CONSTRAINT `fk_accesoTipoPersona_2` FOREIGN KEY (`idTipoPersona`) REFERENCES `tipoPersona` (`idtipoPersona`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `accesoTipoPersona`
---
-
-LOCK TABLES `accesoTipoPersona` WRITE;
-/*!40000 ALTER TABLE `accesoTipoPersona` DISABLE KEYS */;
-/*!40000 ALTER TABLE `accesoTipoPersona` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `anuncio`
@@ -94,15 +76,6 @@ CREATE TABLE `anuncio` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `anuncio`
---
-
-LOCK TABLES `anuncio` WRITE;
-/*!40000 ALTER TABLE `anuncio` DISABLE KEYS */;
-/*!40000 ALTER TABLE `anuncio` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `aula`
 --
 
@@ -120,16 +93,6 @@ CREATE TABLE `aula` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `aula`
---
-
-LOCK TABLES `aula` WRITE;
-/*!40000 ALTER TABLE `aula` DISABLE KEYS */;
-INSERT INTO `aula` VALUES (1,1,NULL),(2,1,NULL),(3,1,NULL),(4,1,NULL),(5,1,NULL),(6,2,NULL),(7,2,NULL),(8,3,NULL),(9,3,NULL),(10,3,NULL),(11,3,NULL);
-/*!40000 ALTER TABLE `aula` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `autor`
 --
 
@@ -143,15 +106,6 @@ CREATE TABLE `autor` (
   PRIMARY KEY (`idautor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `autor`
---
-
-LOCK TABLES `autor` WRITE;
-/*!40000 ALTER TABLE `autor` DISABLE KEYS */;
-/*!40000 ALTER TABLE `autor` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `autorLibro`
@@ -170,15 +124,6 @@ CREATE TABLE `autorLibro` (
   CONSTRAINT `fk_autorLibro_2` FOREIGN KEY (`idLibro`) REFERENCES `recurso` (`idrecurso`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `autorLibro`
---
-
-LOCK TABLES `autorLibro` WRITE;
-/*!40000 ALTER TABLE `autorLibro` DISABLE KEYS */;
-/*!40000 ALTER TABLE `autorLibro` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `capacitaciones`
@@ -203,15 +148,6 @@ CREATE TABLE `capacitaciones` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `capacitaciones`
---
-
-LOCK TABLES `capacitaciones` WRITE;
-/*!40000 ALTER TABLE `capacitaciones` DISABLE KEYS */;
-/*!40000 ALTER TABLE `capacitaciones` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `cargo`
 --
 
@@ -227,15 +163,6 @@ CREATE TABLE `cargo` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `cargo`
---
-
-LOCK TABLES `cargo` WRITE;
-/*!40000 ALTER TABLE `cargo` DISABLE KEYS */;
-/*!40000 ALTER TABLE `cargo` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `categoria`
 --
 
@@ -249,15 +176,6 @@ CREATE TABLE `categoria` (
   PRIMARY KEY (`idcategoria`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `categoria`
---
-
-LOCK TABLES `categoria` WRITE;
-/*!40000 ALTER TABLE `categoria` DISABLE KEYS */;
-/*!40000 ALTER TABLE `categoria` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `citaPsicologia`
@@ -276,15 +194,6 @@ CREATE TABLE `citaPsicologia` (
   CONSTRAINT `fk_citaPsixologia_1` FOREIGN KEY (`estudiante`) REFERENCES `estudiante` (`idestudiante`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `citaPsicologia`
---
-
-LOCK TABLES `citaPsicologia` WRITE;
-/*!40000 ALTER TABLE `citaPsicologia` DISABLE KEYS */;
-/*!40000 ALTER TABLE `citaPsicologia` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `consulta`
@@ -317,15 +226,6 @@ CREATE TABLE `consulta` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `consulta`
---
-
-LOCK TABLES `consulta` WRITE;
-/*!40000 ALTER TABLE `consulta` DISABLE KEYS */;
-/*!40000 ALTER TABLE `consulta` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `contenidoLibro`
 --
 
@@ -342,15 +242,6 @@ CREATE TABLE `contenidoLibro` (
   CONSTRAINT `fk_contenidoLibro_1` FOREIGN KEY (`idLibro`) REFERENCES `recurso` (`idrecurso`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `contenidoLibro`
---
-
-LOCK TABLES `contenidoLibro` WRITE;
-/*!40000 ALTER TABLE `contenidoLibro` DISABLE KEYS */;
-/*!40000 ALTER TABLE `contenidoLibro` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `contribuciones`
@@ -375,15 +266,6 @@ CREATE TABLE `contribuciones` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `contribuciones`
---
-
-LOCK TABLES `contribuciones` WRITE;
-/*!40000 ALTER TABLE `contribuciones` DISABLE KEYS */;
-/*!40000 ALTER TABLE `contribuciones` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `delagacionCargo`
 --
 
@@ -404,15 +286,6 @@ CREATE TABLE `delagacionCargo` (
   CONSTRAINT `fk_delagacionCargo_2` FOREIGN KEY (`idTipoPersona`) REFERENCES `tipoPersona` (`idtipoPersona`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `delagacionCargo`
---
-
-LOCK TABLES `delagacionCargo` WRITE;
-/*!40000 ALTER TABLE `delagacionCargo` DISABLE KEYS */;
-/*!40000 ALTER TABLE `delagacionCargo` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `documentos`
@@ -440,15 +313,6 @@ CREATE TABLE `documentos` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `documentos`
---
-
-LOCK TABLES `documentos` WRITE;
-/*!40000 ALTER TABLE `documentos` DISABLE KEYS */;
-/*!40000 ALTER TABLE `documentos` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `editorial`
 --
 
@@ -462,15 +326,6 @@ CREATE TABLE `editorial` (
   PRIMARY KEY (`ideditorial`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `editorial`
---
-
-LOCK TABLES `editorial` WRITE;
-/*!40000 ALTER TABLE `editorial` DISABLE KEYS */;
-/*!40000 ALTER TABLE `editorial` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `editorialLibro`
@@ -491,15 +346,6 @@ CREATE TABLE `editorialLibro` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `editorialLibro`
---
-
-LOCK TABLES `editorialLibro` WRITE;
-/*!40000 ALTER TABLE `editorialLibro` DISABLE KEYS */;
-/*!40000 ALTER TABLE `editorialLibro` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `ejemplar`
 --
 
@@ -515,15 +361,6 @@ CREATE TABLE `ejemplar` (
   CONSTRAINT `fk_ejemplar_1` FOREIGN KEY (`idRecurso`) REFERENCES `recurso` (`idrecurso`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `ejemplar`
---
-
-LOCK TABLES `ejemplar` WRITE;
-/*!40000 ALTER TABLE `ejemplar` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ejemplar` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `entregaUtiles`
@@ -548,15 +385,6 @@ CREATE TABLE `entregaUtiles` (
   CONSTRAINT `fk_entregaUtiles_3` FOREIGN KEY (`idRepresentante`) REFERENCES `estudiante` (`idestudiante`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `entregaUtiles`
---
-
-LOCK TABLES `entregaUtiles` WRITE;
-/*!40000 ALTER TABLE `entregaUtiles` DISABLE KEYS */;
-/*!40000 ALTER TABLE `entregaUtiles` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `estudiante`
@@ -600,16 +428,6 @@ CREATE TABLE `estudiante` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `estudiante`
---
-
-LOCK TABLES `estudiante` WRITE;
-/*!40000 ALTER TABLE `estudiante` DISABLE KEYS */;
-INSERT INTO `estudiante` VALUES (1045367073,'',1,'',4,3.00,'\0','Madre¿ * * * ','','','',NULL,'','Noveno Grado','Estudiante','7878787878',NULL,NULL,1045689754,1777777777,1878888888,NULL),(1045689754,'',1,'',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'\0','454545454','785445',NULL,NULL,'',NULL,NULL,NULL,NULL);
-/*!40000 ALTER TABLE `estudiante` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `evaluacionMaestro`
 --
 
@@ -648,15 +466,6 @@ CREATE TABLE `evaluacionMaestro` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `evaluacionMaestro`
---
-
-LOCK TABLES `evaluacionMaestro` WRITE;
-/*!40000 ALTER TABLE `evaluacionMaestro` DISABLE KEYS */;
-/*!40000 ALTER TABLE `evaluacionMaestro` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `expedientePS`
 --
 
@@ -674,15 +483,6 @@ CREATE TABLE `expedientePS` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `expedientePS`
---
-
-LOCK TABLES `expedientePS` WRITE;
-/*!40000 ALTER TABLE `expedientePS` DISABLE KEYS */;
-/*!40000 ALTER TABLE `expedientePS` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `financiamiento`
 --
 
@@ -696,15 +496,6 @@ CREATE TABLE `financiamiento` (
   PRIMARY KEY (`idfinanciamiento`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `financiamiento`
---
-
-LOCK TABLES `financiamiento` WRITE;
-/*!40000 ALTER TABLE `financiamiento` DISABLE KEYS */;
-/*!40000 ALTER TABLE `financiamiento` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `grado`
@@ -729,15 +520,6 @@ CREATE TABLE `grado` (
   CONSTRAINT `fk_grado_2` FOREIGN KEY (`aulaGrado`) REFERENCES `aula` (`idaula`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `grado`
---
-
-LOCK TABLES `grado` WRITE;
-/*!40000 ALTER TABLE `grado` DISABLE KEYS */;
-/*!40000 ALTER TABLE `grado` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `gradoEvaluacion`
@@ -776,15 +558,6 @@ CREATE TABLE `gradoEvaluacion` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `gradoEvaluacion`
---
-
-LOCK TABLES `gradoEvaluacion` WRITE;
-/*!40000 ALTER TABLE `gradoEvaluacion` DISABLE KEYS */;
-/*!40000 ALTER TABLE `gradoEvaluacion` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `horario`
 --
 
@@ -799,15 +572,6 @@ CREATE TABLE `horario` (
   PRIMARY KEY (`idhorario`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `horario`
---
-
-LOCK TABLES `horario` WRITE;
-/*!40000 ALTER TABLE `horario` DISABLE KEYS */;
-/*!40000 ALTER TABLE `horario` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `maestoCargo`
@@ -835,15 +599,6 @@ CREATE TABLE `maestoCargo` (
   CONSTRAINT `fk_maestoCargo_4` FOREIGN KEY (`idFinanciamiento`) REFERENCES `financiamiento` (`idfinanciamiento`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `maestoCargo`
---
-
-LOCK TABLES `maestoCargo` WRITE;
-/*!40000 ALTER TABLE `maestoCargo` DISABLE KEYS */;
-/*!40000 ALTER TABLE `maestoCargo` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `maestro`
@@ -884,15 +639,6 @@ CREATE TABLE `maestro` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `maestro`
---
-
-LOCK TABLES `maestro` WRITE;
-/*!40000 ALTER TABLE `maestro` DISABLE KEYS */;
-/*!40000 ALTER TABLE `maestro` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `materia`
 --
 
@@ -909,15 +655,6 @@ CREATE TABLE `materia` (
   CONSTRAINT `fk_materia_1` FOREIGN KEY (`tipoMateria`) REFERENCES `tipoMateria` (`idtipoMateria`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `materia`
---
-
-LOCK TABLES `materia` WRITE;
-/*!40000 ALTER TABLE `materia` DISABLE KEYS */;
-/*!40000 ALTER TABLE `materia` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `matricula`
@@ -940,15 +677,6 @@ CREATE TABLE `matricula` (
   CONSTRAINT `fk_matricula_1` FOREIGN KEY (`matriculaNivel`, `matriculaSeccion`, `matriculaAnyo`, `gradoModalidad`) REFERENCES `grado` (`idgrado`, `gradoSeccion`, `gradoAño`, `gradoModalidad`) ON DELETE NO ACTION ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `matricula`
---
-
-LOCK TABLES `matricula` WRITE;
-/*!40000 ALTER TABLE `matricula` DISABLE KEYS */;
-/*!40000 ALTER TABLE `matricula` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `mestroHorarioMaterias`
@@ -979,15 +707,6 @@ CREATE TABLE `mestroHorarioMaterias` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `mestroHorarioMaterias`
---
-
-LOCK TABLES `mestroHorarioMaterias` WRITE;
-/*!40000 ALTER TABLE `mestroHorarioMaterias` DISABLE KEYS */;
-/*!40000 ALTER TABLE `mestroHorarioMaterias` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `notificaciones`
 --
 
@@ -1007,15 +726,6 @@ CREATE TABLE `notificaciones` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `notificaciones`
---
-
-LOCK TABLES `notificaciones` WRITE;
-/*!40000 ALTER TABLE `notificaciones` DISABLE KEYS */;
-/*!40000 ALTER TABLE `notificaciones` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `pais`
 --
 
@@ -1029,15 +739,6 @@ CREATE TABLE `pais` (
   PRIMARY KEY (`idpais`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `pais`
---
-
-LOCK TABLES `pais` WRITE;
-/*!40000 ALTER TABLE `pais` DISABLE KEYS */;
-/*!40000 ALTER TABLE `pais` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `permisos`
@@ -1068,15 +769,6 @@ CREATE TABLE `permisos` (
   CONSTRAINT `fk_permisos_4` FOREIGN KEY (`tipoPermiso`) REFERENCES `tipoPermiso` (`idtipoPermiso`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `permisos`
---
-
-LOCK TABLES `permisos` WRITE;
-/*!40000 ALTER TABLE `permisos` DISABLE KEYS */;
-/*!40000 ALTER TABLE `permisos` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `persona`
@@ -1115,16 +807,6 @@ CREATE TABLE `persona` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `persona`
---
-
-LOCK TABLES `persona` WRITE;
-/*!40000 ALTER TABLE `persona` DISABLE KEYS */;
-INSERT INTO `persona` VALUES (1045367073,'Guillermo','Delsas','0191-01-17','877777777777777','8777-7777',NULL,1,'78788787#7887787887','04536707-3',NULL,NULL,'','8888-888888-888-8','\0',1,'Salvadoreña','87','',NULL),(1045689754,'12221212','12121','1980-01-22','9898989898989','8888-8888',NULL,1,'787878#78787875','04568975-4',NULL,NULL,'','5666-666666-666-6','\0',1,'looooo','98899898',NULL,NULL),(1777777777,'7778787878','787878787',NULL,NULL,NULL,NULL,NULL,NULL,'77777777-7',NULL,NULL,'\0',NULL,NULL,NULL,NULL,NULL,NULL,NULL),(1878888888,'8878787878','78787878787878',NULL,NULL,NULL,NULL,NULL,NULL,'87888888-8',NULL,NULL,'\0',NULL,NULL,NULL,NULL,NULL,NULL,NULL);
-/*!40000 ALTER TABLE `persona` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `personasReserva`
 --
 
@@ -1141,15 +823,6 @@ CREATE TABLE `personasReserva` (
   CONSTRAINT `fk_personasReserva_2` FOREIGN KEY (`idReserva`) REFERENCES `reserva` (`idreserva`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `personasReserva`
---
-
-LOCK TABLES `personasReserva` WRITE;
-/*!40000 ALTER TABLE `personasReserva` DISABLE KEYS */;
-/*!40000 ALTER TABLE `personasReserva` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `proyectoPedagogico`
@@ -1178,15 +851,6 @@ CREATE TABLE `proyectoPedagogico` (
   PRIMARY KEY (`idproyectoPedagogico`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `proyectoPedagogico`
---
-
-LOCK TABLES `proyectoPedagogico` WRITE;
-/*!40000 ALTER TABLE `proyectoPedagogico` DISABLE KEYS */;
-/*!40000 ALTER TABLE `proyectoPedagogico` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `recurso`
@@ -1222,15 +886,6 @@ CREATE TABLE `recurso` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `recurso`
---
-
-LOCK TABLES `recurso` WRITE;
-/*!40000 ALTER TABLE `recurso` DISABLE KEYS */;
-/*!40000 ALTER TABLE `recurso` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `reserva`
 --
 
@@ -1253,15 +908,6 @@ CREATE TABLE `reserva` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `reserva`
---
-
-LOCK TABLES `reserva` WRITE;
-/*!40000 ALTER TABLE `reserva` DISABLE KEYS */;
-/*!40000 ALTER TABLE `reserva` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `reservaDetalle`
 --
 
@@ -1279,15 +925,6 @@ CREATE TABLE `reservaDetalle` (
   CONSTRAINT `fk_reservaDetalle_2` FOREIGN KEY (`idRecurso`, `ejemplarCorrelativo`) REFERENCES `ejemplar` (`idRecurso`, `ejemplarCorrelativo`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `reservaDetalle`
---
-
-LOCK TABLES `reservaDetalle` WRITE;
-/*!40000 ALTER TABLE `reservaDetalle` DISABLE KEYS */;
-/*!40000 ALTER TABLE `reservaDetalle` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `reservaXpedagogia`
@@ -1308,15 +945,6 @@ CREATE TABLE `reservaXpedagogia` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `reservaXpedagogia`
---
-
-LOCK TABLES `reservaXpedagogia` WRITE;
-/*!40000 ALTER TABLE `reservaXpedagogia` DISABLE KEYS */;
-/*!40000 ALTER TABLE `reservaXpedagogia` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `solicitudReserva`
 --
 
@@ -1335,15 +963,6 @@ CREATE TABLE `solicitudReserva` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `solicitudReserva`
---
-
-LOCK TABLES `solicitudReserva` WRITE;
-/*!40000 ALTER TABLE `solicitudReserva` DISABLE KEYS */;
-/*!40000 ALTER TABLE `solicitudReserva` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `tipoCargo`
 --
 
@@ -1358,15 +977,6 @@ CREATE TABLE `tipoCargo` (
   UNIQUE KEY `idtipoCargo_UNIQUE` (`idtipoCargo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tipoCargo`
---
-
-LOCK TABLES `tipoCargo` WRITE;
-/*!40000 ALTER TABLE `tipoCargo` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tipoCargo` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `tipoMateria`
@@ -1384,15 +994,6 @@ CREATE TABLE `tipoMateria` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tipoMateria`
---
-
-LOCK TABLES `tipoMateria` WRITE;
-/*!40000 ALTER TABLE `tipoMateria` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tipoMateria` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `tipoNombramiento`
 --
 
@@ -1406,15 +1007,6 @@ CREATE TABLE `tipoNombramiento` (
   PRIMARY KEY (`idtipoNombramiento`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tipoNombramiento`
---
-
-LOCK TABLES `tipoNombramiento` WRITE;
-/*!40000 ALTER TABLE `tipoNombramiento` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tipoNombramiento` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `tipoPermiso`
@@ -1433,15 +1025,6 @@ CREATE TABLE `tipoPermiso` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tipoPermiso`
---
-
-LOCK TABLES `tipoPermiso` WRITE;
-/*!40000 ALTER TABLE `tipoPermiso` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tipoPermiso` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `tipoPersona`
 --
 
@@ -1455,16 +1038,6 @@ CREATE TABLE `tipoPersona` (
   PRIMARY KEY (`idtipoPersona`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tipoPersona`
---
-
-LOCK TABLES `tipoPersona` WRITE;
-/*!40000 ALTER TABLE `tipoPersona` DISABLE KEYS */;
-INSERT INTO `tipoPersona` VALUES (0,'administrador','tipo de persona que referncea a los administradores del sistema');
-/*!40000 ALTER TABLE `tipoPersona` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `tipoRecurso`
@@ -1482,15 +1055,6 @@ CREATE TABLE `tipoRecurso` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tipoRecurso`
---
-
-LOCK TABLES `tipoRecurso` WRITE;
-/*!40000 ALTER TABLE `tipoRecurso` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tipoRecurso` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `tipoReserva`
 --
 
@@ -1504,15 +1068,6 @@ CREATE TABLE `tipoReserva` (
   PRIMARY KEY (`idtipoReserva`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tipoReserva`
---
-
-LOCK TABLES `tipoReserva` WRITE;
-/*!40000 ALTER TABLE `tipoReserva` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tipoReserva` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `tipoReservaRecurso`
@@ -1533,15 +1088,6 @@ CREATE TABLE `tipoReservaRecurso` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tipoReservaRecurso`
---
-
-LOCK TABLES `tipoReservaRecurso` WRITE;
-/*!40000 ALTER TABLE `tipoReservaRecurso` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tipoReservaRecurso` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `tipopersonaPermiso`
 --
 
@@ -1560,15 +1106,6 @@ CREATE TABLE `tipopersonaPermiso` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tipopersonaPermiso`
---
-
-LOCK TABLES `tipopersonaPermiso` WRITE;
-/*!40000 ALTER TABLE `tipopersonaPermiso` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tipopersonaPermiso` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `zona`
 --
 
@@ -1582,16 +1119,6 @@ CREATE TABLE `zona` (
   PRIMARY KEY (`idzona`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `zona`
---
-
-LOCK TABLES `zona` WRITE;
-/*!40000 ALTER TABLE `zona` DISABLE KEYS */;
-INSERT INTO `zona` VALUES (1,'Primera Zona',NULL),(2,'Segunda Zona',NULL),(3,'Tercera Zona',NULL);
-/*!40000 ALTER TABLE `zona` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Dumping events for database 'intex'
@@ -1610,4 +1137,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-07-15 21:29:01
+-- Dump completed on 2019-07-19 12:24:57
