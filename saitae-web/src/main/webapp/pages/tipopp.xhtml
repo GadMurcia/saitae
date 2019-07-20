@@ -13,15 +13,14 @@
             <h1>Administración de los tipos del sistema.</h1>
             <p:tabView id="tw" orientation="left" dynamic="true">
                 <p:tab title="Zonas">
-                    <p:dataTable id="zona" var="z" value="#{zonaController.zonas}" editable="true" 
+                    <p:dataTable id="zona" var="z" value="#{tipoController.zonas}" editable="true" 
                                  widgetVar="zona1" >
                         <f:facet name="header">
                             Administración de Zonas
                         </f:facet>
 
-                        <p:ajax event="rowEdit" listener="#{zonaController.onRowEdit}" update=":form:msgs form:tw:zona" />
-                        <p:ajax event="rowEditCancel" listener="#{zonaController.onRowCancel}" update=":form:msgs" />
-                        <p:ajax event="cellEdit" listener="#{zonaController.onCellEdit}" update=":form:msgs" />
+                        <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" update=":form:msgs form:tw:zona" />
+                        <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" update=":form:msgs" />
 
                         <p:column headerText="Id">
                             <h:outputText value="#{z.idzona}" />
@@ -50,32 +49,28 @@
                         <div class="ui-g-12">
                             <p:commandButton value="Agregar Nuevo" styleClass="ui-priority-primary" 
                                              process="@this" update=":form:msgs"
-                                             action="#{zonaController.onAddNew()}" 
+                                             action="#{tipoController.onAddNew('zona')}" 
                                              oncomplete="PF('zona1').addRow();"/>
                         </div>
                     </div>
-                    <p:contextMenu for="zona" widgetVar="cMenu">   
-                        <p:menuitem value="Editar" icon="pi pi-search" onclick="PF('zona').showCellEditor();return false;"/>  
-                        <p:menuitem value="Hide Menu" icon="pi pi-times" onclick="PF('cMenu').hide()"/>  
-                    </p:contextMenu>
                 </p:tab>
                 <p:tab title="Tipo Permisos">
                     <div class="ui-g">
                         <div class="ui-g-12">
                             <p:commandButton value="Nuevo tipo" styleClass="ui-priority-primary" process="@this" 
-                                             update=":form:msgs" action="#{tipoPermisoController.onAddNew()}" 
+                                             update=":form:msgs form:tw:pers form:tw:pickList" action="#{tipoController.onAddNew('permiso')}" 
                                              oncomplete="PF('tipos').addRow();"/>
                         </div>
                     </div>
-                    <p:dataTable id="tp1" widgetVar="tipos" var="tp" value="#{tipoPermisoController.all}" 
+                    <p:dataTable id="tp1" widgetVar="tipos" var="tp" value="#{tipoController.all}" 
                                  editable="true" style="margin-bottom:20px" paginator="true">
                         <f:facet name="header">
                             Administración de los tipos de permisos
                         </f:facet>
 
-                        <p:ajax event="rowEdit" listener="#{tipoPermisoController.onRowEdit}" 
+                        <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" 
                                 update=":form:msgs, form:tw:pers, form:tw:pickList" />
-                        <p:ajax event="rowEditCancel" listener="#{tipoPermisoController.onRowCancel}" update=":form:msgs" />
+                        <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" update=":form:msgs" />
 
                         <p:column headerText="Id">
                             <h:outputText value="#{tp.idtipoPermiso}" />
@@ -107,20 +102,19 @@
                         <div class="ui-g-12">
                             <p:commandButton value="Agregar Nuevo" styleClass="ui-priority-primary" 
                                              process="@this" update=":form:msgs"
-                                             action="#{tipoPersonaController.onAddNew()}" 
-                                             oncomplete="PF('zon').addRow();"/>
+                                             action="#{tipoController.onAddNew('persona')}" 
+                                             oncomplete="PF('per').addRow();"/>
                         </div>
                     </div>
-                    <p:dataTable id="eventsDT" var="tp" value="#{tipoPersonaController.personas}" 
-                                 selectionMode="single" selection="#{tipoPersonaController.selectedTipoPersona}" 
+                    <p:dataTable id="persona" var="tp" value="#{tipoController.personas}" 
                                  rowKey="#{tp.idtipoPersona}" editable="true" style="width: inherit;" paginator="true" 
-                                 widgetVar="zon" pageLinks="5">
+                                 widgetVar="per" pageLinks="5">
                         <f:facet name="header">
                             Administración de los tipos de Usuario.
                         </f:facet>
-                        <p:ajax event="rowEdit" listener="#{tipoPersonaController.onRowEdit}" 
+                        <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" 
                                 update=":form:msgs form:tw:pers form:tw:pickList" />
-                        <p:ajax event="rowEditCancel" listener="#{tipoPersonaController.onRowCancel}" 
+                        <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" 
                                 update=":form:msgs" />
 
                         <p:column headerText="Id" style="width: 10px">
@@ -143,21 +137,105 @@
                 <p:tab id="tab4" title="Tipos Permisos por Usuarios">
                     <h:panelGrid id="pg" columns="2">
                         <h:outputLabel for="pers" value="Tipo de Usuario: " />
-                        <p:selectOneMenu id="pers" required="true" value="#{tipoPersonaController.tipo.idtipoPersona}">
-                            <f:selectItems value="#{tipoPersonaController.tiposPersonas}" />
-                            <p:ajax event="itemSelect" listener="#{tipoPersonaController.onItemSelect(event)}" 
+                        <p:selectOneMenu id="pers" required="true" value="#{tipoController.tipoPersona.idtipoPersona}">
+                            <f:selectItems value="#{tipoController.tiposPersonas}" />
+                            <p:ajax event="itemSelect" listener="#{tipoController.onItemSelect(event)}" 
                                     update="pickList" />
                         </p:selectOneMenu>
 
                         <h:outputLabel for="pickList" value="Tipos de Permisos"/>
-                        <p:pickList id="pickList" value="#{tipoPersonaController.model}" var="perm" 
+                        <p:pickList id="pickList" value="#{tipoController.model}" var="perm" 
                                     itemLabel="#{perm}" itemValue="#{perm}">
                             <f:facet name="sourceCaption">Disponibles</f:facet>
                             <f:facet name="targetCaption">Asignados</f:facet>
                         </p:pickList>
-                        <p:commandButton value="Guardar" actionListener="#{tipoPersonaController.guardar()}"/>
+                        <p:commandButton value="Guardar" actionListener="#{tipoController.guardar()}"/>
 
                     </h:panelGrid>
+                </p:tab>
+                <p:tab title="Tipo Cargo">
+                    <p:dataTable id="cargo" var="ca" value="#{tipoController.cargos}" editable="true" 
+                                 widgetVar="cargo1" >
+                        <f:facet name="header">
+                            Administración de los tipos de cargo al inventario.
+                        </f:facet>
+
+                        <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" update=":form:msgs" />
+                        <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" update=":form:msgs" />
+
+                        <p:column headerText="Id">
+                            <h:outputText value="#{ca.idtipoCargo}" />
+                        </p:column>
+
+                        <p:column headerText="Nombre">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{ca.nombre}" /></f:facet>
+                                <f:facet name="input"><p:inputText value="#{ca.nombre}" 
+                                                                   style="width:100%" label="Nombre"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column headerText="Comentario">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{ca.tipoCargoComentario}" /></f:facet>
+                                <f:facet name="input"><p:inputText value="#{ca.tipoCargoComentario}" 
+                                                                   style="width:100%" label="Comentario"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        <p:column style="width:35px">
+                            <p:rowEditor />
+                        </p:column>
+                    </p:dataTable> 
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <p:commandButton value="Agregar Nuevo" styleClass="ui-priority-primary" 
+                                             process="@this" update=":form:msgs"
+                                             action="#{tipoController.onAddNew('cargo')}" 
+                                             oncomplete="PF('cargo1').addRow();"/>
+                        </div>
+                    </div>
+                </p:tab>
+                <p:tab title="Tipo Recurso">
+                    <p:dataTable id="recurso" var="re" value="#{tipoController.recursos}" editable="true" 
+                                 widgetVar="recurso1" >
+                        <f:facet name="header">
+                            Administración de los tipos de Recursos.
+                        </f:facet>
+
+                        <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" update=":form:msgs" />
+                        <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" update=":form:msgs" />
+
+                        <p:column headerText="Id">
+                            <h:outputText value="#{re.idtipoRecurso}" />
+                        </p:column>
+
+                        <p:column headerText="Nombre">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{re.tipoRecursoNombre}" /></f:facet>
+                                <f:facet name="input"><p:inputText value="#{re.tipoRecursoNombre}" 
+                                                                   style="width:100%" label="Nombre"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column headerText="Comentario">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{re.tipoRecursoComentario}" /></f:facet>
+                                <f:facet name="input"><p:inputText value="#{re.tipoRecursoComentario}" 
+                                                                   style="width:100%" label="Comentario"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        <p:column style="width:35px">
+                            <p:rowEditor />
+                        </p:column>
+                    </p:dataTable> 
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <p:commandButton value="Agregar Nuevo" styleClass="ui-priority-primary" 
+                                             process="@this" update=":form:msgs"
+                                             action="#{tipoController.onAddNew('recursos')}" 
+                                             oncomplete="PF('recurso1').addRow();"/>
+                        </div>
+                    </div>
                 </p:tab>
             </p:tabView> 
         </h:form>

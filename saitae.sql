@@ -1,10 +1,10 @@
 CREATE DATABASE  IF NOT EXISTS `intex` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `intex`;
--- MariaDB dump 10.17  Distrib 10.4.6-MariaDB, for debian-linux-gnu (x86_64)
+-- MySQL dump 10.16  Distrib 10.1.38-MariaDB, for debian-linux-gnu (x86_64)
 --
 -- Host: 127.0.0.1    Database: intex
 -- ------------------------------------------------------
--- Server version	10.4.6-MariaDB-1:10.4.6+maria~buster
+-- Server version	10.1.38-MariaDB-0+deb9u1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -67,7 +67,7 @@ CREATE TABLE `anuncio` (
   `anuncioTitulo` varchar(45) NOT NULL,
   `anuncioFechaFin` datetime NOT NULL,
   `anuncioTexto` text NOT NULL,
-  `anuncioTipoPersona` int(11) DEFAULT 0,
+  `anuncioTipoPersona` int(11) DEFAULT '0',
   `anuncioComentario` varchar(140) DEFAULT NULL,
   PRIMARY KEY (`idanuncio`),
   KEY `fk_anuncio_1_idx` (`anuncioTipoPersona`),
@@ -296,11 +296,11 @@ DROP TABLE IF EXISTS `documentos`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `documentos` (
   `iddocumentos` int(11) NOT NULL,
-  `estudianteDocPartida` longblob DEFAULT NULL,
-  `estudianteDocCertificado` longblob DEFAULT NULL,
-  `estudianteDocConducta` longblob DEFAULT NULL,
-  `estudianteDocDui` longblob DEFAULT NULL,
-  `estudianteDocNotas` longblob DEFAULT NULL,
+  `estudianteDocPartida` longblob,
+  `estudianteDocCertificado` longblob,
+  `estudianteDocConducta` longblob,
+  `estudianteDocDui` longblob,
+  `estudianteDocNotas` longblob,
   `estudianteExtencionPartida` varchar(10) DEFAULT NULL,
   `estudianteExtencionCertificado` varchar(10) DEFAULT NULL,
   `estudianteExtencionConducta` varchar(10) DEFAULT NULL,
@@ -628,7 +628,7 @@ CREATE TABLE `maestro` (
   `maestroSinEscalafon` bit(1) NOT NULL DEFAULT b'1',
   `maestroTipoSalario` varchar(45) NOT NULL,
   `maestroUtilidadTecnologica` bit(1) NOT NULL DEFAULT b'1',
-  `maestroHorasUsoTecnologia` int(11) NOT NULL DEFAULT 0,
+  `maestroHorasUsoTecnologia` int(11) NOT NULL DEFAULT '0',
   `maestroUsoVideoconferencias` bit(1) NOT NULL DEFAULT b'0',
   `maestroRecursosWeb` bit(1) NOT NULL DEFAULT b'1',
   `maestroCapacitacionesVirtuales` bit(1) NOT NULL DEFAULT b'1',
@@ -875,9 +875,9 @@ CREATE TABLE `recurso` (
   `recursoComentarios` varchar(140) DEFAULT NULL,
   PRIMARY KEY (`idrecurso`),
   KEY `fk_recurso_1_idx` (`idTipoRecurso`),
-  KEY `fk_recurso_2_idx` (`tipoCargo`),
   KEY `fk_recurso_3_idx` (`pais`),
   KEY `fk_recurso_4_idx` (`categoria`),
+  KEY `fk_recurso_2_idx` (`tipoCargo`),
   CONSTRAINT `fk_recurso_1` FOREIGN KEY (`idTipoRecurso`) REFERENCES `tipoRecurso` (`idtipoRecurso`) ON UPDATE CASCADE,
   CONSTRAINT `fk_recurso_2` FOREIGN KEY (`tipoCargo`) REFERENCES `tipoCargo` (`idtipoCargo`) ON UPDATE CASCADE,
   CONSTRAINT `fk_recurso_3` FOREIGN KEY (`pais`) REFERENCES `pais` (`idpais`) ON UPDATE CASCADE,
@@ -970,7 +970,7 @@ DROP TABLE IF EXISTS `tipoCargo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tipoCargo` (
-  `idtipoCargo` int(11) NOT NULL,
+  `idtipoCargo` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(100) NOT NULL,
   `tipoCargoComentario` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idtipoCargo`),
@@ -1021,7 +1021,7 @@ CREATE TABLE `tipoPermiso` (
   `tipoPermisoDiasMes` int(2) NOT NULL,
   `tipoPermisoComentarios` varchar(250) DEFAULT NULL,
   PRIMARY KEY (`idtipoPermiso`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1036,7 +1036,7 @@ CREATE TABLE `tipoPersona` (
   `tipoPersonaNombre` varchar(45) NOT NULL,
   `tipoPersonaComentario` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idtipoPersona`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1117,7 +1117,7 @@ CREATE TABLE `zona` (
   `zonaNombre` varchar(45) NOT NULL,
   `zonaCoementario` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idzona`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1137,4 +1137,4 @@ CREATE TABLE `zona` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-07-19 20:05:13
+-- Dump completed on 2019-07-20 13:38:37
