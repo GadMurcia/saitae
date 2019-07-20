@@ -5,58 +5,115 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
-        <title>Tipos de Permisos para los tipos de usuarios</title>
+        <title>Tipos</title>
         <h:outputStylesheet library="css" name="tpp.css"/>        
     </h:head>
     <h:body>
         <h:form id="form" styleClass="centred-form">
             <p:growl id="msgs" showDetail="true"/>
-            <p:panel id="pnl">
-                <p:dataTable id="eventsDT" var="tp" value="#{tipoPersonaController.personas}" 
-                             selectionMode="single" selection="#{tipoPersonaController.selectedTipoPersona}" 
-                             rowKey="#{tp.idtipoPersona}" editable="true" style="width: inherit;" paginator="true" 
-                             widgetVar="zon">
-                    <f:facet name="header">
-                        Administración de los tipos de Usuario.
-                    </f:facet>
-                    <p:ajax event="rowEdit" listener="#{tipoPersonaController.onRowEdit}" 
-                            update=":form:msgs" />
-                    <p:ajax event="rowEditCancel" listener="#{tipoPersonaController.onRowCancel}" 
-                            update=":form:msgs" />
+            <p:commandButton value="Asignar tipos de permisos a los tipos de usuario." 
+                             onclick="PF('dlg').show();" type="button"/>
+            <p:dialog id="dial" header="Asignación de tipos de permisos a los tipos de usuarios" widgetVar="dlg" 
+                      dynamic="true">
+                <h:panelGrid columns="2">
+                    <h:outputLabel for="pers" value="Tipo de Usuario: " />
+                    <p:selectOneMenu id="pers" required="true" value="#{tipoPermisoController.tipo.idtipoPersona}">
+                        <f:selectItems value="#{tipoPermisoController.tiposPersonas}"/>
+                        <p:ajax event="itemSelect" listener="#{tipoPermisoController.onItemSelect(event)}" 
+                                update="pickList" />
+                    </p:selectOneMenu>
 
-                    <p:column headerText="Id" style="width: 10px">
-                        <h:outputText value="#{tp.idtipoPersona}" />
-                    </p:column>
+                    <h3 style="margin-top: 0">tipos de Permisos:</h3>
+                    <p:pickList id="pickList" value="#{tipoPermisoController.model}" var="perm" 
+                                itemLabel="#{perm}" itemValue="#{perm}" addAllLabel="Agregar Todos"
+                                addLabel="Agregar" removeAllLabel="Quitar Todos" removeLabel="Quitar"
+                                />
+                    <p:commandButton value="Guardar" actionListener="#{tipoPermisoController.guardar()}"/>
 
-                    <p:column headerText="Nombre">
-                        <p:cellEditor>
-                            <f:facet name="output"><h:outputText value="#{tp.tipoPersonaNombre}" /></f:facet>
-                            <f:facet name="input"><p:inputText value="#{tp.tipoPersonaNombre}" 
-                                                               style="width:100%" label="Nombre"/></f:facet>
-                        </p:cellEditor>
-                    </p:column>
-
-                    <p:column headerText="Comentario">
-                        <p:cellEditor>
-                            <f:facet name="output"><h:outputText value="#{tp.tipoPersonaComentario}" /></f:facet>
-                            <f:facet name="input"><p:inputText value="#{tp.tipoPersonaComentario}" 
-                                                               style="width:100%" label="Comentario"/></f:facet>
-                        </p:cellEditor>
-                    </p:column>
-
-                    <p:column style="width:35px">
-                        <p:rowEditor />
-                    </p:column>
-                </p:dataTable> 
-                <div class="ui-g">
-                    <div class="ui-g-12">
-                        <p:commandButton value="Agregar Nuevo" styleClass="ui-priority-primary" 
-                                         process="@this" update=":form:msgs"
-                                         action="#{tipoPersonaController.onAddNew()}" 
-                                         oncomplete="PF('zon').addRow();"/>
+                </h:panelGrid>
+            </p:dialog>
+            <h:panelGrid id="pg" columns="2" >
+                <p:panel id="pnl" header="Tipos De Usuarios." >                    
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <p:commandButton value="Agregar Nuevo" styleClass="ui-priority-primary" 
+                                             process="@this" update=":form"
+                                             action="#{tipoPersonaController.onAddNew()}" 
+                                             oncomplete="PF('zon').addRow();"/>
+                        </div>
                     </div>
-                </div>
-            </p:panel>
+                    <p:dataTable id="eventsDT" var="tp" value="#{tipoPersonaController.personas}" 
+                                 selectionMode="single" selection="#{tipoPersonaController.selectedTipoPersona}" 
+                                 rowKey="#{tp.idtipoPersona}" editable="true" style="width: inherit;" paginator="true" 
+                                 widgetVar="zon" pageLinks="5">
+                        <f:facet name="header">
+                            Administración de los tipos de Usuario.
+                        </f:facet>
+                        <p:ajax event="rowEdit" listener="#{tipoPersonaController.onRowEdit}" 
+                                update=":form:msgs" />
+                        <p:ajax event="rowEditCancel" listener="#{tipoPersonaController.onRowCancel}" 
+                                update=":form:msgs" />
+
+                        <p:column headerText="Id" style="width: 10px">
+                            <h:outputText value="#{tp.idtipoPersona}" />
+                        </p:column>
+
+                        <p:column headerText="Nombre">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{tp.tipoPersonaNombre}" /></f:facet>
+                                <f:facet name="input"><p:inputText value="#{tp.tipoPersonaNombre}" 
+                                                                   style="width:100%" label="Nombre"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column style="width:35px">
+                            <p:rowEditor />
+                        </p:column>
+                    </p:dataTable> 
+                </p:panel>
+                <p:panel header="Tipos De Permisos">
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <p:commandButton value="Nuevo tipo" styleClass="ui-priority-primary" process="@this" 
+                                             update=":form:msgs" action="#{tipoPermisoController.onAddNew()}" 
+                                             oncomplete="PF('tipos').addRow();"/>
+                        </div>
+                    </div>
+                    <p:dataTable id="tp1" widgetVar="tipos" var="tp" value="#{tipoPermisoController.all}" 
+                                 editable="true" style="margin-bottom:20px" paginator="true" pageLinks="3">
+                        <f:facet name="header">
+                            Administración de los tipos de permisos
+                        </f:facet>
+
+                        <p:ajax event="rowEdit" listener="#{tipoPermisoController.onRowEdit}" update=":form:msgs" />
+                        <p:ajax event="rowEditCancel" listener="#{tipoPermisoController.onRowCancel}" update=":form:msgs" />
+
+                        <p:column headerText="Id">
+                            <h:outputText value="#{tp.idtipoPermiso}" />
+                        </p:column>
+
+                        <p:column headerText="Nombre">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{tp.tipoPermisoNombre}" /></f:facet>
+                                <f:facet name="input"><p:inputText value="#{tp.tipoPermisoNombre}" style="width:100%" 
+                                                                   label="Nombre"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column headerText="Días al mes">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{tp.tipoPermisoDiasMes}" /></f:facet>
+                                <f:facet name="input"><p:inputText value="#{tp.tipoPermisoDiasMes}" style="width:100%" 
+                                                                   label="Días permitidos al mes"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column style="width:32px">
+                            <p:rowEditor />
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+            </h:panelGrid>
         </h:form>
     </h:body>
 </html>

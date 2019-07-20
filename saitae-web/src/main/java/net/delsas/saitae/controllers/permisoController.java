@@ -73,8 +73,9 @@ public class permisoController implements Serializable {
 //                context.getExternalContext().getSessionMap().remove("mensaje");
                 this.setUs(u.getEstudiante());
                 p.setPermisosPK(new PermisosPK((us == null ? 0 : us.getIdestudiante()), Calendar.getInstance().getTime(), 0));
-                permisos = tpfl.tiposPermisosPorPersona(u.getIdpersona());
-                e = efl.representados(u.getIdpersona());
+                permisos = u.getTipoPersona().getTipopersonaPermisoList();
+                e = u.getEstudiante().getEstudianteEsEstudiante()? 
+                        new ArrayList<Estudiante>() : u.getEstudiante().getEstudianteList();
             }
         } catch (IOException ex) {
         }

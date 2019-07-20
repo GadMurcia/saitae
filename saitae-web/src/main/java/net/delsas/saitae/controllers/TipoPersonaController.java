@@ -82,7 +82,8 @@ public class TipoPersonaController implements Serializable {
         // Add one new car to the table:
         TipoPersona p = new TipoPersona(personas.size() + 1);
         personas.add(p);
-        FacesMessage msg = new FacesMessage("New Zone added", p.getIdtipoPersona() + "");
+        FacesMessage msg = new FacesMessage("Nuevo Tipo de Usuario Agregado", 
+        "Modifique los campos para que los cambios sean permanentes.");
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 

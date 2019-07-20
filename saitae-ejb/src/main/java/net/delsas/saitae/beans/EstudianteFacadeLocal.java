@@ -31,5 +31,5 @@ public interface EstudianteFacadeLocal {
     int count();
 
     public List<Estudiante> representados(int idRepresentante);
-
+    
 }

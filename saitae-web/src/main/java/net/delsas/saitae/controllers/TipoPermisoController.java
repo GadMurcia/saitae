@@ -33,6 +33,7 @@ import net.delsas.saitae.entities.TipoPermiso;
 import net.delsas.saitae.entities.TipoPersona;
 import net.delsas.saitae.entities.TipopersonaPermiso;
 import net.delsas.saitae.entities.TipopersonaPermisoPK;
+import org.primefaces.PrimeFaces;
 import org.primefaces.event.ItemSelectEvent;
 import org.primefaces.event.RowEditEvent;
 import org.primefaces.model.DualListModel;
@@ -90,29 +91,34 @@ public class TipoPermisoController implements Serializable {
 
     public void onItemSelect(ItemSelectEvent event) {
         tipo = personaFL.find(tipo.getIdtipoPersona());
+        tipo = tipo == null ? new TipoPersona(0) : tipo;
         List<TipoPermiso> l = new ArrayList<>();
-        List<String> target=new ArrayList<>();
-        for (TipopersonaPermiso a : tipo.getTipopersonaPermisoList()){
-            l.add(a.getTipoPermiso());
-            target.add(a.getTipoPermiso().getTipoPermisoNombre());
+        List<String> target = new ArrayList<>();
+        List<String> source = new ArrayList<>();
+        if (tipo.getIdtipoPersona() > 0) {
+            for (TipopersonaPermiso a : tipo.getTipopersonaPermisoList()) {
+                l.add(a.getTipoPermiso());
+                target.add(a.getTipoPermiso().getTipoPermisoNombre());
+            }
+
+            for (TipoPermiso p : all) {
+                if (!l.contains(p)) {
+                    source.add(p.getTipoPermisoNombre());
+                }
+            }
+            FacesMessage msg = new FacesMessage("Persona seleccionada", tipo.getTipoPersonaNombre());
+            FacesContext.getCurrentInstance().addMessage(null, msg);
         }
         model.setTarget(target);
-        List<String> source=new ArrayList<>();
-        for(TipoPermiso p : all){
-            if(!l.contains(p)){
-                source.add(p.getTipoPermisoNombre());
-            }
-        }
         model.setSource(source);
-        FacesMessage msg = new FacesMessage("Persona seleccionada", tipo.getTipoPersonaNombre());
-        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
     public void onAddNew() {
         // Add one new car to the table:
         TipoPermiso p = new TipoPermiso(all.size() + 1);
         all.add(p);
-        FacesMessage msg = new FacesMessage("Nuevo Tipo de Permiso agregado", p.getTipoPermisoNombre());
+        FacesMessage msg = new FacesMessage("Campos Nuevos agregados.",
+                "Edite los campos para que las modificaciones sean permenentes");
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
@@ -179,9 +185,41 @@ public class TipoPermisoController implements Serializable {
     public void setModel(DualListModel<String> model) {
         this.model = model;
     }
-    
-    public void guardar(){
-        System.out.println(tipo.toString());
+
+    public void guardar() {
+        if (tipo.getIdtipoPersona() > 0) {
+            List<TipopersonaPermiso> permisos = new ArrayList<>();
+            for (String g : model.getTarget()) {
+                for (TipoPermiso t : all) {
+                    if (g.equals(t.getTipoPermisoNombre())) {
+                        TipopersonaPermiso r = new TipopersonaPermiso(tipo.getIdtipoPersona(), t.getIdtipoPermiso());
+                        r.setTipoPermiso(t);
+                        r.setTipoPersona(tipo);
+                        r.setTipopersonaPermisoComentario("");
+                        permisos.add(r);
+                    }
+                }
+            }
+            for (TipopersonaPermiso t : tipo.getTipopersonaPermisoList()) {
+                if (!permisos.contains(t)) {
+                    tppfl.remove(t);
+                }
+            }
+            tipo.setTipopersonaPermisoList(permisos);
+            personaFL.edit(tipo);
+            String m="Al Tipo de Ususario "+tipo.getTipoPersonaNombre();
+            if(model.getTarget().size()>0){
+            m+=" se le han asignado los Tipos de permisos:";
+            for(String d: model.getTarget()){
+                m+="\n* "+d+".";
+            }            
+            }else{
+                m+=" Se le han removido todos los tipos de permisos.";
+            }
+            FacesMessage msg = new FacesMessage("Las modificaciones se han realizado:", m);
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            PrimeFaces.current().ajax().update("form:msgs");
+        }
     }
 
 }
