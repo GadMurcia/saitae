@@ -37,7 +37,7 @@
                     <div class="ui-g">
                         <div class="ui-g-12">
                             <p:commandButton value="Agregar Nuevo" styleClass="ui-priority-primary" 
-                                             process="@this" update=":form"
+                                             process="@this" update=":form:msgs"
                                              action="#{tipoPersonaController.onAddNew()}" 
                                              oncomplete="PF('zon').addRow();"/>
                         </div>

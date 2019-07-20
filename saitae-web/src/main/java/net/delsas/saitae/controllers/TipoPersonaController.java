@@ -11,8 +11,6 @@ import javax.inject.Named;
 import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
 import net.delsas.saitae.entities.TipoPersona;
 import org.primefaces.event.RowEditEvent;
-import org.primefaces.event.SelectEvent;
-import org.primefaces.event.UnselectEvent;
 
 /**
  *
@@ -66,18 +64,6 @@ public class TipoPersonaController implements Serializable {
         return this.tipoPersona;
     }
 
-    public void onRowSelect(SelectEvent event) {
-        tipoPersona = (TipoPersona) event.getObject();
-        FacesMessage msg = new FacesMessage("Tipo de usuario Seleccionado", ((TipoPersona) event.getObject()).getTipoPersonaNombre());
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-    }
-
-    public void onRowUnselect(UnselectEvent event) {
-        tipoPersona = new TipoPersona(0);
-        FacesMessage msg = new FacesMessage("Tipo de Usuario Desmarcado", ((TipoPersona) event.getObject()).getIdtipoPersona() + "");
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-    }
-
     public void onAddNew() {
         // Add one new car to the table:
         TipoPersona p = new TipoPersona(personas.size() + 1);
@@ -94,7 +80,8 @@ public class TipoPersonaController implements Serializable {
         } else {
             tipoPersonaFL.edit(name);
         }
-        FacesMessage msg = new FacesMessage("tipo Persona Edited", ((TipoPersona) event.getObject()).getIdtipoPersona() + "");
+        FacesMessage msg = new FacesMessage("Edición exitosa.","Editado: "+ 
+                ((TipoPersona) event.getObject()).getTipoPersonaNombre());
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
@@ -103,7 +90,7 @@ public class TipoPersonaController implements Serializable {
         if (z.getTipoPersonaNombre() == null || z.getTipoPersonaNombre().isEmpty()) {
             personas.remove(personas.indexOf(z));
         }
-        FacesMessage msg = new FacesMessage("Edit Cancelled", ((TipoPersona) event.getObject()).getIdtipoPersona() + "");
+        FacesMessage msg = new FacesMessage("Edición cancelada", "El registro se ha restablecido.");
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
