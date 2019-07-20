@@ -29,7 +29,5 @@ public interface EstudianteFacadeLocal {
     List<Estudiante> findRange(int[] range);
 
     int count();
-
-    public List<Estudiante> representados(int idRepresentante);
     
 }

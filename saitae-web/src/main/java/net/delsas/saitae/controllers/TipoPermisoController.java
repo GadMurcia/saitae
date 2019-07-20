@@ -32,7 +32,6 @@ import net.delsas.saitae.beans.TipopersonaPermisoFacadeLocal;
 import net.delsas.saitae.entities.TipoPermiso;
 import net.delsas.saitae.entities.TipoPersona;
 import net.delsas.saitae.entities.TipopersonaPermiso;
-import net.delsas.saitae.entities.TipopersonaPermisoPK;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.ItemSelectEvent;
 import org.primefaces.event.RowEditEvent;
@@ -47,14 +46,6 @@ import org.primefaces.model.DualListModel;
 public class TipoPermisoController implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @EJB
-    private TipopersonaPermisoFacadeLocal tppfl;
-    @EJB
-    private TipoPersonaFacadeLocal personaFL;
-    private TipopersonaPermiso personaPermiso;
-    private List<TipoPersona> Personas;
-    private TipoPersona tipo;
-    private DualListModel<String> model;
 
     @EJB
     private TipoPermisoFacadeLocal tpfl;
@@ -64,11 +55,7 @@ public class TipoPermisoController implements Serializable {
     @PostConstruct
     public void init() {
         tp = new TipoPermiso(0);
-        tipo = new TipoPersona(0);
-        personaPermiso = new TipopersonaPermiso(new TipopersonaPermisoPK());
         all = tpfl.findAll();
-        Personas = personaFL.findAll();
-        model = new DualListModel<>(new ArrayList<String>(), new ArrayList<String>());
     }
 
     public void nuevo() {
@@ -78,39 +65,6 @@ public class TipoPermisoController implements Serializable {
         } catch (Exception e) {
 
         }
-    }
-
-    public List<SelectItem> getTiposPersonas() {
-        List<SelectItem> list = new ArrayList<>();
-        list.add(new SelectItem(0, "Seleccione"));
-        for (TipoPersona p : Personas) {
-            list.add(new SelectItem(p.getIdtipoPersona(), p.getTipoPersonaNombre()));
-        }
-        return list;
-    }
-
-    public void onItemSelect(ItemSelectEvent event) {
-        tipo = personaFL.find(tipo.getIdtipoPersona());
-        tipo = tipo == null ? new TipoPersona(0) : tipo;
-        List<TipoPermiso> l = new ArrayList<>();
-        List<String> target = new ArrayList<>();
-        List<String> source = new ArrayList<>();
-        if (tipo.getIdtipoPersona() > 0) {
-            for (TipopersonaPermiso a : tipo.getTipopersonaPermisoList()) {
-                l.add(a.getTipoPermiso());
-                target.add(a.getTipoPermiso().getTipoPermisoNombre());
-            }
-
-            for (TipoPermiso p : all) {
-                if (!l.contains(p)) {
-                    source.add(p.getTipoPermisoNombre());
-                }
-            }
-            FacesMessage msg = new FacesMessage("Persona seleccionada", tipo.getTipoPersonaNombre());
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-        }
-        model.setTarget(target);
-        model.setSource(source);
     }
 
     public void onAddNew() {
@@ -138,30 +92,6 @@ public class TipoPermisoController implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
-    public TipopersonaPermiso getPersonaPermiso() {
-        return personaPermiso;
-    }
-
-    public void setPersonaPermiso(TipopersonaPermiso personaPermiso) {
-        this.personaPermiso = personaPermiso;
-    }
-
-    public List<TipoPersona> getPersonas() {
-        return Personas;
-    }
-
-    public void setPersonas(List<TipoPersona> Personas) {
-        this.Personas = Personas;
-    }
-
-    public TipoPersona getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(TipoPersona tipo) {
-        this.tipo = tipo;
-    }
-
     public TipoPermiso getTp() {
         return tp;
     }
@@ -176,50 +106,6 @@ public class TipoPermisoController implements Serializable {
 
     public void setAll(List<TipoPermiso> all) {
         this.all = all;
-    }
-
-    public DualListModel<String> getModel() {
-        return model;
-    }
-
-    public void setModel(DualListModel<String> model) {
-        this.model = model;
-    }
-
-    public void guardar() {
-        if (tipo.getIdtipoPersona() > 0) {
-            List<TipopersonaPermiso> permisos = new ArrayList<>();
-            for (String g : model.getTarget()) {
-                for (TipoPermiso t : all) {
-                    if (g.equals(t.getTipoPermisoNombre())) {
-                        TipopersonaPermiso r = new TipopersonaPermiso(tipo.getIdtipoPersona(), t.getIdtipoPermiso());
-                        r.setTipoPermiso(t);
-                        r.setTipoPersona(tipo);
-                        r.setTipopersonaPermisoComentario("");
-                        permisos.add(r);
-                    }
-                }
-            }
-            for (TipopersonaPermiso t : tipo.getTipopersonaPermisoList()) {
-                if (!permisos.contains(t)) {
-                    tppfl.remove(t);
-                }
-            }
-            tipo.setTipopersonaPermisoList(permisos);
-            personaFL.edit(tipo);
-            String m="Al Tipo de Ususario "+tipo.getTipoPersonaNombre();
-            if(model.getTarget().size()>0){
-            m+=" se le han asignado los Tipos de permisos:";
-            for(String d: model.getTarget()){
-                m+="\n* "+d+".";
-            }            
-            }else{
-                m+=" Se le han removido todos los tipos de permisos.";
-            }
-            FacesMessage msg = new FacesMessage("Las modificaciones se han realizado:", m);
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-            PrimeFaces.current().ajax().update("form:msgs");
-        }
     }
 
 }

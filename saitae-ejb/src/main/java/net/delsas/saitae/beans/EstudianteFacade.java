@@ -5,11 +5,9 @@
  */
 package net.delsas.saitae.beans;
 
-import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import net.delsas.saitae.entities.Estudiante;
 
 /**
@@ -31,10 +29,4 @@ public class EstudianteFacade extends AbstractFacade<Estudiante> implements Estu
         super(Estudiante.class);
     }
     
-    @Override
-    public List<Estudiante> representados(int idRepresentante) {
-        Query q = this.getEntityManager().createNamedQuery("Estudiante.findByIdRepresentante");
-        q.setParameter("idRepresentante", new Estudiante(idRepresentante));
-        return q.getResultList();
-}
 }
