@@ -27,15 +27,21 @@ import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import net.delsas.saitae.beans.TipoCargoFacadeLocal;
+import net.delsas.saitae.beans.TipoMateriaFacadeLocal;
+import net.delsas.saitae.beans.TipoNombramientoFacadeLocal;
 import net.delsas.saitae.beans.TipoPermisoFacadeLocal;
 import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
 import net.delsas.saitae.beans.TipoRecursoFacadeLocal;
+import net.delsas.saitae.beans.TipoReservaFacadeLocal;
 import net.delsas.saitae.beans.TipopersonaPermisoFacadeLocal;
 import net.delsas.saitae.beans.ZonaFacadeLocal;
 import net.delsas.saitae.entities.TipoCargo;
+import net.delsas.saitae.entities.TipoMateria;
+import net.delsas.saitae.entities.TipoNombramiento;
 import net.delsas.saitae.entities.TipoPermiso;
 import net.delsas.saitae.entities.TipoPersona;
 import net.delsas.saitae.entities.TipoRecurso;
+import net.delsas.saitae.entities.TipoReserva;
 import net.delsas.saitae.entities.TipopersonaPermiso;
 import net.delsas.saitae.entities.Zona;
 import org.primefaces.PrimeFaces;
@@ -83,6 +89,21 @@ public class TipoController implements Serializable {
     private ZonaFacadeLocal zfl;
     private List<Zona> zonas;
 
+    //Tipo Reserva
+    @EJB
+    private TipoReservaFacadeLocal tipoReservaFL;
+    private List<TipoReserva> reservas;
+
+    //Tipo Nombramiento
+    @EJB
+    private TipoNombramientoFacadeLocal tipoNombramientoFL;
+    private List<TipoNombramiento> nombramientos;
+
+    //TipoMateria
+    @EJB
+    private TipoMateriaFacadeLocal tipoMateriaFL;
+    private List<TipoMateria> materias;
+
     @PostConstruct
     public void init() {
         recursos = tipoRecursoFL.findAll();
@@ -92,7 +113,9 @@ public class TipoController implements Serializable {
         Personas = personaFL.findAll();
         model = new DualListModel<>(new ArrayList<String>(), new ArrayList<String>());
         zonas = zfl.findAll();
-        zonas = zonas != null || !zonas.isEmpty() ? zonas : new ArrayList<Zona>();
+        reservas = tipoReservaFL.findAll();
+        nombramientos = tipoNombramientoFL.findAll();
+        materias = tipoMateriaFL.findAll();
     }
 
     public void onAddNew(String id) {
@@ -107,11 +130,17 @@ public class TipoController implements Serializable {
             case "cargo":
                 cargos.add(new TipoCargo());
                 break;
-            case "persona":
-                Personas.add(new TipoPersona());
+            case "nombramiento":
+                nombramientos.add(new TipoNombramiento());
                 break;
             case "zona":
                 zonas.add(new Zona());
+                break;
+            case "reserva":
+                reservas.add(new TipoReserva());
+                break;
+            case "materia":
+                materias.add(new TipoMateria());
                 break;
             default:
                 System.out.println(id);
@@ -123,7 +152,7 @@ public class TipoController implements Serializable {
     }
 
     public void onRowEdit(RowEditEvent event) {
-        String titulo = "", mensaje = "", id=event.getComponent().getClientId();
+        String titulo = "", mensaje = "", id = event.getComponent().getClientId();
         switch (id) {
             case "form:tw:recurso":
                 tipoRecursoFL.edit((TipoRecurso) event.getObject());
@@ -135,7 +164,7 @@ public class TipoController implements Serializable {
                 tpfl.edit(name);
                 titulo = "Tipo de Permiso";
                 mensaje = ((TipoPermiso) event.getObject()).getTipoPermisoNombre();
-                tipoPersona=new TipoPersona(0);
+                tipoPersona = new TipoPersona(0);
                 onItemSelect(null);
                 break;
             case "form:tw:cargo":
@@ -144,18 +173,29 @@ public class TipoController implements Serializable {
                 titulo = "Tipo Cargo";
                 mensaje = tc.getNombre();
                 break;
-            case "form:tw:persona":
-                personaFL.edit((TipoPersona) event.getObject());
-                titulo = "Tipo Usuario";
-                mensaje = ((TipoPersona) event.getObject()).getTipoPersonaNombre();
+            case "form:tw:nombramiento":
+                tipoNombramientoFL.edit((TipoNombramiento) event.getObject());
+                titulo = "Tipo Nombramiento";
+                mensaje = ((TipoNombramiento) event.getObject()).getTipoNombramientoNombre();
                 break;
             case "form:tw:zona":
                 zfl.edit((Zona) event.getObject());
                 titulo = "Zona";
                 mensaje = ((Zona) event.getObject()).getZonaNombre();
                 break;
+            case "form:tw:reserva":
+                tipoReservaFL.edit((TipoReserva) event.getObject());
+                titulo = "Tipo Reserva";
+                mensaje = ((TipoReserva) event.getObject()).getTipoReservaNombre();
+                break;
+            case "form:tw:materia":
+                TipoMateria m = (TipoMateria) event.getObject();
+                tipoMateriaFL.edit(m);
+                titulo = "Tipo de Materia";
+                mensaje = ((TipoMateria) event.getObject()).getTipoMateriaNombre();
+                break;
             default:
-                System.out.println("default");
+                System.out.println(id);
         }
         PrimeFaces.current().ajax().update(id);
         FacesMessage msg = new FacesMessage(titulo + " Editado", mensaje);
@@ -163,8 +203,8 @@ public class TipoController implements Serializable {
     }
 
     public void onRowCancel(RowEditEvent event) {
-        String mensaje = "";
-        switch (event.getComponent().getClientId()) {
+        String mensaje = "", id = event.getComponent().getClientId();
+        switch (id) {
             case "form:tw:recurso":
                 TipoRecurso z = ((TipoRecurso) event.getObject());
                 if (z.getTipoRecursoNombre() == null || z.getTipoRecursoNombre().isEmpty()) {
@@ -189,19 +229,33 @@ public class TipoController implements Serializable {
             case "form:tw:persona":
                 TipoPersona tp = (TipoPersona) event.getObject();
                 if (tp.getTipoPersonaNombre() == null || tp.getTipoPersonaNombre().isEmpty()) {
-                    Personas.remove(Personas.indexOf(tp));
+                    Personas.remove(tp);
                 }
                 mensaje = tp.getTipoPersonaNombre();
                 break;
             case "form:tw:zona":
                 Zona zon = (Zona) event.getObject();
                 if (zon.getZonaNombre() == null || zon.getZonaNombre().isEmpty()) {
-                    zonas.remove(zonas.indexOf(zon));
+                    zonas.remove(zon);
                 }
                 mensaje = zon.getZonaNombre();
                 break;
+            case "form:tw:reserva":
+                TipoReserva res = (TipoReserva) event.getObject();
+                if (res.getTipoReservaNombre() == null || res.getTipoReservaNombre().isEmpty()) {
+                    reservas.remove(res);
+                }
+                mensaje = res.getTipoReservaNombre();
+                break;
+            case "form:tw:materia":
+                TipoMateria m = (TipoMateria) event.getObject();
+                if (m.getTipoMateriaNombre() == null || m.getTipoMateriaNombre().isEmpty()) {
+                    materias.remove(m);
+                }
+                mensaje = m.getTipoMateriaNombre();
+                break;
             default:
-                System.out.println("default");
+                System.out.println(id);
         }
         FacesMessage msg = new FacesMessage("Edición cancelada", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -331,4 +385,29 @@ public class TipoController implements Serializable {
     public void setZonas(List<Zona> zonas) {
         this.zonas = zonas;
     }
+
+    public List<TipoReserva> getReservas() {
+        return reservas;
+    }
+
+    public void setReservas(List<TipoReserva> reservas) {
+        this.reservas = reservas;
+    }
+
+    public List<TipoNombramiento> getNombramientos() {
+        return nombramientos;
+    }
+
+    public void setNombramientos(List<TipoNombramiento> nombramientos) {
+        this.nombramientos = nombramientos;
+    }
+
+    public List<TipoMateria> getMaterias() {
+        return materias;
+    }
+
+    public void setMaterias(List<TipoMateria> materias) {
+        this.materias = materias;
+    }    
+
 }

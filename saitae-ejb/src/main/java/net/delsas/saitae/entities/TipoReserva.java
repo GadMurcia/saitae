@@ -43,9 +43,7 @@ public class TipoReserva implements Serializable {
     @Basic(optional = false)
     @Column(name = "idtipoReserva")
     private Integer idtipoReserva;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 100)
+    @Size(max = 100)
     @Column(name = "tipoReservaComentario")
     private String tipoReservaComentario;
     @Basic(optional = false)
@@ -65,9 +63,8 @@ public class TipoReserva implements Serializable {
         this.idtipoReserva = idtipoReserva;
     }
 
-    public TipoReserva(Integer idtipoReserva, String tipoReservaComentario, String tipoReservaNombre) {
+    public TipoReserva(Integer idtipoReserva, String tipoReservaNombre) {
         this.idtipoReserva = idtipoReserva;
-        this.tipoReservaComentario = tipoReservaComentario;
         this.tipoReservaNombre = tipoReservaNombre;
     }
 

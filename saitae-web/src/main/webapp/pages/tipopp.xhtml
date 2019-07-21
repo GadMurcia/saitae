@@ -6,15 +6,17 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>Administración de Tipos</title>
+        <h:outputStylesheet library="css" name="tpp.css"/>
     </h:head>
     <h:body>
         <h:form id="form">
             <p:growl id="msgs" showDetail="true"/>
-            <h1>Administración de los tipos del sistema.</h1>
+            <h1 style="align-content: center;">Administración de los tipos del sistema.</h1>
             <p:tabView id="tw" orientation="left" dynamic="true">
                 <p:tab title="Zonas">
                     <p:dataTable id="zona" var="z" value="#{tipoController.zonas}" editable="true" 
-                                 widgetVar="zona1" >
+                                 widgetVar="zona1" styleClass="tabla"
+                                 emptyMessage="Sin registros aún.">
                         <f:facet name="header">
                             Administración de Zonas
                         </f:facet>
@@ -22,8 +24,8 @@
                         <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" update=":form:msgs form:tw:zona" />
                         <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" update=":form:msgs" />
 
-                        <p:column headerText="Id">
-                            <h:outputText value="#{z.idzona}" />
+                        <p:column headerText="Id" style="width: 10px">
+                            <h:outputText value="#{z.idzona}"/>
                         </p:column>
 
                         <p:column headerText="Nombre">
@@ -33,37 +35,24 @@
                                                                    style="width:100%" label="Nombre"/></f:facet>
                             </p:cellEditor>
                         </p:column>
-
-                        <p:column headerText="Comentario">
-                            <p:cellEditor>
-                                <f:facet name="output"><h:outputText value="#{z.zonaCoementario}" /></f:facet>
-                                <f:facet name="input"><p:inputText value="#{z.zonaCoementario}" 
-                                                                   style="width:100%" label="Comentario"/></f:facet>
-                            </p:cellEditor>
-                        </p:column>
                         <p:column style="width:35px">
                             <p:rowEditor />
                         </p:column>
                     </p:dataTable> 
                     <div class="ui-g">
                         <div class="ui-g-12">
-                            <p:commandButton value="Agregar Nuevo" styleClass="ui-priority-primary" 
+                            <p:commandButton value="+" styleClass="ui-priority-primary" 
                                              process="@this" update=":form:msgs"
                                              action="#{tipoController.onAddNew('zona')}" 
-                                             oncomplete="PF('zona1').addRow();"/>
+                                             oncomplete="PF('zona1').addRow();"
+                                             title="Agregar nueva Zona."/>
                         </div>
                     </div>
                 </p:tab>
                 <p:tab title="Tipo Permisos">
-                    <div class="ui-g">
-                        <div class="ui-g-12">
-                            <p:commandButton value="Nuevo tipo" styleClass="ui-priority-primary" process="@this" 
-                                             update=":form:msgs form:tw:pers form:tw:pickList" action="#{tipoController.onAddNew('permiso')}" 
-                                             oncomplete="PF('tipos').addRow();"/>
-                        </div>
-                    </div>
                     <p:dataTable id="tp1" widgetVar="tipos" var="tp" value="#{tipoController.all}" 
-                                 editable="true" style="margin-bottom:20px" paginator="true">
+                                 editable="true" paginator="true" styleClass="tabla"
+                                 emptyMessage="Sin registros aún.">
                         <f:facet name="header">
                             Administración de los tipos de permisos
                         </f:facet>
@@ -72,8 +61,8 @@
                                 update=":form:msgs, form:tw:pers, form:tw:pickList" />
                         <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" update=":form:msgs" />
 
-                        <p:column headerText="Id">
-                            <h:outputText value="#{tp.idtipoPermiso}" />
+                        <p:column headerText="Id" style="width: 10px">
+                            <h:outputText value="#{tp.idtipoPermiso}"/>
                         </p:column>
 
                         <p:column headerText="Nombre">
@@ -84,7 +73,7 @@
                             </p:cellEditor>
                         </p:column>
 
-                        <p:column headerText="Días al mes">
+                        <p:column headerText="Días al mes" style="width: 30px">
                             <p:cellEditor>
                                 <f:facet name="output"><h:outputText value="#{tp.tipoPermisoDiasMes}" /></f:facet>
                                 <f:facet name="input"><p:inputText value="#{tp.tipoPermisoDiasMes}" style="width:100%" 
@@ -95,42 +84,30 @@
                         <p:column style="width:32px">
                             <p:rowEditor />
                         </p:column>
-                    </p:dataTable>
-                </p:tab>
-                <p:tab title="Tipo Usuario">
+                    </p:dataTable>                    
                     <div class="ui-g">
                         <div class="ui-g-12">
-                            <p:commandButton value="Agregar Nuevo" styleClass="ui-priority-primary" 
-                                             process="@this" update=":form:msgs"
-                                             action="#{tipoController.onAddNew('persona')}" 
-                                             oncomplete="PF('per').addRow();"/>
+                            <p:commandButton value="+" styleClass="ui-priority-primary" process="@this" 
+                                             update=":form:msgs form:tw:pers form:tw:pickList" action="#{tipoController.onAddNew('permiso')}" 
+                                             oncomplete="PF('tipos').addRow();"
+                                             title="Agregar nuevo Tipo de Permiso."/>
                         </div>
                     </div>
+                </p:tab>
+                <p:tab title="Tipo Usuario">
                     <p:dataTable id="persona" var="tp" value="#{tipoController.personas}" 
-                                 rowKey="#{tp.idtipoPersona}" editable="true" style="width: inherit;" paginator="true" 
-                                 widgetVar="per" pageLinks="5">
+                                 rowKey="#{tp.idtipoPersona}" style="width: inherit;" paginator="true" 
+                                 widgetVar="per" pageLinks="5" styleClass="tabla" 
+                                 emptyMessage="Sin tipos de usuarios. Actualice la página.">
                         <f:facet name="header">
-                            Administración de los tipos de Usuario.
+                            Listado de los tipos de Usuario del sistema.
                         </f:facet>
-                        <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" 
-                                update=":form:msgs form:tw:pers form:tw:pickList" />
-                        <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" 
-                                update=":form:msgs" />
-
                         <p:column headerText="Id" style="width: 10px">
                             <h:outputText value="#{tp.idtipoPersona}" />
                         </p:column>
 
                         <p:column headerText="Nombre">
-                            <p:cellEditor>
-                                <f:facet name="output"><h:outputText value="#{tp.tipoPersonaNombre}" /></f:facet>
-                                <f:facet name="input"><p:inputText value="#{tp.tipoPersonaNombre}" 
-                                                                   style="width:100%" label="Nombre"/></f:facet>
-                            </p:cellEditor>
-                        </p:column>
-
-                        <p:column style="width:35px">
-                            <p:rowEditor />
+                            <h:outputText value="#{tp.tipoPersonaNombre}" />
                         </p:column>
                     </p:dataTable> 
                 </p:tab>
@@ -155,7 +132,7 @@
                 </p:tab>
                 <p:tab title="Tipo Cargo">
                     <p:dataTable id="cargo" var="ca" value="#{tipoController.cargos}" editable="true" 
-                                 widgetVar="cargo1" >
+                                 widgetVar="cargo1" styleClass="tabla" emptyMessage="Sin registros aún.">
                         <f:facet name="header">
                             Administración de los tipos de cargo al inventario.
                         </f:facet>
@@ -163,7 +140,7 @@
                         <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" update=":form:msgs" />
                         <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" update=":form:msgs" />
 
-                        <p:column headerText="Id">
+                        <p:column headerText="Id" style="width: 10px">
                             <h:outputText value="#{ca.idtipoCargo}" />
                         </p:column>
 
@@ -174,30 +151,23 @@
                                                                    style="width:100%" label="Nombre"/></f:facet>
                             </p:cellEditor>
                         </p:column>
-
-                        <p:column headerText="Comentario">
-                            <p:cellEditor>
-                                <f:facet name="output"><h:outputText value="#{ca.tipoCargoComentario}" /></f:facet>
-                                <f:facet name="input"><p:inputText value="#{ca.tipoCargoComentario}" 
-                                                                   style="width:100%" label="Comentario"/></f:facet>
-                            </p:cellEditor>
-                        </p:column>
                         <p:column style="width:35px">
                             <p:rowEditor />
                         </p:column>
                     </p:dataTable> 
                     <div class="ui-g">
                         <div class="ui-g-12">
-                            <p:commandButton value="Agregar Nuevo" styleClass="ui-priority-primary" 
+                            <p:commandButton value="+" styleClass="ui-priority-primary" 
                                              process="@this" update=":form:msgs"
                                              action="#{tipoController.onAddNew('cargo')}" 
-                                             oncomplete="PF('cargo1').addRow();"/>
+                                             oncomplete="PF('cargo1').addRow();"
+                                             title="Agregar nuevo Tipo de Cargo para el inventario."/>
                         </div>
                     </div>
                 </p:tab>
                 <p:tab title="Tipo Recurso">
                     <p:dataTable id="recurso" var="re" value="#{tipoController.recursos}" editable="true" 
-                                 widgetVar="recurso1" >
+                                 widgetVar="recurso1" styleClass="tabla" emptyMessage="Sin registros aún.">
                         <f:facet name="header">
                             Administración de los tipos de Recursos.
                         </f:facet>
@@ -205,7 +175,7 @@
                         <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" update=":form:msgs" />
                         <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" update=":form:msgs" />
 
-                        <p:column headerText="Id">
+                        <p:column headerText="Id" style="width: 10px">
                             <h:outputText value="#{re.idtipoRecurso}" />
                         </p:column>
 
@@ -216,12 +186,39 @@
                                                                    style="width:100%" label="Nombre"/></f:facet>
                             </p:cellEditor>
                         </p:column>
+                        <p:column style="width:35px">
+                            <p:rowEditor />
+                        </p:column>
+                    </p:dataTable> 
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <p:commandButton value="+" styleClass="ui-priority-primary" 
+                                             process="@this" update=":form:msgs"
+                                             action="#{tipoController.onAddNew('recursos')}" 
+                                             oncomplete="PF('recurso1').addRow();"
+                                             title="Agregar nuevo Tipo de Cargo para el inventario."/>
+                        </div>
+                    </div>
+                </p:tab>
+                <p:tab title="Tipo Reserva">
+                    <p:dataTable id="reserva" var="res" value="#{tipoController.reservas}" editable="true" 
+                                 widgetVar="reserva1" styleClass="tabla" emptyMessage="Sin registros aún.">
+                        <f:facet name="header">
+                            Administración de los tipos de Reserva.
+                        </f:facet>
 
-                        <p:column headerText="Comentario">
+                        <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" update=":form:msgs" />
+                        <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" update=":form:msgs" />
+
+                        <p:column headerText="Id" style="width: 10px">
+                            <h:outputText value="#{res.idtipoReserva}" />
+                        </p:column>
+
+                        <p:column headerText="Nombre">
                             <p:cellEditor>
-                                <f:facet name="output"><h:outputText value="#{re.tipoRecursoComentario}" /></f:facet>
-                                <f:facet name="input"><p:inputText value="#{re.tipoRecursoComentario}" 
-                                                                   style="width:100%" label="Comentario"/></f:facet>
+                                <f:facet name="output"><h:outputText value="#{res.tipoReservaNombre}" /></f:facet>
+                                <f:facet name="input"><p:inputText value="#{res.tipoReservaNombre}" 
+                                                                   style="width:100%" label="Nombre"/></f:facet>
                             </p:cellEditor>
                         </p:column>
                         <p:column style="width:35px">
@@ -230,10 +227,81 @@
                     </p:dataTable> 
                     <div class="ui-g">
                         <div class="ui-g-12">
-                            <p:commandButton value="Agregar Nuevo" styleClass="ui-priority-primary" 
+                            <p:commandButton value="+" styleClass="ui-priority-primary" 
                                              process="@this" update=":form:msgs"
-                                             action="#{tipoController.onAddNew('recursos')}" 
-                                             oncomplete="PF('recurso1').addRow();"/>
+                                             action="#{tipoController.onAddNew('reserva')}" 
+                                             oncomplete="PF('reserva1').addRow();" 
+                                             title="Agregar nuevo tipo de reserva."/>
+                        </div>
+                    </div>
+                </p:tab>
+                <p:tab title="Tipo Nombramiento">
+                    <p:dataTable id="nombramiento" var="nom" value="#{tipoController.nombramientos}" editable="true" 
+                                 widgetVar="nombra1" styleClass="tabla" emptyMessage="Sin registros aún.">
+                        <f:facet name="header">
+                            Administración de los tipos de Nombramiento.
+                        </f:facet>
+
+                        <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" update=":form:msgs" />
+                        <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" update=":form:msgs" />
+
+                        <p:column headerText="Id" style="width: 10px">
+                            <h:outputText value="#{nom.idtipoNombramiento}" />
+                        </p:column>
+
+                        <p:column headerText="Nombre">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{nom.tipoNombramientoNombre}" /></f:facet>
+                                <f:facet name="input"><p:inputText value="#{nom.tipoNombramientoNombre}" 
+                                                                   style="width:100%" label="Nombre"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        <p:column style="width:35px">
+                            <p:rowEditor />
+                        </p:column>
+                    </p:dataTable> 
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <p:commandButton value="+" styleClass="ui-priority-primary" 
+                                             process="@this" update=":form:msgs"
+                                             action="#{tipoController.onAddNew('nombramiento')}" 
+                                             oncomplete="PF('nombra1').addRow();" 
+                                             title="Agregar nuevo tipo de Nombramiento."/>
+                        </div>
+                    </div>
+                </p:tab>
+                <p:tab title="Tipo Materia">
+                    <p:dataTable id="materia" var="ma" value="#{tipoController.materias}" editable="true" 
+                                 widgetVar="materia1" styleClass="tabla" emptyMessage="Sin registros aún.">
+                        <f:facet name="header">
+                            Administración de los tipos de Materias.
+                        </f:facet>
+
+                        <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" update=":form:msgs" />
+                        <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" update=":form:msgs" />
+
+                        <p:column headerText="Id" style="width: 10px">
+                            <h:outputText value="#{ma.idtipoMateria}" />
+                        </p:column>
+
+                        <p:column headerText="Nombre">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{ma.tipoMateriaNombre}" /></f:facet>
+                                <f:facet name="input"><p:inputText value="#{ma.tipoMateriaNombre}" 
+                                                                   style="width:100%" label="Nombre"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        <p:column style="width:35px">
+                            <p:rowEditor />
+                        </p:column>
+                    </p:dataTable> 
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <p:commandButton value="+" styleClass="ui-priority-primary" 
+                                             process="@this" update=":form:msgs"
+                                             action="#{tipoController.onAddNew('materia')}" 
+                                             oncomplete="PF('materia1').addRow();" 
+                                             title="Agregar nuevo Tipo de Materia."/>
                         </div>
                     </div>
                 </p:tab>

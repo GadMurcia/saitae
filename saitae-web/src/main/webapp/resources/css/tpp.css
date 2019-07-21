@@ -49,3 +49,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     align-items: center;
     /*width: 45%;*/
 }
+
+.tabla{
+    margin: 0 auto;
+    width: 70%;
+    margin-bottom:20px;
+}

@@ -975,7 +975,7 @@ CREATE TABLE `tipoCargo` (
   `tipoCargoComentario` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idtipoCargo`),
   UNIQUE KEY `idtipoCargo_UNIQUE` (`idtipoCargo`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -990,7 +990,7 @@ CREATE TABLE `tipoMateria` (
   `tipoMateriaNombre` varchar(50) NOT NULL COMMENT 'Listado de los tipos de materias que se imparten en la institución.',
   `tipoMateriaComentario` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idtipoMateria`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1005,7 +1005,7 @@ CREATE TABLE `tipoNombramiento` (
   `tipoNombramientoNombre` varchar(60) NOT NULL COMMENT 'Listado de las formas en las que se uede nombrar el cargo de un docente dentro de la institución.',
   `tipoNombramientoCoemntario` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idtipoNombramiento`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1021,7 +1021,7 @@ CREATE TABLE `tipoPermiso` (
   `tipoPermisoDiasMes` int(2) NOT NULL,
   `tipoPermisoComentarios` varchar(250) DEFAULT NULL,
   PRIMARY KEY (`idtipoPermiso`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1036,7 +1036,7 @@ CREATE TABLE `tipoPersona` (
   `tipoPersonaNombre` varchar(45) NOT NULL,
   `tipoPersonaComentario` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idtipoPersona`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1051,7 +1051,7 @@ CREATE TABLE `tipoRecurso` (
   `tipoRecursoNombre` varchar(50) NOT NULL,
   `tipoRecursoComentario` varchar(140) DEFAULT NULL,
   PRIMARY KEY (`idtipoRecurso`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1063,8 +1063,8 @@ DROP TABLE IF EXISTS `tipoReserva`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tipoReserva` (
   `idtipoReserva` int(11) NOT NULL AUTO_INCREMENT,
-  `tipoReservaComentario` varchar(100) NOT NULL,
   `tipoReservaNombre` varchar(30) NOT NULL,
+  `tipoReservaComentario` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`idtipoReserva`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1117,7 +1117,7 @@ CREATE TABLE `zona` (
   `zonaNombre` varchar(45) NOT NULL,
   `zonaCoementario` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idzona`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1137,4 +1137,4 @@ CREATE TABLE `zona` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-07-20 13:38:37
+-- Dump completed on 2019-07-20 17:42:59
