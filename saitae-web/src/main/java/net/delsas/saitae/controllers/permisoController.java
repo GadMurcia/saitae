@@ -69,10 +69,6 @@ public class permisoController implements Serializable {
                 context.getExternalContext().redirect("./../");
 
             } else {
-//                FacesMessage ms = (FacesMessage) context.getExternalContext().getSessionMap().get("mensaje");
-//                context.addMessage("growl", ms != null ? ms : new FacesMessage(FacesMessage.SEVERITY_INFO, "Bienvenido", 
-//                        "Gracias por iniciar Sesión " + u.getPersonaNombre()));
-//                context.getExternalContext().getSessionMap().remove("mensaje");
                 this.setUs(u.getEstudiante());
                 p.setPermisosPK(new PermisosPK((us == null ? 0 : us.getIdestudiante()), Calendar.getInstance().getTime(), 0));
                 permisos = u.getTipoPersona().getTipopersonaPermisoList();

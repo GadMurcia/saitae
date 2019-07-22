@@ -55,7 +55,6 @@ public class EstudianteController implements Serializable {
     @EJB
     private TipoPersonaFacadeLocal tpfl;
 
-    
     private Persona est1;
     private Persona resp1;
     private Persona padre;
@@ -105,11 +104,11 @@ public class EstudianteController implements Serializable {
 
     public void guardar() {
         madre.setPersonaActivo(false);
-        madre.setPersonaContrasenya(this.getDuiMadre());
+        madre.setPersonaContrasenya(DigestUtils.md5Hex(this.getDuiMadre()));
         madre.setTipoPersona(tpfl.find(10));
         persist(madre, madre.getIdpersona());
 
-        padre.setPersonaContrasenya(getDuiPadre());
+        padre.setPersonaContrasenya(DigestUtils.md5Hex(getDuiPadre()));
         padre.setTipoPersona(tpfl.find(10));
         padre.setPersonaActivo(false);
         persist(padre, padre.getIdpersona());
@@ -118,7 +117,7 @@ public class EstudianteController implements Serializable {
         resp.setEstudianteEsEstudiante(false);
         resp.setPersona(resp1);
         resp1.setTipoPersona(tpfl.find(9));
-        resp1.setPersonaContrasenya(getDuiResponsable());
+        resp1.setPersonaContrasenya(DigestUtils.md5Hex(getDuiResponsable()));
         resp1.setPersonaActivo(true);
         resp.setEstudianteFormaTrabajo((resp.getEstudianteFormaTrabajo() == null ? "Desempleado" : resp.getEstudianteFormaTrabajo()));
         persist(resp1, resp1.getIdpersona());
@@ -154,9 +153,9 @@ public class EstudianteController implements Serializable {
         }
         FacesContext ci = FacesContext.getCurrentInstance();
         try {
-            ci.getExternalContext().getSessionMap().put("mensaje", new FacesMessage(FacesMessage.SEVERITY_INFO, 
-                    "Éxito!", "El estudiante "+est1.getPersonaNombre() + " " + est1.getPersonaApellido()
-                            +" ha sido guardado."));
+            ci.getExternalContext().getSessionMap().put("mensaje", new FacesMessage(FacesMessage.SEVERITY_INFO,
+                    "Éxito!", "El estudiante " + est1.getPersonaNombre() + " " + est1.getPersonaApellido()
+                    + " ha sido guardado."));
             ci.getExternalContext().redirect("perfil.intex");
         } catch (IOException ex) {
             System.out.println(ex.toString());
@@ -257,7 +256,7 @@ public class EstudianteController implements Serializable {
                 dep += "#" + g;
             }
         }
-        est.setEstudianteDependenciaEconomica(dep+"¿ ");
+        est.setEstudianteDependenciaEconomica(dep + "¿ ");
     }
 
     public boolean getOtraDependencia() {
@@ -292,8 +291,8 @@ public class EstudianteController implements Serializable {
     }
 
     public String getMunRep() {
-        return resp1.getPersonaLugarNac() != null ? resp1.getPersonaLugarNac().split("#")[1] == null ? 
-                "" : resp1.getPersonaLugarNac().split("#")[1] : "";
+        return resp1.getPersonaLugarNac() != null ? resp1.getPersonaLugarNac().split("#")[1] == null
+                ? "" : resp1.getPersonaLugarNac().split("#")[1] : "";
     }
 
     public void setMunRep(String munRep) {
@@ -301,8 +300,8 @@ public class EstudianteController implements Serializable {
     }
 
     public String getDepEst() {
-        return est1.getPersonaLugarNac()!= null ? est1.getPersonaLugarNac().split("#")[0] == null ? 
-                "" : est1.getPersonaLugarNac().split("#")[0] : "";
+        return est1.getPersonaLugarNac() != null ? est1.getPersonaLugarNac().split("#")[0] == null
+                ? "" : est1.getPersonaLugarNac().split("#")[0] : "";
     }
 
     public void setDepEst(String depEst) {
@@ -310,13 +309,13 @@ public class EstudianteController implements Serializable {
     }
 
     public String getOtradependencia() {
-         String dep = est.getEstudianteDependenciaEconomica() == null ? " ¿ "
+        String dep = est.getEstudianteDependenciaEconomica() == null ? " ¿ "
                 : est.getEstudianteDependenciaEconomica().split("¿")[1];
         return dep;
     }
 
     public void setOtradependencia(String otradependencia) {
-        this.est.setEstudianteDependenciaEconomica(est.getEstudianteDependenciaEconomica()+"¿"+otradependencia);
+        this.est.setEstudianteDependenciaEconomica(est.getEstudianteDependenciaEconomica() + "¿" + otradependencia);
     }
 
     public Date getAñoMatricula() {
@@ -346,7 +345,7 @@ public class EstudianteController implements Serializable {
     public void setMadre(Persona madre) {
         this.madre = madre;
     }
-    
+
     public ArrayList<SelectItem> niveles() {
         ArrayList<SelectItem> items = new ArrayList<>();
         items.add(new SelectItem(1, "Primer Año"));
@@ -389,10 +388,9 @@ public class EstudianteController implements Serializable {
         String[] d = p.getIdpersona() == null ? new String[]{""} : p.getIdpersona().toString().split("");
         String h = "";
         for (int i = 1; i < d.length; i++) {
-            if (i == d.length - 2) {
-                h += "" + d[i] + "-";
-            } else {
-                h += "" + d[i];
+            h += d[i];
+            if (p.getTipoPersona().getIdtipoPersona() != 8 && i == (d.length - 2)) {
+                h += "-";
             }
         }
         return h;
@@ -401,9 +399,9 @@ public class EstudianteController implements Serializable {
     public void setDui(String dui, Persona p) {
         String[] d = dui.split("");
         String h = "1";
-        for (int i = 0; i < d.length; i++) {
-            if (i != d.length - 2) {
-                h += d[i];
+        for (String f : d) {
+            if (!f.equals("-")) {
+                h += f;
             }
         }
         p.setIdpersona(Integer.valueOf(h));
