@@ -149,6 +149,7 @@ public class permisoController implements Serializable {
     }
 
     public void guardar() {
+        p.getPermisosPK().setTipoPermiso(p.getTipoPermiso1().getIdtipoPermiso());
         pfl.create(p);
     }
 

@@ -13,14 +13,13 @@
                     <p:growl id="msgs" showDetail="true"/>
                     <h3>Aulas</h3>
                     <p:dataTable id="aula" var="a" value="#{aulaController.aulas}" editable="true" 
-                                 widgetVar="aula" >
+                                 widgetVar="aula1" >
                         <f:facet name="header">
                             Administración de Aulas
                         </f:facet>
 
                         <p:ajax event="rowEdit" listener="#{aulaController.onRowEdit}" update=":form:msgs" />
                         <p:ajax event="rowEditCancel" listener="#{aulaController.onRowCancel}" update=":form:msgs" />
-                        <p:ajax event="cellEdit" listener="#{aulaController.onCellEdit}" update=":form:msgs" />
 
                         <p:column headerText="Id">
                             <h:outputText value="#{a.idaula}" />
@@ -29,10 +28,10 @@
                         <p:column headerText="Zona">
                             <p:cellEditor>
                                 <f:facet name="output"><h:outputText value="#{a.zonaAula.idzona}" /></f:facet>
-                                <f:facet name="input"><p:selectOneMenu id="console" value="#{a.zonaAula.idzona}" 
-                                     style="width:125px" title="Seleccione una zona ">
+                                <f:facet name="input">
+                                    <p:selectOneMenu id="console" value="#{a.zonaAula.idzona}" 
+                                                     style="width:125px" title="Seleccione una zona ">
                                         <f:selectItems value="#{aulaController.listaZonas}"/>
-                        <f:ajax render="console1" execute="SeleccionAula"/>
                                     </p:selectOneMenu></f:facet>
                             </p:cellEditor>
                         </p:column>
@@ -53,7 +52,7 @@
                             <p:commandButton value="Agregar Nuevo" styleClass="ui-priority-primary" 
                                              process="@this" update=":form:msgs"
                                              action="#{aulaController.onAddNew()}" 
-                                             oncomplete="PF('aula').addRow();"/>
+                                             oncomplete="PF('aula1').addRow();"/>
                         </div>
                     </div>
                     <p:contextMenu for="aula" widgetVar="cMenu">   

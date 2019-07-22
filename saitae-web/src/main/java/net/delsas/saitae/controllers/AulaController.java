@@ -33,6 +33,7 @@ import net.delsas.saitae.entities.Aula;
 import net.delsas.saitae.entities.Zona;
 import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.RowEditEvent;
+import org.primefaces.event.SelectEvent;
 
 
 /**
@@ -94,7 +95,9 @@ public class AulaController implements Serializable {
 
 
     public void onRowEdit(RowEditEvent event) {
-        afl.edit((Aula) event.getObject());
+        Aula a = (Aula) event.getObject();
+        a.setZonaAula(zfl.find(a.getZonaAula().getIdzona()));
+        afl.edit(a);
         FacesMessage msg = new FacesMessage("Aula Edited", ((Aula) event.getObject()).getIdaula() + "");
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
@@ -106,6 +109,10 @@ public class AulaController implements Serializable {
         }
         FacesMessage msg = new FacesMessage("Edit Cancelled", ((Aula) event.getObject()).getIdaula() + "");
         FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+    
+    public void onSelectEvent(Object event){
+        System.out.println("Evento: "+event.toString());
     }
 
     public List<SelectItem> getListaZonas(){
