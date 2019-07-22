@@ -26,6 +26,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import net.delsas.saitae.beans.MateriaFacade;
+import net.delsas.saitae.beans.MateriaFacadeLocal;
 import net.delsas.saitae.beans.TipoCargoFacadeLocal;
 import net.delsas.saitae.beans.TipoMateriaFacadeLocal;
 import net.delsas.saitae.beans.TipoNombramientoFacadeLocal;
@@ -35,6 +37,7 @@ import net.delsas.saitae.beans.TipoRecursoFacadeLocal;
 import net.delsas.saitae.beans.TipoReservaFacadeLocal;
 import net.delsas.saitae.beans.TipopersonaPermisoFacadeLocal;
 import net.delsas.saitae.beans.ZonaFacadeLocal;
+import net.delsas.saitae.entities.Materia;
 import net.delsas.saitae.entities.TipoCargo;
 import net.delsas.saitae.entities.TipoMateria;
 import net.delsas.saitae.entities.TipoNombramiento;
@@ -102,8 +105,13 @@ public class TipoController implements Serializable {
     //TipoMateria
     @EJB
     private TipoMateriaFacadeLocal tipoMateriaFL;
-    private List<TipoMateria> materias;
-
+    private List<TipoMateria> tipomaterias;
+    
+    //Materia
+    @EJB
+    private MateriaFacadeLocal materiaFL;
+    private List<Materia> materias;
+    
     @PostConstruct
     public void init() {
         recursos = tipoRecursoFL.findAll();
@@ -115,7 +123,8 @@ public class TipoController implements Serializable {
         zonas = zfl.findAll();
         reservas = tipoReservaFL.findAll();
         nombramientos = tipoNombramientoFL.findAll();
-        materias = tipoMateriaFL.findAll();
+        tipomaterias = tipoMateriaFL.findAll();
+        materias = materiaFL.findAll();
     }
 
     public void onAddNew(String id) {
@@ -139,9 +148,14 @@ public class TipoController implements Serializable {
             case "reserva":
                 reservas.add(new TipoReserva());
                 break;
-            case "materia":
-                materias.add(new TipoMateria());
+            case "tipomateria":
+                tipomaterias.add(new TipoMateria());
                 break;
+                
+            case "materia":
+               materias.add(new Materia());
+               break;
+                
             default:
                 System.out.println(id);
 
@@ -194,6 +208,13 @@ public class TipoController implements Serializable {
                 titulo = "Tipo de Materia";
                 mensaje = ((TipoMateria) event.getObject()).getTipoMateriaNombre();
                 break;
+            case "form:materia:":
+                Materia ma = (Materia) event.getObject();
+                materiaFL.edit(ma);
+                titulo = "Materia";
+                mensaje = ((Materia) event.getObject()).getMateriaNombre();
+                break;
+                
             default:
                 System.out.println(id);
         }
@@ -247,12 +268,19 @@ public class TipoController implements Serializable {
                 }
                 mensaje = res.getTipoReservaNombre();
                 break;
-            case "form:tw:materia":
+            case "form:tw:tipomateria":
                 TipoMateria m = (TipoMateria) event.getObject();
                 if (m.getTipoMateriaNombre() == null || m.getTipoMateriaNombre().isEmpty()) {
-                    materias.remove(m);
+                    tipomaterias.remove(m);
                 }
                 mensaje = m.getTipoMateriaNombre();
+                break;
+                 case "form:materia":
+                Materia ma = (Materia) event.getObject();
+                if (ma.getMateriaNombre()== null || ma.getMateriaNombre().isEmpty()) {
+                    materias.remove(ma);
+                }
+                mensaje = ma.getMateriaNombre();
                 break;
             default:
                 System.out.println(id);
@@ -402,12 +430,20 @@ public class TipoController implements Serializable {
         this.nombramientos = nombramientos;
     }
 
-    public List<TipoMateria> getMaterias() {
+    public List<TipoMateria> getTipoMaterias() {
+        return tipomaterias;
+    }
+
+    public void setTipoMaterias(List<TipoMateria> tipomaterias) {
+        this.tipomaterias = tipomaterias;
+    }    
+
+    public List<Materia> getMaterias() {
         return materias;
     }
 
-    public void setMaterias(List<TipoMateria> materias) {
+    public void setMaterias(List<Materia> materias) {
         this.materias = materias;
-    }    
+    }
 
 }
