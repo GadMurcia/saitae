@@ -83,7 +83,7 @@ public class permisoController implements Serializable {
 
     public permisoController() {
         p = new Permisos();
-        p.setTipoPermiso1(new TipoPermiso(0, "", 0));;
+        p.setTipoPermiso1(new TipoPermiso(0, "", 0));
         e = new ArrayList<>();
         us = new Estudiante();
 

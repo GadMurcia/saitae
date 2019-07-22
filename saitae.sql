@@ -119,7 +119,7 @@ CREATE TABLE `aula` (
   PRIMARY KEY (`idaula`),
   KEY `fk_aula_1_idx` (`zonaAula`),
   CONSTRAINT `fk_aula_1` FOREIGN KEY (`zonaAula`) REFERENCES `zona` (`idzona`) ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -128,6 +128,7 @@ CREATE TABLE `aula` (
 
 LOCK TABLES `aula` WRITE;
 /*!40000 ALTER TABLE `aula` DISABLE KEYS */;
+INSERT INTO `aula` VALUES (1,1,''),(2,2,'');
 /*!40000 ALTER TABLE `aula` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -607,6 +608,7 @@ CREATE TABLE `estudiante` (
 
 LOCK TABLES `estudiante` WRITE;
 /*!40000 ALTER TABLE `estudiante` DISABLE KEYS */;
+INSERT INTO `estudiante` VALUES (1045367075,'',0,'',0,3.00,'\0','Padre#Madre#Hermano/a¿ * ','','','',NULL,'','Noveno Grado','Estudiante','Centro Excolar de procedencia',NULL,NULL,1999999999,1888888888,1999999999,NULL),(1999999999,'',0,'',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'\0','Sexo grado','Ama de casa',NULL,NULL,'',NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `estudiante` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1121,7 +1123,7 @@ CREATE TABLE `persona` (
 
 LOCK TABLES `persona` WRITE;
 /*!40000 ALTER TABLE `persona` DISABLE KEYS */;
-INSERT INTO `persona` VALUES (1045367073,'Guillermo','Delsas',NULL,NULL,NULL,NULL,NULL,NULL,'02951a6cb9595ef475fed783e59c687e','Ingeniero',1,'',NULL,'\0',NULL,NULL,NULL,NULL,NULL),(1045367074,'Director','Directivo',NULL,NULL,NULL,NULL,NULL,NULL,'02951a6cb9595ef475fed783e59c687e','Director',2,'',NULL,'',NULL,NULL,NULL,NULL,NULL),(1045367075,'Estudiante','Estudioso',NULL,NULL,NULL,NULL,NULL,NULL,'02951a6cb9595ef475fed783e59c687e','Estudiante',8,'',NULL,'',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `persona` VALUES (1045367073,'Guillermo','Delsas',NULL,NULL,NULL,NULL,NULL,NULL,'02951a6cb9595ef475fed783e59c687e','Ingeniero',1,'',NULL,'\0',NULL,NULL,NULL,NULL,NULL),(1045367074,'Director','Directivo',NULL,NULL,NULL,NULL,NULL,NULL,'02951a6cb9595ef475fed783e59c687e','Director',2,'',NULL,'',NULL,NULL,NULL,NULL,NULL),(1045367075,'Estudiante','Estudioso',NULL,NULL,NULL,NULL,NULL,NULL,'02951a6cb9595ef475fed783e59c687e','Estudiante',8,'',NULL,'',NULL,NULL,NULL,NULL,NULL),(1888888888,'padre padre1','padre2 padre3',NULL,NULL,NULL,NULL,NULL,NULL,'02951a6cb9595ef475fed783e59c687e',NULL,11,'\0',NULL,NULL,NULL,NULL,NULL,NULL,NULL),(1999999999,'representante','apellidos','1980-01-25','la dirección del representante','7999-9999',NULL,0,'Santa Ana#Texistepeque','02951a6cb9595ef475fed783e59c687e',NULL,9,'','9999-999999-999-9','\0',1,'parentesco','representante@correo.com',NULL,NULL);
 /*!40000 ALTER TABLE `persona` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1357,7 +1359,7 @@ CREATE TABLE `tipoCargo` (
   `tipoCargoComentario` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idtipoCargo`),
   UNIQUE KEY `idtipoCargo_UNIQUE` (`idtipoCargo`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1366,6 +1368,7 @@ CREATE TABLE `tipoCargo` (
 
 LOCK TABLES `tipoCargo` WRITE;
 /*!40000 ALTER TABLE `tipoCargo` DISABLE KEYS */;
+INSERT INTO `tipoCargo` VALUES (1,'Fondos Propios',NULL),(2,'Actividades de la institución',NULL),(3,'Donación',NULL);
 /*!40000 ALTER TABLE `tipoCargo` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1381,7 +1384,7 @@ CREATE TABLE `tipoMateria` (
   `tipoMateriaNombre` varchar(50) NOT NULL COMMENT 'Listado de los tipos de materias que se imparten en la institución.',
   `tipoMateriaComentario` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idtipoMateria`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1390,6 +1393,7 @@ CREATE TABLE `tipoMateria` (
 
 LOCK TABLES `tipoMateria` WRITE;
 /*!40000 ALTER TABLE `tipoMateria` DISABLE KEYS */;
+INSERT INTO `tipoMateria` VALUES (1,'Generales',NULL),(2,'Optativas',NULL),(3,'Tecnologicas',NULL),(4,'Contaduría',NULL);
 /*!40000 ALTER TABLE `tipoMateria` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1405,7 +1409,7 @@ CREATE TABLE `tipoNombramiento` (
   `tipoNombramientoNombre` varchar(60) NOT NULL COMMENT 'Listado de las formas en las que se uede nombrar el cargo de un docente dentro de la institución.',
   `tipoNombramientoCoemntario` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idtipoNombramiento`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1414,6 +1418,7 @@ CREATE TABLE `tipoNombramiento` (
 
 LOCK TABLES `tipoNombramiento` WRITE;
 /*!40000 ALTER TABLE `tipoNombramiento` DISABLE KEYS */;
+INSERT INTO `tipoNombramiento` VALUES (1,'Propietario',NULL),(2,'Interino',NULL),(3,'Suplente',NULL);
 /*!40000 ALTER TABLE `tipoNombramiento` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1430,7 +1435,7 @@ CREATE TABLE `tipoPermiso` (
   `tipoPermisoDiasMes` int(2) NOT NULL,
   `tipoPermisoComentarios` varchar(250) DEFAULT NULL,
   PRIMARY KEY (`idtipoPermiso`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1439,6 +1444,7 @@ CREATE TABLE `tipoPermiso` (
 
 LOCK TABLES `tipoPermiso` WRITE;
 /*!40000 ALTER TABLE `tipoPermiso` DISABLE KEYS */;
+INSERT INTO `tipoPermiso` VALUES (1,'Enfermedad',0,NULL),(2,'Materindad',0,NULL),(3,'Paternidad',0,NULL),(4,'Faltar a clases',0,NULL),(5,'Salir temporalmente de la institución',0,NULL),(6,'Retirarse de la institución',0,NULL),(7,'No portar uniforme',0,NULL);
 /*!40000 ALTER TABLE `tipoPermiso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1454,7 +1460,7 @@ CREATE TABLE `tipoPersona` (
   `tipoPersonaNombre` varchar(45) NOT NULL,
   `tipoPersonaComentario` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idtipoPersona`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1463,7 +1469,7 @@ CREATE TABLE `tipoPersona` (
 
 LOCK TABLES `tipoPersona` WRITE;
 /*!40000 ALTER TABLE `tipoPersona` DISABLE KEYS */;
-INSERT INTO `tipoPersona` VALUES (1,'Administrador',NULL),(2,'Director',NULL),(8,'Estudiante',NULL);
+INSERT INTO `tipoPersona` VALUES (1,'Administrador',NULL),(2,'Director',NULL),(8,'Estudiante',NULL),(9,'Representante',NULL),(10,'Madre de familia',NULL),(11,'Padre de familia',NULL);
 /*!40000 ALTER TABLE `tipoPersona` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1479,7 +1485,7 @@ CREATE TABLE `tipoRecurso` (
   `tipoRecursoNombre` varchar(50) NOT NULL,
   `tipoRecursoComentario` varchar(140) DEFAULT NULL,
   PRIMARY KEY (`idtipoRecurso`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1488,6 +1494,7 @@ CREATE TABLE `tipoRecurso` (
 
 LOCK TABLES `tipoRecurso` WRITE;
 /*!40000 ALTER TABLE `tipoRecurso` DISABLE KEYS */;
+INSERT INTO `tipoRecurso` VALUES (1,'Tecnológico CRA',NULL),(2,'Tecnológico Laboratorio de Ciencias Naturales',NULL),(3,'Bibliográfico',NULL);
 /*!40000 ALTER TABLE `tipoRecurso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1503,7 +1510,7 @@ CREATE TABLE `tipoReserva` (
   `tipoReservaNombre` varchar(30) NOT NULL,
   `tipoReservaComentario` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`idtipoReserva`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1512,6 +1519,7 @@ CREATE TABLE `tipoReserva` (
 
 LOCK TABLES `tipoReserva` WRITE;
 /*!40000 ALTER TABLE `tipoReserva` DISABLE KEYS */;
+INSERT INTO `tipoReserva` VALUES (1,'Uso en sala',NULL),(2,'Uso dentro de la institución',NULL),(3,'Uso en aula',NULL),(4,'Fuera de la institución',NULL);
 /*!40000 ALTER TABLE `tipoReserva` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1566,6 +1574,7 @@ CREATE TABLE `tipopersonaPermiso` (
 
 LOCK TABLES `tipopersonaPermiso` WRITE;
 /*!40000 ALTER TABLE `tipopersonaPermiso` DISABLE KEYS */;
+INSERT INTO `tipopersonaPermiso` VALUES (1,1,''),(1,2,''),(1,3,''),(2,1,''),(2,2,''),(8,4,''),(8,5,''),(8,6,''),(8,7,'');
 /*!40000 ALTER TABLE `tipopersonaPermiso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1581,7 +1590,7 @@ CREATE TABLE `zona` (
   `zonaNombre` varchar(45) NOT NULL,
   `zonaCoementario` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idzona`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1590,6 +1599,7 @@ CREATE TABLE `zona` (
 
 LOCK TABLES `zona` WRITE;
 /*!40000 ALTER TABLE `zona` DISABLE KEYS */;
+INSERT INTO `zona` VALUES (1,'Zona 1',NULL),(2,'Zona 2',NULL),(3,'Zona 3',NULL);
 /*!40000 ALTER TABLE `zona` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1610,4 +1620,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-07-21 19:53:30
+-- Dump completed on 2019-07-22 14:20:30
