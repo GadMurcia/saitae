@@ -8,6 +8,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
+import net.delsas.prueba;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.entities.Persona;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -63,7 +64,7 @@ public class loginController implements Serializable {
             w = 0;
         }
         String passwd = DigestUtils.md5Hex(pass);
-        Persona p = pfl.find(w);
+        Persona p = /*new prueba().getEstudiante().getPersona();//*/pfl.find(w);
         FacesContext context = FacesContext.getCurrentInstance();
         try {
             if (p != null && p.getPersonaActivo() && p.getPersonaContrasenya().equals(passwd)) {
@@ -74,7 +75,7 @@ public class loginController implements Serializable {
                 System.out.println("no logueado");
                 context.getExternalContext().getSessionMap().put("mensaje", new FacesMessage(
                         FacesMessage.SEVERITY_ERROR, "Loggin Error", "Credenciales no validas"));
-                context.getExternalContext().redirect("index.intex");
+                context.getExternalContext().redirect("");
             }
         } catch (IOException e) {
             context.getExternalContext().getSessionMap().put("mensaje", new FacesMessage(

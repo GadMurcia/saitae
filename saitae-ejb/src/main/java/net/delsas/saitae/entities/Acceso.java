@@ -6,6 +6,7 @@
 package net.delsas.saitae.entities;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -15,11 +16,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -61,8 +63,8 @@ public class Acceso implements Serializable {
     @Size(max = 140)
     @Column(name = "accesoComentario")
     private String accesoComentario;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "acceso")
-    private AccesoTipoPersona accesoTipoPersona;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "acceso")
+    private List<AccesoTipoPersona> accesoTipoPersonaList;
 
     public Acceso() {
     }
@@ -118,12 +120,13 @@ public class Acceso implements Serializable {
         this.accesoComentario = accesoComentario;
     }
 
-    public AccesoTipoPersona getAccesoTipoPersona() {
-        return accesoTipoPersona;
+    @XmlTransient
+    public List<AccesoTipoPersona> getAccesoTipoPersonaList() {
+        return accesoTipoPersonaList;
     }
 
-    public void setAccesoTipoPersona(AccesoTipoPersona accesoTipoPersona) {
-        this.accesoTipoPersona = accesoTipoPersona;
+    public void setAccesoTipoPersonaList(List<AccesoTipoPersona> accesoTipoPersonaList) {
+        this.accesoTipoPersonaList = accesoTipoPersonaList;
     }
 
     @Override

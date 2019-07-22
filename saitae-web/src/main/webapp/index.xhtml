@@ -5,19 +5,20 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
+        <meta http-equiv="Content-Language" content="es-SV" />
         <title>SAITAE - INTEX #{loginController.year}</title>
         <f:event listener="#{loginController.preinit()}" type="preRenderView"/>
     </h:head>
-    <h:body>
+    <h:body style="background-color: #dddddd;">
         <style>
             .centred-form{
-                margin: 0 auto;
+                margin: 10% auto;
                 align-content: center;
                 align-items: center;
                 width: 200px;
             }
         </style>
-            <h:form id="frm" styleClass="centred-form">
+        <h:form id="frm" styleClass="centred-form">
             <p:growl id="growl" showDetail="true"/>
             <h:panelGrid columns="3" summary="Inicio de sesión"  >
                 <p:column/>
@@ -39,7 +40,6 @@
                 <p:column/>
             </h:panelGrid>
         </h:form>
-
     </h:body>
 </html>
 

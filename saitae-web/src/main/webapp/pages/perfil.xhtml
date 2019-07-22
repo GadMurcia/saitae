@@ -1,17 +1,45 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
-    <h:head>
-        <title>#{sessionController.us.personaNombre.split(" ")[0]} #{sessionController.us.personaApellido.split(" ")[0]}</title>
-        <f:event type="preRenderView" listener="#{sessionController.log()}"/>
-    </h:head>
-    <h:body>
-        <h:form>
-            <p:growl id="growl" showDetail="true" />
-        </h:form>
-    </h:body>
-</html>
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
 
+    <body>
+
+        <ui:composition template="./../WEB-INF/template/plantilla1.xhtml">
+
+            <ui:define name="content">
+                <style type="text/css">
+                    .value {
+                        font-weight: bold;
+                    }
+
+                    .ui-carousel {
+                        margin-bottom: 20px;
+                    }
+                </style>
+                <h:form id="form">
+                    <p:carousel value="#{anuncioController.all}" headerText="Anuncios" var="ann" circular="true" 
+                                footerText="Total de anuncios: #{anuncioController.all.size()}." numVisible="1"
+                                itemStyle="text-align:center" autoPlayInterval="5000">
+                        <p:panelGrid columns="1" style="width:100%;margin:10px 0px" 
+                                     columnClasses="label,value" layout="grid" 
+                                     styleClass="ui-panelgrid-blank">
+                            <f:facet name="header">
+                                <p:outputLabel value="#{ann.anuncioTitulo}"/> 
+                            </f:facet>
+                            <h:outputText value="#{ann.anuncioTexto}"/>
+                            <f:facet name="footer">
+                                <p:outputLabel value="Dirigido a: #{ann.anuncioTipoPersona.tipoPersonaNombre}"/> 
+                            </f:facet>
+                        </p:panelGrid>
+                    </p:carousel>
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

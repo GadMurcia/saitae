@@ -6,17 +6,14 @@
 package net.delsas.saitae.entities;
 
 import java.io.Serializable;
-import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -29,39 +26,41 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "AccesoTipoPersona.findAll", query = "SELECT a FROM AccesoTipoPersona a")
-    , @NamedQuery(name = "AccesoTipoPersona.findByIdacceso", query = "SELECT a FROM AccesoTipoPersona a WHERE a.idacceso = :idacceso")
+    , @NamedQuery(name = "AccesoTipoPersona.findByIdacceso", query = "SELECT a FROM AccesoTipoPersona a WHERE a.accesoTipoPersonaPK.idacceso = :idacceso")
+    , @NamedQuery(name = "AccesoTipoPersona.findByIdTipoPersona", query = "SELECT a FROM AccesoTipoPersona a WHERE a.accesoTipoPersonaPK.idTipoPersona = :idTipoPersona")
     , @NamedQuery(name = "AccesoTipoPersona.findByAccesoTipoPersonaComentario", query = "SELECT a FROM AccesoTipoPersona a WHERE a.accesoTipoPersonaComentario = :accesoTipoPersonaComentario")})
 public class AccesoTipoPersona implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "idacceso")
-    private Integer idacceso;
+    @EmbeddedId
+    protected AccesoTipoPersonaPK accesoTipoPersonaPK;
     @Size(max = 140)
     @Column(name = "accesoTipoPersonaComentario")
     private String accesoTipoPersonaComentario;
     @JoinColumn(name = "idacceso", referencedColumnName = "idacceso", insertable = false, updatable = false)
-    @OneToOne(optional = false)
-    private Acceso acceso;
-    @JoinColumn(name = "idTipoPersona", referencedColumnName = "idtipoPersona")
     @ManyToOne(optional = false)
-    private TipoPersona idTipoPersona;
+    private Acceso acceso;
+    @JoinColumn(name = "idTipoPersona", referencedColumnName = "idtipoPersona", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private TipoPersona tipoPersona;
 
     public AccesoTipoPersona() {
     }
 
-    public AccesoTipoPersona(Integer idacceso) {
-        this.idacceso = idacceso;
+    public AccesoTipoPersona(AccesoTipoPersonaPK accesoTipoPersonaPK) {
+        this.accesoTipoPersonaPK = accesoTipoPersonaPK;
     }
 
-    public Integer getIdacceso() {
-        return idacceso;
+    public AccesoTipoPersona(int idacceso, int idTipoPersona) {
+        this.accesoTipoPersonaPK = new AccesoTipoPersonaPK(idacceso, idTipoPersona);
     }
 
-    public void setIdacceso(Integer idacceso) {
-        this.idacceso = idacceso;
+    public AccesoTipoPersonaPK getAccesoTipoPersonaPK() {
+        return accesoTipoPersonaPK;
+    }
+
+    public void setAccesoTipoPersonaPK(AccesoTipoPersonaPK accesoTipoPersonaPK) {
+        this.accesoTipoPersonaPK = accesoTipoPersonaPK;
     }
 
     public String getAccesoTipoPersonaComentario() {
@@ -80,18 +79,18 @@ public class AccesoTipoPersona implements Serializable {
         this.acceso = acceso;
     }
 
-    public TipoPersona getIdTipoPersona() {
-        return idTipoPersona;
+    public TipoPersona getTipoPersona() {
+        return tipoPersona;
     }
 
-    public void setIdTipoPersona(TipoPersona idTipoPersona) {
-        this.idTipoPersona = idTipoPersona;
+    public void setTipoPersona(TipoPersona tipoPersona) {
+        this.tipoPersona = tipoPersona;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (idacceso != null ? idacceso.hashCode() : 0);
+        hash += (accesoTipoPersonaPK != null ? accesoTipoPersonaPK.hashCode() : 0);
         return hash;
     }
 
@@ -102,7 +101,7 @@ public class AccesoTipoPersona implements Serializable {
             return false;
         }
         AccesoTipoPersona other = (AccesoTipoPersona) object;
-        if ((this.idacceso == null && other.idacceso != null) || (this.idacceso != null && !this.idacceso.equals(other.idacceso))) {
+        if ((this.accesoTipoPersonaPK == null && other.accesoTipoPersonaPK != null) || (this.accesoTipoPersonaPK != null && !this.accesoTipoPersonaPK.equals(other.accesoTipoPersonaPK))) {
             return false;
         }
         return true;
@@ -110,7 +109,7 @@ public class AccesoTipoPersona implements Serializable {
 
     @Override
     public String toString() {
-        return "net.delsas.saitae.entities.AccesoTipoPersona[ idacceso=" + idacceso + " ]";
+        return "net.delsas.saitae.entities.AccesoTipoPersona[ accesoTipoPersonaPK=" + accesoTipoPersonaPK + " ]";
     }
     
 }

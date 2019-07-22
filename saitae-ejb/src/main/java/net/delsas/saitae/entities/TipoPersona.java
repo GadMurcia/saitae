@@ -57,7 +57,7 @@ public class TipoPersona implements Serializable {
     private List<Persona> personaList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTipoPersona")
     private List<DelagacionCargo> delagacionCargoList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTipoPersona")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoPersona")
     private List<AccesoTipoPersona> accesoTipoPersonaList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoPersona")
     private List<TipopersonaPermiso> tipopersonaPermisoList;

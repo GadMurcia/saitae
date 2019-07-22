@@ -33,8 +33,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "TipoReserva.findAll", query = "SELECT t FROM TipoReserva t")
     , @NamedQuery(name = "TipoReserva.findByIdtipoReserva", query = "SELECT t FROM TipoReserva t WHERE t.idtipoReserva = :idtipoReserva")
-    , @NamedQuery(name = "TipoReserva.findByTipoReservaComentario", query = "SELECT t FROM TipoReserva t WHERE t.tipoReservaComentario = :tipoReservaComentario")
-    , @NamedQuery(name = "TipoReserva.findByTipoReservaNombre", query = "SELECT t FROM TipoReserva t WHERE t.tipoReservaNombre = :tipoReservaNombre")})
+    , @NamedQuery(name = "TipoReserva.findByTipoReservaNombre", query = "SELECT t FROM TipoReserva t WHERE t.tipoReservaNombre = :tipoReservaNombre")
+    , @NamedQuery(name = "TipoReserva.findByTipoReservaComentario", query = "SELECT t FROM TipoReserva t WHERE t.tipoReservaComentario = :tipoReservaComentario")})
 public class TipoReserva implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -43,14 +43,14 @@ public class TipoReserva implements Serializable {
     @Basic(optional = false)
     @Column(name = "idtipoReserva")
     private Integer idtipoReserva;
-    @Size(max = 100)
-    @Column(name = "tipoReservaComentario")
-    private String tipoReservaComentario;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 30)
     @Column(name = "tipoReservaNombre")
     private String tipoReservaNombre;
+    @Size(max = 100)
+    @Column(name = "tipoReservaComentario")
+    private String tipoReservaComentario;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoReserva1")
     private List<TipoReservaRecurso> tipoReservaRecursoList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoReserva")
@@ -76,20 +76,20 @@ public class TipoReserva implements Serializable {
         this.idtipoReserva = idtipoReserva;
     }
 
-    public String getTipoReservaComentario() {
-        return tipoReservaComentario;
-    }
-
-    public void setTipoReservaComentario(String tipoReservaComentario) {
-        this.tipoReservaComentario = tipoReservaComentario;
-    }
-
     public String getTipoReservaNombre() {
         return tipoReservaNombre;
     }
 
     public void setTipoReservaNombre(String tipoReservaNombre) {
         this.tipoReservaNombre = tipoReservaNombre;
+    }
+
+    public String getTipoReservaComentario() {
+        return tipoReservaComentario;
+    }
+
+    public void setTipoReservaComentario(String tipoReservaComentario) {
+        this.tipoReservaComentario = tipoReservaComentario;
     }
 
     @XmlTransient
