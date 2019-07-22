@@ -1,0 +1,92 @@
+
+
+*{
+    font-family: century Gothic;
+}
+body{
+    background: url(../images/fog-foggy-forest-4827.jpg) no-repeat center center fixed;
+    background-size: cover;
+
+
+}
+.main-section{
+margin: 0 auto;
+margin-top: 35%;
+padding:0;
+}
+
+
+
+.modal-content{
+
+    background-color: #0d243f;
+    background: rgba(13,36,63, 0.3);
+    padding: 0 20px;
+    box-shadow: 0px 0px 3px #083161;
+}
+.user-img{
+    margin-top: -50px;
+    margin-bottom: 35px;
+  
+}
+
+.user-img img{
+    width: 100px;
+    height: 100px;
+    box-shadow: 0px 0px 3px  #0d243f;
+    border-radius: 50%;
+}
+.form-group input{
+    height: 42px;
+    font-size: 15px;
+    border:0;
+    padding-left: 54px;
+    border-radius: 5px;
+    margin-top:15px;
+    
+   
+} 
+ .form-group::before{
+  font-family: "Font Awesome\ 5 Free";
+  position: absolute;
+  left: 28px;
+  font-size: 22px;
+  padding-top:4px;
+
+ 
+
+}
+.form-group#user-group::before{
+    content: "\f007";
+}
+.form-group#contraseña-group::before{
+    content: "\f023";
+}
+button{
+    width: 285px;
+    height: 42px;
+    border:0;
+    padding-left: 5px;
+    border-radius: 5px;
+   
+   
+}
+.forgot{
+padding: 15px 0;
+}
+
+.forgot {
+    color:white;
+    font-size: 17px;
+}
+
+.p{
+    color: white;
+    font-size: 20px;
+}
+.bgcolor{
+    background-color:#e7962d;
+}
+.section:hover{
+    background-color: rgba(28, 241, 99, 0.7);
+}

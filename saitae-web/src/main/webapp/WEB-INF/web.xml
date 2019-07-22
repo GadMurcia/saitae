@@ -8,7 +8,7 @@
         <param-value>Development</param-value>
     </context-param>
     <context-param>
-        <description>luna-pink</description>
+        <description>luna-pink flick south-street</description>
         <param-name>primefaces.THEME</param-name>
         <param-value>flick</param-value>
     </context-param>

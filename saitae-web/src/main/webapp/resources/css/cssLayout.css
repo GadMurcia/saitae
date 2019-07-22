@@ -35,15 +35,15 @@
 
 
 #top a:link, #top a:visited {
-  /*color: black;*/
+  color: black;
   font-weight : bold;
-  /*text-decoration: none;*/
+  text-decoration: none;
 }
 
 #top a:link:hover, #top a:visited:hover  {
-  /*color: blue;*/
+  color: white;
   font-weight : bold;
-  /*text-decoration : underline;*/
+  text-decoration : underline;
 }
 
 

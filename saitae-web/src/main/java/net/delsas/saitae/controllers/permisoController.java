@@ -72,20 +72,20 @@ public class permisoController implements Serializable {
                 this.setUs(u.getEstudiante());
                 p.setPermisosPK(new PermisosPK((us == null ? 0 : us.getIdestudiante()), Calendar.getInstance().getTime(), 0));
                 permisos = u.getTipoPersona().getTipopersonaPermisoList();
-                e = u.getEstudiante().getEstudianteEsEstudiante()? 
-                        new ArrayList<Estudiante>() : u.getEstudiante().getEstudianteList();
+                e = u.getEstudiante().getEstudianteEsEstudiante()
+                        ? new ArrayList<Estudiante>() : u.getEstudiante().getEstudianteList();
                 p.setTipoPersona(u.getTipoPersona());
+                p.setPersona(u);
             }
         } catch (IOException ex) {
         }
     }
 
-    
     public permisoController() {
         p = new Permisos();
-        p.setTipoPermiso1(new TipoPermiso(0,"", 0));
-        e=new ArrayList<>();
-        us=new Estudiante();
+        p.setTipoPermiso1(new TipoPermiso(0, "", 0));;
+        e = new ArrayList<>();
+        us = new Estudiante();
 
     }
 

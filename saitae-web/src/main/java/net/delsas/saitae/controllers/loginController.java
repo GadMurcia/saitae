@@ -22,8 +22,8 @@ import org.apache.commons.codec.digest.DigestUtils;
 public class loginController implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    private String user;
-    private String pass;
+    private String user="";
+    private String pass="";
     @EJB
     private PersonaFacadeLocal pfl;
 
