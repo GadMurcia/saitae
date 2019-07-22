@@ -9,7 +9,7 @@
         <title>SAITAE - INTEX #{loginController.year}</title>
         <f:event listener="#{loginController.preinit()}" type="preRenderView"/>
     </h:head>
-    <h:body style="background-color: #dddddd;">
+    <h:body>
         <style>
             .centred-form{
                 margin: 10% auto;
@@ -38,6 +38,9 @@
                 <p:column/>
                 <p:commandButton actionListener="#{loginController.login()}" value="Ingresar"/>
                 <p:column/>
+                <f:facet name="footer">
+                    <h:link value="Nuevo ingreso" outcome="pages/nuevoalumno.intex"/>
+                </f:facet>
             </h:panelGrid>
         </h:form>
     </h:body>

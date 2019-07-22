@@ -1,70 +1,73 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
-    <h:head>
-        <title>solicitud de permisos</title>
-        <f:event listener="#{permisoEstudianteController.inicial()}" type="preRenderView"/>
-    </h:head>
-    <h:body>
-        <style>
-            .centred-form{
-                margin: 0 auto;
-                align-content: center;
-                align-items: center;
-                width: 50%;
-            }
-            </style>
-            <h:form styleClass="centred-form" id="frm">
-            <p:panel header="Gestionar nuevo permiso">
-                <p:messages />
-                <h:panelGrid id="w" columns="2" columnClasses="label, value">
-                    <p:outputLabel for="console" value="Motivo del permiso: *" />
-                    <p:selectOneMenu id="console" value="#{permisoEstudianteController.p.permisosPK.tipoPermiso}" 
-                                     style="width:125px" title="Seleccione el permiso que necesita">
-                        <f:selectItems value="#{permisoEstudianteController.listaPermisos()}"/>
-                        <f:ajax render="console1" execute="SeleccionPermiso"/>
-                    </p:selectOneMenu>
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
 
-                    <p:outputLabel for="console" value="¿Para quién es el permiso?: *" />
-                    <p:selectOneMenu id="console1" value="#{permisoEstudianteController.p.permisosPK.ipPersona}" 
-                                     style="width:125px" title="Seleccione el permiso que necesita"
-                                     disabled="#{!permisoEstudianteController.seleccionPermiso}">
-                        <f:selectItems value="#{permisoEstudianteController.listaEstudiantes()}"/>
-                        <f:ajax render="m" execute="seleccionEstudiante"/>
-                    </p:selectOneMenu>
-                    
-                    <p:column/>
-                    <p:panelGrid id="m" columns="6" columnClasses="label, value, label, value, label, value">
-                        <h:outputLabel value="Bachillerato: "/>
-                        <h:outputLabel value="#{permisoEstudianteController.m.grado.gradoPK.gradoModalidad}"/>
+    <body>
+        <ui:composition template="./../WEB-INF/template/plantilla1.xhtml">
+            <ui:define name="content">
+                <f:event listener="#{permisoEstudianteController.inicial()}" type="preRenderView"/>
+                <style>
+                    .centred-form{
+                        margin: 0 auto;
+                        align-content: center;
+                        align-items: center;
+                        width: 50%;
+                    }
+                </style>
+                <h:form styleClass="centred-form" id="frm">
+                    <p:panel header="Gestionar nuevo permiso">
+                        <p:messages />
+                        <h:panelGrid id="w" columns="2" columnClasses="label, value">
+                            <p:outputLabel for="console" value="Motivo del permiso: *" />
+                            <p:selectOneMenu id="console" value="#{permisoEstudianteController.p.tipoPermiso1.idtipoPermiso}" 
+                                             style="width:125px" title="Seleccione el permiso que necesita">
+                                <f:selectItems value="#{permisoEstudianteController.listaPermisos()}"/>
+                                <f:ajax render="console1" execute="SeleccionPermiso"/>
+                            </p:selectOneMenu>
 
-                        <h:outputLabel value="Grado: "/>
-                        <h:outputLabel value="#{permisoEstudianteController.m.grado.gradoPK.idgrado}"/>
+                            <p:outputLabel for="console" value="¿Para quién es el permiso?: *" />
+                            <p:selectOneMenu id="console1" value="#{permisoEstudianteController.p.persona.idpersona}" 
+                                             style="width:125px" title="Seleccione el permiso que necesita"
+                                             disabled="#{!permisoEstudianteController.seleccionPermiso}">
+                                <f:selectItems value="#{permisoEstudianteController.listaEstudiantes()}"/>
+                                <f:ajax render="m" execute="SeleccionEstudiante"/>
+                            </p:selectOneMenu>
 
-                        <h:outputLabel value="Sección: "/>
-                        <h:outputLabel value="#{permisoEstudianteController.m.grado.gradoPK.gradoSeccion}"/>
-                    </p:panelGrid>
+                            <p:column/>
+                            <p:panelGrid id="m" columns="6" columnClasses="label, value, label, value, label, value">
+                                <h:outputLabel value="Bachillerato: "/>
+                                <h:outputLabel value="#{permisoEstudianteController.m.grado.gradoPK.gradoModalidad}"/>
 
-                    <h:outputLabel value="Motivo: *"/>
-                    <p:inputText value="#{permisoEstudianteController.p.permisosComentario}" required="true" />
+                                <h:outputLabel value="Grado: "/>
+                                <h:outputLabel value="#{permisoEstudianteController.m.grado.gradoPK.idgrado}"/>
 
-                    <h:outputLabel value="Solicitado por: "/>
-                    <h:outputLabel value="#{permisoEstudianteController.us.persona.personaNombre} #{permisoEstudianteController.us.persona.personaApellido}"/>
+                                <h:outputLabel value="Sección: "/>
+                                <h:outputLabel value="#{permisoEstudianteController.m.grado.gradoPK.gradoSeccion}"/>
+                            </p:panelGrid>
 
-                    <p:outputLabel for="spanish" value="Fecha de inicio (yyyy-mm-dd):" />
-                    <p:calendar id="spanish" value="#{permisoEstudianteController.p.permisoFechaInicio}" locale="es" 
-                                navigator="true" pattern="yyyy-mm-dd" />
+                            <h:outputLabel value="Motivo: *"/>
+                            <p:inputText value="#{permisoEstudianteController.p.permisosComentario}" required="true" />
 
-                    <p:outputLabel for="spanish1" value="Fecha de fin (yyyy-mm-dd):" />
-                    <p:calendar id="spanish1" value="#{permisoEstudianteController.p.permisoFechafin}" locale="es" 
-                                navigator="true" pattern="yyyy-mm-dd" />
-               </h:panelGrid>
-            </p:panel>
-                <p:commandButton id="summit" value="Solicitar"/>
-        </h:form>
-    </h:body>
+                            <h:outputLabel value="Solicitado por: "/>
+                            <h:outputLabel value="#{permisoEstudianteController.us.persona.personaNombre} #{permisoEstudianteController.us.persona.personaApellido}"/>
+
+                            <p:outputLabel for="spanish" value="Fecha de inicio (yyyy-mm-dd):" />
+                            <p:calendar id="spanish" value="#{permisoEstudianteController.p.permisoFechaInicio}" locale="es" 
+                                        navigator="true" pattern="yyyy-mm-dd" />
+
+                            <p:outputLabel for="spanish1" value="Fecha de fin (yyyy-mm-dd):" />
+                            <p:calendar id="spanish1" value="#{permisoEstudianteController.p.permisoFechafin}" locale="es" 
+                                        navigator="true" pattern="yyyy-mm-dd" />
+                        </h:panelGrid>
+                    </p:panel>
+                    <p:commandButton id="summit" value="Solicitar"/>
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+    </body>
 </html>
-

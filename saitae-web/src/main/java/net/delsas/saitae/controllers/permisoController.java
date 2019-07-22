@@ -26,6 +26,8 @@ import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.Matricula;
 import net.delsas.saitae.entities.Estudiante;
 import net.delsas.saitae.entities.MatriculaPK;
+import net.delsas.saitae.entities.TipoPermiso;
+import net.delsas.saitae.entities.TipoPersona;
 import net.delsas.saitae.entities.TipopersonaPermiso;
 
 /**
@@ -76,6 +78,7 @@ public class permisoController implements Serializable {
                 permisos = u.getTipoPersona().getTipopersonaPermisoList();
                 e = u.getEstudiante().getEstudianteEsEstudiante()? 
                         new ArrayList<Estudiante>() : u.getEstudiante().getEstudianteList();
+                p.setTipoPersona(u.getTipoPersona());
             }
         } catch (IOException ex) {
         }
@@ -84,6 +87,7 @@ public class permisoController implements Serializable {
     
     public permisoController() {
         p = new Permisos();
+        p.setTipoPermiso1(new TipoPermiso(0,"", 0));
         e=new ArrayList<>();
         us=new Estudiante();
 
@@ -99,7 +103,7 @@ public class permisoController implements Serializable {
     }
 
     public boolean isSeleccionPermiso() {
-        return p.getPermisosPK().getTipoPermiso() > 0;
+        return p.getTipoPermiso1().getIdtipoPermiso() > 0;
     }
 
     public boolean isSeleccionEstudiante() {

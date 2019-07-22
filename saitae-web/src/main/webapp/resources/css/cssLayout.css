@@ -15,35 +15,35 @@
 
 .center_content {
     position: inherit;
-    background-color: #dddddd;
+    /*background-color: #dddddd;*/
     padding: 5px;
     margin: auto;
 }
 
 
 .content {
-    background-color: #dddddd;
+    /*background-color: #dddddd;*/
     padding: 5px;
     margin: 0px 310px 0px 0px;
 }
 #right {
     float: right;
-    background-color: #ece3a5;
+    /*background-color: #ece3a5;*/
     padding: 5px;
     width: 290px;
 }
 
 
 #top a:link, #top a:visited {
-  color: black;
+  /*color: black;*/
   font-weight : bold;
-  text-decoration: none;
+  /*text-decoration: none;*/
 }
 
 #top a:link:hover, #top a:visited:hover  {
-  color: blue;
+  /*color: blue;*/
   font-weight : bold;
-  text-decoration : underline;
+  /*text-decoration : underline;*/
 }
 
 
