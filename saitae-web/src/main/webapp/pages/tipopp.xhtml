@@ -276,7 +276,7 @@
                             </div>
                         </p:tab>
                         <p:tab title="Tipo Materia">
-                            <p:dataTable id="materia" var="ma" value="#{tipoController.materias}" editable="true" 
+                            <p:dataTable id="materia" var="tima" value="#{tipoController.tipomaterias}" editable="true" 
                                          widgetVar="materia1" styleClass="tabla" emptyMessage="Sin registros aún.">
                                 <f:facet name="header">
                                     Administración de los tipos de Materias.
@@ -286,13 +286,13 @@
                                 <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" update=":form:msgs" />
 
                                 <p:column headerText="Id" style="width: 10px">
-                                    <h:outputText value="#{ma.idtipoMateria}" />
+                                    <h:outputText value="#{tima.idtipoMateria}" />
                                 </p:column>
 
                                 <p:column headerText="Nombre">
                                     <p:cellEditor>
-                                        <f:facet name="output"><h:outputText value="#{ma.tipoMateriaNombre}" /></f:facet>
-                                        <f:facet name="input"><p:inputText value="#{ma.tipoMateriaNombre}" 
+                                        <f:facet name="output"><h:outputText value="#{tima.tipoMateriaNombre}" /></f:facet>
+                                        <f:facet name="input"><p:inputText value="#{tima.tipoMateriaNombre}" 
                                                                            style="width:100%" label="Nombre"/></f:facet>
                                     </p:cellEditor>
                                 </p:column>
@@ -304,7 +304,7 @@
                                 <div class="ui-g-12">
                                     <p:commandButton value="+" styleClass="ui-priority-primary" 
                                                      process="@this" update=":form:msgs"
-                                                     action="#{tipoController.onAddNew('materia')}" 
+                                                     action="#{tipoController.onAddNew('tipomateria')}" 
                                                      oncomplete="PF('materia1').addRow();" 
                                                      title="Agregar nuevo Tipo de Materia."/>
                                 </div>
