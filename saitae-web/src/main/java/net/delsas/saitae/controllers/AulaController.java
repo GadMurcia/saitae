@@ -18,14 +18,17 @@ package net.delsas.saitae.controllers;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import net.delsas.saitae.beans.AulaFacadeLocal;
+import net.delsas.saitae.beans.ZonaFacadeLocal;
 import net.delsas.saitae.entities.Aula;
 import net.delsas.saitae.entities.Zona;
 import org.primefaces.event.CellEditEvent;
@@ -47,6 +50,8 @@ public class AulaController implements Serializable {
      */
     @EJB
     private AulaFacadeLocal afl;
+    @EJB
+    private ZonaFacadeLocal zfl;
     private List<Aula> aulas;
 
     @PostConstruct
@@ -103,5 +108,14 @@ public class AulaController implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
+    public List<SelectItem> getListaZonas(){
+    List<SelectItem> ListaZonas = new ArrayList<>();
+    List<Zona> ZonasArray = zfl.findAll();
+    for(Zona z: ZonasArray){
+    ListaZonas.add(new SelectItem(z.getIdzona(), z.getZonaNombre()));
+    }
+    return ListaZonas;
+    
+    }
 }
 
