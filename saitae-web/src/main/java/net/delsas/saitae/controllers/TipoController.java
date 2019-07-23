@@ -25,8 +25,11 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import net.delsas.saitae.beans.AulaFacadeLocal;
+import net.delsas.saitae.beans.AutorFacadeLocal;
+import net.delsas.saitae.beans.CargoFacadeLocal;
 import net.delsas.saitae.beans.MateriaFacadeLocal;
 import net.delsas.saitae.beans.TipoCargoFacadeLocal;
 import net.delsas.saitae.beans.TipoMateriaFacadeLocal;
@@ -38,6 +41,8 @@ import net.delsas.saitae.beans.TipoReservaFacadeLocal;
 import net.delsas.saitae.beans.TipopersonaPermisoFacadeLocal;
 import net.delsas.saitae.beans.ZonaFacadeLocal;
 import net.delsas.saitae.entities.Aula;
+import net.delsas.saitae.entities.Autor;
+import net.delsas.saitae.entities.Cargo;
 import net.delsas.saitae.entities.Materia;
 import net.delsas.saitae.entities.TipoCargo;
 import net.delsas.saitae.entities.TipoMateria;
@@ -58,7 +63,8 @@ import org.primefaces.model.DualListModel;
  * @author delsas
  */
 @Named
-@ApplicationScoped
+//@ApplicationScoped
+@ViewScoped
 public class TipoController implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -117,6 +123,16 @@ public class TipoController implements Serializable {
     @EJB
     private AulaFacadeLocal afl;
     private List<Aula> aulas;
+    
+    //Autor
+    @EJB
+    private AutorFacadeLocal autorFL;
+    private List<Autor> autor;
+    
+    //Cargo
+    @EJB
+    private CargoFacadeLocal cargoFL;
+    private List<Cargo> cargo;
 
     @PostConstruct
     public void init() {
@@ -132,7 +148,10 @@ public class TipoController implements Serializable {
         tipoMaterias = tipoMateriaFL.findAll();
         materias = materiaFL.findAll();
         aulas = afl.findAll();
+        autor = autorFL.findAll();
+        cargo = cargoFL.findAll();
     }
+    
 
     public void onAddNew(String id) {
         // Add one new car to the table:
@@ -160,15 +179,28 @@ public class TipoController implements Serializable {
                 break;
 
             case "materia":
-                materias.add(new Materia());
+                Materia m = new Materia();
+                m.setTipoMateria(new TipoMateria(0));
+                materias.add(m);
                 break;
             case "aula":
-                aulas.add(new Aula());
+                Aula a = new Aula();
+                a.setZonaAula(new Zona(0));
+                aulas.add(a);
                 break;
+            case "autor":
+                autor.add(new Autor());
+                break;
+             case "cargo1":
+                cargo.add(new Cargo());
+                break;
+                
             default:
                 System.out.println(id);
 
         }
+        init();
+        PrimeFaces.current().ajax().update(id);
         FacesMessage msg = new FacesMessage("Campos Nuevos agregados.",
                 "Edite los campos para que las modificaciones sean permenentes");
         FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -211,14 +243,15 @@ public class TipoController implements Serializable {
                 titulo = "Tipo Reserva";
                 mensaje = ((TipoReserva) event.getObject()).getTipoReservaNombre();
                 break;
-            case "form:tw:materia":
+            case "form:tw:tipomateria":
                 TipoMateria m = (TipoMateria) event.getObject();
                 tipoMateriaFL.edit(m);
                 titulo = "Tipo de Materia";
                 mensaje = m.getTipoMateriaNombre();
                 break;
-            case "form:materia:":
+            case "form:materia":
                 Materia ma = (Materia) event.getObject();
+                ma.setTipoMateria(tipoMateriaFL.find(ma.getTipoMateria().getIdtipoMateria()));
                 materiaFL.edit(ma);
                 titulo = "Materia";
                 mensaje = ma.getMateriaNombre();
@@ -230,9 +263,23 @@ public class TipoController implements Serializable {
                 titulo = "Aula";
                 mensaje = "Aula N° " + a.getIdaula();
                 break;
+            case "form:tw:autor":
+                Autor au = (Autor) event.getObject();
+               autorFL.edit(au);
+               titulo = "Autor";
+               mensaje = au.getAutorNombre();
+                break;
+             case "form:tw:cargo1":
+                Cargo c = (Cargo) event.getObject();
+               cargoFL.edit(c);
+               titulo = "Cargo";
+               mensaje = c.getCargoNombre();
+                break;    
             default:
                 System.out.println(id);
         }
+         init();
+        
         PrimeFaces.current().ajax().update(id);
         FacesMessage msg = new FacesMessage(titulo + " Editado", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -304,6 +351,20 @@ public class TipoController implements Serializable {
                 }
                 mensaje = "Aula N° " + a.getIdaula();
                 break;
+             case "form:autor":
+                Autor au = (Autor) event.getObject();
+                if (au.getAutorNombre() == null || au.getAutorNombre().isEmpty()) {
+                    autor.remove(au);
+                }
+                mensaje = au.getAutorNombre();
+                break;    
+            case "form:cargo1":
+                Cargo c = (Cargo) event.getObject();
+                if (c.getCargoNombre()== null || c.getCargoNombre().isEmpty()) {
+                    cargo.remove(c);
+                }
+                mensaje = c.getCargoNombre();
+                break;        
             default:
                 System.out.println(id);
         }
@@ -318,6 +379,14 @@ public class TipoController implements Serializable {
         }
         return ListaZonas;
 
+    }
+    
+    public List<SelectItem> getListaTipoMateria(){
+        List<SelectItem> ListaTipoMateria = new ArrayList<>();
+       for (TipoMateria tp : tipoMaterias) {
+            ListaTipoMateria.add(new SelectItem(tp.getIdtipoMateria(), tp.getTipoMateriaNombre()));
+        }
+        return ListaTipoMateria;
     }
 
     public void onItemSelect(ItemSelectEvent event) {
@@ -484,6 +553,23 @@ public class TipoController implements Serializable {
     public void setAulas(List<Aula> aulas) {
         this.aulas = aulas;
     }
+
+    public List<Autor> getAutor() {
+        return autor;
+    }
+
+    public void setAutor(List<Autor> autor) {
+        this.autor = autor;
+    }
+
+    public List<Cargo> getCargo() {
+        return cargo;
+    }
+
+    public void setCargo(List<Cargo> cargo) {
+        this.cargo = cargo;
+    }
+    
     
     
 }

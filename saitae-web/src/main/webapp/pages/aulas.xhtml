@@ -19,7 +19,7 @@
                         </f:facet>
 
                         <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" update=":form0:msgs" />
-                        <p:ajax event="rowEditCancel" listener="#{tipocontroller.onRowCancel}" update=":form0:msgs" />
+                        <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" update=":form0:msgs" />
 
 
                         <p:column headerText="Id">
@@ -52,7 +52,7 @@
                         <div class="ui-g-12">
                             <p:commandButton value="Agregar Nuevo" styleClass="ui-priority-primary" 
                                              process="@this" update=":form0:msgs"
-                                             action="#{tipocontroller.onAddNew('aula')}" 
+                                             action="#{tipoController.onAddNew('aula')}" 
                                              oncomplete="PF('aula').addRow();"/>
                         </div>
                     </div>
