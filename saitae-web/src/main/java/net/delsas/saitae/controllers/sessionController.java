@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
+import javax.faces.component.UIGraphic;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -86,13 +87,13 @@ public class sessionController implements Serializable {
         DefaultMenuItem mi;
         for (AccesoTipoPersona atp : us.getTipoPersona().getAccesoTipoPersonaList()) {
             mi = new DefaultMenuItem(atp.getAcceso().getAccesoNombre());
-            mi.setIcon("ui-icon-close");
+            mi.setIcon(atp.getAcceso().getAccesoComentario());
             mi.setUrl(atp.getAcceso().getAccesourl());
             mm.addElement(mi);
         }
         if (us.getTipoPersona().getIdtipoPersona() == 1) {
             mi = new DefaultMenuItem("Control de vistas");
-            mi.setStyleClass("pi pi-lock-open");
+            mi.setIcon("fa fa-home");
             mi.setUrl("cvista.intex");
             mm.addElement(mi);
         }
