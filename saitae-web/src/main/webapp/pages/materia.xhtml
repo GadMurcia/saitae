@@ -59,7 +59,7 @@
                         <div class="ui-g-12">
                             <p:commandButton value="Agregar Nuevo" styleClass="ui-priority-primary" 
                                              process="@this" update=":form:msgs"
-                                             action="#{tipoController.onAddNew()}" 
+                                             action="#{tipoController.onAddNew('materia')}" 
                                              oncomplete="PF('materia').addRow();"/>
                         </div>
                     </div>
