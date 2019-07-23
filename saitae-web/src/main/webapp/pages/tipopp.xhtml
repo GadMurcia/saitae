@@ -310,6 +310,90 @@
                                 </div>
                             </div>
                         </p:tab>
+                        <p:tab title="Autor">
+                            <p:dataTable id="autor" var="au" value="#{tipoController.autor}" editable="true" 
+                                         widgetVar="autor1" styleClass="tabla" emptyMessage="Sin registros aún.">
+                                <f:facet name="header">
+                                    Administración de autores.
+                                </f:facet>
+
+                                <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" update=":form:msgs" />
+                                <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" update=":form:msgs" />
+
+                                <p:column headerText="Id" style="width: 10px">
+                                    <h:outputText value="#{au.idautor}" />
+                                </p:column>
+
+                                <p:column headerText="Nombre">
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{au.autorNombre}" /></f:facet>
+                                        <f:facet name="input"><p:inputText value="#{au.autorNombre}" 
+                                                                           style="width:100%" label="Nombre"/></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                               <p:column headerText="Comentario">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{au.autorComentario}" /></f:facet>
+                                <f:facet name="input"><p:inputText value="#{au.autorComentario}" 
+                                                                   style="width:100%" label="Comentario"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        <p:column style="width:35px">
+                            <p:rowEditor />
+                        </p:column>
+                    </p:dataTable>
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <p:commandButton value="+" styleClass="ui-priority-primary" 
+                                             process="@this" update=":form0:msgs"
+                                             action="#{tipoController.onAddNew('autor')}" 
+                                             oncomplete="PF('autor1').addRow();"
+                                             title="Agregar nuevo autor."/>
+                                </div>
+                            </div>
+                        </p:tab>
+                         <p:tab title="cargo">
+                             <p:dataTable id="cargo1" var="c" value="#{tipoController.cargo}" editable="true" 
+                                         widgetVar="cargo0" styleClass="tabla" emptyMessage="Sin registros aún.">
+                                <f:facet name="header">
+                                    Administración de autores.
+                                </f:facet>
+
+                                <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" update=":form:msgs" />
+                                <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" update=":form:msgs" />
+
+                                <p:column headerText="Id" style="width: 10px">
+                                    <h:outputText value="#{c.idcargo}" />
+                                </p:column>
+
+                                <p:column headerText="Nombre">
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{c.cargoNombre}" /></f:facet>
+                                        <f:facet name="input"><p:inputText value="#{c.cargoNombre}" 
+                                                                           style="width:100%" label="Nombre"/></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                               <p:column headerText="Comentario">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{c.cargoComentario}" /></f:facet>
+                                <f:facet name="input"><p:inputText value="#{c.cargoComentario}" 
+                                                                   style="width:100%" label="Comentario"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        <p:column style="width:35px">
+                            <p:rowEditor />
+                        </p:column>
+                    </p:dataTable>
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <p:commandButton value="+" styleClass="ui-priority-primary" 
+                                             process="@this" update=":form0:msgs"
+                                             action="#{tipoController.onAddNew('cargo1')}" 
+                                             oncomplete="PF('cargo0').addRow();"
+                                             title="Agregar nuevo autor."/>
+                                </div>
+                            </div>
+                        </p:tab>
                     </p:tabView> 
                 </h:form>
             </ui:define>
