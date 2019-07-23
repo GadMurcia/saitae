@@ -199,8 +199,7 @@ public class TipoController implements Serializable {
                 System.out.println(id);
 
         }
-        init();
-        PrimeFaces.current().ajax().update(id);
+       
         FacesMessage msg = new FacesMessage("Campos Nuevos agregados.",
                 "Edite los campos para que las modificaciones sean permenentes");
         FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -278,9 +277,9 @@ public class TipoController implements Serializable {
             default:
                 System.out.println(id);
         }
-         init();
-        
+          init();
         PrimeFaces.current().ajax().update(id);
+        
         FacesMessage msg = new FacesMessage(titulo + " Editado", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
@@ -368,6 +367,8 @@ public class TipoController implements Serializable {
             default:
                 System.out.println(id);
         }
+         init();
+        PrimeFaces.current().ajax().update(id);
         FacesMessage msg = new FacesMessage("Edición cancelada", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }

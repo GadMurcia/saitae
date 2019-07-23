@@ -40,7 +40,7 @@ public class sessionController implements Serializable {
 
     @PostConstruct
     public void init() {
-       // this.menu();
+        // this.menu();
     }
 
     public void log() {
@@ -90,6 +90,12 @@ public class sessionController implements Serializable {
             mi.setUrl(atp.getAcceso().getAccesourl());
             mm.addElement(mi);
         }
+        if (us.getTipoPersona().getIdtipoPersona() == 1) {
+            mi = new DefaultMenuItem("Control de vistas");
+            mi.setContainerStyleClass("pi pi-lock-open");
+            mi.setUrl("cvista.intex");
+            mm.addElement(mi);
+        }
         mi = new DefaultMenuItem("salir");
         mi.setIcon("ui-icon-close");
         mi.setAjax(false);
@@ -117,6 +123,6 @@ public class sessionController implements Serializable {
     }
 
     public String getAño() {
-        return String.valueOf(Calendar.getInstance().getTime().getYear()+1900);
+        return String.valueOf(Calendar.getInstance().getTime().getYear() + 1900);
     }
 }
