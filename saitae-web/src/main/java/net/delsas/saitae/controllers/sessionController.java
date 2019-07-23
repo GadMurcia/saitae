@@ -92,7 +92,7 @@ public class sessionController implements Serializable {
         }
         if (us.getTipoPersona().getIdtipoPersona() == 1) {
             mi = new DefaultMenuItem("Control de vistas");
-            mi.setContainerStyleClass("pi pi-lock-open");
+            mi.setStyleClass("pi pi-lock-open");
             mi.setUrl("cvista.intex");
             mm.addElement(mi);
         }
