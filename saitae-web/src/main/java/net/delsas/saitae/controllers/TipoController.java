@@ -21,11 +21,12 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.enterprise.context.ApplicationScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
-import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import net.delsas.saitae.beans.AulaFacadeLocal;
 import net.delsas.saitae.beans.MateriaFacadeLocal;
 import net.delsas.saitae.beans.TipoCargoFacadeLocal;
 import net.delsas.saitae.beans.TipoMateriaFacadeLocal;
@@ -36,6 +37,7 @@ import net.delsas.saitae.beans.TipoRecursoFacadeLocal;
 import net.delsas.saitae.beans.TipoReservaFacadeLocal;
 import net.delsas.saitae.beans.TipopersonaPermisoFacadeLocal;
 import net.delsas.saitae.beans.ZonaFacadeLocal;
+import net.delsas.saitae.entities.Aula;
 import net.delsas.saitae.entities.Materia;
 import net.delsas.saitae.entities.TipoCargo;
 import net.delsas.saitae.entities.TipoMateria;
@@ -56,7 +58,7 @@ import org.primefaces.model.DualListModel;
  * @author delsas
  */
 @Named
-@ViewScoped
+@ApplicationScoped
 public class TipoController implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -105,12 +107,17 @@ public class TipoController implements Serializable {
     @EJB
     private TipoMateriaFacadeLocal tipoMateriaFL;
     private List<TipoMateria> tipoMaterias;
-    
+
     //Materia
     @EJB
     private MateriaFacadeLocal materiaFL;
     private List<Materia> materias;
-    
+
+    //Aulas
+    @EJB
+    private AulaFacadeLocal afl;
+    private List<Aula> aulas;
+
     @PostConstruct
     public void init() {
         recursos = tipoRecursoFL.findAll();
@@ -124,6 +131,7 @@ public class TipoController implements Serializable {
         nombramientos = tipoNombramientoFL.findAll();
         tipoMaterias = tipoMateriaFL.findAll();
         materias = materiaFL.findAll();
+        aulas = afl.findAll();
     }
 
     public void onAddNew(String id) {
@@ -150,11 +158,13 @@ public class TipoController implements Serializable {
             case "tipomateria":
                 tipoMaterias.add(new TipoMateria());
                 break;
-                
+
             case "materia":
-               materias.add(new Materia());
-               break;
-                
+                materias.add(new Materia());
+                break;
+            case "aula":
+                aulas.add(new Aula());
+                break;
             default:
                 System.out.println(id);
 
@@ -205,15 +215,21 @@ public class TipoController implements Serializable {
                 TipoMateria m = (TipoMateria) event.getObject();
                 tipoMateriaFL.edit(m);
                 titulo = "Tipo de Materia";
-                mensaje = ((TipoMateria) event.getObject()).getTipoMateriaNombre();
+                mensaje = m.getTipoMateriaNombre();
                 break;
             case "form:materia:":
                 Materia ma = (Materia) event.getObject();
                 materiaFL.edit(ma);
                 titulo = "Materia";
-                mensaje = ((Materia) event.getObject()).getMateriaNombre();
+                mensaje = ma.getMateriaNombre();
                 break;
-                
+            case "form:aula":
+                Aula a = (Aula) event.getObject();
+                a.setZonaAula(zfl.find(a.getZonaAula().getIdzona()));
+                afl.edit(a);
+                titulo = "Aula";
+                mensaje = "Aula N° " + a.getIdaula();
+                break;
             default:
                 System.out.println(id);
         }
@@ -274,18 +290,34 @@ public class TipoController implements Serializable {
                 }
                 mensaje = m.getTipoMateriaNombre();
                 break;
-                 case "form:materia":
+            case "form:materia":
                 Materia ma = (Materia) event.getObject();
-                if (ma.getMateriaNombre()== null || ma.getMateriaNombre().isEmpty()) {
+                if (ma.getMateriaNombre() == null || ma.getMateriaNombre().isEmpty()) {
                     materias.remove(ma);
                 }
                 mensaje = ma.getMateriaNombre();
+                break;
+            case "form:aula":
+                Aula a = (Aula) event.getObject();
+                if (a.getZonaAula().getIdzona() == null || a.getZonaAula().getIdzona() == 0) {
+                    aulas.remove(aulas.indexOf(a));
+                }
+                mensaje = "Aula N° " + a.getIdaula();
                 break;
             default:
                 System.out.println(id);
         }
         FacesMessage msg = new FacesMessage("Edición cancelada", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public List<SelectItem> getListaZonas() {
+        List<SelectItem> ListaZonas = new ArrayList<>();
+        for (Zona z : zonas) {
+            ListaZonas.add(new SelectItem(z.getIdzona(), z.getZonaNombre()));
+        }
+        return ListaZonas;
+
     }
 
     public void onItemSelect(ItemSelectEvent event) {
@@ -427,7 +459,7 @@ public class TipoController implements Serializable {
 
     public void setNombramientos(List<TipoNombramiento> nombramientos) {
         this.nombramientos = nombramientos;
-    }   
+    }
 
     public List<Materia> getMaterias() {
         return materias;
@@ -444,7 +476,14 @@ public class TipoController implements Serializable {
     public void setTipoMaterias(List<TipoMateria> tipoMaterias) {
         this.tipoMaterias = tipoMaterias;
     }
-    
-    
 
+    public List<Aula> getAulas() {
+        return aulas;
+    }
+
+    public void setAulas(List<Aula> aulas) {
+        this.aulas = aulas;
+    }
+    
+    
 }

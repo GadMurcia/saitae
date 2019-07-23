@@ -27,7 +27,6 @@ import net.delsas.saitae.entities.Matricula;
 import net.delsas.saitae.entities.Estudiante;
 import net.delsas.saitae.entities.MatriculaPK;
 import net.delsas.saitae.entities.TipoPermiso;
-import net.delsas.saitae.entities.TipoPersona;
 import net.delsas.saitae.entities.TipopersonaPermiso;
 
 /**
@@ -105,7 +104,7 @@ public class permisoController implements Serializable {
     public boolean isSeleccionEstudiante() {
         if (p.getPermisosPK().getIpPersona() > 0) {
             m = mfl.find(new MatriculaPK(p.getPermisosPK().getIpPersona(),
-                    (p.getPermisosPK().getPermisoFechaSolicitud())));
+                    p.getPermisosPK().getPermisoFechaSolicitud()));
         }
         return p.getPermisosPK().getIpPersona() > 0;
     }
@@ -150,6 +149,7 @@ public class permisoController implements Serializable {
 
     public void guardar() {
         p.getPermisosPK().setTipoPermiso(p.getTipoPermiso1().getIdtipoPermiso());
+        p.setPermisosSolicitante(us.getPersona());
         pfl.create(p);
     }
 

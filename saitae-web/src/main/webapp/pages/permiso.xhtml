@@ -20,9 +20,8 @@
                 </style>
                 <h:form styleClass="centred-form" id="frm">
                     <p:panel header="Gestionar nuevo permiso">
-                        <p:messages />
                         <h:panelGrid id="w" columns="2" columnClasses="label, value">
-                            <p:outputLabel for="console" value="Motivo del permiso: *" />
+                            <p:outputLabel for="console" value="Tipo del permiso: *" />
                             <p:selectOneMenu id="console" value="#{permisoEstudianteController.p.tipoPermiso1.idtipoPermiso}" 
                                              style="width:125px" title="Seleccione el permiso que necesita">
                                 <f:selectItems value="#{permisoEstudianteController.listaPermisos()}"/>
@@ -34,7 +33,7 @@
                                              style="width:125px" title="Seleccione el permiso que necesita"
                                              disabled="#{!permisoEstudianteController.seleccionPermiso}">
                                 <f:selectItems value="#{permisoEstudianteController.listaEstudiantes()}"/>
-                                <f:ajax render="m" execute="SeleccionEstudiante"/>
+                                <f:ajax render="m summit" execute="SeleccionEstudiante"/>
                             </p:selectOneMenu>
 
                             <p:column/>
@@ -64,7 +63,8 @@
                                         navigator="true" pattern="yyyy-mm-dd" />
                         </h:panelGrid>
                     </p:panel>
-                    <p:commandButton id="summit" value="Solicitar" actionListener="#{permisoEstudianteController.guardar()}"/>
+                    <p:commandButton id="summit" value="Solicitar" disabled="#{!permisoEstudianteController.seleccionEstudiante}"
+                                     actionListener="#{permisoEstudianteController.guardar()}"/>
                 </h:form>
             </ui:define>
 
