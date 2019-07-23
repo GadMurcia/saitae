@@ -26,7 +26,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
-import net.delsas.saitae.beans.MateriaFacade;
 import net.delsas.saitae.beans.MateriaFacadeLocal;
 import net.delsas.saitae.beans.TipoCargoFacadeLocal;
 import net.delsas.saitae.beans.TipoMateriaFacadeLocal;
@@ -105,7 +104,7 @@ public class TipoController implements Serializable {
     //TipoMateria
     @EJB
     private TipoMateriaFacadeLocal tipoMateriaFL;
-    private List<TipoMateria> tipomaterias;
+    private List<TipoMateria> tipoMaterias;
     
     //Materia
     @EJB
@@ -123,7 +122,7 @@ public class TipoController implements Serializable {
         zonas = zfl.findAll();
         reservas = tipoReservaFL.findAll();
         nombramientos = tipoNombramientoFL.findAll();
-        tipomaterias = tipoMateriaFL.findAll();
+        tipoMaterias = tipoMateriaFL.findAll();
         materias = materiaFL.findAll();
     }
 
@@ -149,7 +148,7 @@ public class TipoController implements Serializable {
                 reservas.add(new TipoReserva());
                 break;
             case "tipomateria":
-                tipomaterias.add(new TipoMateria());
+                tipoMaterias.add(new TipoMateria());
                 break;
                 
             case "materia":
@@ -271,7 +270,7 @@ public class TipoController implements Serializable {
             case "form:tw:tipomateria":
                 TipoMateria m = (TipoMateria) event.getObject();
                 if (m.getTipoMateriaNombre() == null || m.getTipoMateriaNombre().isEmpty()) {
-                    tipomaterias.remove(m);
+                    tipoMaterias.remove(m);
                 }
                 mensaje = m.getTipoMateriaNombre();
                 break;
@@ -428,15 +427,7 @@ public class TipoController implements Serializable {
 
     public void setNombramientos(List<TipoNombramiento> nombramientos) {
         this.nombramientos = nombramientos;
-    }
-
-    public List<TipoMateria> getTipoMaterias() {
-        return tipomaterias;
-    }
-
-    public void setTipoMaterias(List<TipoMateria> tipomaterias) {
-        this.tipomaterias = tipomaterias;
-    }    
+    }   
 
     public List<Materia> getMaterias() {
         return materias;
@@ -445,5 +436,15 @@ public class TipoController implements Serializable {
     public void setMaterias(List<Materia> materias) {
         this.materias = materias;
     }
+
+    public List<TipoMateria> getTipoMaterias() {
+        return tipoMaterias;
+    }
+
+    public void setTipoMaterias(List<TipoMateria> tipoMaterias) {
+        this.tipoMaterias = tipoMaterias;
+    }
+    
+    
 
 }
