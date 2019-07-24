@@ -394,6 +394,46 @@
                                 </div>
                             </div>
                         </p:tab>
+                         <p:tab title="categoria">
+                             <p:dataTable id="categoria" var="ca" value="#{tipoController.categoria}" editable="true" 
+                                         widgetVar="categoria0" styleClass="tabla" emptyMessage="Sin registros aún.">
+                                <f:facet name="header">
+                                    Administración de Categoria.
+                                </f:facet>
+
+                                <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" update=":form:msgs" />
+                                <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" update=":form:msgs" />
+
+                                <p:column headerText="Id" style="width: 10px">
+                                   <p:cellEditor>
+                                       <f:facet name="output"><h:outputText value="#{ca.idcategoria}" /></f:facet>
+                                       <f:facet name="input"><p:inputText value="#{ca.idcategoria}" 
+                                                                           style="width:100%" label="Nombre"/></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+
+                                <p:column headerText="Nombre">
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{ca.categoriaNombre}" /></f:facet>
+                                        <f:facet name="input"><p:inputText value="#{ca.categoriaNombre}" 
+                                                                           style="width:100%" label="Nombre"/></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                               
+                        <p:column style="width:35px">
+                            <p:rowEditor />
+                        </p:column>
+                    </p:dataTable>
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <p:commandButton value="+" styleClass="ui-priority-primary" 
+                                             process="@this" update=":form0:msgs"
+                                             action="#{tipoController.onAddNew('categoria')}" 
+                                             oncomplete="PF('categoria0').addRow();"
+                                             title="Agregar nueva categoria."/>
+                                </div>
+                            </div>
+                        </p:tab>
                     </p:tabView> 
                 </h:form>
             </ui:define>

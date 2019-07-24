@@ -30,6 +30,8 @@ import javax.inject.Named;
 import net.delsas.saitae.beans.AulaFacadeLocal;
 import net.delsas.saitae.beans.AutorFacadeLocal;
 import net.delsas.saitae.beans.CargoFacadeLocal;
+import net.delsas.saitae.beans.CategoriaFacade;
+import net.delsas.saitae.beans.CategoriaFacadeLocal;
 import net.delsas.saitae.beans.MateriaFacadeLocal;
 import net.delsas.saitae.beans.TipoCargoFacadeLocal;
 import net.delsas.saitae.beans.TipoMateriaFacadeLocal;
@@ -43,6 +45,7 @@ import net.delsas.saitae.beans.ZonaFacadeLocal;
 import net.delsas.saitae.entities.Aula;
 import net.delsas.saitae.entities.Autor;
 import net.delsas.saitae.entities.Cargo;
+import net.delsas.saitae.entities.Categoria;
 import net.delsas.saitae.entities.Materia;
 import net.delsas.saitae.entities.TipoCargo;
 import net.delsas.saitae.entities.TipoMateria;
@@ -133,6 +136,11 @@ public class TipoController implements Serializable {
     @EJB
     private CargoFacadeLocal cargoFL;
     private List<Cargo> cargo;
+    
+    //Categoria
+    @EJB
+    private CategoriaFacadeLocal categoriaFL;
+    private List<Categoria> categoria;
 
     @PostConstruct
     public void init() {
@@ -150,6 +158,7 @@ public class TipoController implements Serializable {
         aulas = afl.findAll();
         autor = autorFL.findAll();
         cargo = cargoFL.findAll();
+        categoria = categoriaFL.findAll();
     }
     
 
@@ -194,6 +203,8 @@ public class TipoController implements Serializable {
              case "cargo1":
                 cargo.add(new Cargo());
                 break;
+             case "categoria":
+                 categoria.add(new Categoria(0));
                 
             default:
                 System.out.println(id);
@@ -273,7 +284,10 @@ public class TipoController implements Serializable {
                cargoFL.edit(c);
                titulo = "Cargo";
                mensaje = c.getCargoNombre();
-                break;    
+                break;  
+             case "form:tw:categoria":
+                 Categoria ca = (Categoria) event.getObject();
+                 categoriaFL.edit(ca);
             default:
                 System.out.println(id);
         }
@@ -363,7 +377,13 @@ public class TipoController implements Serializable {
                     cargo.remove(c);
                 }
                 mensaje = c.getCargoNombre();
-                break;        
+                break;
+                
+            case "form:categoria":
+                Categoria ca = (Categoria) event.getObject();
+                  if (ca.getCategoriaNombre()== null || ca.getCategoriaNombre().isEmpty()) {
+                    categoria.remove(ca);
+                  }
             default:
                 System.out.println(id);
         }
@@ -569,6 +589,14 @@ public class TipoController implements Serializable {
 
     public void setCargo(List<Cargo> cargo) {
         this.cargo = cargo;
+    }
+
+    public List<Categoria> getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(List<Categoria> categoria) {
+        this.categoria = categoria;
     }
     
     
