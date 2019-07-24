@@ -10,18 +10,18 @@
         <f:event listener="#{loginController.preinit()}" type="preRenderView"/>
         <link rel="Shortcut Icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQnpWNwe4BoNBtI0iyzWf5LBxcFcjLPU7w1vwCzjXJwx5h7rXhX" type="image/jpg" />
     </h:head>
-    <h:body>
+    <h:body style="background-color: #191919; color: #ffffff">
         <style>
             .centred-form{
                 margin: 10% auto;
                 align-content: center;
                 align-items: center;
-                width: 200px;
             }
         </style>
-        <h:form id="frm" styleClass="centred-form">
+        <h:form id="frm" style="width: 200px;" styleClass="centred-form">
             <p:growl id="growl" showDetail="true"/>
-            <h:panelGrid columns="3" summary="Inicio de sesión">
+            <p:focus context="panel"/>
+            <h:panelGrid id="panel" columns="3" summary="Inicio de sesión">
                 <p:column/>
                 <h:outputLabel value="SAITAE-INTEX #{loginController.year}"/>
                 <p:column/>
@@ -42,6 +42,8 @@
                 <f:facet name="footer">
                     <h:link value="Nuevo ingreso" outcome="pages/nuevoalumno.intex"/>
                 </f:facet>
+
+                <p:focus context="panel"/>
             </h:panelGrid>
         </h:form>
     </h:body>   
