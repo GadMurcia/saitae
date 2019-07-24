@@ -136,7 +136,7 @@ public class vistasMenuController implements Serializable {
         FacesMessage msg = new FacesMessage("Edición cancelada", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
-
+    
     public void onItemSelect(ItemSelectEvent event) {
         tipo = tipoPersonaFL.find(tipo.getIdtipoPersona());
         tipo = tipo == null ? new TipoPersona(0) : tipo;
@@ -202,7 +202,8 @@ public class vistasMenuController implements Serializable {
             }
             FacesMessage msg = new FacesMessage("Las modificaciones se han realizado:", m);
             FacesContext.getCurrentInstance().addMessage(null, msg);
-            PrimeFaces.current().ajax().update("form0:msgs");
+            PrimeFaces.current().ajax().update(new String[]{"form0:msgs", "form0:menubar"});
+            
         }
     }
 
