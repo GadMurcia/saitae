@@ -12,10 +12,11 @@
             #{sessionController.us.personaApellido.split(" ")[0]}</title>
         <h:outputStylesheet library="css" name="default.css"/>
         <h:outputStylesheet library="css" name="cssLayout.css"/>
+        <h:outputScript library="js" name="locales.js"/>
         <f:event type="preRenderView" listener="#{sessionController.log()}"/>
         <link rel="Shortcut Icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQnpWNwe4BoNBtI0iyzWf5LBxcFcjLPU7w1vwCzjXJwx5h7rXhX" type="image/jpg" />
     </h:head>
-    <h:body>
+    <h:body style="background-color: #191919; color: #ffffff">
         <div id="top">
             <ui:insert name="top">
                 <h:form id="form0">

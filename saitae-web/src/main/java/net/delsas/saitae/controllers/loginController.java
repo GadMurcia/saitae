@@ -8,7 +8,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
-import net.delsas.prueba;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.entities.Persona;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -22,8 +21,8 @@ import org.apache.commons.codec.digest.DigestUtils;
 public class loginController implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    private String user="";
-    private String pass="";
+    private String user = "";
+    private String pass = "";
     @EJB
     private PersonaFacadeLocal pfl;
 
@@ -45,12 +44,22 @@ public class loginController implements Serializable {
 
     public void preinit() {
         FacesContext context = FacesContext.getCurrentInstance();
-        FacesMessage fm = (FacesMessage) context.getExternalContext().getSessionMap().get("mensaje");
-        if (fm == null) {
-            fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bienvenido", "Inicie Sesión para más funcionalidades.");
+        Persona u = (Persona) context.getExternalContext().getSessionMap().get("usuario");
+        if (u == null) {
+            FacesMessage fm = (FacesMessage) context.getExternalContext().getSessionMap().get("mensaje");
+            if (fm == null) {
+                fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bienvenido", "Inicie Sesión para más funcionalidades.");
+            }
+            context.addMessage("grolm", fm);
+            context.getExternalContext().getSessionMap().remove("mensaje");
+        } else {
+            try {
+                context.getExternalContext().redirect("pages/perfil.intex");
+            } catch (IOException ex) {
+                context.getExternalContext().getSessionMap().put("mensaje", new FacesMessage(
+                        FacesMessage.SEVERITY_FATAL, "Error", ex.getMessage()));
+            }
         }
-        context.addMessage("grolm", fm);
-        context.getExternalContext().getSessionMap().remove("mensaje");
 
     }
 
@@ -64,12 +73,13 @@ public class loginController implements Serializable {
             w = 0;
         }
         String passwd = DigestUtils.md5Hex(pass);
-        Persona p = /*new prueba().getEstudiante().getPersona();//*/pfl.find(w);
+        Persona p = /*new prueba().getEstudiante().getPersona();//*/ pfl.find(w);
         FacesContext context = FacesContext.getCurrentInstance();
         try {
             if (p != null && p.getPersonaActivo() && p.getPersonaContrasenya().equals(passwd)) {
                 System.out.println("logueado");
                 context.getExternalContext().getSessionMap().put("usuario", p);
+                context.getExternalContext().getSessionMap().put("primerInicio", true);
                 context.getExternalContext().redirect("pages/perfil.intex");
             } else {
                 System.out.println("no logueado");
@@ -83,6 +93,8 @@ public class loginController implements Serializable {
             try {
                 context.getExternalContext().redirect("index.intex");
             } catch (IOException ex) {
+                context.getExternalContext().getSessionMap().put("mensaje", new FacesMessage(
+                        FacesMessage.SEVERITY_FATAL, "Error", ex.getMessage()));
             }
         }
     }

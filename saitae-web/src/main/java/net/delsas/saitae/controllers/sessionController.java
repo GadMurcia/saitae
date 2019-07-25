@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIGraphic;
 import javax.faces.context.ExternalContext;
@@ -29,7 +30,7 @@ import org.primefaces.model.menu.DefaultMenuModel;
  * @author delsas
  */
 @Named(value = "sessionController")
-@ViewScoped
+@SessionScoped
 public class sessionController implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -45,24 +46,33 @@ public class sessionController implements Serializable {
     }
 
     public void log() {
+        FacesContext context = FacesContext.getCurrentInstance();
         try {
-            FacesContext context = FacesContext.getCurrentInstance();
             Persona u = (Persona) context.getExternalContext().getSessionMap().get("usuario");
             if (u == null) {
 
-                context.getExternalContext().getSessionMap().put("mensaje", new FacesMessage(FacesMessage.SEVERITY_FATAL,
+                context.getExternalContext().getSessionMap().put("mensaje", new FacesMessage(FacesMessage.SEVERITY_ERROR,
                         "Falla!", "Esa vista no le está permitida aún porque usted no se a logueado."));
                 context.getExternalContext().redirect("./../");
 
             } else {
-                FacesMessage ms = (FacesMessage) context.getExternalContext().getSessionMap().get("mensaje");
-                context.addMessage("growl", ms != null ? ms : new FacesMessage(FacesMessage.SEVERITY_INFO, "Bienvenido",
-                        "Gracias por iniciar Sesión " + u.getPersonaNombre()));
                 this.setUs(u);
-                context.getExternalContext().getSessionMap().remove("mensaje");
+                FacesMessage ms = (FacesMessage) context.getExternalContext().getSessionMap().get("mensaje");
+                if (!((boolean) context.getExternalContext().getSessionMap().get("primerInicio"))) {
+                    if (ms != null) {
+                        context.addMessage("growl", ms);
+                        context.getExternalContext().getSessionMap().remove("mensaje");
+                    }
+                } else {
+                    context.addMessage("growl", new FacesMessage(FacesMessage.SEVERITY_INFO, "Bienvenido",
+                            "Gracias por iniciar Sesión " + u.getPersonaNombre()));
+                    context.getExternalContext().getSessionMap().remove("primerInicio");
+                    context.getExternalContext().getSessionMap().put("primerInicio", false);
+                    this.menu();
+                }
             }
-            this.menu();
-        } catch (IOException ex) {
+        } catch (Exception ex) {
+            context.addMessage("growl", new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error Inesperado", ex.getMessage()));
         }
     }
 
@@ -82,9 +92,13 @@ public class sessionController implements Serializable {
         this.mm = mm;
     }
 
-    private void menu() {
+    private void menu()throws Exception {
         mm = new DefaultMenuModel();
         DefaultMenuItem mi;
+        mi = new DefaultMenuItem("Inicio");
+        mi.setIcon("pi pi-home");
+        mi.setUrl("perfil.intex");
+        mm.addElement(mi);
         for (AccesoTipoPersona atp : us.getTipoPersona().getAccesoTipoPersonaList()) {
             mi = new DefaultMenuItem(atp.getAcceso().getAccesoNombre());
             mi.setIcon(atp.getAcceso().getAccesoComentario());
@@ -93,12 +107,12 @@ public class sessionController implements Serializable {
         }
         if (us.getTipoPersona().getIdtipoPersona() == 1) {
             mi = new DefaultMenuItem("Control de vistas");
-            mi.setIcon("fa fa-home");
+            mi.setIcon("fa fa-wrench");
             mi.setUrl("cvista.intex");
             mm.addElement(mi);
         }
         mi = new DefaultMenuItem("salir");
-        mi.setIcon("ui-icon-close");
+        mi.setIcon("fa fa-close");
         mi.setAjax(false);
         mi.setCommand("#{sessionController.cerrarSesion()}");
         mm.addElement(mi);
