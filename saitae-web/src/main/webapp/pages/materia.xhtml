@@ -20,7 +20,7 @@
 
                         <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" update=":form:msgs" />
                         <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" update=":form:msgs" />
-                     
+
 
                         <p:column headerText="Id">
                             <h:outputText value="#{m.idmateria}" />
@@ -37,9 +37,9 @@
                             <p:cellEditor>
                                 <f:facet name="output"><h:outputText value="#{m.tipoMateria.tipoMateriaNombre}" /></f:facet>
                                 <f:facet name="input"><p:selectOneMenu id="console" value="#{m.tipoMateria.idtipoMateria}" 
-                                     style="width:125px" title="Seleccione un tipo ">
+                                                                       style="width:125px" title="Seleccione un tipo ">
                                         <f:selectItems value="#{tipoController.listaTipoMateria}"/>
-                        <f:ajax render="console1" execute="SeleccionMateria"/>
+                                        <f:ajax render="console1" execute="SeleccionMateria"/>
                                     </p:selectOneMenu></f:facet>
                             </p:cellEditor>
                         </p:column>

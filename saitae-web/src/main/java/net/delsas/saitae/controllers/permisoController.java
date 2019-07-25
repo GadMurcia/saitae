@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -41,17 +42,12 @@ public class permisoController implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Permisos p;
     @EJB
     private PermisosFacadeLocal pfl;
     @EJB
     private TipoPersonaFacadeLocal tipoPersonaFL;
     @EJB
     private PersonaFacadeLocal personaFL;
-    @EJB
-    private TipopersonaPermisoFacadeLocal tpfl;
-    @EJB
-    private EstudianteFacadeLocal efl;
     @EJB
     private MatriculaFacadeLocal mfl;
 
@@ -60,6 +56,8 @@ public class permisoController implements Serializable {
     private Estudiante us;
     private List<Estudiante> e;
     private int id;
+    private Permisos p;
+    private Date finicio, ffin;
 
     /**
      * Creates a new instance of permisoController
@@ -76,7 +74,7 @@ public class permisoController implements Serializable {
 
             } else {
                 this.setUs(u.getEstudiante());
-                p.setPermisosPK(new PermisosPK(0, Calendar.getInstance().getTime(), 0));
+                p.setPermisosPK(new PermisosPK(0, Calendar.getInstance().getTime(), 0, Calendar.getInstance().getTime()));
                 permisos = u.getTipoPersona().getTipopersonaPermisoList();
                 e = u.getEstudiante().getEstudianteEsEstudiante()
                         ? new ArrayList<Estudiante>() : u.getEstudiante().getEstudianteList();
@@ -90,10 +88,11 @@ public class permisoController implements Serializable {
 
     public permisoController() {
         p = new Permisos();
-        p.setTipoPermiso1(new TipoPermiso(0, "", 0));
+        p.setTipoPermiso1(new TipoPermiso(0));
         e = new ArrayList<>();
         us = new Estudiante();
-        id=0;
+        id = 0;
+        finicio = ffin = Calendar.getInstance().getTime();
 
     }
 
@@ -140,6 +139,35 @@ public class permisoController implements Serializable {
         return items;
     }
 
+    public void guardar() {
+        p.getPermisosPK().setTipoPermiso(p.getTipoPermiso1().getIdtipoPermiso());
+        p.setPermisosSolicitante(us.getPersona());
+        p.setPersona(personaFL.find(id));
+        p.getPermisosPK().setIpPersona(id);
+        FacesMessage ms = null;
+        try {
+            pfl.create(p);
+            ms = new FacesMessage(FacesMessage.SEVERITY_INFO, "Solicitud exitosa",
+                    "Su permiso se ha solicitado para entre las fechas: " + p.getPermisosPK().getPermisoFechaInicio() + " y " + p.getPermisoFechafin());
+        } catch (Exception e) {
+            ms = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage());
+        } finally {
+            FacesContext.getCurrentInstance().addMessage(null, ms);
+            p = new Permisos(new PermisosPK((us == null ? 0 : us.getIdestudiante()), Calendar.getInstance().getTime(), 0, Calendar.getInstance().getTime()));
+            p.setTipoPersona(tipoPersonaFL.find(8));
+            p.setPersona(new Persona(0));
+            p.setTipoPermiso1(new TipoPermiso(0));
+        }
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public Matricula getM() {
         return m;
     }
@@ -155,36 +183,23 @@ public class permisoController implements Serializable {
     public void setUs(Estudiante us) {
         this.us = us;
     }
-    
-    
 
-    public void guardar() {
-        p.getPermisosPK().setTipoPermiso(p.getTipoPermiso1().getIdtipoPermiso());
-        p.setPermisosSolicitante(us.getPersona());
-        p.setPersona(personaFL.find(id));
-        p.getPermisosPK().setIpPersona(id);
-        FacesMessage ms = null;
-        try {
-            pfl.create(p);
-            ms = new FacesMessage(FacesMessage.SEVERITY_INFO, "Solicitud exitosa",
-                    "Su permiso se ha solicitado para entre las fechas: " + p.getPermisoFechaInicio() + " y " + p.getPermisoFechafin());
-        } catch (Exception e) {
-            ms = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage());
-        } finally {
-            FacesContext.getCurrentInstance().addMessage(null, ms);
-            p= new Permisos(new PermisosPK((us == null ? 0 : us.getIdestudiante()), Calendar.getInstance().getTime(), 0));
-            p.setTipoPersona(tipoPersonaFL.find(8));
-            p.setPersona(new Persona(0));
-            p.setTipoPermiso1(new TipoPermiso(0));
-        }
+    public Date getFinicio() {
+        return finicio;
     }
 
-    public int getId() {
-        return id;
+    public void setFinicio(Date finicio) {
+        System.out.println("fecha inicio: " + finicio.toString());
+        this.finicio = finicio;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public Date getFfin() {
+        return ffin;
+    }
+
+    public void setFfin(Date ffin) {
+        System.out.println("fecha fin: " + ffin.toString());
+        this.ffin = ffin;
     }
 
 }

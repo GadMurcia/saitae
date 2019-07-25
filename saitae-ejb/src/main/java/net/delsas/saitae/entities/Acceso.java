@@ -14,6 +14,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -34,7 +36,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Acceso.findAll", query = "SELECT a FROM Acceso a")
     , @NamedQuery(name = "Acceso.findByIdacceso", query = "SELECT a FROM Acceso a WHERE a.idacceso = :idacceso")
     , @NamedQuery(name = "Acceso.findByAccesoNombre", query = "SELECT a FROM Acceso a WHERE a.accesoNombre = :accesoNombre")
-    , @NamedQuery(name = "Acceso.findByAccesoIndice", query = "SELECT a FROM Acceso a WHERE a.accesoIndice = :accesoIndice")
     , @NamedQuery(name = "Acceso.findByAccesourl", query = "SELECT a FROM Acceso a WHERE a.accesourl = :accesourl")
     , @NamedQuery(name = "Acceso.findByAccesoComentario", query = "SELECT a FROM Acceso a WHERE a.accesoComentario = :accesoComentario")})
 public class Acceso implements Serializable {
@@ -52,17 +53,17 @@ public class Acceso implements Serializable {
     private String accesoNombre;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 10)
-    @Column(name = "accesoIndice")
-    private String accesoIndice;
-    @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 100)
     @Column(name = "accesourl")
     private String accesourl;
     @Size(max = 140)
     @Column(name = "accesoComentario")
     private String accesoComentario;
+    @OneToMany(mappedBy = "accesoIndice")
+    private List<Acceso> accesoList;
+    @JoinColumn(name = "accesoIndice", referencedColumnName = "idacceso")
+    @ManyToOne
+    private Acceso accesoIndice;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "acceso")
     private List<AccesoTipoPersona> accesoTipoPersonaList;
 
@@ -73,10 +74,9 @@ public class Acceso implements Serializable {
         this.idacceso = idacceso;
     }
 
-    public Acceso(Integer idacceso, String accesoNombre, String accesoIndice, String accesourl) {
+    public Acceso(Integer idacceso, String accesoNombre, String accesourl) {
         this.idacceso = idacceso;
         this.accesoNombre = accesoNombre;
-        this.accesoIndice = accesoIndice;
         this.accesourl = accesourl;
     }
 
@@ -96,14 +96,6 @@ public class Acceso implements Serializable {
         this.accesoNombre = accesoNombre;
     }
 
-    public String getAccesoIndice() {
-        return accesoIndice;
-    }
-
-    public void setAccesoIndice(String accesoIndice) {
-        this.accesoIndice = accesoIndice;
-    }
-
     public String getAccesourl() {
         return accesourl;
     }
@@ -118,6 +110,23 @@ public class Acceso implements Serializable {
 
     public void setAccesoComentario(String accesoComentario) {
         this.accesoComentario = accesoComentario;
+    }
+
+    @XmlTransient
+    public List<Acceso> getAccesoList() {
+        return accesoList;
+    }
+
+    public void setAccesoList(List<Acceso> accesoList) {
+        this.accesoList = accesoList;
+    }
+
+    public Acceso getAccesoIndice() {
+        return accesoIndice;
+    }
+
+    public void setAccesoIndice(Acceso accesoIndice) {
+        this.accesoIndice = accesoIndice;
     }
 
     @XmlTransient

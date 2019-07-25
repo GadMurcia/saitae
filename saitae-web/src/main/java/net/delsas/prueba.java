@@ -19,7 +19,6 @@ package net.delsas;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import net.delsas.saitae.entities.Acceso;
 import net.delsas.saitae.entities.AccesoTipoPersona;
 import net.delsas.saitae.entities.Estudiante;
@@ -78,7 +77,7 @@ public class prueba {
         ArrayList<AccesoTipoPersona> atps = new ArrayList<>();
         for (int i = 0; i < 6; i++) {
             AccesoTipoPersona acc=new AccesoTipoPersona();
-            acc.setAcceso(new Acceso(i, "Acceso"+i,".0", "/pages/perfil"+i+".intex"));
+            acc.setAcceso(new Acceso(i, "Acceso"+i, "/pages/perfil"+i+".intex"));
             acc.setTipoPersona(tp);
             atps.add(acc);
         }

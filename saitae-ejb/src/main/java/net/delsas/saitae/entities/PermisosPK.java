@@ -34,14 +34,20 @@ public class PermisosPK implements Serializable {
     @NotNull
     @Column(name = "tipoPermiso")
     private int tipoPermiso;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "permisoFechaInicio")
+    @Temporal(TemporalType.DATE)
+    private Date permisoFechaInicio;
 
     public PermisosPK() {
     }
 
-    public PermisosPK(int ipPersona, Date permisoFechaSolicitud, int tipoPermiso) {
+    public PermisosPK(int ipPersona, Date permisoFechaSolicitud, int tipoPermiso, Date permisoFechaInicio) {
         this.ipPersona = ipPersona;
         this.permisoFechaSolicitud = permisoFechaSolicitud;
         this.tipoPermiso = tipoPermiso;
+        this.permisoFechaInicio = permisoFechaInicio;
     }
 
     public int getIpPersona() {
@@ -68,12 +74,21 @@ public class PermisosPK implements Serializable {
         this.tipoPermiso = tipoPermiso;
     }
 
+    public Date getPermisoFechaInicio() {
+        return permisoFechaInicio;
+    }
+
+    public void setPermisoFechaInicio(Date permisoFechaInicio) {
+        this.permisoFechaInicio = permisoFechaInicio;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (int) ipPersona;
         hash += (permisoFechaSolicitud != null ? permisoFechaSolicitud.hashCode() : 0);
         hash += (int) tipoPermiso;
+        hash += (permisoFechaInicio != null ? permisoFechaInicio.hashCode() : 0);
         return hash;
     }
 
@@ -93,12 +108,15 @@ public class PermisosPK implements Serializable {
         if (this.tipoPermiso != other.tipoPermiso) {
             return false;
         }
+        if ((this.permisoFechaInicio == null && other.permisoFechaInicio != null) || (this.permisoFechaInicio != null && !this.permisoFechaInicio.equals(other.permisoFechaInicio))) {
+            return false;
+        }
         return true;
     }
 
     @Override
     public String toString() {
-        return "net.delsas.saitae.entities.PermisosPK[ ipPersona=" + ipPersona + ", permisoFechaSolicitud=" + permisoFechaSolicitud + ", tipoPermiso=" + tipoPermiso + " ]";
+        return "net.delsas.saitae.entities.PermisosPK[ ipPersona=" + ipPersona + ", permisoFechaSolicitud=" + permisoFechaSolicitud + ", tipoPermiso=" + tipoPermiso + ", permisoFechaInicio=" + permisoFechaInicio + " ]";
     }
     
 }

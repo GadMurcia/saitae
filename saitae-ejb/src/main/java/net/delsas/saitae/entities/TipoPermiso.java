@@ -3,6 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package net.delsas.saitae.entities;
 
 import java.io.Serializable;
@@ -148,5 +149,5 @@ public class TipoPermiso implements Serializable {
     public String toString() {
         return "net.delsas.saitae.entities.TipoPermiso[ idtipoPermiso=" + idtipoPermiso + " ]";
     }
-    
+
 }

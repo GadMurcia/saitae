@@ -7,7 +7,9 @@ package net.delsas.saitae.controllers;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -20,10 +22,12 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
+import net.delsas.saitae.entities.Acceso;
 import net.delsas.saitae.entities.AccesoTipoPersona;
 import net.delsas.saitae.entities.Persona;
 import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultMenuModel;
+import org.primefaces.model.menu.DefaultSubMenu;
 
 /**
  *
@@ -68,7 +72,7 @@ public class sessionController implements Serializable {
                             "Gracias por iniciar Sesión " + u.getPersonaNombre()));
                     context.getExternalContext().getSessionMap().remove("primerInicio");
                     context.getExternalContext().getSessionMap().put("primerInicio", false);
-                    this.menu();
+                    this.menu2();
                 }
             }
         } catch (Exception ex) {
@@ -92,7 +96,7 @@ public class sessionController implements Serializable {
         this.mm = mm;
     }
 
-    private void menu()throws Exception {
+    private void menu() throws Exception {
         mm = new DefaultMenuModel();
         DefaultMenuItem mi;
         mi = new DefaultMenuItem("Inicio");
@@ -104,6 +108,46 @@ public class sessionController implements Serializable {
             mi.setIcon(atp.getAcceso().getAccesoComentario());
             mi.setUrl(atp.getAcceso().getAccesourl());
             mm.addElement(mi);
+        }
+        if (us.getTipoPersona().getIdtipoPersona() == 1) {
+            mi = new DefaultMenuItem("Control de vistas");
+            mi.setIcon("fa fa-wrench");
+            mi.setUrl("cvista.intex");
+            mm.addElement(mi);
+        }
+        mi = new DefaultMenuItem("salir");
+        mi.setIcon("fa fa-close");
+        mi.setAjax(false);
+        mi.setCommand("#{sessionController.cerrarSesion()}");
+        mm.addElement(mi);
+    }
+
+    public void menu2() {
+        mm = new DefaultMenuModel();
+        DefaultMenuItem mi;
+        mi = new DefaultMenuItem("Inicio");
+        mi.setIcon("pi pi-home");
+        mi.setUrl("perfil.intex");
+        mm.addElement(mi);
+        List<Acceso> ac = new ArrayList<>();
+        for (AccesoTipoPersona atp : us.getTipoPersona().getAccesoTipoPersonaList()) {
+            ac.add(atp.getAcceso());
+        }
+        for (Acceso a : ac) {
+            DefaultSubMenu s = new DefaultSubMenu();
+            if (a.getAccesoIndice() == null) {
+                s.setIcon(a.getAccesoComentario());
+                s.setLabel(a.getAccesoNombre());
+                for (Acceso b : a.getAccesoList()) {
+                    if (ac.contains(b)) {
+                        mi = new DefaultMenuItem(b.getAccesoNombre());
+                        mi.setIcon(b.getAccesoComentario());
+                        mi.setUrl(b.getAccesourl());
+                        s.addElement(mi);
+                    }
+                }
+                mm.addElement(s);
+            }
         }
         if (us.getTipoPersona().getIdtipoPersona() == 1) {
             mi = new DefaultMenuItem("Control de vistas");

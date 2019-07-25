@@ -33,22 +33,17 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Permisos.findAll", query = "SELECT p FROM Permisos p")
     , @NamedQuery(name = "Permisos.findByIpPersona", query = "SELECT p FROM Permisos p WHERE p.permisosPK.ipPersona = :ipPersona")
     , @NamedQuery(name = "Permisos.findByPermisoFechaSolicitud", query = "SELECT p FROM Permisos p WHERE p.permisosPK.permisoFechaSolicitud = :permisoFechaSolicitud")
-    , @NamedQuery(name = "Permisos.findByPermisoFechaInicio", query = "SELECT p FROM Permisos p WHERE p.permisoFechaInicio = :permisoFechaInicio")
+    , @NamedQuery(name = "Permisos.findByTipoPermiso", query = "SELECT p FROM Permisos p WHERE p.permisosPK.tipoPermiso = :tipoPermiso")
+    , @NamedQuery(name = "Permisos.findByPermisoFechaInicio", query = "SELECT p FROM Permisos p WHERE p.permisosPK.permisoFechaInicio = :permisoFechaInicio")
     , @NamedQuery(name = "Permisos.findByPermisoFechafin", query = "SELECT p FROM Permisos p WHERE p.permisoFechafin = :permisoFechafin")
     , @NamedQuery(name = "Permisos.findByPermisosMotivo", query = "SELECT p FROM Permisos p WHERE p.permisosMotivo = :permisosMotivo")
     , @NamedQuery(name = "Permisos.findByPermisosAceptado", query = "SELECT p FROM Permisos p WHERE p.permisosAceptado = :permisosAceptado")
-    , @NamedQuery(name = "Permisos.findByPermisosComentario", query = "SELECT p FROM Permisos p WHERE p.permisosComentario = :permisosComentario")
-    , @NamedQuery(name = "Permisos.findByTipoPermiso", query = "SELECT p FROM Permisos p WHERE p.permisosPK.tipoPermiso = :tipoPermiso")})
+    , @NamedQuery(name = "Permisos.findByPermisosComentario", query = "SELECT p FROM Permisos p WHERE p.permisosComentario = :permisosComentario")})
 public class Permisos implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected PermisosPK permisosPK;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "permisoFechaInicio")
-    @Temporal(TemporalType.DATE)
-    private Date permisoFechaInicio;
     @Basic(optional = false)
     @NotNull
     @Column(name = "permisoFechafin")
@@ -86,16 +81,15 @@ public class Permisos implements Serializable {
         this.permisosPK = permisosPK;
     }
 
-    public Permisos(PermisosPK permisosPK, Date permisoFechaInicio, Date permisoFechafin, String permisosMotivo, int permisosAceptado) {
+    public Permisos(PermisosPK permisosPK, Date permisoFechafin, String permisosMotivo, int permisosAceptado) {
         this.permisosPK = permisosPK;
-        this.permisoFechaInicio = permisoFechaInicio;
         this.permisoFechafin = permisoFechafin;
         this.permisosMotivo = permisosMotivo;
         this.permisosAceptado = permisosAceptado;
     }
 
-    public Permisos(int ipPersona, Date permisoFechaSolicitud, int tipoPermiso) {
-        this.permisosPK = new PermisosPK(ipPersona, permisoFechaSolicitud, tipoPermiso);
+    public Permisos(int ipPersona, Date permisoFechaSolicitud, int tipoPermiso, Date permisoFechaInicio) {
+        this.permisosPK = new PermisosPK(ipPersona, permisoFechaSolicitud, tipoPermiso, permisoFechaInicio);
     }
 
     public PermisosPK getPermisosPK() {
@@ -104,14 +98,6 @@ public class Permisos implements Serializable {
 
     public void setPermisosPK(PermisosPK permisosPK) {
         this.permisosPK = permisosPK;
-    }
-
-    public Date getPermisoFechaInicio() {
-        return permisoFechaInicio;
-    }
-
-    public void setPermisoFechaInicio(Date permisoFechaInicio) {
-        this.permisoFechaInicio = permisoFechaInicio;
     }
 
     public Date getPermisoFechafin() {
