@@ -29,11 +29,11 @@
                             </p:selectOneMenu>
 
                             <p:outputLabel for="console" value="¿Para quién es el permiso?: *" />
-                            <p:selectOneMenu id="console1" value="#{permisoEstudianteController.p.persona.idpersona}" 
+                            <p:selectOneMenu id="console1" value="#{permisoEstudianteController.id}" 
                                              style="width:125px" title="Seleccione el permiso que necesita"
                                              disabled="#{!permisoEstudianteController.seleccionPermiso}">
                                 <f:selectItems value="#{permisoEstudianteController.listaEstudiantes()}"/>
-                                <f:ajax render="m summit" execute="SeleccionEstudiante"/>
+                                <p:ajax update="m frm:summit"/>
                             </p:selectOneMenu>
 
                             <p:column/>
@@ -49,10 +49,11 @@
                             </p:panelGrid>
 
                             <h:outputLabel value="Motivo: *"/>
-                            <p:inputText value="#{permisoEstudianteController.p.permisosComentario}" required="true" />
+                            <p:inputText value="#{permisoEstudianteController.p.permisosMotivo}" required="true" />
 
                             <h:outputLabel value="Solicitado por: "/>
-                            <h:outputLabel value="#{permisoEstudianteController.us.persona.personaNombre} #{permisoEstudianteController.us.persona.personaApellido}"/>
+                            <h:outputLabel value="#{permisoEstudianteController.us.persona.personaNombre} 
+                                           #{permisoEstudianteController.us.persona.personaApellido}"/>
 
                             <p:outputLabel for="spanish" value="Fecha de inicio (yyyy-mm-dd):" />
                             <p:calendar id="spanish" value="#{permisoEstudianteController.p.permisoFechaInicio}" locale="es" 
@@ -64,7 +65,7 @@
                         </h:panelGrid>
                     </p:panel>
                     <p:commandButton id="summit" value="Solicitar" disabled="#{!permisoEstudianteController.seleccionEstudiante}"
-                                     actionListener="#{permisoEstudianteController.guardar()}"/>
+                                     actionListener="#{permisoEstudianteController.guardar()}" update=":form0:msgs frm"/>
                 </h:form>
             </ui:define>
 
