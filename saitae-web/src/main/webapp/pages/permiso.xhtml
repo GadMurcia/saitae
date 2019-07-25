@@ -55,13 +55,13 @@
                             <h:outputLabel value="#{permisoEstudianteController.us.persona.personaNombre} 
                                            #{permisoEstudianteController.us.persona.personaApellido}"/>
 
-                            <p:outputLabel for="spanish" value="Fecha de inicio (yyyy-mm-dd):" />
-                            <p:calendar id="spanish" value="#{permisoEstudianteController.p.permisoFechaInicio}" locale="es" 
-                                        navigator="true" pattern="yyyy-mm-dd" />
+                            <p:outputLabel for="mask" value="Fecha de inicio:" />
+                            <p:calendar id="mask" value="#{permisoEstudianteController.p.permisoFechaInicio}" 
+                                        pattern="dd-MM-yyyy" mask="true" />
 
-                            <p:outputLabel for="spanish1" value="Fecha de fin (yyyy-mm-dd):" />
-                            <p:calendar id="spanish1" value="#{permisoEstudianteController.p.permisoFechafin}" locale="es" 
-                                        navigator="true" pattern="yyyy-mm-dd" />
+                            <p:outputLabel for="mask1" value="Fecha de finalización: " />
+                            <p:calendar id="mask1" value="#{permisoEstudianteController.p.permisoFechafin}" 
+                                        pattern="dd-MM-yyyy" mask="true" />
                         </h:panelGrid>
                     </p:panel>
                     <p:commandButton id="summit" value="Solicitar" disabled="#{!permisoEstudianteController.seleccionEstudiante}"

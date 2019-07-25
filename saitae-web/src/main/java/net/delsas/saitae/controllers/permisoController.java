@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -41,17 +42,12 @@ public class permisoController implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Permisos p;
     @EJB
     private PermisosFacadeLocal pfl;
     @EJB
     private TipoPersonaFacadeLocal tipoPersonaFL;
     @EJB
     private PersonaFacadeLocal personaFL;
-    @EJB
-    private TipopersonaPermisoFacadeLocal tpfl;
-    @EJB
-    private EstudianteFacadeLocal efl;
     @EJB
     private MatriculaFacadeLocal mfl;
 
@@ -60,6 +56,8 @@ public class permisoController implements Serializable {
     private Estudiante us;
     private List<Estudiante> e;
     private int id;
+    private Permisos p;
+    private Date finicio, ffin;
 
     /**
      * Creates a new instance of permisoController
@@ -90,10 +88,11 @@ public class permisoController implements Serializable {
 
     public permisoController() {
         p = new Permisos();
-        p.setTipoPermiso1(new TipoPermiso(0, "", 0));
+        p.setTipoPermiso1(new TipoPermiso(0));
         e = new ArrayList<>();
         us = new Estudiante();
         id=0;
+        finicio=ffin=Calendar.getInstance().getTime();
 
     }
 
@@ -140,24 +139,6 @@ public class permisoController implements Serializable {
         return items;
     }
 
-    public Matricula getM() {
-        return m;
-    }
-
-    public void setM(Matricula m) {
-        this.m = m;
-    }
-
-    public Estudiante getUs() {
-        return us;
-    }
-
-    public void setUs(Estudiante us) {
-        this.us = us;
-    }
-    
-    
-
     public void guardar() {
         p.getPermisosPK().setTipoPermiso(p.getTipoPermiso1().getIdtipoPermiso());
         p.setPermisosSolicitante(us.getPersona());
@@ -186,5 +167,41 @@ public class permisoController implements Serializable {
     public void setId(int id) {
         this.id = id;
     }
+
+    public Matricula getM() {
+        return m;
+    }
+
+    public void setM(Matricula m) {
+        this.m = m;
+    }
+
+    public Estudiante getUs() {
+        return us;
+    }
+
+    public void setUs(Estudiante us) {
+        this.us = us;
+    }
+
+    public Date getFinicio() {
+        return finicio;
+    }
+
+    public void setFinicio(Date finicio) {
+        System.out.println("fecha inicio: "+finicio.toString());
+        this.finicio = finicio;
+    }
+
+    public Date getFfin() {
+        return ffin;
+    }
+
+    public void setFfin(Date ffin) {
+        System.out.println("fecha fin: "+ffin.toString());
+        this.ffin = ffin;
+    }
+    
+    
 
 }
