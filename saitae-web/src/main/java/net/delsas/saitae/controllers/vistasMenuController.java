@@ -39,6 +39,7 @@ import org.primefaces.PrimeFaces;
 import org.primefaces.event.ItemSelectEvent;
 import org.primefaces.event.RowEditEvent;
 import org.primefaces.model.DualListModel;
+import org.primefaces.model.NestedSelectItem;
 
 /**
  *
@@ -66,7 +67,13 @@ public class vistasMenuController implements Serializable {
     @PostConstruct
     public void init() {
         tipo = new TipoPersona();
-        accesos = accesoFL.findAll();
+        accesos = new ArrayList<>();
+        for (Acceso a : accesoFL.findAll()) {
+            if (a.getAccesoIndice() == null) {
+                a.setAccesoIndice(new Acceso(0));
+            }
+            accesos.add(a);
+        }
         tipoPersonas = tipoPersonaFL.findAll();
         model = new DualListModel<>(new ArrayList<String>(), new ArrayList<String>());
     }
@@ -75,7 +82,9 @@ public class vistasMenuController implements Serializable {
         // Add one new car to the table:
         switch (id) {
             case "acceso":
-                accesos.add(new Acceso());
+                Acceso a = new Acceso();
+                a.setAccesoIndice(new Acceso(0));
+                accesos.add(a);
                 break;
             case "tipo":
                 tipoPersonas.add(new TipoPersona());
@@ -93,7 +102,13 @@ public class vistasMenuController implements Serializable {
         String titulo = "", mensaje = "", id = event.getComponent().getClientId();
         switch (id) {
             case "form:tw:accesos":
-                accesoFL.edit((Acceso) event.getObject());
+                Acceso a = (Acceso) event.getObject();
+                if (a.getAccesoIndice().getIdacceso() == 0) {
+                    a.setAccesoIndice(null);
+                } else {
+                    a.setAccesoIndice(accesoFL.find(a.getAccesoIndice().getIdacceso()));
+                }
+                accesoFL.edit(a);
                 titulo = "Tipo de recurso";
                 mensaje = ((Acceso) event.getObject()).getAccesoNombre();
                 break;
@@ -122,7 +137,7 @@ public class vistasMenuController implements Serializable {
                 mensaje = a.getAccesoNombre();
                 break;
             case "form:tw:tipo":
-                TipoPersona tp= (TipoPersona) event.getObject();
+                TipoPersona tp = (TipoPersona) event.getObject();
                 if (tp.getTipoPersonaNombre() == null || tp.getTipoPersonaNombre().isEmpty()) {
                     tipoPersonas.remove(tp);
                 }
@@ -136,7 +151,7 @@ public class vistasMenuController implements Serializable {
         FacesMessage msg = new FacesMessage("Edición cancelada", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
-    
+
     public void onItemSelect(ItemSelectEvent event) {
         tipo = tipoPersonaFL.find(tipo.getIdtipoPersona());
         tipo = tipo == null ? new TipoPersona(0) : tipo;
@@ -203,8 +218,17 @@ public class vistasMenuController implements Serializable {
             FacesMessage msg = new FacesMessage("Las modificaciones se han realizado:", m);
             FacesContext.getCurrentInstance().addMessage(null, msg);
             PrimeFaces.current().ajax().update(new String[]{"form0:msgs", "form0:menubar"});
-            
+
         }
+    }
+
+    public List<SelectItem> getAccesosItems() {
+        List<SelectItem> items = new ArrayList<>();
+        items.add(new SelectItem(0, "Ninguno"));
+        for (Acceso a : accesos) {
+            items.add(new SelectItem(a.getIdacceso(), a.getAccesoNombre()));
+        }
+        return items;
     }
 
     public List<Acceso> getAccesos() {
@@ -238,7 +262,5 @@ public class vistasMenuController implements Serializable {
     public void setModel(DualListModel<String> model) {
         this.model = model;
     }
-    
-    
 
 }

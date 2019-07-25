@@ -74,7 +74,7 @@ public class permisoController implements Serializable {
 
             } else {
                 this.setUs(u.getEstudiante());
-                p.setPermisosPK(new PermisosPK(0, Calendar.getInstance().getTime(), 0));
+                p.setPermisosPK(new PermisosPK(0, Calendar.getInstance().getTime(), 0, Calendar.getInstance().getTime()));
                 permisos = u.getTipoPersona().getTipopersonaPermisoList();
                 e = u.getEstudiante().getEstudianteEsEstudiante()
                         ? new ArrayList<Estudiante>() : u.getEstudiante().getEstudianteList();
@@ -91,8 +91,8 @@ public class permisoController implements Serializable {
         p.setTipoPermiso1(new TipoPermiso(0));
         e = new ArrayList<>();
         us = new Estudiante();
-        id=0;
-        finicio=ffin=Calendar.getInstance().getTime();
+        id = 0;
+        finicio = ffin = Calendar.getInstance().getTime();
 
     }
 
@@ -148,12 +148,12 @@ public class permisoController implements Serializable {
         try {
             pfl.create(p);
             ms = new FacesMessage(FacesMessage.SEVERITY_INFO, "Solicitud exitosa",
-                    "Su permiso se ha solicitado para entre las fechas: " + p.getPermisoFechaInicio() + " y " + p.getPermisoFechafin());
+                    "Su permiso se ha solicitado para entre las fechas: " + p.getPermisosPK().getPermisoFechaInicio() + " y " + p.getPermisoFechafin());
         } catch (Exception e) {
             ms = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage());
         } finally {
             FacesContext.getCurrentInstance().addMessage(null, ms);
-            p= new Permisos(new PermisosPK((us == null ? 0 : us.getIdestudiante()), Calendar.getInstance().getTime(), 0));
+            p = new Permisos(new PermisosPK((us == null ? 0 : us.getIdestudiante()), Calendar.getInstance().getTime(), 0, Calendar.getInstance().getTime()));
             p.setTipoPersona(tipoPersonaFL.find(8));
             p.setPersona(new Persona(0));
             p.setTipoPermiso1(new TipoPermiso(0));
@@ -189,7 +189,7 @@ public class permisoController implements Serializable {
     }
 
     public void setFinicio(Date finicio) {
-        System.out.println("fecha inicio: "+finicio.toString());
+        System.out.println("fecha inicio: " + finicio.toString());
         this.finicio = finicio;
     }
 
@@ -198,10 +198,8 @@ public class permisoController implements Serializable {
     }
 
     public void setFfin(Date ffin) {
-        System.out.println("fecha fin: "+ffin.toString());
+        System.out.println("fecha fin: " + ffin.toString());
         this.ffin = ffin;
     }
-    
-    
 
 }

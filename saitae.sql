@@ -27,14 +27,15 @@ DROP TABLE IF EXISTS `acceso`;
 CREATE TABLE `acceso` (
   `idacceso` int(11) NOT NULL AUTO_INCREMENT,
   `accesoNombre` varchar(30) NOT NULL,
-  `accesoIndice` varchar(10) NOT NULL,
+  `accesoIndice` int(11) DEFAULT '0',
   `accesourl` varchar(100) NOT NULL,
   `accesoComentario` varchar(140) DEFAULT NULL,
   PRIMARY KEY (`idacceso`),
   UNIQUE KEY `accesoNombre_UNIQUE` (`accesoNombre`),
   UNIQUE KEY `idacceso_UNIQUE` (`idacceso`),
-  UNIQUE KEY `accesoIndice_UNIQUE` (`accesoIndice`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+  KEY `fk_acceso_1_idx` (`accesoIndice`),
+  CONSTRAINT `fk_acceso_1` FOREIGN KEY (`accesoIndice`) REFERENCES `acceso` (`idacceso`) ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43,7 +44,7 @@ CREATE TABLE `acceso` (
 
 LOCK TABLES `acceso` WRITE;
 /*!40000 ALTER TABLE `acceso` DISABLE KEYS */;
-INSERT INTO `acceso` VALUES (1,'Permisos','1','permiso.intex',NULL),(2,'Tipos del sistema','2','tipopp.intex',NULL),(3,'Agregar aulas','3','aula.intex',NULL);
+INSERT INTO `acceso` VALUES (9,'Configuración',NULL,'#','pi pi-key'),(10,'Tipos del sistema',9,'tipopp.intex','pi pi-folder-open'),(11,'Materia',9,'materia.intex','pi pi-th-large'),(12,'Aulas',9,'aulas.intex','pi pi-circle-on'),(13,'Perfil',NULL,'#','pi pi-user'),(14,'Permisos',NULL,'#','pi pi-eye'),(15,'Solicitar Permiso',14,'permiso.intex','pi pi-briefcase');
 /*!40000 ALTER TABLE `acceso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -71,7 +72,7 @@ CREATE TABLE `accesoTipoPersona` (
 
 LOCK TABLES `accesoTipoPersona` WRITE;
 /*!40000 ALTER TABLE `accesoTipoPersona` DISABLE KEYS */;
-INSERT INTO `accesoTipoPersona` VALUES (1,1,NULL),(1,2,NULL),(1,8,NULL),(2,1,NULL),(2,2,NULL),(3,1,'');
+INSERT INTO `accesoTipoPersona` VALUES (9,1,''),(9,2,''),(10,1,''),(10,2,''),(11,1,''),(11,2,''),(12,1,''),(12,2,''),(13,1,''),(13,8,''),(14,1,''),(14,8,''),(15,8,'');
 /*!40000 ALTER TABLE `accesoTipoPersona` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -119,7 +120,7 @@ CREATE TABLE `aula` (
   PRIMARY KEY (`idaula`),
   KEY `fk_aula_1_idx` (`zonaAula`),
   CONSTRAINT `fk_aula_1` FOREIGN KEY (`zonaAula`) REFERENCES `zona` (`idzona`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -128,7 +129,7 @@ CREATE TABLE `aula` (
 
 LOCK TABLES `aula` WRITE;
 /*!40000 ALTER TABLE `aula` DISABLE KEYS */;
-INSERT INTO `aula` VALUES (1,1,''),(2,2,'');
+INSERT INTO `aula` VALUES (1,1,''),(2,1,''),(3,1,''),(4,1,''),(5,1,''),(6,2,''),(7,2,'');
 /*!40000 ALTER TABLE `aula` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -910,7 +911,7 @@ CREATE TABLE `materia` (
   PRIMARY KEY (`idmateria`),
   KEY `fk_materia_1_idx` (`tipoMateria`),
   CONSTRAINT `fk_materia_1` FOREIGN KEY (`tipoMateria`) REFERENCES `tipoMateria` (`idtipoMateria`) ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -919,6 +920,7 @@ CREATE TABLE `materia` (
 
 LOCK TABLES `materia` WRITE;
 /*!40000 ALTER TABLE `materia` DISABLE KEYS */;
+INSERT INTO `materia` VALUES (1,'Educación para la vida',2,'');
 /*!40000 ALTER TABLE `materia` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1052,15 +1054,15 @@ DROP TABLE IF EXISTS `permisos`;
 CREATE TABLE `permisos` (
   `ipPersona` int(11) NOT NULL,
   `permisoFechaSolicitud` date NOT NULL,
+  `tipoPermiso` int(11) NOT NULL,
   `permisoFechaInicio` date NOT NULL,
   `permisoFechafin` date NOT NULL,
   `tipoPersona` int(11) NOT NULL,
   `permisosMotivo` varchar(250) NOT NULL,
   `permisosAceptado` int(1) NOT NULL,
-  `permisosComentario` varchar(250) DEFAULT NULL,
   `permisosSolicitante` int(11) NOT NULL,
-  `tipoPermiso` int(11) NOT NULL,
-  PRIMARY KEY (`ipPersona`,`permisoFechaSolicitud`,`tipoPermiso`),
+  `permisosComentario` varchar(250) DEFAULT NULL,
+  PRIMARY KEY (`ipPersona`,`permisoFechaSolicitud`,`tipoPermiso`,`permisoFechaInicio`),
   KEY `fk_permisos_2_idx` (`ipPersona`),
   KEY `fk_permisos_1_idx` (`tipoPersona`),
   KEY `fk_permisos_3_idx` (`permisosSolicitante`),
@@ -1078,6 +1080,7 @@ CREATE TABLE `permisos` (
 
 LOCK TABLES `permisos` WRITE;
 /*!40000 ALTER TABLE `permisos` DISABLE KEYS */;
+INSERT INTO `permisos` VALUES (1045367075,'2019-07-24',5,'2019-07-24','2019-07-25',8,'guillermox020@gmail.com',0,1999999999,NULL),(1045367075,'2019-07-25',4,'2019-07-25','2019-07-25',8,'guillermox020@gmail.com',0,1045367075,NULL);
 /*!40000 ALTER TABLE `permisos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1444,7 +1447,7 @@ CREATE TABLE `tipoPermiso` (
 
 LOCK TABLES `tipoPermiso` WRITE;
 /*!40000 ALTER TABLE `tipoPermiso` DISABLE KEYS */;
-INSERT INTO `tipoPermiso` VALUES (1,'Enfermedad',0,NULL),(2,'Materindad',0,NULL),(3,'Paternidad',0,NULL),(4,'Faltar a clases',0,NULL),(5,'Salir temporalmente de la institución',0,NULL),(6,'Retirarse de la institución',0,NULL),(7,'No portar uniforme',0,NULL);
+INSERT INTO `tipoPermiso` VALUES (1,'Enfermedad',0,NULL),(2,'Materindad',0,NULL),(3,'Paternidad',0,NULL),(4,'Faltar a clases',0,NULL),(5,'Salir temporalmente de la institución',0,NULL),(6,'Retirarse de la institución',0,NULL),(7,'No portar uniforme',5,NULL);
 /*!40000 ALTER TABLE `tipoPermiso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1574,7 +1577,7 @@ CREATE TABLE `tipopersonaPermiso` (
 
 LOCK TABLES `tipopersonaPermiso` WRITE;
 /*!40000 ALTER TABLE `tipopersonaPermiso` DISABLE KEYS */;
-INSERT INTO `tipopersonaPermiso` VALUES (1,1,''),(1,2,''),(1,3,''),(2,1,''),(2,2,''),(8,4,''),(8,5,''),(8,6,''),(8,7,'');
+INSERT INTO `tipopersonaPermiso` VALUES (1,1,''),(1,2,''),(1,3,''),(2,1,''),(2,2,''),(8,4,''),(8,5,''),(8,6,''),(8,7,''),(9,5,''),(9,6,''),(9,7,'');
 /*!40000 ALTER TABLE `tipopersonaPermiso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1620,4 +1623,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-07-22 14:20:30
+-- Dump completed on 2019-07-25  0:41:47
