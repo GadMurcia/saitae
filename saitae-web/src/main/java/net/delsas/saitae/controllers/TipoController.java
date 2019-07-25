@@ -145,6 +145,7 @@ public class TipoController implements Serializable {
     private List<Categoria> categoria;
     
     //Editorial
+    @EJB
     private EditorialFacadeLocal editorialFL;
     private List<Editorial> editorial;
 
