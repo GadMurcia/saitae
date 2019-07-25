@@ -434,6 +434,46 @@
                                 </div>
                             </div>
                         </p:tab>
+                        <p:tab title="editorial">
+                            <p:dataTable id="editorial" var="e" value="#{tipoController.editorial}" editable="true" 
+                                         widgetVar="editorial1" styleClass="tabla" emptyMessage="Sin registros aún.">
+                                <f:facet name="header">
+                                    Administración de Categoria.
+                                </f:facet>
+
+                                <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" update=":form:msgs" />
+                                <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" update=":form:msgs" />
+
+                                <p:column headerText="Id" style="width: 10px">
+                                   <p:cellEditor>
+                                       <f:facet name="output"><h:outputText value="#{e.ideditorial}" /></f:facet>
+                                       <f:facet name="input"><p:inputText value="#{e.ideditorial}" 
+                                                                           style="width:100%" label="Nombre"/></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+
+                                <p:column headerText="Nombre">
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{e.editorialNombre}" /></f:facet>
+                                        <f:facet name="input"><p:inputText value="#{e.editorialNombre}" 
+                                                                           style="width:100%" label="Nombre"/></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                               
+                        <p:column style="width:35px">
+                            <p:rowEditor />
+                        </p:column>
+                    </p:dataTable>
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <p:commandButton value="+" styleClass="ui-priority-primary" 
+                                             process="@this" update=":form0:msgs"
+                                             action="#{tipoController.onAddNew('editorial')}" 
+                                             oncomplete="PF('editorial1').addRow();"
+                                             title="Agregar nueva editorial."/>
+                                </div>
+                            </div>
+                        </p:tab>
                     </p:tabView> 
                 </h:form>
             </ui:define>

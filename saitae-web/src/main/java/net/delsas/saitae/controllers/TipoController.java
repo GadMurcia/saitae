@@ -32,6 +32,7 @@ import net.delsas.saitae.beans.AutorFacadeLocal;
 import net.delsas.saitae.beans.CargoFacadeLocal;
 import net.delsas.saitae.beans.CategoriaFacade;
 import net.delsas.saitae.beans.CategoriaFacadeLocal;
+import net.delsas.saitae.beans.EditorialFacadeLocal;
 import net.delsas.saitae.beans.MateriaFacadeLocal;
 import net.delsas.saitae.beans.TipoCargoFacadeLocal;
 import net.delsas.saitae.beans.TipoMateriaFacadeLocal;
@@ -46,6 +47,7 @@ import net.delsas.saitae.entities.Aula;
 import net.delsas.saitae.entities.Autor;
 import net.delsas.saitae.entities.Cargo;
 import net.delsas.saitae.entities.Categoria;
+import net.delsas.saitae.entities.Editorial;
 import net.delsas.saitae.entities.Materia;
 import net.delsas.saitae.entities.TipoCargo;
 import net.delsas.saitae.entities.TipoMateria;
@@ -141,6 +143,10 @@ public class TipoController implements Serializable {
     @EJB
     private CategoriaFacadeLocal categoriaFL;
     private List<Categoria> categoria;
+    
+    //Editorial
+    private EditorialFacadeLocal editorialFL;
+    private List<Editorial> editorial;
 
     @PostConstruct
     public void init() {
@@ -159,6 +165,7 @@ public class TipoController implements Serializable {
         autor = autorFL.findAll();
         cargo = cargoFL.findAll();
         categoria = categoriaFL.findAll();
+        editorial = editorialFL.findAll();
     }
     
 
@@ -205,6 +212,9 @@ public class TipoController implements Serializable {
                 break;
              case "categoria":
                  categoria.add(new Categoria(0));
+                 break;
+             case "editorial":
+                 editorial.add(new Editorial());
                 
             default:
                 System.out.println(id);
@@ -288,6 +298,13 @@ public class TipoController implements Serializable {
              case "form:tw:categoria":
                  Categoria ca = (Categoria) event.getObject();
                  categoriaFL.edit(ca);
+                  mensaje = ca.getCategoriaNombre();
+                  break;
+             case "form:tw:editorial":
+                 Editorial e = (Editorial) event.getObject();
+                  editorialFL.edit(e);
+                   mensaje = e.getEditorialNombre();
+                   break;
             default:
                 System.out.println(id);
         }
@@ -382,8 +399,17 @@ public class TipoController implements Serializable {
             case "form:categoria":
                 Categoria ca = (Categoria) event.getObject();
                   if (ca.getCategoriaNombre()== null || ca.getCategoriaNombre().isEmpty()) {
-                    categoria.remove(ca);
+                    categoria.remove(ca);  
                   }
+                mensaje = ca.getCategoriaNombre();
+                break;
+            case "form:editorial":
+                Editorial e = (Editorial) event.getObject();
+                if (e.getEditorialNombre() == null || e.getEditorialNombre().isEmpty()){
+                editorial.remove(e);
+                }
+                mensaje = e.getEditorialNombre();
+                break;
             default:
                 System.out.println(id);
         }
@@ -597,6 +623,14 @@ public class TipoController implements Serializable {
 
     public void setCategoria(List<Categoria> categoria) {
         this.categoria = categoria;
+    }
+
+    public List<Editorial> getEditorial() {
+        return editorial;
+    }
+
+    public void setEditorial(List<Editorial> editorial) {
+        this.editorial = editorial;
     }
     
     
