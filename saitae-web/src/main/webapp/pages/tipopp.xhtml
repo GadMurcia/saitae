@@ -56,7 +56,7 @@
                         </p:tab>
                         <p:tab title="Tipo Permisos">
                             <p:dataTable id="tp1" widgetVar="tipos" var="tp" value="#{tipoController.all}" 
-                                         editable="true" paginator="true" styleClass="tabla"
+                                         editable="true" styleClass="tabla"
                                          emptyMessage="Sin registros aún.">
                                 <f:facet name="header">
                                     Administración de los tipos de permisos
@@ -435,9 +435,12 @@
                             </div>
                         </p:tab>
                     </p:tabView> 
+                    <p:commandButton value="Print" type="button" icon="pi pi-print" 
+                                     style="display:block;margin-bottom: 20px">
+                        <p:printer target="form" />
+                    </p:commandButton>
                 </h:form>
             </ui:define>
-
         </ui:composition>
 
     </body>

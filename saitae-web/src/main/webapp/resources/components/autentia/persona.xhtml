@@ -1,0 +1,148 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      >
+
+    <!-- INTERFACE -->
+    <cc:interface>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>       
+
+        <script type="text/javascript">
+            //<![CDATA[
+            function dateTemplateFunc(date) {
+                return '<span style="background-color:' + ((date.day < 21 && date.day > 10) ? '#81C784' : 'inherit') + ';border-radius:50%;padding: .25em;width: 1.75em; height:1.75em; display:block;">' + date.day + '</span>';
+            }
+            //]]>
+        </script>
+
+        <style type="text/css">
+            .value {
+                font-weight: bold;
+            }
+        </style>
+        <h:panelGrid columns="3"  style="color: fuchsia;" >
+            <p:outputLabel for="dui" value="DUI: "/>
+            <p:inputMask id="dui" value=" " required="true" mask="99999999-9"
+                         title="Ingrese el número de documento de identificación de la persona."/>
+            <p:message for="dui" showSummary="true" />                
+
+            <p:outputLabel for="nombre" value="Nombre: "/>
+            <p:inputText id="nombre" value=" " required="true" title="Ingrese el nombre de la persona a agregar"/>
+            <p:message for="nombre" showSummary="true" />
+
+            <p:outputLabel for="apellido" value="Apellidos: "/>
+            <p:inputText id="apellido" value=" " required="true" title="Apellidos de la persona"/>
+            <p:message for="apellido" showSummary="true" /> 
+
+            <p:outputLabel for="fecha" value="Fecha de nacimiento: "/>
+            <p:calendar id="fecha" value="" pattern="dd-MM-yyyy" mask="true" 
+                        title="Ingrese la fecha de nacimiento de la persona."/>
+            <p:message for="fecha" showSummary="true" />
+
+            <p:outputLabel for="direcion" value="Dirección: "/>
+            <p:inputText id="direcion" value="" required="true" title="Ingrese la dirección de residencia de la persona"/>
+            <p:message for="direcion" showSummary="true" />
+
+            <p:outputLabel for="telefono" value="Teléfono Personal: "/>
+            <p:inputMask id="telefono" value="" required="true" mask="9999-9999" title="Ingrese el número de reléfono personal de la persona"/>
+            <p:message for="telefono" showSummary="true" />
+
+            <p:outputLabel for="titulo" value="Profesión: "/>
+            <p:inputText id="titulo" value="" required="true" type="text" title="Ingrese la profesión de la persona."/>
+            <p:message for="titulo" showSummary="true" />
+
+            <p:outputLabel for="nit" value="NIT: "/>
+            <p:inputMask id="nit" value="" required="true" mask="9999-999999-999-9" title="Ingrese nu NIT"/>
+            <p:message for="nit" showSummary="true" />
+
+            <p:outputLabel for="sexo" value="Sexo: "/>
+            <p:selectOneMenu id="sexo" value="" style="width:125px" title="Seleccione su sexo">
+                <f:selectItem itemLabel="Seleccione" itemValue="" />
+                <f:selectItem itemLabel="Femenino" itemValue="0" />
+                <f:selectItem itemLabel="Masculino" itemValue="1" />
+            </p:selectOneMenu>
+            <p:message for="sexo" showSummary="true" />
+
+            <p:outputLabel for="ef" value="Estado Familiar: "/>
+            <p:selectOneMenu id="ef" value="" style="width:125px" title="Seleccione el estado familiar de la persona">
+                <f:selectItem itemLabel="Seleccione" itemValue="" />
+                <f:selectItem itemLabel="Solter@" itemValue="0" />
+                <f:selectItem itemLabel="Casad@" itemValue="1" />
+                <f:selectItem itemLabel="Acompañad@" itemValue="2"/>
+            </p:selectOneMenu>
+            <p:message for="ef" showSummary="true" />
+
+            <p:outputLabel for="nacion" value="Nacionalidad: "/>
+            <p:selectOneMenu id="nacion" value=""  required="true"
+                             style="width:125px" label="Seleccione su nacionalidad">
+                <f:selectItem itemLabel="Salvadoreña" itemValue="Salvadoreña" />
+                <f:selectItem itemLabel="Extrangera" itemValue="Extrangera" />
+            </p:selectOneMenu>
+            <p:message for="nacion" showSummary="true" />
+
+            <p:outputLabel for="zona" value="Zona de residencia: *" />
+            <p:selectOneMenu id="zona" value="" required="true"
+                             style="width:125px" title="Seleccione su Zona donde vive">
+                <f:selectItem itemLabel="Seleccione" itemValue="" />
+                <f:selectItem itemLabel="Rural" itemValue="0" />
+                <f:selectItem itemLabel="Urbana" itemValue="1" />
+            </p:selectOneMenu>
+            <p:messages for="zona" showSummary="true"/>
+
+            <p:outputLabel for="cod" value="Código de residencia: "/>
+            <p:inputMask id="cod" value="" required="true" mask="99:99"/>
+            <p:message for="nit" showSummary="true" />
+
+            <h:outputLabel for="dep" value="Departamento de nacimiento: " />
+            <p:selectOneMenu id="dep" value="" required="true" style="width:125px" 
+                             title="Seleccione el departamento de nacimiento">
+                <f:selectItem itemLabel="Extrangero" itemValue="9" />
+                <f:selectItem itemLabel="Ahuachapán" itemValue="01" />
+                <f:selectItem itemLabel="Santa Ana" itemValue="02" />
+                <f:selectItem itemLabel="Sonsonate" itemValue="03" />
+                <f:selectItem itemLabel="Chalatenango" itemValue="04" />
+                <f:selectItem itemLabel="Cuscatlán" itemValue="05" />
+                <f:selectItem itemLabel="San Salvador" itemValue="06" />
+                <f:selectItem itemLabel="La Libertad" itemValue="07" />
+                <f:selectItem itemLabel="San Vicente" itemValue="08" />
+                <f:selectItem itemLabel="Cabañas" itemValue="09" />
+                <f:selectItem itemLabel="La Paz" itemValue="10" />
+                <f:selectItem itemLabel="Usulután" itemValue="11" />
+                <f:selectItem itemLabel="San Miguel" itemValue="12" />
+                <f:selectItem itemLabel="Morazán" itemValue="13" />
+                <f:selectItem itemLabel="La Unión" itemValue="14" />
+            </p:selectOneMenu>
+            <p:column/>
+
+            <h:outputLabel for="mun" value="Municipio de nacimiento: " />
+            <p:selectOneMenu id="mun" value="" required="true" style="width:125px" 
+                             title="Seleccione el departamento de nacimiento">
+                <f:selectItems value=""/>
+            </p:selectOneMenu>
+            <p:column/>
+
+            <h:outputText value="Discapacidades: " />
+            <p:inputText value=""
+                         title="Si tiene alguna discapacidad, escríbalas separadas por comas"/>
+            <p:column/>
+
+
+            <p:outputLabel for="email" value="Correo electrónico: "/>
+            <p:inputText id="email" value="" type="email"/>
+            <p:column/>
+
+            <p:outputLabel for="disca" value="Discapacidades: " />
+            <p:inputText id="disca" value="" type="text"
+                         title="Si tiene alguna discapacidad, escríbalas separadas por comas"/>
+            <p:column/> 
+        </h:panelGrid> 
+    </cc:implementation>
+</html>
