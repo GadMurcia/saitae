@@ -14,6 +14,19 @@
         <ui:composition template="./../WEB-INF/template/plantilla1.xhtml">
 
             <ui:define name="content">
+                <script type="text/javascript">
+                    //<![CDATA[
+                    function dateTemplateFunc(date) {
+                        return '<span style="background-color:' + ((date.day < 21 && date.day > 10) ? '#81C784' : 'inherit') + ';border-radius:50%;padding: .25em;width: 1.75em; height:1.75em; display:block;">' + date.day + '</span>';
+                    }
+                    //]]>
+                </script>
+
+                <style type="text/css">
+                    .value {
+                        font-weight: bold;
+                    }
+                </style>
                 <h:form id="form">
                     <p:growl id="msgs" showDetail="true"/>
                     <h1 style="align-content: center;">Administración de los tipos del sistema.</h1>
@@ -331,29 +344,29 @@
                                                                            style="width:100%" label="Nombre"/></f:facet>
                                     </p:cellEditor>
                                 </p:column>
-                               <p:column headerText="Comentario">
-                            <p:cellEditor>
-                                <f:facet name="output"><h:outputText value="#{au.autorComentario}" /></f:facet>
-                                <f:facet name="input"><p:inputText value="#{au.autorComentario}" 
-                                                                   style="width:100%" label="Comentario"/></f:facet>
-                            </p:cellEditor>
-                        </p:column>
-                        <p:column style="width:35px">
-                            <p:rowEditor />
-                        </p:column>
-                    </p:dataTable>
-                    <div class="ui-g">
-                        <div class="ui-g-12">
-                            <p:commandButton value="+" styleClass="ui-priority-primary" 
-                                             process="@this" update=":form0:msgs"
-                                             action="#{tipoController.onAddNew('autor')}" 
-                                             oncomplete="PF('autor1').addRow();"
-                                             title="Agregar nuevo autor."/>
+                                <p:column headerText="Comentario">
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{au.autorComentario}" /></f:facet>
+                                        <f:facet name="input"><p:inputText value="#{au.autorComentario}" 
+                                                                           style="width:100%" label="Comentario"/></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                <p:column style="width:35px">
+                                    <p:rowEditor />
+                                </p:column>
+                            </p:dataTable>
+                            <div class="ui-g">
+                                <div class="ui-g-12">
+                                    <p:commandButton value="+" styleClass="ui-priority-primary" 
+                                                     process="@this" update=":form0:msgs"
+                                                     action="#{tipoController.onAddNew('autor')}" 
+                                                     oncomplete="PF('autor1').addRow();"
+                                                     title="Agregar nuevo autor."/>
                                 </div>
                             </div>
                         </p:tab>
-                         <p:tab title="cargo">
-                             <p:dataTable id="cargo1" var="c" value="#{tipoController.cargo}" editable="true" 
+                        <p:tab title="cargo">
+                            <p:dataTable id="cargo1" var="c" value="#{tipoController.cargo}" editable="true" 
                                          widgetVar="cargo0" styleClass="tabla" emptyMessage="Sin registros aún.">
                                 <f:facet name="header">
                                     Administración de autores.
@@ -373,29 +386,29 @@
                                                                            style="width:100%" label="Nombre"/></f:facet>
                                     </p:cellEditor>
                                 </p:column>
-                               <p:column headerText="Comentario">
-                            <p:cellEditor>
-                                <f:facet name="output"><h:outputText value="#{c.cargoComentario}" /></f:facet>
-                                <f:facet name="input"><p:inputText value="#{c.cargoComentario}" 
-                                                                   style="width:100%" label="Comentario"/></f:facet>
-                            </p:cellEditor>
-                        </p:column>
-                        <p:column style="width:35px">
-                            <p:rowEditor />
-                        </p:column>
-                    </p:dataTable>
-                    <div class="ui-g">
-                        <div class="ui-g-12">
-                            <p:commandButton value="+" styleClass="ui-priority-primary" 
-                                             process="@this" update=":form0:msgs"
-                                             action="#{tipoController.onAddNew('cargo1')}" 
-                                             oncomplete="PF('cargo0').addRow();"
-                                             title="Agregar nuevo autor."/>
+                                <p:column headerText="Comentario">
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{c.cargoComentario}" /></f:facet>
+                                        <f:facet name="input"><p:inputText value="#{c.cargoComentario}" 
+                                                                           style="width:100%" label="Comentario"/></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                <p:column style="width:35px">
+                                    <p:rowEditor />
+                                </p:column>
+                            </p:dataTable>
+                            <div class="ui-g">
+                                <div class="ui-g-12">
+                                    <p:commandButton value="+" styleClass="ui-priority-primary" 
+                                                     process="@this" update=":form0:msgs"
+                                                     action="#{tipoController.onAddNew('cargo1')}" 
+                                                     oncomplete="PF('cargo0').addRow();"
+                                                     title="Agregar nuevo autor."/>
                                 </div>
                             </div>
                         </p:tab>
-                         <p:tab title="categoria">
-                             <p:dataTable id="categoria" var="ca" value="#{tipoController.categoria}" editable="true" 
+                        <p:tab title="categoria">
+                            <p:dataTable id="categoria" var="ca" value="#{tipoController.categoria}" editable="true" 
                                          widgetVar="categoria0" styleClass="tabla" emptyMessage="Sin registros aún.">
                                 <f:facet name="header">
                                     Administración de Categoria.
@@ -405,10 +418,10 @@
                                 <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" update=":form:msgs" />
 
                                 <p:column headerText="Id" style="width: 10px">
-                                   <p:cellEditor>
-                                       <f:facet name="output"><h:outputText value="#{ca.idcategoria}" /></f:facet>
-                                       <f:facet name="input"><p:inputText value="#{ca.idcategoria}" 
-                                                                           style="width:100%" label="Nombre"/></f:facet>
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{ca.idcategoria}" /></f:facet>
+                                        <f:facet name="input"><p:inputText value="#{ca.idcategoria}" 
+                                                                           style="width:100%" label="Id"/></f:facet>
                                     </p:cellEditor>
                                 </p:column>
 
@@ -419,18 +432,109 @@
                                                                            style="width:100%" label="Nombre"/></f:facet>
                                     </p:cellEditor>
                                 </p:column>
-                               
-                        <p:column style="width:35px">
-                            <p:rowEditor />
-                        </p:column>
-                    </p:dataTable>
-                    <div class="ui-g">
-                        <div class="ui-g-12">
-                            <p:commandButton value="+" styleClass="ui-priority-primary" 
-                                             process="@this" update=":form0:msgs"
-                                             action="#{tipoController.onAddNew('categoria')}" 
-                                             oncomplete="PF('categoria0').addRow();"
-                                             title="Agregar nueva categoria."/>
+
+                                <p:column style="width:35px">
+                                    <p:rowEditor />
+                                </p:column>
+                            </p:dataTable>
+                            <div class="ui-g">
+                                <div class="ui-g-12">
+                                    <p:commandButton value="+" styleClass="ui-priority-primary" 
+                                                     process="@this" update=":form0:msgs"
+                                                     action="#{tipoController.onAddNew('categoria')}" 
+                                                     oncomplete="PF('categoria0').addRow();"
+                                                     title="Agregar nueva categoria."/>
+                                </div>
+                            </div>
+                        </p:tab>
+                        <p:tab title="editorial">
+                            <p:dataTable id="editorial" var="e" value="#{tipoController.editorial}" editable="true" 
+                                         widgetVar="editorial1" styleClass="tabla" emptyMessage="Sin registros aún.">
+                                <f:facet name="header">
+                                    Administración de Categoria.
+                                </f:facet>
+
+                                <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" update=":form:msgs" />
+                                <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" update=":form:msgs" />
+
+                                <p:column headerText="Id" style="width: 10px">
+                                    <h:outputText value="#{e.ideditorial}" />
+                                </p:column>
+
+                                <p:column headerText="Nombre">
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{e.editorialNombre}" /></f:facet>
+                                        <f:facet name="input"><p:inputText value="#{e.editorialNombre}" 
+                                                                           style="width:100%" label="Nombre"/></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+
+                                <p:column style="width:35px">
+                                    <p:rowEditor />
+                                </p:column>
+                            </p:dataTable>
+                            <div class="ui-g">
+                                <div class="ui-g-12">
+                                    <p:commandButton value="+" styleClass="ui-priority-primary" 
+                                                     process="@this" update=":form0:msgs"
+                                                     action="#{tipoController.onAddNew('editorial')}" 
+                                                     oncomplete="PF('editorial1').addRow();"
+                                                     title="Agregar nueva editorial."/>
+                                </div>
+                            </div>
+                        </p:tab>
+                        <p:tab title="horario">
+
+                            <p:dataTable id="horario" var="h" value="#{tipoController.horario}" editable="true" 
+                                         widgetVar="horario1" styleClass="tabla" emptyMessage="Sin registros aún.">
+                                <f:facet name="header">
+                                    Administración de Horarios.
+                                </f:facet>
+
+                                <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" update=":form:msgs" />
+                                <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" update=":form:msgs" />
+
+                                <p:column headerText="Id" style="width: 10px">
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{h.idhorario}" /></f:facet>
+                                        <f:facet name="input"><p:inputText value="#{h.idhorario}" 
+                                                                           style="width:100%" label="Id"/></f:facet>
+                                    </p:cellEditor>
+
+                                </p:column>
+
+                                <p:column headerText="Hora Inicio">
+                                    <p:cellEditor>
+                                        <f:facet name="output">
+                                            <p:datePicker  value="#{h.horaInicio}" timeOnly="true" pattern="HH:mm" hourFormat="12"/>
+                                        </f:facet>
+                                        <f:facet name="input">
+                                            <p:datePicker  value="#{h.horaInicio}" timeOnly="true" pattern="HH:mm" hourFormat="12"/>
+                                        </f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                <p:column headerText="Hora Fin">
+                                    <p:cellEditor>
+                                        <f:facet name="output">
+                                            <p:datePicker  value="#{h.horaFin}" timeOnly="true" pattern="HH:mm" hourFormat="12"/>
+                                        </f:facet>
+                                        <f:facet name="input">
+                                            <p:datePicker  value="#{h.horaFin}" timeOnly="true" pattern="HH:mm" hourFormat="12"/>
+                                        </f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+
+                                <p:column style="width:35px">
+                                    <p:rowEditor />
+                                </p:column>
+                            </p:dataTable>
+                            <div class="ui-g">
+                                <div class="ui-g-12">
+                                    <p:commandButton value="+" styleClass="ui-priority-primary" 
+                                                     process="@this" update=":form0:msgs"
+                                                     action="#{tipoController.onAddNew('horario')}" 
+                                                     oncomplete="PF('horario1').addRow();"
+                                                     title="Agregar Horario."/>
                                 </div>
                             </div>
                         </p:tab>

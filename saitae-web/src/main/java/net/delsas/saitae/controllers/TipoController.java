@@ -32,6 +32,8 @@ import net.delsas.saitae.beans.AutorFacadeLocal;
 import net.delsas.saitae.beans.CargoFacadeLocal;
 import net.delsas.saitae.beans.CategoriaFacade;
 import net.delsas.saitae.beans.CategoriaFacadeLocal;
+import net.delsas.saitae.beans.EditorialFacadeLocal;
+import net.delsas.saitae.beans.HorarioFacadeLocal;
 import net.delsas.saitae.beans.MateriaFacadeLocal;
 import net.delsas.saitae.beans.TipoCargoFacadeLocal;
 import net.delsas.saitae.beans.TipoMateriaFacadeLocal;
@@ -46,6 +48,8 @@ import net.delsas.saitae.entities.Aula;
 import net.delsas.saitae.entities.Autor;
 import net.delsas.saitae.entities.Cargo;
 import net.delsas.saitae.entities.Categoria;
+import net.delsas.saitae.entities.Editorial;
+import net.delsas.saitae.entities.Horario;
 import net.delsas.saitae.entities.Materia;
 import net.delsas.saitae.entities.TipoCargo;
 import net.delsas.saitae.entities.TipoMateria;
@@ -141,6 +145,16 @@ public class TipoController implements Serializable {
     @EJB
     private CategoriaFacadeLocal categoriaFL;
     private List<Categoria> categoria;
+    
+    //Editorial
+    @EJB
+    private EditorialFacadeLocal editorialFL;
+    private List<Editorial> editorial;
+    
+    //Horario
+    @EJB
+    private HorarioFacadeLocal horarioFL;
+    private List<Horario> horario;
 
     @PostConstruct
     public void init() {
@@ -159,6 +173,8 @@ public class TipoController implements Serializable {
         autor = autorFL.findAll();
         cargo = cargoFL.findAll();
         categoria = categoriaFL.findAll();
+        editorial = editorialFL.findAll();
+        horario = horarioFL.findAll();
     }
     
 
@@ -200,11 +216,19 @@ public class TipoController implements Serializable {
             case "autor":
                 autor.add(new Autor());
                 break;
-             case "cargo1":
+            case "cargo1":
                 cargo.add(new Cargo());
                 break;
-             case "categoria":
+            case "categoria":
                  categoria.add(new Categoria(0));
+                 break;
+            case "editorial":
+                 editorial.add(new Editorial());
+                 break;
+            case "horario":
+                  horario.add(new Horario(0));
+                  break;
+                
                 
             default:
                 System.out.println(id);
@@ -273,21 +297,35 @@ public class TipoController implements Serializable {
                 titulo = "Aula";
                 mensaje = "Aula N° " + a.getIdaula();
                 break;
-            case "form:tw:autor":
-                Autor au = (Autor) event.getObject();
-               autorFL.edit(au);
-               titulo = "Autor";
-               mensaje = au.getAutorNombre();
-                break;
-             case "form:tw:cargo1":
-                Cargo c = (Cargo) event.getObject();
-               cargoFL.edit(c);
-               titulo = "Cargo";
-               mensaje = c.getCargoNombre();
-                break;  
-             case "form:tw:categoria":
-                 Categoria ca = (Categoria) event.getObject();
-                 categoriaFL.edit(ca);
+            case  "form:tw:autor":
+                  Autor au = (Autor) event.getObject();
+                  autorFL.edit(au);
+                  titulo = "Autor";
+                  mensaje = au.getAutorNombre();
+                  break;
+            case  "form:tw:cargo1":
+                  Cargo c = (Cargo) event.getObject();
+                  cargoFL.edit(c);
+                  titulo = "Cargo";
+                  mensaje = c.getCargoNombre();
+                  break;  
+            case  "form:tw:categoria":
+                   Categoria ca = (Categoria) event.getObject();
+                   categoriaFL.edit(ca);
+                    titulo = "Editorial";
+                   mensaje = ca.getCategoriaNombre();
+                   break;
+            case  "form:tw:editorial":
+                   Editorial e = (Editorial) event.getObject();
+                   editorialFL.edit(e);
+                   mensaje = e.getEditorialNombre();
+                    break;
+             case  "form:tw:horario":
+                    Horario h = (Horario) event.getObject();
+                    horarioFL.edit(h);
+                     titulo = "Horario";
+                    mensaje = "Horario Agregado";
+                    
             default:
                 System.out.println(id);
         }
@@ -364,14 +402,14 @@ public class TipoController implements Serializable {
                 }
                 mensaje = "Aula N° " + a.getIdaula();
                 break;
-             case "form:autor":
+             case "form:tw:autor":
                 Autor au = (Autor) event.getObject();
                 if (au.getAutorNombre() == null || au.getAutorNombre().isEmpty()) {
                     autor.remove(au);
                 }
                 mensaje = au.getAutorNombre();
                 break;    
-            case "form:cargo1":
+            case "form:tw:cargo1":
                 Cargo c = (Cargo) event.getObject();
                 if (c.getCargoNombre()== null || c.getCargoNombre().isEmpty()) {
                     cargo.remove(c);
@@ -379,11 +417,27 @@ public class TipoController implements Serializable {
                 mensaje = c.getCargoNombre();
                 break;
                 
-            case "form:categoria":
+            case "form:tw:categoria":
                 Categoria ca = (Categoria) event.getObject();
                   if (ca.getCategoriaNombre()== null || ca.getCategoriaNombre().isEmpty()) {
-                    categoria.remove(ca);
+                    categoria.remove(ca);  
                   }
+                mensaje = ca.getCategoriaNombre();
+                break;
+            case "form:tw:editorial":
+                Editorial e = (Editorial) event.getObject();
+                if (e.getEditorialNombre() == null || e.getEditorialNombre().isEmpty()){
+                editorial.remove(e);
+                }
+                mensaje = e.getEditorialNombre();
+                break;
+            case "form:tw:horario":
+                Horario h = (Horario) event.getObject();
+                if(h.getHoraInicio() == null && h.getHoraFin()==null){
+                    horario.remove(h);
+                }
+                  mensaje = "Horario Cancelado";
+                  break;
             default:
                 System.out.println(id);
         }
@@ -597,6 +651,22 @@ public class TipoController implements Serializable {
 
     public void setCategoria(List<Categoria> categoria) {
         this.categoria = categoria;
+    }
+
+    public List<Editorial> getEditorial() {
+        return editorial;
+    }
+
+    public void setEditorial(List<Editorial> editorial) {
+        this.editorial = editorial;
+    }
+
+    public List<Horario> getHorario() {
+        return horario;
+    }
+
+    public void setHorario(List<Horario> horario) {
+        this.horario = horario;
     }
     
     
