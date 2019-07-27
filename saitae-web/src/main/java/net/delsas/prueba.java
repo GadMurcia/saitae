@@ -41,7 +41,7 @@ public class prueba {
         user.setPersonaTelefono("7878-7878");
         user.setPersonaCodigoResidencia(0);
         user.setPersonaZonaVivienda(0);
-        user.setPersonaLugarNac("depto#muni");
+        user.setPersonaLugarNac("02#13");
         user.setPersonaOCupacion("ocupa");
         user.setPersonaNit("0000-000000-000-0");
         user.setPersonaSexo(false);
