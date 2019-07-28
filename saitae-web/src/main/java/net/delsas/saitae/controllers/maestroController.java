@@ -46,11 +46,7 @@ public class maestroController implements Serializable {
      */
     @PostConstruct
     public void init() {
-        maestro = new Maestro(0);
-        maestro.setPersona(new prueba().getUser());
-        maestro.getPersona().setPersonaLugarNac(" # ");
-        maestro.setMaestoCargoList(new ArrayList<MaestoCargo>());
-
+        maestro = new prueba().getMaestro().getMaestro();
     }
 
     public Maestro getMaestro() {
@@ -100,6 +96,8 @@ public class maestroController implements Serializable {
 
     public List<SelectItem> getMunicipiosLista() {
         List<SelectItem> items = new ArrayList<>();
+        items.add(new SelectItem(" ", "Seleccione"));
+
         int i = 1;
         switch (this.getDepartamento()) {
             case "01":
@@ -222,8 +220,11 @@ public class maestroController implements Serializable {
                     i++;
                 }
                 break;
-            default:
+            case "9":
                 items.add(new SelectItem("9", "Extrangero"));
+                break;
+            default:
+                maestro.getPersona().setPersonaLugarNac(" # ");
 
         }
 
@@ -232,6 +233,7 @@ public class maestroController implements Serializable {
 
     public List<SelectItem> getDepartamentosLista() {
         List<SelectItem> items = new ArrayList<>();
+        items.add(new SelectItem(" ", "Seleccione"));
         if (maestro.getPersona().getPersonaNacionalidad().equals("Salvadoreña")) {
             int t = 1;
             for (String f : new String[]{"Ahuachapán", "Santa Ana", "Sonsonate", "Chalatenango",
@@ -239,11 +241,12 @@ public class maestroController implements Serializable {
                 "Usulután", "San Miguel", "Morazán", "La Unión"}) {
                 items.add(new SelectItem((t < 10 ? "0" : "") + t, f));
                 t++;
-            }            
-        }else{
-            maestro.getPersona().setPersonaLugarNac("9#9");
+            }
+        } else if (maestro.getPersona().getPersonaNacionalidad().equals("Extrangera")) {
+            items.add(new SelectItem("9", "Extrangero"));
+        } else {
+            maestro.getPersona().setPersonaLugarNac(" # ");
         }
-        items.add(new SelectItem("9", "Extrangero"));
         return items;
     }
 

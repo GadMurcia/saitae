@@ -4,13 +4,20 @@
                 template="./../WEB-INF/template/plantilla1.xhtml"      
                 xmlns:t="http://java.sun.com/jsf/composite/components/autentia"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
     
     <ui:define name="content">
         <h:form>
-            <p:outputLabel value="#{maestroController.departamento}"/>
-            <t:persona id="persona"/>
+           <!-- 
+           <t:persona departamento="#{maestroController.departamento}" 
+                       departamentoLista="#{maestroController.departamentosLista}" 
+                       dui="#{maestroController.dui}" municipio="#{maestroController.municipio}" 
+                       municipioLista="#{maestroController.municipiosLista}" 
+                       persona="#{maestroController.maestro.persona}"/>
+            <t:persona1 persona="#{maestroController.maestro.persona}"/>
+            <t:maestro maestro="#{maestroController.maestro}"/>
+            <t:maestro1 maestro="#{maestroController.maestro}"/>
+           -->
         </h:form>
     </ui:define>
 </ui:composition>

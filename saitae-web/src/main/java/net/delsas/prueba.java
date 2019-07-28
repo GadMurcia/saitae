@@ -18,11 +18,20 @@ package net.delsas;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
-import net.delsas.saitae.entities.Acceso;
 import net.delsas.saitae.entities.AccesoTipoPersona;
+import net.delsas.saitae.entities.Anuncio;
+import net.delsas.saitae.entities.Capacitaciones;
 import net.delsas.saitae.entities.Estudiante;
+import net.delsas.saitae.entities.EvaluacionMaestro;
+import net.delsas.saitae.entities.Grado;
+import net.delsas.saitae.entities.Maestro;
+import net.delsas.saitae.entities.MestroHorarioMaterias;
+import net.delsas.saitae.entities.Notificaciones;
+import net.delsas.saitae.entities.Permisos;
 import net.delsas.saitae.entities.Persona;
+import net.delsas.saitae.entities.PersonasReserva;
 import net.delsas.saitae.entities.TipoPersona;
 
 /**
@@ -34,95 +43,78 @@ public class prueba {
     private Persona user;
 
     public prueba() {
-        user = new Persona(1045367073, "User0 User1", "User2 User3", true);
-        user.setPersonaContrasenya("02951a6cb9595ef475fed783e59c687e");
-        user.setPersonaNacimiento(new Date(1991, 1, 17));
-        user.setPersonaDireccion("dirección dirección");
-        user.setPersonaTelefono("7878-7878");
+        user = new Persona(0, "", "", true);
+        user.setPersonaContrasenya("");
+        user.setPersonaNacimiento(new Date(91, 1, 17));
+        user.setPersonaDireccion("");
+        user.setPersonaTelefono("");
         user.setPersonaCodigoResidencia(0);
         user.setPersonaZonaVivienda(0);
         user.setPersonaLugarNac("02#13");
-        user.setPersonaOCupacion("ocupa");
-        user.setPersonaNit("0000-000000-000-0");
+        user.setPersonaOCupacion("");
+        user.setPersonaNit("");
         user.setPersonaSexo(false);
         user.setPersonaEstadoFamiliar(0);
-        user.setPersonaNacionalidad("Salvadoreña");
-        user.setPersonaEmail("email@email");
-        user.setPersonaDiscapacidades("nada nada nada");
-        user.setPersonaComentarios("comentarios comentarios");
+        user.setPersonaNacionalidad("");
+        user.setPersonaEmail("");
+        user.setPersonaDiscapacidades("");
+        user.setPersonaComentarios("");
     }
 
-    public Estudiante getEstudiante() {
-        Estudiante e = new Estudiante(user.getIdpersona(), true, 0, true, "Noveno Grado");
-        e.setEstudianteRiesgoVulnerabilidad("riego o vulnerabilidad");
-        e.setEstudianteMedioTransporte(0);
-        e.setEstudianteDistanciaAlCentro(BigDecimal.valueOf(5.00));
-        e.setEstudianteTrabaja(true);
-        e.setEstudianteDependenciaEconomica("uno#dos#tres");
-        e.setEstudianteParvularia(true);
-        e.setEstudianteEnfermedades("enfermedades");
-        e.setEstudianteMedicamentos("medicamentos");
-        e.setEstudianteParentescoRepresentante("parentesco");
-        e.setEstudianteFormaTrabajo("forma de trabajo");
-        e.setEstudianteCentroProcedencia("Centro de procedencia");
-        e.setEstudianteNoPartida("no partida");
-        e.setEstudianteRepresentanteFamiliar(true);
-        e.setEstudiantePadre(getPadre());
-        e.setEstudianteMadre(getMadre());
-        e.setEstudianteRepresentante(getRepresentante());
-        e.setEstudianteComentario("comentarios");
-        e.setPersona(user);
+    public Persona getEstudiante() {
+        Estudiante e = new Estudiante(user.getIdpersona(), true, 0, true, "");
+        user.getEstudiante().setEstudianteRiesgoVulnerabilidad("");
+        user.getEstudiante().setEstudianteMedioTransporte(0);
+        user.getEstudiante().setEstudianteDistanciaAlCentro(BigDecimal.valueOf(5.00));
+        user.getEstudiante().setEstudianteTrabaja(true);
+        user.getEstudiante().setEstudianteDependenciaEconomica("");
+        user.getEstudiante().setEstudianteParvularia(true);
+        user.getEstudiante().setEstudianteEnfermedades("");
+        user.getEstudiante().setEstudianteMedicamentos("");
+        user.getEstudiante().setEstudianteParentescoRepresentante("");
+        user.getEstudiante().setEstudianteFormaTrabajo("");
+        user.getEstudiante().setEstudianteCentroProcedencia("");
+        user.getEstudiante().setEstudianteNoPartida("");
+        user.getEstudiante().setEstudianteRepresentanteFamiliar(true);
+        user.getEstudiante().setEstudiantePadre(getPadre());
+        user.getEstudiante().setEstudianteMadre(getMadre());
+        user.getEstudiante().setEstudianteRepresentante(getRepresentante().getEstudiante());
+        user.getEstudiante().setEstudianteComentario("");
+        user.getEstudiante().setPersona(user);
         user.setEstudiante(e);
         TipoPersona tp = new TipoPersona(8, "Estudiante");
         ArrayList<AccesoTipoPersona> atps = new ArrayList<>();
-        for (int i = 0; i < 6; i++) {
-            AccesoTipoPersona acc=new AccesoTipoPersona();
-            acc.setAcceso(new Acceso(i, "Acceso"+i, "/pages/perfil"+i+".intex"));
-            acc.setTipoPersona(tp);
-            atps.add(acc);
-        }
         tp.setAccesoTipoPersonaList(atps);
         user.setTipoPersona(tp);
-        return user.getEstudiante();
-    }
-
-    public Persona getUser() {
         return user;
     }
 
-    public void setUser(Persona user) {
-        this.user = user;
+    public Persona getRepresentante() {
+        user.setEstudiante(new Estudiante(user.getIdpersona(), true, 0, true, ""));
+        user.getEstudiante().setEstudianteRiesgoVulnerabilidad("");
+        user.getEstudiante().setEstudianteMedioTransporte(null);
+        user.getEstudiante().setEstudianteDistanciaAlCentro(null);
+        user.getEstudiante().setEstudianteTrabaja(true);
+        user.getEstudiante().setEstudianteDependenciaEconomica(null);
+        user.getEstudiante().setEstudianteParvularia(null);
+        user.getEstudiante().setEstudianteEnfermedades(null);
+        user.getEstudiante().setEstudianteMedicamentos(null);
+        user.getEstudiante().setEstudianteParentescoRepresentante("");
+        user.getEstudiante().setEstudianteFormaTrabajo("");
+        user.getEstudiante().setEstudianteCentroProcedencia(null);
+        user.getEstudiante().setEstudianteNoPartida("");
+        user.getEstudiante().setEstudianteRepresentanteFamiliar(true);
+        user.getEstudiante().setEstudiantePadre(null);
+        user.getEstudiante().setEstudianteMadre(null);
+        user.getEstudiante().setEstudianteRepresentante(null);
+        user.getEstudiante().setEstudianteComentario("");
+        user.setTipoPersona(new TipoPersona(9, "Representante"));
+        user.getTipoPersona().setAccesoTipoPersonaList(new ArrayList<AccesoTipoPersona>());
+        user.getEstudiante().setPersona(user);
+        return user;
     }
 
-    private Estudiante getRepresentante() {
-        user.setIdpersona(1045367076);
-        Estudiante e = new Estudiante(user.getIdpersona(), true, 0, true, "Noveno Grado");
-        e.setEstudianteRiesgoVulnerabilidad("riego o vulnerabilidad");
-        e.setEstudianteMedioTransporte(null);
-        e.setEstudianteDistanciaAlCentro(null);
-        e.setEstudianteTrabaja(true);
-        e.setEstudianteDependenciaEconomica(null);
-        e.setEstudianteParvularia(null);
-        e.setEstudianteEnfermedades(null);
-        e.setEstudianteMedicamentos(null);
-        e.setEstudianteParentescoRepresentante("parentesco");
-        e.setEstudianteFormaTrabajo("forma de trabajo");
-        e.setEstudianteCentroProcedencia(null);
-        e.setEstudianteNoPartida("no partida");
-        e.setEstudianteRepresentanteFamiliar(true);
-        e.setEstudiantePadre(null);
-        e.setEstudianteMadre(null);
-        e.setEstudianteRepresentante(null);
-        e.setEstudianteComentario("comentarios");
-        user.setEstudiante(e);
-        TipoPersona tp = new TipoPersona(9, "Representante");
-        ArrayList<AccesoTipoPersona> atps = new ArrayList<>();
-        tp.setAccesoTipoPersonaList(atps);
-        user.setTipoPersona(tp);
-        return user.getEstudiante();
-    }
-
-    private Persona getMadre() {
+    public Persona getMadre() {
         TipoPersona tp = new TipoPersona(10, "Madre");
         ArrayList<AccesoTipoPersona> atps = new ArrayList<>();
         tp.setAccesoTipoPersonaList(atps);
@@ -131,7 +123,7 @@ public class prueba {
         return user;
     }
 
-    private Persona getPadre() {
+    public Persona getPadre() {
         TipoPersona tp = new TipoPersona(11, "Padre");
         ArrayList<AccesoTipoPersona> atps = new ArrayList<>();
         tp.setAccesoTipoPersonaList(atps);
@@ -140,4 +132,91 @@ public class prueba {
         return user;
     }
 
+    public Persona getMaestro() {
+        user.setEstudiante(null);
+        user.setMaestro(new Maestro(user.getIdpersona()));
+        user.getMaestro().setMaestroAfp("");
+        user.getMaestro().setMaestroBienestar(0);
+        user.getMaestro().setMaestroCapacitacionesVirtuales(true);
+        user.getMaestro().setMaestroCategoria(0);
+        user.getMaestro().setMaestroCodigo(0);
+        user.getMaestro().setMaestroComentario("");
+        user.getMaestro().setMaestroEspecialidad("");
+        user.getMaestro().setMaestroFechaInstitucion(Calendar.getInstance().getTime());
+        user.getMaestro().setMaestroFechaMagisterio(Calendar.getInstance().getTime());
+        user.getMaestro().setMaestroFechaProximoAsenso(Calendar.getInstance().getTime());
+        user.getMaestro().setMaestroHorasUsoTecnologia(0);
+        user.getMaestro().setMaestroNip(0);
+        user.getMaestro().setMaestroNivel(0);
+        user.getMaestro().setMaestroNup(0);
+        user.getMaestro().setMaestroPartidas(0);
+        user.getMaestro().setMaestroRecursosWeb(true);
+        user.getMaestro().setMaestroSinEscalafon(true);
+        user.getMaestro().setMaestroSubnumeros(0);
+        user.getMaestro().setMaestroTiempoCategoria("");
+        user.getMaestro().setMaestroTipoSalario("");
+        user.getMaestro().setMaestroTurno("");
+        user.getMaestro().setMaestroUsoVideoconferencias(true);
+        user.getMaestro().setMaestroUtilidadTecnologica(true);
+        user.getMaestro().setMaestrocolTelefonoResidencia("");
+        user.getMaestro().setPersona(user);
+        user.getMaestro().setCapacitacionesList(new ArrayList<Capacitaciones>());
+        user.getMaestro().setEvaluacionMaestroList(new ArrayList<EvaluacionMaestro>());
+        user.getMaestro().setGradoList(new ArrayList<Grado>());
+        user.getMaestro().setMestroHorarioMateriasList(new ArrayList<MestroHorarioMaterias>());
+        user.setTipoPersona(new TipoPersona(4, "Maestro"));
+        user.setNotificacionesList(new ArrayList<Notificaciones>());
+        user.setPermisosList(new ArrayList<Permisos>());
+        user.setPersonasReservaList(new ArrayList<PersonasReserva>());
+        user.getTipoPersona().setAccesoTipoPersonaList(new ArrayList<AccesoTipoPersona>());
+        user.getTipoPersona().setAnuncioList(new ArrayList<Anuncio>());
+        return user;
+    }
+    
+    public Persona getBibliotecario(){
+        user=getMaestro();
+        user.setMaestro(null);
+        user.setTipoPersona(new TipoPersona(5, "Bibliotecario"));
+        return user;
+    }
+    
+    public Persona getAdministradorCra(){
+        user=getBibliotecario();
+        user.setTipoPersona(new TipoPersona(6, "Administrador CRA"));
+        return user;
+    }
+    
+    public Persona getSubDirector(){
+        user=getAdministradorCra();
+        user.setTipoPersona(new TipoPersona(3, "Subdirector"));
+        return user;
+    }
+    
+    public Persona getLAboratorista(){
+        user=getAdministradorCra();
+        user.setTipoPersona(new TipoPersona(7, "Laboratorista"));
+        return user;
+    }
+    
+    public Persona getAmin(){
+        user.setEstudiante(getEstudiante().getEstudiante());
+        user.setMaestro(getMaestro().getMaestro());
+        user.setTipoPersona(new TipoPersona(7, "Laboratorista"));
+        return user;
+    }
+
 }
+
+/**administrador 1
+ * Director 2
+ * Subdirector 3
+ * maestro 4
+ * bibliotecario 5
+ * administrador cra 6
+ * laboratorista 7
+ * estudiante 8
+ * representante 9
+ * madre de famiia 10
+ * padre de familia 11
+ * 
+ */
