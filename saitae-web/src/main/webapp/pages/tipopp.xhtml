@@ -506,10 +506,12 @@
                                 <p:column headerText="Hora Inicio">
                                     <p:cellEditor>
                                         <f:facet name="output">
-                                            <p:datePicker  value="#{h.horaInicio}" timeOnly="true" pattern="HH:mm" hourFormat="12"/>
+                                            <h:outputText value="#{h.horaInicio}"><f:convertDateTime pattern="HH:mm" />
+                                            </h:outputText>
                                         </f:facet>
                                         <f:facet name="input">
-                                            <p:datePicker  value="#{h.horaInicio}" timeOnly="true" pattern="HH:mm" hourFormat="12"/>
+                                         <h:inputText value="#{h.horaInicio}"><f:convertDateTime pattern="HH:mm" />
+                                            </h:inputText>
                                         </f:facet>
                                     </p:cellEditor>
                                 </p:column>
