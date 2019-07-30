@@ -42,19 +42,22 @@
             <p:message for="cat"/>
             
             <p:outputLabel for="mag" value="Fecha de ingreso al Magisterio: "/>
-            <p:inputText id="mag" value="#{cc.attrs.maestro.maestroFechaMagisterio}" required="true"/>
+            <p:calendar id="mag" value="#{cc.attrs.maestro.maestroFechaMagisterio}" pattern="dd-MM-yyyy" mask="true" 
+                        title=" "/>
             <p:message for="mag"/>
             
             <p:outputLabel for="ins" value="Fecha de ingreso a la Institución: "/>
-            <p:inputText id="ins" value="#{cc.attrs.maestro.maestroFechaInstitucion}" required="true"/>
+            <p:calendar id="ins" value="#{cc.attrs.maestro.maestroFechaInstitucion}" pattern="dd-MM-yyyy" mask="true" 
+                        title=" "/>
             <p:message for="ins"/>
             
             <p:outputLabel for="asc" value="Fecha de próximo asenso: "/>
-            <p:inputText id="asc" value="#{cc.attrs.maestro.maestroFechaProximoAsenso}" required="true"/>
+            <p:calendar id="asc" value="#{cc.attrs.maestro.maestroFechaProximoAsenso}" pattern="dd-MM-yyyy" mask="true" 
+                        title=" "/>
             <p:message for="asc"/>
             
             <p:outputLabel for="tcat" value="Fecha desde que está en la categoría: "/>
-            <p:inputText id="tcat" value="#{cc.attrs.maestro.maestroTiempoCategoria}" required="true"/>
+            <p:inputText id="tcat" value="#{cc.attrs.maestro.maestroTiempoCategoria}" required="true" />
             <p:message for="tcat"/>
             
             <p:outputLabel for="afp" value="Nombre de AFP: "/>
