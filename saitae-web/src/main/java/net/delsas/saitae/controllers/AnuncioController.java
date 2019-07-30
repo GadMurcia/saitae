@@ -21,22 +21,20 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
-import net.delsas.saitae.beans.AccesoFacadeLocal;
 import net.delsas.saitae.beans.AnuncioFacadeLocal;
 import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
 import net.delsas.saitae.entities.Anuncio;
 import net.delsas.saitae.entities.Persona;
-import net.delsas.saitae.entities.TipoPersona;
 
 /**
  *
  * @author delsas
  */
 @Named
-@ApplicationScoped
+@SessionScoped
 public class AnuncioController implements Serializable {
 
     private static final long serialVersionUID = 1L;

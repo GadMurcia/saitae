@@ -541,6 +541,10 @@
                                 </div>
                             </div>
                         </p:tab>
+                        <p:tab title="Tipo de Financionamiento">
+                            <t:tablasTipos id="tabla1" Lista="#{tipoController.financiamientos}" NombreTabla="financiamiento" 
+                                           zid="#{z.idfinanciamiento}" znombre="#{z.financiamientoNombre}"/>
+                        </p:tab>
                     </p:tabView> 
                 </h:form>
             </ui:define>

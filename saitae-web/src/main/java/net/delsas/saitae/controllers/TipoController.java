@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.enterprise.context.ApplicationScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
@@ -30,9 +29,9 @@ import javax.inject.Named;
 import net.delsas.saitae.beans.AulaFacadeLocal;
 import net.delsas.saitae.beans.AutorFacadeLocal;
 import net.delsas.saitae.beans.CargoFacadeLocal;
-import net.delsas.saitae.beans.CategoriaFacade;
 import net.delsas.saitae.beans.CategoriaFacadeLocal;
 import net.delsas.saitae.beans.EditorialFacadeLocal;
+import net.delsas.saitae.beans.FinanciamientoFacadeLocal;
 import net.delsas.saitae.beans.HorarioFacadeLocal;
 import net.delsas.saitae.beans.MateriaFacadeLocal;
 import net.delsas.saitae.beans.TipoCargoFacadeLocal;
@@ -49,6 +48,7 @@ import net.delsas.saitae.entities.Autor;
 import net.delsas.saitae.entities.Cargo;
 import net.delsas.saitae.entities.Categoria;
 import net.delsas.saitae.entities.Editorial;
+import net.delsas.saitae.entities.Financiamiento;
 import net.delsas.saitae.entities.Horario;
 import net.delsas.saitae.entities.Materia;
 import net.delsas.saitae.entities.TipoCargo;
@@ -130,31 +130,36 @@ public class TipoController implements Serializable {
     @EJB
     private AulaFacadeLocal afl;
     private List<Aula> aulas;
-    
+
     //Autor
     @EJB
     private AutorFacadeLocal autorFL;
     private List<Autor> autor;
-    
+
     //Cargo
     @EJB
     private CargoFacadeLocal cargoFL;
     private List<Cargo> cargo;
-    
+
     //Categoria
     @EJB
     private CategoriaFacadeLocal categoriaFL;
     private List<Categoria> categoria;
-    
+
     //Editorial
     @EJB
     private EditorialFacadeLocal editorialFL;
     private List<Editorial> editorial;
-    
+
     //Horario
     @EJB
     private HorarioFacadeLocal horarioFL;
     private List<Horario> horario;
+
+    //Fiannciamiento
+    @EJB
+    private FinanciamientoFacadeLocal financiamientoFL;
+    private List<Financiamiento> financiamientos;
 
     @PostConstruct
     public void init() {
@@ -175,8 +180,8 @@ public class TipoController implements Serializable {
         categoria = categoriaFL.findAll();
         editorial = editorialFL.findAll();
         horario = horarioFL.findAll();
+        financiamientos = financiamientoFL.findAll();
     }
-    
 
     public void onAddNew(String id) {
         // Add one new car to the table:
@@ -220,21 +225,23 @@ public class TipoController implements Serializable {
                 cargo.add(new Cargo());
                 break;
             case "categoria":
-                 categoria.add(new Categoria(0));
-                 break;
+                categoria.add(new Categoria(0));
+                break;
             case "editorial":
-                 editorial.add(new Editorial());
-                 break;
+                editorial.add(new Editorial());
+                break;
             case "horario":
-                  horario.add(new Horario(0));
-                  break;
-                
-                
+                horario.add(new Horario(0));
+                break;
+            case "financiamiento":
+                financiamientos.add(new Financiamiento(0));
+                break;
+
             default:
                 System.out.println(id);
 
         }
-       
+
         FacesMessage msg = new FacesMessage("Campos Nuevos agregados.",
                 "Edite los campos para que las modificaciones sean permenentes");
         FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -297,41 +304,47 @@ public class TipoController implements Serializable {
                 titulo = "Aula";
                 mensaje = "Aula N° " + a.getIdaula();
                 break;
-            case  "form:tw:autor":
-                  Autor au = (Autor) event.getObject();
-                  autorFL.edit(au);
-                  titulo = "Autor";
-                  mensaje = au.getAutorNombre();
-                  break;
-            case  "form:tw:cargo1":
-                  Cargo c = (Cargo) event.getObject();
-                  cargoFL.edit(c);
-                  titulo = "Cargo";
-                  mensaje = c.getCargoNombre();
-                  break;  
-            case  "form:tw:categoria":
-                   Categoria ca = (Categoria) event.getObject();
-                   categoriaFL.edit(ca);
-                    titulo = "Editorial";
-                   mensaje = ca.getCategoriaNombre();
-                   break;
-            case  "form:tw:editorial":
-                   Editorial e = (Editorial) event.getObject();
-                   editorialFL.edit(e);
-                   mensaje = e.getEditorialNombre();
-                    break;
-             case  "form:tw:horario":
-                    Horario h = (Horario) event.getObject();
-                    horarioFL.edit(h);
-                     titulo = "Horario";
-                    mensaje = "Horario Agregado";
-                    
+            case "form:tw:autor":
+                Autor au = (Autor) event.getObject();
+                autorFL.edit(au);
+                titulo = "Autor";
+                mensaje = au.getAutorNombre();
+                break;
+            case "form:tw:cargo1":
+                Cargo c = (Cargo) event.getObject();
+                cargoFL.edit(c);
+                titulo = "Cargo";
+                mensaje = c.getCargoNombre();
+                break;
+            case "form:tw:categoria":
+                Categoria ca = (Categoria) event.getObject();
+                categoriaFL.edit(ca);
+                titulo = "Editorial";
+                mensaje = ca.getCategoriaNombre();
+                break;
+            case "form:tw:editorial":
+                Editorial e = (Editorial) event.getObject();
+                editorialFL.edit(e);
+                mensaje = e.getEditorialNombre();
+                break;
+            case "form:tw:horario":
+                Horario h = (Horario) event.getObject();
+                horarioFL.edit(h);
+                titulo = "Horario";
+                mensaje = "Horario Agregado";
+                break;
+            case "form:tw:tabla1:financiamiento":
+                Financiamiento f = (Financiamiento) event.getObject();
+                financiamientoFL.edit(f);
+                titulo = "Fianciamiento";
+                mensaje = f.getFinanciamientoNombre();
+                break;
             default:
                 System.out.println(id);
         }
-          init();
+        init();
         PrimeFaces.current().ajax().update(id);
-        
+
         FacesMessage msg = new FacesMessage(titulo + " Editado", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
@@ -402,46 +415,53 @@ public class TipoController implements Serializable {
                 }
                 mensaje = "Aula N° " + a.getIdaula();
                 break;
-             case "form:tw:autor":
+            case "form:tw:autor":
                 Autor au = (Autor) event.getObject();
                 if (au.getAutorNombre() == null || au.getAutorNombre().isEmpty()) {
                     autor.remove(au);
                 }
                 mensaje = au.getAutorNombre();
-                break;    
+                break;
             case "form:tw:cargo1":
                 Cargo c = (Cargo) event.getObject();
-                if (c.getCargoNombre()== null || c.getCargoNombre().isEmpty()) {
+                if (c.getCargoNombre() == null || c.getCargoNombre().isEmpty()) {
                     cargo.remove(c);
                 }
                 mensaje = c.getCargoNombre();
                 break;
-                
+
             case "form:tw:categoria":
                 Categoria ca = (Categoria) event.getObject();
-                  if (ca.getCategoriaNombre()== null || ca.getCategoriaNombre().isEmpty()) {
-                    categoria.remove(ca);  
-                  }
+                if (ca.getCategoriaNombre() == null || ca.getCategoriaNombre().isEmpty()) {
+                    categoria.remove(ca);
+                }
                 mensaje = ca.getCategoriaNombre();
                 break;
             case "form:tw:editorial":
                 Editorial e = (Editorial) event.getObject();
-                if (e.getEditorialNombre() == null || e.getEditorialNombre().isEmpty()){
-                editorial.remove(e);
+                if (e.getEditorialNombre() == null || e.getEditorialNombre().isEmpty()) {
+                    editorial.remove(e);
                 }
                 mensaje = e.getEditorialNombre();
                 break;
             case "form:tw:horario":
                 Horario h = (Horario) event.getObject();
-                if(h.getHoraInicio() == null && h.getHoraFin()==null){
+                if (h.getHoraInicio() == null && h.getHoraFin() == null) {
                     horario.remove(h);
                 }
-                  mensaje = "Horario Cancelado";
-                  break;
+                mensaje = "Horario Cancelado";
+                break;
+                case "form:tw:tabla1:financiamiento":
+                Financiamiento f = (Financiamiento) event.getObject();
+                if (f.getFinanciamientoNombre() == null | f.getFinanciamientoNombre().isEmpty()) {
+                    financiamientos.remove(f);
+                }
+                mensaje = "Financiamiento";
+                break;
             default:
                 System.out.println(id);
         }
-         init();
+        init();
         PrimeFaces.current().ajax().update(id);
         FacesMessage msg = new FacesMessage("Edición cancelada", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -455,10 +475,10 @@ public class TipoController implements Serializable {
         return ListaZonas;
 
     }
-    
-    public List<SelectItem> getListaTipoMateria(){
+
+    public List<SelectItem> getListaTipoMateria() {
         List<SelectItem> ListaTipoMateria = new ArrayList<>();
-       for (TipoMateria tp : tipoMaterias) {
+        for (TipoMateria tp : tipoMaterias) {
             ListaTipoMateria.add(new SelectItem(tp.getIdtipoMateria(), tp.getTipoMateriaNombre()));
         }
         return ListaTipoMateria;
@@ -668,7 +688,13 @@ public class TipoController implements Serializable {
     public void setHorario(List<Horario> horario) {
         this.horario = horario;
     }
-    
-    
-    
+
+    public List<Financiamiento> getFinanciamientos() {
+        return financiamientos;
+    }
+
+    public void setFinanciamientos(List<Financiamiento> financiamientos) {
+        this.financiamientos = financiamientos;
+    }
+
 }

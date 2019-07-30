@@ -28,6 +28,7 @@ import net.delsas.saitae.entities.Capacitaciones;
 import net.delsas.saitae.entities.Estudiante;
 import net.delsas.saitae.entities.EvaluacionMaestro;
 import net.delsas.saitae.entities.Grado;
+import net.delsas.saitae.entities.MaestoCargo;
 import net.delsas.saitae.entities.Maestro;
 import net.delsas.saitae.entities.MestroHorarioMaterias;
 import net.delsas.saitae.entities.Notificaciones;
@@ -166,6 +167,7 @@ public class prueba {
         user.getMaestro().setEvaluacionMaestroList(new ArrayList<EvaluacionMaestro>());
         user.getMaestro().setGradoList(new ArrayList<Grado>());
         user.getMaestro().setMestroHorarioMateriasList(new ArrayList<MestroHorarioMaterias>());
+        user.getMaestro().setMaestoCargoList(new ArrayList<MaestoCargo>());
         user.setTipoPersona(new TipoPersona(4, "Maestro"));
         user.setNotificacionesList(new ArrayList<Notificaciones>());
         user.setPermisosList(new ArrayList<Permisos>());

@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        <h:panelGrid columns="2">
+            <p:dataTable id="cargos" widgetVar="cargos1" var="c" 
+                         value="#{maestroController.maestro.maestoCargoList}" 
+                         editable="true" style="margin-bottom:20px">
+                <f:facet name="header">
+                    Cargos que ostenta #{maestroController.maestro.persona.personaNombre}
+                </f:facet>
+
+                <p:ajax event="rowEdit" listener="#{maestroController.onRowEdit}" update=":form:msgs" />
+                <p:ajax event="rowEditCancel" listener="#{maestroController.onRowCancel}" update=":form:msgs" />
+
+                <p:column headerText="cargo">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{c.cargo.cargoNombre}" /></f:facet>
+                        <f:facet name="input">
+                            <h:selectOneMenu value="#{c.cargo}" style="width:100%">
+                                <f:selectItems value="#{tipoController.cargo}" var="tc" 
+                                               itemLabel="#{tc.cargoNombre}" itemValue="#{tc}"/>
+                            </h:selectOneMenu>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="Color">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{c.tipoNombramiento.tipoNombramientoNombre}" /></f:facet>
+                        <f:facet name="input">
+                            <h:selectOneMenu value="#{c.tipoNombramiento}" style="width:100%">
+                                <f:selectItems value="#{tipoController.nombramientos}" 
+                                               var="n" itemLabel="#{n.tipoNombramientoNombre}" itemValue="#{n}" />
+                            </h:selectOneMenu>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column style="width:32px">
+                    <p:rowEditor />
+                </p:column>
+            </p:dataTable>
+
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <p:commandButton value="Add new row" styleClass="ui-priority-primary" process="@this" 
+                                     update=":form0:msgs" action="#{maestroController.onAddNew}" 
+                                     oncomplete="PF('cargos1').addRow();"/>
+                </div>
+            </div>
+        </h:panelGrid>
+    </cc:implementation>
+</html>

@@ -18,7 +18,8 @@
             <p:message for="esp"/>
             
             <p:outputLabel for="escal" value="Tiene escalafón: "/>
-            <p:inputText id="escal" value="#{cc.attrs.maestro.maestroSinEscalafon}" required="true"/>
+            <p:selectBooleanButton id="escal" value="#{cc.attrs.maestro.maestroSinEscalafon}" 
+                                   onLabel="Sí" offLabel="No" style="width:60px" required="true"/>
             <p:message for="escal"/>
             
             <p:outputLabel for="turno" value="Turno"/>
@@ -30,7 +31,8 @@
             <p:message for="sal"/>
             
             <p:outputLabel for="tec" value="Le ha sido útil la tecnología en la enseñanza? "/>
-            <p:inputText id="tec" value="#{cc.attrs.maestro.maestroUtilidadTecnologica}" required="true"/>
+            <p:selectBooleanButton id="tec" value="#{cc.attrs.maestro.maestroUtilidadTecnologica}" 
+                                   onLabel="Sí" offLabel="No" style="width:60px" required="true"/>
             <p:message for="tec"/>
             
             <p:outputLabel for="horas" value="Horas a la semana que usa tecnología en la enseñanza: "/>
@@ -38,15 +40,18 @@
             <p:message for="horas"/>
             
             <p:outputLabel for="video" value="Ha usado videoconferencias? "/>
-            <p:inputText id="video" value="#{cc.attrs.maestro.maestroUsoVideoconferencias}" required="true"/>
+            <p:selectBooleanButton id="video" value="#{cc.attrs.maestro.maestroUsoVideoconferencias}" 
+                                   onLabel="Sí" offLabel="No" style="width:60px" required="true"/>
             <p:message for="video"/>
             
             <p:outputLabel for="rec" value="Puede usar recursos web (Navegador, Internet, ...)?"/>
-            <p:inputText id="rec" value="#{cc.attrs.maestro.maestroRecursosWeb}" required="true"/>
+            <p:selectBooleanButton id="rec" value="#{cc.attrs.maestro.maestroRecursosWeb}" 
+                                   onLabel="Sí" offLabel="No" style="width:60px" required="true"/>
             <p:message for="rec"/>
             
             <p:outputLabel for="capa" value="Tiene capacitaciones Virtuales? "/>
-            <p:inputText id="capa" value="#{cc.attrs.maestro.maestroCapacitacionesVirtuales}" required="true"/>
+            <p:selectBooleanButton id="capa" value="#{cc.attrs.maestro.maestroCapacitacionesVirtuales}" 
+                                   onLabel="Sí" offLabel="No" style="width:60px" required="true"/>
             <p:message for="capa"/>
         </h:panelGrid>
     </cc:implementation>

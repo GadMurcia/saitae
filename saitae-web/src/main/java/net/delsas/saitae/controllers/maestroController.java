@@ -17,15 +17,20 @@
 package net.delsas.saitae.controllers;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import net.delsas.prueba;
 import net.delsas.saitae.beans.MaestroFacadeLocal;
+import net.delsas.saitae.entities.MaestoCargo;
 import net.delsas.saitae.entities.Maestro;
 import org.primefaces.event.FlowEvent;
+import org.primefaces.event.RowEditEvent;
 
 /**
  *
@@ -45,7 +50,7 @@ public class maestroController implements Serializable {
      */
     @PostConstruct
     public void init() {
-        auxiliar=new prueba();
+        auxiliar = new prueba();
         maestro = auxiliar.getMaestro().getMaestro();
     }
 
@@ -88,9 +93,34 @@ public class maestroController implements Serializable {
     public List<SelectItem> getDepartamentosLista() {
         return (new prueba()).getDepartamentoLista(maestro.getPersona());
     }
-    
+
     public String onFlowProcess(FlowEvent event) {
         return event.getNewStep();
+    }
+
+    public void onRowEdit(RowEditEvent event) {
+        MaestoCargo mc = (MaestoCargo) event.getObject();
+        maestro.getMaestoCargoList().remove(index);
+        maestro.getMaestoCargoList().add(mc);
+        FacesMessage msg = new FacesMessage("Car Edited", "");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void onRowCancel(RowEditEvent event) {
+        MaestoCargo mc = (MaestoCargo) event.getObject();
+        if (mc.getCargo().getIdcargo() != null | mc.getCargo().getIdcargo() > 0) {
+            maestro.getMaestoCargoList().remove(mc);
+        }
+        FacesMessage msg = new FacesMessage("Edit Cancelled", "");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+    int index=0;
+    public void onAddNew() {
+        MaestoCargo mc =new MaestoCargo(0, 0, 0, 0, Calendar.getInstance().getTime());
+        maestro.getMaestoCargoList().add(mc);
+        maestro.getMaestoCargoList().indexOf(mc);
+        FacesMessage msg = new FacesMessage("New Car added", "");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
 }
