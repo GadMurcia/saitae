@@ -1,0 +1,112 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      >
+
+    <!-- INTERFACE -->
+    <cc:interface>
+        <cc:attribute name="persona" required="true" type="net.delsas.saitae.entities.Persona"/>
+        <cc:attribute name="departamentoLista" required="true"/>
+        <cc:attribute name="dui" required="true"/>
+        <cc:attribute name="departamento" required="true"/>
+        <cc:attribute name="municipio" required="true"/>
+        <cc:attribute name="municipioLista" required="true"/>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>   
+        <h:panelGrid columns="3">
+            <p:outputLabel for="dui" value="DUI: "/>
+            <p:inputMask id="dui" value="#{cc.attrs.dui}" required="true" mask="99999999-9"
+                         title="Ingrese el número de documento de identificación de la persona."/>
+            <p:message for="dui" showSummary="true" />
+
+            <p:outputLabel for="nit" value="NIT: "/>
+            <p:inputMask id="nit" value="#{cc.attrs.persona.personaNit}" required="true" mask="9999-999999-999-9" title="Ingrese nu NIT"/>
+            <p:message for="nit" showSummary="true" />              
+
+            <p:outputLabel for="nombre" value="Nombre: "/>
+            <p:inputText id="nombre" value="#{cc.attrs.persona.personaNombre}" required="true" title="Ingrese el nombre de la persona a agregar"/>
+            <p:message for="nombre" showSummary="true" />
+
+            <p:outputLabel for="apellido" value="Apellidos: "/>
+            <p:inputText id="apellido" value="#{cc.attrs.persona.personaApellido}" required="true" title="Apellidos de la persona"/>
+            <p:message for="apellido" showSummary="true" /> 
+
+            <p:outputLabel for="fecha" value="Fecha de nacimiento: "/>
+            <p:calendar id="fecha" value="#{cc.attrs.persona.personaNacimiento}" pattern="dd-MM-yyyy" mask="true" 
+                        title="Ingrese la fecha de nacimiento de la persona."/>
+            <p:message for="fecha" showSummary="true" />
+
+            <p:outputLabel for="sexo" value="Sexo: "/>
+            <p:selectOneMenu id="sexo" value="#{cc.attrs.persona.personaSexo}" style="width:125px" title="Seleccione su sexo">
+                <f:selectItem itemLabel="Seleccione" itemValue="" />
+                <f:selectItem itemLabel="Femenino" itemValue="0" />
+                <f:selectItem itemLabel="Masculino" itemValue="1" />
+            </p:selectOneMenu>
+            <p:message for="sexo" showSummary="true" />
+
+            <p:outputLabel for="ef" value="Estado Familiar: "/>
+            <p:selectOneMenu id="ef" value="#{cc.attrs.persona.personaEstadoFamiliar}" style="width:125px" 
+                             title="Seleccione el estado familiar de la persona">
+                <f:selectItem itemLabel="Seleccione" itemValue="" />
+                <f:selectItem itemLabel="Solter@" itemValue="0" />
+                <f:selectItem itemLabel="Casad@" itemValue="1" />
+                <f:selectItem itemLabel="Acompañad@" itemValue="2"/>
+            </p:selectOneMenu>
+            <p:message for="ef" showSummary="true" />           
+
+            <p:outputLabel for="nacion" value="Nacionalidad: "/>
+            <p:selectOneMenu id="nacion" value="#{cc.attrs.persona.personaNacionalidad}"  required="true"
+                             style="width:125px" label="Seleccione su nacionalidad">
+                <f:selectItem itemLabel="Seleccione" itemValue="9" />
+                <f:selectItem itemLabel="Salvadoreña" itemValue="Salvadoreña" />
+                <f:selectItem itemLabel="Extrangera" itemValue="Extrangera" />
+                <p:ajax update="dep mun"/>
+            </p:selectOneMenu>
+            <p:message for="nacion" showSummary="true" />
+
+            <h:outputLabel for="dep" value="Departamento de nacimiento: " />
+            <p:selectOneMenu id="dep" value="#{cc.attrs.departamento}" required="true" style="width:125px" 
+                             title="Seleccione el departamento de nacimiento">
+                <f:selectItems value="#{cc.attrs.departamentoLista}"/>
+                <p:ajax update="mun"/>
+            </p:selectOneMenu>
+            <p:column/>
+
+            <h:outputLabel for="mun" value="Municipio de nacimiento: " />
+            <p:selectOneMenu id="mun" value="#{cc.attrs.municipio}" required="true" style="width:125px" 
+                             title="Seleccione el departamento de nacimiento">
+                <f:selectItems value="#{cc.attrs.municipioLista}"/>
+            </p:selectOneMenu>
+            <p:column/>
+
+            <p:outputLabel for="zona" value="Zona de residencia: *" />
+            <p:selectOneMenu id="zona" value="#{cc.attrs.persona.personaZonaVivienda}" required="true"
+                             style="width:125px" title="Seleccione su Zona donde vive">
+                <f:selectItem itemLabel="Seleccione" itemValue="" />
+                <f:selectItem itemLabel="Rural" itemValue="0" />
+                <f:selectItem itemLabel="Urbana" itemValue="1" />
+            </p:selectOneMenu>
+            <p:messages for="zona" showSummary="true"/>
+
+            <p:outputLabel for="cod" value="Código de residencia: "/>
+            <p:inputText id="cod" value="#{cc.attrs.persona.personaCodigoResidencia}" 
+                         required="true"/>
+            <p:message for="cod" showSummary="true" />
+
+            <p:outputLabel for="titulo" value="Profesión: "/>
+            <p:inputText id="titulo" value="#{cc.attrs.persona.personaOCupacion}" required="true" type="text" title="Ingrese la profesión de la persona."/>
+            <p:message for="titulo" showSummary="true" />
+
+            <p:outputLabel for="disca" value="Discapacidades: " />
+            <p:inputText id="disca" value="#{cc.attrs.persona.personaDiscapacidades}" type="text"
+                         title="Si tiene alguna discapacidad, escríbalas separadas por comas"/>
+            <p:column/> 
+        </h:panelGrid> 
+    </cc:implementation>
+</html>

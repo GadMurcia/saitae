@@ -17,11 +17,15 @@
 package net.delsas.saitae.controllers;
 
 import java.io.Serializable;
+import java.util.List;
+import javax.annotation.PostConstruct;
+import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import net.delsas.prueba;
 import net.delsas.saitae.beans.MaestroFacadeLocal;
-import net.delsas.saitae.entities.MaestoCargo;
 import net.delsas.saitae.entities.Maestro;
+import org.primefaces.event.FlowEvent;
 
 /**
  *
@@ -29,17 +33,64 @@ import net.delsas.saitae.entities.Maestro;
  */
 @Named(value = "maestroController")
 @ViewScoped
-public class maestroController implements Serializable{
+public class maestroController implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    private prueba auxiliar;
     private Maestro maestro;
     private MaestroFacadeLocal mfl;
-    private MaestoCargo cargo;
 
     /**
      * Creates a new instance of maestro
      */
-    public maestroController() {
+    @PostConstruct
+    public void init() {
+        auxiliar=new prueba();
+        maestro = auxiliar.getMaestro().getMaestro();
+    }
+
+    public Maestro getMaestro() {
+        return maestro;
+    }
+
+    public void setMaestro(Maestro maestro) {
+        this.maestro = maestro;
+    }
+
+    public void setDepartamento(String dep) {
+        auxiliar.setDepartamento(dep, maestro.getPersona());
+    }
+
+    public String getDepartamento() {
+        return auxiliar.getDepartamento(maestro.getPersona());
+    }
+
+    public void setMunicipio(String mun) {
+        auxiliar.setMunicipio(mun, maestro.getPersona());
+    }
+
+    public String getMunicipio() {
+        return auxiliar.getMunicipio(maestro.getPersona());
+    }
+
+    public void setDui(String dui) {
+        auxiliar.setDui(dui, maestro.getPersona());
+    }
+
+    public String getDui() {
+        return auxiliar.getDui(maestro.getPersona());
+    }
+
+    public List<SelectItem> getMunicipiosLista() {
+        return (new prueba()).getMunicipioLista(getDepartamento(), maestro.getPersona());
+    }
+
+    public List<SelectItem> getDepartamentosLista() {
+        return (new prueba()).getDepartamentoLista(maestro.getPersona());
     }
     
+    public String onFlowProcess(FlowEvent event) {
+        return event.getNewStep();
+    }
+
 }

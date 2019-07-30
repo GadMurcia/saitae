@@ -30,7 +30,7 @@
     </context-param>
     <context-param>
         <param-name>primefaces.FONT_AWESOME</param-name>
-        <param-value>true</param-value>        
+        <param-value>true</param-value>
     </context-param>
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
@@ -42,9 +42,7 @@
         <url-pattern>*.intex</url-pattern>
     </servlet-mapping>
     <session-config>
-        <session-timeout>
-            10
-        </session-timeout>
+        <session-timeout>20</session-timeout>
     </session-config>
     <welcome-file-list>
         <welcome-file>index.intex</welcome-file>
@@ -105,4 +103,12 @@
         <filter-name>corsonf</filter-name>
         <filter-class>net.delsas.corsonf</filter-class>
     </filter>
+    <error-page>
+        <exception-type>org.jboss.weld.contexts.ContextNotActiveException</exception-type>
+        <location>/index.intex</location>
+    </error-page>    
+    <error-page>
+        <exception-type>javax.faces.application.ViewExpiredException</exception-type>
+        <location>/index.intex</location>
+    </error-page>
 </web-app>
