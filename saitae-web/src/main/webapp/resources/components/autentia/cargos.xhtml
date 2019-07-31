@@ -20,29 +20,41 @@
                     Cargos que ostenta #{maestroController.maestro.persona.personaNombre}
                 </f:facet>
 
-                <p:ajax event="rowEdit" listener="#{maestroController.onRowEdit}" update=":form:msgs" />
-                <p:ajax event="rowEditCancel" listener="#{maestroController.onRowCancel}" update=":form:msgs" />
+                <p:ajax event="rowEdit" listener="#{maestroController.onRowEdit}" update=":form0:msgs" />
+                <p:ajax event="rowEditCancel" listener="#{maestroController.onRowCancel}" update=":form0:msgs" />
 
                 <p:column headerText="cargo">
                     <p:cellEditor>
                         <f:facet name="output"><h:outputText value="#{c.cargo.cargoNombre}" /></f:facet>
                         <f:facet name="input">
-                            <h:selectOneMenu value="#{c.cargo}" style="width:100%">
+                            <p:selectOneMenu value="#{c.cargo.idcargo}" style="width:100%">
                                 <f:selectItems value="#{tipoController.cargo}" var="tc" 
-                                               itemLabel="#{tc.cargoNombre}" itemValue="#{tc}"/>
-                            </h:selectOneMenu>
+                                               itemLabel="#{tc.cargoNombre}" itemValue="#{tc.idcargo}"/>
+                            </p:selectOneMenu>
                         </f:facet>
                     </p:cellEditor>
                 </p:column>
 
-                <p:column headerText="Color">
+                <p:column headerText="Tipo deNombramiento">
                     <p:cellEditor>
                         <f:facet name="output"><h:outputText value="#{c.tipoNombramiento.tipoNombramientoNombre}" /></f:facet>
                         <f:facet name="input">
-                            <h:selectOneMenu value="#{c.tipoNombramiento}" style="width:100%">
+                            <p:selectOneMenu value="#{c.tipoNombramiento.idtipoNombramiento}" style="width:100%">
                                 <f:selectItems value="#{tipoController.nombramientos}" 
-                                               var="n" itemLabel="#{n.tipoNombramientoNombre}" itemValue="#{n}" />
-                            </h:selectOneMenu>
+                                               var="n" itemLabel="#{n.tipoNombramientoNombre}" itemValue="#{n.idtipoNombramiento}" />
+                            </p:selectOneMenu>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                
+                <p:column headerText="Fuente de financiamiento">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{c.financiamiento.financiamientoNombre}" /></f:facet>
+                        <f:facet name="input">
+                            <p:selectOneMenu value="#{c.financiamiento.idfinanciamiento}" style="width:100%">
+                                <f:selectItems value="#{tipoController.financiamientos}" 
+                                               var="f" itemLabel="#{f.financiamientoNombre}" itemValue="#{f.idfinanciamiento}"/>
+                            </p:selectOneMenu>
                         </f:facet>
                     </p:cellEditor>
                 </p:column>
@@ -54,7 +66,7 @@
 
             <div class="ui-g">
                 <div class="ui-g-12">
-                    <p:commandButton value="Add new row" styleClass="ui-priority-primary" process="@this" 
+                    <p:commandButton value="+" styleClass="ui-priority-primary" process="@this" 
                                      update=":form0:msgs" action="#{maestroController.onAddNew}" 
                                      oncomplete="PF('cargos1').addRow();"/>
                 </div>

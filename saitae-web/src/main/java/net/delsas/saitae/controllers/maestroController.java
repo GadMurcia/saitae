@@ -17,18 +17,36 @@
 package net.delsas.saitae.controllers;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import net.delsas.prueba;
+import net.delsas.saitae.beans.CargoFacadeLocal;
+import net.delsas.saitae.beans.FinanciamientoFacadeLocal;
+import net.delsas.saitae.beans.MaestoCargoFacadeLocal;
 import net.delsas.saitae.beans.MaestroFacadeLocal;
+import net.delsas.saitae.beans.PersonaFacadeLocal;
+import net.delsas.saitae.beans.TipoNombramientoFacadeLocal;
+import net.delsas.saitae.entities.Capacitaciones;
+import net.delsas.saitae.entities.Cargo;
+import net.delsas.saitae.entities.EvaluacionMaestro;
+import net.delsas.saitae.entities.Financiamiento;
+import net.delsas.saitae.entities.Grado;
 import net.delsas.saitae.entities.MaestoCargo;
+import net.delsas.saitae.entities.MaestoCargoPK;
 import net.delsas.saitae.entities.Maestro;
+import net.delsas.saitae.entities.MestroHorarioMaterias;
+import net.delsas.saitae.entities.Persona;
+import net.delsas.saitae.entities.TipoNombramiento;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.primefaces.PrimeFaces;
 import org.primefaces.event.FlowEvent;
 import org.primefaces.event.RowEditEvent;
 
@@ -43,7 +61,18 @@ public class maestroController implements Serializable {
     private static final long serialVersionUID = 1L;
     private prueba auxiliar;
     private Maestro maestro;
+    @EJB
     private MaestroFacadeLocal mfl;
+    @EJB
+    private FinanciamientoFacadeLocal ffl;
+    @EJB
+    private CargoFacadeLocal cfl;
+    @EJB
+    private TipoNombramientoFacadeLocal tnfl;
+    @EJB
+    private PersonaFacadeLocal pfl;
+    @EJB
+    private MaestoCargoFacadeLocal mcfl;
 
     /**
      * Creates a new instance of maestro
@@ -80,6 +109,7 @@ public class maestroController implements Serializable {
 
     public void setDui(String dui) {
         auxiliar.setDui(dui, maestro.getPersona());
+        maestro.setIdmaestro(maestro.getPersona().getIdpersona());
     }
 
     public String getDui() {
@@ -87,11 +117,11 @@ public class maestroController implements Serializable {
     }
 
     public List<SelectItem> getMunicipiosLista() {
-        return (new prueba()).getMunicipioLista(getDepartamento(), maestro.getPersona());
+        return auxiliar.getMunicipioLista(getDepartamento(), maestro.getPersona());
     }
 
     public List<SelectItem> getDepartamentosLista() {
-        return (new prueba()).getDepartamentoLista(maestro.getPersona());
+        return auxiliar.getDepartamentoLista(maestro.getPersona());
     }
 
     public String onFlowProcess(FlowEvent event) {
@@ -100,9 +130,18 @@ public class maestroController implements Serializable {
 
     public void onRowEdit(RowEditEvent event) {
         MaestoCargo mc = (MaestoCargo) event.getObject();
+        mc.setCargo(cfl.find(mc.getCargo().getIdcargo()));
+        mc.setFinanciamiento(ffl.find(mc.getFinanciamiento().getIdfinanciamiento()));
+        mc.setTipoNombramiento(tnfl.find(mc.getTipoNombramiento().getIdtipoNombramiento()));
+        mc.getMaestoCargoPK().setIdCargo(mc.getCargo().getIdcargo());
+        mc.getMaestoCargoPK().setIdFinanciamiento(mc.getFinanciamiento().getIdfinanciamiento());
+        mc.getMaestoCargoPK().setIdNombramiento(mc.getTipoNombramiento().getIdtipoNombramiento());
+        mc.getMaestoCargoPK().setIdMaesto(maestro.getIdmaestro());
         maestro.getMaestoCargoList().remove(index);
+        index = -1;
         maestro.getMaestoCargoList().add(mc);
-        FacesMessage msg = new FacesMessage("Car Edited", "");
+        FacesMessage msg = new FacesMessage("Modificaciones realizadas con éxito",
+                "Modificado: " + mc.getCargo().getCargoNombre());
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
@@ -111,16 +150,41 @@ public class maestroController implements Serializable {
         if (mc.getCargo().getIdcargo() != null | mc.getCargo().getIdcargo() > 0) {
             maestro.getMaestoCargoList().remove(mc);
         }
-        FacesMessage msg = new FacesMessage("Edit Cancelled", "");
+        FacesMessage msg = new FacesMessage("Edición Cancelada", "Borrados los campos vacíos.");
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
-    int index=0;
+    private int index = 0;
+
     public void onAddNew() {
-        MaestoCargo mc =new MaestoCargo(0, 0, 0, 0, Calendar.getInstance().getTime());
+        MaestoCargo mc = new MaestoCargo(0, 0, 0, 0, Calendar.getInstance().getTime());
+        mc.setCargo(new Cargo(0, ""));
+        mc.setFinanciamiento(new Financiamiento(0, ""));
+        mc.setTipoNombramiento(new TipoNombramiento(0, ""));
+        mc.setMaestro(maestro);
         maestro.getMaestoCargoList().add(mc);
-        maestro.getMaestoCargoList().indexOf(mc);
+        index = maestro.getMaestoCargoList().indexOf(mc);
         FacesMessage msg = new FacesMessage("New Car added", "");
         FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void guardar() {
+        try {
+            maestro.getPersona().setPersonaContrasenya(DigestUtils.md5Hex(auxiliar.getDui(maestro.getPersona())));
+            maestro.setMaestrocolTelefonoResidencia(maestro.getPersona().getMaestro().getMaestrocolTelefonoResidencia());
+            Persona p = maestro.getPersona();
+            p.setMaestro(null);
+            pfl.edit(p);
+            mfl.edit(maestro);
+            init();
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("mensaje",
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Guardado con éxito",
+                            "Los datos de " + maestro.getPersona().getPersonaNombre()
+                            + " han sido guardados con éxito."));
+            FacesContext.getCurrentInstance().getExternalContext().redirect("agregacion.intex");
+        } catch (Exception o) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
+                    FacesMessage.SEVERITY_FATAL, "Error al intentar guardar", o.getMessage()));
+        }
     }
 
 }

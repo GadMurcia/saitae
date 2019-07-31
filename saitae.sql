@@ -35,7 +35,7 @@ CREATE TABLE `acceso` (
   UNIQUE KEY `idacceso_UNIQUE` (`idacceso`),
   KEY `fk_acceso_1_idx` (`accesoIndice`),
   CONSTRAINT `fk_acceso_1` FOREIGN KEY (`accesoIndice`) REFERENCES `acceso` (`idacceso`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -44,7 +44,7 @@ CREATE TABLE `acceso` (
 
 LOCK TABLES `acceso` WRITE;
 /*!40000 ALTER TABLE `acceso` DISABLE KEYS */;
-INSERT INTO `acceso` VALUES (9,'Configuración',NULL,'#','pi pi-key'),(10,'Tipos del sistema',9,'tipopp.intex','pi pi-folder-open'),(11,'Materia',9,'materia.intex','pi pi-th-large'),(12,'Aulas',9,'aulas.intex','pi pi-circle-on'),(13,'Perfil',NULL,'#','pi pi-user'),(14,'Permisos',NULL,'#','pi pi-eye'),(15,'Solicitar Permiso',14,'permiso.intex','pi pi-briefcase');
+INSERT INTO `acceso` VALUES (9,'Configuración',NULL,'#','pi pi-key'),(10,'Tipos del sistema',9,'tipopp.intex','pi pi-folder-open'),(11,'Materia',9,'materia.intex','pi pi-th-large'),(12,'Aulas',9,'aulas.intex','pi pi-circle-on'),(13,'Perfil',NULL,'#','pi pi-user'),(14,'Permisos',NULL,'#','pi pi-eye'),(15,'Solicitar Permiso',14,'permiso.intex','pi pi-briefcase'),(16,'Personal',NULL,'#','pi pi-users'),(17,'Agregar Maestro',16,'agregacion.intex','pi pi-user-plus'),(18,'Agregar Administrador',NULL,'#','pi pi-plus');
 /*!40000 ALTER TABLE `acceso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -72,7 +72,7 @@ CREATE TABLE `accesoTipoPersona` (
 
 LOCK TABLES `accesoTipoPersona` WRITE;
 /*!40000 ALTER TABLE `accesoTipoPersona` DISABLE KEYS */;
-INSERT INTO `accesoTipoPersona` VALUES (9,1,''),(9,2,''),(10,1,''),(10,2,''),(11,1,''),(11,2,''),(12,1,''),(12,2,''),(13,1,''),(13,8,''),(14,1,''),(14,8,''),(15,8,'');
+INSERT INTO `accesoTipoPersona` VALUES (9,1,''),(9,2,''),(10,1,''),(10,2,''),(11,1,''),(11,2,''),(12,1,''),(12,2,''),(13,8,''),(14,8,''),(15,8,''),(16,1,''),(17,1,''),(18,1,'');
 /*!40000 ALTER TABLE `accesoTipoPersona` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -227,7 +227,7 @@ CREATE TABLE `cargo` (
   `cargoNombre` varchar(50) NOT NULL COMMENT 'Lista de los cargos que el personal docente puede desempeñar.',
   `cargoComentario` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idcargo`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -236,6 +236,7 @@ CREATE TABLE `cargo` (
 
 LOCK TABLES `cargo` WRITE;
 /*!40000 ALTER TABLE `cargo` DISABLE KEYS */;
+INSERT INTO `cargo` VALUES (1,'Director',''),(2,'Profesor',''),(3,'Subdirector',''),(4,'Profesor Auxiliar',''),(5,'Coordinador de área',''),(6,'Psicólogo','');
 /*!40000 ALTER TABLE `cargo` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -694,11 +695,11 @@ DROP TABLE IF EXISTS `financiamiento`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `financiamiento` (
-  `idfinanciamiento` int(11) NOT NULL,
+  `idfinanciamiento` int(11) NOT NULL AUTO_INCREMENT,
   `financiamientoNombre` varchar(45) NOT NULL,
   `financiamientoComentario` varchar(145) DEFAULT NULL COMMENT 'Lista de las formas en las que se fiancea el pago de los cargos de los docentes.',
   PRIMARY KEY (`idfinanciamiento`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -707,6 +708,7 @@ CREATE TABLE `financiamiento` (
 
 LOCK TABLES `financiamiento` WRITE;
 /*!40000 ALTER TABLE `financiamiento` DISABLE KEYS */;
+INSERT INTO `financiamiento` VALUES (1,'MINED',NULL),(2,'CDE',NULL),(3,'Alcaldía',NULL),(4,'ONG',NULL);
 /*!40000 ALTER TABLE `financiamiento` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -846,6 +848,7 @@ CREATE TABLE `maestoCargo` (
 
 LOCK TABLES `maestoCargo` WRITE;
 /*!40000 ALTER TABLE `maestoCargo` DISABLE KEYS */;
+INSERT INTO `maestoCargo` VALUES (1111111111,2,1,1,'2019-07-30',NULL,NULL,NULL),(1111111111,3,2,2,'2019-07-30',NULL,NULL,NULL),(1111111111,4,3,3,'2019-07-30',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `maestoCargo` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -893,6 +896,7 @@ CREATE TABLE `maestro` (
 
 LOCK TABLES `maestro` WRITE;
 /*!40000 ALTER TABLE `maestro` DISABLE KEYS */;
+INSERT INTO `maestro` VALUES (1111111111,89,898989,8989898,9898989,898989,89898,1,'9898989',8989898,'2222-2222','Informática','2019-07-30','2019-07-30','2019-07-30','T','98','','Sueldo Base','',0,'','','','');
 /*!40000 ALTER TABLE `maestro` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -911,7 +915,7 @@ CREATE TABLE `materia` (
   PRIMARY KEY (`idmateria`),
   KEY `fk_materia_1_idx` (`tipoMateria`),
   CONSTRAINT `fk_materia_1` FOREIGN KEY (`tipoMateria`) REFERENCES `tipoMateria` (`idtipoMateria`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -920,7 +924,7 @@ CREATE TABLE `materia` (
 
 LOCK TABLES `materia` WRITE;
 /*!40000 ALTER TABLE `materia` DISABLE KEYS */;
-INSERT INTO `materia` VALUES (1,'Educación para la vida',2,'');
+INSERT INTO `materia` VALUES (1,'Matemática',1,''),(2,'Lenguaje',1,''),(3,'Inglés',1,''),(4,'Informática',1,''),(5,'Estudios Sociales',1,''),(6,'Educación Físiaca',1,''),(7,'Ciencias Naturales',1,''),(8,'Moral, Urbanidad y Cívica',1,''),(9,'Orientación Para La Vida',2,''),(10,'Seminario',2,''),(11,'Curso de Habilidad Laboral',2,''),(12,'Tecnología I',3,''),(13,'Tecnología II',3,''),(14,'Tecnología III',3,''),(15,'Práctica Profesional I',3,''),(16,'Práctica Profesional II',3,''),(17,'Práctica Profesional III',3,''),(18,'Laboratorio de Creatividad I',3,''),(19,'Laboratorio de Creatividad II',3,''),(20,'Laboratorio de Creatividad III',3,''),(21,'Contaduría',4,''),(22,'General',4,'');
 /*!40000 ALTER TABLE `materia` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1126,7 +1130,7 @@ CREATE TABLE `persona` (
 
 LOCK TABLES `persona` WRITE;
 /*!40000 ALTER TABLE `persona` DISABLE KEYS */;
-INSERT INTO `persona` VALUES (1045367073,'Guillermo','Delsas',NULL,NULL,NULL,NULL,NULL,NULL,'02951a6cb9595ef475fed783e59c687e','Ingeniero',1,'',NULL,'\0',NULL,NULL,NULL,NULL,NULL),(1045367074,'Director','Directivo',NULL,NULL,NULL,NULL,NULL,NULL,'02951a6cb9595ef475fed783e59c687e','Director',2,'',NULL,'',NULL,NULL,NULL,NULL,NULL),(1045367075,'Estudiante','Estudioso',NULL,NULL,NULL,NULL,NULL,NULL,'02951a6cb9595ef475fed783e59c687e','Estudiante',8,'',NULL,'',NULL,NULL,NULL,NULL,NULL),(1888888888,'padre padre1','padre2 padre3',NULL,NULL,NULL,NULL,NULL,NULL,'02951a6cb9595ef475fed783e59c687e',NULL,11,'\0',NULL,NULL,NULL,NULL,NULL,NULL,NULL),(1999999999,'representante','apellidos','1980-01-25','la dirección del representante','7999-9999',NULL,0,'Santa Ana#Texistepeque','02951a6cb9595ef475fed783e59c687e',NULL,9,'','9999-999999-999-9','\0',1,'parentesco','representante@correo.com',NULL,NULL);
+INSERT INTO `persona` VALUES (1045367073,'Guillermo','Delsas',NULL,NULL,NULL,NULL,NULL,NULL,'02951a6cb9595ef475fed783e59c687e','Ingeniero',1,'',NULL,'\0',NULL,NULL,NULL,NULL,NULL),(1045367074,'Director','Directivo',NULL,NULL,NULL,NULL,NULL,NULL,'02951a6cb9595ef475fed783e59c687e','Director',2,'',NULL,'',NULL,NULL,NULL,NULL,NULL),(1045367075,'Estudiante','Estudioso',NULL,NULL,NULL,NULL,NULL,NULL,'02951a6cb9595ef475fed783e59c687e','Estudiante',8,'',NULL,'',NULL,NULL,NULL,NULL,NULL),(1111111111,'Quintus Sestus','Septimus Octavios','1991-02-17','878787878787878','7777-7777',0,0,' #9','bbb8aae57c104cda40c93843ad5e6db8','Primus Secuntus Tercius',4,'','1111-111111-111-1','\0',0,'Extrangera','878788888888888','',''),(1888888888,'padre padre1','padre2 padre3',NULL,NULL,NULL,NULL,NULL,NULL,'02951a6cb9595ef475fed783e59c687e',NULL,11,'\0',NULL,NULL,NULL,NULL,NULL,NULL,NULL),(1999999999,'representante','apellidos','1980-01-25','la dirección del representante','7999-9999',NULL,0,'Santa Ana#Texistepeque','02951a6cb9595ef475fed783e59c687e',NULL,9,'','9999-999999-999-9','\0',1,'parentesco','representante@correo.com',NULL,NULL);
 /*!40000 ALTER TABLE `persona` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1396,7 +1400,7 @@ CREATE TABLE `tipoMateria` (
 
 LOCK TABLES `tipoMateria` WRITE;
 /*!40000 ALTER TABLE `tipoMateria` DISABLE KEYS */;
-INSERT INTO `tipoMateria` VALUES (1,'Generales',NULL),(2,'Optativas',NULL),(3,'Tecnologicas',NULL),(4,'Contaduría',NULL);
+INSERT INTO `tipoMateria` VALUES (1,'Área Básica',NULL),(2,'Área Aplicada',NULL),(3,'Área Técnica',NULL),(4,'Modalidad y Opciones',NULL);
 /*!40000 ALTER TABLE `tipoMateria` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1463,7 +1467,7 @@ CREATE TABLE `tipoPersona` (
   `tipoPersonaNombre` varchar(45) NOT NULL,
   `tipoPersonaComentario` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idtipoPersona`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1472,7 +1476,7 @@ CREATE TABLE `tipoPersona` (
 
 LOCK TABLES `tipoPersona` WRITE;
 /*!40000 ALTER TABLE `tipoPersona` DISABLE KEYS */;
-INSERT INTO `tipoPersona` VALUES (1,'Administrador',NULL),(2,'Director',NULL),(8,'Estudiante',NULL),(9,'Representante',NULL),(10,'Madre de familia',NULL),(11,'Padre de familia',NULL);
+INSERT INTO `tipoPersona` VALUES (1,'Administrador',''),(2,'Director',''),(3,'Subdirector',''),(4,'Maestro',''),(5,'Bibliotecario',''),(6,'Administrador CRA',''),(7,'Laboratorista',''),(8,'Estudiante',''),(9,'Representante',''),(10,'Madre de familia',''),(11,'Padre de familia','');
 /*!40000 ALTER TABLE `tipoPersona` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1623,4 +1627,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-07-25  0:41:47
+-- Dump completed on 2019-07-30 19:23:57

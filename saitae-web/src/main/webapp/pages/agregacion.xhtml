@@ -8,7 +8,7 @@
     <body>
         <ui:composition template="./../WEB-INF/template/plantilla1.xhtml">
             <ui:define name="content">
-                <h:form>
+                <h:form id="form1">
                     <style type="text/css">
                         .label {
                             width:20%;
@@ -47,24 +47,25 @@
                                            persona="#{maestroController.maestro.persona}"/>
                             </p:panel>
                         </p:tab>
-
                         <p:tab id="address" title="Contacto">
                             <p:panel header="Información de Constacto.">
                                 <t:persona1 persona="#{maestroController.maestro.persona}"/>
                             </p:panel>
                         </p:tab>
-
                         <p:tab id="contact" title="Profesional">
                             <p:panel header="Información Profesional.">
                                 <t:maestro maestro="#{maestroController.maestro}"/>
                             </p:panel>
                         </p:tab>
-
                         <p:tab id="confirm" title="Contratación">
                             <p:panel header="Información de Contratación.">
                                 <t:maestro1 maestro="#{maestroController.maestro}"/>
-                                <p:commandButton value="Submit" update=":form0:msgs" process="@this"/>
                             </p:panel>
+                        </p:tab>
+                        <p:tab title="Cargos Ostentados">
+                            <t:cargos id="cargos"/>
+                            <p:commandButton value="Guardar" update=":form0:msgs" process="@this"
+                                             actionListener="#{maestroController.guardar()}"/>
                         </p:tab>
                     </p:wizard>
                 </h:form>

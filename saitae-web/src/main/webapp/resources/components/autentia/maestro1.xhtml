@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:cc="http://xmlns.jcp.org/jsf/composite"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <!-- INTERFACE -->
     <cc:interface>
@@ -14,41 +15,61 @@
     <cc:implementation>
         <h:panelGrid columns="3">
             <p:outputLabel for="esp" value="Especialidad: "/>
-            <p:inputText id="esp" value="#{cc.attrs.maestro.maestroEspecialidad}" required="true"/>
+            <p:selectOneMenu id="esp" value="#{cc.attrs.maestro.maestroEspecialidad}" required="true" 
+                             style="width:100%" effect="fold" editable="true" >
+                <f:selectItem itemLabel="Matemáticas" itemValue="Matemáticas"/>
+                <f:selectItem itemLabel="Ciencias Naturales" itemValue="Ciencias Naturales"/>
+                <f:selectItem itemLabel="Educación Física" itemValue="Educación Física"/>
+                <f:selectItem itemLabel="Ciencias de la Educación" itemValue="Ciencias de la Educación"/>
+                <f:selectItem itemLabel="Lenguaje" itemValue="Lenguaje"/>
+                <f:selectItem itemLabel="Ciencias Sociales" itemValue="Ciencias Sociales"/>
+                <f:selectItem itemLabel="Administración y Ciencias Comerciales" itemValue="Administración y Ciencias Comerciales"/>
+                <f:selectItem itemLabel="Inglés" itemValue="Inglés"/>
+                <f:selectItem itemLabel="Informática" itemValue="Informática"/>
+                <f:selectItem itemLabel="Otro" itemValue="Otro"/>
+            </p:selectOneMenu>
             <p:message for="esp"/>
-            
+
             <p:outputLabel for="escal" value="Tiene escalafón: "/>
             <p:selectBooleanButton id="escal" value="#{cc.attrs.maestro.maestroSinEscalafon}" 
                                    onLabel="Sí" offLabel="No" style="width:60px" required="true"/>
             <p:message for="escal"/>
-            
+
             <p:outputLabel for="turno" value="Turno"/>
-            <p:inputText id="turno" value="#{cc.attrs.maestro.maestroTurno}" required="true"/>
+            <p:selectOneMenu id="turno" value="#{cc.attrs.maestro.maestroTurno}" required="true" style="width:100%">
+                <f:selectItem itemLabel="Todo el día" itemValue="T"/>
+                <f:selectItem itemLabel="Mañana" itemValue="M"/>
+                <f:selectItem itemLabel="Tarde" itemValue="V"/>
+            </p:selectOneMenu>
             <p:message for="turno"/>
-            
+
             <p:outputLabel for="sal" value="Tipo de salario: "/>
-            <p:inputText id="sal" value="#{cc.attrs.maestro.maestroTipoSalario}" required="true"/>
+            <p:selectOneMenu id="sal" value="#{cc.attrs.maestro.maestroTipoSalario}" required="true" style="width:100%">
+                <f:selectItem itemLabel="Sueldo Base" itemValue="Sueldo Base"/>
+                <f:selectItem itemLabel="Horas clases" itemValue="Horas clases"/>
+                <f:selectItem itemLabel="Ad honorem" itemValue="Ad honorem"/>
+            </p:selectOneMenu>
             <p:message for="sal"/>
-            
+
             <p:outputLabel for="tec" value="Le ha sido útil la tecnología en la enseñanza? "/>
             <p:selectBooleanButton id="tec" value="#{cc.attrs.maestro.maestroUtilidadTecnologica}" 
                                    onLabel="Sí" offLabel="No" style="width:60px" required="true"/>
             <p:message for="tec"/>
-            
+
             <p:outputLabel for="horas" value="Horas a la semana que usa tecnología en la enseñanza: "/>
             <p:inputText id="horas" value="#{cc.attrs.maestro.maestroHorasUsoTecnologia}" required="true"/>
             <p:message for="horas"/>
-            
+
             <p:outputLabel for="video" value="Ha usado videoconferencias? "/>
             <p:selectBooleanButton id="video" value="#{cc.attrs.maestro.maestroUsoVideoconferencias}" 
                                    onLabel="Sí" offLabel="No" style="width:60px" required="true"/>
             <p:message for="video"/>
-            
+
             <p:outputLabel for="rec" value="Puede usar recursos web (Navegador, Internet, ...)?"/>
             <p:selectBooleanButton id="rec" value="#{cc.attrs.maestro.maestroRecursosWeb}" 
                                    onLabel="Sí" offLabel="No" style="width:60px" required="true"/>
             <p:message for="rec"/>
-            
+
             <p:outputLabel for="capa" value="Tiene capacitaciones Virtuales? "/>
             <p:selectBooleanButton id="capa" value="#{cc.attrs.maestro.maestroCapacitacionesVirtuales}" 
                                    onLabel="Sí" offLabel="No" style="width:60px" required="true"/>
