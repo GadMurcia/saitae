@@ -8,6 +8,7 @@
     <!-- INTERFACE -->
     <cc:interface>
         <cc:attribute name="persona" type="net.delsas.saitae.entities.Persona" required="true"/>
+        <cc:attribute name="maestro" type="net.delsas.saitae.entities.Maestro" required="true"/>
     </cc:interface>
 
     <!-- IMPLEMENTATION -->
@@ -22,7 +23,7 @@
             <p:message for="telefono" showSummary="true" />
             
             <p:outputLabel for="telefono1" value="Teléfono de Residencia: "/>
-            <p:inputMask id="telefono1" value="#{cc.attrs.persona.maestro.maestrocolTelefonoResidencia}" required="true" mask="9999-9999" title="Ingrese el número de reléfono de la residencia de la persona"/>
+            <p:inputMask id="telefono1" value="#{cc.attrs.maestro.maestrocolTelefonoResidencia}" required="true" mask="9999-9999" title="Ingrese el número de reléfono de la residencia de la persona"/>
             <p:message for="telefono1" showSummary="true" />
 
             <p:outputLabel for="email" value="Correo electrónico: "/>

@@ -15,14 +15,18 @@
         <cc:attribute name="departamento" required="true"/>
         <cc:attribute name="municipio" required="true"/>
         <cc:attribute name="municipioLista" required="true"/>
+        <cc:attribute name="onItemSelect" required="true"/>
     </cc:interface>
 
     <!-- IMPLEMENTATION -->
     <cc:implementation>   
         <h:panelGrid columns="3">
             <p:outputLabel for="dui" value="DUI: "/>
-            <p:inputMask id="dui" value="#{cc.attrs.dui}" required="true" mask="99999999-9"
-                         title="Ingrese el número de documento de identificación de la persona."/>
+            <p:autoComplete id="dui" value="#{cc.attrs.dui}" required="true" 
+                         title="Ingrese el número de documento de identificación de la persona."
+                         completeMethod="#{maestroController.completeText}">
+                <p:ajax event="itemSelect" listener="#{maestroController.onItemSelect}" update="form0:msgs form1" />
+        </p:autoComplete>
             <p:message for="dui" showSummary="true" />
 
             <p:outputLabel for="nit" value="NIT: "/>

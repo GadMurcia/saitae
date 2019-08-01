@@ -44,12 +44,14 @@
                                            departamentoLista="#{maestroController.departamentosLista}" 
                                            dui="#{maestroController.dui}" municipio="#{maestroController.municipio}" 
                                            municipioLista="#{maestroController.municipiosLista}" 
-                                           persona="#{maestroController.maestro.persona}"/>
+                                           persona="#{maestroController.maestro.persona}"
+                                           onItemSelect="#{maestroController.onItemSelect(event)}"/>
                             </p:panel>
                         </p:tab>
                         <p:tab id="address" title="Contacto">
                             <p:panel header="Información de Constacto.">
-                                <t:persona1 persona="#{maestroController.maestro.persona}"/>
+                                <t:persona1 persona="#{maestroController.maestro.persona}"
+                                            maestro="#{maestroController.maestro}"/>
                             </p:panel>
                         </p:tab>
                         <p:tab id="contact" title="Profesional">

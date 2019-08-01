@@ -59,7 +59,9 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Maestro.findByMaestroUsoVideoconferencias", query = "SELECT m FROM Maestro m WHERE m.maestroUsoVideoconferencias = :maestroUsoVideoconferencias")
     , @NamedQuery(name = "Maestro.findByMaestroRecursosWeb", query = "SELECT m FROM Maestro m WHERE m.maestroRecursosWeb = :maestroRecursosWeb")
     , @NamedQuery(name = "Maestro.findByMaestroCapacitacionesVirtuales", query = "SELECT m FROM Maestro m WHERE m.maestroCapacitacionesVirtuales = :maestroCapacitacionesVirtuales")
-    , @NamedQuery(name = "Maestro.findByMaestroComentario", query = "SELECT m FROM Maestro m WHERE m.maestroComentario = :maestroComentario")})
+    , @NamedQuery(name = "Maestro.findByMaestroComentario", query = "SELECT m FROM Maestro m WHERE m.maestroComentario = :maestroComentario")
+    , @NamedQuery(name = "Maestro.findByLikeIdmaestro", query = "SELECT m FROM Maestro m WHERE m.idmaestro LIKE CONCAT(:idmaestro, '%')")
+})
 public class Maestro implements Serializable {
 
     private static final long serialVersionUID = 1L;

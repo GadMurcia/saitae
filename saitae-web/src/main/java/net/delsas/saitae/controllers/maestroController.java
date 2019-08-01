@@ -34,21 +34,16 @@ import net.delsas.saitae.beans.MaestoCargoFacadeLocal;
 import net.delsas.saitae.beans.MaestroFacadeLocal;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.beans.TipoNombramientoFacadeLocal;
-import net.delsas.saitae.entities.Capacitaciones;
 import net.delsas.saitae.entities.Cargo;
-import net.delsas.saitae.entities.EvaluacionMaestro;
 import net.delsas.saitae.entities.Financiamiento;
-import net.delsas.saitae.entities.Grado;
 import net.delsas.saitae.entities.MaestoCargo;
-import net.delsas.saitae.entities.MaestoCargoPK;
 import net.delsas.saitae.entities.Maestro;
-import net.delsas.saitae.entities.MestroHorarioMaterias;
 import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.TipoNombramiento;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.primefaces.PrimeFaces;
 import org.primefaces.event.FlowEvent;
 import org.primefaces.event.RowEditEvent;
+import org.primefaces.event.SelectEvent;
 
 /**
  *
@@ -108,7 +103,8 @@ public class maestroController implements Serializable {
     }
 
     public void setDui(String dui) {
-        auxiliar.setDui(dui, maestro.getPersona());
+        String x[]= dui.split("=>");
+        auxiliar.setDui(x.length>1? x[1].substring(1) : x[0], maestro.getPersona());
         maestro.setIdmaestro(maestro.getPersona().getIdpersona());
     }
 
@@ -167,13 +163,43 @@ public class maestroController implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
+    public List<String> completeText(String query) {
+        List<String> results = new ArrayList<>();        
+        try {
+            auxiliar.setDui(query, maestro.getPersona());
+            for(Maestro m : mfl.getLikeById(maestro.getPersona().getIdpersona())){
+                results.add(m.getPersona().getPersonaNombre()+" "+m.getPersona().getPersonaApellido()+"=>"+m.getIdmaestro());
+            }
+            
+        } catch (NumberFormatException p) {
+            System.out.println(p.getMessage());
+        }
+        return results;
+    }
+
+    public void onItemSelect(SelectEvent event) {
+        try{
+        maestro=mfl.find(maestro.getIdmaestro());
+        }catch(Exception o){
+            System.out.println("Error en maestroController.onItemSelect: "+o.getMessage());
+        }
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Selected", maestro.getPersona().getPersonaNombre()));
+    }
+
     public void guardar() {
         try {
-            maestro.getPersona().setPersonaContrasenya(DigestUtils.md5Hex(auxiliar.getDui(maestro.getPersona())));
-            maestro.setMaestrocolTelefonoResidencia(maestro.getPersona().getMaestro().getMaestrocolTelefonoResidencia());
+            maestro.getPersona().setPersonaContrasenya(DigestUtils.md5Hex(auxiliar.getDui(maestro.getPersona())));maestro.setMaestrocolTelefonoResidencia(maestro.getPersona().getMaestro().getMaestrocolTelefonoResidencia());
             Persona p = maestro.getPersona();
             p.setMaestro(null);
             pfl.edit(p);
+            Maestro m1 = mfl.find(maestro.getIdmaestro());
+            if (m1 != null) {
+                for (MaestoCargo mc : m1.getMaestoCargoList()) {
+                    if (!maestro.getMaestoCargoList().contains(mc)) {
+                        mcfl.remove(mc);
+                    }
+                }
+            }
             mfl.edit(maestro);
             init();
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("mensaje",

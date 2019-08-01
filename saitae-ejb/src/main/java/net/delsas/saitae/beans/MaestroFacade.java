@@ -5,9 +5,11 @@
  */
 package net.delsas.saitae.beans;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import net.delsas.saitae.entities.Maestro;
 
 /**
@@ -27,6 +29,13 @@ public class MaestroFacade extends AbstractFacade<Maestro> implements MaestroFac
 
     public MaestroFacade() {
         super(Maestro.class);
+    }
+    
+    @Override
+    public List<Maestro> getLikeById(int id){
+        Query q = em.createNamedQuery("Maestro.findByLikeIdmaestro");
+        q.setParameter("idmaestro", id+"");
+        return q.getResultList();
     }
     
 }
