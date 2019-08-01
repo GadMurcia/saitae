@@ -17,17 +17,22 @@
 package net.delsas.saitae.controllers;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.faces.model.SelectItem;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
+import net.delsas.saitae.beans.CategoriaFacadeLocal;
 import net.delsas.saitae.beans.PaisFacadeLocal;
 import net.delsas.saitae.beans.RecursoFacadeLocal;
+import net.delsas.saitae.beans.TipoCargoFacadeLocal;
+import net.delsas.saitae.beans.TipoRecursoFacadeLocal;
+import net.delsas.saitae.entities.Categoria;
 import net.delsas.saitae.entities.Pais;
 import net.delsas.saitae.entities.Recurso;
+import net.delsas.saitae.entities.TipoCargo;
+import net.delsas.saitae.entities.TipoRecurso;
+
 
 /**
  *
@@ -39,34 +44,56 @@ public class RecursosController implements Serializable{
 
     private static final long serialVersionUID = 1L;
 
+  //Recurso  
   @EJB
   private RecursoFacadeLocal recursoFL;
-  private Recurso recurso;
+  private List<Recurso> recurso;
  
-  
+  //Pais
   @EJB
-  private PaisFacadeLocal paisFL;
+   private PaisFacadeLocal paisFL;
    private List<Pais> listaPais;
-   private Pais pais;
-   private String algo;
+  
+  
+   //Categoria
+   @EJB 
+   private CategoriaFacadeLocal categoriaFL;
+   private List<Categoria> categoria;
+   
+   //Tipo Recurso
+   @EJB
+   private TipoRecursoFacadeLocal tiporecursoFL;
+   private List<TipoRecurso> tiporecurso;
+   
+   //TipoCargo;
+   @EJB
+   private TipoCargoFacadeLocal tipocargoFL;
+   private List<TipoCargo> tipocargo;
+   
+   private Recurso r;
+   
+   
     
    
     
     
     @PostConstruct
     public void init() {
+    recurso = recursoFL.findAll();
     listaPais = paisFL.findAll();
-    }
+    categoria = categoriaFL.findAll();
+    tiporecurso = tiporecursoFL.findAll();
+    tipocargo = tipocargoFL.findAll();
    
-       
-
     
-
-    public Recurso getRecurso() {
+    }
+    
+    
+    public List<Recurso> getRecurso() {
         return recurso;
     }
 
-    public void setRecurso(Recurso recurso) {
+    public void setRecurso(List<Recurso> recurso) {
         this.recurso = recurso;
     }
 
@@ -78,26 +105,78 @@ public class RecursosController implements Serializable{
         this.listaPais = listaPais;
     }
 
-    public Pais getPais() {
-        return pais;
+    public List<Categoria> getCategoria() {
+        return categoria;
     }
 
-    public void setPais(Pais pais) {
-        this.pais = pais;
+    public void setCategoria(List<Categoria> categoria) {
+        this.categoria = categoria;
     }
 
+    public List<TipoRecurso> getTiporecurso() {
+        return tiporecurso;
+    }
+
+    public void setTiporecurso(List<TipoRecurso> tiporecurso) {
+        this.tiporecurso = tiporecurso;
+    }
+
+    public List<TipoCargo> getTipocargo() {
+        return tipocargo;
+    }
+
+    public void setTipocargo(List<TipoCargo> tipocargo) {
+        this.tipocargo = tipocargo;
+    }
+
+    public RecursoFacadeLocal getRecursoFL() {
+        return recursoFL;
+    }
+
+    public void setRecursoFL(RecursoFacadeLocal recursoFL) {
+        this.recursoFL = recursoFL;
+    }
+
+    public PaisFacadeLocal getPaisFL() {
+        return paisFL;
+    }
+
+    public void setPaisFL(PaisFacadeLocal paisFL) {
+        this.paisFL = paisFL;
+    }
+
+    public CategoriaFacadeLocal getCategoriaFL() {
+        return categoriaFL;
+    }
+
+    public void setCategoriaFL(CategoriaFacadeLocal categoriaFL) {
+        this.categoriaFL = categoriaFL;
+    }
+
+    public TipoRecursoFacadeLocal getTiporecursoFL() {
+        return tiporecursoFL;
+    }
+
+    public void setTiporecursoFL(TipoRecursoFacadeLocal tiporecursoFL) {
+        this.tiporecursoFL = tiporecursoFL;
+    }
+
+    public TipoCargoFacadeLocal getTipocargoFL() {
+        return tipocargoFL;
+    }
+
+    public void setTipocargoFL(TipoCargoFacadeLocal tipocargoFL) {
+        this.tipocargoFL = tipocargoFL;
+    }
+
+    public Recurso getR() {
+        return r;
+    }
+
+    public void setR(Recurso r) {
+        this.r = r;
+    }
     
-
-    
-
-    public String getAlgo() {
-        return algo;
-    }
-
-    public void setAlgo(String algo) {
-        this.algo = algo;
-    }
-
   
     
     

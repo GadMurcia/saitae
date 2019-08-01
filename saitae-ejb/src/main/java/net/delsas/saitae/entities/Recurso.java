@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Recurso.findAll", query = "SELECT r FROM Recurso r")
     , @NamedQuery(name = "Recurso.findByIdrecurso", query = "SELECT r FROM Recurso r WHERE r.idrecurso = :idrecurso")
     , @NamedQuery(name = "Recurso.findByNombre", query = "SELECT r FROM Recurso r WHERE r.nombre = :nombre")
-    , @NamedQuery(name = "Recurso.findByTipoPrestamo", query = "SELECT r FROM Recurso r WHERE r.tipoPrestamo = :tipoPrestamo")
+   
     , @NamedQuery(name = "Recurso.findByActivo", query = "SELECT r FROM Recurso r WHERE r.activo = :activo")
     , @NamedQuery(name = "Recurso.findByValorUnitario", query = "SELECT r FROM Recurso r WHERE r.valorUnitario = :valorUnitario")
     , @NamedQuery(name = "Recurso.findByEstadoFisico", query = "SELECT r FROM Recurso r WHERE r.estadoFisico = :estadoFisico")
@@ -56,10 +56,7 @@ public class Recurso implements Serializable {
     private String nombre;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "tipoPrestamo")
-    private int tipoPrestamo;
-    @Basic(optional = false)
-    @NotNull
+    
     @Column(name = "activo")
     private boolean activo;
     @Basic(optional = false)
@@ -112,10 +109,10 @@ public class Recurso implements Serializable {
         this.idrecurso = idrecurso;
     }
 
-    public Recurso(Integer idrecurso, String nombre, int tipoPrestamo, boolean activo, float valorUnitario, String tipoValor) {
+    public Recurso(Integer idrecurso, String nombre, boolean activo, float valorUnitario, String tipoValor) {
         this.idrecurso = idrecurso;
         this.nombre = nombre;
-        this.tipoPrestamo = tipoPrestamo;
+       
         this.activo = activo;
         this.valorUnitario = valorUnitario;
         this.tipoValor = tipoValor;
@@ -137,13 +134,7 @@ public class Recurso implements Serializable {
         this.nombre = nombre;
     }
 
-    public int getTipoPrestamo() {
-        return tipoPrestamo;
-    }
-
-    public void setTipoPrestamo(int tipoPrestamo) {
-        this.tipoPrestamo = tipoPrestamo;
-    }
+   
 
     public boolean getActivo() {
         return activo;
