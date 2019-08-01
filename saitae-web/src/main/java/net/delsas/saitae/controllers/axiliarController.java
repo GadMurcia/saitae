@@ -35,37 +35,39 @@ import org.primefaces.event.SelectEvent;
  */
 @Named(value = "axiliarController")
 @ViewScoped
-public class axiliarController implements Serializable{
+public class axiliarController implements Serializable {
 
     private static final long serialVersionUID = 1L;
-       private final prueba auxiliar=new prueba();
-       public static Persona p=new Persona(0);
-       @EJB
-       private PersonaFacadeLocal pfl;
-       
+    private final prueba auxiliar = new prueba();
+    public static Persona p = new Persona(0);
+    @EJB
+    private PersonaFacadeLocal pfl;
+
     public List<String> completeText(String query) {
-        List<String> results = new ArrayList<>();        
+        List<String> results = new ArrayList<>();
         try {
             auxiliar.setDui(query, p);
-            for(Persona p : pfl.getByLikeId(p.getIdpersona())){
-                results.add(p.getPersonaNombre()+" "
-                        +p.getPersonaApellido()+"=>"+p.getIdpersona());
+            for (Persona o : pfl.getByLikeId(p.getIdpersona())) {
+                results.add(o.getPersonaNombre() + " "
+                        + o.getPersonaApellido() + "=>" + o.getIdpersona());
             }
-            
-        } catch (NumberFormatException p) {
-            System.out.println(p.getMessage());
+
+        } catch (NumberFormatException m) {
+            System.out.println(m.getMessage());
         }
         return results;
     }
 
     public void onItemSelect(SelectEvent event) {
-        try{
-        p=pfl.find(p.getIdpersona());
-        }catch(Exception o){
-            System.out.println("Error en maestroController.onItemSelect: "+o.getMessage());
+        try {
+            String x[] = event.getObject().toString().split("=>");
+            auxiliar.setDui(x.length > 1 ? x[1].substring(1) : x[0], p);
+            p = pfl.find(p.getIdpersona());
+        } catch (Exception o) {
+            System.out.println("Error en maestroController.onItemSelect: " + o.getMessage());
         }
-        FacesContext.getCurrentInstance().addMessage(null, 
+        FacesContext.getCurrentInstance().addMessage(null,
                 new FacesMessage("Selected", p.getPersonaNombre()));
     }
-    
+
 }

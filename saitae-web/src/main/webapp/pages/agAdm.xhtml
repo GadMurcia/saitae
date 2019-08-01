@@ -22,12 +22,13 @@
                 <p:message for="tipo"/>
                 
               <p:column/>
-                <t:persona departamento="#{administradorController.depto}" 
+              <t:persona id="adm" departamento="#{administradorController.depto}" 
                            departamentoLista="#{administradorController.departamentoList}"
                            dui="#{administradorController.dui}" municipio="#{administradorController.muni}" 
                            municipioLista="#{administradorController.municipioList}"
-                           listenerA="#{administradorController.onChange}" 
+                           listenerA="#{administradorController.onItemSelect2(event)}" 
                            persona="#{administradorController.adm}"/>
+                    
               
             </h:panelGrid>
         </h:form>

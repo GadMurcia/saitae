@@ -75,7 +75,7 @@ public class administradorController implements Serializable {
                 new FacesMessage("Selected", adm.getTipoPersona().getTipoPersonaNombre()));
     }
     
-    public void onChange(SelectEvent event){
+    public void onItemSelect2(SelectEvent event){
         adm=axiliarController.p;
     }
 
