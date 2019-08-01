@@ -140,7 +140,7 @@ public class prueba {
         user.setMaestro(new Maestro(user.getIdpersona()));
         user.getMaestro().setMaestroAfp("");
         user.getMaestro().setMaestroBienestar(0);
-        user.getMaestro().setMaestroCapacitacionesVirtuales(true);
+        user.getMaestro().setMaestroCapacitacionesVirtuales(false);
         user.getMaestro().setMaestroCategoria(0);
         user.getMaestro().setMaestroCodigo(0);
         user.getMaestro().setMaestroComentario("");
@@ -153,27 +153,18 @@ public class prueba {
         user.getMaestro().setMaestroNivel(0);
         user.getMaestro().setMaestroNup(0);
         user.getMaestro().setMaestroPartidas(0);
-        user.getMaestro().setMaestroRecursosWeb(true);
-        user.getMaestro().setMaestroSinEscalafon(true);
+        user.getMaestro().setMaestroRecursosWeb(false);
+        user.getMaestro().setMaestroSinEscalafon(false);
         user.getMaestro().setMaestroSubnumeros(0);
         user.getMaestro().setMaestroTiempoCategoria("");
         user.getMaestro().setMaestroTipoSalario("");
         user.getMaestro().setMaestroTurno("");
-        user.getMaestro().setMaestroUsoVideoconferencias(true);
-        user.getMaestro().setMaestroUtilidadTecnologica(true);
+        user.getMaestro().setMaestroUsoVideoconferencias(false);
+        user.getMaestro().setMaestroUtilidadTecnologica(false);
         user.getMaestro().setMaestrocolTelefonoResidencia("");
         user.getMaestro().setPersona(user);
-        user.getMaestro().setCapacitacionesList(new ArrayList<Capacitaciones>());
-        user.getMaestro().setEvaluacionMaestroList(new ArrayList<EvaluacionMaestro>());
-        user.getMaestro().setGradoList(new ArrayList<Grado>());
-        user.getMaestro().setMestroHorarioMateriasList(new ArrayList<MestroHorarioMaterias>());
         user.getMaestro().setMaestoCargoList(new ArrayList<MaestoCargo>());
         user.setTipoPersona(new TipoPersona(4, "Maestro"));
-        user.setNotificacionesList(new ArrayList<Notificaciones>());
-        user.setPermisosList(new ArrayList<Permisos>());
-        user.setPersonasReservaList(new ArrayList<PersonasReserva>());
-        user.getTipoPersona().setAccesoTipoPersonaList(new ArrayList<AccesoTipoPersona>());
-        user.getTipoPersona().setAnuncioList(new ArrayList<Anuncio>());
         return user;
     }
 
@@ -379,7 +370,7 @@ public class prueba {
     }
 
     public void setMunicipio(String mun, Persona p) {
-        p.setPersonaLugarNac(p.getPersonaLugarNac().split("#")[1] + "#" + mun);
+        p.setPersonaLugarNac(p.getPersonaLugarNac().split("#")[0] + "#" + mun);
     }
 
     public String getMunicipio(Persona p) {

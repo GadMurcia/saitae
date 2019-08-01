@@ -134,7 +134,6 @@ public class maestroController implements Serializable {
         mc.getMaestoCargoPK().setIdNombramiento(mc.getTipoNombramiento().getIdtipoNombramiento());
         mc.getMaestoCargoPK().setIdMaesto(maestro.getIdmaestro());
         maestro.getMaestoCargoList().remove(index);
-        index = -1;
         maestro.getMaestoCargoList().add(mc);
         FacesMessage msg = new FacesMessage("Modificaciones realizadas con éxito",
                 "Modificado: " + mc.getCargo().getCargoNombre());
@@ -188,7 +187,7 @@ public class maestroController implements Serializable {
 
     public void guardar() {
         try {
-            maestro.getPersona().setPersonaContrasenya(DigestUtils.md5Hex(auxiliar.getDui(maestro.getPersona())));maestro.setMaestrocolTelefonoResidencia(maestro.getPersona().getMaestro().getMaestrocolTelefonoResidencia());
+            maestro.getPersona().setPersonaContrasenya(DigestUtils.md5Hex(auxiliar.getDui(maestro.getPersona())));
             Persona p = maestro.getPersona();
             p.setMaestro(null);
             pfl.edit(p);
