@@ -29,5 +29,7 @@ public interface PersonaFacadeLocal {
     List<Persona> findRange(int[] range);
 
     int count();
+
+    public List<Persona> getByLikeId(int id);
     
 }

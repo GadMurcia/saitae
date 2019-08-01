@@ -103,8 +103,8 @@ public class maestroController implements Serializable {
     }
 
     public void setDui(String dui) {
-        String x[]= dui.split("=>");
-        auxiliar.setDui(x.length>1? x[1].substring(1) : x[0], maestro.getPersona());
+        String x[] = dui.split("=>");
+        auxiliar.setDui(x.length > 1 ? x[1].substring(1) : x[0], maestro.getPersona());
         maestro.setIdmaestro(maestro.getPersona().getIdpersona());
     }
 
@@ -113,7 +113,7 @@ public class maestroController implements Serializable {
     }
 
     public List<SelectItem> getMunicipiosLista() {
-        return auxiliar.getMunicipioLista(getDepartamento(), maestro.getPersona());
+        return auxiliar.getMunicipioLista(maestro.getPersona());
     }
 
     public List<SelectItem> getDepartamentosLista() {
@@ -162,27 +162,30 @@ public class maestroController implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
-    public List<String> completeText(String query) {
-        List<String> results = new ArrayList<>();        
-        try {
-            auxiliar.setDui(query, maestro.getPersona());
-            for(Maestro m : mfl.getLikeById(maestro.getPersona().getIdpersona())){
-                results.add(m.getPersona().getPersonaNombre()+" "+m.getPersona().getPersonaApellido()+"=>"+m.getIdmaestro());
-            }
-            
-        } catch (NumberFormatException p) {
-            System.out.println(p.getMessage());
-        }
-        return results;
-    }
-
-    public void onItemSelect(SelectEvent event) {
-        try{
-        maestro=mfl.find(maestro.getIdmaestro());
-        }catch(Exception o){
-            System.out.println("Error en maestroController.onItemSelect: "+o.getMessage());
-        }
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Selected", maestro.getPersona().getPersonaNombre()));
+//    public List<String> completeText(String query) {
+//        List<String> results = new ArrayList<>();        
+//        try {
+//            auxiliar.setDui(query, maestro.getPersona());
+//            for(Maestro m : mfl.getLikeById(maestro.getPersona().getIdpersona())){
+//                results.add(m.getPersona().getPersonaNombre()+" "+m.getPersona().getPersonaApellido()+"=>"+m.getIdmaestro());
+//            }
+//            
+//        } catch (NumberFormatException p) {
+//            System.out.println(p.getMessage());
+//        }
+//        return results;
+//    }
+//
+//    public void onItemSelect(SelectEvent event) {
+//        try{
+//        maestro=mfl.find(maestro.getIdmaestro());
+//        }catch(Exception o){
+//            System.out.println("Error en maestroController.onItemSelect: "+o.getMessage());
+//        }
+//        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Selected", maestro.getPersona().getPersonaNombre()));
+//    }
+    public void getChange() {
+        maestro = axiliarController.p.getMaestro();
     }
 
     public void guardar() {

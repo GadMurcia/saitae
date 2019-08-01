@@ -200,12 +200,12 @@ public class prueba {
         return user;
     }
 
-    public List<SelectItem> getMunicipioLista(String dep, Persona p) {
+    public List<SelectItem> getMunicipioLista(Persona p) {
         List<SelectItem> items = new ArrayList<>();
         items.add(new SelectItem(" ", "Seleccione"));
 
         int i = 1;
-        switch (dep) {
+        switch (getDepartamento(p)) {
             case "01":
                 for (String h : new String[]{"Ahuachapán", "Apaneca", "Atiquizaya", "Concepción de Ataco", "El Refugio",
                     "Guaymango", "Jujutla", "San Francisco Menéndez", "San Lorenzo", "San Pedro Puxtla", "Tacuba", "Turín"}) {
