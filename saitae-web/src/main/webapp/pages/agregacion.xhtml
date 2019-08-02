@@ -37,7 +37,8 @@
                             padding:4px;
                         }
                     </style>
-                    <p:wizard flowListener="#{maestroController.onFlowProcess}" backLabel="Atrás" nextLabel="Siguiente">
+                    <p:wizard flowListener="#{maestroController.onFlowProcess}" 
+                              backLabel="Atrás" nextLabel="Siguiente">
                         <p:tab id="personal" title="Personal">
                             <p:panel header="Información Personal.">
                                 <t:persona departamento="#{maestroController.departamento}" 
@@ -45,7 +46,7 @@
                                            dui="#{maestroController.dui}" municipio="#{maestroController.municipio}" 
                                            municipioLista="#{maestroController.municipiosLista}" 
                                            persona="#{maestroController.maestro.persona}"
-                                           listenerA="#{maestroController.change}"/>
+                                           listenerA="#{maestroController.setChange()}"/>
                             </p:panel>
                         </p:tab>
                         <p:tab id="address" title="Contacto">

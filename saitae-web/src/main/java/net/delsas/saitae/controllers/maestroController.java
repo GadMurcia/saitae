@@ -16,6 +16,7 @@
  */
 package net.delsas.saitae.controllers;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -40,6 +41,7 @@ import net.delsas.saitae.entities.MaestoCargo;
 import net.delsas.saitae.entities.Maestro;
 import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.TipoNombramiento;
+import net.delsas.saitae.entities.TipoPersona;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.primefaces.event.FlowEvent;
 import org.primefaces.event.RowEditEvent;
@@ -103,8 +105,7 @@ public class maestroController implements Serializable {
     }
 
     public void setDui(String dui) {
-        String x[] = dui.split("=>");
-        auxiliar.setDui(x.length > 1 ? x[1].substring(1) : x[0], maestro.getPersona());
+        auxiliar.setDui(dui, maestro.getPersona());
         maestro.setIdmaestro(maestro.getPersona().getIdpersona());
     }
 
@@ -161,31 +162,9 @@ public class maestroController implements Serializable {
         FacesMessage msg = new FacesMessage("New Car added", "");
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
-
-//    public List<String> completeText(String query) {
-//        List<String> results = new ArrayList<>();        
-//        try {
-//            auxiliar.setDui(query, maestro.getPersona());
-//            for(Maestro m : mfl.getLikeById(maestro.getPersona().getIdpersona())){
-//                results.add(m.getPersona().getPersonaNombre()+" "+m.getPersona().getPersonaApellido()+"=>"+m.getIdmaestro());
-//            }
-//            
-//        } catch (NumberFormatException p) {
-//            System.out.println(p.getMessage());
-//        }
-//        return results;
-//    }
-//
-//    public void onItemSelect(SelectEvent event) {
-//        try{
-//        maestro=mfl.find(maestro.getIdmaestro());
-//        }catch(Exception o){
-//            System.out.println("Error en maestroController.onItemSelect: "+o.getMessage());
-//        }
-//        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Selected", maestro.getPersona().getPersonaNombre()));
-//    }
-    public void getChange() {
-        maestro = axiliarController.p.getMaestro();
+    
+    public void setChange() {
+        maestro = mfl.find(axiliarController.p.getIdpersona());
     }
 
     public void guardar() {
@@ -193,6 +172,7 @@ public class maestroController implements Serializable {
             maestro.getPersona().setPersonaContrasenya(DigestUtils.md5Hex(auxiliar.getDui(maestro.getPersona())));
             Persona p = maestro.getPersona();
             p.setMaestro(null);
+            p.setTipoPersona(new TipoPersona(4, "Maestro"));
             pfl.edit(p);
             Maestro m1 = mfl.find(maestro.getIdmaestro());
             if (m1 != null) {
@@ -203,13 +183,12 @@ public class maestroController implements Serializable {
                 }
             }
             mfl.edit(maestro);
-            init();
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("mensaje",
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Guardado con éxito",
                             "Los datos de " + maestro.getPersona().getPersonaNombre()
                             + " han sido guardados con éxito."));
             FacesContext.getCurrentInstance().getExternalContext().redirect("agregacion.intex");
-        } catch (Exception o) {
+        } catch (IOException o) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
                     FacesMessage.SEVERITY_FATAL, "Error al intentar guardar", o.getMessage()));
         }

@@ -51,8 +51,8 @@
             <p:outputLabel for="sexo" value="Sexo: "/>
             <p:selectOneMenu id="sexo" value="#{cc.attrs.persona.personaSexo}" style="width:125px" title="Seleccione su sexo">
                 <f:selectItem itemLabel="Seleccione" itemValue="" />
-                <f:selectItem itemLabel="Femenino" itemValue="0" />
-                <f:selectItem itemLabel="Masculino" itemValue="1" />
+                <f:selectItem itemLabel="Femenino" itemValue="true" />
+                <f:selectItem itemLabel="Masculino" itemValue="false" />
             </p:selectOneMenu>
             <p:message for="sexo" showSummary="true" />
 

@@ -5,24 +5,21 @@
  */
 package net.delsas.saitae.controllers;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.inject.Named;
-import javax.faces.view.ViewScoped;
-import net.delsas.saitae.beans.EstudianteFacadeLocal;
 import net.delsas.saitae.beans.MatriculaFacadeLocal;
 import net.delsas.saitae.beans.PermisosFacadeLocal;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
-import net.delsas.saitae.beans.TipopersonaPermisoFacadeLocal;
 import net.delsas.saitae.entities.Permisos;
 import net.delsas.saitae.entities.PermisosPK;
 import net.delsas.saitae.entities.Persona;
@@ -37,7 +34,7 @@ import net.delsas.saitae.entities.TipopersonaPermiso;
  * @author delsas
  */
 @Named(value = "permisoEstudianteController")
-@ViewScoped
+@RequestScoped
 public class permisoController implements Serializable {
 
     private static final long serialVersionUID = 1L;

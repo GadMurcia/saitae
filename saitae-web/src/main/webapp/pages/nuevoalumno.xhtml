@@ -3,133 +3,42 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:t="http://java.sun.com/jsf/composite/components/autentia">
     <h:head>
         <title>Nuevo Ingreso #{(estudianteController.añoMatricula.year +1900)}</title>
     </h:head>
     <h:body>
-        <h:form>
-            <p:growl id="growl" sticky="true" showDetail="true"/>
-
+        <h:form id="form0">
+            <p:growl id="msgs" sticky="true" showDetail="true"/>
+        </h:form>
+        <h:form id="form1"> 
             <p:wizard flowListener="#{estudianteController.onFlowProcess}" style="height: inherit;">
 
                 <p:tab id="general" title="Generalidades" >
                     <p:panel header="Generalidades sobre la inscipción.">
                         <p:messages />
-                        <h:panelGrid columns="2" columnClasses="label, value">
-                            <p:column/>
-                            <h:outputText value="mensaje de inicio"/>
-                            
-                            <h:outputText value="NIE del estudiante a matricular: *"/>
-                            <p:inputText value="#{estudianteController.nie}" rendered="true" 
-                                         label="Número de Identificación Estudiantil" 
-                                         onchange="#{estudianteController.busca()}"
-                                         title="Ingrese su NIE"/>
-                        </h:panelGrid>
+                        <h:panelGrid columns="1">
+                            <h:outputLabel value="" />
+                        </h:panelGrid>                            
                     </p:panel>
                 </p:tab>
 
                 <p:tab id="personal" title="Estudiante">
                     <p:panel header="Datos personales del aspirante a estudiante de nuevo ingreso">
-                        <p:messages />
-                        <h:panelGrid columns="2" columnClasses="label, value">
-                            <h:outputText value="NIE: *"/>
-                            <p:inputText value="#{estudianteController.nie}" rendered="true" 
-                                         label="Número de Identificación Estudiantil"  disabled="tue"
-                                         onchange="#{estudianteController.busca()}"
-                                         title="Ingrese su NIE"/>
-
-                            <h:outputText value="Nombres: *" />
-                            <p:inputText value="#{estudianteController.est1.personaNombre}" required="true" label="Nombres" 
-                                         title="Ingrese sus nombres"/>
-
-                            <h:outputText value="Apellidos: *" />
-                            <p:inputText value="#{estudianteController.est1.personaApellido}" required="true" label="Apellidos" 
-                                         title="Ingrese sus apellidos"/>
-
-                            <p:outputLabel for="spanish" value="Fecha de Nacimiento (yyyy-mm-dd):" />
-                            <p:calendar id="spanish" value="#{estudianteController.est1.personaNacimiento}" locale="es" 
-                                        navigator="true" pattern="yyyy-mm-dd" title="Ingrese su fecha de nacimiento ej.: 1991-02-23"/>
-
-                            <h:outputText value="Nacionalidad: *" />
-                            <p:selectOneMenu value="#{estudianteController.est1.personaNacionalidad}"  required="true"
-                                                     style="width:125px" label="Seleccione su nacionalidad">
-                                <f:selectItem itemLabel="Salvadoreña" itemValue="Salvadoreña" />
-                                <f:selectItem itemLabel="Extrangera" itemValue="Extrangera" />
-                            </p:selectOneMenu>
-
-                            <h:outputText value="Partida de nacimiento?: *" />
-                            <p:selectBooleanButton id="value1" widgetVar="lpo" value="#{estudianteController.partida}" 
-                                                   onLabel="Sí tengo" offLabel="No tengo" style="width:60px">
-                                <p:ajax update="w w0"/>
-                            </p:selectBooleanButton>
-
-                            <h:outputText id="w0" value="Porqué no tiene partida de nacimiento?: " />
-                            <p:inputText id="w" value="#{estudianteController.est.estudianteNoPartida}" 
-                                         disabled="#{estudianteController.partida}" 
-                                         title="¿Por qué no tiene partida de nacimiento?"/>
-
-                            <h:outputText value="NIT: " />
-                            <p:inputMask value="#{estudianteController.est1.personaNit}" mask="9999-999999-999-9" 
-                                         title="Ingrese su NIT si posee uno. No ingrese guiones"/>
-
-                            <p:outputLabel for="console" value="Sexo: *" />
-                            <p:selectOneMenu id="console" value="#{estudianteController.est1.personaSexo}" style="width:125px" title="Seleccione su sexo">
-                                <f:selectItem itemLabel="Seleccione" itemValue="" />
-                                <f:selectItem itemLabel="Femenino" itemValue="0" />
-                                <f:selectItem itemLabel="Masculino" itemValue="1" />
-                            </p:selectOneMenu>
-
-                            <p:outputLabel for="console" value="Estado Familiar: *" />
-                            <p:selectOneMenu id="console1" value="#{estudianteController.est1.personaEstadoFamiliar}" style="width:125px" title="Seleccione su sexo">
-                                <f:selectItem itemLabel="Seleccione" itemValue="" />
-                                <f:selectItem itemLabel="Solter@" itemValue="0" />
-                                <f:selectItem itemLabel="Casad@" itemValue="1" />
-                                <f:selectItem itemLabel="Acompañad@" itemValue="2"/>
-                            </p:selectOneMenu>
-
-                            <h:outputText value="Departamento de nacimiento: *" />
-                            <p:inputText value="#{estudianteController.depEst}" required="true" 
-                                         label="Apellidos" title="Ingrese el departamento de nacimiento segun su partida de nacimiento"/>
-
-                            <h:outputText value="Municipio de nacimiento: *" />
-                            <p:inputText value="#{estudianteController.munEst}" required="true" 
-                                         label="Apellidos" title="Ingrese el municipio de nacimiento segun su partida de nacimiento"/>
-
-                            <h:outputText value="Discapacidades: " />
-                            <p:inputText value="#{estudianteController.est1.personaDiscapacidades}"
-                                         title="Si tiene alguna discapacidad, escríbalas separadas por comas"/>
-
-                            <h:outputText value="Enfermedades que padece: " />
-                            <p:inputText value="#{estudianteController.est.estudianteEnfermedades}"
-                                         title="Si padece de alguna(s) enfermedad(es), escríbalas separadas por comas"/>
-
-                            <h:outputText value="Medicamentos prescritos de carácter permanente: " />
-                            <p:inputText value="#{estudianteController.est.estudianteMedicamentos}"
-                                         title="Si usa permenentemente dedicamentos, escriba los nombres separados por comas"/>
-                        </h:panelGrid>
+                        <t:persona departamento="#{estudianteController.departamentoE}" 
+                                   departamentoLista="#{estudianteController.departamentoListaE}" 
+                                   dui="#{estudianteController.nie}" 
+                                   municipio="#{estudianteController.municipioE}" 
+                                   municipioLista="#{estudianteController.municipioListaE}" 
+                                   persona="#{estudianteController.est1}"
+                                   listenerA="#{estudianteController.onItemSelect2(event)}"/>
                     </p:panel>
                 </p:tab>
 
                 <p:tab id="contacto" title="Contacto">
                     <p:panel header="Información de contacto">
-                        <p:messages />
-                        <h:panelGrid columns="2" columnClasses="label, value">
-                            <h:outputText value="Teléfono: " />
-                            <p:inputMask value="#{estudianteController.est1.personaTelefono}" type="telephone" mask="9999-9999" 
-                                         title="Ingrese su número telefónico"/>
-
-
-                            <h:outputText value="email: " />
-                            <p:inputText value="#{estudianteController.est1.personaEmail}" type="email" 
-                                         title="Ingrese su correo electrónico"/>
-
-                            <h:outputText value="Dirección: *" />
-                            <p:inputText value="#{estudianteController.est1.personaDireccion}" required="true" 
-                                         title="Ingrese su dirección de recidencia completa"/>
-
-
-                        </h:panelGrid>
+                        <t:persona1 persona="#{estudianteController.est1}"/>
                     </p:panel>
                 </p:tab>
 
@@ -137,7 +46,7 @@
                     <p:panel header="Detalles Socioeconómicos del aspirante">
                         <p:messages />
                         <h:panelGrid columns="2" columnClasses="label, value">
-                            <p:outputLabel for="console" value="Zona de residencia: *" />
+                            <p:outputLabel for="console2" value="Zona de residencia: *" />
                             <p:selectOneMenu id="console2" value="#{estudianteController.est1.personaZonaVivienda}" required="true"
                                              style="width:125px" title="Seleccione su Zona donde vive">
                                 <f:selectItem itemLabel="Seleccione" itemValue="" />
@@ -145,7 +54,7 @@
                                 <f:selectItem itemLabel="Urbana" itemValue="1" />
                             </p:selectOneMenu>
 
-                            <p:outputLabel for="console" value="Tipo de calle de donde vive: *" />
+                            <p:outputLabel for="console3" value="Tipo de calle de donde vive: *" />
                             <p:selectOneMenu id="console3" value="#{estudianteController.est.estudianteTipoCalle}"  required="true"
                                              style="width:125px" title="Seleccione el tipo de calle de el lugar donde vive">
                                 <f:selectItem itemLabel="Seleccione" itemValue="" />
@@ -153,7 +62,7 @@
                                 <f:selectItem itemLabel="Pavimentada" itemValue="1" />
                             </p:selectOneMenu>
 
-                            <p:outputLabel for="console" value="Medio de transporte: *" />
+                            <p:outputLabel for="console4" value="Medio de transporte: *" />
                             <p:selectOneMenu id="console4" value="#{estudianteController.est.estudianteMedioTransporte}"  
                                              required="true" style="width:125px" 
                                              title="Seleccione la forma en que habitualmete viajaría al centro de estudios">
@@ -184,7 +93,7 @@
                             <p:inputText id="r2" value="#{estudianteController.est.estudianteFormaTrabajo}" 
                                          disabled="#{!estudianteController.est.estudianteTrabaja}" title="Escriba en qué trabaja"/>
 
-                            <p:outputLabel for="console" value="¿De quién depende económicamente?: *" />
+                            <p:outputLabel for="basic" value="¿De quién depende económicamente?: *" />
                             <p:selectManyCheckbox id="basic" value="#{estudianteController.dependenciaeco}"  required="true"
                                                   style="width:125px" immediate="true">
                                 <f:selectItem itemLabel="Padre" itemValue="Padre" />
@@ -314,7 +223,7 @@
 
                             <h:outputText value="Nacionalidad: *" />
                             <p:selectOneMenu value="#{estudianteController.resp1.personaNacionalidad}"  required="true"
-                                                     style="width:125px" label="Seleccione su nacionalidad">
+                                             style="width:125px" label="Seleccione su nacionalidad">
                                 <f:selectItem itemLabel="Salvadoreña" itemValue="Salvadoreña" />
                                 <f:selectItem itemLabel="Extrangera" itemValue="Extrangera" />
                             </p:selectOneMenu>

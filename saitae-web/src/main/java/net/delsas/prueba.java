@@ -23,18 +23,10 @@ import java.util.Date;
 import java.util.List;
 import javax.faces.model.SelectItem;
 import net.delsas.saitae.entities.AccesoTipoPersona;
-import net.delsas.saitae.entities.Anuncio;
-import net.delsas.saitae.entities.Capacitaciones;
 import net.delsas.saitae.entities.Estudiante;
-import net.delsas.saitae.entities.EvaluacionMaestro;
-import net.delsas.saitae.entities.Grado;
 import net.delsas.saitae.entities.MaestoCargo;
 import net.delsas.saitae.entities.Maestro;
-import net.delsas.saitae.entities.MestroHorarioMaterias;
-import net.delsas.saitae.entities.Notificaciones;
-import net.delsas.saitae.entities.Permisos;
 import net.delsas.saitae.entities.Persona;
-import net.delsas.saitae.entities.PersonasReserva;
 import net.delsas.saitae.entities.TipoPersona;
 
 /**
@@ -65,7 +57,7 @@ public class prueba {
     }
 
     public Persona getEstudiante() {
-        Estudiante e = new Estudiante(user.getIdpersona(), true, 0, true, "");
+        user.setEstudiante(new Estudiante(user.getIdpersona(), true, 0, true, ""));
         user.getEstudiante().setEstudianteRiesgoVulnerabilidad("");
         user.getEstudiante().setEstudianteMedioTransporte(0);
         user.getEstudiante().setEstudianteDistanciaAlCentro(BigDecimal.valueOf(5.00));
@@ -84,11 +76,7 @@ public class prueba {
         user.getEstudiante().setEstudianteRepresentante(getRepresentante().getEstudiante());
         user.getEstudiante().setEstudianteComentario("");
         user.getEstudiante().setPersona(user);
-        user.setEstudiante(e);
-        TipoPersona tp = new TipoPersona(8, "Estudiante");
-        ArrayList<AccesoTipoPersona> atps = new ArrayList<>();
-        tp.setAccesoTipoPersonaList(atps);
-        user.setTipoPersona(tp);
+        user.setTipoPersona(new TipoPersona(8, "Estudiante"));
         return user;
     }
 
@@ -378,8 +366,9 @@ public class prueba {
     }
 
     public void setDui(String dui, Persona p) {
+        String x[] = dui.split("=>");
         String i = "1";
-        for (String g : dui.split("")) {
+        for (String g : (x.length > 1 ? x[1].substring(1) : x[0]).split("")){// dui.split("")) {
             if (!g.equals("-")) {
                 i += g;
             }

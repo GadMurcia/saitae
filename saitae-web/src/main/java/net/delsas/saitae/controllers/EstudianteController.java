@@ -10,13 +10,16 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
+import net.delsas.prueba;
 import net.delsas.saitae.beans.DocumentosFacadeLocal;
 import net.delsas.saitae.beans.EstudianteFacadeLocal;
 import net.delsas.saitae.beans.MatriculaFacadeLocal;
@@ -32,6 +35,7 @@ import net.delsas.saitae.entities.GradoPK;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.FlowEvent;
+import org.primefaces.event.SelectEvent;
 import org.primefaces.model.UploadedFile;
 
 /**
@@ -39,7 +43,7 @@ import org.primefaces.model.UploadedFile;
  * @author delsas
  */
 @Named(value = "estudianteController")
-@ViewScoped
+@RequestScoped
 public class EstudianteController implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -63,15 +67,17 @@ public class EstudianteController implements Serializable {
     private Estudiante resp;
     private Matricula m;
     private Documentos docs;
+    private prueba aux;
 
     @PostConstruct
     public void init() {
-        est1 = new Persona();
-        resp1 = new Persona();
-        padre = new Persona();
-        madre = new Persona();
-        est = new Estudiante();
-        resp = new Estudiante();
+        aux = new prueba();
+        est1 = aux.getEstudiante();
+        resp1 = aux.getRepresentante();
+        padre = aux.getPadre();
+        madre = aux.getMadre();
+        est = est1.getEstudiante();
+        resp = resp1.getEstudiante();
         m = new Matricula();
         m.setGrado(new Grado(new GradoPK(0, "", "", this.getAñoMatricula())));
         docs = new Documentos();
@@ -432,11 +438,43 @@ public class EstudianteController implements Serializable {
     }
 
     public String getNie() {
-        return getDui(est1);
+        return aux.getDui(est1);
     }
 
     public void setNie(String nie) {
-        setDui(nie, est1);
+        aux.setDui(nie, est1);
+    }
+    
+    public void onItemSelect2(SelectEvent event) {
+        est1 = axiliarController.p;
+        est=est1.getEstudiante();
+        resp=est.getEstudianteRepresentante();
+        resp1=resp.getPersona();
+        madre=est.getEstudianteMadre();
+        padre=est.getEstudiantePadre();
     }
 
+    public List<SelectItem> getDepartamentoListaE() {
+        return aux.getDepartamentoLista(est1);
+    }
+    
+    public List<SelectItem> getMunicipioListaE(){
+        return aux.getMunicipioLista(est1);
+    }
+    
+    public String getDepartamentoE() {
+        return aux.getDepartamento(est1);
+    }
+
+    public void setDepartamentoE(String dept) {
+        aux.setDepartamento(dept, est1);
+    }
+
+    public String getMunicipioE() {
+        return aux.getMunicipio(est1);
+    }
+
+    public void setMunicipioE(String mun) {
+        aux.setMunicipio(mun, est1);
+    }
 }

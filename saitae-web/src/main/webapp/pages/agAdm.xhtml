@@ -9,28 +9,45 @@
 
     <ui:define name="content">
         <h:form id="form1">
-            <h:panelGrid columns="3">
-                <p:outputLabel for="tipo" value="Seleccione el tipo de administrador que desea agregar"/>
-                <p:selectOneMenu id="tipo" value="#{administradorController.adm.tipoPersona.idtipoPersona}" required="true" 
-                                 title="Ingrese el número de documento de identificación de la persona.">
-                    <f:selectItem itemLabel="Seleccione" itemValue=""/>
-                    <f:selectItems value="#{administradorController.tipos}" var="t"
-                                   itemLabel="#{t.tipoPersonaNombre}" itemValue="#{t.idtipoPersona}"/>
-                    <p:ajax event="itemSelect" listener="#{administradorController.onItemSelect}" 
-                            update="form0:msgs form1" />
-                </p:selectOneMenu>
-                <p:message for="tipo"/>
-                
-              <p:column/>
-              <t:persona id="adm" departamento="#{administradorController.depto}" 
-                           departamentoLista="#{administradorController.departamentoList}"
-                           dui="#{administradorController.dui}" municipio="#{administradorController.muni}" 
-                           municipioLista="#{administradorController.municipioList}"
-                           listenerA="#{administradorController.onItemSelect2(event)}" 
-                           persona="#{administradorController.adm}"/>
-                    
-              
-            </h:panelGrid>
+            <p:wizard flowListener="#{administradorController.onFlowProcess}" showStepStatus="true" 
+                      backLabel="Atrás" nextLabel="Siguiente">
+                <p:tab title="Personal">
+                    <p:panel header="Información Personal del Administrador">
+                        <t:persona id="adm" departamento="#{administradorController.depto}" 
+                                   departamentoLista="#{administradorController.departamentoList}"
+                                   dui="#{administradorController.dui}" municipio="#{administradorController.muni}" 
+                                   municipioLista="#{administradorController.municipioList}"
+                                   listenerA="#{administradorController.onItemSelect2(event)}" 
+                                   persona="#{administradorController.adm}"/>
+                    </p:panel>
+                </p:tab>
+                <p:tab title="Contacto">
+                    <p:panel header="Información de Contacto">
+                        <t:persona1 persona="#{administradorController.adm}"/>
+                    </p:panel>
+                </p:tab>
+                <p:tab title="Área designada">
+                    <p:panel header="Selección del Area Designada a Administrar">
+                        <h:panelGrid columns="3">
+                            <p:outputLabel for="tipo" value="Seleccione el tipo de administrador que desea agregar"/>
+                            <p:selectOneMenu id="tipo" value="#{administradorController.adm.tipoPersona.idtipoPersona}" required="true" 
+                                             title="Ingrese el número de documento de identificación de la persona.">
+                                <f:selectItem itemLabel="Seleccione" itemValue=""/>
+                                <f:selectItems value="#{administradorController.tipos}" var="t"
+                                               itemLabel="#{t.tipoPersonaNombre}" itemValue="#{t.idtipoPersona}"/>
+                                <p:ajax event="itemSelect" listener="#{administradorController.onItemSelect}" 
+                                        update="form0:msgs form1" />
+                            </p:selectOneMenu>
+                            <p:message for="tipo"/>
+                            <p:column/>
+                            <p:column/>
+                            <p:commandButton actionListener="#{administradorController.guardar()}" 
+                                             icon="pi pi-save" process="@this" value="Guargar" 
+                                             update="form1 :form0:msgs" />
+                        </h:panelGrid>
+                    </p:panel>
+                </p:tab>
+            </p:wizard>
         </h:form>
     </ui:define>
 

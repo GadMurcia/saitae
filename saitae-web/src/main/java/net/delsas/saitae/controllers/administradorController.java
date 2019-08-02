@@ -16,6 +16,7 @@
  */
 package net.delsas.saitae.controllers;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,8 @@ import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
 import net.delsas.saitae.entities.Maestro;
 import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.TipoPersona;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.primefaces.event.FlowEvent;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -57,7 +60,7 @@ public class administradorController implements Serializable {
         aux = new prueba();
         adm = aux.getAdministradorCra();
         adm.setTipoPersona(new TipoPersona());
-        tipos =new ArrayList<>();
+        tipos = new ArrayList<>();
         tipos.add(aux.getAdministradorCra().getTipoPersona());
         tipos.add(aux.getBibliotecario().getTipoPersona());
         tipos.add(aux.getLAboratorista().getTipoPersona());
@@ -74,9 +77,9 @@ public class administradorController implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null,
                 new FacesMessage("Selected", adm.getTipoPersona().getTipoPersonaNombre()));
     }
-    
-    public void onItemSelect2(SelectEvent event){
-        adm=axiliarController.p;
+
+    public void onItemSelect2(SelectEvent event) {
+        adm = axiliarController.p;
     }
 
     public Persona getAdm() {
@@ -116,12 +119,30 @@ public class administradorController implements Serializable {
     }
 
     public void setDui(String dui) {
-        String x[] = dui.split("=>");
-        aux.setDui(x.length > 1 ? x[1].substring(1) : x[0], adm);
+        aux.setDui(dui, adm);
     }
 
     public List<TipoPersona> getTipos() {
         return tipos;
+    }
+
+    public String onFlowProcess(FlowEvent event) {
+        return event.getNewStep();
+    }
+
+    public void guardar() {
+        try {
+            adm.setPersonaContrasenya(DigestUtils.md5Hex(adm.getIdpersona() + ""));
+            pfl.edit(adm);
+            String a = (!adm.getPersonaSexo() ? "El Señor " : "La Señora ") + adm.getPersonaNombre() + " "
+                    + adm.getPersonaApellido() + " ha sido asignad" + (!adm.getPersonaSexo() ? "o " : "a ")
+                    + "como " + adm.getTipoPersona().getTipoPersonaNombre() + ".";
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("mensaje",
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Agregación Exitosa", a));
+            FacesContext.getCurrentInstance().getExternalContext().redirect("agAdm.intex");
+        } catch (IOException e) {
+            System.out.println("Error en adminitrador.Guaradr:" + e.getMessage());
+        }
     }
 
 }
