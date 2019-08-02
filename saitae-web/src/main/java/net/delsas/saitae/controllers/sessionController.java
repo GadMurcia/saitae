@@ -14,7 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.enterprise.context.SessionScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -32,7 +32,7 @@ import org.primefaces.model.menu.DefaultSubMenu;
  * @author delsas
  */
 @Named(value = "sessionController")
-@SessionScoped
+@RequestScoped
 public class sessionController implements Serializable {
 
     private static final long serialVersionUID = 1L;

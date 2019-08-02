@@ -16,7 +16,7 @@
                     <p:tabView id="tw" orientation="left" dynamic="true" style="height: 100%; width: 90%;">
                         <p:tab title="Accesos">
                             <p:dataTable id="accesos" var="a" value="#{vistasMenuController.accesos}" editable="true" 
-                                         widgetVar="acceso" styleClass="tabla"
+                                         widgetVar="acceso" styleClass="tabla" rows="8" paginator="true"
                                          emptyMessage="Sin registros aún.">
                                 <f:facet name="header">
                                     Administración de los Accesos

@@ -1,0 +1,124 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../WEB-INF/template/plantilla1.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:form id="form">
+            <p:growl id="msgs" showDetail="true"/>
+            <h1 style="align-content: center;">Administración General de Recursos.</h1>
+            <p:tabView id="tw" orientation="left" dynamic="true" style="height: 100%; width: 90%;">
+                <p:tab title="Tipo Cargo">
+                    <p:dataTable id="cargo" var="ca" value="#{tipoController.cargos}" editable="true" 
+                                 widgetVar="cargo1" styleClass="tabla" emptyMessage="Sin registros aún.">
+                        <f:facet name="header">
+                            Administración de los tipos de cargo al inventario.
+                        </f:facet>
+
+                        <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" update=":form:msgs" />
+                        <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" update=":form:msgs" />
+
+                        <p:column headerText="Id" style="width: 10px">
+                            <h:outputText value="#{ca.idtipoCargo}" />
+                        </p:column>
+
+                        <p:column headerText="Nombre">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{ca.nombre}" /></f:facet>
+                                <f:facet name="input"><p:inputText value="#{ca.nombre}" 
+                                                                   style="width:100%" label="Nombre"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        <p:column style="width:35px">
+                            <p:rowEditor />
+                        </p:column>
+                    </p:dataTable> 
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <p:commandButton value="+" styleClass="ui-priority-primary" 
+                                             process="@this" update=":form:msgs"
+                                             action="#{tipoController.onAddNew('cargo')}" 
+                                             oncomplete="PF('cargo1').addRow();"
+                                             title="Agregar nuevo Tipo de Cargo para el inventario."/>
+                        </div>
+                    </div>
+                </p:tab>
+                <p:tab title="Tipo Recurso">
+                    <p:dataTable id="recurso" var="re" value="#{tipoController.recursos}" editable="true" 
+                                 widgetVar="recurso1" styleClass="tabla" emptyMessage="Sin registros aún.">
+                        <f:facet name="header">
+                            Administración de los tipos de Recursos.
+                        </f:facet>
+
+                        <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" update=":form:msgs" />
+                        <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" update=":form:msgs" />
+
+                        <p:column headerText="Id" style="width: 10px">
+                            <h:outputText value="#{re.idtipoRecurso}" />
+                        </p:column>
+
+                        <p:column headerText="Nombre">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{re.tipoRecursoNombre}" /></f:facet>
+                                <f:facet name="input"><p:inputText value="#{re.tipoRecursoNombre}" 
+                                                                   style="width:100%" label="Nombre"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        <p:column style="width:35px">
+                            <p:rowEditor />
+                        </p:column>
+                    </p:dataTable> 
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <p:commandButton value="+" styleClass="ui-priority-primary" 
+                                             process="@this" update=":form:msgs"
+                                             action="#{tipoController.onAddNew('recursos')}" 
+                                             oncomplete="PF('recurso1').addRow();"
+                                             title="Agregar nuevo Tipo de Cargo para el inventario."/>
+                        </div>
+                    </div>
+                </p:tab>
+                <p:tab title="Tipo Reserva">
+                    <p:dataTable id="reserva" var="res" value="#{tipoController.reservas}" editable="true" 
+                                 widgetVar="reserva1" styleClass="tabla" emptyMessage="Sin registros aún.">
+                        <f:facet name="header">
+                            Administración de los tipos de Reserva.
+                        </f:facet>
+
+                        <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" update=":form:msgs" />
+                        <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" update=":form:msgs" />
+
+                        <p:column headerText="Id" style="width: 10px">
+                            <h:outputText value="#{res.idtipoReserva}" />
+                        </p:column>
+
+                        <p:column headerText="Nombre">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{res.tipoReservaNombre}" /></f:facet>
+                                <f:facet name="input"><p:inputText value="#{res.tipoReservaNombre}" 
+                                                                   style="width:100%" label="Nombre"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        <p:column style="width:35px">
+                            <p:rowEditor />
+                        </p:column>
+                    </p:dataTable> 
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <p:commandButton value="+" styleClass="ui-priority-primary" 
+                                             process="@this" update=":form:msgs"
+                                             action="#{tipoController.onAddNew('reserva')}" 
+                                             oncomplete="PF('reserva1').addRow();" 
+                                             title="Agregar nuevo tipo de reserva."/>
+                        </div>
+                    </div>
+                </p:tab>
+            </p:tabView>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

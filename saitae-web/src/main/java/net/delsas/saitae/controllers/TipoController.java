@@ -290,14 +290,14 @@ public class TipoController implements Serializable {
                 titulo = "Tipo de Materia";
                 mensaje = m.getTipoMateriaNombre();
                 break;
-            case "form:materia":
+            case "form:tw:materia":
                 Materia ma = (Materia) event.getObject();
                 ma.setTipoMateria(tipoMateriaFL.find(ma.getTipoMateria().getIdtipoMateria()));
                 materiaFL.edit(ma);
                 titulo = "Materia";
                 mensaje = ma.getMateriaNombre();
                 break;
-            case "form:aula":
+            case "form:tw:aula":
                 Aula a = (Aula) event.getObject();
                 a.setZonaAula(zfl.find(a.getZonaAula().getIdzona()));
                 afl.edit(a);
@@ -401,14 +401,14 @@ public class TipoController implements Serializable {
                 }
                 mensaje = m.getTipoMateriaNombre();
                 break;
-            case "form:materia":
+            case "form:tw:materia":
                 Materia ma = (Materia) event.getObject();
                 if (ma.getMateriaNombre() == null || ma.getMateriaNombre().isEmpty()) {
                     materias.remove(ma);
                 }
                 mensaje = ma.getMateriaNombre();
                 break;
-            case "form:aula":
+            case "form:tw:aula":
                 Aula a = (Aula) event.getObject();
                 if (a.getZonaAula().getIdzona() == null || a.getZonaAula().getIdzona() == 0) {
                     aulas.remove(aulas.indexOf(a));
