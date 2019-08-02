@@ -5,74 +5,198 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
-    <body>
+    <h:body>
+
         <ui:composition template="./../WEB-INF/template/plantilla1.xhtml">
             <ui:define name="content">
 
-                <h:form styleClass="centred-form" id="frm">
-                    <p:panel header="Recursos">
-                        <h:panelGrid id="r" columns="2" columnClasses="label, value">
-                            <p:outputLabel for="paises" value="Paises" />
-                            <p:selectOneMenu id="paises" value="#{recursosController.listaPais}" style="width:125px">
-                                <f:selectItems var="p" itemLabel="#{p.paisNombre}" value="#{recursosController.listaPais}"/>
-                            </p:selectOneMenu>
-                            <p:outputLabel for="categoria" value="Categorias" />
-                            <p:selectOneMenu id="categoria" value="#{recursosController.categoria}" style="width:125px">
-                                <f:selectItems var="c" itemLabel="#{c.categoriaNombre}"  value="#{recursosController.categoria}"/>
-                            </p:selectOneMenu>
-                            <p:outputLabel for="tiporecurso" value="Tipo Recurso" />
-                            <p:selectOneMenu id="tiporecurso" value="#{recursosController.tiporecurso}" style="width:125px">
-                                <f:selectItems var="tr" itemLabel="#{tr.tipoRecursoNombre}"  value="#{recursosController.tiporecurso}"/>
-                            </p:selectOneMenu>
-                            <p:outputLabel for="tipocargo" value="Tipo Cargo" />
-                            <p:selectOneMenu id="tipocargo" value="#{recursosController.tipocargo}" style="width:125px">
-                                <f:selectItems var="tc" itemLabel="#{tc.nombre}"  value="#{recursosController.tipocargo}"/>
-                            </p:selectOneMenu>
-                            <h:outputLabel value="Nombre"/>
-                            <p:inputText value="#{recursosController.r.nombre}" required="true" />
+                <f:view>
 
-                            <h:outputLabel value="Tipo Prestamo"/>
-                            <p:selectBooleanCheckbox value="#{recursosController.r.tipoPrestamo}" itemLabel="Interno"/>
-                            <p:selectBooleanCheckbox value="#{recursosController.r.tipoPrestamo}" itemLabel="Externo"/>
-                            <p:selectBooleanCheckbox value="#{recursosController.r.tipoPrestamo}" itemLabel="Sala"/>
-                            <p:outputLabel for="activo" value="Activo" />
-                            <p:selectOneMenu id="activo" value="#{recursosController.r.activo}" required="true"
-                                             style="width:125px" title="Seleccione activo o inactivo">
-                                <f:selectItem itemLabel="Seleccione" itemValue="" />
-                                <f:selectItem itemLabel="Activo" itemValue="0" />
-                                <f:selectItem itemLabel="Inactivo" itemValue="1" />
-                            </p:selectOneMenu>
-                            <p:messages for="activo" showSummary="true"/>
-                            <p:outputLabel for="valor" value="Valor unitario " />
-                            <p:selectOneMenu id="valor" value="#{recursosController.r.valorUnitario}" required="true"
-                                             style="width:125px" title="Seleccione valor">
-                                <f:selectItem itemLabel="Seleccione" itemValue="" />
-                                <f:selectItem itemLabel="Real" itemValue="0" />
-                                <f:selectItem itemLabel="Estimado" itemValue="1" />
-                            </p:selectOneMenu>
-                            <p:messages for="valor" showSummary="true"/>
-                            <p:outputLabel for="estado" value="Estado Fisico" />
-                            <p:selectOneMenu id="estado" value="#{recursosController.r.estadoFisico}" style="width:125px">
-                                <f:selectItem itemLabel="Seleccione" itemValue="" />
-                                <f:selectItem itemLabel="Bueno" itemValue="" />
-                                <f:selectItem itemLabel="Regular" itemValue="Xbox One" />
-                            </p:selectOneMenu>
-                            <p:selectOneMenu id="tipovalor" value="#{recursosController.r.tipoValor}" required="true"
-                                             style="width:125px" title="Seleccione valor">
-                                <f:selectItem itemLabel="Seleccione" itemValue="" />
-                                <f:selectItem itemLabel="Real" itemValue="0" />
-                                <f:selectItem itemLabel="Estimado" itemValue="1" />
-                            </p:selectOneMenu>
-                            <h:outputLabel value="Modelo"/>
-                            <p:inputText value="#{recursosController.r.modelo}" required="true" />
-                        </h:panelGrid>
+                    <h:form class="centred-form" id="frm-recurso">
+                        <p:growl id="growl" life="2000" />
+                        <h1><h:outputText value="Agregar un recurso"/></h1>
+                        <p:panel>
+                            <h2 style="text-align: center">Selecciona el tipo de recurso que deseas asignar</h2>
+                            <h:panelGrid columns="2" style="margin: 0 auto">
+                                <p:outputLabel for="tiporecurso" value="Tipo Recurso" />
+                                <p:selectOneMenu id="tiporecurso" value="#{recursosController.recursoEntity.idTipoRecurso}" converter="omnifaces.SelectItemsConverter">
+                                    <f:selectItems value="#{recursosController.tiporecurso}" var="tr" itemLabel="#{tr.tipoRecursoNombre}" itemValue="#{tr}" />
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+                        </p:panel>
 
-                    </p:panel>
+                        <p:panel style="margin: 10px auto;" >
 
-                </h:form>
+                            <h2 style="text-align: center">Datos del libro</h2>
+                            <p:panelGrid columns="2" style="margin: 0 auto;">
+                                <p:outputLabel value="Autor:" for="autor" />
+                                <p:selectOneMenu id="autor" value="#{recursosController.autorLibro.autor}" required="true" converter="omnifaces.SelectItemsConverter" requiredMessage="The Autor field is required.">
+                                    <f:selectItems value="#{recursosController.listaAutores}" var="ra" itemLabel="#{ra.autorNombre}" />
+                                </p:selectOneMenu>
+                                <p:outputLabel value="Editorial:" for="editorial" />
+                                <p:selectOneMenu id="editorial" value="#{recursosController.editorialLibro.editorial}" converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="The Editorial field is required.">
+                                    <f:selectItems value="#{recursosController.listaEditorial}" var="re" itemLabel="#{re.editorialNombre}" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel value="Nombre del Libro:"  />
+                                <p:inputText  value="#{recursosController.contenidoLibroPK.contenidoLibroNombre}" maxlength="45" title="ContenidoLibroNombre" required="true" requiredMessage="The ContenidoLibroNombre field is required."/>
+                                <p:outputLabel value="Cantidad de Paginas:"  />
+                                <p:inputNumber  value="#{recursosController.contenidoLibroPK.contenidoLibroPagina}" minValue="0" decimalPlaces="0" title="ContenidoLibroPagina" required="true" requiredMessage="The ContenidoLibroPagina field is required."/>
+                                <p:outputLabel value="Indice:" for="contenidoLibroIndice" />
+                                <p:inputNumber id="contenidoLibroIndice" value="#{recursosController.contenidoLibroEntity.contenidoLibroIndice}" minValue="0" decimalPlaces="0" title="ContenidoLibroIndice" required="true" requiredMessage="The ContenidoLibroIndice field is required."/>
+                                <p:outputLabel value="Comentario:" for="contenidoLibroComentario" />
+                                <p:inputTextarea id="contenidoLibroComentario" value="#{recursosController.contenidoLibroEntity.contenidoLibroComentario}" title="ContenidoLibroComentario" />
+                            </p:panelGrid>
+
+
+                        </p:panel>
+                       
+                        <p:panel  style="margin: 10px auto;" >
+
+                            <p:panelGrid columns="2" style="margin: 0 auto;" id="grid-recurso"> 
+                                <p:outputLabel value="Codigo:" for="codigo" />
+                                <p:inputNumber id="codigo" value="#{recursosController.recursoEntity.idrecurso}" decimalPlaces="0" minValue="0"  title="Codigo" required="true" requiredMessage="El campo es requerido"/>
+                                <p:outputLabel value="Nombre del Recurso:" for="nombre" />
+                                <p:inputText id="nombre" value="#{recursosController.recursoEntity.nombre}" title="Nombre" required="true" requiredMessage="The Nombre field is required."/>
+                                <h:outputLabel for="multiple" value="Tipo de Reserva:"/>
+                                <p:selectCheckboxMenu id="multiple" value="#{recursosController.seleccionTipoReserva}" label="Cities" multiple="true"
+                                                      filter="true" filterMatchMode="startsWith" panelStyle="width:250px">
+                                    <f:selectItems value="#{recursosController.listaTipoReserva}" var="tr" itemLabel="#{tr.tipoReservaNombre}" />
+                                </p:selectCheckboxMenu>
+                                <p:outputLabel value="Valor Unitario:" for="valorUnitario" />
+                                <p:inputNumber id="valorUnitario" value="#{recursosController.recursoEntity.valorUnitario}" title="ValorUnitario" required="true" minValue="1" requiredMessage="The ValorUnitario field is required."/>
+                                <p:outputLabel for="estado" value="Estado Fisico" />
+                                <p:selectOneMenu id="estado" value="#{recursosController.recursoEntity.estadoFisico}" required="true" style="width:125px">
+                                    <f:selectItem itemLabel="Seleccione" itemValue="" noSelectionOption="true" />
+                                    <f:selectItem itemLabel="Bueno" itemValue="B" />
+                                    <f:selectItem itemLabel="Regular" itemValue="R" />
+                                </p:selectOneMenu>
+                                <p:outputLabel value="Tipo Valor:" for="tipoValor" />
+                                <p:selectOneMenu id="tipoValor" value="#{recursosController.recursoEntity.tipoValor}" required="true" style="width:125px">
+                                    <f:selectItem itemLabel="REAL" itemValue="REAL" />
+                                    <f:selectItem itemLabel="ESTIMADO" itemValue="ESTIMADO" />
+                                </p:selectOneMenu>
+                                <p:outputLabel value="Modelo:" for="modelo" />
+                                <p:inputText id="modelo" value="#{recursosController.recursoEntity.modelo}" title="Modelo" />
+                                <p:outputLabel value="Comentarios:" for="recursoComentarios" />
+                                <p:inputTextarea id="recursoComentarios" value="#{recursosController.recursoEntity.recursoComentarios}" cols="30" title="RecursoComentarios" />
+
+                                <p:outputLabel for="tipocargo" value="Tipo Cargo" />
+                                <p:selectOneMenu id="tipocargo" value="#{recursosController.recursoEntity.tipoCargo}" converter="omnifaces.SelectItemsConverter">
+                                    <f:selectItems var="tc" itemLabel="#{tc.nombre}"  value="#{recursosController.tipocargo}"/>
+                                </p:selectOneMenu>
+                                <p:outputLabel for="paises" value="Paises" />
+                                <p:selectOneMenu id="paises" value="#{recursosController.recursoEntity.pais}" converter="omnifaces.SelectItemsConverter">
+                                    <f:selectItems var="p" itemLabel="#{p.paisNombre}" value="#{recursosController.listaPais}" />
+                                </p:selectOneMenu>
+                                <p:outputLabel for="categoria" value="Categorias" />
+                                <p:selectOneMenu id="categoria" value="#{recursosController.recursoEntity.categoria}" converter="omnifaces.SelectItemsConverter">
+                                    <f:selectItems var="c" itemLabel="#{c.categoriaNombre}"  value="#{recursosController.categoria}"/>
+                                </p:selectOneMenu>
+
+                            </p:panelGrid>
+
+
+                            <h:panelGrid columns="1" style="margin: 10px auto;">
+                                <p:commandButton value="Guardar" id="btnAddRecruso" update=":frm-recurso frm-tabla:tb-recurso " action="#{recursosController.crear()}" />
+                            </h:panelGrid>
+                        </p:panel>
+
+
+                    </h:form>
+
+
+                    <h:form id="frm-tabla" >
+                        <h1><h:outputText value="Lista de Recursos"/></h1>
+                        <p:dataTable id="tb-recurso"
+                                     value="#{recursosController.recurso}" 
+                                     var="item"
+                                     paginator="true"
+                                     rows="10"
+                                     rowsPerPageTemplate="5,10,15,20"
+                                     paginatorPosition="bottom"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     widgetVar="dataTable"
+                                     >
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Idrecurso"/>
+                                </f:facet>
+                                <h:outputText value="#{item.idrecurso}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Nombre"/>
+                                </f:facet>
+                                <h:outputText value="#{item.nombre}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Activo"/>
+                                </f:facet>
+                                <h:outputText value="#{item.activo}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="ValorUnitario"/>
+                                </f:facet>
+                                <h:outputText value="#{item.valorUnitario}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="EstadoFisico"/>
+                                </f:facet>
+                                <h:outputText value="#{item.estadoFisico}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="TipoValor"/>
+                                </f:facet>
+                                <h:outputText value="#{item.tipoValor}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Modelo"/>
+                                </f:facet>
+                                <h:outputText value="#{item.modelo}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="RecursoComentarios"/>
+                                </f:facet>
+                                <h:outputText value="#{item.recursoComentarios}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="TipoRecurso"/>
+                                </f:facet>
+                                <h:outputText value="#{item.idTipoRecurso.tipoRecursoNombre}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Tipo Cargo"/>
+                                </f:facet>
+                                <h:outputText value="#{item.tipoCargo.nombre}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Pais"/>
+                                </f:facet>
+                                <h:outputText value="#{item.pais.paisNombre}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Categoria"/>
+                                </f:facet>
+                                <h:outputText value="#{item.categoria.categoriaNombre}"/>
+                            </p:column>
+                        </p:dataTable>
+                    </h:form>
+                </f:view>
+
             </ui:define>
 
         </ui:composition>
-    </body>
+    </h:body>
 </html>
 
