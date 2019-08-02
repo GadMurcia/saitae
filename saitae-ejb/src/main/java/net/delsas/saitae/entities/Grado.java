@@ -53,7 +53,7 @@ public class Grado implements Serializable {
     @Column(name = "gradoCoemntario")
     private String gradoCoemntario;
     @JoinColumn(name = "gradoMaestroGuia", referencedColumnName = "idmaestro")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = true)
     private Maestro gradoMaestroGuia;
     @JoinColumn(name = "aulaGrado", referencedColumnName = "idaula")
     @ManyToOne(optional = false)
