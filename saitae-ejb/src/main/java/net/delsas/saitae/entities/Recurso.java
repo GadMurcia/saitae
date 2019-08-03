@@ -34,7 +34,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Recurso.findAll", query = "SELECT r FROM Recurso r")
     , @NamedQuery(name = "Recurso.findByIdrecurso", query = "SELECT r FROM Recurso r WHERE r.idrecurso = :idrecurso")
     , @NamedQuery(name = "Recurso.findByNombre", query = "SELECT r FROM Recurso r WHERE r.nombre = :nombre")
-   
     , @NamedQuery(name = "Recurso.findByActivo", query = "SELECT r FROM Recurso r WHERE r.activo = :activo")
     , @NamedQuery(name = "Recurso.findByValorUnitario", query = "SELECT r FROM Recurso r WHERE r.valorUnitario = :valorUnitario")
     , @NamedQuery(name = "Recurso.findByEstadoFisico", query = "SELECT r FROM Recurso r WHERE r.estadoFisico = :estadoFisico")
@@ -56,7 +55,6 @@ public class Recurso implements Serializable {
     private String nombre;
     @Basic(optional = false)
     @NotNull
-    
     @Column(name = "activo")
     private boolean activo;
     @Basic(optional = false)
@@ -112,7 +110,6 @@ public class Recurso implements Serializable {
     public Recurso(Integer idrecurso, String nombre, boolean activo, float valorUnitario, String tipoValor) {
         this.idrecurso = idrecurso;
         this.nombre = nombre;
-       
         this.activo = activo;
         this.valorUnitario = valorUnitario;
         this.tipoValor = tipoValor;
@@ -133,8 +130,6 @@ public class Recurso implements Serializable {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-
-   
 
     public boolean getActivo() {
         return activo;

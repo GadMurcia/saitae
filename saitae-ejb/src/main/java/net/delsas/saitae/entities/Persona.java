@@ -453,5 +453,5 @@ public class Persona implements Serializable {
     public String toString() {
         return "net.delsas.saitae.entities.Persona[ idpersona=" + idpersona + " ]";
     }
-
+    
 }

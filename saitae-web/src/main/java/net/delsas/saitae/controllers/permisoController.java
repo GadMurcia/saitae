@@ -109,7 +109,7 @@ public class permisoController implements Serializable {
     public boolean isSeleccionEstudiante() {
         if (id > 0) {
             m = mfl.find(new MatriculaPK(id,
-                    p.getPermisosPK().getPermisoFechaSolicitud()));
+                    p.getPermisosPK().getPermisoFechaSolicitud().getYear()+1900));
         }
         return id > 0;
     }

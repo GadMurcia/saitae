@@ -6,7 +6,6 @@
 package net.delsas.saitae.entities;
 
 import java.io.Serializable;
-import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -68,7 +67,7 @@ public class MestroHorarioMaterias implements Serializable {
         this.mestroHorarioMateriasPK = mestroHorarioMateriasPK;
     }
 
-    public MestroHorarioMaterias(int idMaestro, int idMateria, int idHorario, String diaSemana, int idGrado, String seccionGrado, Date añoGrado) {
+    public MestroHorarioMaterias(int idMaestro, int idMateria, int idHorario, String diaSemana, int idGrado, String seccionGrado, int añoGrado) {
         this.mestroHorarioMateriasPK = new MestroHorarioMateriasPK(idMaestro, idMateria, idHorario, diaSemana, idGrado, seccionGrado, añoGrado);
     }
 

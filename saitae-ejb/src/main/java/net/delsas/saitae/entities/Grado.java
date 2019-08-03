@@ -6,7 +6,6 @@
 package net.delsas.saitae.entities;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -53,7 +52,7 @@ public class Grado implements Serializable {
     @Column(name = "gradoCoemntario")
     private String gradoCoemntario;
     @JoinColumn(name = "gradoMaestroGuia", referencedColumnName = "idmaestro")
-    @ManyToOne(optional = true)
+    @ManyToOne
     private Maestro gradoMaestroGuia;
     @JoinColumn(name = "aulaGrado", referencedColumnName = "idaula")
     @ManyToOne(optional = false)
@@ -79,7 +78,7 @@ public class Grado implements Serializable {
         this.gradoActivo = gradoActivo;
     }
 
-    public Grado(int idgrado, String gradoModalidad, String gradoSeccion, Date gradoAño) {
+    public Grado(int idgrado, String gradoModalidad, String gradoSeccion, int gradoAño) {
         this.gradoPK = new GradoPK(idgrado, gradoModalidad, gradoSeccion, gradoAño);
     }
 

@@ -153,7 +153,7 @@ public class GradoEvaluacion implements Serializable {
         this.material = material;
     }
 
-    public GradoEvaluacion(int idGrado, String gradoSeccion, Date gradoAño, String gradoModalidad) {
+    public GradoEvaluacion(int idGrado, String gradoSeccion, int gradoAño, String gradoModalidad) {
         this.gradoEvaluacionPK = new GradoEvaluacionPK(idGrado, gradoSeccion, gradoAño, gradoModalidad);
     }
 

@@ -33,13 +33,12 @@ public class ContribucionesPK implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "a\u00f1o")
-    @Temporal(TemporalType.DATE)
-    private Date año;
+    private int año;
 
     public ContribucionesPK() {
     }
 
-    public ContribucionesPK(Date fechaHora, int mes, Date año) {
+    public ContribucionesPK(Date fechaHora, int mes, int año) {
         this.fechaHora = fechaHora;
         this.mes = mes;
         this.año = año;
@@ -61,11 +60,11 @@ public class ContribucionesPK implements Serializable {
         this.mes = mes;
     }
 
-    public Date getAño() {
+    public int getAño() {
         return año;
     }
 
-    public void setAño(Date año) {
+    public void setAño(int año) {
         this.año = año;
     }
 
@@ -74,7 +73,7 @@ public class ContribucionesPK implements Serializable {
         int hash = 0;
         hash += (fechaHora != null ? fechaHora.hashCode() : 0);
         hash += (int) mes;
-        hash += (año != null ? año.hashCode() : 0);
+        hash += (int) año;
         return hash;
     }
 
@@ -91,7 +90,7 @@ public class ContribucionesPK implements Serializable {
         if (this.mes != other.mes) {
             return false;
         }
-        if ((this.año == null && other.año != null) || (this.año != null && !this.año.equals(other.año))) {
+        if (this.año != other.año) {
             return false;
         }
         return true;

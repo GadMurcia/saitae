@@ -53,7 +53,7 @@ public class Contribuciones implements Serializable {
         this.contribucionesPK = contribucionesPK;
     }
 
-    public Contribuciones(Date fechaHora, int mes, Date año) {
+    public Contribuciones(Date fechaHora, int mes, int año) {
         this.contribucionesPK = new ContribucionesPK(fechaHora, mes, año);
     }
 

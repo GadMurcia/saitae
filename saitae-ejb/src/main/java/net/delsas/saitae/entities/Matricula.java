@@ -6,7 +6,6 @@
 package net.delsas.saitae.entities;
 
 import java.io.Serializable;
-import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -69,7 +68,7 @@ public class Matricula implements Serializable {
         this.matriculaRepite = matriculaRepite;
     }
 
-    public Matricula(int idmatricula, Date matriculaAnyo) {
+    public Matricula(int idmatricula, int matriculaAnyo) {
         this.matriculaPK = new MatriculaPK(idmatricula, matriculaAnyo);
     }
 

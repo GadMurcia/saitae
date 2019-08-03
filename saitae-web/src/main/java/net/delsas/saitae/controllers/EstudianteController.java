@@ -79,7 +79,7 @@ public class EstudianteController implements Serializable {
         est = est1.getEstudiante();
         resp = resp1.getEstudiante();
         m = new Matricula();
-        m.setGrado(new Grado(new GradoPK(0, "", "", this.getAñoMatricula())));
+        m.setGrado(new Grado(new GradoPK(0, "", "", getAñoMatricula().getYear()+1900)));
         docs = new Documentos();
     }
 
@@ -94,7 +94,7 @@ public class EstudianteController implements Serializable {
 
     public void busca() {
         Matricula m1 = mfl.find(new MatriculaPK(est1.getIdpersona() != null ? est1.getIdpersona() : 0,
-                getAñoMatricula()));
+                getAñoMatricula().getYear()+1900));
         if (m1 != null && m1.getEstudiante().getEstudianteEsEstudiante() && est.getIdestudiante() == null) {
             est = m1.getEstudiante();
             est1 = est.getPersona();
@@ -147,7 +147,7 @@ public class EstudianteController implements Serializable {
         persist(est, est.getIdestudiante());
 
         m.setEstudiante(est);
-        m.setMatriculaPK(new MatriculaPK(est.getIdestudiante(), this.getAñoMatricula()));
+        m.setMatriculaPK(new MatriculaPK(est.getIdestudiante(), this.getAñoMatricula().getYear()+1900));
         m.getGrado().getGradoPK().setGradoSeccion("C");
         persist(m, m.getMatriculaPK().getIdmatricula());
 
@@ -376,7 +376,7 @@ public class EstudianteController implements Serializable {
                 efl.edit((Estudiante) m);
             }
         } else if (m.getClass() == this.m.getClass()) {
-            if (mfl.find(new MatriculaPK(p, this.getAñoMatricula())) == null) {
+            if (mfl.find(new MatriculaPK(p, this.getAñoMatricula().getYear()+1900)) == null) {
                 mfl.create((Matricula) m);
             } else {
                 mfl.edit((Matricula) m);

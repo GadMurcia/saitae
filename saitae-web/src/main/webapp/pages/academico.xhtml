@@ -152,8 +152,7 @@
                         </p:tab>
                         <p:tab title="Grados">
                             <p:dataTable id="grado" var="g" value="#{tipoController.grados}" 
-                                         editable="true" rows="7" paginator="true"
-                                         widgetVar="grado1" >
+                                         editable="true" widgetVar="grado1" >
                                 <f:facet name="header">
                                     Administración de Grados
                                 </f:facet>
@@ -221,12 +220,13 @@
                                     </p:cellEditor>
                                 </p:column>
                                 <p:column headerText="Año">
-                                    <h:outputText value="#{g.gradoPK.gradoAño.year+1900}" />
+                                    <h:outputText value="#{g.gradoPK.gradoAño}" />
                                 </p:column>
                                 <p:column headerText="Maestro Guía">
                                     <p:cellEditor>
                                         <f:facet name="output">
-                                            <h:outputText value="#{g.gradoMaestroGuia == null? 'No Seleccionado' : 
+                                            <h:outputText value="#{g.gradoMaestroGuia.idmaestro == 0 
+                                                                   ? 'No Seleccionado' : 
                                                                    g.gradoMaestroGuia.persona.personaNombre}" />
                                         </f:facet>
                                         <f:facet name="input">

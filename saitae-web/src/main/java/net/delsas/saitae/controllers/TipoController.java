@@ -60,6 +60,7 @@ import net.delsas.saitae.entities.GradoPK;
 import net.delsas.saitae.entities.Horario;
 import net.delsas.saitae.entities.Maestro;
 import net.delsas.saitae.entities.Materia;
+import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.TipoCargo;
 import net.delsas.saitae.entities.TipoMateria;
 import net.delsas.saitae.entities.TipoNombramiento;
@@ -196,7 +197,7 @@ public class TipoController implements Serializable {
         editorial = editorialFL.findAll();
         horario = horarioFL.findAll();
         financiamientos = financiamientoFL.findAll();
-        grados = gradoFL.findAll();
+        grados = gradoFL.findAll();        
     }
 
     public void onAddNew(String id) {
@@ -253,7 +254,8 @@ public class TipoController implements Serializable {
                 financiamientos.add(new Financiamiento(0));
                 break;
             case "grado":
-                Grado g = new Grado(new GradoPK(0, "", "", new Date()), true);
+                Grado g = new Grado(new GradoPK(0, "", "",
+                        Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date()))), true);
                 g.setAulaGrado(new Aula(0));
                 g.getAulaGrado().setZonaAula(new Zona(0, ""));
                 g.setGradoMaestroGuia(new prueba().getMaestro().getMaestro());
@@ -371,7 +373,7 @@ public class TipoController implements Serializable {
                 titulo = "Grado";
                 mensaje = g.getGradoPK().getIdgrado() + "° " + g.getGradoPK().getGradoModalidad() + " "
                         + g.getGradoPK().getGradoSeccion() + " para el año"
-                        + g.getGradoPK().getGradoAño().getYear() + " fue agregado.";
+                        + g.getGradoPK().getGradoAño() + " fue agregado.";
                 break;
             default:
                 System.out.println(id);
@@ -740,7 +742,16 @@ public class TipoController implements Serializable {
     }
 
     public List<Grado> getGrados() {
-        return grados;
+        List<Grado> i=new ArrayList<>();
+        for (Grado g : grados) {
+            if (g.getGradoMaestroGuia() == null) {
+                g.setGradoMaestroGuia(new Maestro(0));
+                g.getGradoMaestroGuia().setPersona(new Persona(0, "", "", true));
+            }
+            
+                i.add(g);
+        }
+        return i;
     }
 
     public void setGrados(List<Grado> grados) {

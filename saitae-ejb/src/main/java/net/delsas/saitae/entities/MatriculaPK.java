@@ -6,12 +6,9 @@
 package net.delsas.saitae.entities;
 
 import java.io.Serializable;
-import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -28,13 +25,12 @@ public class MatriculaPK implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "matriculaAnyo")
-    @Temporal(TemporalType.DATE)
-    private Date matriculaAnyo;
+    private int matriculaAnyo;
 
     public MatriculaPK() {
     }
 
-    public MatriculaPK(int idmatricula, Date matriculaAnyo) {
+    public MatriculaPK(int idmatricula, int matriculaAnyo) {
         this.idmatricula = idmatricula;
         this.matriculaAnyo = matriculaAnyo;
     }
@@ -47,11 +43,11 @@ public class MatriculaPK implements Serializable {
         this.idmatricula = idmatricula;
     }
 
-    public Date getMatriculaAnyo() {
+    public int getMatriculaAnyo() {
         return matriculaAnyo;
     }
 
-    public void setMatriculaAnyo(Date matriculaAnyo) {
+    public void setMatriculaAnyo(int matriculaAnyo) {
         this.matriculaAnyo = matriculaAnyo;
     }
 
@@ -59,7 +55,7 @@ public class MatriculaPK implements Serializable {
     public int hashCode() {
         int hash = 0;
         hash += (int) idmatricula;
-        hash += (matriculaAnyo != null ? matriculaAnyo.hashCode() : 0);
+        hash += (int) matriculaAnyo;
         return hash;
     }
 
@@ -73,7 +69,7 @@ public class MatriculaPK implements Serializable {
         if (this.idmatricula != other.idmatricula) {
             return false;
         }
-        if ((this.matriculaAnyo == null && other.matriculaAnyo != null) || (this.matriculaAnyo != null && !this.matriculaAnyo.equals(other.matriculaAnyo))) {
+        if (this.matriculaAnyo != other.matriculaAnyo) {
             return false;
         }
         return true;

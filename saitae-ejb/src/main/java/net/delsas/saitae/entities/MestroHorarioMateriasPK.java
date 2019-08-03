@@ -6,12 +6,9 @@
 package net.delsas.saitae.entities;
 
 import java.io.Serializable;
-import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -51,13 +48,12 @@ public class MestroHorarioMateriasPK implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "a\u00f1oGrado")
-    @Temporal(TemporalType.DATE)
-    private Date añoGrado;
+    private int añoGrado;
 
     public MestroHorarioMateriasPK() {
     }
 
-    public MestroHorarioMateriasPK(int idMaestro, int idMateria, int idHorario, String diaSemana, int idGrado, String seccionGrado, Date añoGrado) {
+    public MestroHorarioMateriasPK(int idMaestro, int idMateria, int idHorario, String diaSemana, int idGrado, String seccionGrado, int añoGrado) {
         this.idMaestro = idMaestro;
         this.idMateria = idMateria;
         this.idHorario = idHorario;
@@ -115,11 +111,11 @@ public class MestroHorarioMateriasPK implements Serializable {
         this.seccionGrado = seccionGrado;
     }
 
-    public Date getAñoGrado() {
+    public int getAñoGrado() {
         return añoGrado;
     }
 
-    public void setAñoGrado(Date añoGrado) {
+    public void setAñoGrado(int añoGrado) {
         this.añoGrado = añoGrado;
     }
 
@@ -132,7 +128,7 @@ public class MestroHorarioMateriasPK implements Serializable {
         hash += (diaSemana != null ? diaSemana.hashCode() : 0);
         hash += (int) idGrado;
         hash += (seccionGrado != null ? seccionGrado.hashCode() : 0);
-        hash += (añoGrado != null ? añoGrado.hashCode() : 0);
+        hash += (int) añoGrado;
         return hash;
     }
 
@@ -161,7 +157,7 @@ public class MestroHorarioMateriasPK implements Serializable {
         if ((this.seccionGrado == null && other.seccionGrado != null) || (this.seccionGrado != null && !this.seccionGrado.equals(other.seccionGrado))) {
             return false;
         }
-        if ((this.añoGrado == null && other.añoGrado != null) || (this.añoGrado != null && !this.añoGrado.equals(other.añoGrado))) {
+        if (this.añoGrado != other.añoGrado) {
             return false;
         }
         return true;

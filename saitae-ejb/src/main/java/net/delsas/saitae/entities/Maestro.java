@@ -172,7 +172,7 @@ public class Maestro implements Serializable {
     @Size(max = 45)
     @Column(name = "maestroComentario")
     private String maestroComentario;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "gradoMaestroGuia")
+    @OneToMany(mappedBy = "gradoMaestroGuia")
     private List<Grado> gradoList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "maestro")
     private List<MestroHorarioMaterias> mestroHorarioMateriasList;
