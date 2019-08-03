@@ -3,354 +3,60 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:t="http://java.sun.com/jsf/composite/components/autentia">
     <h:head>
         <title>Nuevo Ingreso #{(estudianteController.añoMatricula.year +1900)}</title>
     </h:head>
     <h:body>
         <h:form id="form0">
-            <p:growl id="msgs" sticky="true" showDetail="true"/>
+            <p:growl id="msgs" showDetail="true"/>
         </h:form>
         <h:form id="form1"> 
-            <p:wizard flowListener="#{estudianteController.onFlowProcess}" style="height: inherit;">
+            <p:wizard flowListener="#{estudianteController.onFlowProcess}" style="height: inherit;"
+                      nextLabel="Siguiente" backLabel="Atrás">
 
-                <p:tab id="general" title="Generalidades" >
+                <p:tab id="general" title="Generalidades">
                     <p:panel header="Generalidades sobre la inscipción.">
                         <p:messages />
                         <h:panelGrid columns="1">
-                            <h:outputLabel value="" />
+                            <p>
+                                Llegado a este punto, Usted ha terminado de llenar su solicitud para 
+                                estudiante de nuevo ingreso. pero si tiene alguna duda o quiere revisar lo que ha ingresado,
+                                puede fácilmente presionar el botón <strong>Atrás</strong> que se encuentra en la parte inferior
+                                izquierda del formulario y verificar todo lo que ha ingresado.<br/>Una vez esté
+                                satisfecho presione el botón <strong>Siguiente</strong> hasta que aparezca de nuevo éste mismo
+                                mensaje y presione el botón <strong>Guardar</strong>, en la esquina inferior izquierda, para guardar sus datos.<br/>
+                                <br/><strong>No actualice la página o perderá sus datos</strong>.<br/>
+                                <br/>
+                                Una vez guardados sus datos, podrá ingresar a nuestra plataforma usando su <strong>NIE</strong> 
+                                como usuario y como contraseña.<br/>
+                                La contraseña puede ser actualizada desde su perfil más adelante.
+                                <br/><br/>
+                                <strong>Feliz día!</strong>
+
+                            </p> 
                         </h:panelGrid>                            
                     </p:panel>
                 </p:tab>
 
-                <p:tab id="personal" title="Estudiante">
+                <p:tab id="personal" title="Estudiante" >
                     <p:panel header="Datos personales del aspirante a estudiante de nuevo ingreso">
-                        <t:persona departamento="#{estudianteController.departamentoE}" 
-                                   departamentoLista="#{estudianteController.departamentoListaE}" 
-                                   dui="#{estudianteController.nie}" 
-                                   municipio="#{estudianteController.municipioE}" 
-                                   municipioLista="#{estudianteController.municipioListaE}" 
-                                   persona="#{estudianteController.est1}"
-                                   listenerA="#{estudianteController.onItemSelect2(event)}"/>
+                        <t:persona departamento="#{estudianteController.departamentoE}" departamentoLista="#{estudianteController.departamentoListaE}" dui="#{estudianteController.nie}" municipio="#{estudianteController.municipioE}" 
+                                   municipioLista="#{estudianteController.municipioListaE}" persona="#{estudianteController.est1}"
+                                   listenerA="#{estudianteController.onItemSelect2}" t="8" estudiante="#{estudianteController.est}"/>
                     </p:panel>
                 </p:tab>
 
                 <p:tab id="contacto" title="Contacto">
                     <p:panel header="Información de contacto">
-                        <t:persona1 persona="#{estudianteController.est1}"/>
+                        <t:persona1 persona="#{estudianteController.est1}" />
                     </p:panel>
                 </p:tab>
-
+                
                 <p:tab id="eco" title="Socioeconómico">
-                    <p:panel header="Detalles Socioeconómicos del aspirante">
-                        <p:messages />
-                        <h:panelGrid columns="2" columnClasses="label, value">
-                            <p:outputLabel for="console2" value="Zona de residencia: *" />
-                            <p:selectOneMenu id="console2" value="#{estudianteController.est1.personaZonaVivienda}" required="true"
-                                             style="width:125px" title="Seleccione su Zona donde vive">
-                                <f:selectItem itemLabel="Seleccione" itemValue="" />
-                                <f:selectItem itemLabel="Rural" itemValue="0" />
-                                <f:selectItem itemLabel="Urbana" itemValue="1" />
-                            </p:selectOneMenu>
-
-                            <p:outputLabel for="console3" value="Tipo de calle de donde vive: *" />
-                            <p:selectOneMenu id="console3" value="#{estudianteController.est.estudianteTipoCalle}"  required="true"
-                                             style="width:125px" title="Seleccione el tipo de calle de el lugar donde vive">
-                                <f:selectItem itemLabel="Seleccione" itemValue="" />
-                                <f:selectItem itemLabel="Tierra" itemValue="0" />
-                                <f:selectItem itemLabel="Pavimentada" itemValue="1" />
-                            </p:selectOneMenu>
-
-                            <p:outputLabel for="console4" value="Medio de transporte: *" />
-                            <p:selectOneMenu id="console4" value="#{estudianteController.est.estudianteMedioTransporte}"  
-                                             required="true" style="width:125px" 
-                                             title="Seleccione la forma en que habitualmete viajaría al centro de estudios">
-                                <f:selectItem itemLabel="Seleccione" itemValue="" />
-                                <f:selectItem itemLabel="A pie" itemValue="0" />
-                                <f:selectItem itemLabel="Bicicleta" itemValue="1" />
-                                <f:selectItem itemLabel="Moto" itemValue="2" />
-                                <f:selectItem itemLabel="Carro propio" itemValue="3" />
-                                <f:selectItem itemLabel="Bus" itemValue="4" />
-                                <f:selectItem itemLabel="Microbús" itemValue="5" />
-                            </p:selectOneMenu>
-
-                            <h:outputText value="Riesgo o vulnerabilidad: " />
-                            <p:inputText value="#{estudianteController.est.estudianteRiesgoVulnerabilidad}"  
-                                         title="Escriba los riesgos o vulnarabilidades del lugar en donde vive, si los hubiera."/>
-
-                            <h:outputText value="Distancia en KM que recorrería hasta al INTEX: *"/>
-                            <p:inputNumber id="input1" value="#{estudianteController.est.estudianteDistanciaAlCentro}" required="true"
-                                           symbol=" Km" symbolPosition="s" decimalSeparator="." thousandSeparator=","/> 
-
-                            <h:outputText value="Trabaja?: *" />
-                            <p:selectBooleanButton id="value2" value="#{estudianteController.est.estudianteTrabaja}" required="true"
-                                                   onLabel="Sí" offLabel="No" style="width:60px">
-                                <p:ajax update="r2" />
-                            </p:selectBooleanButton>
-
-                            <h:outputText value="¿En qué trabaja?: "/>
-                            <p:inputText id="r2" value="#{estudianteController.est.estudianteFormaTrabajo}" 
-                                         disabled="#{!estudianteController.est.estudianteTrabaja}" title="Escriba en qué trabaja"/>
-
-                            <p:outputLabel for="basic" value="¿De quién depende económicamente?: *" />
-                            <p:selectManyCheckbox id="basic" value="#{estudianteController.dependenciaeco}"  required="true"
-                                                  style="width:125px" immediate="true">
-                                <f:selectItem itemLabel="Padre" itemValue="Padre" />
-                                <f:selectItem itemLabel="Madre" itemValue="Madre" />
-                                <f:selectItem itemLabel="Abuelos" itemValue="Abuelo/a" />
-                                <f:selectItem itemLabel="Hermanos" itemValue="Hermano/a" />
-                                <f:selectItem itemLabel="Otros" itemValue="Otro"  />
-                                <f:ajax execute="otraDependencia" render="ot"/>
-                            </p:selectManyCheckbox>
-
-                            <h:outputText value="Especifique: "/>
-                            <p:inputText id="ot" value="#{estudianteController.otradependencia}"  
-                                         title="Escriba quién más le ayuda para sus estudios" 
-                                         disabled="#{!estudianteController.otraDependencia}"/>
-
-
-                        </h:panelGrid>
-                    </p:panel>
+                    <t:estudiante estudiante="#{estudianteController.est}" 
+                                  persona="#{estudianteController.est1}"/>
                 </p:tab>
-
-                <p:tab id="matricula" title="Matrícula">
-                    <p:panel header="Datos sobre la mátricula del aspirante">
-                        <p:messages />
-                        <h:panelGrid columns="2" columnClasses="label, value">
-                            <h:outputText value="Centro educativo de procedencia: *" />
-                            <p:inputText value="#{estudianteController.est.estudianteCentroProcedencia}" required="true"
-                                         title="Ecriba el nombre completo del Centro Escolar donde solía estudiar."/>
-
-                            <p:outputLabel for="console" value="Modalidad de bachillerato a la que aplica: *" />
-                            <p:selectOneMenu id="console5" value="#{estudianteController.m.grado.gradoPK.gradoModalidad}"  required="true"
-                                             style="width:125px" title="Seleccione la modalidad de bachillerato en la que va a iscribirse">
-                                <f:selectItem itemLabel="Seleccione" itemValue="" />
-                                <f:selectItem itemLabel="Bachillerato General" itemValue="G" />
-                                <f:selectItem itemLabel="Bachillerato Comercial" itemValue="C" />
-                                <f:ajax execute="matriculaModalidad" render="console6"/>
-                            </p:selectOneMenu>
-
-                            <p:outputLabel for="console" value="Año de BAchillerato al que aplica: *" />
-                            <p:selectOneMenu id="console6" value="#{estudianteController.m.grado.gradoPK.idgrado}"  required="true"
-                                             style="width:125px" title="Seleccione el año al que desea inscribirse">
-                                <f:selectItem itemLabel="Seleccione" itemValue="" />
-                                <f:selectItems value="#{estudianteController.niveles()}" />
-                            </p:selectOneMenu>
-
-                            <h:outputText value="¿Repite año?: *" />
-                            <p:selectBooleanButton value="#{estudianteController.m.matriculaRepite}" required="true"
-                                                   onLabel="Sí" offLabel="No" style="width:60px"/>
-
-                            <h:outputText value="¿Cursó parvularia?: *" />
-                            <p:selectBooleanButton value="#{estudianteController.est.estudianteParvularia}" required="true"
-                                                   onLabel="Sí" offLabel="No" style="width:60px"/>
-
-
-                        </h:panelGrid>
-                    </p:panel>
-                </p:tab>
-
-                <p:tab id="documentos" title="Documentos">
-
-                    <p:panel header="Ingrese los documentos que a continuación se le requieren">
-                        <h:outputText value="Recuerde que debe llevar al INTEX los documentos originales para su confrontación."/>
-                        <h:outputText value="No es necesario el llenado de estos campos en este momento. Si así lo desea, salte este paso."/>
-                        <p:messages />
-                        <h:panelGrid columns="2" columnClasses="label, value">
-                            <h:outputText value="partida de nacimiento: " />
-                            <h:form>  
-                                <p:fileUpload fileUploadListener="#{estudianteController.partida}" mode="advanced"
-                                              update="messages"  sizeLimit="10000000" label="Elejir"
-                                              allowTypes="/(\.|\/)(gif|jpe?g|png|pdf)$/" auto="true"/>
-                                <p:growl id="messages" showDetail="true" />        
-                            </h:form>
-
-                            <h:outputText value="Certificado de 9° Grado: " />
-                            <h:form>  
-                                <p:fileUpload fileUploadListener="#{estudianteController.noveno}" mode="advanced"
-                                              update="messages"  sizeLimit="10000000" label="Elejir" 
-                                              allowTypes="/(\.|\/)(gif|jpe?g|png|pdf)$/" auto="true"/>
-                                <p:growl id="messages" showDetail="true" />        
-                            </h:form>
-
-                            <h:outputText value="Constancia de conducta: " />
-                            <h:form>  
-                                <p:fileUpload fileUploadListener="#{estudianteController.conducta}" mode="advanced"
-                                              update="messages"  sizeLimit="10000000" label="Elejir"
-                                              allowTypes="/(\.|\/)(gif|jpe?g|png|pdf)$/" auto="true"/>
-                                <p:growl id="messages" showDetail="true" />        
-                            </h:form>
-
-                            <h:outputText value="Certificado de notas de bachillerato: " />
-                            <h:form>  
-                                <p:fileUpload fileUploadListener="#{estudianteController.notas}" mode="advanced"
-                                              update="messages"  sizeLimit="10000000" label="Elejir"
-                                              allowTypes="/(\.|\/)(gif|jpe?g|png|pdf)$/" auto="true"/>
-                                <p:growl id="messages" showDetail="true" />        
-                            </h:form>
-
-                            <h:outputText value="Fotocopia de DUI: " />
-                            <h:form>  
-                                <p:fileUpload fileUploadListener="#{estudianteController.noveno}" mode="advanced"
-                                              update="messages"  sizeLimit="10000000" label="Elejir"
-                                              allowTypes="/(\.|\/)(gif|jpe?g|png|pdf)$/" auto="true"/>
-                                <p:growl id="messages" showDetail="true" />        
-                            </h:form>
-                        </h:panelGrid>
-                    </p:panel>
-                </p:tab>
-
-                <p:tab id="representante" title="Repesentante">
-                    <p:panel header="Ingrese los datos del representante.">
-                        <p:messages />
-                        <h:panelGrid columns="2" columnClasses="label, value">
-                            <h:outputText value="DUI: *"/>
-                            <p:inputMask value="#{estudianteController.duiResponsable}" mask="99999999-9" 
-                                         title="Ingrese su DUI"/>
-
-                            <h:outputText value="Nombres: *" />
-                            <p:inputText value="#{estudianteController.resp1.personaNombre}" required="true" label="Nombres" 
-                                         title="Ingrese los nombres del responsable"/>
-
-                            <h:outputText value="Apellidos: *" />
-                            <p:inputText value="#{estudianteController.resp1.personaApellido}" required="true" label="Apellidos" 
-                                         title="Ingrese los apellidos del reponsable"/>
-
-                            <p:outputLabel for="spanish1" value="Fecha de Nacimiento (yyyy-mm-dd):" />
-                            <p:calendar id="spanish1" value="#{estudianteController.resp1.personaNacimiento}" locale="es" 
-                                        navigator="true" pattern="yyyy-mm-dd" title="Ingrese su fecha de nacimiento ej.: 1991-02-23"/>
-
-                            <h:outputText value="Nacionalidad: *" />
-                            <p:selectOneMenu value="#{estudianteController.resp1.personaNacionalidad}"  required="true"
-                                             style="width:125px" label="Seleccione su nacionalidad">
-                                <f:selectItem itemLabel="Salvadoreña" itemValue="Salvadoreña" />
-                                <f:selectItem itemLabel="Extrangera" itemValue="Extrangera" />
-                            </p:selectOneMenu>
-
-                            <h:outputText value="¿Es familiar del estudiante?: *" />
-                            <p:selectBooleanButton id="value3" value="#{estudianteController.resp.estudianteRepresentanteFamiliar}" onLabel="Sí" offLabel="No" style="width:60px"/>
-
-                            <h:outputText value="Parentesco con el estudiante: *" />
-                            <p:inputText value="#{estudianteController.resp1.personaNacionalidad}" 
-                                         required="true" label="Apellidos"
-                                         title="Ingrese el parentesco con el estudiante."/>
-
-
-                            <h:outputText value="NIT: " />
-                            <p:inputMask value="#{estudianteController.resp1.personaNit}" mask="9999-999999-999-9" 
-                                         title="Ingrese su NIT si posee uno."/>
-
-                            <p:outputLabel for="console" value="Sexo: *" />
-                            <p:selectOneMenu id="console7" value="#{estudianteController.resp1.personaSexo}" 
-                                             style="width:125px" title="Seleccione su sexo">
-                                <f:selectItem itemLabel="Femenino" itemValue="0" />
-                                <f:selectItem itemLabel="Masculino" itemValue="1" />
-                            </p:selectOneMenu>
-
-                            <p:outputLabel for="console" value="Estado Familiar: *" />
-                            <p:selectOneMenu id="console8" value="#{estudianteController.resp1.personaEstadoFamiliar}" >
-                                <f:selectItem itemLabel="Solter@" itemValue="0" />
-                                <f:selectItem itemLabel="Casad@" itemValue="1" />
-                            </p:selectOneMenu>
-
-                            <h:outputText value="¿Posee partida de nacimiento?: *" />
-                            <p:selectBooleanButton id="value4" value="#{estudianteController.resp.estudiantePartidaNac}" 
-                                                   onLabel="Sí" offLabel="No" style="width:60px">
-                                <p:ajax update="m"/>
-                            </p:selectBooleanButton>
-
-                            <h:outputText value="¿Por qué no tiene partida de nacimiento: " />
-                            <p:inputText id="m" value="#{estudianteController.resp.estudianteNoPartida}" 
-                                         label="Apellidos" disabled="#{estudianteController.resp.estudiantePartidaNac}"
-                                         title="Ingrese el motivo por el que no tiene partidas de nacimiento en la actualidad"/>
-
-                            <h:outputText value="Departamento de nacimiento: *" />
-                            <p:inputText value="#{estudianteController.depRep}" required="true" 
-                                         label="Apellidos" title="Ingrese el departamento de nacimiento segun su DUI"/>
-
-                            <h:outputText value="Municipio de nacimiento: *" />
-                            <p:inputText value="#{estudianteController.munRep}" required="true" 
-                                         label="Apellidos" title="Ingrese el municipio de nacimiento segun su DUI"/>
-
-                            <h:outputText value="Teléfono: " />
-                            <p:inputMask value="#{estudianteController.resp1.personaTelefono}" type="telephone" mask="9999-9999" 
-                                         title="Ingrese su número telefónico"/>
-
-
-                            <h:outputText value="email: " />
-                            <p:inputText value="#{estudianteController.resp1.personaEmail}" type="email" 
-                                         title="Ingrese su correo electrónico"/>
-
-                            <h:outputText value="Dirección: *" />
-                            <p:inputText value="#{estudianteController.resp1.personaDireccion}" required="true" 
-                                         title="Ingrese su dirección de recidencia completa"/>
-
-                            <p:outputLabel for="console" value="Zona de residencia: *" />
-                            <p:selectOneMenu id="console9" value="#{estudianteController.resp1.personaZonaVivienda}" required="true"
-                                             style="width:125px" title="Seleccione su Zona donde vive">
-                                <f:selectItem itemLabel="Seleccione" itemValue="" />
-                                <f:selectItem itemLabel="Rural" itemValue="0" />
-                                <f:selectItem itemLabel="Urbana" itemValue="1" />
-                            </p:selectOneMenu>
-
-                            <p:outputLabel for="console" value="Tipo de calle de donde vive: *" />
-                            <p:selectOneMenu id="console10" value="#{estudianteController.resp.estudianteTipoCalle}"  required="true"
-                                             style="width:125px" title="Seleccione el tipo de calle de el lugar donde vive">
-                                <f:selectItem itemLabel="Seleccione" itemValue="" />
-                                <f:selectItem itemLabel="Tierra" itemValue="0" />
-                                <f:selectItem itemLabel="Pavimentada" itemValue="1" />
-                            </p:selectOneMenu>
-
-                            <h:outputText value="Riesgos o vulnarebilidades: " />
-                            <p:inputText value="#{estudianteController.resp.estudianteRiesgoVulnerabilidad}" 
-                                         title="Escriba las vulnarebilidades que perciba en el lugar donde vive."/>
-
-                            <h:outputText value="Profesión u oficio: *" />
-                            <p:inputText value="#{estudianteController.resp.estudianteFormaTrabajo}" required="true" 
-                                         title="Ingrese su profesión u oficio segun su DUI"/>
-
-                            <h:outputText value="Escolaridad: *" />
-                            <p:inputText value="#{estudianteController.resp.estudianteEscolaridad}" required="true" 
-                                         title="Escriba hasta qué grado estudió."/>
-                        </h:panelGrid>
-                    </p:panel>
-                </p:tab>
-
-                <p:tab id="padres" title="Padres">
-                    <p:panel header="Ingrese los datos del padre y la madre del aspirante.">
-                        <p:messages />
-                        <h:panelGrid columns="2" columnClasses="label, value">
-                            <h:outputText value="DUI del padre: *"/>
-                            <p:inputMask value="#{estudianteController.duiPadre}" rendered="true" 
-                                         label="Número de Documento Único de Identiad" 
-                                         title="Ingrese el número de DUI del padre" mask="99999999-9"/>
-
-                            <h:outputText value="Nombres del padre: *" />
-                            <p:inputText value="#{estudianteController.padre.personaNombre}" required="true" label="Nombres" 
-                                         title="Ingrese los nombres del padre"/>
-
-                            <h:outputText value="Apellidos del padre: *" />
-                            <p:inputText value="#{estudianteController.padre.personaApellido}" required="true" label="Apellidos" 
-                                         title="Ingrese los apellidos del padre"/>
-
-                            <p:column/><p:column/>
-
-                            <h:outputText value="DUI de la madre: *"/>
-                            <p:inputMask value="#{estudianteController.duiMadre}" rendered="true" 
-                                         label="Número de Documento Único de Identiad" 
-                                         title="Ingrese el número de DUI de la madre" mask="99999999-9"/>
-
-                            <h:outputText value="Nombres de la madre: *" />
-                            <p:inputText value="#{estudianteController.madre.personaNombre}" required="true" label="Nombres" 
-                                         title="Ingrese los nombres de la madre"/>
-
-                            <h:outputText value="Apellidos de la madre: *" />
-                            <p:inputText value="#{estudianteController.madre.personaApellido}" required="true" label="Apellidos" 
-                                         title="Ingrese los apellidos de la madre"/>
-                        </h:panelGrid>
-                    </p:panel>
-                </p:tab> 
 
                 <p:tab id="confirmacion" title="Confirmación">
                     <p:panel header="Última información.">
@@ -358,10 +64,10 @@
                             <p>
                                 Llegado a este punto, Usted ha terminado de llenar su solicitud para 
                                 estudiante de nuevo ingreso. pero si tiene alguna duda o quiere revisar lo que ha ingresado,
-                                puede fácilmente presionar el botón <strong>Back</strong> que se encuentra en la parte inferior
+                                puede fácilmente presionar el botón <strong>Atrás</strong> que se encuentra en la parte inferior
                                 izquierda del formulario y verificar todo lo que ha ingresado.<br/>Una vez esté
-                                satisfecho presione el botón <strong>Next</strong> hasta que aparezca de nuevo éste mismo
-                                mensaje y presione el botón <strong>Guardar</strong>, en la esquina inferior izquierda, para gusrdar sus datos.<br/>
+                                satisfecho presione el botón <strong>Siguiente</strong> hasta que aparezca de nuevo éste mismo
+                                mensaje y presione el botón <strong>Guardar</strong>, en la esquina inferior izquierda, para guardar sus datos.<br/>
                                 <br/><strong>No actualice la página o perderá sus datos</strong>.<br/>
                                 <br/>
                                 Una vez guardados sus datos, podrá ingresar a nuestra plataforma usando su <strong>NIE</strong> 
@@ -372,7 +78,8 @@
 
                             </p> 
                         </h:panelGrid>
-                        <p:commandButton value="Guardar" action="#{estudianteController.guardar}" update="growl" process="@this"/>
+                        <p:commandButton value="Guardar" action="#{estudianteController.guardar}" 
+                                         update=":form0:msgs" process="@this"/>
                     </p:panel>
                 </p:tab> 
             </p:wizard>

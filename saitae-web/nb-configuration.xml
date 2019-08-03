@@ -63,5 +63,6 @@ Any value defined here will override the pom.xml file value but is only applicab
         <org-netbeans-spi-editor-hints-projects.text.x-java.Braces_5f_DO_5f_WHILE_5f_LOOP.enabled>true</org-netbeans-spi-editor-hints-projects.text.x-java.Braces_5f_DO_5f_WHILE_5f_LOOP.enabled>
         <org-netbeans-modules-javascript2-requirejs.enabled>true</org-netbeans-modules-javascript2-requirejs.enabled>
         <org-netbeans-spi-editor-hints-projects.text.x-java.Javac_5f_DIVISION_5f_BY_5f_ZERO.enabled>true</org-netbeans-spi-editor-hints-projects.text.x-java.Javac_5f_DIVISION_5f_BY_5f_ZERO.enabled>
+        <org-netbeans-spi-editor-hints-projects.text.x-java.org_2e_netbeans_2e_modules_2e_java_2e_hints_2e_bugs_2e_UnusedAssignmentOrBranch_2e_unusedAssignment.enabled>false</org-netbeans-spi-editor-hints-projects.text.x-java.org_2e_netbeans_2e_modules_2e_java_2e_hints_2e_bugs_2e_UnusedAssignmentOrBranch_2e_unusedAssignment.enabled>
     </properties>
 </project-shared-configuration>

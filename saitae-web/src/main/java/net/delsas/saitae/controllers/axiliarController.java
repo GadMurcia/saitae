@@ -19,6 +19,7 @@ package net.delsas.saitae.controllers;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.faces.application.FacesMessage;
@@ -27,6 +28,7 @@ import javax.faces.view.ViewScoped;
 import net.delsas.prueba;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.entities.Persona;
+import net.delsas.saitae.entities.TipoPersona;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -36,32 +38,41 @@ import org.primefaces.event.SelectEvent;
 @Named(value = "axiliarController")
 @ViewScoped
 public class axiliarController implements Serializable {
-
+    
     private static final long serialVersionUID = 1L;
     private final prueba auxiliar = new prueba();
     public static Persona p = new Persona(0);
+    private int tipo;
     @EJB
     private PersonaFacadeLocal pfl;
-
+        
     public List<String> completeText(String query) {
         List<String> results = new ArrayList<>();
+        List<Persona> list;
         try {
             auxiliar.setDui(query, p);
-            for (Persona o : pfl.getByLikeId(p.getIdpersona())) {
+            list = tipo != 100
+                    ? pfl.getPersonaByLikeIdAndType(p.getIdpersona(), tipo)
+                    : pfl.getAdminsByLikeId(p.getIdpersona());
+            for (Persona o : list) {
                 results.add(o.getPersonaNombre() + " "
-                        + o.getPersonaApellido() + "=>" + o.getIdpersona());
+                        + o.getPersonaApellido() + "=>" + o.getIdpersona().toString().substring(1));
             }
-
-        } catch (NumberFormatException m) {
+            
+        } catch (Exception m) {
             System.out.println(m.getMessage());
         }
         return results;
     }
-
+    
+    public void setTipo(int t) {
+        tipo=t;
+    }
+    
     public void onItemSelect(SelectEvent event) {
         try {
             String x[] = event.getObject().toString().split("=>");
-            auxiliar.setDui(x.length > 1 ? x[1].substring(1) : x[0], p);
+            auxiliar.setDui(x.length > 1 ? x[1] : x[0], p);
             p = pfl.find(p.getIdpersona());
         } catch (Exception o) {
             System.out.println("Error en maestroController.onItemSelect: " + o.getMessage());
@@ -69,5 +80,5 @@ public class axiliarController implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null,
                 new FacesMessage("Selected", p.getPersonaNombre()));
     }
-
+    
 }

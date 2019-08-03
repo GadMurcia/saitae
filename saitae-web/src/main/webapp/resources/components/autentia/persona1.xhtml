@@ -21,12 +21,15 @@
             <p:outputLabel for="telefono" value="Teléfono Personal: "/>
             <p:inputMask id="telefono" value="#{cc.attrs.persona.personaTelefono}" required="true" mask="9999-9999" title="Ingrese el número de reléfono personal de la persona"/>
             <p:message for="telefono" showSummary="true" />
-            
-            <p:outputLabel for="telefono1" value="Teléfono de Residencia: "/>
+
+            <p:outputLabel for="telefono1" value="Teléfono de Residencia: " 
+                           rendered="#{cc.attrs.persona.tipoPersona.idtipoPersona==4}"/>
             <p:inputMask id="telefono1" value="#{cc.attrs.maestro.maestrocolTelefonoResidencia}" 
-                         required="true" mask="9999-9999" disabled="#{cc.attrs.maestro == null}"
+                         required="true" mask="9999-9999" 
+                         rendered="#{cc.attrs.persona.tipoPersona.idtipoPersona==4}"
                          title="Ingrese el número de reléfono de la residencia de la persona"/>
-            <p:message for="telefono1" showSummary="true" />
+            <p:message for="telefono1" showSummary="true" 
+                       rendered="#{cc.attrs.persona.tipoPersona.idtipoPersona==4}"/>
 
             <p:outputLabel for="email" value="Correo electrónico: "/>
             <p:inputText id="email" value="#{cc.attrs.persona.personaEmail}" type="email"/>

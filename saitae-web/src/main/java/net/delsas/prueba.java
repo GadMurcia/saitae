@@ -38,154 +38,150 @@ public class prueba {
     private Persona user;
 
     public prueba() {
-        user = new Persona(0, "", "", true);
+        user = new Persona(0, "", "", false);
         user.setPersonaContrasenya("");
-        user.setPersonaNacimiento(new Date(91, 1, 17));
+        user.setPersonaNacimiento(new Date());
         user.setPersonaDireccion("");
         user.setPersonaTelefono("");
         user.setPersonaCodigoResidencia(0);
         user.setPersonaZonaVivienda(0);
-        user.setPersonaLugarNac("02#13");
+        user.setPersonaLugarNac(" # ");
         user.setPersonaOCupacion("");
         user.setPersonaNit("");
         user.setPersonaSexo(false);
         user.setPersonaEstadoFamiliar(0);
-        user.setPersonaNacionalidad("");
+        user.setPersonaNacionalidad("Salvadoreña");
         user.setPersonaEmail("");
         user.setPersonaDiscapacidades("");
         user.setPersonaComentarios("");
     }
 
     public Persona getEstudiante() {
-        user.setEstudiante(new Estudiante(user.getIdpersona(), true, 0, true, ""));
-        user.getEstudiante().setEstudianteRiesgoVulnerabilidad("");
-        user.getEstudiante().setEstudianteMedioTransporte(0);
-        user.getEstudiante().setEstudianteDistanciaAlCentro(BigDecimal.valueOf(5.00));
-        user.getEstudiante().setEstudianteTrabaja(true);
-        user.getEstudiante().setEstudianteDependenciaEconomica("");
-        user.getEstudiante().setEstudianteParvularia(true);
-        user.getEstudiante().setEstudianteEnfermedades("");
-        user.getEstudiante().setEstudianteMedicamentos("");
-        user.getEstudiante().setEstudianteParentescoRepresentante("");
-        user.getEstudiante().setEstudianteFormaTrabajo("");
-        user.getEstudiante().setEstudianteCentroProcedencia("");
-        user.getEstudiante().setEstudianteNoPartida("");
-        user.getEstudiante().setEstudianteRepresentanteFamiliar(true);
-        user.getEstudiante().setEstudiantePadre(getPadre());
-        user.getEstudiante().setEstudianteMadre(getMadre());
-        user.getEstudiante().setEstudianteRepresentante(getRepresentante().getEstudiante());
-        user.getEstudiante().setEstudianteComentario("");
-        user.getEstudiante().setPersona(user);
-        user.setTipoPersona(new TipoPersona(8, "Estudiante"));
-        return user;
+        Persona e=user;
+        e.setEstudiante(new Estudiante(e.getIdpersona(), false, 0, false, ""));
+        e.getEstudiante().setEstudianteRiesgoVulnerabilidad("");
+        e.getEstudiante().setEstudianteMedioTransporte(0);
+        e.getEstudiante().setEstudianteDistanciaAlCentro(BigDecimal.valueOf(0));
+        e.getEstudiante().setEstudianteTrabaja(false);
+        e.getEstudiante().setEstudianteDependenciaEconomica("");
+        e.getEstudiante().setEstudianteParvularia(false);
+        e.getEstudiante().setEstudianteEnfermedades("");
+        e.getEstudiante().setEstudianteMedicamentos("");
+        e.getEstudiante().setEstudianteParentescoRepresentante("");
+        e.getEstudiante().setEstudianteFormaTrabajo("");
+        e.getEstudiante().setEstudianteCentroProcedencia("");
+        e.getEstudiante().setEstudianteNoPartida("");
+        e.getEstudiante().setEstudianteRepresentanteFamiliar(false);
+        e.getEstudiante().setEstudiantePadre(getPadre());
+        e.getEstudiante().setEstudianteMadre(getMadre());
+        e.getEstudiante().setEstudianteRepresentante(getRepresentante().getEstudiante());
+        e.getEstudiante().setEstudianteComentario("");
+        e.getEstudiante().setPersona(e);
+        e.setTipoPersona(new TipoPersona(8, "Estudiante"));
+        return e;
     }
 
     public Persona getRepresentante() {
-        user.setEstudiante(new Estudiante(user.getIdpersona(), true, 0, true, ""));
-        user.getEstudiante().setEstudianteRiesgoVulnerabilidad("");
-        user.getEstudiante().setEstudianteMedioTransporte(null);
-        user.getEstudiante().setEstudianteDistanciaAlCentro(null);
-        user.getEstudiante().setEstudianteTrabaja(true);
-        user.getEstudiante().setEstudianteDependenciaEconomica(null);
-        user.getEstudiante().setEstudianteParvularia(null);
-        user.getEstudiante().setEstudianteEnfermedades(null);
-        user.getEstudiante().setEstudianteMedicamentos(null);
-        user.getEstudiante().setEstudianteParentescoRepresentante("");
-        user.getEstudiante().setEstudianteFormaTrabajo("");
-        user.getEstudiante().setEstudianteCentroProcedencia(null);
-        user.getEstudiante().setEstudianteNoPartida("");
-        user.getEstudiante().setEstudianteRepresentanteFamiliar(true);
-        user.getEstudiante().setEstudiantePadre(null);
-        user.getEstudiante().setEstudianteMadre(null);
-        user.getEstudiante().setEstudianteRepresentante(null);
-        user.getEstudiante().setEstudianteComentario("");
-        user.setTipoPersona(new TipoPersona(9, "Representante"));
-        user.getTipoPersona().setAccesoTipoPersonaList(new ArrayList<AccesoTipoPersona>());
-        user.getEstudiante().setPersona(user);
-        return user;
+        Persona r=user;
+        r.setEstudiante(new Estudiante(r.getIdpersona(), false, 0, false, ""));
+        r.getEstudiante().setEstudianteRiesgoVulnerabilidad("");
+        r.getEstudiante().setEstudianteMedioTransporte(null);
+        r.getEstudiante().setEstudianteDistanciaAlCentro(null);
+        r.getEstudiante().setEstudianteTrabaja(false);
+        r.getEstudiante().setEstudianteDependenciaEconomica(null);
+        r.getEstudiante().setEstudianteParvularia(null);
+        r.getEstudiante().setEstudianteEnfermedades(null);
+        r.getEstudiante().setEstudianteMedicamentos(null);
+        r.getEstudiante().setEstudianteParentescoRepresentante("");
+        r.getEstudiante().setEstudianteFormaTrabajo("");
+        r.getEstudiante().setEstudianteCentroProcedencia(null);
+        r.getEstudiante().setEstudianteNoPartida("");
+        r.getEstudiante().setEstudianteRepresentanteFamiliar(false);
+        r.getEstudiante().setEstudiantePadre(null);
+        r.getEstudiante().setEstudianteMadre(null);
+        r.getEstudiante().setEstudianteRepresentante(null);
+        r.getEstudiante().setEstudianteComentario("");
+        r.setTipoPersona(new TipoPersona(9, "Representante"));
+        r.getEstudiante().setPersona(r);
+        return r;
     }
 
     public Persona getMadre() {
-        TipoPersona tp = new TipoPersona(10, "Madre");
-        ArrayList<AccesoTipoPersona> atps = new ArrayList<>();
-        tp.setAccesoTipoPersonaList(atps);
-        user.setTipoPersona(tp);
-        user.setIdpersona(1045367074);
-        return user;
+        Persona m=user;
+        m.setTipoPersona(new TipoPersona(10, "Madre de familia"));
+        return m;
     }
 
     public Persona getPadre() {
-        TipoPersona tp = new TipoPersona(11, "Padre");
-        ArrayList<AccesoTipoPersona> atps = new ArrayList<>();
-        tp.setAccesoTipoPersonaList(atps);
-        user.setTipoPersona(tp);
-        user.setIdpersona(1045367075);
-        return user;
+        Persona p = user;
+        p.setTipoPersona(new TipoPersona(11, "Padre de familia"));
+        return p;
     }
 
     public Persona getMaestro() {
-        user.setEstudiante(null);
-        user.setMaestro(new Maestro(user.getIdpersona()));
-        user.getMaestro().setMaestroAfp("");
-        user.getMaestro().setMaestroBienestar(0);
-        user.getMaestro().setMaestroCapacitacionesVirtuales(false);
-        user.getMaestro().setMaestroCategoria(0);
-        user.getMaestro().setMaestroCodigo(0);
-        user.getMaestro().setMaestroComentario("");
-        user.getMaestro().setMaestroEspecialidad("");
-        user.getMaestro().setMaestroFechaInstitucion(Calendar.getInstance().getTime());
-        user.getMaestro().setMaestroFechaMagisterio(Calendar.getInstance().getTime());
-        user.getMaestro().setMaestroFechaProximoAsenso(Calendar.getInstance().getTime());
-        user.getMaestro().setMaestroHorasUsoTecnologia(0);
-        user.getMaestro().setMaestroNip(0);
-        user.getMaestro().setMaestroNivel(0);
-        user.getMaestro().setMaestroNup(0);
-        user.getMaestro().setMaestroPartidas(0);
-        user.getMaestro().setMaestroRecursosWeb(false);
-        user.getMaestro().setMaestroSinEscalafon(false);
-        user.getMaestro().setMaestroSubnumeros(0);
-        user.getMaestro().setMaestroTiempoCategoria("");
-        user.getMaestro().setMaestroTipoSalario("");
-        user.getMaestro().setMaestroTurno("");
-        user.getMaestro().setMaestroUsoVideoconferencias(false);
-        user.getMaestro().setMaestroUtilidadTecnologica(false);
-        user.getMaestro().setMaestrocolTelefonoResidencia("");
-        user.getMaestro().setPersona(user);
-        user.getMaestro().setMaestoCargoList(new ArrayList<MaestoCargo>());
-        user.setTipoPersona(new TipoPersona(4, "Maestro"));
-        return user;
+        Persona ma= user;
+        ma.setEstudiante(null);
+        ma.setMaestro(new Maestro(ma.getIdpersona()));
+        ma.getMaestro().setMaestroAfp("");
+        ma.getMaestro().setMaestroBienestar(0);
+        ma.getMaestro().setMaestroCapacitacionesVirtuales(false);
+        ma.getMaestro().setMaestroCategoria(0);
+        ma.getMaestro().setMaestroCodigo(0);
+        ma.getMaestro().setMaestroComentario("");
+        ma.getMaestro().setMaestroEspecialidad("");
+        ma.getMaestro().setMaestroFechaInstitucion(Calendar.getInstance().getTime());
+        ma.getMaestro().setMaestroFechaMagisterio(Calendar.getInstance().getTime());
+        ma.getMaestro().setMaestroFechaProximoAsenso(Calendar.getInstance().getTime());
+        ma.getMaestro().setMaestroHorasUsoTecnologia(0);
+        ma.getMaestro().setMaestroNip(0);
+        ma.getMaestro().setMaestroNivel(0);
+        ma.getMaestro().setMaestroNup(0);
+        ma.getMaestro().setMaestroPartidas(0);
+        ma.getMaestro().setMaestroRecursosWeb(false);
+        ma.getMaestro().setMaestroSinEscalafon(false);
+        ma.getMaestro().setMaestroSubnumeros(0);
+        ma.getMaestro().setMaestroTiempoCategoria("");
+        ma.getMaestro().setMaestroTipoSalario("");
+        ma.getMaestro().setMaestroTurno("");
+        ma.getMaestro().setMaestroUsoVideoconferencias(false);
+        ma.getMaestro().setMaestroUtilidadTecnologica(false);
+        ma.getMaestro().setMaestrocolTelefonoResidencia("");
+        ma.getMaestro().setPersona(ma);
+        ma.getMaestro().setMaestoCargoList(new ArrayList<MaestoCargo>());
+        ma.setTipoPersona(new TipoPersona(4, "Maestro"));
+        return ma;
     }
 
     public Persona getBibliotecario() {
-        user = getMaestro();
-        user.setMaestro(null);
-        user.setTipoPersona(new TipoPersona(5, "Bibliotecario"));
-        return user;
+        Persona b=user;
+        b.setTipoPersona(new TipoPersona(5, "Bibliotecario"));
+        return b;
     }
 
     public Persona getAdministradorCra() {
-        user = getBibliotecario();
-        user.setTipoPersona(new TipoPersona(6, "Administrador CRA"));
-        return user;
+        Persona a=user;
+        a.setTipoPersona(new TipoPersona(6, "Administrador CRA"));
+        return a;
     }
 
     public Persona getSubDirector() {
-        user = getAdministradorCra();
-        user.setTipoPersona(new TipoPersona(3, "Subdirector"));
-        return user;
+        Persona sd=user;
+        sd.setTipoPersona(new TipoPersona(3, "Subdirector"));
+        return sd;
     }
 
     public Persona getLAboratorista() {
-        user = getAdministradorCra();
-        user.setTipoPersona(new TipoPersona(7, "Laboratorista"));
-        return user;
+        Persona l=user;
+        l.setTipoPersona(new TipoPersona(7, "Laboratorista"));
+        return l;
     }
 
     public Persona getAmin() {
-        user.setEstudiante(getEstudiante().getEstudiante());
-        user.setMaestro(getMaestro().getMaestro());
-        user.setTipoPersona(new TipoPersona(7, "Laboratorista"));
-        return user;
+        Persona ad=user;
+        ad.setEstudiante(getEstudiante().getEstudiante());
+        ad.setMaestro(getMaestro().getMaestro());
+        ad.setTipoPersona(new TipoPersona(1, "Administrador"));
+        return ad;
     }
 
     public List<SelectItem> getMunicipioLista(Persona p) {
@@ -388,17 +384,3 @@ public class prueba {
     }
 
 }
-
-/**
- * administrador 1 
- * Director 2 
- * Subdirector 3 
- * maestro 4 
- * bibliotecario 5
- * administrador cra 6 
- * laboratorista 7 
- * estudiante 8 
- * representante 9 
- * madre de famiia 10 
- * padre de familia 11
- */

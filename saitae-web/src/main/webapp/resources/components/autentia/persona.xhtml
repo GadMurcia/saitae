@@ -8,22 +8,24 @@
       >
 
     <!-- INTERFACE -->
-    <cc:interface>
+    <cc:interface>        
+        <cc:attribute name="estudiante" type="net.delsas.saitae.entities.Estudiante"/>
         <cc:attribute name="persona" required="true" type="net.delsas.saitae.entities.Persona"/>
         <cc:attribute name="departamentoLista" required="true"/>
         <cc:attribute name="dui" required="true"/>
         <cc:attribute name="departamento" required="true"/>
         <cc:attribute name="municipio" required="true"/>
         <cc:attribute name="municipioLista" required="true"/>
-        <cc:attribute name="listenerA" method-signature="java.lang.Object action()" 
-                      required="false" default="null"/>
+        <cc:attribute name="listenerA" method-signature="java.lang.Object action( org.primefaces.event.SelectEvent )" default="null"/>
+        <cc:attribute name="t" default="0" type="java.lang.Integer"/>        
     </cc:interface>
 
     <!-- IMPLEMENTATION -->
-    <cc:implementation>   
+    <cc:implementation>  
+        <f:event type="preRenderView" listener="#{axiliarController.setTipo(cc.attrs.t)}"/>
         <h:panelGrid columns="3">
             <p:outputLabel for="dui" value="DUI: "/>
-            <p:autoComplete id="dui" value="#{cc.attrs.dui}" required="true" 
+            <p:autoComplete id="dui" value="#{cc.attrs.dui}" required="true" type="int"
                          title="Ingrese el número de documento de identificación de la persona."
                          completeMethod="#{axiliarController.completeText}">
                 <p:ajax event="itemSelect" listener="#{axiliarController.onItemSelect}" update="form0:msgs form1"/>
@@ -32,7 +34,8 @@
             <p:message for="dui" showSummary="true" />
 
             <p:outputLabel for="nit" value="NIT: "/>
-            <p:inputMask id="nit" value="#{cc.attrs.persona.personaNit}" required="true" mask="9999-999999-999-9" title="Ingrese nu NIT"/>
+            <p:inputMask id="nit" value="#{cc.attrs.persona.personaNit}" required="#{cc.attrs.t!=8}" 
+                         mask="9999-999999-999-9" title="Ingrese nu NIT"/>
             <p:message for="nit" showSummary="true" />              
 
             <p:outputLabel for="nombre" value="Nombre: "/>
@@ -100,19 +103,35 @@
             </p:selectOneMenu>
             <p:messages for="zona" showSummary="true"/>
 
-            <p:outputLabel for="cod" value="Código de residencia: "/>
+            <p:outputLabel for="cod" value="Código de residencia: " rendered="#{cc.attrs.t==4}"/>
             <p:inputText id="cod" value="#{cc.attrs.persona.personaCodigoResidencia}" 
-                         required="true"/>
-            <p:message for="cod" showSummary="true" />
+                         required="true" rendered="#{cc.attrs.t==4}"/>
+            <p:message for="cod" showSummary="true" rendered="#{cc.attrs.t==4}"/>
 
-            <p:outputLabel for="titulo" value="Profesión: "/>
-            <p:inputText id="titulo" value="#{cc.attrs.persona.personaOCupacion}" required="true" type="text" title="Ingrese la profesión de la persona."/>
-            <p:message for="titulo" showSummary="true" />
+            <p:outputLabel for="titulo" value="Profesión: " rendered="#{cc.attrs.t!=8}"/>
+            <p:inputText id="titulo" value="#{cc.attrs.persona.personaOCupacion}" required="true" 
+                         rendered="#{cc.attrs.t!=8}"
+                         title="Ingrese la profesión de la persona."/>
+            <p:message for="titulo" showSummary="true" rendered="#{cc.attrs.t!=8}"/>
 
             <p:outputLabel for="disca" value="Discapacidades: " />
             <p:inputText id="disca" value="#{cc.attrs.persona.personaDiscapacidades}" type="text"
                          title="Si tiene alguna discapacidad, escríbalas separadas por comas"/>
-            <p:column/> 
+            <p:column/>
+            
+            <p:outputLabel for="enf" value="Enfermedades que padece: " 
+                           rendered="#{cc.attrs.t == 8}"/>
+            <p:inputText id="enf" value="#{cc.attrs.estudiante.estudianteEnfermedades}" type="text"
+                         title="Si padece enfermedades crónicas, escríbalas separadas por comas"
+                         rendered="#{cc.attrs.t == 8}"/>
+            <p:column rendered="#{cc.attrs.t == 8}"/>
+            
+            <p:outputLabel for="med" value="Medicamentos permanentes: " 
+                           rendered="#{cc.attrs.t == 8}"/>
+            <p:inputText id="med" value="#{cc.attrs.estudiante.estudianteMedicamentos}" type="text"
+                         title="Si tiene Medicamentos Recetados de forma permanente, escríbalos separadas por comas"
+                         rendered="#{cc.attrs.t == 8}"/>
+            <p:column rendered="#{cc.attrs.t == 8}"/>
         </h:panelGrid> 
     </cc:implementation>
 </html>

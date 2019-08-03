@@ -35,5 +35,9 @@ public interface PersonaFacadeLocal {
     public List<Persona> getPlantel();
 
     public List<Persona> getMaestros();
+
+    public List<Persona> getPersonaByLikeIdAndType(int likeId, int LikeTipo);
+
+    public List<Persona> getAdminsByLikeId(int id);
     
 }

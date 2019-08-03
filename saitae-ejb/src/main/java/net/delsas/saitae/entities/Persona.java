@@ -57,6 +57,8 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Persona.findByPersonaComentarios", query = "SELECT p FROM Persona p WHERE p.personaComentarios = :personaComentarios")
     , @NamedQuery(name = "Persona.findByLikeIdpersona", query = "SELECT p FROM Persona p WHERE p.idpersona LIKE CONCAT(:idpersona,'%')")
     , @NamedQuery(name = "Persona.findPlantel", query = "SELECT p FROM Persona p WHERE p.tipoPersona.idtipoPersona NOT IN (1, 8, 9, 10, 11) ORDER BY p.tipoPersona.tipoPersonaNombre, p.personaNombre, p.personaApellido")
+    , @NamedQuery(name = "Persona.findPersonaByLikeIdpersona", query = "SELECT p FROM Persona p WHERE p.tipoPersona.idtipoPersona = :idtipoPersona AND p.idpersona LIKE CONCAT(:idpersona,'%')")
+    , @NamedQuery(name = "Persona.findAdministratorByLikeType", query = "SELECT p FROM Persona p WHERE p.tipoPersona.idtipoPersona IN (2, 3, 5, 6, 7) AND p.idpersona LIKE CONCAT(:idpersona,'%')")
 })
 public class Persona implements Serializable {
 
@@ -453,5 +455,5 @@ public class Persona implements Serializable {
     public String toString() {
         return "net.delsas.saitae.entities.Persona[ idpersona=" + idpersona + " ]";
     }
-    
+
 }
