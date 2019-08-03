@@ -17,7 +17,10 @@
 package net.delsas.saitae.controllers;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -26,13 +29,16 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import net.delsas.prueba;
 import net.delsas.saitae.beans.AulaFacadeLocal;
 import net.delsas.saitae.beans.AutorFacadeLocal;
 import net.delsas.saitae.beans.CargoFacadeLocal;
 import net.delsas.saitae.beans.CategoriaFacadeLocal;
 import net.delsas.saitae.beans.EditorialFacadeLocal;
 import net.delsas.saitae.beans.FinanciamientoFacadeLocal;
+import net.delsas.saitae.beans.GradoFacadeLocal;
 import net.delsas.saitae.beans.HorarioFacadeLocal;
+import net.delsas.saitae.beans.MaestroFacadeLocal;
 import net.delsas.saitae.beans.MateriaFacadeLocal;
 import net.delsas.saitae.beans.TipoCargoFacadeLocal;
 import net.delsas.saitae.beans.TipoMateriaFacadeLocal;
@@ -49,7 +55,10 @@ import net.delsas.saitae.entities.Cargo;
 import net.delsas.saitae.entities.Categoria;
 import net.delsas.saitae.entities.Editorial;
 import net.delsas.saitae.entities.Financiamiento;
+import net.delsas.saitae.entities.Grado;
+import net.delsas.saitae.entities.GradoPK;
 import net.delsas.saitae.entities.Horario;
+import net.delsas.saitae.entities.Maestro;
 import net.delsas.saitae.entities.Materia;
 import net.delsas.saitae.entities.TipoCargo;
 import net.delsas.saitae.entities.TipoMateria;
@@ -70,7 +79,6 @@ import org.primefaces.model.DualListModel;
  * @author delsas
  */
 @Named
-//@ApplicationScoped
 @ViewScoped
 public class TipoController implements Serializable {
 
@@ -161,6 +169,13 @@ public class TipoController implements Serializable {
     private FinanciamientoFacadeLocal financiamientoFL;
     private List<Financiamiento> financiamientos;
 
+    //Grado
+    @EJB
+    private GradoFacadeLocal gradoFL;
+    private List<Grado> grados;
+    @EJB
+    private MaestroFacadeLocal maestroFL;
+
     @PostConstruct
     public void init() {
         recursos = tipoRecursoFL.findAll();
@@ -181,6 +196,7 @@ public class TipoController implements Serializable {
         editorial = editorialFL.findAll();
         horario = horarioFL.findAll();
         financiamientos = financiamientoFL.findAll();
+        grados = gradoFL.findAll();
     }
 
     public void onAddNew(String id) {
@@ -236,7 +252,13 @@ public class TipoController implements Serializable {
             case "financiamiento":
                 financiamientos.add(new Financiamiento(0));
                 break;
-
+            case "grado":
+                Grado g = new Grado(new GradoPK(0, "", "", new Date()), true);
+                g.setAulaGrado(new Aula(0));
+                g.getAulaGrado().setZonaAula(new Zona(0, ""));
+                g.setGradoMaestroGuia(new prueba().getMaestro().getMaestro());
+                grados.add(g);
+                break;
             default:
                 System.out.println(id);
 
@@ -338,6 +360,18 @@ public class TipoController implements Serializable {
                 financiamientoFL.edit(f);
                 titulo = "Fianciamiento";
                 mensaje = f.getFinanciamientoNombre();
+                break;
+            case "form:tw:grado":
+                Grado g = (Grado) event.getObject();
+                g.setAulaGrado(afl.find(g.getAulaGrado().getIdaula()));
+                g.setGradoMaestroGuia(g.getGradoMaestroGuia() == null
+                        || g.getGradoMaestroGuia().getIdmaestro() == 0
+                        ? null : maestroFL.find(g.getGradoMaestroGuia().getIdmaestro()));
+                gradoFL.edit(g);
+                titulo = "Grado";
+                mensaje = g.getGradoPK().getIdgrado() + "° " + g.getGradoPK().getGradoModalidad() + " "
+                        + g.getGradoPK().getGradoSeccion() + " para el año"
+                        + g.getGradoPK().getGradoAño().getYear() + " fue agregado.";
                 break;
             default:
                 System.out.println(id);
@@ -451,12 +485,20 @@ public class TipoController implements Serializable {
                 }
                 mensaje = "Horario Cancelado";
                 break;
-                case "form:tw:tabla1:financiamiento":
+            case "form:tw:tabla1:financiamiento":
                 Financiamiento f = (Financiamiento) event.getObject();
                 if (f.getFinanciamientoNombre() == null | f.getFinanciamientoNombre().isEmpty()) {
                     financiamientos.remove(f);
                 }
                 mensaje = "Financiamiento";
+                break;
+            case "form:tw:grado":
+                Grado g = (Grado) event.getObject();
+                if (g.getGradoPK().getIdgrado() == 0 | g.getGradoPK().getGradoModalidad().isEmpty()
+                        | g.getGradoPK().getGradoSeccion().isEmpty() | g.getAulaGrado().getIdaula() == 0) {
+                    grados.remove(g);
+                }
+                mensaje = "Grado";
                 break;
             default:
                 System.out.println(id);
@@ -695,6 +737,18 @@ public class TipoController implements Serializable {
 
     public void setFinanciamientos(List<Financiamiento> financiamientos) {
         this.financiamientos = financiamientos;
+    }
+
+    public List<Grado> getGrados() {
+        return grados;
+    }
+
+    public void setGrados(List<Grado> grados) {
+        this.grados = grados;
+    }
+
+    public List<Maestro> getMaestros() {
+        return maestroFL.findAll();
     }
 
 }

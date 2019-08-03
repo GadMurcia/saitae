@@ -30,7 +30,6 @@ import javax.faces.view.ViewScoped;
 import net.delsas.prueba;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
-import net.delsas.saitae.entities.Maestro;
 import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.TipoPersona;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -41,13 +40,14 @@ import org.primefaces.event.SelectEvent;
  *
  * @author delsas
  */
-@Named(value = "administradorController")
+@Named
 @ViewScoped
 public class administradorController implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private Persona adm;
+    private Persona selected;
     @EJB
     private PersonaFacadeLocal pfl;
     @EJB
@@ -58,12 +58,15 @@ public class administradorController implements Serializable {
     @PostConstruct
     public void init() {
         aux = new prueba();
+        selected=new Persona();
         adm = aux.getAdministradorCra();
         adm.setTipoPersona(new TipoPersona());
         tipos = new ArrayList<>();
-        tipos.add(aux.getAdministradorCra().getTipoPersona());
-        tipos.add(aux.getBibliotecario().getTipoPersona());
-        tipos.add(aux.getLAboratorista().getTipoPersona());
+        tipos.add(new TipoPersona(7,"Laboratorista"));
+        tipos.add(new TipoPersona(6,"Administrador CRA"));
+        tipos.add(new TipoPersona(5,"Bibliotecario"));
+        tipos.add(new TipoPersona(3,"Subdirector"));
+        tipos.add(new TipoPersona(2, "Director"));
     }
 
     public List<String> completeText(String query) {
@@ -144,5 +147,19 @@ public class administradorController implements Serializable {
             System.out.println("Error en adminitrador.Guaradr:" + e.getMessage());
         }
     }
+    
+    public List<Persona> getPlantel(){
+        return pfl.getPlantel();
+    }
+
+    public Persona getSelected() {
+        return selected;
+    }
+
+    public void setSelected(Persona selected) {
+        this.selected = selected;
+    }
+    
+    
 
 }

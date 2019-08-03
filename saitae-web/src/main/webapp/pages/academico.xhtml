@@ -25,7 +25,7 @@
                                 <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" update=":form:msgs" />
 
                                 <p:column headerText="Id" style="width: 10px">
-                                    <h:outputText value="#{tima.idtipoMateria}" />
+                                    <p:outputLabel value="#{tima.idtipoMateria}"/>
                                 </p:column>
 
                                 <p:column headerText="Nombre">
@@ -61,8 +61,8 @@
                                 <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" update=":form:msgs" />
 
 
-                                <p:column headerText="Id">
-                                    <h:outputText value="#{m.idmateria}" />
+                                <p:column headerText="Id" style="width: 10px;">
+                                    <h:outputText value="#{m.idmateria}"/>
                                 </p:column>
                                 <p:column headerText="Nombre Materia">
                                     <p:cellEditor>
@@ -80,14 +80,6 @@
                                                 <f:selectItems value="#{tipoController.listaTipoMateria}"/>
                                                 <f:ajax render="console1" execute="SeleccionMateria"/>
                                             </p:selectOneMenu></f:facet>
-                                    </p:cellEditor>
-                                </p:column>
-
-                                <p:column headerText="Comentario">
-                                    <p:cellEditor>
-                                        <f:facet name="output"><h:outputText value="#{m.materiaComentario}" /></f:facet>
-                                        <f:facet name="input"><p:inputText value="#{m.materiaComentario}" 
-                                                                           style="width:100%" label="Comentario"/></f:facet>
                                     </p:cellEditor>
                                 </p:column>
                                 <p:column style="width:35px">
@@ -159,7 +151,108 @@
                             </div>
                         </p:tab>
                         <p:tab title="Grados">
-                            
+                            <p:dataTable id="grado" var="g" value="#{tipoController.grados}" 
+                                         editable="true" rows="7" paginator="true"
+                                         widgetVar="grado1" >
+                                <f:facet name="header">
+                                    Administración de Grados
+                                </f:facet>
+
+                                <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" update=":form:msgs" />
+                                <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" update=":form:msgs" />
+
+
+                                <p:column headerText="Id">
+                                    <p:cellEditor>
+                                        <f:facet name="output">
+                                            <h:outputText value="#{g.gradoPK.idgrado}" />
+                                        </f:facet>
+                                        <f:facet name="input">
+                                            <p:inputText value="#{g.gradoPK.idgrado}" label="ID">
+                                                <f:validateLength minimum="1" />
+                                            </p:inputText>
+                                        </f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                <p:column headerText="Modalidad">
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText 
+                                                value="#{g.gradoPK.gradoModalidad.equals('C')? 'Comercio' : 'General'}" />
+                                        </f:facet>
+                                        <f:facet name="input">
+                                            <p:selectOneMenu value="#{g.gradoPK.gradoModalidad}">
+                                                <f:selectItem itemLabel="Seleccione" itemValue=""/>
+                                                <f:selectItem itemLabel="Comercio" itemValue="C"/>
+                                                <f:selectItem itemLabel="General" itemValue="G"/>
+                                                <f:validateLength minimum="1" />
+                                            </p:selectOneMenu>
+                                        </f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                <p:column headerText="Sección">
+                                    <p:cellEditor>
+                                        <f:facet name="output">
+                                            <h:outputText value="#{g.gradoPK.gradoSeccion}" /></f:facet>
+                                        <f:facet name="input">
+                                            <p:selectOneMenu value="#{g.gradoPK.gradoSeccion}">
+                                                <f:selectItem itemLabel="Seleccione" itemValue=""/>
+                                                <f:selectItem itemLabel="Sección A" itemValue="A"/>
+                                                <f:selectItem itemLabel="Sección B" itemValue="B"/>
+                                                <f:selectItem itemLabel="Sección C" itemValue="C"/>
+                                                <f:validateLength minimum="1" />
+                                            </p:selectOneMenu>
+                                        </f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                <p:column headerText="Aula">
+                                    <p:cellEditor>
+                                        <f:facet name="output">
+                                            <h:outputText value="Aula #{g.aulaGrado.idaula} - #{g.aulaGrado.zonaAula.zonaNombre}" />
+                                        </f:facet>
+                                        <f:facet name="input">
+                                            <p:selectOneMenu value="#{g.aulaGrado.idaula}">
+                                                <f:selectItem itemLabel="Seleccione" itemValue=""/>
+                                                <f:selectItems value="#{tipoController.aulas}"
+                                                               var="au" itemLabel=" Aula #{au.idaula} - #{au.zonaAula.zonaNombre}" 
+                                                               itemValue="#{au.idaula}"/>
+                                                <f:validateLength minimum="1" />
+                                            </p:selectOneMenu>
+                                        </f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                <p:column headerText="Año">
+                                    <h:outputText value="#{g.gradoPK.gradoAño.year+1900}" />
+                                </p:column>
+                                <p:column headerText="Maestro Guía">
+                                    <p:cellEditor>
+                                        <f:facet name="output">
+                                            <h:outputText value="#{g.gradoMaestroGuia == null? 'No Seleccionado' : 
+                                                                   g.gradoMaestroGuia.persona.personaNombre}" />
+                                        </f:facet>
+                                        <f:facet name="input">
+                                            <p:selectOneMenu value="#{g.gradoMaestroGuia.idmaestro}">
+                                                <f:selectItem itemLabel="Seleccionar" itemValue="0"/>
+                                                <f:selectItems value="#{tipoController.maestros}" var="mae" itemLabel="#{mae.persona.personaNombre}"
+                                                               itemValue="#{mae.idmaestro}"/>
+                                            </p:selectOneMenu>
+                                        </f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                <p:column style="width:35px">
+                                    <p:rowEditor />
+                                </p:column>
+                            </p:dataTable>
+                            <div class="ui-g">
+                                <div class="ui-g-12">
+                                    <p:commandButton value="+" styleClass="ui-priority-primary" 
+                                                     process="@this" update=":form:msgs"
+                                                     action="#{tipoController.onAddNew('grado')}" 
+                                                     oncomplete="PF('grado1').addRow();"
+                                                     title="Agregar Nuevo Grado"/>
+                                </div>
+                            </div>
+
+
                         </p:tab>
                     </p:tabView>
                 </h:form>

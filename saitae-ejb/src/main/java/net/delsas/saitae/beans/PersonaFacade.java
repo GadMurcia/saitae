@@ -10,6 +10,8 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import net.delsas.saitae.entities.Persona;
 
 /**
@@ -38,8 +40,20 @@ public class PersonaFacade extends AbstractFacade<Persona> implements PersonaFac
      */
     @Override
     public List<Persona> getByLikeId(int id){
-        Query q = em.createNamedQuery("Persona.findByLikeIdpersona").setParameter("idpersona", id+"");
-        return q.getResultList();
+        return em.createNamedQuery("Persona.findByLikeIdpersona").setParameter("idpersona", id+"").getResultList();
     }
     
+    @Override
+    public List<Persona> getPlantel(){
+        return em.createNamedQuery("Persona.findPlantel").getResultList();
+    }
+    
+    @Override
+    public List<Persona> getMaestros(){
+        CriteriaQuery q= em.getCriteriaBuilder().createQuery();
+        Root<Persona> r = q.from(Persona.class);
+        q.select(r).where(em.getCriteriaBuilder().equal(
+                r.get("tipoPersona").get("idtipoPersona"), 4));
+        return em.createQuery(q).getResultList();
+    }
 }

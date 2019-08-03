@@ -1,10 +1,64 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="./../WEB-INF/template/plantilla1.xhtml">
+                template="./../WEB-INF/template/plantilla1.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns="http://www.w3.org/1999/xhtml">
 
     <ui:define name="content">
-        content
+        <h:form id="form">
+            <p:tab  title="Listado Del plantel Institucional">
+                <p:dataTable id="plantel" var="p" value="#{administradorController.plantel}" rowKey="#{p.idpersona}"
+                             emptyMessage="Sin registros aún." rows="10" paginator="true" selectionMode="single"
+                             selection="#{administradorController.selected}">
+                    <f:facet name="header">
+                        Lista del plantel institucional
+                    </f:facet>
+                    <p:column headerText="DUI" style="width: 100px">
+                        <p:outputLabel value="#{p.idpersona.toString().substring(1)}"/>
+                    </p:column>
+                    <p:column headerText="Nombre">
+                        <p:outputLabel value="#{p.personaNombre} #{p.personaApellido}"/>
+                    </p:column>
+                    <p:column headerText="Ocupación">
+                        <p:outputLabel value="#{p.personaOCupacion}"/>
+                    </p:column>                    
+                    <p:column headerText="Cargo Principal">
+                        <p:outputLabel value="#{p.tipoPersona.tipoPersonaNombre}"/>
+                    </p:column>
+                </p:dataTable> 
+                <p:contextMenu for="plantel">
+                    <p:menuitem value="Ver" update="pl" icon="pi pi-search" oncomplete="PF('pld').show()"/>
+                </p:contextMenu>
+
+                <p:dialog header="Datos de la persona Seleccionada" widgetVar="pld" modal="true" 
+                          showEffect="fade" hideEffect="fade" resizable="false">
+                    <p:outputPanel id="pl" style="text-align:center;">
+                        <p:panelGrid  columns="2" rendered="#{not empty administradorController.selected}" 
+                                      columnClasses="label,value">
+                            <f:facet name="header">
+                                <p:outputLabel value="#{administradorController.selected.personaNombre} 
+                                               #{administradorController.selected.personaApellido}"/> 
+                            </f:facet>
+
+                            <h:outputText value="DUI:" />
+                            <h:outputText value="#{administradorController.selected.idpersona}" />
+
+                            <h:outputText value="Ocupación" />
+                            <h:outputText value="#{administradorController.selected.personaOCupacion}" />
+
+                            <h:outputText value="Cargo Principal:" />
+                            <h:outputText value="#{administradorController.selected.tipoPersona.tipoPersonaNombre}"/>
+                            
+                            <h:outputText value="Es maestro?"/>
+                            <h:outputText value="#{administradorController.selected.maestro!=null? 'Es Maestro' : 'No es Maestro'}"/>
+                        </p:panelGrid>
+                    </p:outputPanel>
+                </p:dialog>
+            </p:tab>
+        </h:form>
     </ui:define>
 
 </ui:composition>
