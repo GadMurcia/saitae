@@ -22,7 +22,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.faces.model.SelectItem;
-import net.delsas.saitae.entities.AccesoTipoPersona;
 import net.delsas.saitae.entities.Estudiante;
 import net.delsas.saitae.entities.MaestoCargo;
 import net.delsas.saitae.entities.Maestro;
