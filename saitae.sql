@@ -35,7 +35,7 @@ CREATE TABLE `acceso` (
   UNIQUE KEY `idacceso_UNIQUE` (`idacceso`),
   KEY `fk_acceso_1_idx` (`accesoIndice`),
   CONSTRAINT `fk_acceso_1` FOREIGN KEY (`accesoIndice`) REFERENCES `acceso` (`idacceso`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -44,7 +44,7 @@ CREATE TABLE `acceso` (
 
 LOCK TABLES `acceso` WRITE;
 /*!40000 ALTER TABLE `acceso` DISABLE KEYS */;
-INSERT INTO `acceso` VALUES (9,'Configuración',NULL,'#','pi pi-key'),(10,'Administración',9,'tipopp.intex','pi pi-folder-open'),(11,'Permisos y Licencias',9,'lictp.intex','pi pi-th-large'),(12,'Académica',9,'academico.intex','fa fa-leaf'),(13,'Perfil',NULL,'#','pi pi-user'),(14,'Permisos',NULL,'#','pi pi-eye'),(15,'Solicitar Permiso',14,'permiso.intex','pi pi-briefcase'),(16,'Personal',NULL,'#','pi pi-users'),(17,'Agregar Maestro',16,'agregacion.intex','pi pi-user-plus'),(18,'Agregar Administrador',16,'agAdm.intex','pi pi-plus'),(19,'Plantel Institucional',16,'plantel.intex','pi pi-table'),(20,'Inventario',9,'inventario.intex','fa fa-thumb-tack'),(21,'Libros',9,'libros.intex','fa fa-tint');
+INSERT INTO `acceso` VALUES (9,'Configuración',NULL,'#','pi pi-key'),(10,'Administración',9,'tipopp.intex','pi pi-folder-open'),(11,'Permisos y Licencias',9,'lictp.intex','pi pi-th-large'),(12,'Académica',9,'academico.intex','fa fa-leaf'),(13,'Perfil',NULL,'#','pi pi-user'),(14,'Permisos',NULL,'#','pi pi-eye'),(15,'Solicitar Permiso',14,'permiso.intex','pi pi-briefcase'),(16,'Personal',NULL,'#','pi pi-users'),(17,'Agregar Maestro',16,'agregacion.intex','pi pi-user-plus'),(18,'Agregar Administrador',16,'agAdm.intex','pi pi-plus'),(19,'Plantel Institucional',16,'plantel.intex','pi pi-table'),(20,'Inventario',9,'inventario.intex','fa fa-thumb-tack'),(21,'Libros',9,'libros.intex','fa fa-tint'),(22,'Nuevo Ingreso',16,'nuevoalumno.intex','pi pi.user');
 /*!40000 ALTER TABLE `acceso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -72,7 +72,7 @@ CREATE TABLE `accesoTipoPersona` (
 
 LOCK TABLES `accesoTipoPersona` WRITE;
 /*!40000 ALTER TABLE `accesoTipoPersona` DISABLE KEYS */;
-INSERT INTO `accesoTipoPersona` VALUES (9,1,''),(9,2,''),(10,1,''),(10,2,''),(11,1,''),(11,2,''),(12,1,''),(12,2,''),(13,8,''),(14,8,''),(15,8,''),(16,1,''),(17,1,''),(18,1,''),(19,1,''),(20,1,''),(21,1,'');
+INSERT INTO `accesoTipoPersona` VALUES (9,1,''),(9,2,''),(10,1,''),(10,2,''),(11,1,''),(11,2,''),(12,1,''),(12,2,''),(13,8,''),(14,8,''),(15,8,''),(16,1,''),(17,1,''),(18,1,''),(19,1,''),(20,1,''),(21,1,''),(22,1,'');
 /*!40000 ALTER TABLE `accesoTipoPersona` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -236,7 +236,7 @@ CREATE TABLE `cargo` (
 
 LOCK TABLES `cargo` WRITE;
 /*!40000 ALTER TABLE `cargo` DISABLE KEYS */;
-INSERT INTO `cargo` VALUES (1,'Director',''),(2,'Profesor',''),(3,'Subdirector',''),(4,'Profesor Auxiliar',''),(5,'Coordinador de área',''),(6,'Psicólogo','');
+INSERT INTO `cargo` VALUES (1,'Director',''),(2,'Profesor',''),(3,'Subdirector',''),(4,'Profesor Auxiliar',''),(5,'Coordinador de área Informática',''),(6,'Psicólogo','');
 /*!40000 ALTER TABLE `cargo` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -368,7 +368,7 @@ DROP TABLE IF EXISTS `contribuciones`;
 CREATE TABLE `contribuciones` (
   `fechaHora` datetime NOT NULL,
   `mes` int(2) NOT NULL,
-  `año` year(4) NOT NULL,
+  `año` int(4) NOT NULL,
   `idEstudiante` int(11) NOT NULL,
   `idColector` int(11) NOT NULL,
   `contribucionesComentario` varchar(140) DEFAULT NULL,
@@ -627,7 +627,7 @@ CREATE TABLE `evaluacionMaestro` (
   `fechaHora` datetime NOT NULL,
   `grado` int(11) NOT NULL,
   `seccion` enum('A','B','C') NOT NULL,
-  `año` year(4) NOT NULL,
+  `año` int(4) NOT NULL,
   `materia` int(11) NOT NULL,
   `turno` enum('M','v') NOT NULL,
   `Estudiantes` int(11) NOT NULL,
@@ -646,7 +646,6 @@ CREATE TABLE `evaluacionMaestro` (
   `gradoModalidad` enum('C','G') NOT NULL,
   PRIMARY KEY (`idMaestro`,`fechaHora`,`gradoModalidad`),
   KEY `fk_evaluacionMaestro_1_idx` (`idMaestro`),
-  KEY `fk_evaluacionMaestro_2_idx` (`grado`,`seccion`,`año`),
   KEY `fk_evaluacionMaestro_2` (`grado`,`seccion`,`año`,`gradoModalidad`),
   CONSTRAINT `fk_evaluacionMaestro_1` FOREIGN KEY (`idMaestro`) REFERENCES `maestro` (`idmaestro`) ON UPDATE CASCADE,
   CONSTRAINT `fk_evaluacionMaestro_2` FOREIGN KEY (`grado`, `seccion`, `año`, `gradoModalidad`) REFERENCES `grado` (`idgrado`, `gradoSeccion`, `gradoAño`, `gradoModalidad`) ON UPDATE CASCADE
@@ -724,7 +723,7 @@ CREATE TABLE `grado` (
   `idgrado` int(11) NOT NULL,
   `gradoModalidad` enum('C','G') NOT NULL,
   `gradoSeccion` enum('A','B','C') NOT NULL,
-  `gradoAño` year(4) NOT NULL,
+  `gradoAño` int(4) NOT NULL,
   `aulaGrado` int(11) NOT NULL,
   `gradoActivo` bit(1) NOT NULL,
   `gradoMaestroGuia` int(11) DEFAULT NULL,
@@ -743,6 +742,7 @@ CREATE TABLE `grado` (
 
 LOCK TABLES `grado` WRITE;
 /*!40000 ALTER TABLE `grado` DISABLE KEYS */;
+INSERT INTO `grado` VALUES (1,'C','A',2019,1,'',1222222222,NULL),(1,'G','A',2019,3,'',1123456798,NULL),(1,'C','B',2019,7,'',1111111111,NULL);
 /*!40000 ALTER TABLE `grado` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -756,7 +756,7 @@ DROP TABLE IF EXISTS `gradoEvaluacion`;
 CREATE TABLE `gradoEvaluacion` (
   `idGrado` int(11) NOT NULL,
   `gradoSeccion` enum('A','B','c') NOT NULL,
-  `gradoAño` year(4) NOT NULL,
+  `gradoAño` int(4) NOT NULL,
   `fechaEvaluacion` date NOT NULL COMMENT 'histórico de evaluaciones a cada grado del instituto.',
   `evaluador` int(11) NOT NULL,
   `organizadorLimpieza` bit(1) NOT NULL,
@@ -849,7 +849,7 @@ CREATE TABLE `maestoCargo` (
 
 LOCK TABLES `maestoCargo` WRITE;
 /*!40000 ALTER TABLE `maestoCargo` DISABLE KEYS */;
-INSERT INTO `maestoCargo` VALUES (1111111111,2,1,1,'2019-07-30',NULL,NULL,NULL),(1111111111,3,2,2,'2019-07-30',NULL,NULL,NULL),(1111111111,4,3,3,'2019-07-30',NULL,NULL,NULL),(1123456798,2,1,2,'2019-08-01',NULL,NULL,NULL),(1222222222,2,1,1,'2019-08-01',NULL,NULL,NULL);
+INSERT INTO `maestoCargo` VALUES (1111111111,2,1,1,'2019-07-30',NULL,NULL,NULL),(1111111111,3,2,2,'2019-07-30',NULL,NULL,NULL),(1123456798,2,1,2,'2019-08-01',NULL,NULL,NULL),(1222222222,2,1,1,'2019-08-01',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `maestoCargo` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -938,7 +938,7 @@ DROP TABLE IF EXISTS `matricula`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `matricula` (
   `idmatricula` int(11) NOT NULL,
-  `matriculaAnyo` year(4) NOT NULL,
+  `matriculaAnyo` int(4) NOT NULL,
   `matriculaNivel` int(11) NOT NULL,
   `gradoModalidad` enum('C','G') NOT NULL,
   `matriculaSeccion` enum('A','B','C') NOT NULL DEFAULT 'A',
@@ -974,7 +974,7 @@ CREATE TABLE `mestroHorarioMaterias` (
   `diaSemana` enum('L','M','X','J','V') NOT NULL,
   `idGrado` int(11) NOT NULL,
   `seccionGrado` enum('A','B','C') NOT NULL,
-  `añoGrado` year(4) NOT NULL,
+  `añoGrado` int(4) NOT NULL,
   `gradoModalidad` enum('C','G') NOT NULL,
   `mestroHorarioMateriasComentarios` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idMaestro`,`idMateria`,`idHorario`,`diaSemana`,`idGrado`,`seccionGrado`,`añoGrado`),
@@ -1132,7 +1132,7 @@ CREATE TABLE `persona` (
 
 LOCK TABLES `persona` WRITE;
 /*!40000 ALTER TABLE `persona` DISABLE KEYS */;
-INSERT INTO `persona` VALUES (1045367073,'Guillermo','Delsas',NULL,NULL,NULL,NULL,NULL,NULL,'02951a6cb9595ef475fed783e59c687e','Ingeniero',1,'',NULL,'\0',NULL,NULL,NULL,NULL,NULL),(1045367074,'Director','Directivo',NULL,NULL,NULL,NULL,NULL,NULL,'02951a6cb9595ef475fed783e59c687e','Director',2,'',NULL,'',NULL,NULL,NULL,NULL,NULL),(1045367075,'Estudiante','Estudioso','1991-01-17','','',0,0,'01#01','02951a6cb9595ef475fed783e59c687e','Estudiante',8,'','','',0,'Salvadoreña','','',''),(1111111111,'Quintus Sestus','Septimus Octavios','1991-02-17','878787878787878','7777-7777',0,0,'01#09','bbb8aae57c104cda40c93843ad5e6db8','Primus Secuntus Tercius',4,'','1111-111111-111-1','\0',0,'Extrangera','878788888888888','',''),(1123456798,'fffffffffffff gf f','fgfgfgfgfgg','1991-02-17','789798','8979-8798',0,0,'02#13','e0c28158eeac6b5d9bcfe1e028185438','455545455',7,'','2111-111111-111-1','',1,'Salvadoreña','89798797979','',''),(1222222222,'Lentulus Primus','Batiatus Ludus','1991-02-17','222222222','2222-2222',0,0,'02#13','0d777e9e30b918e9034ab610712c90cf','Leninista',4,'','2222-222222-222-2','\0',0,'Salvadoreña','22222222222222','',''),(1888888888,'padre padre1','padre2 padre3',NULL,NULL,NULL,NULL,NULL,NULL,'02951a6cb9595ef475fed783e59c687e',NULL,11,'\0',NULL,NULL,NULL,NULL,NULL,NULL,NULL),(1999999999,'representante','apellidos','1980-01-25','la dirección del representante','7999-9999',NULL,0,'Santa Ana#Texistepeque','02951a6cb9595ef475fed783e59c687e',NULL,9,'','9999-999999-999-9','\0',1,'parentesco','representante@correo.com',NULL,NULL);
+INSERT INTO `persona` VALUES (1045367073,'Guillermo','Delsas',NULL,NULL,NULL,NULL,NULL,NULL,'02951a6cb9595ef475fed783e59c687e','Ingeniero',1,'',NULL,'\0',NULL,NULL,NULL,NULL,NULL),(1045367074,'Director','Directivo',NULL,NULL,NULL,NULL,NULL,NULL,'02951a6cb9595ef475fed783e59c687e','Director',2,'',NULL,'',NULL,NULL,NULL,NULL,NULL),(1045367075,'Estudiante','Estudioso','1991-01-17','','',0,0,'01#01','02951a6cb9595ef475fed783e59c687e','Estudiante',8,'','','',0,'Salvadoreña','','',''),(1111111111,'Quintus Sestus','Septimus Octavios','1991-02-17','878787878787878','7777-7777',0,0,' #09','bbb8aae57c104cda40c93843ad5e6db8','Primus Secuntus Tercius',4,'','1111-111111-111-1','\0',0,'Extrangera','878788888888888','121212',''),(1123456798,'fffffffffffff gf f','fgfgfgfgfgg','1991-02-17','789798','8979-8798',0,0,'02#13','e0c28158eeac6b5d9bcfe1e028185438','455545455',2,'','2111-111111-111-1','',1,'Salvadoreña','89798797979','ooooooo',''),(1222222222,'Lentulus Primus','Batiatus Ludus','1991-02-17','222222222','2222-2222',0,0,'02#13','0d777e9e30b918e9034ab610712c90cf','Leninista',4,'','2222-222222-222-2','\0',0,'Salvadoreña','22222222222222','',''),(1888888888,'padre padre1','padre2 padre3',NULL,NULL,NULL,NULL,NULL,NULL,'02951a6cb9595ef475fed783e59c687e',NULL,11,'\0',NULL,NULL,NULL,NULL,NULL,NULL,NULL),(1999999999,'representante','apellidos','1980-01-25','la dirección del representante','7999-9999',NULL,0,'Santa Ana#Texistepeque','02951a6cb9595ef475fed783e59c687e',NULL,9,'','9999-999999-999-9','\0',1,'parentesco','representante@correo.com',NULL,NULL);
 /*!40000 ALTER TABLE `persona` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1452,7 +1452,7 @@ CREATE TABLE `tipoPermiso` (
 
 LOCK TABLES `tipoPermiso` WRITE;
 /*!40000 ALTER TABLE `tipoPermiso` DISABLE KEYS */;
-INSERT INTO `tipoPermiso` VALUES (1,'Enfermedad',0,NULL),(2,'Materindad',0,NULL),(3,'Paternidad',0,NULL),(4,'Faltar a clases',0,NULL),(5,'Salir temporalmente de la institución',0,NULL),(6,'Retirarse de la institución',0,NULL),(7,'No portar uniforme',5,NULL);
+INSERT INTO `tipoPermiso` VALUES (1,'Enfermedad',8,NULL),(2,'Materindad',0,NULL),(3,'Paternidad',0,NULL),(4,'Faltar a clases',0,NULL),(5,'Salir temporalmente de la institución',0,NULL),(6,'Retirarse de la institución',0,NULL),(7,'No portar uniforme',5,NULL);
 /*!40000 ALTER TABLE `tipoPermiso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1582,7 +1582,7 @@ CREATE TABLE `tipopersonaPermiso` (
 
 LOCK TABLES `tipopersonaPermiso` WRITE;
 /*!40000 ALTER TABLE `tipopersonaPermiso` DISABLE KEYS */;
-INSERT INTO `tipopersonaPermiso` VALUES (1,1,''),(1,2,''),(1,3,''),(2,1,''),(2,2,''),(8,4,''),(8,5,''),(8,6,''),(8,7,''),(9,5,''),(9,6,''),(9,7,'');
+INSERT INTO `tipopersonaPermiso` VALUES (1,1,''),(1,2,''),(1,3,''),(2,1,''),(2,2,''),(5,1,''),(5,2,''),(8,4,''),(8,5,''),(8,6,''),(8,7,''),(9,5,''),(9,6,''),(9,7,'');
 /*!40000 ALTER TABLE `tipopersonaPermiso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1628,4 +1628,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-08-02 15:38:20
+-- Dump completed on 2019-08-03 18:38:13
