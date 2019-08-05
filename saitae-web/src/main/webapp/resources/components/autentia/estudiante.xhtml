@@ -14,75 +14,73 @@
 
     <!-- IMPLEMENTATION -->
     <cc:implementation>
-        <p:panel header="Detalles Socioeconómicos del aspirante">
-            <p:messages />
-            <h:panelGrid columns="2" columnClasses="label, value">
-                <p:outputLabel for="console2" value="Zona de residencia: *" />
-                <p:selectOneMenu id="console2" value="#{cc.attrs.persona.personaZonaVivienda}" required="true"
-                                 style="width:125px" title="Seleccione su Zona donde vive">
-                    <f:selectItem itemLabel="Seleccione" itemValue="" />
-                    <f:selectItem itemLabel="Rural" itemValue="0" />
-                    <f:selectItem itemLabel="Urbana" itemValue="1" />
-                </p:selectOneMenu>
+        <h:panelGrid columns="2" columnClasses="label, value">
+            <p:outputLabel for="console2" value="Zona de residencia: *" />
+            <p:selectOneMenu id="console2" value="#{cc.attrs.persona.personaZonaVivienda}" required="true"
+                             style="width:125px" title="Seleccione su Zona donde vive">
+                <f:selectItem itemLabel="Seleccione" itemValue="" />
+                <f:selectItem itemLabel="Rural" itemValue="0" />
+                <f:selectItem itemLabel="Urbana" itemValue="1" />
+            </p:selectOneMenu>
 
-                <p:outputLabel for="console3" value="Tipo de calle de donde vive: *" />
-                <p:selectOneMenu id="console3" value="#{cc.attrs.estudiante.estudianteTipoCalle}"  required="true"
-                                 style="width:125px" title="Seleccione el tipo de calle de el lugar donde vive">
-                    <f:selectItem itemLabel="Seleccione" itemValue="" />
-                    <f:selectItem itemLabel="Tierra" itemValue="0" />
-                    <f:selectItem itemLabel="Pavimentada" itemValue="1" />
-                </p:selectOneMenu>
+            <p:outputLabel for="console3" value="Tipo de calle de donde vive: *" />
+            <p:selectOneMenu id="console3" value="#{cc.attrs.estudiante.estudianteTipoCalle}"  required="true"
+                             style="width:125px" title="Seleccione el tipo de calle de el lugar donde vive">
+                <f:selectItem itemLabel="Seleccione" itemValue="" />
+                <f:selectItem itemLabel="Tierra" itemValue="0" />
+                <f:selectItem itemLabel="Pavimentada" itemValue="1" />
+            </p:selectOneMenu>
 
-                <p:outputLabel for="console4" value="Medio de transporte: *" />
-                <p:selectOneMenu id="console4" value="#{cc.attrs.estudiante.estudianteMedioTransporte}"  
-                                 required="true" style="width:125px" 
-                                 title="Seleccione la forma en que habitualmete viajaría al centro de estudios">
-                    <f:selectItem itemLabel="Seleccione" itemValue="" />
-                    <f:selectItem itemLabel="A pie" itemValue="0" />
-                    <f:selectItem itemLabel="Bicicleta" itemValue="1" />
-                    <f:selectItem itemLabel="Moto" itemValue="2" />
-                    <f:selectItem itemLabel="Carro propio" itemValue="3" />
-                    <f:selectItem itemLabel="Bus" itemValue="4" />
-                    <f:selectItem itemLabel="Microbús" itemValue="5" />
-                </p:selectOneMenu>
+            <p:outputLabel for="console4" value="Medio de transporte: *" />
+            <p:selectOneMenu id="console4" value="#{cc.attrs.estudiante.estudianteMedioTransporte}"  
+                             required="true" style="width:125px" 
+                             title="Seleccione la forma en que habitualmete viajaría al centro de estudios">
+                <f:selectItem itemLabel="Seleccione" itemValue="" />
+                <f:selectItem itemLabel="A pie" itemValue="0" />
+                <f:selectItem itemLabel="Bicicleta" itemValue="1" />
+                <f:selectItem itemLabel="Moto" itemValue="2" />
+                <f:selectItem itemLabel="Carro propio" itemValue="3" />
+                <f:selectItem itemLabel="Bus" itemValue="4" />
+                <f:selectItem itemLabel="Microbús" itemValue="5" />
+            </p:selectOneMenu>
 
-                <h:outputText value="Riesgo o vulnerabilidad: " />
-                <p:inputText value="#{cc.attrs.estudiante.estudianteRiesgoVulnerabilidad}"  
-                             title="Escriba los riesgos o vulnarabilidades del lugar en donde vive, si los hubiera."/>
+            <h:outputText value="Riesgo o vulnerabilidad: " />
+            <p:inputText value="#{cc.attrs.estudiante.estudianteRiesgoVulnerabilidad}"  
+                         title="Escriba los riesgos o vulnarabilidades del lugar en donde vive, si los hubiera."/>
 
-                <h:outputText value="Distancia en KM que recorrería hasta al INTEX: *"/>
-                <p:inputNumber id="input1" value="#{cc.attrs.estudiante.estudianteDistanciaAlCentro}" required="true"
-                               symbol=" Km" symbolPosition="s" decimalSeparator="." thousandSeparator=","/> 
+            <h:outputText value="Distancia en KM que recorrería hasta al INTEX: *"/>
+            <p:inputNumber id="input1" value="#{cc.attrs.estudiante.estudianteDistanciaAlCentro}" required="true"
+                           symbol=" Km" symbolPosition="s" decimalSeparator="." thousandSeparator=","/> 
 
-                <h:outputText value="Trabaja?: *" />
-                <p:selectBooleanButton id="value2" value="#{cc.attrs.estudiante.estudianteTrabaja}" required="true"
-                                       onLabel="Sí" offLabel="No" style="width:60px">
-                    <p:ajax update="r2" />
-                </p:selectBooleanButton>
+            <h:outputText value="Trabaja?: *" />
+            <p:selectBooleanButton id="value2" value="#{cc.attrs.estudiante.estudianteTrabaja}" required="true"
+                                   onLabel="Sí" offLabel="No" style="width:60px">
+                <p:ajax update="r2" />
+            </p:selectBooleanButton>
 
-                <h:outputText value="¿En qué trabaja?: "/>
-                <p:inputText id="r2" value="#{cc.attrs.estudiante.estudianteFormaTrabajo}" 
-                             disabled="#{!cc.attrs.estudiante.estudianteTrabaja}" title="Escriba en qué trabaja"/>
+            <h:outputText value="¿En qué trabaja?: "/>
+            <p:inputText id="r2" value="#{cc.attrs.estudiante.estudianteFormaTrabajo}" 
+                         disabled="#{!cc.attrs.estudiante.estudianteTrabaja}" 
+                         title="Escriba en qué trabaja"/>
 
-                <p:outputLabel for="basic" value="¿De quién depende económicamente?: *" />
-                <p:selectManyCheckbox id="basic" value="#{estudianteController.dependenciaeco}"  required="true"
-                                      style="width:125px" immediate="true">
-                    <f:selectItem itemLabel="Padre" itemValue="Padre" />
-                    <f:selectItem itemLabel="Madre" itemValue="Madre" />
-                    <f:selectItem itemLabel="Abuelos" itemValue="Abuelo/a" />
-                    <f:selectItem itemLabel="Hermanos" itemValue="Hermano/a" />
-                    <f:selectItem itemLabel="Otros" itemValue="Otro"  />
-                    <f:ajax execute="otraDependencia" render="ot"/>
-                </p:selectManyCheckbox>
+            <p:outputLabel for="basic" value="¿De quién depende económicamente?: *" />
+            <p:selectManyCheckbox id="basic" value="#{nuevoingresoController.dependenciaeco}"  
+                                  required="true"
+                                  style="width:125px" immediate="true">
+                <f:selectItem itemLabel="Padre" itemValue="Padre" />
+                <f:selectItem itemLabel="Madre" itemValue="Madre" />
+                <f:selectItem itemLabel="Abuelos" itemValue="Abuelo/a" />
+                <f:selectItem itemLabel="Hermanos" itemValue="Hermano/a" />
+                <f:selectItem itemLabel="Otros" itemValue="Otro"  />
+                <f:ajax execute="otraDependencia" render="ot"/>
+            </p:selectManyCheckbox>
 
-                <h:outputText value="Especifique: "/>
-                <p:inputText id="ot" value="#{estudianteController.otradependencia}"  
-                             title="Escriba quién más le ayuda para sus estudios" 
-                             disabled="#{!estudianteController.otraDependencia}"/>
+            <h:outputText value="Especifique: "/>
+            <p:inputText id="ot" value="#{nuevoingresoController.otraDependencia}"  
+                         title="Escriba quién más le ayuda para sus estudios" 
+                         disabled="#{!nuevoingresoController.otraDep}"/>
 
 
-            </h:panelGrid>
-        </p:panel>
-
+        </h:panelGrid>
     </cc:implementation>
 </html>

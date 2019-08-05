@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+        <cc:attribute name="persona" required="true" type="net.delsas.saitae.entities.Persona"/>
+        <cc:attribute name="dui" required="true"/>
+        <cc:attribute name="listenerA" required="true" method-signature="java.lang.Object action( org.primefaces.event.SelectEvent )"/>
+        <cc:attribute name="t" default="0" type="java.lang.Integer"/>        
+        <cc:attribute name="onComplete" required="true" method-signature="java.util.List java.lang.String completeText( java.lang.String )"/>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>  
+        <h:panelGrid columns="3">
+            <p:outputLabel for="dui#{cc.attrs.t}" value="DUI: "/>
+            <p:autoComplete id="dui#{cc.attrs.t}" value="#{cc.attrs.dui}" required="true" type="int"
+                            title="Ingrese el número de documento de identificación de la persona."
+                            completeMethod="#{cc.attrs.onComplete}">
+                <p:ajax event="itemSelect" listener="#{axiliarController.onItemSelect}" 
+                        update="form0:msgs form1"/>
+                <p:ajax event="itemSelect" listener="#{cc.attrs.listenerA}"/>
+            </p:autoComplete>
+            <p:message for="dui#{cc.attrs.t}" showSummary="true" />            
+
+            <p:outputLabel for="nombre#{cc.attrs.t}" value="Nombre: "/>
+            <p:inputText id="nombre#{cc.attrs.t}" value="#{cc.attrs.persona.personaNombre}" 
+                         required="true" title="Ingrese el nombre de la persona a agregar"/>
+            <p:message for="nombre#{cc.attrs.t}" showSummary="true" />
+
+            <p:outputLabel for="apellido#{cc.attrs.t}" value="Apellidos: "/>
+            <p:inputText id="apellido#{cc.attrs.t}" value="#{cc.attrs.persona.personaApellido}" 
+                         required="true" title="Apellidos de la persona"/>
+            <p:message for="apellido#{cc.attrs.t}" showSummary="true" />
+        </h:panelGrid>
+    </cc:implementation>
+</html>

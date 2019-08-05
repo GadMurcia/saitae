@@ -446,7 +446,7 @@ public class EstudianteController implements Serializable {
     }
     
     public void onItemSelect2(SelectEvent event) {
-        est1 = axiliarController.p;
+        est1 = axiliarController.getP();
         est=est1.getEstudiante();
         resp=est.getEstudianteRepresentante();
         resp1=resp.getPersona();

@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.SimpleFormatter;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.model.SelectItem;
@@ -30,72 +29,155 @@ public class nuevoingresoController implements Serializable {
     private PersonaFacadeLocal pfl;
     @EJB
     private EstudianteFacadeLocal efl;
-    private prueba aux;
-    private Persona estudiante;
+    private Persona e;
+    private Persona Representante;
+    private Persona madre;
+    private Persona padre;
 
     @PostConstruct
     public void init() {
-        aux = new prueba();
-        estudiante = aux.getEstudiante();
-        estudiante.getEstudiante().setEstudianteRepresentante(aux.getRepresentante().getEstudiante());
-        estudiante.getEstudiante().getEstudianteRepresentante().setPersona(aux.getRepresentante());
-        estudiante.getEstudiante().setEstudiantePadre(aux.getMadre());
-        estudiante.getEstudiante().setEstudianteMadre(aux.getMadre());
+        Representante = (new prueba()).getRepresentante();
+        e = (new prueba()).getEstudiante();
+        madre = (new prueba()).getMadre();
+        padre = (new prueba()).getPadre();
     }
 
     public void guardar() {
         System.out.println("guardar");
     }
 
-    public Persona getEstudiante() {
-        return estudiante;
+    public String[] getDependenciaeco() {
+        String dep = e.getEstudiante().getEstudianteDependenciaEconomica() == null ? ""
+                : e.getEstudiante().getEstudianteDependenciaEconomica().split("¿")[0];
+        return ((dep == null || dep.isEmpty()) ? new String[]{""} : dep.split("#"));
     }
 
-    public void setEstudiante(Persona estudiante) {
-        this.estudiante = estudiante;
+    public void setDependenciaeco(String[] dependenciaeco) {
+        String dep = "";
+        for (String g : dependenciaeco) {
+            if (dep.equalsIgnoreCase("")) {
+                dep += g;
+            } else {
+                dep += "#" + g;
+            }
+        }
+        e.getEstudiante().setEstudianteDependenciaEconomica(dep + "¿ ");
+    }
+
+    public boolean isOtraDep() {
+        String es = e.getEstudiante().getEstudianteDependenciaEconomica() == null ? ""
+                : e.getEstudiante().getEstudianteDependenciaEconomica().split("¿")[0];
+        String[] r = ((es == null || es.isEmpty()) ? new String[]{""} : es.split("#"));
+        return r.length > 0 ? r[r.length - 1].equalsIgnoreCase("otro") : false;
+    }
+
+    public String getOtraDependencia() {
+        String dep = e.getEstudiante().getEstudianteDependenciaEconomica() == null ? " ¿ "
+                : e.getEstudiante().getEstudianteDependenciaEconomica().split("¿")[1];
+        return dep;
+    }
+
+    public void setOtraDependencia(String otradependencia) {
+        this.e.getEstudiante().setEstudianteDependenciaEconomica(
+                e.getEstudiante().getEstudianteDependenciaEconomica() + "¿" + otradependencia);
+    }
+
+    public Persona getE() {
+        return e;
+    }
+
+    public void setE(Persona e) {
+        this.e = e;
     }
 
     public void setNie(String nie) {
-        aux.setDui(nie, estudiante);
+        (new prueba()).setDui(nie, e);
     }
 
     public String getNie() {
-        return aux.getDui(estudiante);
+        return (new prueba()).getDui(e);
     }
 
     public String getDepartamentoE() {
-        return aux.getDepartamento(estudiante);
+        return (new prueba()).getDepartamento(e);
     }
 
     public void setDepartamentoE(String de) {
-        aux.setDepartamento(de, estudiante);
+        (new prueba()).setDepartamento(de, e);
     }
 
     public List<SelectItem> getDepartamentoListaE() {
-        return aux.getDepartamentoLista(estudiante);
+        return (new prueba()).getDepartamentoLista(e);
     }
 
     public String getMunicipioE() {
-        return aux.getMunicipio(estudiante);
+        return (new prueba()).getMunicipio(e);
     }
 
     public void setMunicipioE(String de) {
-        aux.setMunicipio(de, estudiante);
+        (new prueba()).setMunicipio(de, e);
     }
 
     public List<SelectItem> getMunicipioListaE() {
-        return aux.getMunicipioLista(estudiante);
+        return (new prueba()).getMunicipioLista(e);
     }
 
     public void onItemSelect2(SelectEvent event) {
-        estudiante = axiliarController.p;
+        Persona po = axiliarController.getP();
+        switch (po.getTipoPersona().getIdtipoPersona()) {
+            case 8:
+                e = po;
+                break;
+            case 9:
+                Representante = po;
+                break;
+            case 10:
+                madre = po;
+                break;
+            case 11:
+                padre = po;
+        }
+        System.out.println(po.toString());
     }
-    
+
     public String onFlowProcess(FlowEvent event) {
         return event.getNewStep();
     }
-    
-    public int getAñoMatricula(){
+
+    public int getAñoMatricula() {
         return Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date()));
     }
+
+    public void setDuiPadre(String dui) {
+        (new prueba()).setDui(dui, padre);
+    }
+
+    public String getDuiPadre() {
+        return (new prueba()).getDui(padre);
+    }
+
+    public void setDuiMadre(String dui) {
+        (new prueba()).setDui(dui, madre);
+    }
+
+    public String getDuiMadre() {
+        return (new prueba()).getDui(madre);
+    }
+
+    public Persona getMadre() {
+        return madre;
+    }
+
+    public void setMadre(Persona madre) {
+        this.madre = madre;
+    }
+
+    public Persona getPadre() {
+        return padre;
+    }
+
+    public void setPadre(Persona padre) {
+        this.padre = padre;
+    }
+
 }

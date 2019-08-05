@@ -164,7 +164,7 @@ public class maestroController implements Serializable {
     }
     
     public void setChange() {
-        maestro = mfl.find(axiliarController.p.getIdpersona());
+        maestro = mfl.find(axiliarController.getP().getIdpersona());
     }
 
     public void guardar() {

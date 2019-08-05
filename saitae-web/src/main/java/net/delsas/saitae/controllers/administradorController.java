@@ -77,12 +77,10 @@ public class administradorController implements Serializable {
 
     public void onItemSelect(SelectEvent event) {
         adm.setTipoPersona(tpfl.find(adm.getTipoPersona().getIdtipoPersona()));
-        FacesContext.getCurrentInstance().addMessage(null,
-                new FacesMessage("Selected", adm.getTipoPersona().getTipoPersonaNombre()));
     }
 
     public void onItemSelect2(SelectEvent event) {
-        adm = axiliarController.p;
+        adm = axiliarController.getP();
     }
 
     public Persona getAdm() {

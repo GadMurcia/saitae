@@ -21,8 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
@@ -33,21 +31,18 @@ import net.delsas.saitae.beans.AccesoTipoPersonaFacadeLocal;
 import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
 import net.delsas.saitae.entities.Acceso;
 import net.delsas.saitae.entities.AccesoTipoPersona;
-import net.delsas.saitae.entities.TipoPermiso;
 import net.delsas.saitae.entities.TipoPersona;
-import net.delsas.saitae.entities.TipopersonaPermiso;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.ItemSelectEvent;
 import org.primefaces.event.RowEditEvent;
 import org.primefaces.model.DualListModel;
-import org.primefaces.model.NestedSelectItem;
 
 /**
  *
  * @author delsas
  */
 @Named
-@SessionScoped
+@ViewScoped
 public class vistasMenuController implements Serializable {
 
     private static final long serialVersionUID = 1L;
