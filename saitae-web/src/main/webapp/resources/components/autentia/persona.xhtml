@@ -8,14 +8,14 @@
 
     <!-- INTERFACE -->
     <cc:interface>        
-        <cc:attribute name="estudiante" type="net.delsas.saitae.entities.Estudiante"/>
+        <cc:attribute name="es" type="net.delsas.saitae.entities.Estudiante"/>
         <cc:attribute name="persona" required="true" type="net.delsas.saitae.entities.Persona"/>
         <cc:attribute name="departamentoLista" required="true"/>
         <cc:attribute name="dui" required="true"/>
         <cc:attribute name="departamento" required="true"/>
         <cc:attribute name="municipio" required="true"/>
         <cc:attribute name="municipioLista" required="true"/>
-        <cc:attribute name="listenerA" method-signature="void onItemSelect2( org.primefaces.event.SelectEvent )"/>
+        <cc:attribute name="onItemSelect" required="true" method-signature="void onItemSelect( org.primefaces.event.SelectEvent )"/>
         <cc:attribute name="t" default="0" type="java.lang.Integer"/>
         <cc:attribute name="onComplete" required="true" method-signature="java.util.List java.lang.String completeText( java.lang.String )"/>
     </cc:interface>
@@ -24,113 +24,113 @@
     <cc:implementation>          
         <f:event type="preRenderView" listener="#{axiliarController.setTipo(cc.attrs.t)}"/>
         <h:panelGrid columns="3">
-            <p:outputLabel for="dui" value="DUI: "/>
-            <p:autoComplete id="dui" value="#{cc.attrs.dui}" required="true" type="int"
+            <p:outputLabel for="dui#{cc.attrs.t}" value="DUI: "/>
+            <p:autoComplete id="dui#{cc.attrs.t}" value="#{cc.attrs.dui}" required="true" type="int"
                             title="Ingrese el número de documento de identificación de la persona."
                             completeMethod="#{cc.attrs.onComplete}">
                 <p:ajax event="itemSelect" listener="#{axiliarController.onItemSelect}" update="form0:msgs form1"/>
-                <p:ajax event="itemSelect" listener="#{cc.attrs.listenerA}"/>
+                <p:ajax event="itemSelect" listener="#{cc.attrs.onItemSelect}"/>
             </p:autoComplete>
-            <p:message for="dui" showSummary="true" />
+            <p:message for="dui#{cc.attrs.t}" showSummary="true" />
 
-            <p:outputLabel for="nit" value="NIT: " />
-            <p:inputMask id="nit" value="#{cc.attrs.persona.personaNit}" required="#{cc.attrs.t!=8}" 
+            <p:outputLabel for="nit#{cc.attrs.t}" value="NIT: " />
+            <p:inputMask id="nit#{cc.attrs.t}" value="#{cc.attrs.persona.personaNit}" required="#{cc.attrs.t!=8}" 
                          mask="9999-999999-999-9" title="Ingrese nu NIT" />
-            <p:message for="nit" showSummary="true" />              
+            <p:message for="nit#{cc.attrs.t}" showSummary="true" />              
 
-            <p:outputLabel for="nombre" value="Nombre: "/>
-            <p:inputText id="nombre" value="#{cc.attrs.persona.personaNombre}" required="true" title="Ingrese el nombre de la persona a agregar"/>
-            <p:message for="nombre" showSummary="true" />
+            <p:outputLabel for="nombre#{cc.attrs.t}" value="Nombre: "/>
+            <p:inputText id="nombre#{cc.attrs.t}" value="#{cc.attrs.persona.personaNombre}" required="true" title="Ingrese el nombre de la persona a agregar"/>
+            <p:message for="nombre#{cc.attrs.t}" showSummary="true" />
 
-            <p:outputLabel for="apellido" value="Apellidos: "/>
-            <p:inputText id="apellido" value="#{cc.attrs.persona.personaApellido}" required="true" title="Apellidos de la persona"/>
-            <p:message for="apellido" showSummary="true" /> 
+            <p:outputLabel for="apellido#{cc.attrs.t}" value="Apellidos: "/>
+            <p:inputText id="apellido#{cc.attrs.t}" value="#{cc.attrs.persona.personaApellido}" required="true" title="Apellidos de la persona"/>
+            <p:message for="apellido#{cc.attrs.t}" showSummary="true" /> 
 
-            <p:outputLabel for="fecha" value="Fecha de nacimiento: " />
-            <p:calendar id="fecha" value="#{cc.attrs.persona.personaNacimiento}" pattern="dd-MM-yyyy" mask="true" 
+            <p:outputLabel for="fecha#{cc.attrs.t}" value="Fecha de nacimiento: " />
+            <p:calendar id="fecha#{cc.attrs.t}" value="#{cc.attrs.persona.personaNacimiento}" pattern="dd-MM-yyyy" mask="true" 
                         title="Ingrese la fecha de nacimiento de la persona." />
-            <p:message for="fecha" showSummary="true" />
+            <p:message for="fecha#{cc.attrs.t}" showSummary="true" />
 
-            <p:outputLabel for="sexo" value="Sexo: " />
-            <p:selectOneMenu id="sexo" value="#{cc.attrs.persona.personaSexo}" style="width:125px" title="Seleccione su sexo"
+            <p:outputLabel for="sexo#{cc.attrs.t}" value="Sexo: " />
+            <p:selectOneMenu id="sexo#{cc.attrs.t}" value="#{cc.attrs.persona.personaSexo}" style="width:125px" title="Seleccione su sexo"
                              >
                 <f:selectItem itemLabel="Seleccione" itemValue="" />
                 <f:selectItem itemLabel="Femenino" itemValue="true" />
                 <f:selectItem itemLabel="Masculino" itemValue="false" />
             </p:selectOneMenu>
-            <p:message for="sexo" showSummary="true" />
+            <p:message for="sexo#{cc.attrs.t}" showSummary="true" />
 
-            <p:outputLabel for="ef" value="Estado Familiar: " />
-            <p:selectOneMenu id="ef" value="#{cc.attrs.persona.personaEstadoFamiliar}" style="width:125px" 
+            <p:outputLabel for="ef#{cc.attrs.t}" value="Estado Familiar: " />
+            <p:selectOneMenu id="ef#{cc.attrs.t}" value="#{cc.attrs.persona.personaEstadoFamiliar}" style="width:125px" 
                              title="Seleccione el estado familiar de la persona" >
                 <f:selectItem itemLabel="Seleccione" itemValue="" />
                 <f:selectItem itemLabel="Solter@" itemValue="0" />
                 <f:selectItem itemLabel="Casad@" itemValue="1" />
                 <f:selectItem itemLabel="Acompañad@" itemValue="2"/>
             </p:selectOneMenu>
-            <p:message for="ef" showSummary="true" />           
+            <p:message for="ef#{cc.attrs.t}" showSummary="true" />           
 
-            <p:outputLabel for="nacion" value="Nacionalidad: "/>
-            <p:selectOneMenu id="nacion" value="#{cc.attrs.persona.personaNacionalidad}"  required="true"
+            <p:outputLabel for="nacion#{cc.attrs.t}" value="Nacionalidad: "/>
+            <p:selectOneMenu id="nacion#{cc.attrs.t}" value="#{cc.attrs.persona.personaNacionalidad}"  required="true"
                              style="width:125px" label="Seleccione su nacionalidad" >
                 <f:selectItem itemLabel="Seleccione" itemValue="9" />
                 <f:selectItem itemLabel="Salvadoreña" itemValue="Salvadoreña" />
                 <f:selectItem itemLabel="Extrangera" itemValue="Extrangera" />
-                <p:ajax update="dep mun"/>
+                <p:ajax update="dep#{cc.attrs.t} mun#{cc.attrs.t}"/>
             </p:selectOneMenu>
-            <p:message for="nacion" showSummary="true" />
+            <p:message for="nacion#{cc.attrs.t}" showSummary="true" />
 
-            <h:outputLabel for="dep" value="Departamento de nacimiento: " />
-            <p:selectOneMenu id="dep" value="#{cc.attrs.departamento}" required="true" style="width:125px" 
+            <h:outputLabel for="dep#{cc.attrs.t}" value="Departamento de nacimiento: " />
+            <p:selectOneMenu id="dep#{cc.attrs.t}" value="#{cc.attrs.departamento}" required="true" style="width:125px" 
                              title="Seleccione el departamento de nacimiento" >
                 <f:selectItems value="#{cc.attrs.departamentoLista}"/>
-                <p:ajax update="mun"/>
+                <p:ajax update="mun#{cc.attrs.t}"/>
             </p:selectOneMenu>
             <p:column />
 
-            <h:outputLabel for="mun" value="Municipio de nacimiento: " />
-            <p:selectOneMenu id="mun" value="#{cc.attrs.municipio}" required="true" style="width:125px" 
+            <h:outputLabel for="mun#{cc.attrs.t}" value="Municipio de nacimiento: " />
+            <p:selectOneMenu id="mun#{cc.attrs.t}" value="#{cc.attrs.municipio}" required="true" style="width:125px" 
                              title="Seleccione el municipio de nacimiento" >
                 <f:selectItems value="#{cc.attrs.municipioLista}"/>
             </p:selectOneMenu>
             <p:column />
 
-            <p:outputLabel for="zona" value="Zona de residencia: *" />
-            <p:selectOneMenu id="zona" value="#{cc.attrs.persona.personaZonaVivienda}" required="true"
+            <p:outputLabel for="zona#{cc.attrs.t}" value="Zona de residencia: *" />
+            <p:selectOneMenu id="zona#{cc.attrs.t}" value="#{cc.attrs.persona.personaZonaVivienda}" required="true"
                              style="width:125px" title="Seleccione su Zona donde vive" >
                 <f:selectItem itemLabel="Seleccione" itemValue="" />
                 <f:selectItem itemLabel="Rural" itemValue="0" />
                 <f:selectItem itemLabel="Urbana" itemValue="1" />
             </p:selectOneMenu>
-            <p:messages for="zona" showSummary="true" />
+            <p:messages for="zona#{cc.attrs.t}" showSummary="true" />
 
-            <p:outputLabel for="cod" value="Código de residencia: " rendered="#{cc.attrs.t==4}"/>
-            <p:inputText id="cod" value="#{cc.attrs.persona.personaCodigoResidencia}" 
+            <p:outputLabel for="cod#{cc.attrs.t}" value="Código de residencia: " rendered="#{cc.attrs.t==4}"/>
+            <p:inputText id="cod#{cc.attrs.t}" value="#{cc.attrs.persona.personaCodigoResidencia}" 
                          required="true" rendered="#{cc.attrs.t==4}"/>
-            <p:message for="cod" showSummary="true" rendered="#{cc.attrs.t==4}"/>
+            <p:message for="cod#{cc.attrs.t}" showSummary="true" rendered="#{cc.attrs.t==4}"/>
 
-            <p:outputLabel for="titulo" value="Profesión: " rendered="#{cc.attrs.t!=8}"/>
-            <p:inputText id="titulo" value="#{cc.attrs.persona.personaOCupacion}" required="true" 
+            <p:outputLabel for="titulo#{cc.attrs.t}" value="Profesión: " rendered="#{cc.attrs.t!=8}"/>
+            <p:inputText id="titulo#{cc.attrs.t}" value="#{cc.attrs.persona.personaOCupacion}" required="true" 
                          rendered="#{cc.attrs.t!=8}"
                          title="Ingrese la profesión de la persona."/>
-            <p:message for="titulo" showSummary="true" rendered="#{cc.attrs.t!=8}"/>
+            <p:message for="titulo#{cc.attrs.t}" showSummary="true" rendered="#{cc.attrs.t!=8}"/>
 
-            <p:outputLabel for="disca" value="Discapacidades: " />
-            <p:inputText id="disca" value="#{cc.attrs.persona.personaDiscapacidades}" type="text"
+            <p:outputLabel for="disca#{cc.attrs.t}" value="Discapacidades: " />
+            <p:inputText id="disca#{cc.attrs.t}" value="#{cc.attrs.persona.personaDiscapacidades}" type="text"
                          title="Si tiene alguna discapacidad, escríbalas separadas por comas"
                          />
             <p:column />
 
-            <p:outputLabel for="enf" value="Enfermedades que padece: " 
+            <p:outputLabel for="enf#{cc.attrs.t}" value="Enfermedades que padece: " 
                            rendered="#{cc.attrs.t == 8}"/>
-            <p:inputText id="enf" value="#{cc.attrs.estudiante.estudianteEnfermedades}" type="text"
+            <p:inputText id="enf#{cc.attrs.t}" value="#{cc.attrs.es.estudianteEnfermedades}" type="text"
                          title="Si padece enfermedades crónicas, escríbalas separadas por comas"
                          rendered="#{cc.attrs.t == 8}"/>
             <p:column rendered="#{cc.attrs.t == 8}"/>
 
-            <p:outputLabel for="med" value="Medicamentos permanentes: " 
+            <p:outputLabel for="med#{cc.attrs.t}" value="Medicamentos permanentes: " 
                            rendered="#{cc.attrs.t == 8}"/>
-            <p:inputText id="med" value="#{cc.attrs.estudiante.estudianteMedicamentos}" type="text"
+            <p:inputText id="med#{cc.attrs.t}" value="#{cc.attrs.es.estudianteMedicamentos}" type="text"
                          title="Si tiene Medicamentos Recetados de forma permanente, escríbalos separadas por comas"
                          rendered="#{cc.attrs.t == 8}"/>
             <p:column rendered="#{cc.attrs.t == 8}"/>

@@ -9,7 +9,7 @@
     <!-- INTERFACE -->
     <cc:interface>
         <cc:attribute name="persona" required="true" type="net.delsas.saitae.entities.Persona"/>
-        <cc:attribute name="estudiante" required="true" type="net.delsas.saitae.entities.Estudiante"/>
+        <cc:attribute name="e" required="true" type="net.delsas.saitae.entities.Estudiante"/>
     </cc:interface>
 
     <!-- IMPLEMENTATION -->
@@ -24,7 +24,7 @@
             </p:selectOneMenu>
 
             <p:outputLabel for="console3" value="Tipo de calle de donde vive: *" />
-            <p:selectOneMenu id="console3" value="#{cc.attrs.estudiante.estudianteTipoCalle}"  required="true"
+            <p:selectOneMenu id="console3" value="#{cc.attrs.e.estudianteTipoCalle}"  required="true"
                              style="width:125px" title="Seleccione el tipo de calle de el lugar donde vive">
                 <f:selectItem itemLabel="Seleccione" itemValue="" />
                 <f:selectItem itemLabel="Tierra" itemValue="0" />
@@ -32,7 +32,7 @@
             </p:selectOneMenu>
 
             <p:outputLabel for="console4" value="Medio de transporte: *" />
-            <p:selectOneMenu id="console4" value="#{cc.attrs.estudiante.estudianteMedioTransporte}"  
+            <p:selectOneMenu id="console4" value="#{cc.attrs.e.estudianteMedioTransporte}"  
                              required="true" style="width:125px" 
                              title="Seleccione la forma en que habitualmete viajaría al centro de estudios">
                 <f:selectItem itemLabel="Seleccione" itemValue="" />
@@ -45,22 +45,22 @@
             </p:selectOneMenu>
 
             <h:outputText value="Riesgo o vulnerabilidad: " />
-            <p:inputText value="#{cc.attrs.estudiante.estudianteRiesgoVulnerabilidad}"  
+            <p:inputText value="#{cc.attrs.e.estudianteRiesgoVulnerabilidad}"  
                          title="Escriba los riesgos o vulnarabilidades del lugar en donde vive, si los hubiera."/>
 
             <h:outputText value="Distancia en KM que recorrería hasta al INTEX: *"/>
-            <p:inputNumber id="input1" value="#{cc.attrs.estudiante.estudianteDistanciaAlCentro}" required="true"
+            <p:inputNumber id="input1" value="#{cc.attrs.e.estudianteDistanciaAlCentro}" required="true"
                            symbol=" Km" symbolPosition="s" decimalSeparator="." thousandSeparator=","/> 
 
             <h:outputText value="Trabaja?: *" />
-            <p:selectBooleanButton id="value2" value="#{cc.attrs.estudiante.estudianteTrabaja}" required="true"
+            <p:selectBooleanButton id="value2" value="#{cc.attrs.e.estudianteTrabaja}" required="true"
                                    onLabel="Sí" offLabel="No" style="width:60px">
                 <p:ajax update="r2" />
             </p:selectBooleanButton>
 
             <h:outputText value="¿En qué trabaja?: "/>
-            <p:inputText id="r2" value="#{cc.attrs.estudiante.estudianteFormaTrabajo}" 
-                         disabled="#{!cc.attrs.estudiante.estudianteTrabaja}" 
+            <p:inputText id="r2" value="#{cc.attrs.e.estudianteFormaTrabajo}" 
+                         disabled="#{!cc.attrs.e.estudianteTrabaja}" 
                          title="Escriba en qué trabaja"/>
 
             <p:outputLabel for="basic" value="¿De quién depende económicamente?: *" />

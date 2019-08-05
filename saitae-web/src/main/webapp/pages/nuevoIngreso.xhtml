@@ -21,8 +21,8 @@
                                    dui="#{nuevoingresoController.nie}" municipio="#{nuevoingresoController.municipioE}" 
                                    municipioLista="#{nuevoingresoController.municipioListaE}" 
                                    persona="#{nuevoingresoController.e}"
-                                   listenerA="#{nuevoingresoController.onItemSelect2}" t="8" 
-                                   estudiante="#{nuevoingresoController.e.estudiante}"
+                                   onItemSelect="#{nuevoingresoController.onItemSelect2}" t="8" 
+                                   es="#{nuevoingresoController.e.estudiante}"
                                    onComplete="#{axiliarController.completeTextEst}"/>
                     </p:panel>
                 </p:tab>
@@ -33,7 +33,7 @@
                 </p:tab>
                 <p:tab title="Socioeconómico">
                     <p:panel header="Información Socio-económica del aspirante">
-                        <t:estudiante estudiante="#{nuevoingresoController.e.estudiante}" 
+                        <t:estudiante e="#{nuevoingresoController.e.estudiante}" 
                                       persona="#{nuevoingresoController.e}"/>
                     </p:panel>
                 </p:tab>
@@ -42,13 +42,13 @@
                         <h:panelGrid columns="1">
                             <p:panel header="Datos del padre">
                                 <t:padres id="padre" dui="#{nuevoingresoController.duiPadre}" 
-                                          persona="#{nuevoingresoController.padre}" t="11"
+                                          pa="#{nuevoingresoController.padre}" t="11"
                                           listenerA="#{nuevoingresoController.onItemSelect2}"
                                           onComplete="#{axiliarController.completeTextPad}"/>
                             </p:panel>
                             <p:panel header="Datos de la madre">
                                 <t:padres id="madre" dui="#{nuevoingresoController.duiMadre}" 
-                                          persona="#{nuevoingresoController.madre}" t="10"
+                                          pa="#{nuevoingresoController.madre}" t="10"
                                           listenerA="#{nuevoingresoController.onItemSelect2}"
                                           onComplete="#{axiliarController.completeTextMad}"/>
                             </p:panel>
