@@ -38,7 +38,6 @@ import org.primefaces.event.SelectEvent;
 public class axiliarController implements Serializable {
     
     private static final long serialVersionUID = 1L;
-    private final prueba auxiliar = new prueba();
     private static Persona p = new Persona(0);
     private int tipo;
     @EJB
@@ -48,7 +47,7 @@ public class axiliarController implements Serializable {
         List<String> results = new ArrayList<>();
         List<Persona> list;
         try {
-            auxiliar.setDui(query, getP());
+            (new prueba()).setDui(query, getP());
             list = tipo != 100
                     ? pfl.getPersonaByLikeIdAndType(getP().getIdpersona(), tipo)
                     : pfl.getAdminsByLikeId(getP().getIdpersona());
@@ -71,10 +70,10 @@ public class axiliarController implements Serializable {
         setP(new Persona(0));
         try {
             String x[] = event.getObject().toString().split("=>");
-            auxiliar.setDui(x.length > 1 ? x[1] : x[0], getP());
+            (new prueba()).setDui(x.length > 1 ? x[1] : x[0], getP());
             setP(pfl.find(getP().getIdpersona()));
         } catch (Exception o) {
-            System.out.println("Error en auxiliar.onItemSelect: " + o.getMessage());
+            System.out.println("Error en (new prueba()).onItemSelect: " + o.getMessage());
         }
         FacesContext.getCurrentInstance().addMessage(null,
                 new FacesMessage("Selected", getP().getPersonaNombre()));

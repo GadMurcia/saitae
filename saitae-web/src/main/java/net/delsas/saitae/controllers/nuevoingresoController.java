@@ -2,6 +2,7 @@ package net.delsas.saitae.controllers;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -11,10 +12,17 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import net.delsas.prueba;
 import net.delsas.saitae.beans.EstudianteFacadeLocal;
+import net.delsas.saitae.beans.GradoFacadeLocal;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
+import net.delsas.saitae.entities.Documentos;
+import net.delsas.saitae.entities.Grado;
+import net.delsas.saitae.entities.Matricula;
+import net.delsas.saitae.entities.MatriculaPK;
 import net.delsas.saitae.entities.Persona;
+import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.FlowEvent;
 import org.primefaces.event.SelectEvent;
+import org.primefaces.model.UploadedFile;
 
 /**
  *
@@ -29,10 +37,14 @@ public class nuevoingresoController implements Serializable {
     private PersonaFacadeLocal pfl;
     @EJB
     private EstudianteFacadeLocal efl;
+    @EJB
+    private GradoFacadeLocal gfl;
     private Persona e;
     private Persona Representante;
     private Persona madre;
     private Persona padre;
+    private Matricula mat;
+    private Documentos docs;
 
     @PostConstruct
     public void init() {
@@ -40,10 +52,58 @@ public class nuevoingresoController implements Serializable {
         e = (new prueba()).getEstudiante();
         madre = (new prueba()).getMadre();
         padre = (new prueba()).getPadre();
+        mat = new Matricula(new MatriculaPK(0, getAñoMatricula()));
+        mat.setGrado(new Grado(0, "", "", getAñoMatricula()));
+        docs = e.getEstudiante().getDocumentos();
+        docs = docs == null ? new Documentos(e.getIdpersona()) : docs;
     }
 
     public void guardar() {
         System.out.println("guardar");
+    }
+
+    /**
+     * Genera un lista para que el susario seleccione el año de bachillerato
+     * para inscribirse.
+     *
+     * @return List;
+     */
+    public List<SelectItem> getNiveles() {
+        List<SelectItem> items = new ArrayList<>();
+        for (Integer i : gfl.getIdPorAñoyModalidad(getAñoMatricula(), mat.getGrado().getGradoPK().getGradoModalidad())) {
+            items.add(new SelectItem(i, i == 3 ? "Tercer Año"
+                    : i == 2 ? "Segundo Año"
+                            : "primer Año"));
+        }
+        return items;
+    }
+
+    public List<SelectItem> getModalidades() {
+        List<SelectItem> items = new ArrayList<>();
+        for (String g : gfl.getModalidadPorAño(getAñoMatricula())) {
+            items.add(new SelectItem(g, g.equals("C") ? "T.V.C. Contaduría"
+                    : g.equals("S") ? "T.V.C. Secretariado"
+                    : "General"));
+        }
+        return items;
+    }
+
+    public void onItemSelect2(SelectEvent event) {
+        Persona po = axiliarController.getP();
+        switch (po.getTipoPersona().getIdtipoPersona()) {
+            case 8:
+                e = po;
+                break;
+            case 9:
+                Representante = po;
+                break;
+            case 10:
+                madre = po;
+                break;
+            case 11:
+                padre = po;
+        }
+        System.out.println(po.toString());
     }
 
     public String[] getDependenciaeco() {
@@ -80,6 +140,35 @@ public class nuevoingresoController implements Serializable {
     public void setOtraDependencia(String otradependencia) {
         this.e.getEstudiante().setEstudianteDependenciaEconomica(
                 e.getEstudiante().getEstudianteDependenciaEconomica() + "¿" + otradependencia);
+    }
+
+    public void partida(FileUploadEvent event) {
+        this.docs.setEstudianteDocPartida(event.getFile().getContents());
+        this.docs.setEstudianteExtencionPartida(this.getExtencion(event.getFile()));
+    }
+
+    public String getExtencion(UploadedFile f) {
+        return f.getContentType();
+    }
+
+    public void noveno(FileUploadEvent event) {
+        this.docs.setEstudianteDocCertificado(event.getFile().getContents());
+        this.docs.setEstudianteExtencionCertificado(this.getExtencion(event.getFile()));
+    }
+
+    public void conducta(FileUploadEvent event) {
+        this.docs.setEstudianteDocConducta(event.getFile().getContents());
+        this.docs.setEstudianteExtencionConducta(this.getExtencion(event.getFile()));
+    }
+
+    public void dui(FileUploadEvent event) {
+        this.docs.setEstudianteDocDui(event.getFile().getContents());
+        this.docs.setEstudianteExtencionDui(this.getExtencion(event.getFile()));
+    }
+
+    public void notas(FileUploadEvent event) {
+        this.docs.setEstudianteDocNotas(event.getFile().getContents());
+        this.docs.setEstudianteExtencionNotas(this.getExtencion(event.getFile()));
     }
 
     public Persona getE() {
@@ -122,24 +211,6 @@ public class nuevoingresoController implements Serializable {
         return (new prueba()).getMunicipioLista(e);
     }
 
-    public void onItemSelect2(SelectEvent event) {
-        Persona po = axiliarController.getP();
-        switch (po.getTipoPersona().getIdtipoPersona()) {
-            case 8:
-                e = po;
-                break;
-            case 9:
-                Representante = po;
-                break;
-            case 10:
-                madre = po;
-                break;
-            case 11:
-                padre = po;
-        }
-        System.out.println(po.toString());
-    }
-
     public String onFlowProcess(FlowEvent event) {
         return event.getNewStep();
     }
@@ -178,6 +249,54 @@ public class nuevoingresoController implements Serializable {
 
     public void setPadre(Persona padre) {
         this.padre = padre;
+    }
+
+    public Persona getRepresentante() {
+        return Representante;
+    }
+
+    public void setRepresentante(Persona Representante) {
+        this.Representante = Representante;
+    }
+
+    public Matricula getMat() {
+        return mat;
+    }
+
+    public void setMat(Matricula mat) {
+        this.mat = mat;
+    }
+
+    public void setDuiR(String nie) {
+        (new prueba()).setDui(nie, Representante);
+    }
+
+    public String getDuiR() {
+        return (new prueba()).getDui(Representante);
+    }
+
+    public String getDepartamentoR() {
+        return (new prueba()).getDepartamento(Representante);
+    }
+
+    public void setDepartamentoR(String de) {
+        (new prueba()).setDepartamento(de, Representante);
+    }
+
+    public List<SelectItem> getDepartamentoListaR() {
+        return (new prueba()).getDepartamentoLista(Representante);
+    }
+
+    public String getMunicipioR() {
+        return (new prueba()).getMunicipio(Representante);
+    }
+
+    public void setMunicipioR(String de) {
+        (new prueba()).setMunicipio(de, Representante);
+    }
+
+    public List<SelectItem> getMunicipioListaR() {
+        return (new prueba()).getMunicipioLista(Representante);
     }
 
 }

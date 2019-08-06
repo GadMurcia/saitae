@@ -174,34 +174,7 @@ public class EstudianteController implements Serializable {
         return event.getNewStep();
     }
 
-    public void partida(FileUploadEvent event) {
-        this.docs.setEstudianteDocPartida(event.getFile().getContents());
-        this.docs.setEstudianteExtencionPartida(this.getExtencion(event.getFile()));
-    }
-
-    public String getExtencion(UploadedFile f) {
-        return f.getContentType();
-    }
-
-    public void noveno(FileUploadEvent event) {
-        this.docs.setEstudianteDocCertificado(event.getFile().getContents());
-        this.docs.setEstudianteExtencionCertificado(this.getExtencion(event.getFile()));
-    }
-
-    public void conducta(FileUploadEvent event) {
-        this.docs.setEstudianteDocConducta(event.getFile().getContents());
-        this.docs.setEstudianteExtencionConducta(this.getExtencion(event.getFile()));
-    }
-
-    public void dui(FileUploadEvent event) {
-        this.docs.setEstudianteDocDui(event.getFile().getContents());
-        this.docs.setEstudianteExtencionDui(this.getExtencion(event.getFile()));
-    }
-
-    public void notas(FileUploadEvent event) {
-        this.docs.setEstudianteDocNotas(event.getFile().getContents());
-        this.docs.setEstudianteExtencionNotas(this.getExtencion(event.getFile()));
-    }
+    
 
     public void dependencia() {
         this.getOtraDependencia();

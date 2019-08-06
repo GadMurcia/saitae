@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        <p:outputLabel value="Recuerde que debe llevar al INTEX los documentos originales para su confrontación."/>
+        <br/>
+        <p:outputLabel value="No es necesario el llenado de estos campos en este momento. Si así lo desea, salte este paso."/>
+        <h:panelGrid columns="3" columnClasses="label, value, label">
+            <p:outputLabel for="part" value="partida de nacimiento: " />
+            <p:fileUpload id="part" fileUploadListener="#{nuevoingresoController.partida}" mode="advanced"
+                          sizeLimit="10000000" label="Elejir"
+                          allowTypes="/(\.|\/)(jpe?g|png|pdf)$/" auto="true"/>
+            <p:messages for="part" />
+
+            <p:outputLabel for="nov" value="Certificado de 9° Grado: " />
+            <p:fileUpload id="nov" fileUploadListener="#{nuevoingresoController.noveno}" mode="advanced"
+                          sizeLimit="10000000" label="Elejir" 
+                          allowTypes="/(\.|\/)(jpe?g|png|pdf)$/" auto="true"/>
+            <p:messages for="nov" />
+
+            <p:outputLabel for="cons" value="Constancia de conducta: " />
+            <p:fileUpload id="cons" fileUploadListener="#{nuevoingresoController.conducta}" mode="advanced"
+                          sizeLimit="10000000" label="Elejir"
+                          allowTypes="/(\.|\/)(jpe?g|png|pdf)$/" auto="true"/>
+            <p:messages for="cons" />
+
+            <p:outputLabel for="not" value="Certificado de notas de bachillerato: " />
+            <p:fileUpload id="not" fileUploadListener="#{nuevoingresoController.notas}" mode="advanced"
+                          sizeLimit="10000000" label="Elejir"
+                          allowTypes="/(\.|\/)(jpe?g|png|pdf)$/" auto="true"/>
+            <p:messages for="not" />
+
+            <p:outputLabel for="duid" value="Fotocopia de DUI: " />
+            <p:fileUpload id="duid" fileUploadListener="#{nuevoingresoController.noveno}" mode="advanced"
+                          sizeLimit="10000000" label="Elejir"
+                          allowTypes="/(\.|\/)(jpe?g|png|pdf)$/" auto="true"/>
+            <p:messages for="duid" />
+        </h:panelGrid>
+    </cc:implementation>
+</html>

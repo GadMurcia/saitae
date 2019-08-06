@@ -643,7 +643,7 @@ CREATE TABLE `evaluacionMaestro` (
   `resumen` varchar(250) DEFAULT NULL,
   `propuestaMejora` varchar(145) DEFAULT NULL,
   `evaluacionMaestroComentario` varchar(145) DEFAULT NULL,
-  `gradoModalidad` enum('C','G') NOT NULL,
+  `gradoModalidad` enum('C','S','G') NOT NULL,
   PRIMARY KEY (`idMaestro`,`fechaHora`,`gradoModalidad`),
   KEY `fk_evaluacionMaestro_1_idx` (`idMaestro`),
   KEY `fk_evaluacionMaestro_2` (`grado`,`seccion`,`año`,`gradoModalidad`),
@@ -721,7 +721,7 @@ DROP TABLE IF EXISTS `grado`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `grado` (
   `idgrado` int(11) NOT NULL,
-  `gradoModalidad` enum('C','G') NOT NULL,
+  `gradoModalidad` enum('C','S','G') NOT NULL,
   `gradoSeccion` enum('A','B','C') NOT NULL,
   `gradoAño` int(4) NOT NULL,
   `aulaGrado` int(11) NOT NULL,
@@ -755,8 +755,9 @@ DROP TABLE IF EXISTS `gradoEvaluacion`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `gradoEvaluacion` (
   `idGrado` int(11) NOT NULL,
-  `gradoSeccion` enum('A','B','c') NOT NULL,
+  `gradoSeccion` enum('A','B','C') NOT NULL,
   `gradoAño` int(4) NOT NULL,
+  `gradoModalidad` enum('C','S','G') NOT NULL,
   `fechaEvaluacion` date NOT NULL COMMENT 'histórico de evaluaciones a cada grado del instituto.',
   `evaluador` int(11) NOT NULL,
   `organizadorLimpieza` bit(1) NOT NULL,
@@ -768,7 +769,6 @@ CREATE TABLE `gradoEvaluacion` (
   `comites` bit(1) NOT NULL,
   `bienvenidos` bit(1) NOT NULL,
   `valores` bit(1) NOT NULL,
-  `gradoModalidad` enum('C','G') NOT NULL,
   `directiva` bit(1) NOT NULL,
   `material` bit(1) NOT NULL,
   `observacionesPositivas` varchar(145) DEFAULT NULL,
@@ -940,7 +940,7 @@ CREATE TABLE `matricula` (
   `idmatricula` int(11) NOT NULL,
   `matriculaAnyo` int(4) NOT NULL,
   `matriculaNivel` int(11) NOT NULL,
-  `gradoModalidad` enum('C','G') NOT NULL,
+  `gradoModalidad` enum('C','S','G') NOT NULL,
   `matriculaSeccion` enum('A','B','C') NOT NULL DEFAULT 'A',
   `matriculaRepite` bit(1) NOT NULL,
   `matriculaComentario` varchar(140) DEFAULT NULL,
@@ -975,7 +975,7 @@ CREATE TABLE `mestroHorarioMaterias` (
   `idGrado` int(11) NOT NULL,
   `seccionGrado` enum('A','B','C') NOT NULL,
   `añoGrado` int(4) NOT NULL,
-  `gradoModalidad` enum('C','G') NOT NULL,
+  `gradoModalidad` enum('C','S','G') NOT NULL,
   `mestroHorarioMateriasComentarios` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idMaestro`,`idMateria`,`idHorario`,`diaSemana`,`idGrado`,`seccionGrado`,`añoGrado`),
   KEY `fk_mestroHorarioMaterias_2_idx` (`idMateria`),
@@ -1628,4 +1628,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-08-05  0:14:57
+-- Dump completed on 2019-08-05 21:25:58

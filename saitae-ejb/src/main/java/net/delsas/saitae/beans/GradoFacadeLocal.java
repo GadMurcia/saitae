@@ -29,5 +29,9 @@ public interface GradoFacadeLocal {
     List<Grado> findRange(int[] range);
 
     int count();
+
+    public List<String> getModalidadPorAño(int año);
+
+    public List<Integer> getIdPorAñoyModalidad(int año, String modalidad);
     
 }

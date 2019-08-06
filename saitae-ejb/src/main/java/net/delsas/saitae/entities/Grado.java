@@ -38,7 +38,10 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Grado.findByGradoSeccion", query = "SELECT g FROM Grado g WHERE g.gradoPK.gradoSeccion = :gradoSeccion")
     , @NamedQuery(name = "Grado.findByGradoA\u00f1o", query = "SELECT g FROM Grado g WHERE g.gradoPK.gradoA\u00f1o = :gradoA\u00f1o")
     , @NamedQuery(name = "Grado.findByGradoActivo", query = "SELECT g FROM Grado g WHERE g.gradoActivo = :gradoActivo")
-    , @NamedQuery(name = "Grado.findByGradoCoemntario", query = "SELECT g FROM Grado g WHERE g.gradoCoemntario = :gradoCoemntario")})
+    , @NamedQuery(name = "Grado.findByGradoCoemntario", query = "SELECT g FROM Grado g WHERE g.gradoCoemntario = :gradoCoemntario")
+    , @NamedQuery(name = "Grado.findModalidadByaño", query = "SELECT DISTINCT(g.gradoPK.gradoModalidad) FROM Grado g WHERE g.gradoPK.gradoAño = :año")
+    , @NamedQuery(name = "Grado.findIDByañoAndModalidad", query = "SELECT DISTINCT(g.gradoPK.idgrado) FROM Grado g WHERE g.gradoPK.gradoAño = :año AND g.gradoPK.gradoModalidad = :modalidad")
+})
 public class Grado implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -181,5 +184,5 @@ public class Grado implements Serializable {
     public String toString() {
         return "net.delsas.saitae.entities.Grado[ gradoPK=" + gradoPK + " ]";
     }
-    
+
 }

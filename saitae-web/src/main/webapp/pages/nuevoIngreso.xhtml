@@ -12,11 +12,11 @@
             <p:growl id="msgs" showDetail="true"/>
         </h:form>
         <h:form id="form1"> 
-            <p:wizard flowListener="#{nuevoingresoController.onFlowProcess}" 
+            <p:wizard id="wd" flowListener="#{nuevoingresoController.onFlowProcess}" 
                       nextLabel="Siguiente" backLabel="Atrás">
                 <p:tab title="Estudiante">
                     <p:panel header="Datos personales del aspirante a estudiante de nuevo ingreso">
-                        <t:persona id="p0" departamento="#{nuevoingresoController.departamentoE}" 
+                        <t:persona id="estudiante0" departamento="#{nuevoingresoController.departamentoE}" 
                                    departamentoLista="#{nuevoingresoController.departamentoListaE}" 
                                    dui="#{nuevoingresoController.nie}" municipio="#{nuevoingresoController.municipioE}" 
                                    municipioLista="#{nuevoingresoController.municipioListaE}" 
@@ -28,13 +28,41 @@
                 </p:tab>
                 <p:tab title="Contacto">
                     <p:panel header="Información de contacto">
-                        <t:persona1 persona="#{nuevoingresoController.e}" />
+                        <t:persona1 id="estudiante1" persona="#{nuevoingresoController.e}" />
                     </p:panel>
                 </p:tab>
                 <p:tab title="Socioeconómico">
                     <p:panel header="Información Socio-económica del aspirante">
                         <t:estudiante e="#{nuevoingresoController.e.estudiante}" 
                                       persona="#{nuevoingresoController.e}"/>
+                    </p:panel>
+                </p:tab>
+                <p:tab title="Matrícula">
+                    <p:panel header="Datos sobre la mátricula del aspirante">
+                        <t:estudiante1 e="#{nuevoingresoController.e.estudiante}" 
+                                       mat="#{nuevoingresoController.mat}" 
+                                       niveles="#{nuevoingresoController.niveles}"/> 
+                    </p:panel>
+                </p:tab>
+                <p:tab title="Documentos">
+                    <p:panel header="Ingrese los documentos que a continuación se le requieren">
+                        <t:documentos/>
+                    </p:panel>
+                </p:tab>
+                <p:tab title="Repesentante">
+                    <p:panel header="Ingrese los datos del representante.">
+                        <h:panelGrid columns="1">
+                            <t:persona id="representante0" 
+                                       departamento="#{nuevoingresoController.departamentoR}" 
+                                       departamentoLista="#{nuevoingresoController.departamentoListaR}" 
+                                       dui="#{nuevoingresoController.duiR}"
+                                       municipio="#{nuevoingresoController.municipioR}" 
+                                       municipioLista="#{nuevoingresoController.municipioListaR}" 
+                                       onComplete="#{axiliarController.completeTextRep}"
+                                       onItemSelect="#{nuevoingresoController.onItemSelect2}" 
+                                       persona="#{nuevoingresoController.representante}" t="9"/>
+                            <t:persona1 id="representante1" persona="#{nuevoingresoController.representante}"/>
+                        </h:panelGrid>
                     </p:panel>
                 </p:tab>
                 <p:tab title="Padres">
