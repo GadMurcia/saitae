@@ -15,7 +15,7 @@
     <!-- IMPLEMENTATION -->
     <cc:implementation>
         <h:panelGrid columns="2" columnClasses="label, value">
-            <p:outputLabel for="console2" value="Zona de residencia: *" />
+            <p:outputLabel for="console2" value="Zona de residencia: " />
             <p:selectOneMenu id="console2" value="#{cc.attrs.persona.personaZonaVivienda}" required="true"
                              style="width:125px" title="Seleccione su Zona donde vive">
                 <f:selectItem itemLabel="Seleccione" itemValue="" />
@@ -23,7 +23,7 @@
                 <f:selectItem itemLabel="Urbana" itemValue="1" />
             </p:selectOneMenu>
 
-            <p:outputLabel for="console3" value="Tipo de calle de donde vive: *" />
+            <p:outputLabel for="console3" value="Tipo de calle de donde vive: " />
             <p:selectOneMenu id="console3" value="#{cc.attrs.e.estudianteTipoCalle}"  required="true"
                              style="width:125px" title="Seleccione el tipo de calle de el lugar donde vive">
                 <f:selectItem itemLabel="Seleccione" itemValue="" />
@@ -31,7 +31,7 @@
                 <f:selectItem itemLabel="Pavimentada" itemValue="1" />
             </p:selectOneMenu>
 
-            <p:outputLabel for="console4" value="Medio de transporte: *" />
+            <p:outputLabel for="console4" value="Medio de transporte: " />
             <p:selectOneMenu id="console4" value="#{cc.attrs.e.estudianteMedioTransporte}"  
                              required="true" style="width:125px" 
                              title="Seleccione la forma en que habitualmete viajaría al centro de estudios">
@@ -48,11 +48,11 @@
             <p:inputText value="#{cc.attrs.e.estudianteRiesgoVulnerabilidad}"  
                          title="Escriba los riesgos o vulnarabilidades del lugar en donde vive, si los hubiera."/>
 
-            <h:outputText value="Distancia en KM que recorrería hasta al INTEX: *"/>
+            <h:outputText value="Distancia en KM que recorrería hasta al INTEX: "/>
             <p:inputNumber id="input1" value="#{cc.attrs.e.estudianteDistanciaAlCentro}" required="true"
                            symbol=" Km" symbolPosition="s" decimalSeparator="." thousandSeparator=","/> 
 
-            <h:outputText value="Trabaja?: *" />
+            <h:outputText value="Trabaja?: " />
             <p:selectBooleanButton id="value2" value="#{cc.attrs.e.estudianteTrabaja}" required="true"
                                    onLabel="Sí" offLabel="No" style="width:60px">
                 <p:ajax update="r2" />
@@ -63,7 +63,7 @@
                          disabled="#{!cc.attrs.e.estudianteTrabaja}" 
                          title="Escriba en qué trabaja"/>
 
-            <p:outputLabel for="basic" value="¿De quién depende económicamente?: *" />
+            <p:outputLabel for="basic" value="¿De quién depende económicamente?: " />
             <p:selectManyCheckbox id="basic" value="#{nuevoingresoController.dependenciaeco}"  
                                   required="true"
                                   style="width:125px" immediate="true">

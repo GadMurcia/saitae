@@ -93,6 +93,9 @@ public class nuevoingresoController implements Serializable {
         switch (po.getTipoPersona().getIdtipoPersona()) {
             case 8:
                 e = po;
+                Representante=e.getEstudiante().getEstudianteRepresentante().getPersona();
+                padre=e.getEstudiante().getEstudiantePadre();
+                madre=e.getEstudiante().getEstudianteMadre();
                 break;
             case 9:
                 Representante = po;
@@ -298,5 +301,11 @@ public class nuevoingresoController implements Serializable {
     public List<SelectItem> getMunicipioListaR() {
         return (new prueba()).getMunicipioLista(Representante);
     }
+
+    public Documentos getDocs() {
+        return docs;
+    }
+    
+    
 
 }

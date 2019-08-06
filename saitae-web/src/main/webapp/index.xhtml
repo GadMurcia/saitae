@@ -8,7 +8,7 @@
         <meta http-equiv="Content-Language" content="es-SV" />
         <title>SAITAE - INTEX #{loginController.year}</title>
         <f:event listener="#{loginController.preinit()}" type="preRenderView"/>
-        <link rel="Shortcut Icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQnpWNwe4BoNBtI0iyzWf5LBxcFcjLPU7w1vwCzjXJwx5h7rXhX" type="image/jpg" />
+        <link rel="Shortcut Icon" type="image/jpg" dir="rtl" href="intexM.jpeg"/>
     </h:head>
     <h:body style="background-color: #191919; color: #ffffff">
         <style>
@@ -43,7 +43,8 @@
                     <h:link value="Nuevo ingreso" outcome="pages/nuevoIngreso.intex"/>
                 </f:facet>
                 <p:focus context="panel"/>
-            </h:panelGrid>
+            </h:panelGrid>            
+            <p:barcode value="https://www.primefaces.org/showcase/ui/multimedia/barcode.xhtml" type="qr" width="300px" height="300px"/>
         </h:form>
     </h:body>   
 </html>

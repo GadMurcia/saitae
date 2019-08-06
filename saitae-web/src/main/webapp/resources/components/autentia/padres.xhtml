@@ -17,25 +17,25 @@
     <!-- IMPLEMENTATION -->
     <cc:implementation>  
         <h:panelGrid columns="3">
-            <p:outputLabel for="dui#{cc.attrs.t}" value="DUI: "/>
-            <p:autoComplete id="dui#{cc.attrs.t}" value="#{cc.attrs.dui}" required="true" type="int"
+            <p:outputLabel for="dui#{cc.attrs.t}a" value="DUI: "/>
+            <p:autoComplete id="dui#{cc.attrs.t}a" value="#{cc.attrs.dui}" required="true" type="int"
                             title="Ingrese el número de documento de identificación de la persona."
                             completeMethod="#{cc.attrs.onComplete}">
                 <p:ajax event="itemSelect" listener="#{axiliarController.onItemSelect}" 
                         update="form0:msgs form1"/>
                 <p:ajax event="itemSelect" listener="#{cc.attrs.listenerA}"/>
             </p:autoComplete>
-            <p:message for="dui#{cc.attrs.t}" showSummary="true" />            
+            <p:message for="dui#{cc.attrs.t}a" showSummary="true" />            
 
-            <p:outputLabel for="nombre#{cc.attrs.t}" value="Nombre: "/>
-            <p:inputText id="nombre#{cc.attrs.t}" value="#{cc.attrs.pa.personaNombre}" 
+            <p:outputLabel for="nombre#{cc.attrs.t}a" value="Nombre: "/>
+            <p:inputText id="nombre#{cc.attrs.t}a" value="#{cc.attrs.pa.personaNombre}" 
                          required="true" title="Ingrese el nombre de la persona a agregar"/>
-            <p:message for="nombre#{cc.attrs.t}" showSummary="true" />
+            <p:message for="nombre#{cc.attrs.t}a" showSummary="true" />
 
-            <p:outputLabel for="apellido#{cc.attrs.t}" value="Apellidos: "/>
-            <p:inputText id="apellido#{cc.attrs.t}" value="#{cc.attrs.pa.personaApellido}" 
+            <p:outputLabel for="apellido#{cc.attrs.t}a" value="Apellidos: "/>
+            <p:inputText id="apellido#{cc.attrs.t}a" value="#{cc.attrs.pa.personaApellido}" 
                          required="true" title="Apellidos de la persona"/>
-            <p:message for="apellido#{cc.attrs.t}" showSummary="true" />
+            <p:message for="apellido#{cc.attrs.t}a" showSummary="true" />
         </h:panelGrid>
     </cc:implementation>
 </html>

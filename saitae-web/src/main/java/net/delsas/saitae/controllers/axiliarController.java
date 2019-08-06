@@ -36,13 +36,13 @@ import org.primefaces.event.SelectEvent;
 @Named(value = "axiliarController")
 @ViewScoped
 public class axiliarController implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
     private static Persona p = new Persona(0);
     private int tipo;
     @EJB
     private PersonaFacadeLocal pfl;
-    
+
     public List<String> completeText(String query) {
         List<String> results = new ArrayList<>();
         List<Persona> list;
@@ -55,17 +55,17 @@ public class axiliarController implements Serializable {
                 results.add(o.getPersonaNombre() + " "
                         + o.getPersonaApellido() + "=>" + o.getIdpersona().toString().substring(1));
             }
-            
+
         } catch (Exception m) {
             System.out.println(m.getMessage());
         }
         return results;
     }
-    
+
     public void setTipo(int t) {
         tipo = t;
     }
-    
+
     public void onItemSelect(SelectEvent event) {
         setP(new Persona(0));
         try {
@@ -78,12 +78,12 @@ public class axiliarController implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null,
                 new FacesMessage("Selected", getP().getPersonaNombre()));
     }
-    
+
     public List<String> completeTextRep(String query) {
         tipo = 9;
         return completeText(query);
     }
-    
+
     public List<String> completeTextPad(String query) {
         tipo = 11;
         return completeText(query);
@@ -93,9 +93,19 @@ public class axiliarController implements Serializable {
         tipo = 10;
         return completeText(query);
     }
-    
+
     public List<String> completeTextEst(String query) {
         tipo = 8;
+        return completeText(query);
+    }
+    
+    public List<String> completeTextMae(String query) {
+        tipo = 4;
+        return completeText(query);
+    }
+
+    public List<String> completeTextAdm(String query) {
+        tipo = 100;
         return completeText(query);
     }
 
@@ -112,5 +122,5 @@ public class axiliarController implements Serializable {
     public static void setP(Persona aP) {
         p = aP;
     }
-    
+
 }

@@ -14,9 +14,10 @@
         <p:outputLabel value="Recuerde que debe llevar al INTEX los documentos originales para su confrontación."/>
         <br/>
         <p:outputLabel value="No es necesario el llenado de estos campos en este momento. Si así lo desea, salte este paso."/>
-        <h:panelGrid columns="3" columnClasses="label, value, label">
+        <h:panelGrid columns="3">
             <p:outputLabel for="part" value="partida de nacimiento: " />
-            <p:fileUpload id="part" fileUploadListener="#{nuevoingresoController.partida}" mode="advanced"
+            <p:fileUpload id="part" fileUploadListener="#{nuevoingresoController.partida(event)}" 
+                          mode="advanced" 
                           sizeLimit="10000000" label="Elejir"
                           allowTypes="/(\.|\/)(jpe?g|png|pdf)$/" auto="true"/>
             <p:messages for="part" />
