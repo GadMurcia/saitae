@@ -59,6 +59,7 @@ import net.delsas.saitae.entities.TipoRecurso;
 import net.delsas.saitae.entities.TipoReserva;
 import net.delsas.saitae.entities.TipoReservaRecurso;
 import net.delsas.saitae.entities.TipoReservaRecursoPK;
+import org.primefaces.event.SelectEvent;
 
 /**
  *
@@ -76,6 +77,9 @@ public class RecursosController implements Serializable {
     private RecursoFacadeLocal recursoFL;
     private List<Recurso> recurso;
     private Recurso recursoEntity = new Recurso();
+    private List<Recurso> filterRecurso;
+    
+    private Recurso SelectRecursos = new Recurso();
 
     //Pais
     @EJB
@@ -86,6 +90,7 @@ public class RecursosController implements Serializable {
     @EJB
     private CategoriaFacadeLocal categoriaFL;
     private List<Categoria> categoria;
+   
 
     //Tipo Recurso
     @EJB
@@ -179,6 +184,31 @@ public class RecursosController implements Serializable {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Creado con Exito!", null) );
             }else{
                 System.err.println("ESTA VACIAAAAA LA ENTITTY");
+            }
+        } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+        }
+    }
+    
+    public void onRowSelect(SelectEvent evento){
+        this.recursoEntity = this.SelectRecursos;
+        
+        
+    }
+     public void update(){
+        try {
+            if (this.recursoEntity!= null && this.recursoFL != null) {
+                this.recursoFL.edit(this.recursoEntity);
+                this.ejemplarFL.edit(this.ejemplarEntity);
+                this.tipoReservaFL.edit(this.tipoReservaRecurso);
+                this.autorLibroFL.edit(this.autorLibro);
+                
+                
+                    this.nuevo();
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Moficiado con Exito!", null));
+                
+            } else {
+                System.err.println("La entity esta vacia revisar");
             }
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
@@ -476,6 +506,22 @@ public class RecursosController implements Serializable {
 
     public void setSeleccionTipoReserva(List<TipoReserva> seleccionTipoReserva) {
         this.seleccionTipoReserva = seleccionTipoReserva;
+    }
+
+    public List<Recurso> getFilterRecurso() {
+        return filterRecurso;
+    }
+
+    public void setFilterRecurso(List<Recurso> filterRecurso) {
+        this.filterRecurso = filterRecurso;
+    }
+
+    public Recurso getSelectRecursos() {
+        return SelectRecursos;
+    }
+
+    public void setSelectRecursos(Recurso SelectRecursos) {
+        this.SelectRecursos = SelectRecursos;
     }
     
 
