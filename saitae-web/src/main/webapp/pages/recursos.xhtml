@@ -50,7 +50,7 @@
 
 
                         </p:panel>
-                       
+
                         <p:panel  style="margin: 10px auto;" >
 
                             <p:panelGrid columns="2" style="margin: 0 auto;" id="grid-recurso"> 
@@ -59,8 +59,8 @@
                                 <p:outputLabel value="Nombre del Recurso:" for="nombre" />
                                 <p:inputText id="nombre" value="#{recursosController.recursoEntity.nombre}" title="Nombre" required="true" requiredMessage="The Nombre field is required."/>
                                 <h:outputLabel for="multiple" value="Tipo de Reserva:"/>
-                                <p:selectCheckboxMenu id="multiple" value="#{recursosController.seleccionTipoReserva}" label="Cities" multiple="true"
-                                                      filter="true" filterMatchMode="startsWith" panelStyle="width:250px">
+                                <p:selectCheckboxMenu id="multiple" value="#{recursosController.seleccionTipoReserva}" label="Cities" multiple="true" 
+                                                      filter="true" filterMatchMode="startsWith" panelStyle="width:250px" required="true" requiredMessage="Debe seleccionar al menos un tipo">
                                     <f:selectItems value="#{recursosController.listaTipoReserva}" var="tr" itemLabel="#{tr.tipoReservaNombre}" />
                                 </p:selectCheckboxMenu>
                                 <p:outputLabel value="Valor Unitario:" for="valorUnitario" />
@@ -89,6 +89,13 @@
                                 <p:selectOneMenu id="paises" value="#{recursosController.recursoEntity.pais}" converter="omnifaces.SelectItemsConverter">
                                     <f:selectItems var="p" itemLabel="#{p.paisNombre}" value="#{recursosController.listaPais}" />
                                 </p:selectOneMenu>
+                                  <p:outputLabel value="Activo:" for="activo" />
+                                  <p:selectOneMenu id="activo" value="#{recursosController.recursoEntity.activo}" title="Activo" required="true" requiredMessage="Es necesario seleccionar el estado" converter="omnifaces.SelectItemsConverter">
+                        <f:selectItem itemLabel="Seleccione un estado" itemValue="" noSelectionOption="true"  />
+                        <f:selectItem itemLabel="Activo" itemValue="#{true}" />
+                        <f:selectItem itemLabel="Inactivo" itemValue="#{false}" />
+                    </p:selectOneMenu>
+                                
                                 <p:outputLabel for="categoria" value="Categorias" />
                                 <p:selectOneMenu id="categoria" value="#{recursosController.recursoEntity.categoria}" converter="omnifaces.SelectItemsConverter">
                                     <f:selectItems var="c" itemLabel="#{c.categoriaNombre}"  value="#{recursosController.categoria}"/>
@@ -99,6 +106,7 @@
 
                             <h:panelGrid columns="1" style="margin: 10px auto;">
                                 <p:commandButton value="Guardar" id="btnAddRecruso" update=":frm-recurso frm-tabla:tb-recurso " action="#{recursosController.crear()}" />
+                                <p:commandButton value="Actualizar" id="btnAddRecruso" update=":frm-recurso frm-tabla:tb-recurso " action="#{recursosController.update()}" />
                             </h:panelGrid>
                         </p:panel>
 
@@ -110,81 +118,89 @@
                         <h1><h:outputText value="Lista de Recursos"/></h1>
                         <p:dataTable id="tb-recurso"
                                      value="#{recursosController.recurso}" 
+                                     filteredValue="#{recursosController.filterRecurso}"
                                      var="item"
                                      paginator="true"
                                      rows="10"
                                      rowsPerPageTemplate="5,10,15,20"
                                      paginatorPosition="bottom"
                                      paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                     widgetVar="dataTable"
+                                     widgetVar="tableRecurso"
+                                     emptyMessage="No se encontro ningun registro"
+                                      selectionMode="single" 
+                                      selection="#{recursosController.selectRecursos}" 
+                                      rowKey="#{item.idrecurso}"
                                      >
-                            <p:column>
+                            <p:ajax event="rowSelect" listener="#{recursosController.onRowSelect}" update=":frm-recurso"/>
+                            <f:facet name="header">
+                                <p:outputPanel>
+                                    <h:outputText value="Buscar Registro:" />
+                                    <p:inputText id="globalFilter" onkeyup="PF('tableRecurso').filter()" style="width:150px" placeholder="Ingrese un palabra"/>
+                                </p:outputPanel>
+                            </f:facet>
+                            <p:column  filterBy="#{item.idrecurso}" sortBy="#{item.idrecurso}" filterMatchMode="contains">
                                 <f:facet name="header">
-                                    <h:outputText value="Idrecurso"/>
+
+                                    <h:outputText value="Codigo"/>
                                 </f:facet>
                                 <h:outputText value="#{item.idrecurso}"/>
                             </p:column>
-                            <p:column>
+                            <p:column  filterBy="#{item.nombre}" sortBy="#{item.nombre}" filterMatchMode="contains">
                                 <f:facet name="header">
                                     <h:outputText value="Nombre"/>
                                 </f:facet>
                                 <h:outputText value="#{item.nombre}"/>
                             </p:column>
-                            <p:column>
+                            <p:column filterBy="#{item.activo ? 'ACTIVO': 'INACTIVO'}" sortBy="#{item.activo ? 'ACTIVO': 'INACTIVO'}" filterMatchMode="contains">
                                 <f:facet name="header">
                                     <h:outputText value="Activo"/>
                                 </f:facet>
-                                <h:outputText value="#{item.activo}"/>
+                                <h:outputText value="#{item.activo ? 'ACTIVO': 'INACTIVO'}"/>
                             </p:column>
-                            <p:column>
+                            <p:column filterBy="#{item.valorUnitario}" sortBy="#{item.valorUnitario}" filterMatchMode="contains">
                                 <f:facet name="header">
-                                    <h:outputText value="ValorUnitario"/>
+                                    <h:outputText value="Valor Unitario"/>
                                 </f:facet>
                                 <h:outputText value="#{item.valorUnitario}"/>
                             </p:column>
-                            <p:column>
+                            <p:column filterBy="#{(item.estadoFisico =='B') ? 'BUENO':'REGULAR' }" sortBy="#{(item.estadoFisico =='B') ? 'BUENO':'REGULAR' }" filterMatchMode="contains">
                                 <f:facet name="header">
-                                    <h:outputText value="EstadoFisico"/>
+                                    <h:outputText value="Estado Fisico"/>
                                 </f:facet>
-                                <h:outputText value="#{item.estadoFisico}"/>
+                                <h:outputText value="#{(item.estadoFisico =='B') ? 'BUENO':'REGULAR' }"/>
                             </p:column>
-                            <p:column>
+                            <p:column filterBy="#{item.tipoValor}" sortBy="#{item.tipoValor}" filterMatchMode="contains">
                                 <f:facet name="header">
-                                    <h:outputText value="TipoValor"/>
+                                    <h:outputText value="Tipo Valor"/>
                                 </f:facet>
                                 <h:outputText value="#{item.tipoValor}"/>
                             </p:column>
-                            <p:column>
+                            <p:column filterBy="#{item.modelo}" sortBy="#{item.modelo}" filterMatchMode="contains">
                                 <f:facet name="header">
                                     <h:outputText value="Modelo"/>
                                 </f:facet>
                                 <h:outputText value="#{item.modelo}"/>
                             </p:column>
-                            <p:column>
+                            
+                            <p:column filterBy="#{item.idTipoRecurso.tipoRecursoNombre}" sortBy="#{item.idTipoRecurso.tipoRecursoNombre}" filterMatchMode="contains">
                                 <f:facet name="header">
-                                    <h:outputText value="RecursoComentarios"/>
-                                </f:facet>
-                                <h:outputText value="#{item.recursoComentarios}"/>
-                            </p:column>
-                            <p:column>
-                                <f:facet name="header">
-                                    <h:outputText value="TipoRecurso"/>
+                                    <h:outputText value="Tipo Recurso"/>
                                 </f:facet>
                                 <h:outputText value="#{item.idTipoRecurso.tipoRecursoNombre}"/>
-                            </p:column>
-                            <p:column>
+                            </p:column >
+                            <p:column filterBy="#{item.tipoCargo.nombre}" sortBy="#{item.tipoCargo.nombre}" filterMatchMode="contains">
                                 <f:facet name="header">
                                     <h:outputText value="Tipo Cargo"/>
                                 </f:facet>
                                 <h:outputText value="#{item.tipoCargo.nombre}"/>
                             </p:column>
-                            <p:column>
+                            <p:column filterBy="#{item.pais.paisNombre}" sortBy="#{item.pais.paisNombre}" filterMatchMode="contains">
                                 <f:facet name="header">
                                     <h:outputText value="Pais"/>
                                 </f:facet>
                                 <h:outputText value="#{item.pais.paisNombre}"/>
                             </p:column>
-                            <p:column>
+                            <p:column filterBy="#{item.categoria.categoriaNombre}" sortBy="#{item.categoria.categoriaNombre}" filterMatchMode="contains">
                                 <f:facet name="header">
                                     <h:outputText value="Categoria"/>
                                 </f:facet>
@@ -199,4 +215,3 @@
         </ui:composition>
     </h:body>
 </html>
-
