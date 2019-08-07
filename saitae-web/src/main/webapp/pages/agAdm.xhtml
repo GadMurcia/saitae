@@ -17,9 +17,9 @@
                                    departamentoLista="#{administradorController.departamentoList}"
                                    dui="#{administradorController.dui}" municipio="#{administradorController.muni}" 
                                    municipioLista="#{administradorController.municipioList}"
-                                   listenerA="#{administradorController.onItemSelect2(event)}" 
+                                   onItemSelect="#{administradorController.onItemSelect2}" 
                                    persona="#{administradorController.adm}"
-                                   t="100"/>
+                                   t="100" onComplete="#{axiliarController.completeTextAdm}"/>
                     </p:panel>
                 </p:tab>
                 <p:tab title="Contacto">

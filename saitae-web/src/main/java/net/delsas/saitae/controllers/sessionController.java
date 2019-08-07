@@ -26,12 +26,13 @@ import net.delsas.saitae.entities.Persona;
 import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultMenuModel;
 import org.primefaces.model.menu.DefaultSubMenu;
+import org.primefaces.model.menu.MenuElement;
 
 /**
  *
  * @author delsas
  */
-@Named(value = "sessionController")
+@Named
 @SessionScoped
 public class sessionController implements Serializable {
 
@@ -94,18 +95,21 @@ public class sessionController implements Serializable {
         this.mm = mm;
     }
 
-    private void menu() throws Exception {
+    public void menu2() {
         mm = new DefaultMenuModel();
         DefaultMenuItem mi;
         mi = new DefaultMenuItem("Inicio");
         mi.setIcon("pi pi-home");
         mi.setUrl("perfil.intex");
         mm.addElement(mi);
+        List<Acceso> ac = new ArrayList<>();
         for (AccesoTipoPersona atp : us.getTipoPersona().getAccesoTipoPersonaList()) {
-            mi = new DefaultMenuItem(atp.getAcceso().getAccesoNombre());
-            mi.setIcon(atp.getAcceso().getAccesoComentario());
-            mi.setUrl(atp.getAcceso().getAccesourl());
-            mm.addElement(mi);
+            ac.add(atp.getAcceso());
+        }
+        for (Acceso a : ac) {
+            if (a.getAccesoIndice() == null) {
+                mm.addElement(menu3(a, ac));
+            }
         }
         if (us.getTipoPersona().getIdtipoPersona() == 1) {
             mi = new DefaultMenuItem("Control de vistas");
@@ -120,44 +124,18 @@ public class sessionController implements Serializable {
         mm.addElement(mi);
     }
 
-    public void menu2() {
-        mm = new DefaultMenuModel();
-        DefaultMenuItem mi;
-        mi = new DefaultMenuItem("Inicio");
-        mi.setIcon("pi pi-home");
-        mi.setUrl("perfil.intex");
-        mm.addElement(mi);
-        List<Acceso> ac = new ArrayList<>();
-        for (AccesoTipoPersona atp : us.getTipoPersona().getAccesoTipoPersonaList()) {
-            ac.add(atp.getAcceso());
-        }
-        for (Acceso a : ac) {
-            DefaultSubMenu s = new DefaultSubMenu();
-            if (a.getAccesoIndice() == null) {
-                s.setIcon(a.getAccesoComentario());
-                s.setLabel(a.getAccesoNombre());
-                for (Acceso b : a.getAccesoList()) {
-                    if (ac.contains(b)) {
-                        mi = new DefaultMenuItem(b.getAccesoNombre());
-                        mi.setIcon(b.getAccesoComentario());
-                        mi.setUrl(b.getAccesourl());
-                        s.addElement(mi);
-                    }
+    private MenuElement menu3(Acceso a, List<Acceso> ac) {
+        DefaultSubMenu s = new DefaultSubMenu(a.getAccesoNombre(), a.getAccesoComentario());
+        for (Acceso b : a.getAccesoList()) {
+            if (ac.contains(b)) {
+                if (b.getAccesoList() == null || b.getAccesoList().isEmpty()) {
+                    s.addElement(new DefaultMenuItem(b.getAccesoNombre(), b.getAccesoComentario(), b.getAccesourl()));
+                }else{
+                    s.addElement(menu3(b, ac));
                 }
-                mm.addElement(s);
             }
         }
-        if (us.getTipoPersona().getIdtipoPersona() == 1) {
-            mi = new DefaultMenuItem("Control de vistas");
-            mi.setIcon("fa fa-wrench");
-            mi.setUrl("cvista.intex");
-            mm.addElement(mi);
-        }
-        mi = new DefaultMenuItem("salir");
-        mi.setIcon("fa fa-close");
-        mi.setAjax(false);
-        mi.setCommand("#{sessionController.cerrarSesion()}");
-        mm.addElement(mi);
+        return s;
     }
 
     public void cerrarSesion() {

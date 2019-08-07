@@ -12,31 +12,101 @@
             <p:growl id="msgs" showDetail="true"/>
         </h:form>
         <h:form id="form1"> 
-            <p:wizard flowListener="#{nuevoingresoController.onFlowProcess}" 
+            <p:wizard id="wd" flowListener="#{nuevoingresoController.onFlowProcess}" 
                       nextLabel="Siguiente" backLabel="Atrás">
                 <p:tab title="Estudiante">
                     <p:panel header="Datos personales del aspirante a estudiante de nuevo ingreso">
-                        <t:persona id="p0" departamento="#{nuevoingresoController.departamentoE}" 
+                        <t:persona id="estudiante0" departamento="#{nuevoingresoController.departamentoE}" 
                                    departamentoLista="#{nuevoingresoController.departamentoListaE}" 
                                    dui="#{nuevoingresoController.nie}" municipio="#{nuevoingresoController.municipioE}" 
                                    municipioLista="#{nuevoingresoController.municipioListaE}" 
-                                   persona="#{nuevoingresoController.estudiante}"
-                                   listenerA="#{nuevoingresoController.onItemSelect2}" t="8" 
-                                   estudiante="#{nuevoingresoController.estudiante.estudiante}"/>
+                                   persona="#{nuevoingresoController.e}"
+                                   onItemSelect="#{nuevoingresoController.onItemSelect2}" t="8" 
+                                   es="#{nuevoingresoController.e.estudiante}"
+                                   onComplete="#{axiliarController.completeTextEst}"/>
                     </p:panel>
                 </p:tab>
                 <p:tab title="Contacto">
                     <p:panel header="Información de contacto">
-                        <t:persona1 persona="#{nuevoingresoController.estudiante}" />
+                        <t:persona1 id="estudiante1" persona="#{nuevoingresoController.e}" />
                     </p:panel>
                 </p:tab>
-
                 <p:tab title="Socioeconómico">
                     <p:panel header="Información Socio-económica del aspirante">
-                        <t:estudiante estudiante="#{nuevoingresoController.estudiante.estudiante}" 
-                                      persona="#{nuevoingresoController.estudiante}"/>
+                        <t:estudiante e="#{nuevoingresoController.e.estudiante}" 
+                                      persona="#{nuevoingresoController.e}"/>
                     </p:panel>
                 </p:tab>
+                <p:tab title="Matrícula">
+                    <p:panel header="Datos sobre la mátricula del aspirante">
+                        <t:estudiante1 e="#{nuevoingresoController.e.estudiante}" 
+                                       mat="#{nuevoingresoController.mat}" 
+                                       niveles="#{nuevoingresoController.niveles}"/> 
+                    </p:panel>
+                </p:tab>
+                <p:tab title="Documentos">
+                    <p:panel header="Ingrese los documentos que a continuación se le requieren">
+                        <t:documentos/>
+                    </p:panel>
+                </p:tab>
+                <p:tab title="Repesentante">
+                    <p:panel header="Ingrese los datos del representante.">
+                        <h:panelGrid columns="1">
+                            <t:persona id="representante0" 
+                                       departamento="#{nuevoingresoController.departamentoR}" 
+                                       departamentoLista="#{nuevoingresoController.departamentoListaR}" 
+                                       dui="#{nuevoingresoController.duiR}"
+                                       municipio="#{nuevoingresoController.municipioR}" 
+                                       municipioLista="#{nuevoingresoController.municipioListaR}" 
+                                       onComplete="#{axiliarController.completeTextRep}"
+                                       onItemSelect="#{nuevoingresoController.onItemSelect2}" 
+                                       persona="#{nuevoingresoController.representante}" t="9"/>
+                            <t:persona1 id="representante1" persona="#{nuevoingresoController.representante}"/>
+                        </h:panelGrid>
+                    </p:panel>
+                </p:tab>
+                <p:tab title="Padres">
+                    <p:panel header="Información de los padres del aspirante">
+                        <h:panelGrid columns="1">
+                            <p:panel header="Datos del padre">
+                                <t:padres id="padre" dui="#{nuevoingresoController.duiPadre}" 
+                                          pa="#{nuevoingresoController.padre}" t="11"
+                                          listenerA="#{nuevoingresoController.onItemSelect2}"
+                                          onComplete="#{axiliarController.completeTextPad}"/>
+                            </p:panel>
+                            <p:panel header="Datos de la madre">
+                                <t:padres id="madre" dui="#{nuevoingresoController.duiMadre}" 
+                                          pa="#{nuevoingresoController.madre}" t="10"
+                                          listenerA="#{nuevoingresoController.onItemSelect2}"
+                                          onComplete="#{axiliarController.completeTextMad}"/>
+                            </p:panel>
+                        </h:panelGrid>
+                    </p:panel>
+                </p:tab>
+                <p:tab id="confirmacion" title="Confirmación">
+                    <p:panel header="Última información.">
+                        <h:panelGrid columns="2" columnClasses="label">
+                            <p>
+                                Llegado a este punto, Usted ha terminado de llenar su solicitud para 
+                                estudiante de nuevo ingreso. pero si tiene alguna duda o quiere revisar lo que ha ingresado,
+                                puede fácilmente presionar el botón <strong>Atrás</strong> que se encuentra en la parte inferior
+                                izquierda del formulario y verificar todo lo que ha ingresado.<br/>Una vez esté
+                                satisfecho presione el botón <strong>Siguiente</strong> hasta que aparezca de nuevo éste mismo
+                                mensaje y presione el botón <strong>Guardar</strong>, en la esquina inferior izquierda, para guardar sus datos.<br/>
+                                <br/><strong>No actualice la página o perderá sus datos</strong>.<br/>
+                                <br/>
+                                Una vez guardados sus datos, podrá ingresar a nuestra plataforma usando su <strong>NIE</strong> 
+                                como usuario y como contraseña.<br/>
+                                La contraseña puede ser actualizada desde su perfil más adelante.
+                                <br/><br/>
+                                <strong>Feliz día!</strong>
+
+                            </p> 
+                        </h:panelGrid>
+                        <p:commandButton value="Guardar" action="#{nuevoingresoController.guardar()}" 
+                                         update=":form0:msgs" process="@this"/>
+                    </p:panel>
+                </p:tab> 
             </p:wizard>
         </h:form>
     </h:body>

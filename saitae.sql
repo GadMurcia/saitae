@@ -35,7 +35,7 @@ CREATE TABLE `acceso` (
   UNIQUE KEY `idacceso_UNIQUE` (`idacceso`),
   KEY `fk_acceso_1_idx` (`accesoIndice`),
   CONSTRAINT `fk_acceso_1` FOREIGN KEY (`accesoIndice`) REFERENCES `acceso` (`idacceso`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -44,7 +44,7 @@ CREATE TABLE `acceso` (
 
 LOCK TABLES `acceso` WRITE;
 /*!40000 ALTER TABLE `acceso` DISABLE KEYS */;
-INSERT INTO `acceso` VALUES (9,'Configuración',NULL,'#','pi pi-key'),(10,'Administración',9,'tipopp.intex','pi pi-folder-open'),(11,'Permisos y Licencias',9,'lictp.intex','pi pi-th-large'),(12,'Académica',9,'academico.intex','fa fa-leaf'),(13,'Perfil',NULL,'#','pi pi-user'),(14,'Permisos',NULL,'#','pi pi-eye'),(15,'Solicitar Permiso',14,'permiso.intex','pi pi-briefcase'),(16,'Personal',NULL,'#','pi pi-users'),(17,'Agregar Maestro',16,'agregacion.intex','pi pi-user-plus'),(18,'Agregar Administrador',16,'agAdm.intex','pi pi-plus'),(19,'Plantel Institucional',16,'plantel.intex','pi pi-table'),(20,'Inventario',9,'inventario.intex','fa fa-thumb-tack'),(21,'Libros',9,'libros.intex','fa fa-tint'),(22,'Nuevo Ingreso',16,'nuevoalumno.intex','pi pi.user');
+INSERT INTO `acceso` VALUES (9,'Configuración',NULL,'#','pi pi-key'),(10,'Administración',9,'tipopp.intex','pi pi-folder-open'),(11,'Permisos y Licencias',9,'lictp.intex','pi pi-th-large'),(12,'Académica',9,'academico.intex','fa fa-leaf'),(13,'Perfil',NULL,'#','pi pi-user'),(14,'Permisos',NULL,'#','pi pi-eye'),(15,'Solicitar Permiso',14,'permiso.intex','pi pi-briefcase'),(16,'Personal',NULL,'#','pi pi-users'),(17,'Agregar Maestro',16,'agregacion.intex','pi pi-user-plus'),(18,'Agregar Administrador',16,'agAdm.intex','pi pi-plus'),(19,'Plantel Institucional',16,'plantel.intex','pi pi-table'),(20,'Inventario',23,'inventario.intex','fa fa-thumb-tack'),(21,'Libros',23,'libros.intex','fa fa-tint'),(22,'Nuevo Ingreso',16,'nuevoIngreso.intex','pi pi-user'),(23,'Recursos',9,'#','fa fa-tint');
 /*!40000 ALTER TABLE `acceso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -72,7 +72,7 @@ CREATE TABLE `accesoTipoPersona` (
 
 LOCK TABLES `accesoTipoPersona` WRITE;
 /*!40000 ALTER TABLE `accesoTipoPersona` DISABLE KEYS */;
-INSERT INTO `accesoTipoPersona` VALUES (9,1,''),(9,2,''),(10,1,''),(10,2,''),(11,1,''),(11,2,''),(12,1,''),(12,2,''),(13,8,''),(14,8,''),(15,8,''),(16,1,''),(17,1,''),(18,1,''),(19,1,''),(20,1,''),(21,1,''),(22,1,'');
+INSERT INTO `accesoTipoPersona` VALUES (9,1,''),(9,2,''),(10,1,''),(10,2,''),(11,1,''),(11,2,''),(12,1,''),(12,2,''),(13,8,''),(14,8,''),(15,8,''),(16,1,''),(17,1,''),(18,1,''),(19,1,''),(20,1,''),(21,1,''),(22,1,''),(23,1,'');
 /*!40000 ALTER TABLE `accesoTipoPersona` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -643,7 +643,7 @@ CREATE TABLE `evaluacionMaestro` (
   `resumen` varchar(250) DEFAULT NULL,
   `propuestaMejora` varchar(145) DEFAULT NULL,
   `evaluacionMaestroComentario` varchar(145) DEFAULT NULL,
-  `gradoModalidad` enum('C','G') NOT NULL,
+  `gradoModalidad` enum('C','S','G') NOT NULL,
   PRIMARY KEY (`idMaestro`,`fechaHora`,`gradoModalidad`),
   KEY `fk_evaluacionMaestro_1_idx` (`idMaestro`),
   KEY `fk_evaluacionMaestro_2` (`grado`,`seccion`,`año`,`gradoModalidad`),
@@ -721,7 +721,7 @@ DROP TABLE IF EXISTS `grado`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `grado` (
   `idgrado` int(11) NOT NULL,
-  `gradoModalidad` enum('C','G') NOT NULL,
+  `gradoModalidad` enum('C','S','G') NOT NULL,
   `gradoSeccion` enum('A','B','C') NOT NULL,
   `gradoAño` int(4) NOT NULL,
   `aulaGrado` int(11) NOT NULL,
@@ -755,8 +755,9 @@ DROP TABLE IF EXISTS `gradoEvaluacion`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `gradoEvaluacion` (
   `idGrado` int(11) NOT NULL,
-  `gradoSeccion` enum('A','B','c') NOT NULL,
+  `gradoSeccion` enum('A','B','C') NOT NULL,
   `gradoAño` int(4) NOT NULL,
+  `gradoModalidad` enum('C','S','G') NOT NULL,
   `fechaEvaluacion` date NOT NULL COMMENT 'histórico de evaluaciones a cada grado del instituto.',
   `evaluador` int(11) NOT NULL,
   `organizadorLimpieza` bit(1) NOT NULL,
@@ -768,7 +769,6 @@ CREATE TABLE `gradoEvaluacion` (
   `comites` bit(1) NOT NULL,
   `bienvenidos` bit(1) NOT NULL,
   `valores` bit(1) NOT NULL,
-  `gradoModalidad` enum('C','G') NOT NULL,
   `directiva` bit(1) NOT NULL,
   `material` bit(1) NOT NULL,
   `observacionesPositivas` varchar(145) DEFAULT NULL,
@@ -940,7 +940,7 @@ CREATE TABLE `matricula` (
   `idmatricula` int(11) NOT NULL,
   `matriculaAnyo` int(4) NOT NULL,
   `matriculaNivel` int(11) NOT NULL,
-  `gradoModalidad` enum('C','G') NOT NULL,
+  `gradoModalidad` enum('C','S','G') NOT NULL,
   `matriculaSeccion` enum('A','B','C') NOT NULL DEFAULT 'A',
   `matriculaRepite` bit(1) NOT NULL,
   `matriculaComentario` varchar(140) DEFAULT NULL,
@@ -975,7 +975,7 @@ CREATE TABLE `mestroHorarioMaterias` (
   `idGrado` int(11) NOT NULL,
   `seccionGrado` enum('A','B','C') NOT NULL,
   `añoGrado` int(4) NOT NULL,
-  `gradoModalidad` enum('C','G') NOT NULL,
+  `gradoModalidad` enum('C','S','G') NOT NULL,
   `mestroHorarioMateriasComentarios` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idMaestro`,`idMateria`,`idHorario`,`diaSemana`,`idGrado`,`seccionGrado`,`añoGrado`),
   KEY `fk_mestroHorarioMaterias_2_idx` (`idMateria`),
@@ -1628,4 +1628,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-08-03 18:38:13
+-- Dump completed on 2019-08-05 21:25:58

@@ -19,7 +19,6 @@ package net.delsas.saitae.controllers;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.faces.application.FacesMessage;
@@ -28,7 +27,6 @@ import javax.faces.view.ViewScoped;
 import net.delsas.prueba;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.entities.Persona;
-import net.delsas.saitae.entities.TipoPersona;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -38,47 +36,91 @@ import org.primefaces.event.SelectEvent;
 @Named(value = "axiliarController")
 @ViewScoped
 public class axiliarController implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
-    private final prueba auxiliar = new prueba();
-    public static Persona p = new Persona(0);
+    private static Persona p = new Persona(0);
     private int tipo;
     @EJB
     private PersonaFacadeLocal pfl;
-        
+
     public List<String> completeText(String query) {
         List<String> results = new ArrayList<>();
         List<Persona> list;
         try {
-            auxiliar.setDui(query, p);
+            (new prueba()).setDui(query, getP());
             list = tipo != 100
-                    ? pfl.getPersonaByLikeIdAndType(p.getIdpersona(), tipo)
-                    : pfl.getAdminsByLikeId(p.getIdpersona());
+                    ? pfl.getPersonaByLikeIdAndType(getP().getIdpersona(), tipo)
+                    : pfl.getAdminsByLikeId(getP().getIdpersona());
             for (Persona o : list) {
                 results.add(o.getPersonaNombre() + " "
                         + o.getPersonaApellido() + "=>" + o.getIdpersona().toString().substring(1));
             }
-            
+
         } catch (Exception m) {
             System.out.println(m.getMessage());
         }
         return results;
     }
-    
+
     public void setTipo(int t) {
-        tipo=t;
+        tipo = t;
     }
-    
+
     public void onItemSelect(SelectEvent event) {
+        setP(new Persona(0));
         try {
             String x[] = event.getObject().toString().split("=>");
-            auxiliar.setDui(x.length > 1 ? x[1] : x[0], p);
-            p = pfl.find(p.getIdpersona());
+            (new prueba()).setDui(x.length > 1 ? x[1] : x[0], getP());
+            setP(pfl.find(getP().getIdpersona()));
         } catch (Exception o) {
-            System.out.println("Error en maestroController.onItemSelect: " + o.getMessage());
+            System.out.println("Error en (new prueba()).onItemSelect: " + o.getMessage());
         }
         FacesContext.getCurrentInstance().addMessage(null,
-                new FacesMessage("Selected", p.getPersonaNombre()));
+                new FacesMessage("Selected", getP().getPersonaNombre()));
+    }
+
+    public List<String> completeTextRep(String query) {
+        tipo = 9;
+        return completeText(query);
+    }
+
+    public List<String> completeTextPad(String query) {
+        tipo = 11;
+        return completeText(query);
+    }
+
+    public List<String> completeTextMad(String query) {
+        tipo = 10;
+        return completeText(query);
+    }
+
+    public List<String> completeTextEst(String query) {
+        tipo = 8;
+        return completeText(query);
     }
     
+    public List<String> completeTextMae(String query) {
+        tipo = 4;
+        return completeText(query);
+    }
+
+    public List<String> completeTextAdm(String query) {
+        tipo = 100;
+        return completeText(query);
+    }
+
+    /**
+     * @return the p
+     */
+    public static Persona getP() {
+        return p;
+    }
+
+    /**
+     * @param aP the p to set
+     */
+    public static void setP(Persona aP) {
+        p = aP;
+    }
+
 }
