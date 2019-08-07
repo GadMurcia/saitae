@@ -200,7 +200,7 @@ public class RecursosController implements Serializable {
             if (this.recursoEntity!= null && this.recursoFL != null) {
                 this.recursoFL.edit(this.recursoEntity);
                 this.ejemplarFL.edit(this.ejemplarEntity);
-                this.tipoReservaFL.edit(this.tipoReservaRecurso);
+               // this.tipoReservaFL.edit(this.tipoReservaRecurso);
                 this.autorLibroFL.edit(this.autorLibro);
                 
                 
