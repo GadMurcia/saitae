@@ -181,9 +181,9 @@
                                         <f:facet name="input">
                                             <p:selectOneMenu value="#{g.gradoPK.gradoModalidad}">
                                                 <f:selectItem itemLabel="Seleccione" itemValue=""/>
-                                                <f:selectItem itemLabel="T.V.C. Contador" itemValue="C"/>
-                                                <f:selectItem itemLabel="General" itemValue="G"/>
+                                                <f:selectItem itemLabel="T.V.C. Contador" itemValue="C"/>                                                
                                                 <f:selectItem itemLabel="T.V.C. Secretariado" itemValue="S"/>
+                                                <f:selectItem itemLabel="General" itemValue="G"/>
                                                 <f:validateLength minimum="1" />
                                             </p:selectOneMenu>
                                         </f:facet>
@@ -236,6 +236,17 @@
                                                 <f:selectItems value="#{tipoController.maestros}" var="mae" itemLabel="#{mae.persona.personaNombre}"
                                                                itemValue="#{mae.idmaestro}"/>
                                             </p:selectOneMenu>
+                                        </f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                <p:column headerText="Activo">
+                                    <p:cellEditor>
+                                        <f:facet name="output">
+                                            <h:outputText value="#{g.gradoActivo ? "Activo" : "Inactivo"}" />
+                                        </f:facet>
+                                        <f:facet name="input">
+                                            <p:selectBooleanButton offLabel="Inactivo" onLabel="Activo" 
+                                                                   value="#{g.gradoActivo}"/>
                                         </f:facet>
                                     </p:cellEditor>
                                 </p:column>

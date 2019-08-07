@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 /**
  *
  * @author delsas
+ * @param <T>
  */
 public abstract class AbstractFacade<T> {
 
