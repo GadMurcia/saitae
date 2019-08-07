@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
@@ -19,6 +21,9 @@ import net.delsas.saitae.entities.Grado;
 import net.delsas.saitae.entities.Matricula;
 import net.delsas.saitae.entities.MatriculaPK;
 import net.delsas.saitae.entities.Persona;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.primefaces.PrimeFaces;
+import org.primefaces.component.wizard.Wizard;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.FlowEvent;
 import org.primefaces.event.SelectEvent;
@@ -33,6 +38,7 @@ import org.primefaces.model.UploadedFile;
 public class nuevoingresoController implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    private final String nombrePagina = "nuevoIngreso.intex";
     @EJB
     private PersonaFacadeLocal pfl;
     @EJB
@@ -45,10 +51,22 @@ public class nuevoingresoController implements Serializable {
     private Persona padre;
     private Matricula mat;
     private Documentos docs;
+    private FacesContext context;
+
+    public void message() {
+//        Object session = context.getExternalContext().getSession(true);
+//        
+//        FacesMessage ms = (FacesMessage) context.getExternalContext().getSessionMap().get("mensaje");
+//        if (ms != null) {
+//            context.addMessage(null, ms);
+//            context.getExternalContext().getSessionMap().remove("mensaje");
+//        }
+    }
 
     @PostConstruct
     public void init() {
         Representante = (new prueba()).getRepresentante();
+        context = FacesContext.getCurrentInstance();
         e = (new prueba()).getEstudiante();
         madre = (new prueba()).getMadre();
         padre = (new prueba()).getPadre();
@@ -59,7 +77,47 @@ public class nuevoingresoController implements Serializable {
     }
 
     public void guardar() {
-        System.out.println("guardar");
+        try {
+            setContraseña(Representante);
+            Representante.getEstudiante().setIdestudiante(Representante.getIdpersona());
+
+            pfl.edit(madre);
+            pfl.edit(padre);
+            pfl.edit(Representante);
+
+            mat.getMatriculaPK().setIdmatricula(e.getIdpersona());
+            mat.setEstudiante(e.getEstudiante());
+
+            docs.setIddocumentos(e.getIdpersona());
+            docs.setEstudiante(e.getEstudiante());
+
+            setContraseña(e);
+            e.getEstudiante().setIdestudiante(e.getIdpersona());
+            e.getEstudiante().setMatriculaList(new ArrayList<Matricula>());
+            e.getEstudiante().getMatriculaList().add(mat);
+            e.getEstudiante().setDocumentos(docs);
+            e.getEstudiante().setEstudianteMadre(madre);
+            e.getEstudiante().setEstudiantePadre(padre);
+            e.getEstudiante().setEstudianteRepresentante(Representante.getEstudiante());
+            pfl.edit(e);
+//
+//            FacesMessage ms = new FacesMessage(FacesMessage.SEVERITY_INFO, "Agregación exitosa",
+//                    "Inscrito: " + e.getPersonaNombre() + " " + e.getPersonaApellido() + " en el grado: "
+//                    + mat.getGrado().getGradoPK().getIdgrado() + "° "
+//                    + (mat.getGrado().getGradoPK().getGradoModalidad().equals("C") ? "Comercio"
+//                    : mat.getGrado().getGradoPK().getGradoModalidad().equals("S") ? "Secretariado"
+//                    : "general") + ", para el año " + mat.getMatriculaPK().getMatriculaAnyo() + ".");
+//            context.addMessage("mensaje", ms);
+            context.getExternalContext().redirect("nuevoIngreso.intex");
+            System.out.println("guardar");
+        } catch (Exception ex) {
+            context.addMessage(null, new FacesMessage(
+                    FacesMessage.SEVERITY_FATAL, "Error inesperado", ex.toString()));
+        }
+    }
+
+    private void setContraseña(Persona p) {
+        p.setPersonaContrasenya(DigestUtils.md5Hex(p.getIdpersona().toString()));
     }
 
     /**
@@ -87,15 +145,25 @@ public class nuevoingresoController implements Serializable {
         }
         return items;
     }
+    
+    public List<SelectItem> getSecciones() {
+        List<SelectItem> items = new ArrayList<>();
+        for (String g : gfl.getSeccionPorAñoModalidadyId(getAñoMatricula(), mat.getGrado().getGradoPK().getGradoModalidad(), mat.getGrado().getGradoPK().getIdgrado())) {
+            items.add(new SelectItem(g, g.equals("A") ? "Sección A"
+                    : g.equals("B") ? "Sección B"
+                    : "Sección C"));
+        }
+        return items;
+    }
 
     public void onItemSelect2(SelectEvent event) {
         Persona po = axiliarController.getP();
         switch (po.getTipoPersona().getIdtipoPersona()) {
             case 8:
                 e = po;
-                Representante=e.getEstudiante().getEstudianteRepresentante().getPersona();
-                padre=e.getEstudiante().getEstudiantePadre();
-                madre=e.getEstudiante().getEstudianteMadre();
+                Representante = e.getEstudiante().getEstudianteRepresentante().getPersona();
+                padre = e.getEstudiante().getEstudiantePadre();
+                madre = e.getEstudiante().getEstudianteMadre();
                 break;
             case 9:
                 Representante = po;
@@ -305,7 +373,4 @@ public class nuevoingresoController implements Serializable {
     public Documentos getDocs() {
         return docs;
     }
-    
-    
-
 }

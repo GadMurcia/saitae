@@ -26,7 +26,7 @@
                              style="width:125px" title="Seleccione la modalidad de bachillerato en la que va a iscribirse">
                 <f:selectItem itemLabel="Seleccione" itemValue="" />
                 <f:selectItems value="#{nuevoingresoController.modalidades}" />
-                <p:ajax update="console6"/>
+                <p:ajax update="console6 secc"/>
             </p:selectOneMenu>
             <p:message for="console5"/>
 
@@ -36,8 +36,19 @@
                              requiredMessage="Debe elegir un año de bachillerato para poder inscribirse.">
                 <f:selectItem itemLabel="Seleccione" itemValue="" />
                 <f:selectItems value="#{nuevoingresoController.niveles}"/>
+                <p:ajax update="secc"/>
             </p:selectOneMenu>
             <p:message for="console6"/>
+            
+            <p:outputLabel for="secc" value="Sección a la que aplica: " />
+            <p:selectOneMenu id="secc" value="#{cc.attrs.mat.grado.gradoPK.gradoSeccion}"  required="true"
+                             style="width:125px" title="Seleccione la sección a la que desea inscribirse"
+                             requiredMessage="Debe elegir una sección para poder inscribirse.">
+                <f:validateLength minimum="1"/>
+                <f:selectItem itemLabel="Seleccione" itemValue="" />
+                <f:selectItems value="#{nuevoingresoController.secciones}"/>
+            </p:selectOneMenu>
+            <p:message for="secc"/>
 
             <h:outputText value="¿Repite año?: " />
             <p:selectBooleanButton value="#{cc.attrs.mat.matriculaRepite}" required="true"

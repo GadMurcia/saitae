@@ -55,5 +55,21 @@ public class GradoFacade extends AbstractFacade<Grado> implements GradoFacadeLoc
                 .setParameter("modalidad", modalidad)
                 .getResultList();
     }
+    
+    /**
+     * Busca una lista de secciones activas para el grado y modalidad provistas en el año seleccionado.
+     * @param año
+     * @param modalidad
+     * @param idgrado
+     * @return lista de Secciones activas.
+     */
+    @Override
+    public List<String> getSeccionPorAñoModalidadyId(int año, String modalidad, int idgrado){
+        return em.createNamedQuery("Grado.findSeccionByAñoModId")
+                .setParameter("año", año)
+                .setParameter("modalidad", modalidad)
+                .setParameter("idgrado", idgrado)
+                .getResultList();
+    }
 
 }

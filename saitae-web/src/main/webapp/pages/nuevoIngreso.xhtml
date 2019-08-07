@@ -3,9 +3,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:t="http://java.sun.com/jsf/composite/components/autentia">
+      xmlns:t="http://java.sun.com/jsf/composite/components/autentia"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>Nuevo Ingreso #{nuevoingresoController.añoMatricula}</title>
+        <f:event listener="#{nuevoingresoController.message()}" type="preRenderView"/>
     </h:head>
     <h:body>
         <h:form id="form0">
@@ -14,7 +16,7 @@
         <h:form id="form1"> 
             <p:wizard id="wd" flowListener="#{nuevoingresoController.onFlowProcess}" 
                       nextLabel="Siguiente" backLabel="Atrás">
-                <p:tab title="Estudiante">
+                <p:tab id="e1" title="Estudiante">
                     <p:panel header="Datos personales del aspirante a estudiante de nuevo ingreso">
                         <t:persona id="estudiante0" departamento="#{nuevoingresoController.departamentoE}" 
                                    departamentoLista="#{nuevoingresoController.departamentoListaE}" 
@@ -26,7 +28,7 @@
                                    onComplete="#{axiliarController.completeTextEst}"/>
                     </p:panel>
                 </p:tab>
-                <p:tab title="Contacto">
+                <p:tab id="e2" title="Contacto">
                     <p:panel header="Información de contacto">
                         <t:persona1 id="estudiante1" persona="#{nuevoingresoController.e}" />
                     </p:panel>
@@ -83,7 +85,7 @@
                         </h:panelGrid>
                     </p:panel>
                 </p:tab>
-                <p:tab id="confirmacion" title="Confirmación">
+                <p:tab id="c1" title="Confirmación">
                     <p:panel header="Última información.">
                         <h:panelGrid columns="2" columnClasses="label">
                             <p>

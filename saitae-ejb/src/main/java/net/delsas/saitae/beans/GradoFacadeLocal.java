@@ -33,5 +33,7 @@ public interface GradoFacadeLocal {
     public List<String> getModalidadPorAño(int año);
 
     public List<Integer> getIdPorAñoyModalidad(int año, String modalidad);
+
+    public List<String> getSeccionPorAñoModalidadyId(int año, String modalidad, int id);
     
 }
