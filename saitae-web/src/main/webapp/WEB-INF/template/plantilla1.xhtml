@@ -7,15 +7,14 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <h:head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <title>#{sessionController.us.personaNombre.split(" ")[0]} 
             #{sessionController.us.personaApellido.split(" ")[0]}</title>
+        <link rel="shortcut icon" href="../resources/img/intexM.jpeg"/>
         <h:outputStylesheet library="css" name="default.css"/>
         <h:outputStylesheet library="css" name="cssLayout.css"/>
         <h:outputStylesheet library="css" name="main.css"/>
         <h:outputScript library="js" name="locales.js"/>
         <f:event type="preRenderView" listener="#{sessionController.log()}"/>
-        <link rel="Shortcut Icon" type="image/jpg" dir="rtl" href="intexM.jpeg"/>
     </h:head>
     <!-- color: #ffffff" -->
     <h:body style="background-color: #191919; color: white;">
