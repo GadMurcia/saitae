@@ -9,16 +9,17 @@
         <title>SAITAE - INTEX #{loginController.year}</title>
         <f:event listener="#{loginController.preinit()}" type="preRenderView"/>
         <link rel="Shortcut Icon" type="image/jpg" dir="rtl" href="intexM.jpeg"/>
+        <h:outputStylesheet library="css" name="main.css"/>
     </h:head>
     <h:body style="background-color: #191919; color: #ffffff">
         <style>
             .centred-form{
-                margin: 10% auto;
+                margin: 8% 45% 0% 35%;
                 align-content: center;
                 align-items: center;
             }
         </style>
-        <h:form id="frm" style="width: 200px;" styleClass="centred-form">
+        <h:form id="frm" style="width: 200px; height: 200px;" styleClass="centred-form">
             <p:growl id="growl" showDetail="true"/>
             <p:focus context="panel"/>
             <h:panelGrid id="panel" columns="3" summary="Inicio de sesión">
@@ -43,9 +44,66 @@
                     <h:link value="Nuevo ingreso" outcome="pages/nuevoIngreso.intex"/>
                 </f:facet>
                 <p:focus context="panel"/>
-            </h:panelGrid>            
-            <p:barcode value="https://www.primefaces.org/showcase/ui/multimedia/barcode.xhtml" type="qr" 
-                       width="300px" height="300px" hrp="botton"/>
+            </h:panelGrid>
         </h:form>
+        <footer id="footer" class="top-space">
+            <div class="footer1">
+                <div class="container">
+                    <div class="row">
+
+                        <div class="col-md-3 widget">
+                            <h3 class="widget-title">Contáctenos</h3>
+                            <div class="widget-body">
+                                <p>(+503) 2470-0219<br/>
+                                    <a href="mailto:#">instituto.texistepeque@gmail.com</a><br/>
+                                    <br/>
+                                    km 83 1/2 carretera CA 12-N colonia Monches y Herrera 00000 Texistepeque, Santa Ana, El Salvador.
+                                </p>	
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 widget">
+                            <h3 class="widget-title">Nuestras Redes Sociales</h3>
+                            <div class="widget-body">
+                                <p class="follow-me-icons">
+                                    <a href=""><i class="fa fa-twitter fa-2"></i></a>
+                                    <a href=""><i class="fa fa-dribbble fa-2"></i></a>
+                                    <a href="https://m.me/intex.oficial"><i class="pi pi-comment"></i></a>
+                                    <a href="https://www.facebook.com/intex.oficial/"><i class="fa fa-facebook fa-2"></i></a>
+                                </p>	
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 widget">
+                            <h3 class="widget-title">Sobre nosotros</h3>
+                            <div class="widget-body">
+                                <p>Somos una institución de educación media formadora 
+                                    de alumnos con alto grado de conocimientos académicos, técnicos, 
+                                    morales y con profesionales especializados, permitiéndoles a 
+                                    los estudiantes la transformación de su realidad para desarrollarse satisfactoriamente en la vida.</p>
+                            </div> <!-- /row of widgets -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer2">
+                <div class="container">
+                    <div class="row">
+
+                        <div class="col-md-6 widget">
+                            <div class="widget-body">
+                                <p class="text-right">
+                                    Copyright &copy; 2020-2025, C.E. INTEX. Designed by 
+                                    <a href="https://www.facebook.com/gad.murcia" rel="designer">Guillermo Delsas</a> 
+                                    and
+                                    <a href="https://www.facebook.com/nathmenendez" rel="designer">Gabriela Menéndez</a> 
+                                </p>
+                            </div>
+                        </div>
+
+                    </div> <!-- /row of widgets -->
+                </div>
+            </div>
+        </footer>
     </h:body>   
 </html>

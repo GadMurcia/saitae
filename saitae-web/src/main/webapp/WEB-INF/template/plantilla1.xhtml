@@ -12,6 +12,7 @@
             #{sessionController.us.personaApellido.split(" ")[0]}</title>
         <h:outputStylesheet library="css" name="default.css"/>
         <h:outputStylesheet library="css" name="cssLayout.css"/>
+        <h:outputStylesheet library="css" name="main.css"/>
         <h:outputScript library="js" name="locales.js"/>
         <f:event type="preRenderView" listener="#{sessionController.log()}"/>
         <link rel="Shortcut Icon" type="image/jpg" dir="rtl" href="intexM.jpeg"/>
@@ -39,7 +40,25 @@
         </div>
         <div id="bottom">
             <ui:insert name="bottom">
-                Bottom
+                <footer id="footer" class="top-space">
+                    <div class="footer2">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-6 widget">
+                                    <div class="widget-body">
+                                        <p class="text-right">
+                                            Copyright &copy; 2020-2025, C.E. INTEX. Designed by 
+                                            <a href="https://www.facebook.com/gad.murcia" rel="designer">Guillermo Delsas</a> 
+                                            and
+                                            <a href="https://www.facebook.com/nathmenendez" rel="designer">Gabriela Menéndez</a> 
+                                        </p>
+                                    </div>
+                                </div>
+
+                            </div> <!-- /row of widgets -->
+                        </div>
+                    </div>
+                </footer>
             </ui:insert>
         </div>
     </h:body>
