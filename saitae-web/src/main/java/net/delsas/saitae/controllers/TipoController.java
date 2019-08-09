@@ -164,6 +164,7 @@ public class TipoController implements Serializable {
     @EJB
     private HorarioFacadeLocal horarioFL;
     private List<Horario> horario;
+    private Horario hora;
 
     //Fiannciamiento
     @EJB
@@ -197,7 +198,8 @@ public class TipoController implements Serializable {
         editorial = editorialFL.findAll();
         horario = horarioFL.findAll();
         financiamientos = financiamientoFL.findAll();
-        grados = gradoFL.findAll();        
+        grados = gradoFL.findAll();
+        hora = new Horario(0, new Date(), new Date());
     }
 
     public void onAddNew(String id) {
@@ -597,6 +599,41 @@ public class TipoController implements Serializable {
         }
     }
 
+    public void agregarHorario() {
+        FacesMessage msg;
+        if (hora.getIdhorario() > 0) {
+            horarioFL.edit(hora);
+            horario = horarioFL.findAll();
+            hora = new Horario(0, new Date(), new Date());
+            msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Agregación Exitosa",
+                    "El horario n° " + hora.getIdhorario() + ", entre las " + (new SimpleDateFormat("hh:mm a").format(hora.getHoraInicio()))
+                    + " y las " + (new SimpleDateFormat("hh:mm a").format(hora.getHoraFin())) + ", ha sido agregado.");
+        } else {
+            msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Horario", "no se ha agregado nada.");
+        }
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+        PrimeFaces.current().ajax().update("form", "h1");
+    }
+
+    public void eliminarHorario() {
+        FacesMessage ms;
+        try {
+            horarioFL.remove(hora);
+            horario.remove(hora);
+            ms = new FacesMessage(FacesMessage.SEVERITY_INFO, "Eliminación",
+                    "El horario n° " + hora.getIdhorario() + ", entre las " + (new SimpleDateFormat("hh:mm a").format(hora.getHoraInicio()))
+                    + " y las " + (new SimpleDateFormat("hh:mm a").format(hora.getHoraFin())) + ", ha sido eliminado.");
+            hora = new Horario(0, new Date(), new Date());
+        } catch (Exception ex) {
+            ms = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "¡Vaya, hubo un error!",
+                    ex.getMessage() != null ? ex.getMessage()
+                    : "Un error inesperado se ha interceptado mientras se hacía la operación indicada.");
+        }
+        FacesContext.getCurrentInstance().addMessage(null, ms);
+        PrimeFaces.current().ajax().update("form", "h1");
+    }
+
     public List<TipoRecurso> getRecursos() {
         return recursos;
     }
@@ -742,14 +779,14 @@ public class TipoController implements Serializable {
     }
 
     public List<Grado> getGrados() {
-        List<Grado> i=new ArrayList<>();
+        List<Grado> i = new ArrayList<>();
         for (Grado g : grados) {
             if (g.getGradoMaestroGuia() == null) {
                 g.setGradoMaestroGuia(new Maestro(0));
                 g.getGradoMaestroGuia().setPersona(new Persona(0, "", "", true));
             }
-            
-                i.add(g);
+
+            i.add(g);
         }
         return i;
     }
@@ -760,6 +797,14 @@ public class TipoController implements Serializable {
 
     public List<Maestro> getMaestros() {
         return maestroFL.findAll();
+    }
+
+    public Horario getHora() {
+        return hora;
+    }
+
+    public void setHora(Horario horario) {
+        this.hora = horario == null ? new Horario(0, new Date(), new Date()) : horario;
     }
 
 }
