@@ -30,4 +30,6 @@ public interface EjemplarFacadeLocal {
 
     int count();
     
+    List<Ejemplar> findByIdRecruso(Object idRecurso);
+    
 }

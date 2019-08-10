@@ -135,5 +135,5 @@ public class Ejemplar implements Serializable {
     public String toString() {
         return "net.delsas.saitae.entities.Ejemplar[ ejemplarPK=" + ejemplarPK + " ]";
     }
-    
+
 }

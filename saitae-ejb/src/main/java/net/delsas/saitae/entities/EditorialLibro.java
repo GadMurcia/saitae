@@ -111,5 +111,5 @@ public class EditorialLibro implements Serializable {
     public String toString() {
         return "net.delsas.saitae.entities.EditorialLibro[ editorialLibroPK=" + editorialLibroPK + " ]";
     }
-    
+
 }

@@ -111,5 +111,5 @@ public class TipoReservaRecurso implements Serializable {
     public String toString() {
         return "net.delsas.saitae.entities.TipoReservaRecurso[ tipoReservaRecursoPK=" + tipoReservaRecursoPK + " ]";
     }
-    
+
 }

@@ -30,4 +30,6 @@ public interface EditorialLibroFacadeLocal {
 
     int count();
     
+    List<EditorialLibro> findByIdRecruso(Object idRecurso);
+    
 }

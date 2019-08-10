@@ -30,7 +30,6 @@ import javax.faces.view.ViewScoped;
 import net.delsas.saitae.beans.AutorFacadeLocal;
 import net.delsas.saitae.beans.AutorLibroFacadeLocal;
 import net.delsas.saitae.beans.CategoriaFacadeLocal;
-import net.delsas.saitae.beans.ContenidoLibroFacade;
 import net.delsas.saitae.beans.ContenidoLibroFacadeLocal;
 import net.delsas.saitae.beans.EditorialFacadeLocal;
 import net.delsas.saitae.beans.EditorialLibroFacadeLocal;
@@ -78,8 +77,20 @@ public class RecursosController implements Serializable {
     private List<Recurso> recurso;
     private Recurso recursoEntity = new Recurso();
     private List<Recurso> filterRecurso;
-    
+    //Seleccion
     private Recurso SelectRecursos = new Recurso();
+    private AutorLibro selectAutorLibro = new AutorLibro();
+    private EditorialLibro selectEditorial = new EditorialLibro();
+    private ContenidoLibro selectContenidoLibro = new ContenidoLibro();
+    private TipoReservaRecurso selectTipoReserva = new TipoReservaRecurso();
+    private Ejemplar selectEjemplar = new Ejemplar();
+    //botones
+    private boolean btnNewAutorLibro = true;
+    private boolean btnAddAutorLibro = false;
+    private boolean btnEditAutorLIbro = false;
+    private boolean btncancelAutorLibro = false;
+    //comparar si es libro
+    private boolean isLibro = false;
 
     //Pais
     @EJB
@@ -90,7 +101,6 @@ public class RecursosController implements Serializable {
     @EJB
     private CategoriaFacadeLocal categoriaFL;
     private List<Categoria> categoria;
-   
 
     //Tipo Recurso
     @EJB
@@ -101,40 +111,42 @@ public class RecursosController implements Serializable {
     @EJB
     private TipoCargoFacadeLocal tipocargoFL;
     private List<TipoCargo> tipocargo;
-    
+
     //Ejemplar
     @EJB
     private EjemplarFacadeLocal ejemplarFL;
     private Ejemplar ejemplarEntity = new Ejemplar();
     private EjemplarPK ejemplarPK = new EjemplarPK();
-    
+    private List<Ejemplar> listaEjemplares;
+
     //ContenidoLibro
+    @EJB
+    private ContenidoLibroFacadeLocal contenidolibroFL;
+    private List<ContenidoLibro> listacontenidolibro;
+    private ContenidoLibro contenidolibro = new ContenidoLibro();
     private ContenidoLibro contenidoLibroEntity = new ContenidoLibro();
     private ContenidoLibroPK contenidoLibroPK = new ContenidoLibroPK();
-   @EJB
-   private ContenidoLibroFacadeLocal contenidolibroFL;
-   private List<ContenidoLibro> listacontenidolibro;
-   private ContenidoLibro contenidolibro = new ContenidoLibro();
-    
+
     //EditorialLibro
-    private EditorialLibro editorialLibro = new EditorialLibro();
-    private EditorialLibroPK editorialLibroPK = new EditorialLibroPK();
-    private List<Editorial> listaEditorial;
-    private int idEditorial;
     @EJB
     private EditorialFacadeLocal editorialFL;
     @EJB
     private EditorialLibroFacadeLocal editorialLibroFL;
-    
+    private EditorialLibro editorialLibro = new EditorialLibro();
+    private EditorialLibroPK editorialLibroPK = new EditorialLibroPK();
+    private List<Editorial> listaEditorial;
+    private List<EditorialLibro> listaEditorialLibros;
+
     //Autor Libro
-    private AutorLibro autorLibro = new AutorLibro();
-    private AutorLibroPK autorLibroPK = new AutorLibroPK();
-    private List<Autor> listaAutores;
     @EJB
     private AutorFacadeLocal autorFL;
     @EJB
     private AutorLibroFacadeLocal autorLibroFL;
-    
+    private AutorLibro autorLibro = new AutorLibro();
+    private AutorLibroPK autorLibroPK = new AutorLibroPK();
+    private List<Autor> listaAutores;
+    private List<AutorLibro> listaAutorLibros;
+
     //Tipo Reserva Recurso
     @EJB
     private TipoReservaRecursoFacadeLocal tipoReservaRecursoFL;
@@ -144,12 +156,10 @@ public class RecursosController implements Serializable {
     private TipoReservaRecursoPK tipoReservaRecursoPK = new TipoReservaRecursoPK();
     private List<TipoReserva> listaTipoReserva;
     private List<TipoReserva> seleccionTipoReserva;
-    
-   
-    
-   
-     
-    
+    private List<TipoReservaRecurso> listaTipoReservaRecursos;
+
+    //Lista de Pruebas (Solo Debug)
+    private List<AutorLibro> listaPrueba;
 
     @PostConstruct
     public void init() {
@@ -160,53 +170,122 @@ public class RecursosController implements Serializable {
         tipocargo = tipocargoFL.findAll();
         listaAutores = autorFL.findAll();
         listaEditorial = editorialFL.findAll();
-        listacontenidolibro = contenidolibroFL.findAll();
-       
-         listaTipoReserva = tipoReservaFL.findAll();
-        
-        
+        listaTipoReserva = tipoReservaFL.findAll();
+
     }
 
     public void crear() {
         this.recursoEntity.setActivo(true);
-        
+
         try {
             if (this.recursoEntity != null && this.recursoEntity != null) {
                 recursoFL.create(this.recursoEntity);
-                recurso = recursoFL.findAll();
                 this.crearEjemplar();
                 this.crearEditorial();
                 this.crearAutor();
                 this.crearContenidolibro();
-               this.crearTipoReservaRecurso();
+                this.crearTipoReservaRecurso();
                 this.nuevo();
+                recurso = recursoFL.findAll();
 
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Creado con Exito!", null) );
-            }else{
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Creado con Exito!", null));
+            } else {
                 System.err.println("ESTA VACIAAAAA LA ENTITTY");
             }
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
         }
     }
-    
-    public void onRowSelect(SelectEvent evento){
+
+    public void onRowSelect(SelectEvent evento) {
         this.recursoEntity = this.SelectRecursos;
-        
-        
+
+        listaAutorLibros = autorLibroFL.findByIdRecruso(recursoEntity.getIdrecurso());
+        listaEditorialLibros = editorialLibroFL.findByIdRecruso(recursoEntity.getIdrecurso());
+        listaEjemplares = ejemplarFL.findByIdRecruso(recursoEntity.getIdrecurso());
+        listaTipoReservaRecursos = tipoReservaRecursoFL.findByIdRecruso(recursoEntity.getIdrecurso());
+        listacontenidolibro = contenidolibroFL.findByIdRecruso(recursoEntity.getIdrecurso());
+
+        if (this.recursoEntity.getIdTipoRecurso().getIdtipoRecurso() == 3) {
+            this.isLibro = true;
+        } else {
+            this.isLibro = false;
+        }
+
     }
-     public void update(){
+
+    public void seleccionAutor(SelectEvent evento) {
+        this.autorLibro = this.selectAutorLibro;
+        this.btnEditAutorLIbro = true;
+        this.btnAddAutorLibro = false;
+        this.btncancelAutorLibro = true;
+    }
+
+    public void crearAutorLibro() {
         try {
-            if (this.recursoEntity!= null && this.recursoFL != null) {
+            if (this.recursoEntity.getIdrecurso() == null || this.recursoEntity.getIdrecurso() == 0) {
+                if (this.autorLibro != null && this.autorLibroFL != null) {
+                    this.autorLibroPK.setIdLibro(this.recursoEntity.getIdrecurso());
+                    this.autorLibroPK.setIdautor(this.autorLibro.getAutor().getIdautor());
+                    this.autorLibro.setAutorLibroPK(this.autorLibroPK);
+                    this.autorLibroFL.create(autorLibro);
+                    this.listaAutorLibros = autorLibroFL.findByIdRecruso(recursoEntity.getIdrecurso());
+                    this.autorLibro = new AutorLibro();
+                    this.cancelAutorLibro();
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Creado con Exito!", null));
+                } else {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Debe seleccionar un recurso primero!", null));
+                }
+            }
+        } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+        }
+    }
+
+    public void editarAutorLibro() {
+        try {
+            if (this.autorLibro != null && this.autorLibroFL != null) {
+                this.autorLibroPK.setIdLibro(this.recursoEntity.getIdrecurso());
+                this.autorLibroPK.setIdautor(this.autorLibro.getAutor().getIdautor());
+                this.autorLibro.setAutorLibroPK(this.autorLibroPK);
+                this.autorLibroFL.edit(autorLibro);
+                this.listaAutorLibros = autorLibroFL.findByIdRecruso(recursoEntity.getIdrecurso());
+                this.autorLibro = new AutorLibro();
+                this.selectAutorLibro = new AutorLibro();
+                this.cancelAutorLibro();
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Modificado con Exito!", null));
+            }
+        } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+        }
+    }
+
+    public void mostrarAddAutorLibro() {
+        this.autorLibro = new AutorLibro();
+        this.selectAutorLibro = new AutorLibro();
+        this.btnAddAutorLibro = true;
+        this.btncancelAutorLibro = true;
+        this.btnEditAutorLIbro = false;
+    }
+
+    public void cancelAutorLibro() {
+        this.btnAddAutorLibro = false;
+        this.btncancelAutorLibro = false;
+        this.btnAddAutorLibro = false;
+    }
+
+    public void update() {
+        try {
+            if (this.recursoEntity != null && this.recursoFL != null) {
                 this.recursoFL.edit(this.recursoEntity);
-                this.ejemplarFL.edit(this.ejemplarEntity);
-                this.tipoReservaFL.edit(this.tipoReservaRecurso);
-                this.autorLibroFL.edit(this.autorLibro);
-                
-                
-                    this.nuevo();
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Moficiado con Exito!", null));
-                
+                recurso = recursoFL.findAll();
+
+//                this.ejemplarFL.edit(this.ejemplarEntity);
+//                this.tipoReservaRecursoFL.edit(this.tipoReservaRecurso);
+//                this.autorLibroFL.edit(this.autorLibro);
+                this.nuevo();
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Moficiado con Exito!", null));
+
             } else {
                 System.err.println("La entity esta vacia revisar");
             }
@@ -214,8 +293,8 @@ public class RecursosController implements Serializable {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
         }
     }
-    
-    public void crearEjemplar(){
+
+    public void crearEjemplar() {
         try {
             Date fecha = new Date();
             this.ejemplarEntity.setRecurso(this.recursoEntity);
@@ -224,7 +303,7 @@ public class RecursosController implements Serializable {
             this.ejemplarPK.setIdRecurso(this.recursoEntity.getIdrecurso());
             this.ejemplarPK.setEjemplarCorrelativo(1);
             this.ejemplarEntity.setEjemplarPK(ejemplarPK);
-            
+
             this.ejemplarFL.create(this.ejemplarEntity);
             this.ejemplarEntity = new Ejemplar();
             this.ejemplarPK = new EjemplarPK();
@@ -232,8 +311,8 @@ public class RecursosController implements Serializable {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
         }
     }
-    
-    public void crearEditorial(){
+
+    public void crearEditorial() {
         try {
             this.editorialLibro.setEditorialLibroComentario("Agregado");
             this.editorialLibroPK.setIdLibro(this.recursoEntity.getIdrecurso());
@@ -244,36 +323,39 @@ public class RecursosController implements Serializable {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
         }
     }
-    public void crearAutor(){
+
+    public void crearAutor() {
         try {
-           
+
             this.autorLibro.setAutorLibrocComentario("");
             this.autorLibroPK.setIdLibro(this.recursoEntity.getIdrecurso());
             this.autorLibroPK.setIdautor(this.autorLibro.getAutor().getIdautor());
-           
+
             this.autorLibro.setAutorLibroPK(this.autorLibroPK);
             this.autorLibroFL.create(this.autorLibro);
-            
+
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
         }
     }
-    public void crearContenidolibro(){
-        try{
+
+    public void crearContenidolibro() {
+        try {
             this.contenidolibro.setContenidoLibroComentario("");
             this.contenidoLibroPK.setIdLibro(this.recursoEntity.getIdrecurso());
-           
+
             this.contenidoLibroEntity.setContenidoLibroPK(contenidoLibroPK);
             this.contenidolibroFL.create(this.contenidoLibroEntity);
             this.contenidoLibroEntity = new ContenidoLibro();
             this.contenidoLibroPK = new ContenidoLibroPK();
-         
-        } catch (Exception e){
-         Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+
+        } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
         }
-    
+
     }
-    public void crearTipoReservaRecurso(){
+
+    public void crearTipoReservaRecurso() {
         try {
             for (TipoReserva tipoReserva : seleccionTipoReserva) {
                 this.tipoReservaRecurso.setTipoReservaRecursoComentario("");
@@ -285,7 +367,7 @@ public class RecursosController implements Serializable {
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
         }
-    
+
     }
 
     public void nuevo() {
@@ -468,15 +550,7 @@ public class RecursosController implements Serializable {
         this.autorLibroPK = autorLibroPK;
     }
 
-    public int getIdEditorial() {
-        return idEditorial;
-    }
-
-    public void setIdEditorial(int idEditorial) {
-        this.idEditorial = idEditorial;
-    }
-
-     public TipoReservaRecurso getTipoReservaRecurso() {
+    public TipoReservaRecurso getTipoReservaRecurso() {
         return tipoReservaRecurso;
     }
 
@@ -523,9 +597,133 @@ public class RecursosController implements Serializable {
     public void setSelectRecursos(Recurso SelectRecursos) {
         this.SelectRecursos = SelectRecursos;
     }
-    
 
-    
+    public List<ContenidoLibro> getListacontenidolibro() {
+        return listacontenidolibro;
+    }
 
+    public void setListacontenidolibro(List<ContenidoLibro> listacontenidolibro) {
+        this.listacontenidolibro = listacontenidolibro;
+    }
+
+    public List<AutorLibro> getListaPrueba() {
+        return listaPrueba;
+    }
+
+    public void setListaPrueba(List<AutorLibro> listaPrueba) {
+        this.listaPrueba = listaPrueba;
+    }
+
+    public List<Ejemplar> getListaEjemplares() {
+        return listaEjemplares;
+    }
+
+    public void setListaEjemplares(List<Ejemplar> listaEjemplares) {
+        this.listaEjemplares = listaEjemplares;
+    }
+
+    public List<EditorialLibro> getListaEditorialLibros() {
+        return listaEditorialLibros;
+    }
+
+    public void setListaEditorialLibros(List<EditorialLibro> listaEditorialLibros) {
+        this.listaEditorialLibros = listaEditorialLibros;
+    }
+
+    public List<AutorLibro> getListaAutorLibros() {
+        return listaAutorLibros;
+    }
+
+    public void setListaAutorLibros(List<AutorLibro> listaAutorLibros) {
+        this.listaAutorLibros = listaAutorLibros;
+    }
+
+    public List<TipoReservaRecurso> getListaTipoReservaRecursos() {
+        return listaTipoReservaRecursos;
+    }
+
+    public void setListaTipoReservaRecursos(List<TipoReservaRecurso> listaTipoReservaRecursos) {
+        this.listaTipoReservaRecursos = listaTipoReservaRecursos;
+    }
+
+    public AutorLibro getSelectAutorLibro() {
+        return selectAutorLibro;
+    }
+
+    public void setSelectAutorLibro(AutorLibro selectAutorLibro) {
+        this.selectAutorLibro = selectAutorLibro;
+    }
+
+    public EditorialLibro getSelectEditorial() {
+        return selectEditorial;
+    }
+
+    public void setSelectEditorial(EditorialLibro selectEditorial) {
+        this.selectEditorial = selectEditorial;
+    }
+
+    public ContenidoLibro getSelectContenidoLibro() {
+        return selectContenidoLibro;
+    }
+
+    public void setSelectContenidoLibro(ContenidoLibro selectContenidoLibro) {
+        this.selectContenidoLibro = selectContenidoLibro;
+    }
+
+    public TipoReservaRecurso getSelectTipoReserva() {
+        return selectTipoReserva;
+    }
+
+    public void setSelectTipoReserva(TipoReservaRecurso selectTipoReserva) {
+        this.selectTipoReserva = selectTipoReserva;
+    }
+
+    public boolean isBtnNewAutorLibro() {
+        return btnNewAutorLibro;
+    }
+
+    public void setBtnNewAutorLibro(boolean btnNewAutorLibro) {
+        this.btnNewAutorLibro = btnNewAutorLibro;
+    }
+
+    public boolean isBtnAddAutorLibro() {
+        return btnAddAutorLibro;
+    }
+
+    public void setBtnAddAutorLibro(boolean btnAddAutorLibro) {
+        this.btnAddAutorLibro = btnAddAutorLibro;
+    }
+
+    public boolean isBtnEditAutorLIbro() {
+        return btnEditAutorLIbro;
+    }
+
+    public void setBtnEditAutorLIbro(boolean btnEditAutorLIbro) {
+        this.btnEditAutorLIbro = btnEditAutorLIbro;
+    }
+
+    public boolean isBtncancelAutorLibro() {
+        return btncancelAutorLibro;
+    }
+
+    public void setBtncancelAutorLibro(boolean btncancelAutorLibro) {
+        this.btncancelAutorLibro = btncancelAutorLibro;
+    }
+
+    public boolean isIsLibro() {
+        return isLibro;
+    }
+
+    public void setIsLibro(boolean isLibro) {
+        this.isLibro = isLibro;
+    }
+
+    public Ejemplar getSelectEjemplar() {
+        return selectEjemplar;
+    }
+
+    public void setSelectEjemplar(Ejemplar selectEjemplar) {
+        this.selectEjemplar = selectEjemplar;
+    }
 
 }

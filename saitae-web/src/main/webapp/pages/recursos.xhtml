@@ -105,8 +105,8 @@
 
 
                             <h:panelGrid columns="1" style="margin: 10px auto;">
-                                <p:commandButton value="Guardar" id="btnAddRecruso" update=":frm-recurso frm-tabla:tb-recurso " action="#{recursosController.crear()}" />
-                                <p:commandButton value="Actualizar" id="btnAddRecruso" update=":frm-recurso frm-tabla:tb-recurso " action="#{recursosController.update()}" />
+                                <p:commandButton value="Guardar" id="btnAddRecruso" update=":frm-recurso :frm-tabla:tb-recurso " action="#{recursosController.crear()}" />
+                                <p:commandButton value="Actualizar" id="btnEditRecruso" update=":frm-recurso :frm-tabla:tb-recurso " action="#{recursosController.update()}" />
                             </h:panelGrid>
                         </p:panel>
 
