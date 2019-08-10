@@ -35,7 +35,7 @@ CREATE TABLE `acceso` (
   UNIQUE KEY `idacceso_UNIQUE` (`idacceso`),
   KEY `fk_acceso_1_idx` (`accesoIndice`),
   CONSTRAINT `fk_acceso_1` FOREIGN KEY (`accesoIndice`) REFERENCES `acceso` (`idacceso`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -44,7 +44,7 @@ CREATE TABLE `acceso` (
 
 LOCK TABLES `acceso` WRITE;
 /*!40000 ALTER TABLE `acceso` DISABLE KEYS */;
-INSERT INTO `acceso` VALUES (9,'Configuración',NULL,'#','pi pi-key'),(10,'Administración',9,'tipopp.intex','pi pi-folder-open'),(11,'Permisos y Licencias',9,'lictp.intex','pi pi-th-large'),(12,'Académica',9,'academico.intex','fa fa-leaf'),(13,'Perfil',NULL,'#','pi pi-user'),(14,'Permisos',NULL,'#','pi pi-eye'),(15,'Solicitar Permiso',14,'permiso.intex','pi pi-briefcase'),(16,'Personal',NULL,'#','pi pi-users'),(17,'Agregar Maestro',16,'agregacion.intex','pi pi-user-plus'),(18,'Agregar Administrador',16,'agAdm.intex','pi pi-plus'),(19,'Plantel Institucional',16,'plantel.intex','pi pi-table'),(20,'Inventario',23,'inventario.intex','fa fa-thumb-tack'),(21,'Libros',23,'libros.intex','fa fa-tint'),(22,'Nuevo Ingreso',16,'nuevoIngreso.intex','pi pi-user'),(23,'Recursos',9,'#','fa fa-tint');
+INSERT INTO `acceso` VALUES (9,'Configuración',NULL,'#','pi pi-key'),(10,'Administración',9,'tipopp.intex','pi pi-folder-open'),(11,'Permisos y Licencias',9,'lictp.intex','pi pi-th-large'),(12,'Académica',9,'academico.intex','fa fa-leaf'),(13,'Perfil',NULL,'#','pi pi-user'),(14,'Permisos',NULL,'#','pi pi-eye'),(15,'Solicitar Permiso',14,'permiso.intex','pi pi-briefcase'),(16,'Personal',NULL,'#','pi pi-users'),(17,'Agregar Maestro',16,'agregacion.intex','pi pi-user-plus'),(18,'Agregar Administrador',16,'agAdm.intex','pi pi-plus'),(19,'Plantel Institucional',16,'plantel.intex','pi pi-table'),(20,'Inventario',23,'inventario.intex','fa fa-thumb-tack'),(21,'Libros',23,'libros.intex','fa fa-tint'),(22,'Nuevo Ingreso',16,'nuevoIngreso.intex','pi pi-user'),(23,'Recursos',9,'#','fa fa-tint'),(24,'Nomina de Alumnos',16,'nominaA.intex','pi pi-user');
 /*!40000 ALTER TABLE `acceso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -72,7 +72,7 @@ CREATE TABLE `accesoTipoPersona` (
 
 LOCK TABLES `accesoTipoPersona` WRITE;
 /*!40000 ALTER TABLE `accesoTipoPersona` DISABLE KEYS */;
-INSERT INTO `accesoTipoPersona` VALUES (9,1,''),(9,2,''),(10,1,''),(10,2,''),(11,1,''),(11,2,''),(12,1,''),(12,2,''),(13,8,''),(14,8,''),(15,8,''),(16,1,''),(17,1,''),(18,1,''),(19,1,''),(20,1,''),(21,1,''),(22,1,''),(23,1,'');
+INSERT INTO `accesoTipoPersona` VALUES (9,1,''),(10,1,''),(11,1,''),(12,1,''),(16,1,''),(17,1,''),(18,1,''),(19,1,''),(20,1,''),(21,1,''),(22,1,''),(23,1,''),(24,1,NULL);
 /*!40000 ALTER TABLE `accesoTipoPersona` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -102,7 +102,7 @@ CREATE TABLE `anuncio` (
 
 LOCK TABLES `anuncio` WRITE;
 /*!40000 ALTER TABLE `anuncio` DISABLE KEYS */;
-INSERT INTO `anuncio` VALUES (1,'Anuncio 1','2019-12-25 00:00:00','Raw denim you probably haven\'t heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.',8,NULL),(2,'Anuncio 2','2019-07-10 00:00:00','<div class=\"list-group\">\n  <a href=\"#\" class=\"list-group-item list-group-item-action flex-column align-items-start active\">\n    <div class=\"d-flex w-100 justify-content-between\">\n      <h5 class=\"mb-1\">List group item heading</h5>\n      <small>3 days ago</small>\n    </div>\n    <p class=\"mb-1\">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>\n    <small>Donec id elit non mi porta.</small>\n  </a>\n  <a href=\"#\" class=\"list-group-item list-group-item-action flex-column align-items-start\">\n    <div class=\"d-flex w-100 justify-content-between\">\n      <h5 class=\"mb-1\">List group item heading</h5>\n      <small class=\"text-muted\">3 days ago</small>\n    </div>\n    <p class=\"mb-1\">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>\n    <small class=\"text-muted\">Donec id elit non mi porta.</small>\n  </a>\n</div>',8,NULL),(3,'Anuncio 3','2019-12-20 00:00:00','Header\nPrimary card title\nSome quick example text to build on the card title and make up the bulk of the card\'s content.',8,NULL),(4,'Anuncio 4','2019-12-31 00:00:00','Hello, world!\nThis is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.\n\nIt uses utility classes for typography and spacing to space content out within the larger container.\n\n\n',2,NULL);
+INSERT INTO `anuncio` VALUES (1,'Odit, laudantium, dolores','2019-12-25 00:00:00','Odit, laudantium, dolores, natus distinctio labore voluptates in inventore quasi qui nobis quis adipisci fugit id! Aliquam alias ea modi. Porro, odio, sed veniam hic numquam qui ad molestiae sint placeat expedita? Perferendis, enim qui numquam sequi obcaecati molestiae fugiat!\n\nAperiam, odit, quasi, voluptate fugiat quisquam velit magni provident corporis animi facilis illo eveniet eum obcaecati adipisci blanditiis quas labore doloribus eos veniam repudiandae suscipit tempora ad harum odio eius distinctio hic deleniti. Sunt fuga ad perspiciatis repellat deleniti omnis!',8,NULL),(2,'Numquam, ut iure quia facere totam quas odit ','2019-07-10 00:00:00','Est, maiores, fuga sed nemo qui veritatis ducimus placeat odit quisquam dolorum. Rem, sunt, praesentium veniam maiores quia molestias eos fugit eaque ducimus veritatis provident assumenda. Quia, fuga, voluptates voluptatibus quis enim nam asperiores aliquam dignissimos ullam recusandae debitis iste.\n\nDignissimos, beatae, praesentium illum eos autem perspiciatis? Minus, non, tempore, illo, mollitia exercitationem tempora quas harum odio dolores delectus quidem laudantium adipisci ducimus ullam placeat eaque minima quae iure itaque corporis magni nesciunt eius sed dolor doloremque id quasi nisi.',8,NULL),(3,'A, quibusdam, nobis, eveniet consequatur','2019-12-20 00:00:00','A, quibusdam, nobis, eveniet consequatur alias doloremque officia blanditiis fuga et numquam labore reiciendis voluptas quis repellat quos sunt non dolore consectetur at sit nam tenetur dolorem? Harum, quas, sit perspiciatis esse odit temporibus aperiam nulla aspernatur sequi fugiat tempore?\n\nAd velit consequuntur quo qui odit quam sapiente repudiandae et ea pariatur? Ex sapiente beatae nobis consectetur ea. Deleniti, beatae, magnam, dolorum, fuga nostrum quas laboriosam sapiente temporibus enim voluptates ullam impedit atque quae provident quos mollitia aperiam perferendis amet.',8,NULL),(4,'Lorem ipsum dolor sit amet, consectetur.','2019-12-31 00:00:00','Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium, itaque, cumque, maxime obcaecati reprehenderit ea dignissimos amet voluptatem id excepturi facilis totam veritatis maiores eveniet neque explicabo temporibus quisquam in ex ab fugiat ipsa tempore sunt corporis nostrum quam illum!\n\nConsectetur cupiditate labore repudiandae beatae nisi fugiat facilis natus illum vitae doloremque. In, perspiciatis, natus, impedit voluptas itaque odio repudiandae placeat nisi totam repellendus earum dolores mollitia tempore quasi beatae alias cum dicta maxime laborum corporis harum porro magnam laboriosam.\n\nAut, eaque, minus atque alias odio mollitia cum nisi ipsa nulla natus quae minima similique ipsam aspernatur molestias animi in deleniti nam. Tempora, labore, modi eum perspiciatis doloremque sequi nam illo corporis iusto maiores nisi recusandae repellat animi reiciendis accusamus.',2,NULL);
 /*!40000 ALTER TABLE `anuncio` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -451,6 +451,7 @@ CREATE TABLE `documentos` (
 
 LOCK TABLES `documentos` WRITE;
 /*!40000 ALTER TABLE `documentos` DISABLE KEYS */;
+INSERT INTO `documentos` VALUES (1045367075,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `documentos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -611,7 +612,7 @@ CREATE TABLE `estudiante` (
 
 LOCK TABLES `estudiante` WRITE;
 /*!40000 ALTER TABLE `estudiante` DISABLE KEYS */;
-INSERT INTO `estudiante` VALUES (1045367075,'',0,'',0,3.00,'\0','Padre#Madre#Hermano/a¿ * ','','','',NULL,'','Noveno Grado','Estudiante','Centro Excolar de procedencia',NULL,NULL,1999999999,1888888888,1999999999,NULL),(1999999999,'',0,'',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'\0','Sexo grado','Ama de casa',NULL,NULL,'',NULL,NULL,NULL,NULL);
+INSERT INTO `estudiante` VALUES (1045367075,'',1,'ninguna',1,3.00,'\0','Padre#Madre#Abuelo/a#Hermano/a¿ ','\0','878787','87878787',NULL,'','Noveno Grado','Estudiante','Centro Excolar de procedencia',NULL,NULL,1999999999,1888888888,1999999999,NULL),(1999999999,'',0,'',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'\0','Sexo grado','Ama de casa',NULL,NULL,'',NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `estudiante` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -742,7 +743,7 @@ CREATE TABLE `grado` (
 
 LOCK TABLES `grado` WRITE;
 /*!40000 ALTER TABLE `grado` DISABLE KEYS */;
-INSERT INTO `grado` VALUES (1,'C','A',2019,1,'',1222222222,NULL),(1,'G','A',2019,3,'',1123456798,NULL),(1,'C','B',2019,7,'',1111111111,NULL);
+INSERT INTO `grado` VALUES (1,'C','A',2019,1,'',1222222222,NULL),(1,'S','A',2019,5,'\0',1111111111,NULL),(1,'G','A',2019,3,'',1123456798,NULL),(1,'C','B',2019,7,'',1111111111,NULL),(2,'C','A',2019,2,'',NULL,NULL),(2,'G','A',2019,4,'',NULL,NULL),(3,'C','A',2019,6,'',NULL,NULL);
 /*!40000 ALTER TABLE `grado` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -813,6 +814,7 @@ CREATE TABLE `horario` (
 
 LOCK TABLES `horario` WRITE;
 /*!40000 ALTER TABLE `horario` DISABLE KEYS */;
+INSERT INTO `horario` VALUES (1,'07:15:00','08:05:00',NULL),(2,'08:05:00','08:55:00',NULL),(3,'09:15:00','10:05:00',NULL),(4,'10:05:00','10:55:00',NULL),(5,'11:10:00','12:00:00',NULL),(6,'13:00:00','13:50:00',NULL),(7,'13:50:00','14:40:00',NULL),(8,'14:50:00','15:40:00',NULL),(9,'15:40:00','16:30:00',NULL),(10,'16:30:00','17:20:00',NULL);
 /*!40000 ALTER TABLE `horario` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -957,6 +959,7 @@ CREATE TABLE `matricula` (
 
 LOCK TABLES `matricula` WRITE;
 /*!40000 ALTER TABLE `matricula` DISABLE KEYS */;
+INSERT INTO `matricula` VALUES (1045367075,2019,1,'C','A','\0',NULL);
 /*!40000 ALTER TABLE `matricula` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1132,7 +1135,7 @@ CREATE TABLE `persona` (
 
 LOCK TABLES `persona` WRITE;
 /*!40000 ALTER TABLE `persona` DISABLE KEYS */;
-INSERT INTO `persona` VALUES (1045367073,'Guillermo','Delsas',NULL,NULL,NULL,NULL,NULL,NULL,'02951a6cb9595ef475fed783e59c687e','Ingeniero',1,'',NULL,'\0',NULL,NULL,NULL,NULL,NULL),(1045367074,'Director','Directivo',NULL,NULL,NULL,NULL,NULL,NULL,'02951a6cb9595ef475fed783e59c687e','Director',2,'',NULL,'',NULL,NULL,NULL,NULL,NULL),(1045367075,'Estudiante','Estudioso','1991-01-17','','',0,0,'01#01','02951a6cb9595ef475fed783e59c687e','Estudiante',8,'','','',0,'Salvadoreña','','',''),(1111111111,'Quintus Sestus','Septimus Octavios','1991-02-17','878787878787878','7777-7777',0,0,' #09','bbb8aae57c104cda40c93843ad5e6db8','Primus Secuntus Tercius',4,'','1111-111111-111-1','\0',0,'Extrangera','878788888888888','121212',''),(1123456798,'fffffffffffff gf f','fgfgfgfgfgg','1991-02-17','789798','8979-8798',0,0,'02#13','e0c28158eeac6b5d9bcfe1e028185438','455545455',2,'','2111-111111-111-1','',1,'Salvadoreña','89798797979','ooooooo',''),(1222222222,'Lentulus Primus','Batiatus Ludus','1991-02-17','222222222','2222-2222',0,0,'02#13','0d777e9e30b918e9034ab610712c90cf','Leninista',4,'','2222-222222-222-2','\0',0,'Salvadoreña','22222222222222','',''),(1888888888,'padre padre1','padre2 padre3',NULL,NULL,NULL,NULL,NULL,NULL,'02951a6cb9595ef475fed783e59c687e',NULL,11,'\0',NULL,NULL,NULL,NULL,NULL,NULL,NULL),(1999999999,'representante','apellidos','1980-01-25','la dirección del representante','7999-9999',NULL,0,'Santa Ana#Texistepeque','02951a6cb9595ef475fed783e59c687e',NULL,9,'','9999-999999-999-9','\0',1,'parentesco','representante@correo.com',NULL,NULL);
+INSERT INTO `persona` VALUES (1045367073,'Guillermo','Delsas',NULL,NULL,NULL,NULL,NULL,NULL,'02951a6cb9595ef475fed783e59c687e','Ingeniero',1,'',NULL,'\0',NULL,NULL,NULL,NULL,NULL),(1045367074,'Director','Directivo',NULL,NULL,NULL,NULL,NULL,NULL,'02951a6cb9595ef475fed783e59c687e','Director',2,'',NULL,'',NULL,NULL,NULL,NULL,NULL),(1045367075,'Estudiante','Estudioso','1991-01-01','7888787878787','8788-7878',0,1,'01#02','b3702f2e7b62c465c08ffe6dec344037','Estudiante',8,'','0444-444448-777-7','',0,'Salvadoreña','87878787878787','7878787',''),(1111111111,'Quintus Sestus','Septimus Octavios','1991-02-17','878787878787878','7777-7777',0,0,' #09','bbb8aae57c104cda40c93843ad5e6db8','Primus Secuntus Tercius',4,'','1111-111111-111-1','\0',0,'Extrangera','878788888888888','121212',''),(1123456798,'fffffffffffff gf f','fgfgfgfgfgg','1991-02-17','789798','8979-8798',0,0,'02#13','e0c28158eeac6b5d9bcfe1e028185438','455545455',2,'','2111-111111-111-1','',1,'Salvadoreña','89798797979','ooooooo',''),(1222222222,'Lentulus Primus','Batiatus Ludus','1991-02-17','222222222','2222-2222',0,0,'02#13','0d777e9e30b918e9034ab610712c90cf','Leninista',4,'','2222-222222-222-2','\0',0,'Salvadoreña','22222222222222','',''),(1888888888,'padre padre1','padre2 padre3',NULL,NULL,NULL,NULL,NULL,NULL,'02951a6cb9595ef475fed783e59c687e',NULL,11,'\0',NULL,NULL,NULL,NULL,NULL,NULL,NULL),(1999999999,'representante','apellidos','1980-01-25','la dirección del representante','7999-9999',NULL,0,' # ','e9e2bcfcbdc37e5897e0c0def72b257c','Agricultor',9,'','9999-999999-999-9','\0',1,'9','representante@correo.com','ninguna',NULL);
 /*!40000 ALTER TABLE `persona` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1628,4 +1631,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-08-05 21:25:58
+-- Dump completed on 2019-08-09 17:58:38

@@ -278,13 +278,15 @@ public class RecursosController implements Serializable {
         try {
             if (this.recursoEntity != null && this.recursoFL != null) {
                 this.recursoFL.edit(this.recursoEntity);
-                recurso = recursoFL.findAll();
 
-//                this.ejemplarFL.edit(this.ejemplarEntity);
-//                this.tipoReservaRecursoFL.edit(this.tipoReservaRecurso);
-//                this.autorLibroFL.edit(this.autorLibro);
-                this.nuevo();
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Moficiado con Exito!", null));
+                this.ejemplarFL.edit(this.ejemplarEntity);
+               // this.tipoReservaFL.edit(this.tipoReservaRecurso);
+                this.autorLibroFL.edit(this.autorLibro);
+                
+                
+                    this.nuevo();
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Moficiado con Exito!", null));
+                
 
             } else {
                 System.err.println("La entity esta vacia revisar");

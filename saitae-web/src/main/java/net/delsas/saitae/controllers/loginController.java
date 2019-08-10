@@ -2,7 +2,9 @@ package net.delsas.saitae.controllers;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -100,7 +102,7 @@ public class loginController implements Serializable {
     }
 
     public int getYear() {
-        return (Calendar.getInstance().getTime().getYear() + 1900);
+        return Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date()));
     }
 
 }

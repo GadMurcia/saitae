@@ -9,29 +9,27 @@
     position: relative;
     padding: 5px;
     margin: 10px 0px 0px 0px;
-    background-color: blue;
+    /*background-color: blue;*/
 }
 
 
 
 .center_content {
     position: inherit;
-    /*background-color: #dddddd;*/
     padding: 5px;
     margin: auto;
 }
 
 
 .content {
-    /*background-color: #dddddd;*/
     padding: 5px;
-    margin: 0px 310px 0px 0px;
+    width: 80%;
 }
 #right {
     float: right;
     background-color: #ece3a5;
     padding: 5px;
-    width: 290px;
+    width: 20%;
 }
 
 

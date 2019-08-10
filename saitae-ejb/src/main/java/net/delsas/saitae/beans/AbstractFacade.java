@@ -19,6 +19,7 @@ import net.delsas.saitae.entities.AutorLibro;
 /**
  *
  * @author delsas
+ * @param <T>
  */
 public abstract class AbstractFacade<T> {
 

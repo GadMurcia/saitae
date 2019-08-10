@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../WEB-INF/template/plantilla1.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:form id="form1">
+            <p:panelGrid columns="1">
+
+                <p:panelGrid columns="2" >
+                    <p:outputLabel for="soe" value="Seleccione el grado que desea listar"/>
+                    <p:selectOneMenu id="soe"
+                                     title="Seleccione el grado para mostar su nómina de estudiantes.">
+                        <f:selectItem itemLabel="Seleccione" itemValue=" "/>
+                        <f:selectItems value="#{nominaAController.grados}"/>
+                        <p:ajax event="itemSelect" listener="#{nominaAController.onSelectItem}" update="nom"/>
+                    </p:selectOneMenu>
+                </p:panelGrid>
+
+                <p:dataTable id="nom" var="e" value="#{nominaAController.nomina}" 
+                             widgetVar="nom1" emptyMessage="Sin registros aún.">
+                    <f:facet name="header">
+                            <p:outputLabel value="#{nominaAController.PK.idgrado == 0? '' : 'Nómina de Alumnos para el grado: '}"/>
+                            <p:outputLabel value="#{nominaAController.PK.idgrado == 0? '' : nominaAController.PK.idgrado} "/>
+                            <p:outputLabel value="#{nominaAController.PK.gradoModalidad.equals('C')? 'TVC Contador' 
+                                                    : nominaAController.PK.gradoModalidad.equals('S') ? 'TVC Secretariado'
+                                                    : nominaAController.PK.gradoModalidad.equals('G') ? 'General': ''}"/>
+                            <p:outputLabel value="#{nominaAController.PK.idgrado == 0? '' : ' Sección '}"/>
+                            <p:outputLabel value="#{nominaAController.PK.gradoSeccion}"/>
+                    </f:facet>
+
+                  <!--  <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" update=":form:msgs form:tw:zona" />
+                    <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" update=":form:msgs" />
+                    -->
+
+                    <p:column headerText="NIE" style="width: 100px">
+                        <p:outputLabel value="#{e.idestudiante}"/>
+                    </p:column>
+
+                    <p:column headerText="Nombre">
+                        <p:outputLabel value="#{e.persona.personaNombre} #{e.persona.personaApellido}"/>
+                    </p:column>
+                    <p:column style="width:35px">
+                        <p:rowEditor />
+                    </p:column>
+                </p:dataTable>
+            </p:panelGrid>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
