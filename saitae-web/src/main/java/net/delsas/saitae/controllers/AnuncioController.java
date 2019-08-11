@@ -23,6 +23,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import net.delsas.saitae.beans.AnuncioFacadeLocal;
 import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
@@ -34,7 +35,7 @@ import net.delsas.saitae.entities.Persona;
  * @author delsas
  */
 @Named
-@SessionScoped
+@ViewScoped
 public class AnuncioController implements Serializable {
 
     private static final long serialVersionUID = 1L;
