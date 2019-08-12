@@ -374,6 +374,7 @@ public class RecursosController implements Serializable {
 
     public void nuevo() {
         this.recursoEntity = new Recurso();
+        this.autorLibro = new AutorLibro();
     }
 
     public List<Recurso> getRecurso() {
