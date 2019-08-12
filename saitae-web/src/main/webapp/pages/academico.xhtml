@@ -281,11 +281,11 @@
 
                             <p:outputLabel for="inicio" value="Hora inicial:" />
                             <p:datePicker id="inicio" value="#{tipoController.hora.horaInicio}" 
-                                          timeOnly="true" pattern="hh:mm a"/>
+                                          timeOnly="true" pattern="hh:mm a" showTime="true"/>
 
                             <p:outputLabel for="fin" value="Hora final: "/>
                             <p:datePicker id="fin"  value="#{tipoController.hora.horaFin}" 
-                                          timeOnly="true" pattern="hh:mm a"/>
+                                          timeOnly="true" pattern="hh:mm a" showTime="true"/>
                         </h:panelGrid>
                         <p:commandButton actionListener="#{tipoController.agregarHorario()}" value="Agregar"
                                          icon="pi pi-save" update="form:tw:horario form0:msgs"/>

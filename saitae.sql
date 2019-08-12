@@ -145,7 +145,7 @@ CREATE TABLE `autor` (
   `autorNombre` varchar(30) NOT NULL,
   `autorComentario` varchar(140) DEFAULT NULL,
   PRIMARY KEY (`idautor`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -154,6 +154,7 @@ CREATE TABLE `autor` (
 
 LOCK TABLES `autor` WRITE;
 /*!40000 ALTER TABLE `autor` DISABLE KEYS */;
+INSERT INTO `autor` VALUES (1,'Rusou','');
 /*!40000 ALTER TABLE `autor` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -181,6 +182,7 @@ CREATE TABLE `autorLibro` (
 
 LOCK TABLES `autorLibro` WRITE;
 /*!40000 ALTER TABLE `autorLibro` DISABLE KEYS */;
+INSERT INTO `autorLibro` VALUES (1,14706554,'');
 /*!40000 ALTER TABLE `autorLibro` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -355,6 +357,7 @@ CREATE TABLE `contenidoLibro` (
 
 LOCK TABLES `contenidoLibro` WRITE;
 /*!40000 ALTER TABLE `contenidoLibro` DISABLE KEYS */;
+INSERT INTO `contenidoLibro` VALUES (14706554,'blavla',0,0,'');
 /*!40000 ALTER TABLE `contenidoLibro` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -467,7 +470,7 @@ CREATE TABLE `editorial` (
   `editorialNombre` varchar(50) NOT NULL,
   `editorialComentarios` varchar(140) DEFAULT NULL,
   PRIMARY KEY (`ideditorial`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -476,6 +479,7 @@ CREATE TABLE `editorial` (
 
 LOCK TABLES `editorial` WRITE;
 /*!40000 ALTER TABLE `editorial` DISABLE KEYS */;
+INSERT INTO `editorial` VALUES (1,'rousoes',NULL);
 /*!40000 ALTER TABLE `editorial` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -503,6 +507,7 @@ CREATE TABLE `editorialLibro` (
 
 LOCK TABLES `editorialLibro` WRITE;
 /*!40000 ALTER TABLE `editorialLibro` DISABLE KEYS */;
+INSERT INTO `editorialLibro` VALUES (1,14706554,'Agregado');
 /*!40000 ALTER TABLE `editorialLibro` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -529,6 +534,7 @@ CREATE TABLE `ejemplar` (
 
 LOCK TABLES `ejemplar` WRITE;
 /*!40000 ALTER TABLE `ejemplar` DISABLE KEYS */;
+INSERT INTO `ejemplar` VALUES (14706554,1,119,'Agregado');
 /*!40000 ALTER TABLE `ejemplar` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1241,6 +1247,7 @@ CREATE TABLE `recurso` (
 
 LOCK TABLES `recurso` WRITE;
 /*!40000 ALTER TABLE `recurso` DISABLE KEYS */;
+INSERT INTO `recurso` VALUES (14706554,'sjhsuhihihi|',600,1,2,1,'',1,'B','ESTIMADO','wwwww','wwww');
 /*!40000 ALTER TABLE `recurso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1558,6 +1565,7 @@ CREATE TABLE `tipoReservaRecurso` (
 
 LOCK TABLES `tipoReservaRecurso` WRITE;
 /*!40000 ALTER TABLE `tipoReservaRecurso` DISABLE KEYS */;
+INSERT INTO `tipoReservaRecurso` VALUES (1,14706554,''),(2,14706554,''),(3,14706554,'');
 /*!40000 ALTER TABLE `tipoReservaRecurso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1631,4 +1639,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-08-09 17:58:38
+-- Dump completed on 2019-08-11 15:00:42
