@@ -76,33 +76,45 @@
 
 
                             <p:outputLabel value="Idrecurso:" for="idrecurso" />
-                            <p:inputText id="idrecurso" value="#{recursoController.seleccionado.idrecurso}" title="Idrecurso" required="true" requiredMessage="The Idrecurso field is required."/>
+                            <p:inputText id="idrecurso" value="#{recursoController.seleccionado.idrecurso}" 
+                                         title="Idrecurso" required="true" 
+                                         requiredMessage="The Idrecurso field is required."/>
                             <p:outputLabel value="Nombre:" for="nombre" />
-                            <p:inputText id="nombre" value="#{recursoController.seleccionado.nombre}" title="Nombre" required="true" requiredMessage="The Nombre field is required."/>
+                            <p:inputText id="nombre" value="#{recursoController.seleccionado.nombre}" 
+                                         title="Nombre" required="true" requiredMessage="The Nombre field is required."/>
                             <p:outputLabel value="Activo:" for="activo" />
-                            <p:inputText id="activo" value="#{recursoController.seleccionado.activo}" title="Activo" required="true" requiredMessage="The Activo field is required."/>
-                           <p:outputLabel for="categoria" value="Categorias" />
-                           <p:selectOneMenu id="categoria" value="#{recursoController.seleccionado.categoria}" >
-                               <f:selectItems var="c" itemLabel="#{c.categoriaNombre}"  value="#{recursoController.categorialist}"/>
-                                </p:selectOneMenu>
-                           <p:outputLabel for="tiporecurso" value="tiporecurso" />
-                           <p:selectOneMenu id="tiporecurso" value="#{recursoController.seleccionado.idTipoRecurso.idtipoRecurso}" >
-                               <f:selectItems var="tr" itemLabel="#{tr.tipoRecursoNombre}"  value="#{recursoController.tiporecursolist}"/>
-                                </p:selectOneMenu>
+                            <p:inputText id="activo" value="#{recursoController.seleccionado.activo}" title="Activo" 
+                                         required="true" requiredMessage="The Activo field is required."/>
+                            <p:outputLabel for="categoria" value="Categorias" />
+                            <p:selectOneMenu id="categoria" value="#{recursoController.seleccionado.categoria.idcategoria}" >
+                                <f:selectItems var="c" itemLabel="#{c.categoriaNombre}" 
+                                               itemValue="#{c.idcategoria}"  value="#{recursoController.categorialist}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel for="tiporecurso" value="tiporecurso" />
+                            <p:selectOneMenu id="tiporecurso" 
+                                             value="#{recursoController.seleccionado.idTipoRecurso.idtipoRecurso}" >
+                                <f:selectItems var="tr" itemLabel="#{tr.tipoRecursoNombre}" 
+                                               itemValue="#{tr.idtipoRecurso}"  value="#{recursoController.tiporecursolist}"/>
+                            </p:selectOneMenu>
                             <p:outputLabel value="ValorUnitario:" for="valorUnitario" />
-                            <p:inputText id="valorUnitario" value="#{recursoController.seleccionado.valorUnitario}" title="ValorUnitario" required="true" requiredMessage="The ValorUnitario field is required."/>
+                            <p:inputText id="valorUnitario" value="#{recursoController.seleccionado.valorUnitario}" 
+                                         title="ValorUnitario" required="true" 
+                                         requiredMessage="The ValorUnitario field is required."/>
                             <p:outputLabel value="EstadoFisico:" for="estadoFisico" />
-                            <p:inputText id="estadoFisico" value="#{recursoController.seleccionado.estadoFisico}" title="EstadoFisico" />
+                            <p:inputText id="estadoFisico" value="#{recursoController.seleccionado.estadoFisico}" 
+                                         title="EstadoFisico" />
                             <p:outputLabel value="TipoValor:" for="tipoValor" />
-                            <p:inputText id="tipoValor" value="#{recursoController.seleccionado.tipoValor}" title="TipoValor" required="true" requiredMessage="The TipoValor field is required."/>
+                            <p:inputText id="tipoValor" value="#{recursoController.seleccionado.tipoValor}" title="TipoValor" 
+                                         required="true" requiredMessage="The TipoValor field is required."/>
                             <p:outputLabel value="Modelo:" for="modelo" />
                             <p:inputText id="modelo" value="#{recursoController.seleccionado.modelo}" title="Modelo" />
                             <p:outputLabel value="RecursoComentarios:" for="recursoComentarios" />
-                            <p:inputText id="recursoComentarios" value="#{recursoController.seleccionado.recursoComentarios}" title="RecursoComentarios" />
-                            
-                        
-                    </h:panelGrid>
-                    
+                            <p:inputText id="recursoComentarios" value="#{recursoController.seleccionado.recursoComentarios}" 
+                                         title="RecursoComentarios" />
+
+
+                        </h:panelGrid>
+
                     </h:form>
                 </p:dialog>
             </ui:define>

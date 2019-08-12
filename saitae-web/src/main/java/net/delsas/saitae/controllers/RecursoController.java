@@ -30,6 +30,7 @@ import net.delsas.saitae.entities.AutorLibro;
 import net.delsas.saitae.entities.Categoria;
 import net.delsas.saitae.entities.EditorialLibro;
 import net.delsas.saitae.entities.Recurso;
+import net.delsas.saitae.entities.TipoCargo;
 import net.delsas.saitae.entities.TipoRecurso;
 
 /**
@@ -65,8 +66,10 @@ public class RecursoController implements Serializable {
     recurso = recursoFL.findAll();
     categorialist = categoriaFL.findAll();
     tiporecursolist = tiporecursoFL.findAll();
-    Seleccionado = new Recurso();
-    
+    Seleccionado = new Recurso(0);
+    Seleccionado.setCategoria(new Categoria(0, " "));
+    Seleccionado.setTipoCargo(new TipoCargo(0, " "));
+    Seleccionado.setIdTipoRecurso(new TipoRecurso(0, " "));
     
     
 }
