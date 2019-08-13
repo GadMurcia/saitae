@@ -102,8 +102,7 @@ public class RecursoController implements Serializable {
     tipocargolist = tipocargoFL.findAll();
     paislist = paisFL.findAll();
     listaTipoReserva = tipoReservaFL.findAll();
-    Seleccionado = new Recurso();
-    
+    Seleccionado = new Recurso();    
     Seleccionado.setCategoria(new Categoria(0,""));
     Seleccionado.setIdTipoRecurso(new TipoRecurso(0,""));
     Seleccionado.setTipoCargo(new TipoCargo(0, ""));
@@ -142,22 +141,12 @@ public class RecursoController implements Serializable {
         return editoriales;
     }
  public void agregarRecurso() {
-       
-
         try {
-            if (this.Seleccionado != null && this.Seleccionado!= null) {
-                recursoFL.create(this.Seleccionado);
-                
+            if (Seleccionado != null && Seleccionado!= null) {
+                recursoFL.create(this.Seleccionado);                
                 this.init();
-                recurso = recursoFL.findAll();
-                 categorialist = categoriaFL.findAll();
-    tiporecursolist = tiporecursoFL.findAll();
-    tipocargolist = tipocargoFL.findAll();
-    paislist = paisFL.findAll();
-    listaTipoReserva = tipoReservaFL.findAll();
-    Seleccionado = new Recurso();
-
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Creado con Exito!", null));
+                FacesContext.getCurrentInstance().addMessage(null, 
+                        new FacesMessage("Creado con Exito!", null));
             } else {
                 System.err.println("ESTA VACIA");
             }
