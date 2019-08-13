@@ -17,6 +17,7 @@
 package net.delsas.saitae.controllers;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -61,33 +62,31 @@ public class RecursoController implements Serializable {
     private RecursoFacadeLocal recursoFL;
     private List<Recurso> recurso;
     private Recurso Seleccionado;
-
+    private int ejemplares;
 //Categoria
     @EJB
     private CategoriaFacadeLocal categoriaFL;
     private List<Categoria> categorialist;
-
+    private Categoria cat;
 //Tipo Recurso
     @EJB
     private TipoRecursoFacadeLocal tiporecursoFL;
     private List<TipoRecurso> tiporecursolist;
-
+    private TipoRecurso tr;
 //Tipo Cargo
     @EJB
     private TipoCargoFacadeLocal tipocargoFL;
     private List<TipoCargo> tipocargolist;
-
+    private TipoCargo tipoCargo;
 //Pais
     @EJB
     private PaisFacadeLocal paisFL;
     private List<Pais> paislist;
+    private Pais pais;
 //Tipo Reserva    
     @EJB
     private TipoReservaFacadeLocal tipoReservaFL;
-    //private TipoReservaRecurso tipoReservaRecurso = new TipoReservaRecurso();
-    //private TipoReservaRecursoPK tipoReservaRecursoPK = new TipoReservaRecursoPK();
     private List<TipoReserva> listaTipoReserva;
-    private List<TipoReserva> seleccionTipoReserva;
     private List<TipoReservaRecurso> listaTipoReservaRecursos;
 
     //ejemplar
@@ -100,12 +99,11 @@ public class RecursoController implements Serializable {
         paislist = paisFL.findAll();
         listaTipoReserva = tipoReservaFL.findAll();
         Seleccionado = new Recurso(0);
-
-        Seleccionado.setCategoria(new Categoria(0, ""));
-        Seleccionado.setIdTipoRecurso(new TipoRecurso(0, ""));
-        Seleccionado.setTipoCargo(new TipoCargo(0, ""));
-        Seleccionado.setPais(new Pais(0, ""));
-
+        ejemplares = 0;
+        cat = new Categoria(0, "");
+        tr = new TipoRecurso(0, "");
+        tipoCargo = new TipoCargo(0, "");
+        pais = (new Pais(0, ""));
     }
 
     public String AutorLibro(List<AutorLibro> listautorlibro) {
@@ -152,6 +150,32 @@ public class RecursoController implements Serializable {
         }
     }
 
+    public int[] getTiposReservas() {
+        List<TipoReservaRecurso> l = Seleccionado.getTipoReservaRecursoList();
+        int[] a;
+        if (l != null) {
+            a = new int[l.size()];
+            for (int i = 0; i < l.size(); i++) {
+                a[i] = l.get(i).getTipoReserva1().getIdtipoReserva();
+            }
+        } else {
+            a = new int[0];
+        }
+        return a;
+    }
+
+    public void setTiposReservas(int[] a) {
+        List<TipoReservaRecurso> l = new ArrayList<>();
+        for (int i : a) {
+            TipoReservaRecurso trr = new TipoReservaRecurso(new TipoReservaRecursoPK(i, Seleccionado.getIdrecurso()));
+            trr.setRecurso(Seleccionado);
+            trr.setTipoReserva1(tipoReservaFL.find(i));
+            trr.setTipoReservaRecursoComentario("");
+            l.add(trr);
+        }
+        Seleccionado.setTipoReservaRecursoList(l);
+    }
+
     public List<Recurso> getRecurso() {
         return recurso;
     }
@@ -165,7 +189,7 @@ public class RecursoController implements Serializable {
     }
 
     public void setSeleccionado(Recurso Seleccionado) {
-        this.Seleccionado = Seleccionado;
+        this.Seleccionado = Seleccionado == null ? new Recurso(0) : Seleccionado;
     }
 
     public List<Categoria> getCategorialist() {
@@ -214,6 +238,46 @@ public class RecursoController implements Serializable {
 
     public void setListaTipoReserva(List<TipoReserva> listaTipoReserva) {
         this.listaTipoReserva = listaTipoReserva;
+    }
+
+    public int getEjemplares() {
+        return ejemplares;
+    }
+
+    public void setEjemplares(int ejemplares) {
+        this.ejemplares = ejemplares;
+    }
+
+    public Categoria getCat() {
+        return cat;
+    }
+
+    public void setCat(Categoria cat) {
+        this.cat = cat;
+    }
+
+    public TipoRecurso getTr() {
+        return tr;
+    }
+
+    public void setTr(TipoRecurso tr) {
+        this.tr = tr;
+    }
+
+    public TipoCargo getTipoCargo() {
+        return tipoCargo;
+    }
+
+    public void setTipoCargo(TipoCargo tipoCargo) {
+        this.tipoCargo = tipoCargo;
+    }
+
+    public Pais getPais() {
+        return pais;
+    }
+
+    public void setPais(Pais pais) {
+        this.pais = pais;
     }
 
 }
