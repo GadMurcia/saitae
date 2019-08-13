@@ -53,25 +53,25 @@ import net.delsas.saitae.entities.TipoReservaRecursoPK;
 @ViewScoped
 
 public class RecursoController implements Serializable {
-      private static final long serialVersionUID = 1L;
+
+    private static final long serialVersionUID = 1L;
 
 //Recurso
     @EJB
     private RecursoFacadeLocal recursoFL;
     private List<Recurso> recurso;
     private Recurso Seleccionado;
-    
+
 //Categoria
     @EJB
     private CategoriaFacadeLocal categoriaFL;
     private List<Categoria> categorialist;
-    
-    
+
 //Tipo Recurso
     @EJB
     private TipoRecursoFacadeLocal tiporecursoFL;
     private List<TipoRecurso> tiporecursolist;
-    
+
 //Tipo Cargo
     @EJB
     private TipoCargoFacadeLocal tipocargoFL;
@@ -91,62 +91,59 @@ public class RecursoController implements Serializable {
     private List<TipoReservaRecurso> listaTipoReservaRecursos;
 
     //ejemplar
-    
-    
-    
-@PostConstruct
-    public void init(){
-    recurso = recursoFL.findAll();
-    categorialist = categoriaFL.findAll();
-    tiporecursolist = tiporecursoFL.findAll();
-    tipocargolist = tipocargoFL.findAll();
-    paislist = paisFL.findAll();
-    listaTipoReserva = tipoReservaFL.findAll();
-    Seleccionado = new Recurso();    
-    Seleccionado.setCategoria(new Categoria(0,""));
-    Seleccionado.setIdTipoRecurso(new TipoRecurso(0,""));
-    Seleccionado.setTipoCargo(new TipoCargo(0, ""));
-    Seleccionado.setPais(new Pais(0,""));
-   
-    
-}
-    
-    
-    public String  AutorLibro(List<AutorLibro> listautorlibro){
-        String autores ="";
-        for(AutorLibro al : listautorlibro){
-        autores+= al.getAutor().getAutorNombre()+ "-";
-        if(listautorlibro.indexOf(al)>0){
-            autores+=", ";
-           
+    @PostConstruct
+    public void init() {
+        recurso = recursoFL.findAll();
+        categorialist = categoriaFL.findAll();
+        tiporecursolist = tiporecursoFL.findAll();
+        tipocargolist = tipocargoFL.findAll();
+        paislist = paisFL.findAll();
+        listaTipoReserva = tipoReservaFL.findAll();
+        Seleccionado = new Recurso(0);
+
+        Seleccionado.setCategoria(new Categoria(0, ""));
+        Seleccionado.setIdTipoRecurso(new TipoRecurso(0, ""));
+        Seleccionado.setTipoCargo(new TipoCargo(0, ""));
+        Seleccionado.setPais(new Pais(0, ""));
+
+    }
+
+    public String AutorLibro(List<AutorLibro> listautorlibro) {
+        String autores = "";
+        for (AutorLibro al : listautorlibro) {
+            autores += al.getAutor().getAutorNombre() + "-";
+            if (listautorlibro.indexOf(al) > 0) {
+                autores += ", ";
+
+            }
+            autores += al.getAutor().getAutorNombre();
         }
-         autores+= al.getAutor().getAutorNombre();
-        }
-        
-        
+
         return autores;
     }
-    
-    public String EditorialLibro(List<EditorialLibro> listeditoriallibro){
-        String editoriales ="";
-        for(EditorialLibro el : listeditoriallibro){
-        editoriales+= el.getEditorial().getEditorialNombre()+"-";
-        if(listeditoriallibro.indexOf(el)>0){
-            editoriales+=", ";
+
+    public String EditorialLibro(List<EditorialLibro> listeditoriallibro) {
+        String editoriales = "";
+        for (EditorialLibro el : listeditoriallibro) {
+            editoriales += el.getEditorial().getEditorialNombre() + "-";
+            if (listeditoriallibro.indexOf(el) > 0) {
+                editoriales += ", ";
+            }
+            editoriales += el.getEditorial().getEditorialNombre();
         }
-         editoriales+= el.getEditorial().getEditorialNombre();
-        }
-        
-    
+
         return editoriales;
     }
- public void agregarRecurso() {
+
+    public void agregarRecurso() {
+
         try {
-            if (Seleccionado != null && Seleccionado!= null) {
-                recursoFL.create(this.Seleccionado);                
+            if (this.Seleccionado != null && this.Seleccionado.getIdrecurso() > 0) {
+                recursoFL.create(this.Seleccionado);
+
                 this.init();
-                FacesContext.getCurrentInstance().addMessage(null, 
-                        new FacesMessage("Creado con Exito!", null));
+
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Creado con Exito!", null));
             } else {
                 System.err.println("ESTA VACIA");
             }
@@ -155,10 +152,6 @@ public class RecursoController implements Serializable {
         }
     }
 
-    
-    
-    
-    
     public List<Recurso> getRecurso() {
         return recurso;
     }
@@ -222,7 +215,5 @@ public class RecursoController implements Serializable {
     public void setListaTipoReserva(List<TipoReserva> listaTipoReserva) {
         this.listaTipoReserva = listaTipoReserva;
     }
-
-
 
 }

@@ -121,6 +121,20 @@
                                 </p:selectOneMenu>
                             <p:outputLabel value="Modelo:" for="modelo" />
                             <p:inputText id="modelo" value="#{recursoController.seleccionado.modelo}" title="Modelo" />
+                            
+                            <p:outputLabel value="Existencias" for="numeroejemplar" />
+                            <p:inputText id="numeroejemplar" value="#{recursoController.seleccionado.ejemplarList}" title="ejemplar" />
+                            
+                          <h:outputLabel for="multiple" value="Formas de Reserva"/>
+                          <p:selectCheckboxMenu id="multiple" value="#{recursoController.listaTipoReservaRecursos}" label="Cities" multiple="true" 
+                                                      filter="true" filterMatchMode="startsWith" panelStyle="width:250px" required="true" requiredMessage="Debe seleccionar al menos un tipo">
+                                    <f:selectItems value="#{recursoController.listaTipoReserva}" var="trr" itemLabel="#{trr.tipoReservaNombre}" />
+                                </p:selectCheckboxMenu>
+                        
+                    </h:panelGrid>
+                        <p:commandButton actionListener="#{recursoController.agregarRecurso()}" value="Agregar"
+                                         icon="pi pi-save" update="form:recurso form0:msgs"/>
+                    
                     </h:form>
                 </p:dialog>
             </ui:define>
