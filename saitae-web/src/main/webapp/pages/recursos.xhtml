@@ -90,13 +90,13 @@
                                     <f:selectItems var="p" itemLabel="#{p.paisNombre}" value="#{recursosController.listaPais}" />
                                 </p:selectOneMenu>
                                   <p:outputLabel value="Activo:" for="activo" />
-                                  <p:selectOneMenu id="activo" value="#{recursosController.recursoEntity.activo}" title="Activo" required="true" requiredMessage="Es necesario seleccionar el estado" converter="omnifaces.SelectItemsConverter">
+                                  <p:selectOneMenu id="activo" value="#{recursoController.seleccionado.activo}" title="Activo" required="true" requiredMessage="Es necesario seleccionar el estado" converter="omnifaces.SelectItemsConverter">
                         <f:selectItem itemLabel="Seleccione un estado" itemValue="" noSelectionOption="true"  />
                         <f:selectItem itemLabel="Activo" itemValue="#{true}" />
                         <f:selectItem itemLabel="Inactivo" itemValue="#{false}" />
                     </p:selectOneMenu>
                                 
-                                <p:outputLabel for="categoria" value="Categorias" />
+                                <p:outputLabel for="tiporeserva" value="" />
                                 <p:selectOneMenu id="categoria" value="#{recursosController.recursoEntity.categoria}" converter="omnifaces.SelectItemsConverter">
                                     <f:selectItems var="c" itemLabel="#{c.categoriaNombre}"  value="#{recursosController.categoria}"/>
                                 </p:selectOneMenu>
