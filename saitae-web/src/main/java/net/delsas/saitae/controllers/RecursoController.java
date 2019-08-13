@@ -28,6 +28,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import net.delsas.saitae.beans.CategoriaFacadeLocal;
+import net.delsas.saitae.beans.ContenidoLibroFacadeLocal;
+import net.delsas.saitae.beans.EjemplarFacadeLocal;
 import net.delsas.saitae.beans.PaisFacadeLocal;
 import net.delsas.saitae.beans.RecursoFacadeLocal;
 import net.delsas.saitae.beans.TipoCargoFacadeLocal;
@@ -36,8 +38,10 @@ import net.delsas.saitae.beans.TipoRecursoFacadeLocal;
 import net.delsas.saitae.beans.TipoReservaFacadeLocal;
 import net.delsas.saitae.entities.AutorLibro;
 import net.delsas.saitae.entities.Categoria;
+import net.delsas.saitae.entities.ContenidoLibro;
 import net.delsas.saitae.entities.EditorialLibro;
 import net.delsas.saitae.entities.Ejemplar;
+import net.delsas.saitae.entities.EjemplarPK;
 import net.delsas.saitae.entities.Pais;
 import net.delsas.saitae.entities.Recurso;
 import net.delsas.saitae.entities.TipoCargo;
@@ -45,6 +49,7 @@ import net.delsas.saitae.entities.TipoRecurso;
 import net.delsas.saitae.entities.TipoReserva;
 import net.delsas.saitae.entities.TipoReservaRecurso;
 import net.delsas.saitae.entities.TipoReservaRecursoPK;
+import org.primefaces.event.FlowEvent;
 
 /**
  *
@@ -90,6 +95,17 @@ public class RecursoController implements Serializable {
     private List<TipoReservaRecurso> listaTipoReservaRecursos;
 
     //ejemplar
+    @EJB 
+    private EjemplarFacadeLocal ejemplarFL;
+    private List<Ejemplar> listaEjemplar;
+    private int ejemplar; 
+  //contenido libro
+    @EJB
+    //private ContenidoLibroFacadeLocal contenidolibroFL;
+    private List<ContenidoLibro> contenido;
+    private ContenidoLibro cl;
+    private boolean skip;
+    
     @PostConstruct
     public void init() {
         recurso = recursoFL.findAll();
@@ -98,12 +114,28 @@ public class RecursoController implements Serializable {
         tipocargolist = tipocargoFL.findAll();
         paislist = paisFL.findAll();
         listaTipoReserva = tipoReservaFL.findAll();
+        listaEjemplar = ejemplarFL.findAll();
+        //contenido = contenidolibroFL.findAll();
         Seleccionado = new Recurso(0);
         ejemplares = 0;
+        ejemplar = 0;
         cat = new Categoria(0, "");
         tr = new TipoRecurso(0, "");
         tipoCargo = new TipoCargo(0, "");
         pais = (new Pais(0, ""));
+        cl = new ContenidoLibro();
+        
+        
+      
+    }
+    public String onFlowProcess(FlowEvent event) {
+        if(skip) {
+            skip = false;   //reset in case user goes back
+            return "confirm";
+        }
+        else {
+            return event.getNewStep();
+        }
     }
 
     public String AutorLibro(List<AutorLibro> listautorlibro) {
@@ -132,12 +164,33 @@ public class RecursoController implements Serializable {
 
         return editoriales;
     }
+    
+    public void ejemplar (){
+       List<Ejemplar> ej = new ArrayList<>();
+               
+  for(int i = 0; i<ejemplares; i++){
+ Ejemplar e = new Ejemplar(new EjemplarPK(Seleccionado.getIdrecurso(), (Seleccionado.getIdrecurso()+i)));
+    //e.getEjemplarPK().setIdRecurso(Seleccionado.getIdrecurso());
+    e.setEjemplarAnioDeIngreso(ejemplar);
+    e.setEjemplarComentario("");
+    e.setRecurso(Seleccionado);
+     ej.add(e);
+    
+  }  
+  Seleccionado.setEjemplarList(ej);
+  
+  }
 
     public void agregarRecurso() {
 
         try {
             if (this.Seleccionado != null && this.Seleccionado.getIdrecurso() > 0) {
-                recursoFL.create(this.Seleccionado);
+                Seleccionado.setCategoria(categoriaFL.find(cat.getIdcategoria()));
+                Seleccionado.setPais(paisFL.find(pais.getIdpais()));
+                Seleccionado.setIdTipoRecurso(tiporecursoFL.find(tr.getIdtipoRecurso()));
+                Seleccionado.setTipoCargo(tipocargoFL.find(tipoCargo.getIdtipoCargo()));
+                ejemplar();
+                recursoFL.edit(this.Seleccionado);
 
                 this.init();
 
@@ -278,6 +331,32 @@ public class RecursoController implements Serializable {
 
     public void setPais(Pais pais) {
         this.pais = pais;
+    }
+
+    public ContenidoLibro getCl() {
+        return cl;
+    }
+
+    public void setCl(ContenidoLibro cl) {
+        this.cl = cl;
+    }
+
+    
+
+    public boolean isSkip() {
+        return skip;
+    }
+
+    public void setSkip(boolean skip) {
+        this.skip = skip;
+    }
+
+    public List<ContenidoLibro> getContenido() {
+        return contenido;
+    }
+
+    public void setContenido(List<ContenidoLibro> contenido) {
+        this.contenido = contenido;
     }
 
 }
