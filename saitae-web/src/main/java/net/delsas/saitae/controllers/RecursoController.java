@@ -18,20 +18,32 @@ package net.delsas.saitae.controllers;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import net.delsas.saitae.beans.CategoriaFacadeLocal;
+import net.delsas.saitae.beans.PaisFacadeLocal;
 import net.delsas.saitae.beans.RecursoFacadeLocal;
+import net.delsas.saitae.beans.TipoCargoFacadeLocal;
 import net.delsas.saitae.beans.TipoRecursoFacade;
 import net.delsas.saitae.beans.TipoRecursoFacadeLocal;
+import net.delsas.saitae.beans.TipoReservaFacadeLocal;
 import net.delsas.saitae.entities.AutorLibro;
 import net.delsas.saitae.entities.Categoria;
 import net.delsas.saitae.entities.EditorialLibro;
+import net.delsas.saitae.entities.Ejemplar;
+import net.delsas.saitae.entities.Pais;
 import net.delsas.saitae.entities.Recurso;
 import net.delsas.saitae.entities.TipoCargo;
 import net.delsas.saitae.entities.TipoRecurso;
+import net.delsas.saitae.entities.TipoReserva;
+import net.delsas.saitae.entities.TipoReservaRecurso;
+import net.delsas.saitae.entities.TipoReservaRecursoPK;
 
 /**
  *
@@ -54,10 +66,31 @@ public class RecursoController implements Serializable {
     private CategoriaFacadeLocal categoriaFL;
     private List<Categoria> categorialist;
     
+    
 //Tipo Recurso
     @EJB
     private TipoRecursoFacadeLocal tiporecursoFL;
     private List<TipoRecurso> tiporecursolist;
+    
+//Tipo Cargo
+    @EJB
+    private TipoCargoFacadeLocal tipocargoFL;
+    private List<TipoCargo> tipocargolist;
+
+//Pais
+    @EJB
+    private PaisFacadeLocal paisFL;
+    private List<Pais> paislist;
+//Tipo Reserva    
+    @EJB
+    private TipoReservaFacadeLocal tipoReservaFL;
+    //private TipoReservaRecurso tipoReservaRecurso = new TipoReservaRecurso();
+    //private TipoReservaRecursoPK tipoReservaRecursoPK = new TipoReservaRecursoPK();
+    private List<TipoReserva> listaTipoReserva;
+    private List<TipoReserva> seleccionTipoReserva;
+    private List<TipoReservaRecurso> listaTipoReservaRecursos;
+
+    //ejemplar
     
     
     
@@ -66,11 +99,16 @@ public class RecursoController implements Serializable {
     recurso = recursoFL.findAll();
     categorialist = categoriaFL.findAll();
     tiporecursolist = tiporecursoFL.findAll();
-    Seleccionado = new Recurso(0);
-    Seleccionado.setCategoria(new Categoria(0, " "));
-    Seleccionado.setTipoCargo(new TipoCargo(0, " "));
-    Seleccionado.setIdTipoRecurso(new TipoRecurso(0, " "));
+    tipocargolist = tipocargoFL.findAll();
+    paislist = paisFL.findAll();
+    listaTipoReserva = tipoReservaFL.findAll();
+    Seleccionado = new Recurso();
     
+    Seleccionado.setCategoria(new Categoria(0,""));
+    Seleccionado.setIdTipoRecurso(new TipoRecurso(0,""));
+    Seleccionado.setTipoCargo(new TipoCargo(0, ""));
+    Seleccionado.setPais(new Pais(0,""));
+   
     
 }
     
@@ -103,7 +141,32 @@ public class RecursoController implements Serializable {
     
         return editoriales;
     }
+ public void agregarRecurso() {
+       
 
+        try {
+            if (this.Seleccionado != null && this.Seleccionado!= null) {
+                recursoFL.create(this.Seleccionado);
+                
+                this.init();
+                recurso = recursoFL.findAll();
+                 categorialist = categoriaFL.findAll();
+    tiporecursolist = tiporecursoFL.findAll();
+    tipocargolist = tipocargoFL.findAll();
+    paislist = paisFL.findAll();
+    listaTipoReserva = tipoReservaFL.findAll();
+    Seleccionado = new Recurso();
+
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Creado con Exito!", null));
+            } else {
+                System.err.println("ESTA VACIA");
+            }
+        } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+        }
+    }
+
+    
     
     
     
@@ -137,6 +200,38 @@ public class RecursoController implements Serializable {
 
     public void setTiporecursolist(List<TipoRecurso> tiporecursolist) {
         this.tiporecursolist = tiporecursolist;
+    }
+
+    public List<TipoCargo> getTipocargolist() {
+        return tipocargolist;
+    }
+
+    public void setTipocargolist(List<TipoCargo> tipocargolist) {
+        this.tipocargolist = tipocargolist;
+    }
+
+    public List<Pais> getPaislist() {
+        return paislist;
+    }
+
+    public void setPaislist(List<Pais> paislist) {
+        this.paislist = paislist;
+    }
+
+    public List<TipoReservaRecurso> getListaTipoReservaRecursos() {
+        return listaTipoReservaRecursos;
+    }
+
+    public void setListaTipoReservaRecursos(List<TipoReservaRecurso> listaTipoReservaRecursos) {
+        this.listaTipoReservaRecursos = listaTipoReservaRecursos;
+    }
+
+    public List<TipoReserva> getListaTipoReserva() {
+        return listaTipoReserva;
+    }
+
+    public void setListaTipoReserva(List<TipoReserva> listaTipoReserva) {
+        this.listaTipoReserva = listaTipoReserva;
     }
 
 
