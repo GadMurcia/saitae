@@ -100,7 +100,7 @@ public class RecursoController implements Serializable {
     private List<Ejemplar> listaEjemplar;
     private int ejemplar; 
   //contenido libro
-    @EJB
+    
     //private ContenidoLibroFacadeLocal contenidolibroFL;
     private List<ContenidoLibro> contenido;
     private ContenidoLibro cl;
@@ -128,14 +128,8 @@ public class RecursoController implements Serializable {
         
       
     }
-    public String onFlowProcess(FlowEvent event) {
-        if(skip) {
-            skip = false;   //reset in case user goes back
-            return "confirm";
-        }
-        else {
-            return event.getNewStep();
-        }
+     public String onFlowProcess(FlowEvent event) {
+        return event.getNewStep();
     }
 
     public String AutorLibro(List<AutorLibro> listautorlibro) {
