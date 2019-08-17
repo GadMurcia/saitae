@@ -12,7 +12,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
-import net.delsas.prueba;
+import net.delsas.saitae.aux.prueba;
 import net.delsas.saitae.beans.EstudianteFacadeLocal;
 import net.delsas.saitae.beans.GradoFacadeLocal;
 import net.delsas.saitae.beans.PersonaFacadeLocal;

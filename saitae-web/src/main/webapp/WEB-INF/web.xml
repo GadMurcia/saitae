@@ -7,6 +7,10 @@
         <param-name>javax.faces.PROJECT_STAGE</param-name>
         <param-value>Development</param-value>
     </context-param>
+    <context-param>
+        <param-name>org.omnifaces.SOCKET_ENDPOINT_ENABLED</param-name>
+        <param-value>true</param-value>
+    </context-param>
     <mime-mapping>
         <extension>woff2</extension>
         <mime-type>application/font-woff2</mime-type>
@@ -23,7 +27,7 @@
         <extension>ttf</extension>
         <mime-type>application/font-ttf</mime-type>
     </mime-mapping>
-   <context-param>
+    <context-param>
         <description>luna-pink flick south-street</description>
         <param-name>primefaces.THEME</param-name>
         <param-value>luna-pink</param-value>
@@ -58,7 +62,7 @@
     <filter>
         <!-- The CORS filter with parameters -->
         <filter-name>CORS</filter-name>
-        <filter-class>net.delsas.corsonf</filter-class>
+        <filter-class>net.delsas.saitae.aux.corsonf</filter-class>
         <!-- Note: All parameters are options, if omitted the CORS 
            Filter will fall back to the respective default values.
         -->
@@ -101,12 +105,12 @@
     </filter>
     <filter>
         <filter-name>corsonf</filter-name>
-        <filter-class>net.delsas.corsonf</filter-class>
+        <filter-class>net.delsas.saitae.aux.corsonf</filter-class>
     </filter>
     <error-page>
         <exception-type>org.jboss.weld.contexts.ContextNotActiveException</exception-type>
         <location>/index.intex</location>
-    </error-page>    
+    </error-page>
     <error-page>
         <exception-type>javax.faces.application.ViewExpiredException</exception-type>
         <location>/index.intex</location>

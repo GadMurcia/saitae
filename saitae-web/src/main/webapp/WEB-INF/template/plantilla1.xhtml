@@ -4,7 +4,8 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:o="http://omnifaces.org/ui">
 
     <h:head>
         <title>#{sessionController.us.personaNombre.split(" ")[0]} 
@@ -23,13 +24,32 @@
                 <h:form id="form0">
                     <p:growl id="msgs" showDetail="true" />
                     <p:menubar id="menubar" model="#{sessionController.mm}"></p:menubar>
-
                 </h:form>
             </ui:insert>
         </div>
         <div id="right">
-            <ui:insert name="right">
-                Right
+            <ui:insert name="right">                
+                <script>
+                    function socketListener(message, channel, event) {
+                        notificar([{name: 'mss', value: message}]);
+                    }
+                </script>
+                <h:form id="noti">
+                    <o:socket channel="notificacion" onmessage="socketListener"/>
+                    <p:remoteCommand name="notificar" actionListener="#{sessionController.escucha()}" update=":form0:msgs"/>
+                    <p:panel id="toggleable" header="Notificación" toggleable="true" 
+                             toggleSpeed="500" widgetVar="panel" 
+                             style="margin-bottom:20px">
+
+                        <p:ajax event="toggle" listener="#{sessionController.onToggle}" update=":form0:msgs" />
+
+                        <h:panelGrid columns="1" >
+                            <h:outputText value="Francis Ford Coppola's legendary continuation and sequel to his landmark 1972 film, The_Godfather, parallels the young Vito Corleone's rise with his son Michael's spiritual fall, deepening The_Godfather's depiction of the dark side of the American dream. 
+                                          In the early 1900s, the child Vito flees his Sicilian village for America after the local Mafia kills his family. Vito struggles to make a living, legally or illegally, for his wife and growing brood in Little Italy, 
+                                          killing the local Black Hand Fanucci after he demands his customary cut of the tyro's business. With Fanucci gone, Vito's communal stature grows." />
+                        </h:panelGrid>
+                    </p:panel>
+                </h:form>
             </ui:insert>
         </div>
         <div id="content" class="content">

@@ -7,8 +7,10 @@ package net.delsas.saitae.controllers;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,10 +21,12 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
+import net.delsas.saitae.aux.mensaje;
 import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
 import net.delsas.saitae.entities.Acceso;
 import net.delsas.saitae.entities.AccesoTipoPersona;
 import net.delsas.saitae.entities.Persona;
+import org.primefaces.event.ToggleEvent;
 import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultMenuModel;
 import org.primefaces.model.menu.DefaultSubMenu;
@@ -148,6 +152,12 @@ public class sessionController implements Serializable {
             Logger.getLogger(sessionController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public void onToggle(ToggleEvent event) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, 
+                event.getComponent().getId() + " toggled", "Status:" + event.getVisibility().name());
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
 
     public int getUsNie() {
         return Integer.valueOf(us.getIdpersona().toString().subSequence(1, us.getIdpersona().toString().split("").length - 1).toString());
@@ -157,7 +167,17 @@ public class sessionController implements Serializable {
         us.setIdpersona(Integer.valueOf("1" + nie));
     }
 
-    public String getAño() {
-        return String.valueOf(Calendar.getInstance().getTime().getYear() + 1900);
+    public int getAño() {
+        return Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date()));
+    }
+    
+    public void escucha(){
+        try {
+            String mss = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("mss");
+            mensaje m=new mensaje(mss);
+            FacesContext.getCurrentInstance().addMessage(null, m.getFacesmessage());
+        } catch (Exception ex) {
+            Logger.getLogger(sessionController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

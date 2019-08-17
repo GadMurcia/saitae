@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package net.delsas;
+package net.delsas.saitae.aux;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

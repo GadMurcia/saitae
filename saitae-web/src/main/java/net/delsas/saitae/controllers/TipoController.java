@@ -28,8 +28,10 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
-import net.delsas.prueba;
+import net.delsas.saitae.aux.mensaje;
+import net.delsas.saitae.aux.prueba;
 import net.delsas.saitae.beans.AulaFacadeLocal;
 import net.delsas.saitae.beans.AutorFacadeLocal;
 import net.delsas.saitae.beans.CargoFacadeLocal;
@@ -70,6 +72,8 @@ import net.delsas.saitae.entities.TipoRecurso;
 import net.delsas.saitae.entities.TipoReserva;
 import net.delsas.saitae.entities.TipopersonaPermiso;
 import net.delsas.saitae.entities.Zona;
+import org.omnifaces.cdi.Push;
+import org.omnifaces.cdi.PushContext;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.ItemSelectEvent;
 import org.primefaces.event.RowEditEvent;
@@ -304,6 +308,7 @@ public class TipoController implements Serializable {
                 zfl.edit((Zona) event.getObject());
                 titulo = "Zona";
                 mensaje = ((Zona) event.getObject()).getZonaNombre();
+                enviarNotificación((Zona) event.getObject(), "zona");
                 break;
             case "form:tw:reserva":
                 tipoReservaFL.edit((TipoReserva) event.getObject());
@@ -805,6 +810,23 @@ public class TipoController implements Serializable {
 
     public void setHora(Horario horario) {
         this.hora = horario == null ? new Horario(0, new Date(), new Date()) : horario;
+    }
+
+    private void enviarNotificación(Object o, String tabla) {
+        if (tabla.equals("zona")) {
+            Zona z = (Zona) o;
+            sendMessage(new mensaje(0, 0, "??",
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Zonas modificadas ",
+                            "Modificación:" + z.toString())).toString());
+        }
+    }
+
+    @Inject
+    @Push
+    private PushContext notificacion;
+
+    public void sendMessage(Object message) {
+        notificacion.send(message);
     }
 
 }
