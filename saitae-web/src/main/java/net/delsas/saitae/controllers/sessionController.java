@@ -190,7 +190,7 @@ public class sessionController implements Serializable {
             cuerpoNoti=m.getCuerpoMensaje();
             verNoti=true;
             PrimeFaces.current().ajax().update("noti");
-            FacesContext.getCurrentInstance().addMessage(null, m.getFacesmessage());
+            //FacesContext.getCurrentInstance().addMessage(null, m.getFacesmessage());
         } catch (Exception ex) {
             Logger.getLogger(sessionController.class.getName()).log(Level.SEVERE, null, ex);
         }
