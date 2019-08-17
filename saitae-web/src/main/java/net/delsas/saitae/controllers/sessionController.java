@@ -26,6 +26,7 @@ import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
 import net.delsas.saitae.entities.Acceso;
 import net.delsas.saitae.entities.AccesoTipoPersona;
 import net.delsas.saitae.entities.Persona;
+import org.primefaces.PrimeFaces;
 import org.primefaces.event.ToggleEvent;
 import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultMenuModel;
@@ -46,10 +47,17 @@ public class sessionController implements Serializable {
     private Persona us;
     @EJB
     private TipoPersonaFacadeLocal tpfl;
+    
+    //para notificaciones
+    private String nombreNoti;
+    private String cuerpoNoti;
+    private boolean verNoti;
 
     @PostConstruct
     public void init() {
-        // this.menu();
+        nombreNoti=" ";
+        cuerpoNoti=" ";
+        verNoti=false;
     }
 
     public void log() {
@@ -175,9 +183,42 @@ public class sessionController implements Serializable {
         try {
             String mss = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("mss");
             mensaje m=new mensaje(mss);
+            if(m.getRemitente()!=us.getIdpersona()){
+                System.out.println("Rmitente: "+m.getRemitente()+". Escucha: "+us.getIdpersona());
+            }
+            nombreNoti=m.getTituloMensaje();
+            cuerpoNoti=m.getCuerpoMensaje();
+            verNoti=true;
+            PrimeFaces.current().ajax().update("noti");
             FacesContext.getCurrentInstance().addMessage(null, m.getFacesmessage());
         } catch (Exception ex) {
             Logger.getLogger(sessionController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    public String getNombreNoti() {
+        return nombreNoti;
+    }
+
+    public void setNombreNoti(String nombreNoti) {
+        this.nombreNoti = nombreNoti;
+    }
+
+    public String getCuerpoNoti() {
+        return cuerpoNoti;
+    }
+
+    public void setCuerpoNoti(String cuerpoNoti) {
+        this.cuerpoNoti = cuerpoNoti;
+    }
+
+    public boolean isVerNoti() {
+        return verNoti;
+    }
+
+    public void setVerNoti(boolean verNoti) {
+        this.verNoti = verNoti;
+    }
+    
+    
 }

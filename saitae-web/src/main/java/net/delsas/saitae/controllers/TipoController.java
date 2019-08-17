@@ -813,11 +813,12 @@ public class TipoController implements Serializable {
     }
 
     private void enviarNotificación(Object o, String tabla) {
+        Persona usuario = (Persona) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
         if (tabla.equals("zona")) {
             Zona z = (Zona) o;
-            sendMessage(new mensaje(0, 0, "??",
+            sendMessage(new mensaje(0, usuario.getIdpersona(), "??",
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Zonas modificadas ",
-                            "Modificación:" + z.toString())).toString());
+                            "Modificación:" + z.getZonaNombre())).toString());
         }
     }
 
