@@ -53,7 +53,7 @@ public class mensaje {
         this. severidad= facesmessage.getSeverity();
     }
 
-    public mensaje(String mensajePush) throws Exception {
+    public mensaje(String mensajePush) throws Exception{
         String[] msj = mensajePush.split("::");
         if (msj.length == 6) {
             this.destinatario = Integer.valueOf(msj[0]);

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -22,6 +23,7 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import net.delsas.saitae.aux.mensaje;
+import net.delsas.saitae.aux.notificacion;
 import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
 import net.delsas.saitae.entities.Acceso;
 import net.delsas.saitae.entities.AccesoTipoPersona;
@@ -47,17 +49,19 @@ public class sessionController implements Serializable {
     private Persona us;
     @EJB
     private TipoPersonaFacadeLocal tpfl;
-    
+
     //para notificaciones
+    private List<notificacion> notificaciones;
     private String nombreNoti;
     private String cuerpoNoti;
     private boolean verNoti;
 
     @PostConstruct
     public void init() {
-        nombreNoti=" ";
-        cuerpoNoti=" ";
-        verNoti=false;
+        nombreNoti = " ";
+        cuerpoNoti = " ";
+        verNoti = false;
+        notificaciones = new ArrayList<>();
     }
 
     public void log() {
@@ -142,7 +146,7 @@ public class sessionController implements Serializable {
             if (ac.contains(b)) {
                 if (b.getAccesoList() == null || b.getAccesoList().isEmpty()) {
                     s.addElement(new DefaultMenuItem(b.getAccesoNombre(), b.getAccesoComentario(), b.getAccesourl()));
-                }else{
+                } else {
                     s.addElement(menu3(b, ac));
                 }
             }
@@ -160,9 +164,9 @@ public class sessionController implements Serializable {
             Logger.getLogger(sessionController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public void onToggle(ToggleEvent event) {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, 
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
                 event.getComponent().getId() + " toggled", "Status:" + event.getVisibility().name());
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
@@ -178,17 +182,35 @@ public class sessionController implements Serializable {
     public int getAño() {
         return Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date()));
     }
-    
-    public void escucha(){
+
+    public void escucha() {
         try {
             String mss = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("mss");
-            mensaje m=new mensaje(mss);
-            if(m.getRemitente()!=us.getIdpersona()){
-                System.out.println("Rmitente: "+m.getRemitente()+". Escucha: "+us.getIdpersona());
+            mensaje m = new mensaje(mss);
+            if (m.getRemitente() != us.getIdpersona()) {
+                System.out.println("Rmitente: " + m.getRemitente() + ". Escucha: " + us.getIdpersona());
             }
-            nombreNoti=m.getTituloMensaje();
-            cuerpoNoti=m.getCuerpoMensaje();
-            verNoti=true;
+            notificacion n = new notificacion(m.getTituloMensaje(), m.getCuerpoMensaje());
+
+            if (!notificaciones.contains(n)) {
+                List<notificacion> n1 = new ArrayList<>();
+                for(notificacion nn : notificaciones){
+                    nn.setCollapsed(true);
+                    n1.add(nn);
+                }
+                notificaciones.clear();
+                notificaciones.add(n);
+                if (n1.size() < 4) {
+                    notificaciones.addAll(n1);
+                } else {
+                    for (notificacion not : n1) {
+                        if (n1.indexOf(not) < 4) {
+                            notificaciones.add(not);
+                        }
+                    }
+                }
+            }
+            verNoti = true;
             PrimeFaces.current().ajax().update("noti");
             //FacesContext.getCurrentInstance().addMessage(null, m.getFacesmessage());
         } catch (Exception ex) {
@@ -219,6 +241,13 @@ public class sessionController implements Serializable {
     public void setVerNoti(boolean verNoti) {
         this.verNoti = verNoti;
     }
-    
-    
+
+    public List<notificacion> getNotificaciones() {
+        return notificaciones;
+    }
+
+    public void setNotificaciones(List<notificacion> notificaciones) {
+        this.notificaciones = notificaciones;
+    }
+
 }
