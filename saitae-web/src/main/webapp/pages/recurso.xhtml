@@ -10,6 +10,34 @@
 
         <ui:composition template="./../WEB-INF/template/plantilla1.xhtml">
             <ui:define name="content">
+                <style type="text/css">
+    .label {
+        width:20%;
+        padding:4px;
+    }
+ 
+    .value {
+        width:80%;
+        padding:4px;
+    }
+ 
+    .grid {
+        width:100%;
+    }
+ 
+    .error {
+        color: red;
+    }
+ 
+    .outputLabel {
+        font-weight: bold;
+    }
+ 
+    .grid {
+        width:33%;
+        padding:4px;
+    }
+</style>
                 <h:form id="form">
 
                     <p:dataTable id="recurso" var="r" value="#{recursoController.recurso}" rowKey="#{r.idrecurso}"
@@ -65,7 +93,7 @@
                           showEffect="fade" hideEffect="fade" resizable="false">
                     <h:form id="h1">
                         <p:wizard flowListener="#{recursoController.onFlowProcess}">
-                            <p:tab  title="Información Recursos">
+                            <p:tab id="tab1" title="Información Recursos">
                                 <p:panel header="Información Recursos">
                                     <h:panelGrid columns="4" cellspacing="10px">
 
@@ -132,14 +160,15 @@
                                     </h:panelGrid>
                                 </p:panel>
                             </p:tab>
-                            <p:tab  title="Temario">
+                            <p:tab id="tab2"  title="Temario">
+                                 <p:panel header="Temario">
                                 <h:panelGrid columns="1" cellspacing="10px">
                                     <p:commandButton value="+" styleClass="ui-priority-primary" 
                                                      update=":form0:msgs h2"
                                                      onclick="PF('Dcontenido').show();"
                                                      title="Agregar Contenido."/>
 
-                                    <p:panel header="Temario">
+                                   
 
                                         <p:dataTable value="#{recursoController.contenido}" var="item">
                                             <p:column>
@@ -168,10 +197,12 @@
                                                 <h:outputText value="#{item.recurso}"/>
                                             </p:column>
                                         </p:dataTable>
-                                    </p:panel>
+                                   
                              <p:commandButton actionListener="#{recursoController.agregarRecurso()}" value="Agregar"
-                                                         icon="pi pi-save" update="form:recurso form0:msgs"/>
+                                                         icon="pi pi-save" update="h1 form0:msgs"/>
+                             
                             </h:panelGrid>
+                                      </p:panel>
                                 </p:tab>
                         </p:wizard>
                     </h:form>
