@@ -34,21 +34,18 @@
                         notificar([{name: 'mss', value: message}]);
                     }
                 </script>                
-                    <o:socket channel="notificacion" onmessage="socketListener"/>
+                <o:socket channel="notificacion" onmessage="socketListener"/>
                 <h:form id="noti">
                     <h1>Área de Notificaciones</h1>
                     <p:remoteCommand name="notificar" actionListener="#{sessionController.escucha()}" update=":form0:msgs"/>
                     <ui:repeat value="#{sessionController.notificaciones}" var="n">
                         <p:panel header="#{n.nombreNoti}" toggleable="true" 
                                  toggleSpeed="500" rendered="#{n.verNoti}" collapsed="#{n.collapsed}" 
-                             style="margin-bottom:20px">
-                        
-                       
-                        
-                        <h:panelGrid columns="1" >
-                            <h:outputText value="#{n.cuerpoNoti}" />
-                        </h:panelGrid>
-                    </p:panel>
+                                 style="margin-bottom:20px">
+                            <h:panelGrid columns="1" >
+                                <h:outputText value="#{n.cuerpoNoti}" />
+                            </h:panelGrid>
+                        </p:panel>
                     </ui:repeat>
                 </h:form>
             </ui:insert>
