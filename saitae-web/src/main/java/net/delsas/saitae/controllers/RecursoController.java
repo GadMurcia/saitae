@@ -104,7 +104,8 @@ public class RecursoController implements Serializable {
     //private ContenidoLibroFacadeLocal contenidolibroFL;
     private List<ContenidoLibro> contenido;
     private ContenidoLibro cl;
-    private boolean skip;
+    //private boolean skip;
+    private int indice; 
     
     @PostConstruct
     public void init() {
@@ -119,6 +120,7 @@ public class RecursoController implements Serializable {
         Seleccionado = new Recurso(0);
         ejemplares = 0;
         ejemplar = 0;
+        indice = 0;
         cat = new Categoria(0, "");
         tr = new TipoRecurso(0, "");
         tipoCargo = new TipoCargo(0, "");
@@ -337,13 +339,7 @@ public class RecursoController implements Serializable {
 
     
 
-    public boolean isSkip() {
-        return skip;
-    }
-
-    public void setSkip(boolean skip) {
-        this.skip = skip;
-    }
+    
 
     public List<ContenidoLibro> getContenido() {
         return contenido;
