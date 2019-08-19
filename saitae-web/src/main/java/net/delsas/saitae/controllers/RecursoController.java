@@ -17,7 +17,9 @@
 package net.delsas.saitae.controllers;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,11 +42,13 @@ import net.delsas.saitae.beans.TipoRecursoFacadeLocal;
 import net.delsas.saitae.beans.TipoReservaFacadeLocal;
 import net.delsas.saitae.entities.Autor;
 import net.delsas.saitae.entities.AutorLibro;
+import net.delsas.saitae.entities.AutorLibroPK;
 import net.delsas.saitae.entities.Categoria;
 import net.delsas.saitae.entities.ContenidoLibro;
 import net.delsas.saitae.entities.ContenidoLibroPK;
 import net.delsas.saitae.entities.Editorial;
 import net.delsas.saitae.entities.EditorialLibro;
+import net.delsas.saitae.entities.EditorialLibroPK;
 import net.delsas.saitae.entities.Ejemplar;
 import net.delsas.saitae.entities.EjemplarPK;
 import net.delsas.saitae.entities.Pais;
@@ -54,6 +58,7 @@ import net.delsas.saitae.entities.TipoRecurso;
 import net.delsas.saitae.entities.TipoReserva;
 import net.delsas.saitae.entities.TipoReservaRecurso;
 import net.delsas.saitae.entities.TipoReservaRecursoPK;
+import org.primefaces.PrimeFaces;
 import org.primefaces.event.FlowEvent;
 
 /**
@@ -108,12 +113,12 @@ public class RecursoController implements Serializable {
     //contenidolibro
     private List<ContenidoLibro> contenido;
     private ContenidoLibro cl;
-    
+
     //autores
     @EJB
     private AutorFacadeLocal autorFL;
     private List<Autor> autores;
-    
+
     @EJB
     private EditorialFacadeLocal editorialFL;
     private List<Editorial> editoriales;
@@ -128,16 +133,16 @@ public class RecursoController implements Serializable {
         listaTipoReserva = tipoReservaFL.findAll();
         listaEjemplar = ejemplarFL.findAll();
         Seleccionado = new Recurso(0);
-        ejemplares = 0;
-        ejemplar = 0;
+        ejemplares = 1;
+        ejemplar = Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date()));
         cat = new Categoria(0, "");
         tr = new TipoRecurso(0, "");
         tipoCargo = new TipoCargo(0, "");
         pais = (new Pais(0, ""));
         cl = new ContenidoLibro(new ContenidoLibroPK(0, "", 0));
         contenido = new ArrayList<>();
-        autores=autorFL.findAll();
-        editoriales=editorialFL.findAll();
+        autores = autorFL.findAll();
+        editoriales = editorialFL.findAll();
     }
 
     public String onFlowProcess(FlowEvent event) {
@@ -145,30 +150,25 @@ public class RecursoController implements Serializable {
     }
 
     public String AutorLibro(List<AutorLibro> listautorlibro) {
-        String autores = "";
+        String auts = "";
         for (AutorLibro al : listautorlibro) {
-            autores += al.getAutor().getAutorNombre() + "-";
             if (listautorlibro.indexOf(al) > 0) {
-                autores += ", ";
-
+                auts += ", ";
             }
-            autores += al.getAutor().getAutorNombre();
+            auts += al.getAutor().getAutorNombre();
         }
-
-        return autores;
+        return auts;
     }
 
     public String EditorialLibro(List<EditorialLibro> listeditoriallibro) {
-        String editoriales = "";
+        String edts = "";
         for (EditorialLibro el : listeditoriallibro) {
-            editoriales += el.getEditorial().getEditorialNombre() + "-";
             if (listeditoriallibro.indexOf(el) > 0) {
-                editoriales += ", ";
+                edts += ", ";
             }
-            editoriales += el.getEditorial().getEditorialNombre();
+            edts += el.getEditorial().getEditorialNombre();
         }
-
-        return editoriales;
+        return edts;
     }
 
     public void ejemplar() {
@@ -234,6 +234,63 @@ public class RecursoController implements Serializable {
         Seleccionado.setTipoReservaRecursoList(l);
     }
 
+    public Integer[] getAutoresXlibro() {
+        List<AutorLibro> l = Seleccionado.getAutorLibroList();
+        Integer[] a;
+        if (l != null) {
+            a = new Integer[l.size()];
+            for (int i = 0; i < l.size(); i++) {
+                a[i] = l.get(i).getAutor().getIdautor();
+            }
+        } else {
+            a = new Integer[0];
+        }
+        return a;
+    }
+
+    public void setAutoresXlibro(Integer[] a) {
+        List<AutorLibro> l = new ArrayList<>();
+        for (int i : a) {
+            AutorLibro al = new AutorLibro(new AutorLibroPK(i, Seleccionado.getIdrecurso()));
+            al.setRecurso(Seleccionado);
+            al.setAutor(autorFL.find(i));
+            al.setAutorLibrocComentario("");
+            l.add(al);
+        }
+        Seleccionado.setAutorLibroList(l);
+    }
+
+    public Integer[] getEditorialesXlibro() {
+        List<EditorialLibro> l = Seleccionado.getEditorialLibroList();
+        Integer[] a;
+        if (l != null) {
+            a = new Integer[l.size()];
+            for (int i = 0; i < l.size(); i++) {
+                a[i] = l.get(i).getEditorial().getIdeditorial();
+            }
+        } else {
+            a = new Integer[0];
+        }
+        return a;
+    }
+
+    public void setEditorialesXlibro(Integer[] a) {
+        List<EditorialLibro> l = new ArrayList<>();
+        for (int i : a) {
+            EditorialLibro al = new EditorialLibro(new EditorialLibroPK(i, Seleccionado.getIdrecurso()));
+            al.setRecurso(Seleccionado);
+            al.setEditorial(editorialFL.find(i));
+            al.setEditorialLibroComentario("");
+            l.add(al);
+        }
+        Seleccionado.setEditorialLibroList(l);
+    }
+
+    public void cancelarEdicion() {
+        init();
+        PrimeFaces.current().ajax().update("form0", "form", "h1", "h2");
+    }
+
     public List<Recurso> getRecurso() {
         return recurso;
     }
@@ -247,12 +304,17 @@ public class RecursoController implements Serializable {
     }
 
     public void setSeleccionado(Recurso Seleccionado) {
-        this.Seleccionado = Seleccionado == null ? new Recurso(0) : Seleccionado;
-        cat = Seleccionado.getCategoria();
-        tr = Seleccionado.getIdTipoRecurso();
-        tipoCargo = Seleccionado.getTipoCargo();
-        pais = Seleccionado.getPais();
-        contenido=Seleccionado.getContenidoLibroList();
+        if (Seleccionado == null) {
+            this.Seleccionado = new Recurso(0);
+        } else {
+            this.Seleccionado = Seleccionado;
+            cat = Seleccionado.getCategoria();
+            tr = Seleccionado.getIdTipoRecurso();
+            tipoCargo = Seleccionado.getTipoCargo();
+            pais = Seleccionado.getPais();
+            contenido = Seleccionado.getContenidoLibroList();
+            ejemplares= Seleccionado.getEjemplarList().size();
+        }
     }
 
     public List<Categoria> getCategorialist() {
@@ -364,16 +426,16 @@ public class RecursoController implements Serializable {
                 && cl.getContenidoLibroPK().getContenidoLibroPagina() > 0) {
             cl.getContenidoLibroPK().setIdLibro(Seleccionado.getIdrecurso());
             contenido.add(cl);
-            cl = new ContenidoLibro(new ContenidoLibroPK(Seleccionado.getIdrecurso(), "", 0));
+            nuevoContenido();
         }
     }
-    
-    public void nuevoContenido(){
-        cl=new ContenidoLibro(new ContenidoLibroPK(Seleccionado.getIdrecurso(), "", 0));
+
+    public void nuevoContenido() {
+        cl = new ContenidoLibro(new ContenidoLibroPK(Seleccionado.getIdrecurso(), "", 0));
     }
-    
-    public void nuevoRecurso(){
-        Seleccionado=new Recurso(0);
+
+    public void nuevoRecurso() {
+        Seleccionado = new Recurso(0);
     }
 
     public List<Autor> getAutores() {
