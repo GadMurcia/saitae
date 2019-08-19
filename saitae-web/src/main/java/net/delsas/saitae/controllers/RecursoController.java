@@ -113,7 +113,7 @@ public class RecursoController implements Serializable {
     //contenidolibro
     private List<ContenidoLibro> contenido;
     private ContenidoLibro cl;
-
+    
     //autores
     @EJB
     private AutorFacadeLocal autorFL;
@@ -437,7 +437,7 @@ public class RecursoController implements Serializable {
     public void nuevoRecurso() {
         Seleccionado = new Recurso(0);
     }
-
+    
     public List<Autor> getAutores() {
         return autores;
     }

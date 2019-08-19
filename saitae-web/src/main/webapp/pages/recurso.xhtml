@@ -9,6 +9,34 @@
     <body>
         <ui:composition template="./../WEB-INF/template/plantilla1.xhtml">
             <ui:define name="content">
+                <style type="text/css">
+    .label {
+        width:20%;
+        padding:4px;
+    }
+ 
+    .value {
+        width:80%;
+        padding:4px;
+    }
+ 
+    .grid {
+        width:100%;
+    }
+ 
+    .error {
+        color: red;
+    }
+ 
+    .outputLabel {
+        font-weight: bold;
+    }
+ 
+    .grid {
+        width:33%;
+        padding:4px;
+    }
+</style>
                 <h:form id="form">
                     <p:dataTable id="recurso" var="r" value="#{recursoController.recurso}" rowKey="#{r.idrecurso}"
                                  widgetVar="recurso1"  emptyMessage="Sin registros aún."
@@ -221,27 +249,76 @@
                                                  update="form h1 h2" oncomplete="PF('Drecurso').hide();"/>
                             </h:panelGrid>
                         </h:panelGrid>
-                    </h:form>
-
-                </p:dialog>
-                <p:dialog header="Administración de contenido" widgetVar="Dcontenido" modal="true" 
-                          showEffect="fade" hideEffect="fade">
-                    <h:form id="h2">
-                        <h:panelGrid columns="2" cellspacing="10px">
-                            <p:outputLabel value="Nombre" for="nombre" />
-                            <p:inputText id="nombre" value="#{recursoController.cl.contenidoLibroPK.contenidoLibroNombre}" 
-                                         title="nombre" required="true" requiredMessage="The Idrecurso field is required."/>
-
-                            <p:outputLabel value="Pagina" for="pagina" />
-                            <p:inputText id="pagina" value="#{recursoController.cl.contenidoLibroPK.contenidoLibroPagina}" 
-                                         title="Nombre" required="true" requiredMessage="The Nombre field is required."/>
-                            <p:commandButton value="agregar Tema" actionListener="#{recursoController.agregarContenido()}"
-                                             update=":h1:h1Contenido h2"/>
+                                    </p:panel>
+                                </p:tab>                                
+                                <p:tab  title="Temario">
+                                    <p:panel header="Temario" style="width: 680px;">
+                                        <h:panelGrid columns="1" cellspacing="10px">                                    
+                                            <p:commandButton value="+" styleClass="ui-priority-primary" 
+                                                             actionListener="#{recursoController.nuevoContenido()}"
+                                                             update=":form0:msgs h2"
+                                                             onclick="PF('Dcontenido').show();"
+                                                             title="Agregar Contenido."/>
+                                            <p:dataTable id="h1Contenido" value="#{recursoController.contenido}" var="item"
+                                                         rowKey="#{item.contenidoLibroPK}" selection="#{recursoController.cl}"
+                                                         selectionMode="single">
+                                                <p:column>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="ContenidoLibroNombre"/>
+                                                    </f:facet>
+                                                    <h:outputText value="#{item.contenidoLibroPK.contenidoLibroNombre}"/>
+                                                </p:column>
+                                                <p:column>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="ContenidoLibroPagina"/>
+                                                    </f:facet>
+                                                    <h:outputText value="#{item.contenidoLibroPK.contenidoLibroPagina}"/>
+                                                </p:column>                                            
+                                            </p:dataTable>
+                                            <p:contextMenu for="h1Contenido">
+                                                <p:menuitem value="Modificar" update=":form0:msgs h1Contenido h2"
+                                                            icon="fa fa-edit" onclick="PF('Dcontenido').show()"/>                            
+                                            </p:contextMenu>
+                                            <p:commandButton actionListener="#{recursoController.agregarRecurso()}" 
+                                                             oncomplete="PF('Drecurso').hide()"
+                                                             value="Agregar" icon="pi pi-save" update="form:recurso form0:msgs"/>
+                                        </h:panelGrid>
+                                    </p:panel>
+                                </p:tab>
+                            </p:wizard>
+                            <h:panelGrid columns="3" dir="rtl">
+                                <p:column style="width: 150px;"></p:column>
+                                <p:column style="width: 150px;"></p:column>
+                                <p:commandButton value="cancelar" actionListener="#{recursoController.cancelarEdicion()}" 
+                                                 update="form h1 h2" oncomplete="PF('Drecurso').hide();"/>
+                            </h:panelGrid>
                         </h:panelGrid>
-                    </h:form>
-                </p:dialog>
+                            <p:tab id="tab2"  title="Temario">
+                                 <p:panel header="Temario">
+                                <h:panelGrid columns="1" cellspacing="10px">
+                                    <p:commandButton value="+" styleClass="ui-priority-primary" 
+                                                     update=":form0:msgs h2"
+                                                     onclick="PF('Dcontenido').show();"
+                                                     title="Agregar Contenido."/>
 
-            </ui:define>
-        </ui:composition>
-    </body>
-</html>
+                                   
+
+                                        <p:dataTable value="#{recursoController.contenido}" var="item">
+                                            <p:column>
+                                                <f:facet name="header">
+                                                    <h:outputText value="ContenidoLibroNombre"/>
+                                                </f:facet>
+                                                <h:outputText value="#{item.contenidoLibroPK.contenidoLibroNombre}"/>
+                                            </p:column>
+                                            <p:column>
+                                                <f:facet name="header">
+                                                    <h:outputText value="ContenidoLibroPagina"/>
+                                                </f:facet>
+                                                <h:outputText value="#{item.contenidoLibroPK.contenidoLibroPagina}"/>
+                                            </p:column>                                            
+                                        </p:dataTable>
+
+
+
+
+                        </p:wizard>
