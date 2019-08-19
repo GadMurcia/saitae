@@ -3,7 +3,6 @@ package net.delsas.saitae.controllers;
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -76,6 +75,7 @@ public class loginController implements Serializable {
         }
         String passwd = DigestUtils.md5Hex(pass);
         Persona p = /*new prueba().getEstudiante().getPersona();//*/ pfl.find(w);
+        System.out.println("contra "+p.getPersonaContrasenya());
         FacesContext context = FacesContext.getCurrentInstance();
         try {
             if (p != null && p.getPersonaActivo() && p.getPersonaContrasenya().equals(passwd)) {

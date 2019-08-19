@@ -16,6 +16,7 @@
  */
 package net.delsas.saitae.controllers;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,13 +32,11 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import net.delsas.saitae.beans.AutorFacadeLocal;
 import net.delsas.saitae.beans.CategoriaFacadeLocal;
-import net.delsas.saitae.beans.ContenidoLibroFacadeLocal;
 import net.delsas.saitae.beans.EditorialFacadeLocal;
 import net.delsas.saitae.beans.EjemplarFacadeLocal;
 import net.delsas.saitae.beans.PaisFacadeLocal;
 import net.delsas.saitae.beans.RecursoFacadeLocal;
 import net.delsas.saitae.beans.TipoCargoFacadeLocal;
-import net.delsas.saitae.beans.TipoRecursoFacade;
 import net.delsas.saitae.beans.TipoRecursoFacadeLocal;
 import net.delsas.saitae.beans.TipoReservaFacadeLocal;
 import net.delsas.saitae.entities.Autor;
@@ -52,6 +51,7 @@ import net.delsas.saitae.entities.EditorialLibroPK;
 import net.delsas.saitae.entities.Ejemplar;
 import net.delsas.saitae.entities.EjemplarPK;
 import net.delsas.saitae.entities.Pais;
+import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.Recurso;
 import net.delsas.saitae.entities.TipoCargo;
 import net.delsas.saitae.entities.TipoRecurso;
@@ -60,6 +60,8 @@ import net.delsas.saitae.entities.TipoReservaRecurso;
 import net.delsas.saitae.entities.TipoReservaRecursoPK;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.FlowEvent;
+import org.primefaces.event.ItemSelectEvent;
+import org.primefaces.event.SelectEvent;
 
 /**
  *
@@ -71,6 +73,11 @@ import org.primefaces.event.FlowEvent;
 public class RecursoController implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    //validación de usuarios
+    private Persona usuario;
+    private FacesContext context;
+    private boolean verTipos, verOtrosPaneles, verBotonGuardarPanel1, verCategorias, verCategoriastabla;
+    //FIn de validación de usuarios
 
 //Recurso
     @EJB
@@ -113,7 +120,7 @@ public class RecursoController implements Serializable {
     //contenidolibro
     private List<ContenidoLibro> contenido;
     private ContenidoLibro cl;
-    
+
     //autores
     @EJB
     private AutorFacadeLocal autorFL;
@@ -125,7 +132,12 @@ public class RecursoController implements Serializable {
 
     @PostConstruct
     public void init() {
-        recurso = recursoFL.findAll();
+        context = FacesContext.getCurrentInstance();
+        initVariables();
+        controlUsuarios();
+    }
+
+    private void initVariables() {
         categorialist = categoriaFL.findAll();
         tiporecursolist = tiporecursoFL.findAll();
         tipocargolist = tipocargoFL.findAll();
@@ -143,6 +155,50 @@ public class RecursoController implements Serializable {
         contenido = new ArrayList<>();
         autores = autorFL.findAll();
         editoriales = editorialFL.findAll();
+    }
+
+    private void llenado(int tr, boolean verPaneles) {
+        TipoRecurso tipor = tiporecursoFL.find(tr);
+        Seleccionado.setIdTipoRecurso(tipor);
+        recurso = tipor.getRecursoList();
+        verTipos = false;
+        verBotonGuardarPanel1 = !verPaneles;
+        verOtrosPaneles = verPaneles;
+        verCategorias = verPaneles;
+        verCategoriastabla = verPaneles;
+    }
+
+    public void controlUsuarios() {
+        try {
+            usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
+            switch (usuario.getTipoPersona().getIdtipoPersona()) {
+                case 1:
+                case 2:
+                    verTipos = true;
+                    verCategorias = true;
+                    verCategoriastabla = true;
+                    recurso = recursoFL.findAll();
+                    break;
+                case 5:
+                    llenado(3, true);
+                    break;
+                case 6:
+                    llenado(1, false);
+                    break;
+                case 7:
+                    llenado(2, false);
+                    break;
+                default:
+                    context.getExternalContext().getSessionMap().put("mensaje",
+                            new FacesMessage(FacesMessage.SEVERITY_WARN, "Página prohibida",
+                                    "Usted no tiene los permisos suficientes para ver y utilizar esa página."));
+                    context.getExternalContext().redirect("perfil.intex");
+            }
+        } catch (IOException ex) {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error iniesperado",
+                    (ex != null ? ex.getMessage() : "Error desconocido.")));
+        }
+
     }
 
     public String onFlowProcess(FlowEvent event) {
@@ -191,12 +247,14 @@ public class RecursoController implements Serializable {
 
         try {
             if (this.Seleccionado != null && this.Seleccionado.getIdrecurso() > 0) {
-                Seleccionado.setCategoria(categoriaFL.find(cat.getIdcategoria()));
-                Seleccionado.setPais(paisFL.find(pais.getIdpais()));
-                Seleccionado.setIdTipoRecurso(tiporecursoFL.find(tr.getIdtipoRecurso()));
+                if (Seleccionado.getIdTipoRecurso().getIdtipoRecurso() == 3) {
+                    Seleccionado.setCategoria(categoriaFL.find(cat.getIdcategoria()));
+                    Seleccionado.setPais(paisFL.find(pais.getIdpais()));
+                    //Seleccionado.setIdTipoRecurso(tiporecursoFL.find(tr.getIdtipoRecurso()));
+                    Seleccionado.setContenidoLibroList(contenido);
+                }
                 Seleccionado.setTipoCargo(tipocargoFL.find(tipoCargo.getIdtipoCargo()));
                 ejemplar();
-                Seleccionado.setContenidoLibroList(contenido);
                 recursoFL.edit(this.Seleccionado);
                 this.init();
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Creado con Exito!", null));
@@ -305,7 +363,13 @@ public class RecursoController implements Serializable {
 
     public void setSeleccionado(Recurso Seleccionado) {
         if (Seleccionado == null) {
+            TipoRecurso t = this.Seleccionado.getIdTipoRecurso();
             this.Seleccionado = new Recurso(0);
+            if (t != null) {
+                this.Seleccionado.setIdTipoRecurso(t);
+            } else {
+                init();
+            }
         } else {
             this.Seleccionado = Seleccionado;
             cat = Seleccionado.getCategoria();
@@ -313,8 +377,23 @@ public class RecursoController implements Serializable {
             tipoCargo = Seleccionado.getTipoCargo();
             pais = Seleccionado.getPais();
             contenido = Seleccionado.getContenidoLibroList();
-            ejemplares= Seleccionado.getEjemplarList().size();
+            ejemplares = Seleccionado.getEjemplarList().size();
         }
+    }
+
+    public void tipoRecursoSelect(SelectEvent event) {
+        if (((int) event.getObject()) == 3) {
+            verBotonGuardarPanel1 = false;
+            verCategorias = true;
+            verOtrosPaneles = true;
+        } else {
+            verBotonGuardarPanel1 = true;
+            verCategorias = false;
+            verOtrosPaneles = false;
+        }
+        Seleccionado.setIdTipoRecurso(tiporecursoFL.find((Integer) event.getObject()));
+        PrimeFaces.current().ajax().update("form0", "form", "h1", "h2");
+        System.out.println(event.getObject());
     }
 
     public List<Categoria> getCategorialist() {
@@ -435,9 +514,19 @@ public class RecursoController implements Serializable {
     }
 
     public void nuevoRecurso() {
+        ejemplares = 1;
+        verBotonGuardarPanel1=true;
+        TipoRecurso t = this.Seleccionado.getIdTipoRecurso();        
         Seleccionado = new Recurso(0);
+        this.Seleccionado = new Recurso(0);
+        if (t != null) {
+            this.Seleccionado.setIdTipoRecurso(t);
+        } else {
+            init();
+        }
+        PrimeFaces.current().ajax().update("h1", "h2");
     }
-    
+
     public List<Autor> getAutores() {
         return autores;
     }
@@ -454,4 +543,43 @@ public class RecursoController implements Serializable {
         this.editoriales = editoriales;
     }
 
+    public boolean isVerTipos() {
+        return verTipos;
+    }
+
+    public void setVerTipos(boolean verTipos) {
+        this.verTipos = verTipos;
+    }
+
+    public boolean isVerOtrosPaneles() {
+        return verOtrosPaneles;
+    }
+
+    public void setVerOtrosPaneles(boolean verOtrosPaneles) {
+        this.verOtrosPaneles = verOtrosPaneles;
+    }
+
+    public boolean isVerBotonGuardarPanel1() {
+        return verBotonGuardarPanel1;
+    }
+
+    public void setVerBotonGuardarPanel1(boolean verBotonGuardarPanel1) {
+        this.verBotonGuardarPanel1 = verBotonGuardarPanel1;
+    }
+
+    public boolean isVerCategorias() {
+        return verCategorias;
+    }
+
+    public void setVerCategorias(boolean verCategorias) {
+        this.verCategorias = verCategorias;
+    }
+
+    public boolean isVerCategoriastabla() {
+        return verCategoriastabla;
+    }
+
+    public void setVerCategoriastabla(boolean verCategoriastabla) {
+        this.verCategoriastabla = verCategoriastabla;
+    }
 }
