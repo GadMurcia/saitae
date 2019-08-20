@@ -30,6 +30,4 @@ public interface TipoReservaRecursoFacadeLocal {
 
     int count();
     
-    List<TipoReservaRecurso> findByIdRecruso(Object idRecurso);
-    
 }

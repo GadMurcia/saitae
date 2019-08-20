@@ -10,7 +10,6 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import net.delsas.saitae.entities.Grado;
-import net.delsas.saitae.entities.GradoPK;
 
 /**
  *
@@ -36,7 +35,7 @@ public class GradoFacade extends AbstractFacade<Grado> implements GradoFacadeLoc
         return em.createNamedQuery("Grado.findModalidadByaño")
                 .setParameter("año", año)
                 .getResultList();
-    }
+}
     
     @Override
     public List<Integer> getIdPorAñoyModalidad(int año, String modalidad){

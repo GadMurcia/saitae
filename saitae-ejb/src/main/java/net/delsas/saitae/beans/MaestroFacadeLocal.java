@@ -29,7 +29,7 @@ public interface MaestroFacadeLocal {
     List<Maestro> findRange(int[] range);
 
     int count();
-
+    
     public List<Maestro> getLikeById(int id);
     
 }

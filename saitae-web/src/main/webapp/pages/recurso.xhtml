@@ -63,9 +63,10 @@
                             </p:contextMenu>
                         </div>
                     </div>
+                    <p:remoteCommand name="nuevoRecurso" actionListener="#{recursoController.nuevoRecurso()}"/>
                 </h:form>
-                <p:dialog header="Administración de recursos" widgetVar="Drecurso" modal="true" 
-                          showEffect="fade" hideEffect="fade" resizable="false" dynamic="true" >
+                <p:dialog header="Administración de recursos" widgetVar="Drecurso" modal="true" onHide="nuevoRecurso();"
+                          showEffect="fade" hideEffect="fade" resizable="false" style="width: 90%;">
                     <h:form id="h1">
                         <p:wizard flowListener="#{recursoController.onFlowProcess}" backLabel="Retroceder" nextLabel="Siguiente"
                                   step="init">
@@ -93,15 +94,18 @@
                                             </p:selectOneMenu>
 
                                             <p:outputLabel for="categoria" value="Categorias" rendered="#{recursoController.verCategorias}"/>
-                                            <p:selectOneMenu id="categoria" value="#{recursoController.cat.idcategoria}" 
+                                            <p:selectOneMenu id="categoria" value="#{recursoController.cat.idcategoria}"
                                                              rendered="#{recursoController.verCategorias}">
+                                                <f:selectItem itemLabel="Seleccione" itemValue=""/>
                                                 <f:selectItems var="c" itemLabel="#{c.categoriaNombre}" 
                                                                itemValue="#{c.idcategoria}"  
                                                                value="#{recursoController.categorialist}"/>
+                                                <p:ajax event="itemSelect" listener="#{recursoController.categoriaSelect}"/>
                                             </p:selectOneMenu>
                                             <p:outputLabel for="tiporecurso" value="Tipo Recurso" rendered="#{recursoController.verTipos}"/>
-                                            <p:selectOneMenu id="tiporecurso" value="#{recursoController.tr.idtipoRecurso}" 
+                                            <p:selectOneMenu id="tiporecurso" value="#{recursoController.tr.idtipoRecurso}"
                                                              rendered="#{recursoController.verTipos}">
+                                                <f:selectItem itemLabel="Seleccione" itemValue=""/>
                                                 <f:selectItems var="tr" itemLabel="#{tr.tipoRecursoNombre}" 
                                                                itemValue="#{tr.idtipoRecurso}" 
                                                                value="#{recursoController.tiporecursolist}"/>
@@ -109,14 +113,18 @@
                                             </p:selectOneMenu>
                                             <p:outputLabel for="tipocargo" value="Tipo Cargo" />
                                             <p:selectOneMenu id="tipocargo" value="#{recursoController.tipoCargo.idtipoCargo}">
+                                                <f:selectItem itemLabel="Seleccione" itemValue=""/>
                                                 <f:selectItems var="tc" itemLabel="#{tc.nombre}" itemValue="#{tc.idtipoCargo}" 
                                                                value="#{recursoController.tipocargolist}"/>
+                                                <p:ajax event="itemSelect" listener="#{recursoController.tipoCargoSelect}"/>
                                             </p:selectOneMenu>
                                             <p:outputLabel for="pais" value="Pais" rendered="#{recursoController.verCategorias}"/>
-                                            <p:selectOneMenu id="pais" value="#{recursoController.pais.idpais}" 
+                                            <p:selectOneMenu id="pais" value="#{recursoController.pais.idpais}"
                                                              rendered="#{recursoController.verCategorias}">
+                                                <f:selectItem itemLabel="Seleccione" itemValue=""/>
                                                 <f:selectItems var="p" itemLabel="#{p.paisNombre}" itemValue="#{p.idpais}" 
                                                                value="#{recursoController.paislist}"/>
+                                                <p:ajax event="itemSelect" listener="#{recursoController.paisSelect}"/>
                                             </p:selectOneMenu>
 
                                             <p:outputLabel value="Valor:" for="valorUnitario" />

@@ -121,5 +121,5 @@ public class ContenidoLibro implements Serializable {
     public String toString() {
         return "net.delsas.saitae.entities.ContenidoLibro[ contenidoLibroPK=" + contenidoLibroPK + " ]";
     }
-
+    
 }

@@ -30,6 +30,4 @@ public interface ContenidoLibroFacadeLocal {
 
     int count();
     
-    List<ContenidoLibro> findByIdRecruso(Object idRecurso);
-    
 }

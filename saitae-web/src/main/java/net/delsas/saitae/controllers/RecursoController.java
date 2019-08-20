@@ -27,11 +27,13 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
+import javax.faces.component.behavior.BehaviorBase;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import net.delsas.saitae.beans.AutorFacadeLocal;
 import net.delsas.saitae.beans.CategoriaFacadeLocal;
+import net.delsas.saitae.beans.ContenidoLibroFacadeLocal;
 import net.delsas.saitae.beans.EditorialFacadeLocal;
 import net.delsas.saitae.beans.EjemplarFacadeLocal;
 import net.delsas.saitae.beans.PaisFacadeLocal;
@@ -59,8 +61,8 @@ import net.delsas.saitae.entities.TipoReserva;
 import net.delsas.saitae.entities.TipoReservaRecurso;
 import net.delsas.saitae.entities.TipoReservaRecursoPK;
 import org.primefaces.PrimeFaces;
+import org.primefaces.component.selectmanymenu.SelectManyMenu;
 import org.primefaces.event.FlowEvent;
-import org.primefaces.event.ItemSelectEvent;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -126,25 +128,41 @@ public class RecursoController implements Serializable {
     private AutorFacadeLocal autorFL;
     private List<Autor> autores;
 
+    //editorial
     @EJB
     private EditorialFacadeLocal editorialFL;
     private List<Editorial> editoriales;
+    
+    //contenidoLibro
+    @EJB
+    private ContenidoLibroFacadeLocal contenidoFL;
 
     @PostConstruct
     public void init() {
         context = FacesContext.getCurrentInstance();
         initVariables();
+        llenarListas();
         controlUsuarios();
     }
 
-    private void initVariables() {
+    public void llenarListas() {
         categorialist = categoriaFL.findAll();
         tiporecursolist = tiporecursoFL.findAll();
         tipocargolist = tipocargoFL.findAll();
         paislist = paisFL.findAll();
         listaTipoReserva = tipoReservaFL.findAll();
         listaEjemplar = ejemplarFL.findAll();
+        autores = autorFL.findAll();
+        editoriales = editorialFL.findAll();
+        ejemplar = Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date()));
+    }
+
+    private void initVariables() {
         Seleccionado = new Recurso(0);
+        Seleccionado.setTipoCargo(new TipoCargo(0));
+        Seleccionado.setCategoria(new Categoria(0));
+        Seleccionado.setPais(new Pais(0));
+        Seleccionado.setIdTipoRecurso(new TipoRecurso(0));
         ejemplares = 1;
         ejemplar = Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date()));
         cat = new Categoria(0, "");
@@ -153,8 +171,6 @@ public class RecursoController implements Serializable {
         pais = (new Pais(0, ""));
         cl = new ContenidoLibro(new ContenidoLibroPK(0, "", 0));
         contenido = new ArrayList<>();
-        autores = autorFL.findAll();
-        editoriales = editorialFL.findAll();
     }
 
     private void llenado(int tr, boolean verPaneles) {
@@ -244,18 +260,26 @@ public class RecursoController implements Serializable {
     }
 
     public void agregarRecurso() {
-
         try {
             if (this.Seleccionado != null && this.Seleccionado.getIdrecurso() > 0) {
                 if (Seleccionado.getIdTipoRecurso().getIdtipoRecurso() == 3) {
-                    Seleccionado.setCategoria(categoriaFL.find(cat.getIdcategoria()));
-                    Seleccionado.setPais(paisFL.find(pais.getIdpais()));
-                    //Seleccionado.setIdTipoRecurso(tiporecursoFL.find(tr.getIdtipoRecurso()));
-                    Seleccionado.setContenidoLibroList(contenido);
+                    Seleccionado.setContenidoLibroList(null);
                 }
-                Seleccionado.setTipoCargo(tipocargoFL.find(tipoCargo.getIdtipoCargo()));
                 ejemplar();
+                Recurso r = recursoFL.find(Seleccionado.getIdrecurso());
+                if (r != null) {
+                    for (Ejemplar ej : r.getEjemplarList()) {
+                        ejemplarFL.remove(ej);
+                    }
+
+                    for (ContenidoLibro c : r.getContenidoLibroList()) {
+                        contenidoFL.remove(c);
+                    }
+                }
                 recursoFL.edit(this.Seleccionado);
+                for(ContenidoLibro cc : contenido){
+                    contenidoFL.create(cl);
+                }
                 this.init();
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Creado con Exito!", null));
             } else {
@@ -367,8 +391,12 @@ public class RecursoController implements Serializable {
             this.Seleccionado = new Recurso(0);
             if (t != null) {
                 this.Seleccionado.setIdTipoRecurso(t);
+                this.Seleccionado.setTipoCargo(this.Seleccionado.getTipoCargo() != null ? this.Seleccionado.getTipoCargo() : new TipoCargo(0));
+                this.Seleccionado.setCategoria(this.Seleccionado.getCategoria() != null ? this.Seleccionado.getCategoria() : new Categoria(0));
+                this.Seleccionado.setPais(this.Seleccionado.getPais() != null ? this.Seleccionado.getPais() : new Pais(0));
+                contenido = new ArrayList<>();
             } else {
-                init();
+                initVariables();
             }
         } else {
             this.Seleccionado = Seleccionado;
@@ -378,11 +406,13 @@ public class RecursoController implements Serializable {
             pais = Seleccionado.getPais();
             contenido = Seleccionado.getContenidoLibroList();
             ejemplares = Seleccionado.getEjemplarList().size();
+            tipoRecursoSelect(new SelectEvent(new SelectManyMenu(), new BehaviorBase(), Seleccionado.getIdTipoRecurso().getIdtipoRecurso()));
         }
     }
 
     public void tipoRecursoSelect(SelectEvent event) {
-        if (((int) event.getObject()) == 3) {
+        int q = Integer.valueOf(event.getObject().toString());
+        if (q == 3) {
             verBotonGuardarPanel1 = false;
             verCategorias = true;
             verOtrosPaneles = true;
@@ -391,9 +421,24 @@ public class RecursoController implements Serializable {
             verCategorias = false;
             verOtrosPaneles = false;
         }
-        Seleccionado.setIdTipoRecurso(tiporecursoFL.find((Integer) event.getObject()));
+        Seleccionado.setIdTipoRecurso(tiporecursoFL.find(q));
         PrimeFaces.current().ajax().update("form0", "form", "h1", "h2");
         System.out.println(event.getObject());
+    }
+
+    public void categoriaSelect(SelectEvent event) {
+        Seleccionado.setCategoria(categoriaFL.find(Integer.valueOf(event.getObject().toString())));
+        System.out.println("Categiría seleccionada: " + event.getObject());
+    }
+
+    public void paisSelect(SelectEvent event) {
+        Seleccionado.setPais(paisFL.find(Integer.valueOf(event.getObject().toString())));
+        System.out.println("Pais seleccionado: " + event.getObject());
+    }
+
+    public void tipoCargoSelect(SelectEvent event) {
+        Seleccionado.setTipoCargo(tipocargoFL.find(Integer.valueOf(event.getObject().toString())));
+        System.out.println("Tipo Cargo seleccionado: " + event.getObject());
     }
 
     public List<Categoria> getCategorialist() {
@@ -484,11 +529,14 @@ public class RecursoController implements Serializable {
         this.pais = pais;
     }
 
+    int indiceCl = -1;
+
     public ContenidoLibro getCl() {
         return cl;
     }
 
     public void setCl(ContenidoLibro cl) {
+        indiceCl = contenido.contains(cl) ? contenido.indexOf(cl) : -1;
         this.cl = cl;
     }
 
@@ -502,21 +550,25 @@ public class RecursoController implements Serializable {
 
     public void agregarContenido() {
         if (!cl.getContenidoLibroPK().getContenidoLibroNombre().isEmpty()
-                && cl.getContenidoLibroPK().getContenidoLibroPagina() > 0) {
+                && cl.getContenidoLibroPK().getContenidoLibroPagina() > 0 && indiceCl == -1) {
             cl.getContenidoLibroPK().setIdLibro(Seleccionado.getIdrecurso());
             contenido.add(cl);
-            nuevoContenido();
+        } else if (indiceCl > -1) {
+            contenido.remove(indiceCl);
+            contenido.add(indiceCl, cl);
         }
+        nuevoContenido();
+
     }
 
     public void nuevoContenido() {
         cl = new ContenidoLibro(new ContenidoLibroPK(Seleccionado.getIdrecurso(), "", 0));
+        indiceCl = -1;
     }
 
     public void nuevoRecurso() {
         ejemplares = 1;
-        verBotonGuardarPanel1=true;
-        TipoRecurso t = this.Seleccionado.getIdTipoRecurso();        
+        TipoRecurso t = this.Seleccionado.getIdTipoRecurso();
         Seleccionado = new Recurso(0);
         this.Seleccionado = new Recurso(0);
         if (t != null) {

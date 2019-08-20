@@ -8,7 +8,6 @@ package net.delsas.saitae.beans;
 import java.util.List;
 import javax.ejb.Local;
 import net.delsas.saitae.entities.Grado;
-import net.delsas.saitae.entities.GradoPK;
 
 /**
  *
@@ -30,7 +29,7 @@ public interface GradoFacadeLocal {
     List<Grado> findRange(int[] range);
 
     int count();
-
+    
     /**
      * Lista de años, modalidades y secciones registradas para el un año.
      * @param año

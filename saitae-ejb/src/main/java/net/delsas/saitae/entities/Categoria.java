@@ -8,7 +8,6 @@ package net.delsas.saitae.entities;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -49,7 +48,7 @@ public class Categoria implements Serializable {
     @Size(max = 45)
     @Column(name = "categoriaComentario")
     private String categoriaComentario;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoria")
+    @OneToMany(mappedBy = "categoria")
     private List<Recurso> recursoList;
 
     public Categoria() {

@@ -53,15 +53,14 @@ public class Recurso implements Serializable {
     @Size(min = 1, max = 100)
     @Column(name = "nombre")
     private String nombre;
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "activo")
-    private boolean activo;
+    private Boolean activo;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "valorUnitario")
+    private Float valorUnitario;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "valorUnitario")
-    private float valorUnitario;
-    @Size(max = 2)
+    @Size(min = 1, max = 2)
     @Column(name = "estadoFisico")
     private String estadoFisico;
     @Basic(optional = false)
@@ -89,13 +88,13 @@ public class Recurso implements Serializable {
     @ManyToOne(optional = false)
     private TipoRecurso idTipoRecurso;
     @JoinColumn(name = "tipoCargo", referencedColumnName = "idtipoCargo")
-    @ManyToOne
+    @ManyToOne(optional = false)
     private TipoCargo tipoCargo;
     @JoinColumn(name = "pais", referencedColumnName = "idpais")
     @ManyToOne
     private Pais pais;
     @JoinColumn(name = "categoria", referencedColumnName = "idcategoria")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Categoria categoria;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "recurso")
     private List<SolicitudReserva> solicitudReservaList;
@@ -107,11 +106,10 @@ public class Recurso implements Serializable {
         this.idrecurso = idrecurso;
     }
 
-    public Recurso(Integer idrecurso, String nombre, boolean activo, float valorUnitario, String tipoValor) {
+    public Recurso(Integer idrecurso, String nombre, String estadoFisico, String tipoValor) {
         this.idrecurso = idrecurso;
         this.nombre = nombre;
-        this.activo = activo;
-        this.valorUnitario = valorUnitario;
+        this.estadoFisico = estadoFisico;
         this.tipoValor = tipoValor;
     }
 
@@ -131,19 +129,19 @@ public class Recurso implements Serializable {
         this.nombre = nombre;
     }
 
-    public boolean getActivo() {
+    public Boolean getActivo() {
         return activo;
     }
 
-    public void setActivo(boolean activo) {
+    public void setActivo(Boolean activo) {
         this.activo = activo;
     }
 
-    public float getValorUnitario() {
+    public Float getValorUnitario() {
         return valorUnitario;
     }
 
-    public void setValorUnitario(float valorUnitario) {
+    public void setValorUnitario(Float valorUnitario) {
         this.valorUnitario = valorUnitario;
     }
 

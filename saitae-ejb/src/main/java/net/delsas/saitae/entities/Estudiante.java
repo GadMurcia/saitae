@@ -52,9 +52,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Estudiante.findByEstudianteCentroProcedencia", query = "SELECT e FROM Estudiante e WHERE e.estudianteCentroProcedencia = :estudianteCentroProcedencia")
     , @NamedQuery(name = "Estudiante.findByEstudianteNoPartida", query = "SELECT e FROM Estudiante e WHERE e.estudianteNoPartida = :estudianteNoPartida")
     , @NamedQuery(name = "Estudiante.findByEstudianteRepresentanteFamiliar", query = "SELECT e FROM Estudiante e WHERE e.estudianteRepresentanteFamiliar = :estudianteRepresentanteFamiliar")
-    , @NamedQuery(name = "Estudiante.findByEstudianteComentario", query = "SELECT e FROM Estudiante e WHERE e.estudianteComentario = :estudianteComentario")
-        
-})
+    , @NamedQuery(name = "Estudiante.findByEstudianteComentario", query = "SELECT e FROM Estudiante e WHERE e.estudianteComentario = :estudianteComentario")})
 public class Estudiante implements Serializable {
 
     private static final long serialVersionUID = 1L;

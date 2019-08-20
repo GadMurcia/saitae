@@ -5,16 +5,8 @@
  */
 package net.delsas.saitae.beans;
 
-import static java.util.Collections.EMPTY_LIST;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import net.delsas.saitae.entities.AutorLibro;
 
 /**
  *
@@ -70,17 +62,5 @@ public abstract class AbstractFacade<T> {
         return ((Long) q.getSingleResult()).intValue();
     }
 
-    public List<T> findByIdRecruso(Object idRecurso) {
-        try {
-            CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
-            CriteriaQuery cq = cb.createQuery();
-            Root<T> entity = cq.from(entityClass);
-            cq.where(cb.equal(entity.get("recurso").get("idrecurso"), idRecurso));
-            return getEntityManager().createQuery(cq).getResultList();
-        } catch (Exception e) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
-            return (List<T>) EMPTY_LIST;
-        }
-    }
-
+    
 }

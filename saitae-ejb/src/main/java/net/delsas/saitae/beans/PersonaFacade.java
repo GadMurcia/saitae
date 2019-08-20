@@ -31,7 +31,7 @@ public class PersonaFacade extends AbstractFacade<Persona> implements PersonaFac
     public PersonaFacade() {
         super(Persona.class);
     }
-
+    
     /**
      * Devuelve una lista de objetos persona cuyos id inicien por el
      * proporcionado en el parámetro id
@@ -42,7 +42,7 @@ public class PersonaFacade extends AbstractFacade<Persona> implements PersonaFac
     @Override
     public List<Persona> getByLikeId(int id) {
         return em.createNamedQuery("Persona.findByLikeIdpersona").setParameter("idpersona", id + "").getResultList();
-    }
+}
 
     @Override
     public List<Persona> getPlantel() {
