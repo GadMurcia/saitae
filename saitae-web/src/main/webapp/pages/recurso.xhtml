@@ -4,12 +4,20 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:o="http://omnifaces.org/ui">
 
     <body>
         <ui:composition template="./../WEB-INF/template/plantilla1.xhtml">
             <ui:define name="content">
+                <script>
+                    function onMessage(mss, channel, event){
+                        escuchaR([{name: 'mss', value: mss}]);
+                    }
+                </script>
+                <o:socket channel="recursoAC" onmessage="onMessage" scope="application"/>
                 <h:form id="form">
+                    <p:remoteCommand name="escuchaR" actionListener="#{recursoController.escuchaRecursoAC()}"/>
                     <p:dataTable id="recurso" var="r" value="#{recursoController.recurso}" rowKey="#{r.idrecurso}"
                                  widgetVar="recurso1"  emptyMessage="Sin registros aún."
                                  selection="#{recursoController.seleccionado}" selectionMode="single" rows="10" 
@@ -37,7 +45,7 @@
                             <p:outputLabel value ="#{r.pais.paisNombre}" />
                         </p:column>
                         <p:column headerText="Estado fisico">
-                            <p:outputLabel value ="#{r.estadoFisico}" />
+                            <p:outputLabel value ="#{r.estadoFisico.equals('B') ? 'BUENO': 'REGULAR'}" />
                         </p:column>
                         <p:column headerText="Cantidad ejemplar">
                             <p:outputLabel value ="#{r.ejemplarList.size()}" />
@@ -65,7 +73,7 @@
                     </div>
                     <p:remoteCommand name="nuevoRecurso" actionListener="#{recursoController.nuevoRecurso()}"/>
                 </h:form>
-                <p:dialog header="Administración de recursos" widgetVar="Drecurso" modal="true" onHide="nuevoRecurso();"
+                <p:dialog id="dialog1" header="Administración de recursos" widgetVar="Drecurso" modal="true" onHide="nuevoRecurso();"
                           showEffect="fade" hideEffect="fade" resizable="false" style="width: 90%;">
                     <h:form id="h1">
                         <p:wizard flowListener="#{recursoController.onFlowProcess}" backLabel="Retroceder" nextLabel="Siguiente"

@@ -28,7 +28,7 @@
         <mime-type>application/font-ttf</mime-type>
     </mime-mapping>
     <context-param>
-        <description>luna-pink flick south-street</description>
+        <description>flick south-street luna-[pink, amber, green]</description>
         <param-name>primefaces.THEME</param-name>
         <param-value>luna-pink</param-value>
     </context-param>
