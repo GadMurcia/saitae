@@ -98,9 +98,11 @@ public class MestromateriaController implements Serializable {
     private List<Horario> listhorario;
 
     private Persona usuario;
+    
 
     @PostConstruct
     public void init() {
+        FacesContext context = FacesContext.getCurrentInstance();
         listmhm = mhmFL.findAll();
         listmaestro = maestroFL.findAll();
         Calendar cal = Calendar.getInstance();
@@ -113,7 +115,7 @@ public class MestromateriaController implements Serializable {
         mhm = new MestroHorarioMaterias();
         materia = new Materia(0, "");
         mhmPK = new MestroHorarioMateriasPK();
-        usuario = (Persona) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
+        usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
 
     }
 
@@ -151,15 +153,18 @@ public class MestromateriaController implements Serializable {
                 mhmPK.setAñoGrado(mhm.getGrado().getGradoPK().getGradoAño());
                 mhmPK.setDiaSemana(diaSemanal);
                 mhmPK.setIdGrado(mhm.getGrado().getGradoPK().getIdgrado());
+                boolean modifica = false;
                 
                 mhm.setMestroHorarioMateriasPK(mhmPK);
                 if(control.getMestroHorarioMateriasPK() != null){
                  this.mhmFL.remove(control);
+                 modifica =true;
                 }
                
                 this.mhmFL.edit(this.mhm);
                 this.limpiar();
-                this.push(new mensaje(0, usuario.getIdpersona(), "??", new FacesMessage(FacesMessage.SEVERITY_INFO, "Asignación de Horario ", "Se ha Agregado o Modificado un campo")).toString());
+                String cuerpo = usuario.getPersonaNombre()+" "+usuario.getPersonaApellido()+"ha "+((modifica) ? "modificado" : "agregado")+" la materia "+mhm.getMateria().getMateriaNombre()+" al maestro "+mhm.getMaestro().getPersona().getPersonaNombre();
+                this.push(new mensaje(0, usuario.getIdpersona(), "??", new FacesMessage(FacesMessage.SEVERITY_INFO, "Asignación de Horario ", cuerpo )).toString());
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Creado con Exito!", null));
             } else {
                 System.err.println("La entity esta vacia revisar");
