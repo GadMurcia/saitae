@@ -27,6 +27,7 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 import net.delsas.saitae.aux.mensaje;
 import net.delsas.saitae.beans.GradoFacadeLocal;
@@ -41,7 +42,11 @@ import net.delsas.saitae.entities.Materia;
 import net.delsas.saitae.entities.MestroHorarioMaterias;
 import net.delsas.saitae.entities.MestroHorarioMateriasPK;
 import net.delsas.saitae.entities.Persona;
+import org.omnifaces.cdi.Push;
 import org.primefaces.event.SelectEvent;
+import javax.inject.Inject;
+import org.omnifaces.cdi.Push;
+import org.omnifaces.cdi.PushContext;
 
 
 /**
@@ -149,7 +154,7 @@ public class MestromateriaController implements Serializable{
                     this.mhmFL.remove(control);
                     this.mhmFL.edit(this.mhm);
                     this.limpiar();
-                    this.push(new mensaje(0, usuario.getIdpersona(), "??", new FacesMessage(FacesMessage.SEVERITY_INFO, "Asignación de Horario ", "Se ha asiganado un Horario")).toString());
+                    this.push(new mensaje(0, usuario.getIdpersona(), "??", new FacesMessage(FacesMessage.SEVERITY_INFO, "Asignación de Horario ", "Se ha Agregado o Modificado un campo")).toString());
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Creado con Exito!", null));
             } else {
                 System.err.println("La entity esta vacia revisar");
@@ -291,9 +296,13 @@ public class MestromateriaController implements Serializable{
     public void setBtnDelete(boolean btnDelete) {
         this.btnDelete = btnDelete;
     }
-    //@inject
-    private void push(String toString) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    @Inject
+    @Push
+    private PushContext notificacion;
+
+    private void push(String mensaje) {
+        notificacion.send(mensaje);
+        System.out.println("mensaje del push recurso enviado: " + mensaje);
     }
     
     
