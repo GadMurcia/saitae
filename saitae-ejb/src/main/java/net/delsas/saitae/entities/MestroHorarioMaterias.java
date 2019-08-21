@@ -56,7 +56,7 @@ public class MestroHorarioMaterias implements Serializable {
         @JoinColumn(name = "idGrado", referencedColumnName = "idgrado", insertable = false, updatable = false)
         , @JoinColumn(name = "seccionGrado", referencedColumnName = "gradoSeccion", insertable = false, updatable = false)
         , @JoinColumn(name = "a\u00f1oGrado", referencedColumnName = "gradoA\u00f1o", insertable = false, updatable = false)
-        , @JoinColumn(name = "gradoModalidad", referencedColumnName = "gradoModalidad")})
+        , @JoinColumn(name = "gradoModalidad", referencedColumnName = "gradoModalidad", insertable = false, updatable = false)})
     @ManyToOne(optional = false)
     private Grado grado;
 
@@ -67,8 +67,8 @@ public class MestroHorarioMaterias implements Serializable {
         this.mestroHorarioMateriasPK = mestroHorarioMateriasPK;
     }
 
-    public MestroHorarioMaterias(int idMaestro, int idMateria, int idHorario, String diaSemana, int idGrado, String seccionGrado, int añoGrado) {
-        this.mestroHorarioMateriasPK = new MestroHorarioMateriasPK(idMaestro, idMateria, idHorario, diaSemana, idGrado, seccionGrado, añoGrado);
+    public MestroHorarioMaterias(int idMaestro, int idMateria, int idHorario, String diaSemana, int idGrado, String seccionGrado, int añoGrado, String gradoModalidad) {
+        this.mestroHorarioMateriasPK = new MestroHorarioMateriasPK(idMaestro, idMateria, idHorario, diaSemana, idGrado, seccionGrado, gradoModalidad, añoGrado);
     }
 
     public MestroHorarioMateriasPK getMestroHorarioMateriasPK() {
@@ -143,5 +143,5 @@ public class MestroHorarioMaterias implements Serializable {
     public String toString() {
         return "net.delsas.saitae.entities.MestroHorarioMaterias[ mestroHorarioMateriasPK=" + mestroHorarioMateriasPK + " ]";
     }
-    
+
 }
