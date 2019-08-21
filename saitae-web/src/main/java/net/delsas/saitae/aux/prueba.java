@@ -62,7 +62,7 @@ public class prueba {
         e.getEstudiante().setEstudianteMedioTransporte(0);
         e.getEstudiante().setEstudianteDistanciaAlCentro(BigDecimal.valueOf(0));
         e.getEstudiante().setEstudianteTrabaja(false);
-        e.getEstudiante().setEstudianteDependenciaEconomica("");
+        e.getEstudiante().setEstudianteDependenciaEconomica(" ¿ ");
         e.getEstudiante().setEstudianteParvularia(false);
         e.getEstudiante().setEstudianteEnfermedades("");
         e.getEstudiante().setEstudianteMedicamentos("");

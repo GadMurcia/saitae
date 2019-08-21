@@ -212,7 +212,7 @@ public class nuevoingresoController implements Serializable {
 
     public void setOtraDependencia(String otradependencia) {
         this.e.getEstudiante().setEstudianteDependenciaEconomica(
-                e.getEstudiante().getEstudianteDependenciaEconomica() + "¿" + otradependencia);
+                e.getEstudiante().getEstudianteDependenciaEconomica().split("¿")[0] + "¿" + otradependencia);
     }
 
     public void partida(FileUploadEvent event) {

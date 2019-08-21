@@ -35,7 +35,7 @@ CREATE TABLE `acceso` (
   UNIQUE KEY `idacceso_UNIQUE` (`idacceso`),
   KEY `fk_acceso_1_idx` (`accesoIndice`),
   CONSTRAINT `fk_acceso_1` FOREIGN KEY (`accesoIndice`) REFERENCES `acceso` (`idacceso`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -44,7 +44,7 @@ CREATE TABLE `acceso` (
 
 LOCK TABLES `acceso` WRITE;
 /*!40000 ALTER TABLE `acceso` DISABLE KEYS */;
-INSERT INTO `acceso` VALUES (9,'Configuración',NULL,'#','pi pi-key'),(10,'Administración',9,'tipopp.intex','pi pi-folder-open'),(11,'Permisos y Licencias',9,'lictp.intex','pi pi-th-large'),(12,'Académica',9,'academico.intex','fa fa-leaf'),(13,'Perfil',NULL,'#','pi pi-user'),(14,'Permisos',NULL,'#','pi pi-eye'),(15,'Solicitar Permiso',14,'permiso.intex','pi pi-briefcase'),(16,'Personal',NULL,'#','pi pi-users'),(17,'Agregar Maestro',16,'agregacion.intex','pi pi-user-plus'),(18,'Agregar Administrador',16,'agAdm.intex','pi pi-plus'),(19,'Plantel Institucional',16,'plantel.intex','pi pi-table'),(20,'Inventario',23,'inventario.intex','fa fa-thumb-tack'),(21,'Libros',23,'libros.intex','fa fa-tint'),(22,'Nuevo Ingreso',16,'nuevoIngreso.intex','pi pi-user'),(23,'Recursos',9,'#','fa fa-tint'),(24,'Nomina de Alumnos',16,'nominaA.intex','pi pi-user');
+INSERT INTO `acceso` VALUES (9,'Configuración',NULL,'#','pi pi-key'),(10,'Administración',9,'tipopp.intex','pi pi-folder-open'),(11,'Permisos y Licencias',9,'lictp.intex','pi pi-th-large'),(12,'Académica',9,'academico.intex','fa fa-leaf'),(13,'Perfil',NULL,'#','pi pi-user'),(14,'Permisos',NULL,'#','pi pi-eye'),(15,'Solicitar Permiso',14,'permiso.intex','pi pi-briefcase'),(16,'Personal',NULL,'#','pi pi-users'),(17,'Agregar Maestro',16,'agregacion.intex','pi pi-user-plus'),(18,'Agregar Administrador',16,'agAdm.intex','pi pi-plus'),(19,'Plantel Institucional',16,'plantel.intex','pi pi-table'),(20,'Inventario',23,'inventario.intex','fa fa-thumb-tack'),(21,'Libros',23,'libros.intex','fa fa-tint'),(22,'Nuevo Ingreso',16,'nuevoIngreso.intex','pi pi-user'),(23,'Recursos',9,'#','fa fa-tint'),(24,'Nomina de Alumnos',16,'nominaA.intex','pi pi-user'),(25,'Administración de Recursos',23,'recurso.intex','pi pi-list'),(26,'Lista de Representantes',16,'listaRepresentantes.intex','pi pi-list');
 /*!40000 ALTER TABLE `acceso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -72,7 +72,7 @@ CREATE TABLE `accesoTipoPersona` (
 
 LOCK TABLES `accesoTipoPersona` WRITE;
 /*!40000 ALTER TABLE `accesoTipoPersona` DISABLE KEYS */;
-INSERT INTO `accesoTipoPersona` VALUES (9,1,''),(10,1,''),(11,1,''),(12,1,''),(16,1,''),(17,1,''),(18,1,''),(19,1,''),(20,1,''),(21,1,''),(22,1,''),(23,1,''),(24,1,NULL);
+INSERT INTO `accesoTipoPersona` VALUES (9,1,''),(9,2,''),(9,6,''),(10,1,''),(10,2,''),(11,1,''),(12,1,''),(12,2,''),(16,1,''),(17,1,''),(18,1,''),(19,1,''),(20,1,''),(21,1,''),(22,1,''),(23,1,''),(23,6,''),(24,1,''),(25,1,''),(25,6,''),(26,1,'');
 /*!40000 ALTER TABLE `accesoTipoPersona` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -145,7 +145,7 @@ CREATE TABLE `autor` (
   `autorNombre` varchar(30) NOT NULL,
   `autorComentario` varchar(140) DEFAULT NULL,
   PRIMARY KEY (`idautor`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -154,7 +154,7 @@ CREATE TABLE `autor` (
 
 LOCK TABLES `autor` WRITE;
 /*!40000 ALTER TABLE `autor` DISABLE KEYS */;
-INSERT INTO `autor` VALUES (1,'Rusou','');
+INSERT INTO `autor` VALUES (1,'Rusou',''),(2,'loosss','');
 /*!40000 ALTER TABLE `autor` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -182,7 +182,7 @@ CREATE TABLE `autorLibro` (
 
 LOCK TABLES `autorLibro` WRITE;
 /*!40000 ALTER TABLE `autorLibro` DISABLE KEYS */;
-INSERT INTO `autorLibro` VALUES (1,14706554,'');
+INSERT INTO `autorLibro` VALUES (1,22,''),(1,23,''),(1,555,''),(1,1258965,''),(1,14706554,''),(2,22,'');
 /*!40000 ALTER TABLE `autorLibro` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -357,7 +357,7 @@ CREATE TABLE `contenidoLibro` (
 
 LOCK TABLES `contenidoLibro` WRITE;
 /*!40000 ALTER TABLE `contenidoLibro` DISABLE KEYS */;
-INSERT INTO `contenidoLibro` VALUES (14706554,'blavla',0,0,'');
+INSERT INTO `contenidoLibro` VALUES (22,'1',1,0,NULL),(22,'2',1,0,NULL),(22,'3',1,0,NULL),(23,'lop',1,0,NULL),(23,'lop',2,0,NULL),(555,'89',1,0,NULL),(14706554,'blavla',0,0,'');
 /*!40000 ALTER TABLE `contenidoLibro` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -470,7 +470,7 @@ CREATE TABLE `editorial` (
   `editorialNombre` varchar(50) NOT NULL,
   `editorialComentarios` varchar(140) DEFAULT NULL,
   PRIMARY KEY (`ideditorial`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -479,7 +479,7 @@ CREATE TABLE `editorial` (
 
 LOCK TABLES `editorial` WRITE;
 /*!40000 ALTER TABLE `editorial` DISABLE KEYS */;
-INSERT INTO `editorial` VALUES (1,'rousoes',NULL);
+INSERT INTO `editorial` VALUES (1,'rousoes',NULL),(2,'lessss',NULL);
 /*!40000 ALTER TABLE `editorial` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -507,7 +507,7 @@ CREATE TABLE `editorialLibro` (
 
 LOCK TABLES `editorialLibro` WRITE;
 /*!40000 ALTER TABLE `editorialLibro` DISABLE KEYS */;
-INSERT INTO `editorialLibro` VALUES (1,14706554,'Agregado');
+INSERT INTO `editorialLibro` VALUES (1,22,''),(1,23,''),(1,555,''),(1,1258965,''),(1,14706554,''),(2,22,'');
 /*!40000 ALTER TABLE `editorialLibro` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -534,7 +534,7 @@ CREATE TABLE `ejemplar` (
 
 LOCK TABLES `ejemplar` WRITE;
 /*!40000 ALTER TABLE `ejemplar` DISABLE KEYS */;
-INSERT INTO `ejemplar` VALUES (14706554,1,119,'Agregado');
+INSERT INTO `ejemplar` VALUES (20,20,2019,''),(20,21,2019,''),(22,22,2019,''),(22,23,2019,''),(22,24,2019,''),(22,25,2019,''),(22,26,2019,''),(23,23,2019,''),(23,24,2019,''),(23,25,2019,''),(23,26,2019,''),(23,27,2019,''),(70,70,2019,''),(70,71,2019,''),(70,72,2019,''),(70,73,2019,''),(70,74,2019,''),(70,75,2019,''),(70,76,2019,''),(555,555,2019,''),(555,556,2019,''),(555,557,2019,''),(555,558,2019,''),(555,559,2019,''),(2212,2212,2019,''),(2212,2213,2019,''),(2212,2214,2019,''),(2212,2215,2019,''),(2212,2216,2019,''),(2212,2217,2019,''),(2212,2218,2019,''),(2212,2219,2019,''),(7030,7030,2019,''),(7030,7031,2019,''),(7030,7032,2019,''),(7030,7033,2019,''),(7030,7034,2019,''),(1258965,1258965,2019,''),(14706554,14706554,2019,''),(14706554,14706555,2019,'');
 /*!40000 ALTER TABLE `ejemplar` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -749,7 +749,7 @@ CREATE TABLE `grado` (
 
 LOCK TABLES `grado` WRITE;
 /*!40000 ALTER TABLE `grado` DISABLE KEYS */;
-INSERT INTO `grado` VALUES (1,'C','A',2019,1,'',1222222222,NULL),(1,'S','A',2019,5,'\0',1111111111,NULL),(1,'G','A',2019,3,'',1123456798,NULL),(1,'C','B',2019,7,'',1111111111,NULL),(2,'C','A',2019,2,'',NULL,NULL),(2,'G','A',2019,4,'',NULL,NULL),(3,'C','A',2019,6,'',NULL,NULL);
+INSERT INTO `grado` VALUES (1,'C','A',2019,1,'',1222222222,NULL),(1,'S','A',2019,5,'\0',1111111111,NULL),(1,'G','A',2019,3,'',1123456798,NULL),(1,'C','B',2019,7,'',NULL,NULL),(2,'C','A',2019,2,'',NULL,NULL),(2,'G','A',2019,4,'',NULL,NULL),(3,'C','A',2019,6,'',NULL,NULL);
 /*!40000 ALTER TABLE `grado` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -982,11 +982,11 @@ CREATE TABLE `mestroHorarioMaterias` (
   `idHorario` int(11) NOT NULL,
   `diaSemana` enum('L','M','X','J','V') NOT NULL,
   `idGrado` int(11) NOT NULL,
+  `gradoModalidad` enum('C','S','G') NOT NULL,
   `seccionGrado` enum('A','B','C') NOT NULL,
   `añoGrado` int(4) NOT NULL,
-  `gradoModalidad` enum('C','S','G') NOT NULL,
   `mestroHorarioMateriasComentarios` varchar(145) DEFAULT NULL,
-  PRIMARY KEY (`idMaestro`,`idMateria`,`idHorario`,`diaSemana`,`idGrado`,`seccionGrado`,`añoGrado`),
+  PRIMARY KEY (`idMaestro`,`idMateria`,`idHorario`,`diaSemana`,`idGrado`,`seccionGrado`,`añoGrado`,`gradoModalidad`),
   KEY `fk_mestroHorarioMaterias_2_idx` (`idMateria`),
   KEY `fk_mestroHorarioMaterias_3_idx` (`idHorario`),
   KEY `fk_mestroHorarioMaterias_4` (`idGrado`,`seccionGrado`,`añoGrado`,`gradoModalidad`),
@@ -1128,8 +1128,6 @@ CREATE TABLE `persona` (
   `personaDiscapacidades` varchar(250) DEFAULT NULL,
   `personaComentarios` varchar(250) DEFAULT NULL COMMENT 'Detalle de la información relevante de todo el recurso humano de la institución.',
   PRIMARY KEY (`idpersona`),
-  UNIQUE KEY `personaEmail_UNIQUE` (`personaEmail`),
-  UNIQUE KEY `personaNit_UNIQUE` (`personaNit`),
   KEY `fk_persona_1_idx` (`tipoPersona`),
   CONSTRAINT `fk_persona_1` FOREIGN KEY (`tipoPersona`) REFERENCES `tipoPersona` (`idtipoPersona`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -1141,7 +1139,7 @@ CREATE TABLE `persona` (
 
 LOCK TABLES `persona` WRITE;
 /*!40000 ALTER TABLE `persona` DISABLE KEYS */;
-INSERT INTO `persona` VALUES (1045367073,'Guillermo','Delsas',NULL,NULL,NULL,NULL,NULL,NULL,'02951a6cb9595ef475fed783e59c687e','Ingeniero',1,'',NULL,'\0',NULL,NULL,NULL,NULL,NULL),(1045367074,'Director','Directivo',NULL,NULL,NULL,NULL,NULL,NULL,'02951a6cb9595ef475fed783e59c687e','Director',2,'',NULL,'',NULL,NULL,NULL,NULL,NULL),(1045367075,'Estudiante','Estudioso','1991-01-01','7888787878787','8788-7878',0,1,'01#02','b3702f2e7b62c465c08ffe6dec344037','Estudiante',8,'','0444-444448-777-7','',0,'Salvadoreña','87878787878787','7878787',''),(1111111111,'Quintus Sestus','Septimus Octavios','1991-02-17','878787878787878','7777-7777',0,0,' #09','bbb8aae57c104cda40c93843ad5e6db8','Primus Secuntus Tercius',4,'','1111-111111-111-1','\0',0,'Extrangera','878788888888888','121212',''),(1123456798,'fffffffffffff gf f','fgfgfgfgfgg','1991-02-17','789798','8979-8798',0,0,'02#13','e0c28158eeac6b5d9bcfe1e028185438','455545455',2,'','2111-111111-111-1','',1,'Salvadoreña','89798797979','ooooooo',''),(1222222222,'Lentulus Primus','Batiatus Ludus','1991-02-17','222222222','2222-2222',0,0,'02#13','0d777e9e30b918e9034ab610712c90cf','Leninista',4,'','2222-222222-222-2','\0',0,'Salvadoreña','22222222222222','',''),(1888888888,'padre padre1','padre2 padre3',NULL,NULL,NULL,NULL,NULL,NULL,'02951a6cb9595ef475fed783e59c687e',NULL,11,'\0',NULL,NULL,NULL,NULL,NULL,NULL,NULL),(1999999999,'representante','apellidos','1980-01-25','la dirección del representante','7999-9999',NULL,0,' # ','e9e2bcfcbdc37e5897e0c0def72b257c','Agricultor',9,'','9999-999999-999-9','\0',1,'9','representante@correo.com','ninguna',NULL);
+INSERT INTO `persona` VALUES (1045367073,'Guillermo','Delsas',NULL,NULL,NULL,NULL,NULL,NULL,'02951a6cb9595ef475fed783e59c687e','Ingeniero',1,'',NULL,'\0',NULL,NULL,NULL,NULL,NULL),(1045367074,'Director','Directivo',NULL,NULL,NULL,NULL,NULL,NULL,'02951a6cb9595ef475fed783e59c687e','Director',2,'',NULL,'',NULL,NULL,NULL,NULL,NULL),(1045367075,'Estudiante','Estudioso','1991-01-01','7888787878787','8788-7878',0,1,'01#02','4fece643fea5732bb85533b5784c4dda','Estudiante',8,'','0444-444448-777-7','',0,'Salvadoreña','87878787878787','7878787',''),(1111111111,'Quintus Sestus','Septimus Octavios','1991-02-17','878787878787878','7777-7777',0,0,' #09','02951a6cb9595ef475fed783e59c687e','Primus Secuntus Tercius',6,'','1111-111111-111-1','\0',0,'Extrangera','878788888888888','121212',''),(1123456798,'fffffffffffff gf f','fgfgfgfgfgg','1991-02-17','789798','8979-8798',0,0,'02#13','e0c28158eeac6b5d9bcfe1e028185438','455545455',2,'','2111-111111-111-1','',1,'Salvadoreña','89798797979','ooooooo',''),(1131413141,'trece catorce','quince dieciséis','2019-08-20','','',0,0,' # ','','',10,'\0','','\0',0,'Salvadoreña','','',''),(1212121212,'doce trece','catorce quince','2019-08-20','','',0,0,' # ','','',11,'\0',NULL,'\0',0,'Salvadoreña',NULL,'',''),(1222222222,'dieciséis diecisiete ','dieciocho diecinueve','2019-08-20','','',0,0,' # ','','',10,'\0',NULL,'\0',0,'Salvadoreña',NULL,'',''),(1888888888,'padre padre1','padre2 padre3',NULL,NULL,NULL,NULL,NULL,NULL,'02951a6cb9595ef475fed783e59c687e',NULL,11,'\0',NULL,NULL,NULL,NULL,NULL,NULL,NULL),(1999999999,'representante','apellidos','1980-01-25','la dirección del representante','7999-9999',NULL,0,' # ','e9e2bcfcbdc37e5897e0c0def72b257c','Agricultor',9,'','9999-999999-999-9','\0',1,'9','representante@correo.com','ninguna',NULL);
 /*!40000 ALTER TABLE `persona` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1219,13 +1217,13 @@ DROP TABLE IF EXISTS `recurso`;
 CREATE TABLE `recurso` (
   `idrecurso` int(11) NOT NULL,
   `nombre` varchar(100) NOT NULL,
-  `categoria` int(11) NOT NULL,
+  `categoria` int(11) DEFAULT NULL,
   `idTipoRecurso` int(11) NOT NULL,
-  `tipoCargo` int(11) DEFAULT NULL,
+  `tipoCargo` int(11) NOT NULL,
   `pais` int(11) DEFAULT NULL,
-  `activo` bit(1) NOT NULL,
-  `valorUnitario` float NOT NULL,
-  `estadoFisico` enum('R','B') DEFAULT NULL,
+  `activo` bit(1) DEFAULT NULL,
+  `valorUnitario` float DEFAULT NULL,
+  `estadoFisico` enum('R','B') NOT NULL,
   `tipoValor` enum('REAL','ESTIMADO') NOT NULL,
   `modelo` varchar(45) DEFAULT NULL,
   `recursoComentarios` varchar(140) DEFAULT NULL,
@@ -1247,7 +1245,7 @@ CREATE TABLE `recurso` (
 
 LOCK TABLES `recurso` WRITE;
 /*!40000 ALTER TABLE `recurso` DISABLE KEYS */;
-INSERT INTO `recurso` VALUES (14706554,'sjhsuhihihi|',600,1,2,1,'',1,'B','ESTIMADO','wwwww','wwww');
+INSERT INTO `recurso` VALUES (20,'978987',NULL,1,1,NULL,'',20,'B','REAL','lpedr',NULL),(22,'ddddd',0,3,1,1,'\0',30.25,'B','REAL','f',NULL),(23,'hñoio',100,3,2,2,'',12.5,'B','ESTIMADO','78',NULL),(70,'7070',NULL,1,2,NULL,'',250,'B','REAL','f',NULL),(555,'yygi',0,3,1,1,'\0',15,'B','REAL','9u',NULL),(2212,'laptop2',600,1,1,1,'',250,'B','ESTIMADO','',NULL),(7030,'7030',NULL,2,2,NULL,'',1.35,'B','ESTIMADO','n/a',NULL),(1258965,'COmputadoras laptop lempita',600,3,1,7,'',350.78,'B','REAL','lpedr',NULL),(14706554,'sjhsuhihihi|',600,1,2,1,'',10,'B','ESTIMADO','wwwww','wwww');
 /*!40000 ALTER TABLE `recurso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1565,7 +1563,7 @@ CREATE TABLE `tipoReservaRecurso` (
 
 LOCK TABLES `tipoReservaRecurso` WRITE;
 /*!40000 ALTER TABLE `tipoReservaRecurso` DISABLE KEYS */;
-INSERT INTO `tipoReservaRecurso` VALUES (1,14706554,''),(2,14706554,''),(3,14706554,'');
+INSERT INTO `tipoReservaRecurso` VALUES (1,22,''),(1,23,''),(1,70,''),(1,2212,''),(1,7030,''),(1,1258965,''),(1,14706554,''),(2,23,''),(2,70,''),(2,555,''),(3,23,''),(3,70,''),(3,2212,''),(3,1258965,''),(4,23,''),(4,70,'');
 /*!40000 ALTER TABLE `tipoReservaRecurso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1609,7 +1607,7 @@ CREATE TABLE `zona` (
   `zonaNombre` varchar(45) NOT NULL,
   `zonaCoementario` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idzona`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1618,7 +1616,7 @@ CREATE TABLE `zona` (
 
 LOCK TABLES `zona` WRITE;
 /*!40000 ALTER TABLE `zona` DISABLE KEYS */;
-INSERT INTO `zona` VALUES (1,'Zona 1',NULL),(2,'Zona 2',NULL),(3,'Zona 3',NULL);
+INSERT INTO `zona` VALUES (1,'Zona 10',NULL),(2,'Zona 20',NULL),(3,'Zona 30',NULL),(4,'zona 40',NULL);
 /*!40000 ALTER TABLE `zona` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1639,4 +1637,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-08-11 15:00:42
+-- Dump completed on 2019-08-21 16:11:20
