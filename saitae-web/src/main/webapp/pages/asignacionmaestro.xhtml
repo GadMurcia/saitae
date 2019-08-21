@@ -64,25 +64,33 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         <h:panelGrid columns="2">
 
                             <p:outputLabel value="Maestro:" for="maestro" />
-                            <p:selectOneMenu id="maestro" value="#{mestromateriaController.mhm.maestro}" required="true" requiredMessage="The Maestro field is required." converter="omnifaces.SelectItemsConverter">
+                            <p:selectOneMenu id="maestro" value="#{mestromateriaController.mhm.maestro}" 
+                                             required="true" requiredMessage="The Maestro field is required." 
+                                             converter="omnifaces.SelectItemsConverter">
                                 <f:selectItem itemValue="null" itemLabel="Seleccione" noSelectionOption="true"/>
-                                <f:selectItems var="m" itemLabel="#{m.persona.personaNombre}" itemValue="#{m}" value="#{mestromateriaController.listmaestro}"/>
+                                <f:selectItems var="m" itemLabel="#{m.persona.personaNombre}" itemValue="#{m}" 
+                                               value="#{mestromateriaController.listmaestro}"/>
                             <p:ajax event="itemSelect" listener="#{mestromateriaController.selectCampo}"/>
                             </p:selectOneMenu>
                             <p:outputLabel value="Materia:" for="materia" />
-                            <p:selectOneMenu id="materia" value="#{mestromateriaController.mhm.materia}" required="true" requiredMessage="The Materia field is required." converter="omnifaces.SelectItemsConverter">
+                            <p:selectOneMenu id="materia" value="#{mestromateriaController.mhm.materia}" required="true" 
+                                             requiredMessage="The Materia field is required." converter="omnifaces.SelectItemsConverter">
                                  <f:selectItem itemValue="null" itemLabel="Seleccione" noSelectionOption="true"/>
-                                <f:selectItems  var="ma" itemLabel="#{ma.materiaNombre}" itemValue="#{ma}" value="#{mestromateriaController.listmateria}"/>
+                                 <f:selectItems  var="ma" itemLabel="#{ma.materiaNombre}" itemValue="#{ma}" 
+                                                 value="#{mestromateriaController.listmateria}"/>
                             <p:ajax event="itemSelect" listener="#{mestromateriaController.selectCampo}"/>
                             </p:selectOneMenu>
                             <p:outputLabel value="Horario:" for="horario" />
-                            <p:selectOneMenu id="horario" value="#{mestromateriaController.mhm.horario}" required="true" requiredMessage="The Horario field is required." converter="omnifaces.SelectItemsConverter">
+                            <p:selectOneMenu id="horario" value="#{mestromateriaController.mhm.horario}" required="true" 
+                                             requiredMessage="The Horario field is required." converter="omnifaces.SelectItemsConverter">
                                 <f:selectItem itemValue="null" itemLabel="Seleccione" noSelectionOption="true"/>
-                                <f:selectItems  var="h" itemLabel="#{h.horaInicio.hours}:#{h.horaInicio.minutes} - #{h.horaFin.hours}:#{h.horaFin.minutes}" itemValue="#{h}" value="#{mestromateriaController.listhorario}" />
+                                <f:selectItems  var="h" itemLabel="#{h.horaInicio.hours}:#{h.horaInicio.minutes} - #{h.horaFin.hours}:#{h.horaFin.minutes}" 
+                                                itemValue="#{h}" value="#{mestromateriaController.listhorario}" />
                             <p:ajax event="itemSelect" listener="#{mestromateriaController.selectCampo}"/>
                             </p:selectOneMenu>
                             <p:outputLabel value="Dia" for="dia" />
-                            <p:selectOneMenu id="dia" value="#{mestromateriaController.diaSemanal}" required="true" requiredMessage="The Maestro field is required.">
+                            <p:selectOneMenu id="dia" value="#{mestromateriaController.diaSemanal}" required="true" 
+                                             requiredMessage="The Maestro field is required.">
                                  <f:selectItem itemValue="null" itemLabel="Seleccione" noSelectionOption="true"/>
                                 <f:selectItem itemLabel="Lunes" itemValue="L"/>
                                 <f:selectItem itemLabel="Martes" itemValue="M"/>
@@ -93,16 +101,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                             </p:selectOneMenu>
 
                             <p:outputLabel value="Grado:" for="grado" />
-                            <p:selectOneMenu id="grado" value="#{mestromateriaController.mhm.grado}" required="true" requiredMessage="The Grado field is required." converter="omnifaces.SelectItemsConverter">
+                            <p:selectOneMenu id="grado" value="#{mestromateriaController.mhm.grado}" required="true" 
+                                             requiredMessage="The Grado field is required." converter="omnifaces.SelectItemsConverter">
                                  <f:selectItem itemValue="null" itemLabel="Seleccione" noSelectionOption="true"/>
-                                <f:selectItems var="g" itemLabel="#{g.gradoPK.idgrado} #{g.gradoPK.gradoSeccion}#{g.gradoPK.gradoAño} #{g.gradoPK.gradoModalidad}" itemValue="#{g}" value="#{mestromateriaController.listgrado}"/>
+                                 <f:selectItems var="g" itemLabel="#{representanteController.getLabel(g.gradoPK)}" 
+                                                itemValue="#{g}" value="#{mestromateriaController.listgrado}"/>
                                 <p:ajax event="itemSelect" listener="#{mestromateriaController.selectCampo}"/>
                             </p:selectOneMenu>
                             
                               
-                            <p:commandButton value="Guardar" rendered="#{mestromateriaController.btnCreate}" actionListener="#{mestromateriaController.crear()}" update=":formulario :form-mhm:tb-mhm" process="@this"/>
+                            <p:commandButton value="Guardar" rendered="#{mestromateriaController.btnCreate}" actionListener="#{mestromateriaController.crear()}" 
+                                             update=":formulario :form-mhm:tb-mhm" process="@this" onsuccess="PF('Dmaterias').hide()"/>
                                 <p:commandButton value="Cancelar" actionListener="#{mestromateriaController.limpiar()}" update= ":formulario :form-mhm:tb-mhm"/>
-                                <p:commandButton value="Modificar" rendered="#{mestromateriaController.btnEdit}" actionListener="#{mestromateriaController.crear()}" update=":formulario :form-mhm:tb-mhm" process="@this"/>
+                                <p:commandButton value="Modificar" rendered="#{mestromateriaController.btnEdit}" 
+                                                 actionListener="#{mestromateriaController.crear()}" update=":formulario :form-mhm:tb-mhm" process="@this"
+                                                 onsuccess="PF('Dmaterias').hide()"/>
                                
                         </h:panelGrid>
                         
@@ -127,7 +140,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                                      selection="#{mestromateriaController.selectmhm}" 
                                      rowKey="#{item.mestroHorarioMateriasPK}"
                                      >
-                            <p:ajax event="rowSelect" listener="#{mestromateriaController.onRowSelect}" update=":formulario" oncomplete="PF('Dmaterias').show()"/>
+                            <p:ajax event="rowSelect" listener="#{mestromateriaController.onRowSelect}" update=":formulario"/>
 
                             <p:column>
                                 <f:facet name="header">
@@ -157,7 +170,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                                 <f:facet name="header">
                                     <h:outputText value="Grado"/>
                                 </f:facet>
-                                <h:outputText value="#{item.grado.gradoPK.idgrado} #{item.grado.gradoPK.gradoSeccion}#{item.grado.gradoPK.gradoAño} #{item.grado.gradoPK.gradoModalidad}"/>
+                                <h:outputText value="#{representanteController.getLabel(item.grado.gradoPK)}"/>
                             </p:column>
                         </p:dataTable>
                            <p:commandButton 
@@ -169,7 +182,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
                                     <p:contextMenu for="tb-mhm">
                                         <p:menuitem value="Modificar" update="form0:msgs formulario"
-                                                    icon="fa fa-edit" onclick="PF('Dhorario').show()"/>
+                                                    icon="fa fa-edit" onclick="PF('Dmaterias').show()"/>
                                        
                                     </p:contextMenu>
                                 

@@ -143,7 +143,7 @@ public class MestromateriaController implements Serializable {
         try {
 
             if (this.mhm != null && this.control != null) {
-
+                
                 mhmPK.setIdMaestro(mhm.getMaestro().getIdmaestro());
                 mhmPK.setIdMateria(mhm.getMateria().getIdmateria());
                 mhmPK.setIdHorario(mhm.getHorario().getIdhorario());
@@ -151,8 +151,12 @@ public class MestromateriaController implements Serializable {
                 mhmPK.setAñoGrado(mhm.getGrado().getGradoPK().getGradoAño());
                 mhmPK.setDiaSemana(diaSemanal);
                 mhmPK.setIdGrado(mhm.getGrado().getGradoPK().getIdgrado());
+                
                 mhm.setMestroHorarioMateriasPK(mhmPK);
-                this.mhmFL.remove(control);
+                if(control.getMestroHorarioMateriasPK() != null){
+                 this.mhmFL.remove(control);
+                }
+               
                 this.mhmFL.edit(this.mhm);
                 this.limpiar();
                 this.push(new mensaje(0, usuario.getIdpersona(), "??", new FacesMessage(FacesMessage.SEVERITY_INFO, "Asignación de Horario ", "Se ha Agregado o Modificado un campo")).toString());
@@ -169,33 +173,34 @@ public class MestromateriaController implements Serializable {
 
         Object id = event.getObject();
         String componente = event.getComponent().getId();
-        if (id != null) {
+        if (id != null &&  !id.toString().isEmpty()) {
             switch (componente) {
                 case "maestro":
-                    mhmPK.setIdMaestro(Integer.valueOf(id.toString()));
+                    mhmPK.setIdMaestro(((Maestro) id).getIdmaestro());
                     break;
                 case "materia":
-                    mhmPK.setIdMateria(Integer.valueOf(id.toString()));
+                    mhmPK.setIdMateria(((Materia) id).getIdmateria());
                     break;
                 case "horario":
-                    mhmPK.setIdHorario(Integer.valueOf(id.toString()));
+                    mhmPK.setIdHorario(((Horario) id).getIdhorario());
                     break;
                 case "dia":
                     mhmPK.setDiaSemana(id.toString());
                     break;
                 case "grado":
-                    GradoPK pk = (GradoPK) id;
+                    GradoPK pk = ((Grado) id).getGradoPK();
                     mhmPK.setAñoGrado(pk.getGradoAño());
                     mhmPK.setIdGrado(pk.getIdgrado());
                     mhmPK.setSeccionGrado(pk.getGradoSeccion());
-                    
+                    mhmPK.setGradoModalidad(pk.getGradoModalidad());
+                    control = new MestroHorarioMaterias();
                     break;
 
             }
 
         }
 
-        PrimeFaces.current().ajax().update("formulario");
+       // PrimeFaces.current().ajax().update("formulario");
     }
 
 //     public void update(){
@@ -215,8 +220,8 @@ public class MestromateriaController implements Serializable {
 //    }
     public void limpiar() {
         try {
-            this.mhm = new MestroHorarioMaterias(new MestroHorarioMateriasPK(0, 0, 0, "", 0, "", 0));
-            this.selectmhm = new MestroHorarioMaterias(new MestroHorarioMateriasPK(0, 0, 0, "", 0, "", 0));
+            this.mhm = new MestroHorarioMaterias(new MestroHorarioMateriasPK(0, 0, 0, "", 0, "", "", 0));
+            this.selectmhm = new MestroHorarioMaterias(new MestroHorarioMateriasPK(0, 0, 0, "", 0, "", "", 0));
             btnCreate = true;
             btnEdit = false;
             //btnDelete = false;
