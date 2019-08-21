@@ -18,6 +18,7 @@ import net.delsas.saitae.beans.EstudianteFacadeLocal;
 import net.delsas.saitae.beans.GradoFacadeLocal;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.entities.Documentos;
+import net.delsas.saitae.entities.Estudiante;
 import net.delsas.saitae.entities.Grado;
 import net.delsas.saitae.entities.Matricula;
 import net.delsas.saitae.entities.MatriculaPK;
@@ -73,8 +74,8 @@ public class nuevoingresoController implements Serializable {
         padre = (new prueba()).getPadre();
         mat = new Matricula(new MatriculaPK(0, getAñoMatricula()));
         mat.setGrado(new Grado(0, "", "", getAñoMatricula()));
-        docs = e.getEstudiante().getDocumentos();
-        docs = docs == null ? new Documentos(e.getIdpersona()) : docs;
+        docs = e.getEstudiante().getDocumentos() != null ? e.getEstudiante().getDocumentos()
+                : new Documentos(e.getIdpersona());
     }
 
     public void guardar() {
@@ -146,7 +147,7 @@ public class nuevoingresoController implements Serializable {
         }
         return items;
     }
-    
+
     public List<SelectItem> getSecciones() {
         List<SelectItem> items = new ArrayList<>();
         for (String g : gfl.getSeccionPorAñoModalidadyId(getAñoMatricula(), mat.getGrado().getGradoPK().getGradoModalidad(), mat.getGrado().getGradoPK().getIdgrado())) {

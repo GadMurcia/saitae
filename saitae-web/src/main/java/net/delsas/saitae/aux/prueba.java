@@ -56,7 +56,7 @@ public class prueba {
     }
 
     public Persona getEstudiante() {
-        Persona e=user;
+        Persona e = (new prueba()).getUser();
         e.setEstudiante(new Estudiante(e.getIdpersona(), false, 0, false, ""));
         e.getEstudiante().setEstudianteRiesgoVulnerabilidad("");
         e.getEstudiante().setEstudianteMedioTransporte(0);
@@ -81,7 +81,7 @@ public class prueba {
     }
 
     public Persona getRepresentante() {
-        Persona r=user;
+        Persona r = (new prueba()).getUser();
         r.setEstudiante(new Estudiante(r.getIdpersona(), false, 0, false, ""));
         r.getEstudiante().setEstudianteRiesgoVulnerabilidad("");
         r.getEstudiante().setEstudianteMedioTransporte(null);
@@ -106,7 +106,7 @@ public class prueba {
     }
 
     public Persona getMadre() {
-        Persona m=user;
+        Persona m = (new prueba()).getUser();
         m.setTipoPersona(new TipoPersona(10, "Madre de familia"));
         m.setPersonaEmail(null);
         m.setPersonaNit(null);
@@ -114,7 +114,7 @@ public class prueba {
     }
 
     public Persona getPadre() {
-        Persona p = user;
+        Persona p = (new prueba()).getUser();
         p.setTipoPersona(new TipoPersona(11, "Padre de familia"));
         p.setPersonaEmail(null);
         p.setPersonaNit(null);
@@ -122,7 +122,7 @@ public class prueba {
     }
 
     public Persona getMaestro() {
-        Persona ma= user;
+        Persona ma = (new prueba()).getUser();
         ma.setEstudiante(null);
         ma.setMaestro(new Maestro(ma.getIdpersona()));
         ma.getMaestro().setMaestroAfp("");
@@ -156,31 +156,31 @@ public class prueba {
     }
 
     public Persona getBibliotecario() {
-        Persona b=user;
+        Persona b = (new prueba()).getUser();
         b.setTipoPersona(new TipoPersona(5, "Bibliotecario"));
         return b;
     }
 
     public Persona getAdministradorCra() {
-        Persona a=user;
+        Persona a = (new prueba()).getUser();
         a.setTipoPersona(new TipoPersona(6, "Administrador CRA"));
         return a;
     }
 
     public Persona getSubDirector() {
-        Persona sd=user;
+        Persona sd = (new prueba()).getUser();
         sd.setTipoPersona(new TipoPersona(3, "Subdirector"));
         return sd;
     }
 
     public Persona getLAboratorista() {
-        Persona l=user;
+        Persona l = (new prueba()).getUser();
         l.setTipoPersona(new TipoPersona(7, "Laboratorista"));
         return l;
     }
 
     public Persona getAmin() {
-        Persona ad=user;
+        Persona ad = (new prueba()).getUser();
         ad.setEstudiante(getEstudiante().getEstudiante());
         ad.setMaestro(getMaestro().getMaestro());
         ad.setTipoPersona(new TipoPersona(1, "Administrador"));
@@ -367,7 +367,7 @@ public class prueba {
     public void setDui(String dui, Persona p) {
         String x[] = dui.split("=>");
         String i = "1";
-        for (String g : (x.length > 1 ? x[1].substring(1) : x[0]).split("")){// dui.split("")) {
+        for (String g : (x.length > 1 ? x[1].substring(1) : x[0]).split("")) {// dui.split("")) {
             if (!g.equals("-")) {
                 i += g;
             }
@@ -384,6 +384,14 @@ public class prueba {
             }
         }
         return i;
+    }
+
+    public Persona getUser() {
+        return user;
+    }
+
+    public void setUser(Persona user) {
+        this.user = user;
     }
 
 }
