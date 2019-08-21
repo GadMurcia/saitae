@@ -17,97 +17,143 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <!DOCTYPE html>
 <html 
-      xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
-   
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://xmlns.jcp.org/jsf/core">
+
     <body>
-         <ui:composition template="./../WEB-INF/template/plantilla1.xhtml">
+        <ui:composition template="./../WEB-INF/template/plantilla1.xhtml">
             <ui:define name="content">
                 <style type="text/css">
-    .label {
-        width:20%;
-        padding:4px;
-    }
- 
-    .value {
-        width:80%;
-        padding:4px;
-    }
- 
-    .grid {
-        width:100%;
-    }
- 
-    .error {
-        color: red;
-    }
- 
-    .outputLabel {
-        font-weight: bold;
-    }
- 
-    .grid {
-        width:33%;
-        padding:4px;
-    }
-</style>
-       
-            <f:view>
+                    .label {
+                        width:20%;
+                        padding:4px;
+                    }
+
+                    .value {
+                        width:80%;
+                        padding:4px;
+                    }
+
+                    .grid {
+                        width:100%;
+                    }
+
+                    .error {
+                        color: red;
+                    }
+
+                    .outputLabel {
+                        font-weight: bold;
+                    }
+
+                    .grid {
+                        width:33%;
+                        padding:4px;
+                    }
+                </style>
+
+                <f:view>
 
 
-                <h:form>
-                    <h1><h:outputText value="Asignar Materias Y Horarios"/></h1>
-                    <p:panelGrid columns="2">
-                       
-                        
-                        
-                        <p:outputLabel value="Maestro:" for="maestro" />
-                        <p:selectOneMenu id="maestro" value="#{mestromateriaController.mhm.maestro}" required="true" requiredMessage="The Maestro field is required.">
-                            <!-- TODO: update below reference to list of available items-->
-                            <f:selectItems var="m" itemLabel="#{m.persona.personaNombre}" itemValue="#{m.idmaestro}" value="#{mestromateriaController.listmaestro}"/>
-                        </p:selectOneMenu>
-                        <p:outputLabel value="Materia:" for="materia" />
-                        <p:selectOneMenu id="materia" value="#{mestromateriaController.mhm.materia}" required="true" requiredMessage="The Materia field is required.">
-                            <!-- TODO: update below reference to list of available items-->
-                            <f:selectItems  var="ma" itemLabel="#{ma.materiaNombre}" itemValue="#{ma.idmateria}" value="#{mestromateriaController.listmateria}"/>
-                        </p:selectOneMenu>
-                        <p:outputLabel value="Horario:" for="horario" />
-                        <p:selectOneMenu id="horario" value="#{mestromateriaController.mhm.horario}" required="true" requiredMessage="The Horario field is required.">
-                            <!-- TODO: update below reference to list of available items-->
-                            <f:selectItems var="h" itemLabel="#{h.idhorario.toString}" itemValue="#{h.idhorario}" value="#{mestromateriaController.listhorario}"/>
-                        </p:selectOneMenu>
-                        <p:outputLabel value="Dia" for="dia" />
-                        <p:selectOneMenu id="dia" value="#{mestromateriaController.mhm.mestroHorarioMateriasPK.diaSemana}" required="true" requiredMessage="The Maestro field is required.">
-                            <!-- TODO: update below reference to list of available items-->
-                            <f:selectItems var="h" itemLabel="#{h.mestroHorarioMateriasPK.diaSemana}" itemValue="#{h.mestroHorarioMateriasPK.idMaestro}" value="#{mestromateriaController.listmhm}"/>
-                        </p:selectOneMenu>
-                        
-                        <p:outputLabel value="Grado:" for="grado" />
-                        <p:selectOneMenu id="grado" value="#{mestromateriaController.mhm.grado}" required="true" requiredMessage="The Grado field is required.">
-                            <!-- TODO: update below reference to list of available items-->
-                            <f:selectItems var="g" itemLabel="#{g.gradoPK.idgrado}" itemValue="#{g.gradoPK.idgrado}" value="#{mestromateriaController.listgrado}"/>
-                        </p:selectOneMenu>
-                        
-                          <p:outputLabel value="Sección:" for="seccion" />
-                        <p:selectOneMenu id="seccion" value="#{mestromateriaController.mhm.grado}" required="true" requiredMessage="The Grado field is required.">
-                            <!-- TODO: update below reference to list of available items-->
-                            <f:selectItems var="s" itemLabel="#{s.gradoPK.gradoSeccion}" itemValue="#{s.gradoPK.idgrado}" value="#{mestromateriaController.listgrado}"/>
-                        </p:selectOneMenu>
-                           <p:outputLabel value="Modalidad" for="mod" />
-                        <p:selectOneMenu id="mod" value="#{mestromateriaController.mhm.grado}" required="true" requiredMessage="The Grado field is required.">
-                            <!-- TODO: update below reference to list of available items-->
-                            <f:selectItems var="mo" itemLabel="#{mo.gradoPK.gradoModalidad}" itemValue="#{mo.gradoPK.idgrado}" value="#{mestromateriaController.listgrado}"/>
-                        </p:selectOneMenu>
-                           
-                           
-                    </p:panelGrid>
-                </h:form>
-            </f:view>
+                    <h:form id="formulario">
+                        <h1><h:outputText value="Asignar Materias Y Horarios"/></h1>
+                        <p:panelGrid columns="2">
+
+                            <p:outputLabel value="Maestro:" for="maestro" />
+                            <p:selectOneMenu id="maestro" value="#{mestromateriaController.mhm.maestro}" required="true" requiredMessage="The Maestro field is required." converter="omnifaces.SelectItemsConverter">
+                                <f:selectItems var="m" itemLabel="#{m.persona.personaNombre}" itemValue="#{m}" value="#{mestromateriaController.listmaestro}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Materia:" for="materia" />
+                            <p:selectOneMenu id="materia" value="#{mestromateriaController.mhm.materia}" required="true" requiredMessage="The Materia field is required." converter="omnifaces.SelectItemsConverter">
+                                <f:selectItems  var="ma" itemLabel="#{ma.materiaNombre}" itemValue="#{ma}" value="#{mestromateriaController.listmateria}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Horario:" for="horario" />
+                            <p:selectOneMenu id="horario" value="#{mestromateriaController.mhm.horario}" required="true" requiredMessage="The Horario field is required." converter="omnifaces.SelectItemsConverter">
+                                <f:selectItems  var="h" itemLabel="#{h.horaInicio.hours}:#{h.horaInicio.minutes} - #{h.horaFin.hours}:#{h.horaFin.minutes}" itemValue="#{h}" value="#{mestromateriaController.listhorario}" />
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Dia" for="dia" />
+                            <p:selectOneMenu id="dia" value="#{mestromateriaController.diaSemanal}" required="true" requiredMessage="The Maestro field is required.">
+                                <f:selectItem itemLabel="Lunes" itemValue="L"/>
+                                <f:selectItem itemLabel="Martes" itemValue="M"/>
+                                <f:selectItem itemLabel="Miercoles" itemValue="X"/>
+                                <f:selectItem itemLabel="Jueves" itemValue="J"/>
+                                <f:selectItem itemLabel="Viernes" itemValue="V"/>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel value="Grado:" for="grado" />
+                            <p:selectOneMenu id="grado" value="#{mestromateriaController.mhm.grado}" required="true" requiredMessage="The Grado field is required." converter="omnifaces.SelectItemsConverter">
+                                <f:selectItems var="g" itemLabel="#{g.gradoPK.idgrado} #{g.gradoPK.gradoSeccion}#{g.gradoPK.gradoAño} #{g.gradoPK.gradoModalidad}" itemValue="#{g}" value="#{mestromateriaController.listgrado}"/>
+                            </p:selectOneMenu>
+                            <div style="margin: 10px auto">
+                                <p:commandButton value="Guardar" rendered="#{mestromateriaController.btnCreate}" actionListener="#{mestromateriaController.crear()}" update=":formulario :form-mhm:tb-mhm"/>
+                                <p:commandButton value="Cancelar" actionListener="#{mestromateriaController.limpiar()}" update= ":formulario :form-mhm:tb-mhm"/>
+                                <p:commandButton value="Modificar" rendered="#{mestromateriaController.btnEdit}" actionListener="#{mestromateriaController.crear()}" update=":formulario :form-mhm:tb-mhm"/>
+                               
+                            </div>
+                        </p:panelGrid>
+                    </h:form>
+
+
+
+                    <h:form id="form-mhm" style="width: 80%; margin: 0 auto">
+                        <h1 style="text-align: center"><h:outputText  value="Asignación de Materias y Horario"/></h1>
+                        <p:dataTable value="#{mestromateriaController.obtenerTodos()}" 
+                                     id="tb-mhm"
+                                     var="item"
+                                     lazy="true"
+                                     paginator="true"
+                                     rows="5"
+                                     rowsPerPageTemplate="5,10,15"
+                                     paginatorPosition="bottom"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     widgetVar="tablemhm"
+                                     selectionMode="single" 
+                                     selection="#{mestromateriaController.selectmhm}" 
+                                     rowKey="#{item.mestroHorarioMateriasPK}"
+                                     >
+                            <p:ajax event="rowSelect" listener="#{mestromateriaController.onRowSelect}" update=":formulario"/>
+
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Maestro"/>
+                                </f:facet>
+                                <h:outputText value="#{item.maestro.persona.personaNombre}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Materia"/>
+                                </f:facet>
+                                <h:outputText value="#{item.materia.materiaNombre}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Horario"/>
+                                </f:facet>
+                                <h:outputText value="#{item.horario.horaInicio.hours}:#{item.horario.horaInicio.minutes} - #{item.horario.horaFin.hours}:#{item.horario.horaFin.minutes}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Dia"/>
+                                </f:facet>
+                                <h:outputText value="#{item.mestroHorarioMateriasPK.diaSemana}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Grado"/>
+                                </f:facet>
+                                <h:outputText value="#{item.grado.gradoPK.idgrado} #{item.grado.gradoPK.gradoSeccion}#{item.grado.gradoPK.gradoAño} #{item.grado.gradoPK.gradoModalidad}"/>
+                            </p:column>
+                        </p:dataTable>
+
+                    </h:form>
+
+
+                </f:view>
             </ui:define>
-         </ui:composition>
-        
+        </ui:composition>
+
     </body>
 </html>

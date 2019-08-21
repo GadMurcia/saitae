@@ -17,11 +17,19 @@
 package net.delsas.saitae.controllers;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
+import net.delsas.saitae.aux.mensaje;
 import net.delsas.saitae.beans.GradoFacadeLocal;
 import net.delsas.saitae.beans.HorarioFacadeLocal;
 import net.delsas.saitae.beans.MaestroFacadeLocal;
@@ -32,6 +40,13 @@ import net.delsas.saitae.entities.Horario;
 import net.delsas.saitae.entities.Maestro;
 import net.delsas.saitae.entities.Materia;
 import net.delsas.saitae.entities.MestroHorarioMaterias;
+import net.delsas.saitae.entities.MestroHorarioMateriasPK;
+import net.delsas.saitae.entities.Persona;
+import org.omnifaces.cdi.Push;
+import org.primefaces.event.SelectEvent;
+import javax.inject.Inject;
+import org.omnifaces.cdi.Push;
+import org.omnifaces.cdi.PushContext;
 
 
 /**
@@ -48,7 +63,14 @@ public class MestromateriaController implements Serializable{
    @EJB
    private MestroHorarioMateriasFacadeLocal mhmFL;
    private MestroHorarioMaterias mhm;
+   private MestroHorarioMaterias selectmhm = new MestroHorarioMaterias();
+    private MestroHorarioMaterias control = new MestroHorarioMaterias();
+   private MestroHorarioMateriasPK mhmPK;
+   private String diaSemanal;
    private List<MestroHorarioMaterias> listmhm;
+    boolean btnCreate = true;
+    boolean btnEdit = false;
+    boolean btnDelete = false;
    
    //Materia
    @EJB
@@ -73,22 +95,101 @@ public class MestromateriaController implements Serializable{
    private Horario horario;
    private List<Horario> listhorario;
    
-   
+   private Persona usuario;
    
    
    @PostConstruct
     public void init() {
      listmhm = mhmFL.findAll();
      listmaestro = maestroFL.findAll();
-     listgrado = gradoFL.findAll();
+     Calendar cal= Calendar.getInstance();
+     int year= cal.get(Calendar.YEAR);
+     listgrado = gradoFL.getPorAñoYActivo(year);
      listmateria = materiaFL.findAll();
+     listhorario = horarioFL.findAll();
      maestro = new Maestro();
      grado = new Grado();
      mhm = new MestroHorarioMaterias();
      materia = new Materia(0, "");
+     mhmPK = new MestroHorarioMateriasPK();
+     usuario = (Persona) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
      
-       
-        
+     
+    }
+     @Deprecated
+    public List<MestroHorarioMaterias> obtenerTodos() {
+        List<MestroHorarioMaterias> salida = new ArrayList();
+        try {
+            if (mhmFL != null) {
+                salida = mhmFL.findAll();
+            }
+        } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+        }
+        return salida;
+    }
+
+    public void onRowSelect(SelectEvent event) {
+        this.mhm = this.selectmhm;
+        this.control = mhmFL.find(selectmhm.getMestroHorarioMateriasPK());
+        this.diaSemanal = this.selectmhm.getMestroHorarioMateriasPK().getDiaSemana();
+        btnCreate = false;
+        btnEdit = true;
+        btnDelete = true;
+    }
+    
+    public void crear() {
+        try {
+                    
+            if (this.mhm != null && this.control != null) {
+                    
+                    mhmPK.setIdMaestro(mhm.getMaestro().getIdmaestro());
+                    mhmPK.setIdMateria(mhm.getMateria().getIdmateria());
+                    mhmPK.setIdHorario(mhm.getHorario().getIdhorario());
+                    mhmPK.setSeccionGrado(mhm.getGrado().getGradoPK().getGradoSeccion());
+                    mhmPK.setAñoGrado(mhm.getGrado().getGradoPK().getGradoAño());
+                    mhmPK.setDiaSemana(diaSemanal);
+                    mhmPK.setIdGrado(mhm.getGrado().getGradoPK().getIdgrado());
+                    mhm.setMestroHorarioMateriasPK(mhmPK);
+                    this.mhmFL.remove(control);
+                    this.mhmFL.edit(this.mhm);
+                    this.limpiar();
+                    this.push(new mensaje(0, usuario.getIdpersona(), "??", new FacesMessage(FacesMessage.SEVERITY_INFO, "Asignación de Horario ", "Se ha Agregado o Modificado un campo")).toString());
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Creado con Exito!", null));
+            } else {
+                System.err.println("La entity esta vacia revisar");
+            }
+        } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+        }
+    }
+    
+//     public void update(){
+//        try {
+//            
+//            if (this.mhm != null && this.mhmFL != null) {
+//                
+//                    this.mhmFL.edit(this.mhm);
+//                    this.limpiar();
+//                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Editado con Exito!", null));
+//            } else {
+//                System.err.println("La entity esta vacia revisar");
+//            }
+//        } catch (Exception e) {
+//            Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+//        }
+//    }
+     public void limpiar(){
+        try {
+            this.mhm = new MestroHorarioMaterias();
+            this.selectmhm = new MestroHorarioMaterias();
+            btnCreate = true;
+            btnEdit = false;
+            btnDelete = false;
+            control = null;
+        } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+        }
     }
     
 
@@ -146,6 +247,62 @@ public class MestromateriaController implements Serializable{
 
     public void setListhorario(List<Horario> listhorario) {
         this.listhorario = listhorario;
+    }
+
+    public String getDiaSemanal() {
+        return diaSemanal;
+    }
+
+    public void setDiaSemanal(String diaSemanal) {
+        this.diaSemanal = diaSemanal;
+    }
+
+    public MestroHorarioMateriasPK getMhmPK() {
+        return mhmPK;
+    }
+
+    public void setMhmPK(MestroHorarioMateriasPK mhmPK) {
+        this.mhmPK = mhmPK;
+    }
+
+    public MestroHorarioMaterias getSelectmhm() {
+        return selectmhm;
+    }
+
+    public void setSelectmhm(MestroHorarioMaterias selectmhm) {
+        this.selectmhm = selectmhm;
+    }
+
+    public boolean isBtnCreate() {
+        return btnCreate;
+    }
+
+    public void setBtnCreate(boolean btnCreate) {
+        this.btnCreate = btnCreate;
+    }
+
+    public boolean isBtnEdit() {
+        return btnEdit;
+    }
+
+    public void setBtnEdit(boolean btnEdit) {
+        this.btnEdit = btnEdit;
+    }
+
+    public boolean isBtnDelete() {
+        return btnDelete;
+    }
+
+    public void setBtnDelete(boolean btnDelete) {
+        this.btnDelete = btnDelete;
+    }
+    @Inject
+    @Push
+    private PushContext notificacion;
+
+    private void push(String mensaje) {
+        notificacion.send(mensaje);
+        System.out.println("mensaje del push recurso enviado: " + mensaje);
     }
     
     
