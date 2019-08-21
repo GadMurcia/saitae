@@ -1,5 +1,6 @@
 package net.delsas.saitae.controllers;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -100,18 +101,18 @@ public class nuevoingresoController implements Serializable {
             e.getEstudiante().setEstudiantePadre(padre);
             e.getEstudiante().setEstudianteRepresentante(Representante.getEstudiante());
             pfl.edit(e);
-//
-//            FacesMessage ms = new FacesMessage(FacesMessage.SEVERITY_INFO, "Agregación exitosa",
-//                    "Inscrito: " + e.getPersonaNombre() + " " + e.getPersonaApellido() + " en el grado: "
-//                    + mat.getGrado().getGradoPK().getIdgrado() + "° "
-//                    + (mat.getGrado().getGradoPK().getGradoModalidad().equals("C") ? "Comercio"
-//                    : mat.getGrado().getGradoPK().getGradoModalidad().equals("S") ? "Secretariado"
-//                    : "general") + ", para el año " + mat.getMatriculaPK().getMatriculaAnyo() + ".");
-//            context.addMessage("mensaje", ms);
+
+            FacesMessage ms = new FacesMessage(FacesMessage.SEVERITY_INFO, "Agregación exitosa",
+                    "Inscrito: " + e.getPersonaNombre() + " " + e.getPersonaApellido() + " en el grado: "
+                    + mat.getGrado().getGradoPK().getIdgrado() + "° "
+                    + (mat.getGrado().getGradoPK().getGradoModalidad().equals("C") ? "Comercio"
+                    : mat.getGrado().getGradoPK().getGradoModalidad().equals("S") ? "Secretariado"
+                    : "general") + ", para el año " + mat.getMatriculaPK().getMatriculaAnyo() + ".");
+            context.addMessage("mensaje", ms);
             context.getExternalContext().redirect("nuevoIngreso.intex");
             System.out.println("guardar");
-        } catch (Exception ex) {
-            context.addMessage(null, new FacesMessage(
+        } catch (IOException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
                     FacesMessage.SEVERITY_FATAL, "Error inesperado", ex.toString()));
         }
     }

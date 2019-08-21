@@ -108,12 +108,16 @@ public class prueba {
     public Persona getMadre() {
         Persona m=user;
         m.setTipoPersona(new TipoPersona(10, "Madre de familia"));
+        m.setPersonaEmail(null);
+        m.setPersonaNit(null);
         return m;
     }
 
     public Persona getPadre() {
         Persona p = user;
         p.setTipoPersona(new TipoPersona(11, "Padre de familia"));
+        p.setPersonaEmail(null);
+        p.setPersonaNit(null);
         return p;
     }
 
