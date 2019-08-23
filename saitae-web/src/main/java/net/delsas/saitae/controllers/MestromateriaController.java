@@ -98,6 +98,7 @@ public class MestromateriaController implements Serializable {
     private List<Horario> listhorario;
 
     private Persona usuario;
+    private Maestro maestroseleccionado;    
     
 
     @PostConstruct
@@ -163,7 +164,7 @@ public class MestromateriaController implements Serializable {
                
                 this.mhmFL.edit(this.mhm);
                 this.limpiar();
-                String cuerpo = usuario.getPersonaNombre()+" "+usuario.getPersonaApellido()+"ha "+((modifica) ? "modificado" : "agregado")+" la materia "+mhm.getMateria().getMateriaNombre()+" al maestro "+mhm.getMaestro().getPersona().getPersonaNombre();
+                String cuerpo =  usuario.getPersonaNombre()+" "+usuario.getPersonaApellido()+"ha "+((modifica) ? "modificado" : "agregado")+" la materia "+mhm.getMateria().getMateriaNombre()+" al maestro "+maestroseleccionado;
                 this.push(new mensaje(0, usuario.getIdpersona(), "??", new FacesMessage(FacesMessage.SEVERITY_INFO, "Asignación de Horario ", cuerpo )).toString());
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Creado con Exito!", null));
             } else {
@@ -181,7 +182,9 @@ public class MestromateriaController implements Serializable {
         if (id != null &&  !id.toString().isEmpty()) {
             switch (componente) {
                 case "maestro":
-                    mhmPK.setIdMaestro(((Maestro) id).getIdmaestro());
+                  
+                    maestroseleccionado = (Maestro) id; 
+                    mhmPK.setIdMaestro(maestroseleccionado.getIdmaestro());
                     break;
                 case "materia":
                     mhmPK.setIdMateria(((Materia) id).getIdmateria());
