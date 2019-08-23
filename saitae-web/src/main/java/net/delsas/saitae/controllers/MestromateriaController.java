@@ -98,8 +98,7 @@ public class MestromateriaController implements Serializable {
     private List<Horario> listhorario;
 
     private Persona usuario;
-    private Maestro maestroseleccionado;    
-    
+    private Maestro maestroseleccionado;
 
     @PostConstruct
     public void init() {
@@ -146,7 +145,7 @@ public class MestromateriaController implements Serializable {
         try {
 
             if (this.mhm != null && this.control != null) {
-                
+
                 mhmPK.setIdMaestro(mhm.getMaestro().getIdmaestro());
                 mhmPK.setIdMateria(mhm.getMateria().getIdmateria());
                 mhmPK.setIdHorario(mhm.getHorario().getIdhorario());
@@ -155,18 +154,23 @@ public class MestromateriaController implements Serializable {
                 mhmPK.setDiaSemana(diaSemanal);
                 mhmPK.setIdGrado(mhm.getGrado().getGradoPK().getIdgrado());
                 boolean modifica = false;
-                
+
                 mhm.setMestroHorarioMateriasPK(mhmPK);
-                if(control.getMestroHorarioMateriasPK() != null){
-                 this.mhmFL.remove(control);
-                 modifica =true;
+                if (control.getMestroHorarioMateriasPK() != null) {
+                    this.mhmFL.remove(control);
+                    modifica = true;
                 }
-               
+
                 this.mhmFL.edit(this.mhm);
+                String cuerpo = usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
+                        + "ha " + ((modifica) ? "modificado" : "agregado") + " la materia " + mhm.getMateria().getMateriaNombre()
+                        + " al maestro " + maestroseleccionado.getPersona().getPersonaNombre()
+                        +" "+ maestroseleccionado.getPersona().getPersonaApellido();
                 this.limpiar();
-                String cuerpo =  usuario.getPersonaNombre()+" "+usuario.getPersonaApellido()+"ha "+((modifica) ? "modificado" : "agregado")+" la materia "+mhm.getMateria().getMateriaNombre()+" al maestro "+maestroseleccionado;
-                this.push(new mensaje(0, usuario.getIdpersona(), "??", new FacesMessage(FacesMessage.SEVERITY_INFO, "Asignación de Horario ", cuerpo )).toString());
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Creado con Exito!", null));
+                this.push(new mensaje(0, usuario.getIdpersona(), "??",
+                        new FacesMessage(FacesMessage.SEVERITY_INFO, "Asignación de Horario ", cuerpo)).toString());
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_INFO, "Creado con Exito!", null));
             } else {
                 System.err.println("La entity esta vacia revisar");
             }
@@ -179,11 +183,11 @@ public class MestromateriaController implements Serializable {
 
         Object id = event.getObject();
         String componente = event.getComponent().getId();
-        if (id != null &&  !id.toString().isEmpty()) {
+        if (id != null && !id.toString().isEmpty()) {
             switch (componente) {
                 case "maestro":
-                  
-                    maestroseleccionado = (Maestro) id; 
+
+                    maestroseleccionado = (Maestro) id;
                     mhmPK.setIdMaestro(maestroseleccionado.getIdmaestro());
                     break;
                 case "materia":
@@ -208,7 +212,7 @@ public class MestromateriaController implements Serializable {
 
         }
 
-       // PrimeFaces.current().ajax().update("formulario");
+        // PrimeFaces.current().ajax().update("formulario");
     }
 
 //     public void update(){

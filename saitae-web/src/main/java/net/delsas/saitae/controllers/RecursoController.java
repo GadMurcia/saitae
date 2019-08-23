@@ -84,7 +84,7 @@ public class RecursoController implements Serializable {
     //validación de usuarios
     private Persona usuario;
     private FacesContext context;
-    private boolean verTipos, verOtrosPaneles, verBotonGuardarPanel1, verCategorias, verCategoriastabla;
+    private boolean verTipos, verOtrosPaneles, verBotonGuardarPanel1, verCategorias, verCategoriastabla, editarID, editarTipo;
     @EJB
     private PersonaFacadeLocal pFL;
     //FIn de validación de usuarios
@@ -185,6 +185,8 @@ public class RecursoController implements Serializable {
         pais = (new Pais(0, ""));
         cl = new ContenidoLibro(new ContenidoLibroPK(0, "", 0));
         contenido = new ArrayList<>();
+        editarID=true;
+        editarTipo=true;
     }
 
     private void llenado(int tr, boolean verPaneles) {
@@ -449,6 +451,7 @@ public class RecursoController implements Serializable {
             contenido.addAll(Seleccionado.getContenidoLibroList());
             ejemplares = Seleccionado.getEjemplarList().size();
             tipoRecursoSelect(new SelectEvent(new SelectManyMenu(), new BehaviorBase(), Seleccionado.getIdTipoRecurso().getIdtipoRecurso()));
+            editarID=editarTipo=false;
         }
     }
 
@@ -618,6 +621,8 @@ public class RecursoController implements Serializable {
         } else {
             init();
         }
+        editarID=true;
+        editarTipo=true;
         PrimeFaces.current().ajax().update("h1", "h2");
     }
 
@@ -709,4 +714,21 @@ public class RecursoController implements Serializable {
                     : e.getMessage()));
         }
     }
+
+    public boolean isEditarID() {
+        return editarID;
+    }
+
+    public void setEditarID(boolean editarID) {
+        this.editarID = editarID;
+    }
+
+    public boolean isEditarTipo() {
+        return editarTipo;
+    }
+
+    public void setEditarTipo(boolean editarTipo) {
+        this.editarTipo = editarTipo;
+    }
+    
 }
