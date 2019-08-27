@@ -151,21 +151,55 @@ public class MestromateriaController implements Serializable {
                 mhmPK.setIdHorario(mhm.getHorario().getIdhorario());
                 mhmPK.setSeccionGrado(mhm.getGrado().getGradoPK().getGradoSeccion());
                 mhmPK.setAñoGrado(mhm.getGrado().getGradoPK().getGradoAño());
+                mhmPK.setGradoModalidad(mhm.getGrado().getGradoPK().getGradoModalidad());
                 mhmPK.setDiaSemana(diaSemanal);
                 mhmPK.setIdGrado(mhm.getGrado().getGradoPK().getIdgrado());
                 boolean modifica = false;
+                
+//                                mhm.setMestroHorarioMateriasPK(mhmPK);
+//                if(btnEdit == true){
+////                     this.mhmFL.remove(control);
+//                     this.mhmFL.edit(this.mhm);
+//                    modifica = true;
+//                    btnEdit = false;
+//                    FacesContext.getCurrentInstance().addMessage(null,
+//                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "CREAR", null));
+//                }
+//                
+//                if(btnCreate == true){
+//                    this.mhmFL.create(this.mhm);
+//                    FacesContext.getCurrentInstance().addMessage(null,
+//                        new FacesMessage(FacesMessage.SEVERITY_WARN, "EDIT", null));
+//                }
+//                
+//                //volver las variables al estado inicial
+//                btnEdit = false;
+//                btnCreate = true;
 
-                mhm.setMestroHorarioMateriasPK(mhmPK);
                 if (control.getMestroHorarioMateriasPK() != null) {
-                    this.mhmFL.remove(control);
+                    //logs de datos
+                    System.err.println(mhm);
+                    System.err.println(control);
+                    System.err.println(mhmPK);
+
+                    //Eliminar registro de la base de datos
+                    this.mhmFL.remove(mhm);
+                    
+                    //Setter una nueva llave foranea
+                    mhm.setMestroHorarioMateriasPK(mhmPK);
+                    //volver a crear el registro
+                    this.mhmFL.edit(this.mhm);
                     modifica = true;
                 }
-
-                this.mhmFL.edit(this.mhm);
+                else{
+                    mhm.setMestroHorarioMateriasPK(mhmPK);
+                    this.mhmFL.create(this.mhm);
+                }
+                
                 String cuerpo = usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
-                        + "ha " + ((modifica) ? "modificado" : "agregado") + " la materia " + mhm.getMateria().getMateriaNombre()
-                        + " al maestro " + maestroseleccionado.getPersona().getPersonaNombre()
-                        +" "+ maestroseleccionado.getPersona().getPersonaApellido();
+                        + " ha " + ((modifica) ? "modificado" : "agregado") + " la materia " + mhm.getMateria().getMateriaNombre();
+                       
+                        
                 this.limpiar();
                 this.push(new mensaje(0, usuario.getIdpersona(), "??",
                         new FacesMessage(FacesMessage.SEVERITY_INFO, "Asignación de Horario ", cuerpo)).toString());
@@ -232,8 +266,8 @@ public class MestromateriaController implements Serializable {
 //    }
     public void limpiar() {
         try {
-            this.mhm = new MestroHorarioMaterias(new MestroHorarioMateriasPK(0, 0, 0, "", 0, "", "", 0));
-            this.selectmhm = new MestroHorarioMaterias(new MestroHorarioMateriasPK(0, 0, 0, "", 0, "", "", 0));
+            this.mhm = new MestroHorarioMaterias(new MestroHorarioMateriasPK());
+            this.selectmhm = new MestroHorarioMaterias(new MestroHorarioMateriasPK());
             btnCreate = true;
             btnEdit = false;
             //btnDelete = false;

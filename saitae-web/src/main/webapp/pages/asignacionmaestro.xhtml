@@ -104,7 +104,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                             <p:selectOneMenu id="grado" value="#{mestromateriaController.mhm.grado}" required="true" 
                                              requiredMessage="The Grado field is required." converter="omnifaces.SelectItemsConverter">
                                  <f:selectItem itemValue="null" itemLabel="Seleccione" noSelectionOption="true"/>
-                                 <f:selectItems var="g" itemLabel="#{representanteController.getLabel(g.gradoPK)}" 
+                                 <f:selectItems var="g" itemLabel="#{mestromateriaController.listgrado}" 
                                                 itemValue="#{g}" value="#{mestromateriaController.listgrado}"/>
                                 <p:ajax event="itemSelect" listener="#{mestromateriaController.selectCampo}"/>
                             </p:selectOneMenu>
@@ -170,7 +170,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                                 <f:facet name="header">
                                     <h:outputText value="Grado"/>
                                 </f:facet>
-                                <h:outputText value="#{representanteController.getLabel(item.grado.gradoPK)}"/>
+                                <h:outputText value="#{item.grado.gradoPK.gradoAño} #{item.grado.gradoPK.gradoSeccion} #{item.grado.gradoPK.gradoModalidad}"/>
                             </p:column>
                         </p:dataTable>
                            <p:commandButton 
