@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -185,8 +186,7 @@ public class RecursoController implements Serializable {
         pais = (new Pais(0, ""));
         cl = new ContenidoLibro(new ContenidoLibroPK(0, "", 0));
         contenido = new ArrayList<>();
-        editarID=true;
-        editarTipo=true;
+        editarID = editarTipo = true;
     }
 
     private void llenado(int tr, boolean verPaneles) {
@@ -194,10 +194,7 @@ public class RecursoController implements Serializable {
         Seleccionado.setIdTipoRecurso(tipor);
         recurso = tipor.getRecursoList();
         verTipos = false;
-        verBotonGuardarPanel1 = !verPaneles;
-        verOtrosPaneles = verPaneles;
-        verCategorias = verPaneles;
-        verCategoriastabla = verPaneles;
+        verBotonGuardarPanel1 = !(verOtrosPaneles = (verCategorias = (verCategoriastabla = verPaneles)));
     }
 
     public void controlUsuarios() {
@@ -206,9 +203,7 @@ public class RecursoController implements Serializable {
             switch (usuario.getTipoPersona().getIdtipoPersona()) {
                 case 1:
                 case 2:
-                    verTipos = true;
-                    verCategorias = true;
-                    verCategoriastabla = true;
+                    verTipos = verCategorias = verCategoriastabla = true;
                     recurso = recursoFL.findAll();
                     break;
                 case 5:
@@ -417,7 +412,7 @@ public class RecursoController implements Serializable {
     }
 
     public List<Recurso> getRecurso() {
-        return recurso;
+        return Collections.unmodifiableList(recurso);
     }
 
     public void setRecurso(List<Recurso> recurso) {
@@ -451,21 +446,13 @@ public class RecursoController implements Serializable {
             contenido.addAll(Seleccionado.getContenidoLibroList());
             ejemplares = Seleccionado.getEjemplarList().size();
             tipoRecursoSelect(new SelectEvent(new SelectManyMenu(), new BehaviorBase(), Seleccionado.getIdTipoRecurso().getIdtipoRecurso()));
-            editarID=editarTipo=false;
+            editarID = (editarTipo = false);
         }
     }
 
     public void tipoRecursoSelect(SelectEvent event) {
         int q = Integer.valueOf(event.getObject().toString());
-        if (q == 3) {
-            verBotonGuardarPanel1 = false;
-            verCategorias = true;
-            verOtrosPaneles = true;
-        } else {
-            verBotonGuardarPanel1 = true;
-            verCategorias = false;
-            verOtrosPaneles = false;
-        }
+        verBotonGuardarPanel1 = !(verCategorias = (verOtrosPaneles = (q == 3)));
         Seleccionado.setIdTipoRecurso(tiporecursoFL.find(q));
         PrimeFaces.current().ajax().update("form0", "form", "h1", "h2");
         System.out.println(event.getObject());
@@ -487,7 +474,7 @@ public class RecursoController implements Serializable {
     }
 
     public List<Categoria> getCategorialist() {
-        return categorialist;
+        return Collections.unmodifiableList(categorialist);
     }
 
     public void setCategorialist(List<Categoria> categorialist) {
@@ -495,7 +482,7 @@ public class RecursoController implements Serializable {
     }
 
     public List<TipoRecurso> getTiporecursolist() {
-        return tiporecursolist;
+        return Collections.unmodifiableList(tiporecursolist);
     }
 
     public void setTiporecursolist(List<TipoRecurso> tiporecursolist) {
@@ -503,7 +490,7 @@ public class RecursoController implements Serializable {
     }
 
     public List<TipoCargo> getTipocargolist() {
-        return tipocargolist;
+        return Collections.unmodifiableList(tipocargolist);
     }
 
     public void setTipocargolist(List<TipoCargo> tipocargolist) {
@@ -511,7 +498,7 @@ public class RecursoController implements Serializable {
     }
 
     public List<Pais> getPaislist() {
-        return paislist;
+        return Collections.unmodifiableList(paislist);
     }
 
     public void setPaislist(List<Pais> paislist) {
@@ -519,7 +506,7 @@ public class RecursoController implements Serializable {
     }
 
     public List<TipoReservaRecurso> getListaTipoReservaRecursos() {
-        return listaTipoReservaRecursos;
+        return Collections.unmodifiableList(listaTipoReservaRecursos);
     }
 
     public void setListaTipoReservaRecursos(List<TipoReservaRecurso> listaTipoReservaRecursos) {
@@ -527,7 +514,7 @@ public class RecursoController implements Serializable {
     }
 
     public List<TipoReserva> getListaTipoReserva() {
-        return listaTipoReserva;
+        return Collections.unmodifiableList(listaTipoReserva);
     }
 
     public void setListaTipoReserva(List<TipoReserva> listaTipoReserva) {
@@ -586,7 +573,7 @@ public class RecursoController implements Serializable {
     }
 
     public List<ContenidoLibro> getContenido() {
-        return contenido;
+        return Collections.unmodifiableList(contenido);
     }
 
     public void setContenido(List<ContenidoLibro> contenido) {
@@ -621,13 +608,12 @@ public class RecursoController implements Serializable {
         } else {
             init();
         }
-        editarID=true;
-        editarTipo=true;
+        editarID = (editarTipo = true);
         PrimeFaces.current().ajax().update("h1", "h2");
     }
 
     public List<Autor> getAutores() {
-        return autores;
+        return Collections.unmodifiableList(autores);
     }
 
     public void setAutores(List<Autor> autores) {
@@ -635,7 +621,7 @@ public class RecursoController implements Serializable {
     }
 
     public List<Editorial> getEditoriales() {
-        return editoriales;
+        return Collections.unmodifiableList(editoriales);
     }
 
     public void setEditoriales(List<Editorial> editoriales) {
@@ -699,7 +685,8 @@ public class RecursoController implements Serializable {
     public void escuchaRecursoAC() {
         try {
             mensaje mss = new mensaje(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("mss"));
-            int tipoP = mss.getCadenaAccion().equals("1") ? 6 : (mss.getCadenaAccion().endsWith("2") ? 7 : (mss.getCadenaAccion().endsWith("3") ? 5 : 0));
+            int tipoP = mss.getCadenaAccion().equals("1") ? 6 : (mss.getCadenaAccion().equals("2") ? 7
+                    : (mss.getCadenaAccion().equals("3") ? 5 : 0));
             System.out.println("Mensaje del pushRecurso recibido: " + mss.toString());
             Persona remitente = pFL.find(mss.getRemitente());
             if (usuario.getTipoPersona().equals(remitente.getTipoPersona())
@@ -730,5 +717,5 @@ public class RecursoController implements Serializable {
     public void setEditarTipo(boolean editarTipo) {
         this.editarTipo = editarTipo;
     }
-    
+
 }

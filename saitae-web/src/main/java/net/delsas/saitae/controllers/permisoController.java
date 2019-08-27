@@ -6,6 +6,7 @@
 package net.delsas.saitae.controllers;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -33,7 +34,7 @@ import net.delsas.saitae.entities.TipopersonaPermiso;
  *
  * @author delsas
  */
-@Named(value = "permisoEstudianteController")
+@Named
 @RequestScoped
 public class permisoController implements Serializable {
 
@@ -89,7 +90,7 @@ public class permisoController implements Serializable {
         e = new ArrayList<>();
         us = new Estudiante();
         id = 0;
-        finicio = ffin = Calendar.getInstance().getTime();
+        finicio = ffin = new Date();
 
     }
 
@@ -108,8 +109,8 @@ public class permisoController implements Serializable {
 
     public boolean isSeleccionEstudiante() {
         if (id > 0) {
-            m = mfl.find(new MatriculaPK(id,
-                    p.getPermisosPK().getPermisoFechaSolicitud().getYear()+1900));
+            m = mfl.find(new MatriculaPK(id, Integer.valueOf(new SimpleDateFormat("YYYY")
+                    .format(p.getPermisosPK().getPermisoFechaSolicitud()))));
         }
         return id > 0;
     }

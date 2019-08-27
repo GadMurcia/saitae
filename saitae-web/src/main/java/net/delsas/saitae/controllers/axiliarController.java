@@ -33,7 +33,7 @@ import org.primefaces.event.SelectEvent;
  *
  * @author delsas
  */
-@Named(value = "axiliarController")
+@Named
 @ViewScoped
 public class axiliarController implements Serializable {
 

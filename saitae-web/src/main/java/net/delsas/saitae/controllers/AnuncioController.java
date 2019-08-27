@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
@@ -40,8 +39,8 @@ public class AnuncioController implements Serializable {
 
     private static final long serialVersionUID = 1L;
     //private TipoPersona tipoPersona;
-    @EJB
-    private TipoPersonaFacadeLocal tipoPersonaFL;
+//    @EJB
+//    private TipoPersonaFacadeLocal tipoPersonaFL;
     @EJB
     private AnuncioFacadeLocal anuncioFL;
 

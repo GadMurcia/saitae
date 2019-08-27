@@ -17,7 +17,7 @@ import org.apache.commons.codec.digest.DigestUtils;
  *
  * @author delsas
  */
-@Named(value = "loginController")
+@Named
 @ViewScoped
 public class loginController implements Serializable {
 

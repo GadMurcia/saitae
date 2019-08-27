@@ -18,6 +18,7 @@ package net.delsas.saitae.controllers;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -228,7 +229,7 @@ public class vistasMenuController implements Serializable {
     }
 
     public List<Acceso> getAccesos() {
-        return accesos;
+        return Collections.unmodifiableList(accesos);
     }
 
     public void setAccesos(List<Acceso> accesos) {
@@ -236,7 +237,7 @@ public class vistasMenuController implements Serializable {
     }
 
     public List<TipoPersona> getTipoPersonas() {
-        return tipoPersonas;
+        return Collections.unmodifiableList(tipoPersonas);
     }
 
     public void setTipoPersonas(List<TipoPersona> tipoPersonas) {

@@ -19,6 +19,7 @@ package net.delsas.saitae.controllers;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,7 +28,6 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
 import net.delsas.saitae.aux.mensaje;
 import net.delsas.saitae.beans.GradoFacadeLocal;
@@ -42,13 +42,11 @@ import net.delsas.saitae.entities.Materia;
 import net.delsas.saitae.entities.MestroHorarioMaterias;
 import net.delsas.saitae.entities.MestroHorarioMateriasPK;
 import net.delsas.saitae.entities.Persona;
-import org.omnifaces.cdi.Push;
 import org.primefaces.event.SelectEvent;
 import javax.inject.Inject;
 import net.delsas.saitae.entities.GradoPK;
 import org.omnifaces.cdi.Push;
 import org.omnifaces.cdi.PushContext;
-import org.primefaces.PrimeFaces;
 
 /**
  *
@@ -119,9 +117,8 @@ public class MestromateriaController implements Serializable {
 
     }
 
-    @Deprecated
     public List<MestroHorarioMaterias> obtenerTodos() {
-        List<MestroHorarioMaterias> salida = new ArrayList();
+        List<MestroHorarioMaterias> salida = new ArrayList<>();
         try {
             if (mhmFL != null) {
                 salida = mhmFL.findAll();
@@ -286,7 +283,7 @@ public class MestromateriaController implements Serializable {
     }
 
     public List<Materia> getListmateria() {
-        return listmateria;
+        return Collections.unmodifiableList(listmateria);
     }
 
     public void setListmateria(List<Materia> listmateria) {
@@ -294,7 +291,7 @@ public class MestromateriaController implements Serializable {
     }
 
     public List<Grado> getListgrado() {
-        return listgrado;
+        return Collections.unmodifiableList(listgrado);
     }
 
     public void setListgrado(List<Grado> listgrado) {
@@ -302,7 +299,7 @@ public class MestromateriaController implements Serializable {
     }
 
     public List<Maestro> getListmaestro() {
-        return listmaestro;
+        return Collections.unmodifiableList(listmaestro);
     }
 
     public void setListmaestro(List<Maestro> listmaestro) {
@@ -310,7 +307,7 @@ public class MestromateriaController implements Serializable {
     }
 
     public List<MestroHorarioMaterias> getListmhm() {
-        return listmhm;
+        return Collections.unmodifiableList(listmhm);
     }
 
     public void setListmhm(List<MestroHorarioMaterias> listmhm) {
@@ -326,7 +323,7 @@ public class MestromateriaController implements Serializable {
     }
 
     public List<Horario> getListhorario() {
-        return listhorario;
+        return Collections.unmodifiableList(listhorario);
     }
 
     public void setListhorario(List<Horario> listhorario) {
