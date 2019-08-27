@@ -18,6 +18,7 @@ package net.delsas.saitae.controllers;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -50,7 +51,7 @@ public class representanteController {
     public void init() {
         grados = gFL.getPorAñoYActivo(getAñoActual());
         representantes = new ArrayList<>();
-        nombreGrado="";
+        nombreGrado = "";
     }
 
     public Integer getAñoActual() {
@@ -65,15 +66,15 @@ public class representanteController {
             for (Matricula m : g.getMatriculaList()) {
                 representantes.add(m.getEstudiante().getEstudianteRepresentante());
             }
-            nombreGrado= getLabel(g.getGradoPK());
-        }else{
-            nombreGrado= "";
+            nombreGrado = getLabel(g.getGradoPK());
+        } else {
+            nombreGrado = "";
         }
         PrimeFaces.current().ajax().update(":form:representantes");
     }
 
     public List<Grado> getGrados() {
-        return grados;
+        return Collections.unmodifiableList(grados);
     }
 
     public void setGrados(List<Grado> grados) {
@@ -81,7 +82,7 @@ public class representanteController {
     }
 
     public List<Estudiante> getRepresentantes() {
-        return representantes;
+        return Collections.unmodifiableList(representantes);
     }
 
     public void setRepresentantes(List<Estudiante> representantes) {
@@ -93,9 +94,9 @@ public class representanteController {
                 : (id.getGradoModalidad().equals("S") ? "TVC Secretariado" : "General"))
                 + " " + id.getGradoSeccion();
     }
-    
+
     public String getValue(GradoPK id) {
-        return id.getIdgrado() + "¿¿" + id.getGradoModalidad()+"¿¿" + id.getGradoSeccion();
+        return id.getIdgrado() + "¿¿" + id.getGradoModalidad() + "¿¿" + id.getGradoSeccion();
     }
 
     public String getNombreGrado() {
@@ -105,7 +106,4 @@ public class representanteController {
     public void setNombreGrado(String nombreGrado) {
         this.nombreGrado = nombreGrado;
     }
-    
-    
-
 }

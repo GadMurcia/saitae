@@ -19,6 +19,7 @@ package net.delsas.saitae.controllers;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -124,7 +125,7 @@ public class administradorController implements Serializable {
     }
 
     public List<TipoPersona> getTipos() {
-        return tipos;
+        return Collections.unmodifiableList(tipos);
     }
 
     public String onFlowProcess(FlowEvent event) {

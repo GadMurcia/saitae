@@ -19,7 +19,7 @@ package net.delsas.saitae.controllers;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -230,7 +230,6 @@ public class TipoController implements Serializable {
             case "tipomateria":
                 tipoMaterias.add(new TipoMateria());
                 break;
-
             case "materia":
                 Materia m = new Materia();
                 m.setTipoMateria(new TipoMateria(0));
@@ -308,7 +307,7 @@ public class TipoController implements Serializable {
                 zfl.edit((Zona) event.getObject());
                 titulo = "Zona";
                 mensaje = ((Zona) event.getObject()).getZonaNombre();
-                enviarNotificación((Zona) event.getObject(), "zona");
+                enviarNotificación(event.getObject(), "zona");
                 break;
             case "form:tw:reserva":
                 tipoReservaFL.edit((TipoReserva) event.getObject());
@@ -640,7 +639,7 @@ public class TipoController implements Serializable {
     }
 
     public List<TipoRecurso> getRecursos() {
-        return recursos;
+        return Collections.unmodifiableList(recursos);
     }
 
     public void setRecursos(List<TipoRecurso> recursos) {
@@ -648,7 +647,7 @@ public class TipoController implements Serializable {
     }
 
     public List<TipoPermiso> getAll() {
-        return all;
+        return Collections.unmodifiableList(all);
     }
 
     public void setAll(List<TipoPermiso> all) {
@@ -656,7 +655,7 @@ public class TipoController implements Serializable {
     }
 
     public List<TipoCargo> getCargos() {
-        return cargos;
+        return Collections.unmodifiableList(cargos);
     }
 
     public void setCargos(List<TipoCargo> cargos) {
@@ -664,7 +663,7 @@ public class TipoController implements Serializable {
     }
 
     public List<TipoPersona> getPersonas() {
-        return Personas;
+        return Collections.unmodifiableList(Personas);
     }
 
     public void setPersonas(List<TipoPersona> Personas) {
@@ -688,7 +687,7 @@ public class TipoController implements Serializable {
     }
 
     public List<Zona> getZonas() {
-        return zonas;
+        return Collections.unmodifiableList(zonas);
     }
 
     public void setZonas(List<Zona> zonas) {
@@ -696,7 +695,7 @@ public class TipoController implements Serializable {
     }
 
     public List<TipoReserva> getReservas() {
-        return reservas;
+        return Collections.unmodifiableList(reservas);
     }
 
     public void setReservas(List<TipoReserva> reservas) {
@@ -704,7 +703,7 @@ public class TipoController implements Serializable {
     }
 
     public List<TipoNombramiento> getNombramientos() {
-        return nombramientos;
+        return Collections.unmodifiableList(nombramientos);
     }
 
     public void setNombramientos(List<TipoNombramiento> nombramientos) {
@@ -712,7 +711,7 @@ public class TipoController implements Serializable {
     }
 
     public List<Materia> getMaterias() {
-        return materias;
+        return Collections.unmodifiableList(materias);
     }
 
     public void setMaterias(List<Materia> materias) {
@@ -720,7 +719,7 @@ public class TipoController implements Serializable {
     }
 
     public List<TipoMateria> getTipoMaterias() {
-        return tipoMaterias;
+        return Collections.unmodifiableList(tipoMaterias);
     }
 
     public void setTipoMaterias(List<TipoMateria> tipoMaterias) {
@@ -728,7 +727,7 @@ public class TipoController implements Serializable {
     }
 
     public List<Aula> getAulas() {
-        return aulas;
+        return Collections.unmodifiableList(aulas);
     }
 
     public void setAulas(List<Aula> aulas) {
@@ -736,7 +735,7 @@ public class TipoController implements Serializable {
     }
 
     public List<Autor> getAutor() {
-        return autor;
+        return Collections.unmodifiableList(autor);
     }
 
     public void setAutor(List<Autor> autor) {
@@ -744,7 +743,7 @@ public class TipoController implements Serializable {
     }
 
     public List<Cargo> getCargo() {
-        return cargo;
+        return Collections.unmodifiableList(cargo);
     }
 
     public void setCargo(List<Cargo> cargo) {
@@ -752,7 +751,7 @@ public class TipoController implements Serializable {
     }
 
     public List<Categoria> getCategoria() {
-        return categoria;
+        return Collections.unmodifiableList(categoria);
     }
 
     public void setCategoria(List<Categoria> categoria) {
@@ -760,7 +759,7 @@ public class TipoController implements Serializable {
     }
 
     public List<Editorial> getEditorial() {
-        return editorial;
+        return Collections.unmodifiableList(editorial);
     }
 
     public void setEditorial(List<Editorial> editorial) {
@@ -768,7 +767,7 @@ public class TipoController implements Serializable {
     }
 
     public List<Horario> getHorario() {
-        return horario;
+        return Collections.unmodifiableList(horario);
     }
 
     public void setHorario(List<Horario> horario) {
@@ -776,7 +775,7 @@ public class TipoController implements Serializable {
     }
 
     public List<Financiamiento> getFinanciamientos() {
-        return financiamientos;
+        return Collections.unmodifiableList(financiamientos);
     }
 
     public void setFinanciamientos(List<Financiamiento> financiamientos) {

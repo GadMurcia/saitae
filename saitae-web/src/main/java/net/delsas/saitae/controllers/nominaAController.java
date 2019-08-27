@@ -3,6 +3,7 @@ package net.delsas.saitae.controllers;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -78,7 +79,7 @@ public class nominaAController implements Serializable {
     }
 
     public List<Estudiante> getNomina() {
-        return nomina;
+        return Collections.unmodifiableList(nomina);
     }
 
     public void setNomina(List<Estudiante> nomina) {

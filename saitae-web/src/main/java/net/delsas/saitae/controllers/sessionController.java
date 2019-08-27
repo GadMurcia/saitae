@@ -9,10 +9,9 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -243,7 +242,7 @@ public class sessionController implements Serializable {
     }
 
     public List<notificacion> getNotificaciones() {
-        return notificaciones;
+        return Collections.unmodifiableList(notificaciones);
     }
 
     public void setNotificaciones(List<notificacion> notificaciones) {

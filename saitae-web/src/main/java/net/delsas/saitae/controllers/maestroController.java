@@ -18,7 +18,6 @@ package net.delsas.saitae.controllers;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -45,7 +44,6 @@ import net.delsas.saitae.entities.TipoPersona;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.primefaces.event.FlowEvent;
 import org.primefaces.event.RowEditEvent;
-import org.primefaces.event.SelectEvent;
 
 /**
  *
