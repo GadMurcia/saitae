@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -203,24 +205,25 @@ public class TipoController implements Serializable {
         usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
         String pagina = context.getExternalContext().getRequestServletPath().split("/")[2];
         controlUsuarios(pagina);
-        variables(pagina);
     }
 
     public void controlUsuarios(String pagina) {
         try {
-            Acceso a=accesoFL.getAccesoByUrl(pagina);
-            AccesoTipoPersonaPK pk  = new AccesoTipoPersonaPK(usuario.getTipoPersona().getIdtipoPersona(),a.getIdacceso());
-            AccesoTipoPersona f = accesoTPFL.find(pk);
-            if(f==null){
-            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("mensaje",
-                    new FacesMessage(FacesMessage.SEVERITY_WARN, "Página prohibida",
-                            "Usted no tiene los permisos suficientes para ver y utilizar esa página."));
-            FacesContext.getCurrentInstance().getExternalContext().redirect("perfil.intex");
+            AccesoTipoPersona f = accesoTPFL.find(
+                    new AccesoTipoPersonaPK(
+                            accesoFL.getAccesoByUrl(pagina).getIdacceso(),
+                            usuario.getTipoPersona().getIdtipoPersona()));
+            if (f == null) {
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("mensaje",
+                        new FacesMessage(FacesMessage.SEVERITY_WARN, "Página prohibida",
+                                "Usted no tiene los permisos suficientes para ver y utilizar esa página."));
+                FacesContext.getCurrentInstance().getExternalContext().redirect("perfil.intex");
             }
-
+            variables(pagina);
         } catch (IOException ex) {
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error iniesperado",
-                    (ex != null ? ex.getMessage() : "Error desconocido.")));
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error Inesperado",
+                            ex.getMessage() == null ? "Error de causa desconocida." : ex.getMessage()));
         }
 
     }
