@@ -8,6 +8,8 @@ package net.delsas.saitae.beans;
 import java.util.List;
 import javax.ejb.Local;
 import net.delsas.saitae.entities.AccesoTipoPersona;
+import net.delsas.saitae.entities.Acceso;
+import net.delsas.saitae.entities.TipoPersona;
 
 /**
  *
@@ -29,5 +31,12 @@ public interface AccesoTipoPersonaFacadeLocal {
     List<AccesoTipoPersona> findRange(int[] range);
 
     int count();
+
+    /**
+     * Busca Los tipos de personas que está habilitados para ver el acceso identificado por el Id
+     * @param a
+     * @return Lista de TipoPersona
+     */
+    public List<TipoPersona> findTipoPersonaPermitidos(Acceso a);
     
 }

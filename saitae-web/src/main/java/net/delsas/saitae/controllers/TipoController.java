@@ -16,6 +16,7 @@
  */
 package net.delsas.saitae.controllers;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
@@ -32,6 +34,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import net.delsas.saitae.aux.mensaje;
 import net.delsas.saitae.aux.prueba;
+import net.delsas.saitae.beans.AccesoFacadeLocal;
+import net.delsas.saitae.beans.AccesoTipoPersonaFacadeLocal;
 import net.delsas.saitae.beans.AulaFacadeLocal;
 import net.delsas.saitae.beans.AutorFacadeLocal;
 import net.delsas.saitae.beans.CargoFacadeLocal;
@@ -51,6 +55,9 @@ import net.delsas.saitae.beans.TipoRecursoFacadeLocal;
 import net.delsas.saitae.beans.TipoReservaFacadeLocal;
 import net.delsas.saitae.beans.TipopersonaPermisoFacadeLocal;
 import net.delsas.saitae.beans.ZonaFacadeLocal;
+import net.delsas.saitae.entities.Acceso;
+import net.delsas.saitae.entities.AccesoTipoPersona;
+import net.delsas.saitae.entities.AccesoTipoPersonaPK;
 import net.delsas.saitae.entities.Aula;
 import net.delsas.saitae.entities.Autor;
 import net.delsas.saitae.entities.Cargo;
@@ -182,28 +189,40 @@ public class TipoController implements Serializable {
     @EJB
     private MaestroFacadeLocal maestroFL;
 
+    //controlde usuarios    
+    private FacesContext context;
+    private Persona usuario;
+    @EJB
+    private AccesoTipoPersonaFacadeLocal accesoTPFL;
+    @EJB
+    private AccesoFacadeLocal accesoFL;
+
     @PostConstruct
     public void init() {
-        recursos = tipoRecursoFL.findAll();
-        all = tpfl.findAll();
-        cargos = tipoCargoFL.findAll();
-        tipoPersona = new TipoPersona(0);
-        Personas = personaFL.findAll();
-        model = new DualListModel<>(new ArrayList<String>(), new ArrayList<String>());
-        zonas = zfl.findAll();
-        reservas = tipoReservaFL.findAll();
-        nombramientos = tipoNombramientoFL.findAll();
-        tipoMaterias = tipoMateriaFL.findAll();
-        materias = materiaFL.findAll();
-        aulas = afl.findAll();
-        autor = autorFL.findAll();
-        cargo = cargoFL.findAll();
-        categoria = categoriaFL.findAll();
-        editorial = editorialFL.findAll();
-        horario = horarioFL.findAll();
-        financiamientos = financiamientoFL.findAll();
-        grados = gradoFL.findAll();
-        hora = new Horario(0, new Date(), new Date());
+        context = FacesContext.getCurrentInstance();
+        usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
+        String pagina = context.getExternalContext().getRequestServletPath().split("/")[2];
+        controlUsuarios(pagina);
+        variables(pagina);
+    }
+
+    public void controlUsuarios(String pagina) {
+        try {
+            Acceso a=accesoFL.getAccesoByUrl(pagina);
+            AccesoTipoPersonaPK pk  = new AccesoTipoPersonaPK(usuario.getTipoPersona().getIdtipoPersona(),a.getIdacceso());
+            AccesoTipoPersona f = accesoTPFL.find(pk);
+            if(f==null){
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("mensaje",
+                    new FacesMessage(FacesMessage.SEVERITY_WARN, "Página prohibida",
+                            "Usted no tiene los permisos suficientes para ver y utilizar esa página."));
+            FacesContext.getCurrentInstance().getExternalContext().redirect("perfil.intex");
+            }
+
+        } catch (IOException ex) {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error iniesperado",
+                    (ex != null ? ex.getMessage() : "Error desconocido.")));
+        }
+
     }
 
     public void onAddNew(String id) {
@@ -827,6 +846,42 @@ public class TipoController implements Serializable {
 
     public void sendMessage(Object message) {
         notificacion.send(message);
+    }
+
+    private void variables(String pg) {
+        switch (pg) {
+            case "tipopp.intex":
+                aulas = afl.findAll();
+                cargo = cargoFL.findAll();
+                zonas = zfl.findAll();
+                nombramientos = tipoNombramientoFL.findAll();
+                financiamientos = financiamientoFL.findAll();
+                break;
+            case "lictp.intex":
+                model = new DualListModel<>(new ArrayList<String>(), new ArrayList<String>());
+                tipoPersona = new TipoPersona(0);
+                Personas = personaFL.findAll();
+                all = tpfl.findAll();
+                break;
+            case "academico.intex":
+                tipoMaterias = tipoMateriaFL.findAll();
+                materias = materiaFL.findAll();
+                horario = horarioFL.findAll();
+                grados = gradoFL.findAll();
+                hora = new Horario(0, new Date(), new Date());
+                aulas = afl.findAll();
+                break;
+            case "inventario.intex":
+                cargos = tipoCargoFL.findAll();
+                recursos = tipoRecursoFL.findAll();
+                reservas = tipoReservaFL.findAll();
+                break;
+            case "libros.intex":
+                autor = autorFL.findAll();
+                categoria = categoriaFL.findAll();
+                editorial = editorialFL.findAll();
+                break;
+        }
     }
 
 }

@@ -5,10 +5,13 @@
  */
 package net.delsas.saitae.beans;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import net.delsas.saitae.entities.AccesoTipoPersona;
+import net.delsas.saitae.entities.Acceso;
+import net.delsas.saitae.entities.TipoPersona;
 
 /**
  *
@@ -27,6 +30,13 @@ public class AccesoTipoPersonaFacade extends AbstractFacade<AccesoTipoPersona> i
 
     public AccesoTipoPersonaFacade() {
         super(AccesoTipoPersona.class);
+    }
+    
+    @Override
+    public List<TipoPersona> findTipoPersonaPermitidos(Acceso a){
+        return em.createNamedQuery("AccesoTipoPersona.findTipoPersonaByAccesoUrl")
+                .setParameter("idacceso", a.getIdacceso())
+                .getResultList();
     }
     
 }

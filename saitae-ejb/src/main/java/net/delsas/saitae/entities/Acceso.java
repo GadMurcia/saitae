@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Acceso.findAll", query = "SELECT a FROM Acceso a")
     , @NamedQuery(name = "Acceso.findByIdacceso", query = "SELECT a FROM Acceso a WHERE a.idacceso = :idacceso")
     , @NamedQuery(name = "Acceso.findByAccesoNombre", query = "SELECT a FROM Acceso a WHERE a.accesoNombre = :accesoNombre")
-    , @NamedQuery(name = "Acceso.findByAccesourl", query = "SELECT a FROM Acceso a WHERE a.accesourl = :accesourl")
+    , @NamedQuery(name = "Acceso.findByAccesourl", query = "SELECT a FROM Acceso a WHERE a.accesourl = :url")
     , @NamedQuery(name = "Acceso.findByAccesoComentario", query = "SELECT a FROM Acceso a WHERE a.accesoComentario = :accesoComentario")})
 public class Acceso implements Serializable {
 
