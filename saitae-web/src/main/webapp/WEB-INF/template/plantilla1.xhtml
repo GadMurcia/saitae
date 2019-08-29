@@ -9,7 +9,7 @@
 
     <h:head>
         <title>#{sessionController.us.personaNombre.split(" ")[0]} 
-            #{sessionController.us.personaApellido.split(" ")[0]}</title>
+            #{sessionController.us.personaApellido.split(" ")[0]} - SAITAE/INTEX #{sessionController.año}</title>
         <link rel="shortcut icon" href="../resources/img/intexM.jpeg"/>
         <h:outputStylesheet library="css" name="default.css"/>
         <h:outputStylesheet library="css" name="cssLayout.css"/>
@@ -23,7 +23,13 @@
             <ui:insert name="top">
                 <h:form id="form0">
                     <p:growl id="msgs" showDetail="true" />
-                    <p:menubar id="menubar" model="#{sessionController.mm}"></p:menubar>
+                    <p:menubar id="menubar" model="#{sessionController.mm}">
+                        <f:facet name="options">
+                            <p:outputLabel value="#{sessionController.us.personaNombre.split(' ')[0]} 
+                                           #{sessionController.us.personaApellido.split(' ')[0]}  "
+                                           title="Su nombre de usuario"/>
+                        </f:facet>
+                    </p:menubar>
                 </h:form>
             </ui:insert>
         </div>

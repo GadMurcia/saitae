@@ -209,10 +209,10 @@ public class TipoController implements Serializable {
 
     public void controlUsuarios(String pagina) {
         try {
-            AccesoTipoPersona f = accesoTPFL.find(
-                    new AccesoTipoPersonaPK(
-                            accesoFL.getAccesoByUrl(pagina).getIdacceso(),
-                            usuario.getTipoPersona().getIdtipoPersona()));
+            AccesoTipoPersonaPK pk = new AccesoTipoPersonaPK(
+                    accesoFL.getAccesoByUrl(pagina).getIdacceso(),
+                    usuario.getTipoPersona().getIdtipoPersona());
+            AccesoTipoPersona f = accesoTPFL.find(pk);
             if (f == null) {
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("mensaje",
                         new FacesMessage(FacesMessage.SEVERITY_WARN, "Página prohibida",

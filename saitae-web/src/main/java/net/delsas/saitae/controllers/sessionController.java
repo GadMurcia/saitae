@@ -127,13 +127,15 @@ public class sessionController implements Serializable {
             }
         }
         if (us.getTipoPersona().getIdtipoPersona() == 1) {
-            mi = new DefaultMenuItem("Control de vistas");
-            mi.setIcon("fa fa-wrench");
+            mi = new DefaultMenuItem("Control de vistas", "fa fa-wrench");
             mi.setUrl("cvista.intex");
             mm.addElement(mi);
         }
-        mi = new DefaultMenuItem("salir");
-        mi.setIcon("fa fa-close");
+        mi = new DefaultMenuItem(us.getPersonaNombre().split(" ")[0]+" "
+                +us.getPersonaApellido().split(" ")[0], "fa fa-user", "#");
+        mm.addElement(mi);
+        
+        mi = new DefaultMenuItem("salir", "fa fa-close");
         mi.setAjax(false);
         mi.setCommand("#{sessionController.cerrarSesion()}");
         mm.addElement(mi);
