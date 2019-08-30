@@ -43,7 +43,7 @@
                 <o:socket channel="notificacion" onmessage="socketListener"/>
                 <h:form id="noti">
                     <h1>Área de Notificaciones</h1>
-                    <p:remoteCommand name="notificar" actionListener="#{sessionController.escucha()}" update=":form0:msgs"/>
+                    <p:remoteCommand name="notificar" actionListener="#{sessionController.escucha()}" update=":form0"/>
                     <ui:repeat value="#{sessionController.notificaciones}" var="n">
                         <p:panel header="#{n.nombreNoti}" toggleable="true" 
                                  toggleSpeed="500" rendered="#{n.verNoti}" collapsed="#{n.collapsed}" 

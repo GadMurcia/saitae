@@ -23,12 +23,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
@@ -42,6 +39,7 @@ import net.delsas.saitae.beans.AulaFacadeLocal;
 import net.delsas.saitae.beans.AutorFacadeLocal;
 import net.delsas.saitae.beans.CargoFacadeLocal;
 import net.delsas.saitae.beans.CategoriaFacadeLocal;
+import net.delsas.saitae.beans.DiasEstudioFacadeLocal;
 import net.delsas.saitae.beans.EditorialFacadeLocal;
 import net.delsas.saitae.beans.FinanciamientoFacadeLocal;
 import net.delsas.saitae.beans.GradoFacadeLocal;
@@ -57,13 +55,13 @@ import net.delsas.saitae.beans.TipoRecursoFacadeLocal;
 import net.delsas.saitae.beans.TipoReservaFacadeLocal;
 import net.delsas.saitae.beans.TipopersonaPermisoFacadeLocal;
 import net.delsas.saitae.beans.ZonaFacadeLocal;
-import net.delsas.saitae.entities.Acceso;
 import net.delsas.saitae.entities.AccesoTipoPersona;
 import net.delsas.saitae.entities.AccesoTipoPersonaPK;
 import net.delsas.saitae.entities.Aula;
 import net.delsas.saitae.entities.Autor;
 import net.delsas.saitae.entities.Cargo;
 import net.delsas.saitae.entities.Categoria;
+import net.delsas.saitae.entities.DiasEstudio;
 import net.delsas.saitae.entities.Editorial;
 import net.delsas.saitae.entities.Financiamiento;
 import net.delsas.saitae.entities.Grado;
@@ -86,6 +84,7 @@ import org.omnifaces.cdi.PushContext;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.ItemSelectEvent;
 import org.primefaces.event.RowEditEvent;
+import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DualListModel;
 
 /**
@@ -191,6 +190,13 @@ public class TipoController implements Serializable {
     @EJB
     private MaestroFacadeLocal maestroFL;
 
+    //diasEstudio
+    @EJB
+    private DiasEstudioFacadeLocal diasEstudioFL;
+    private List<DiasEstudio> dias;
+    private List<DiasEstudio> diasSeleccionables;
+    private DiasEstudio diasSelected;
+
     //controlde usuarios    
     private FacesContext context;
     private Persona usuario;
@@ -226,6 +232,115 @@ public class TipoController implements Serializable {
                             ex.getMessage() == null ? "Error de causa desconocida." : ex.getMessage()));
         }
 
+    }
+
+    private void variables(String pg) {
+        switch (pg) {
+            case "tipopp.intex":
+                aulas = afl.findAll();
+                cargo = cargoFL.findAll();
+                zonas = zfl.findAll();
+                nombramientos = tipoNombramientoFL.findAll();
+                financiamientos = financiamientoFL.findAll();
+                break;
+            case "lictp.intex":
+                model = new DualListModel<>(new ArrayList<String>(), new ArrayList<String>());
+                tipoPersona = new TipoPersona(0);
+                Personas = personaFL.findAll();
+                all = tpfl.findAll();
+                break;
+            case "academico.intex":
+                tipoMaterias = tipoMateriaFL.findAll();
+                materias = materiaFL.findAll();
+                horario = horarioFL.findAll();
+                grados = gradoFL.findAll();
+                hora = new Horario(0, new Date(), new Date());
+                aulas = afl.findAll();
+                dias = diasEstudioFL.findAll();
+                diasSelected = new DiasEstudio(0, "");
+                diasSeleccionables = new ArrayList<>();
+                diasSeleccionables.add(new DiasEstudio(1, "Lunes"));
+                diasSeleccionables.add(new DiasEstudio(2, "Martes"));
+                diasSeleccionables.add(new DiasEstudio(3, "Miércoles"));
+                diasSeleccionables.add(new DiasEstudio(4, "Jueves"));
+                diasSeleccionables.add(new DiasEstudio(5, "Viernes"));
+                diasSeleccionables.add(new DiasEstudio(6, "Sábado"));
+                diasSeleccionables.add(new DiasEstudio(7, "Domingo"));
+                editarDia = 0;
+                break;
+            case "inventario.intex":
+                cargos = tipoCargoFL.findAll();
+                recursos = tipoRecursoFL.findAll();
+                reservas = tipoReservaFL.findAll();
+                break;
+            case "libros.intex":
+                autor = autorFL.findAll();
+                categoria = categoriaFL.findAll();
+                editorial = editorialFL.findAll();
+                break;
+        }
+    }
+
+    public void nuevoDias() {
+        diasSelected = new DiasEstudio(0, "");
+        editarDia = 0;
+    }
+
+    public void onRowSelected(SelectEvent event) {
+        if (event.getObject() instanceof DiasEstudio) {
+            setDiasSelected((DiasEstudio) event.getObject());
+            this.editarDia = diasSelected.getIdDias();
+        }
+    }
+
+    private int editarDia = 0;
+
+    public void editarDias() {
+        editarDia = diasSelected.getIdDias();
+        PrimeFaces.current().ajax().update(":form:tw:dias", "f1");
+    }
+
+    public void eliminarDias() {
+        try {
+            if (diasSelected != null) {
+                diasEstudioFL.remove(diasSelected);
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+                        "Eliminación exitosa.",
+                        "La eliminación se llevo a cabo con éxito."));
+                enviarNotificación("Se ha eliminado un día laboral", "El día que se ha eliminado es: "
+                        + diasSelected.getDiasEstudioNombre() + ". Eliminado por "
+                        + usuario.getPersonaNombre() + " " + usuario.getPersonaApellido());
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        "No se encuentra la orden.",
+                        "Al parecer no se seleccionó nada."));
+            }
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL,
+                    "No es posible proceder con la eliminación.",
+                    "Seguramente ya había datos que dependían del día seleccionado."
+                    + " Por lo que no es posible continuar con su eiminación."));
+        }
+        init();
+        PrimeFaces.current().ajax().update(":form0:msgs", ":form:tw:dias", "f1");
+    }
+
+    public void guardarDias() {
+        if (diasSelected != null) {
+            if (editarDia > 0) {
+                diasEstudioFL.remove(diasEstudioFL.find(editarDia));
+            }
+            diasEstudioFL.edit(diasSelected);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+                    "Agregación exitosa.",
+                    "La agregación se llevó a cabo con éxito."));
+            enviarNotificación("Se ha " + (editarDia > 0 ? "editado " : "agregado ")
+                    + "un día laboral", "El día que se ha " + (editarDia > 0 ? "editado " : "agregado ")
+                    + "es: " + diasSelected.getDiasEstudioNombre() + ". " + (editarDia > 0 ? "Editado " : "Agregado ")
+                    + "por " + usuario.getPersonaNombre() + " " + usuario.getPersonaApellido());
+        }
+        init();
+        PrimeFaces.current().ajax().update(":form0", ":form:tw:dias", "f1");
     }
 
     public void onAddNew(String id) {
@@ -329,7 +444,6 @@ public class TipoController implements Serializable {
                 zfl.edit((Zona) event.getObject());
                 titulo = "Zona";
                 mensaje = ((Zona) event.getObject()).getZonaNombre();
-                enviarNotificación(event.getObject(), "zona");
                 break;
             case "form:tw:reserva":
                 tipoReservaFL.edit((TipoReserva) event.getObject());
@@ -408,7 +522,7 @@ public class TipoController implements Serializable {
         }
         init();
         PrimeFaces.current().ajax().update(id);
-
+        enviarNotificación(titulo + " Editado", mensaje);
         FacesMessage msg = new FacesMessage(titulo + " Editado", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
@@ -833,58 +947,60 @@ public class TipoController implements Serializable {
         this.hora = horario == null ? new Horario(0, new Date(), new Date()) : horario;
     }
 
-    private void enviarNotificación(Object o, String tabla) {
-        Persona usuario = (Persona) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
-        if (tabla.equals("zona")) {
-            Zona z = (Zona) o;
-            sendMessage(new mensaje(0, usuario.getIdpersona(), "??",
-                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Zonas modificadas ",
-                            "Modificación:" + z.getZonaNombre())).toString());
-        }
+    public List<DiasEstudio> getDias() {
+        return Collections.unmodifiableList(dias);
+    }
+
+    public void setDias(List<DiasEstudio> dias) {
+        this.dias = dias;
+    }
+
+    public DiasEstudio getDiasSelected() {
+        return diasSelected;
+    }
+
+    public void setDiasSelected(DiasEstudio diasSelected) {
+        this.diasSelected = diasSelected;
+    }
+
+    private void enviarNotificación(String titulo, String mensaje) {
+        sendMessage(new mensaje(0, usuario.getIdpersona(), "??",
+                new FacesMessage(FacesMessage.SEVERITY_INFO, titulo,
+                        mensaje)).toString());
+    }
+
+    public List<DiasEstudio> getDiasSeleccionables() {
+        return diasSeleccionables;
+    }
+
+    public void setDiasSeleccionables(List<DiasEstudio> diasSeleccionables) {
+        this.diasSeleccionables = diasSeleccionables;
     }
 
     @Inject
     @Push
     private PushContext notificacion;
 
-    public void sendMessage(Object message) {
+    @Inject
+    @Push
+    private PushContext tipopp;
+
+    public void sendMessage(String message) {
         notificacion.send(message);
+        tipopp.send(message);
     }
 
-    private void variables(String pg) {
-        switch (pg) {
-            case "tipopp.intex":
-                aulas = afl.findAll();
-                cargo = cargoFL.findAll();
-                zonas = zfl.findAll();
-                nombramientos = tipoNombramientoFL.findAll();
-                financiamientos = financiamientoFL.findAll();
-                break;
-            case "lictp.intex":
-                model = new DualListModel<>(new ArrayList<String>(), new ArrayList<String>());
-                tipoPersona = new TipoPersona(0);
-                Personas = personaFL.findAll();
-                all = tpfl.findAll();
-                break;
-            case "academico.intex":
-                tipoMaterias = tipoMateriaFL.findAll();
-                materias = materiaFL.findAll();
-                horario = horarioFL.findAll();
-                grados = gradoFL.findAll();
-                hora = new Horario(0, new Date(), new Date());
-                aulas = afl.findAll();
-                break;
-            case "inventario.intex":
-                cargos = tipoCargoFL.findAll();
-                recursos = tipoRecursoFL.findAll();
-                reservas = tipoReservaFL.findAll();
-                break;
-            case "libros.intex":
-                autor = autorFL.findAll();
-                categoria = categoriaFL.findAll();
-                editorial = editorialFL.findAll();
-                break;
+    public void escucha() {
+        try {
+            String mss = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("mss");
+            mensaje m = new mensaje(mss);
+            if (m.getRemitente() != usuario.getIdpersona()) {
+                FacesContext.getCurrentInstance().addMessage(null, m.getFacesmessage());
+                init();
+                PrimeFaces.current().ajax().update("form0", "form");
+            }
+        } catch (Exception e) {
+            System.out.println("Error en tipoController/escucha: " + (e.getMessage() == null ? "Error desconocido" : e.getMessage()));
         }
     }
-
 }

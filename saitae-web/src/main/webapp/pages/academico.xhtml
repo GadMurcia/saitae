@@ -7,7 +7,8 @@
     xmlns:p="http://primefaces.org/ui"
     xmlns:f="http://xmlns.jcp.org/jsf/core"
     xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-    xmlns:t="http://java.sun.com/jsf/composite/components/autentia">
+    xmlns:t="http://java.sun.com/jsf/composite/components/autentia"
+    xmlns:o="http://omnifaces.org/ui">
     <body>
         <ui:composition template="./../WEB-INF/template/plantilla1.xhtml">
             <ui:define name="content">
@@ -26,8 +27,7 @@
                 <h:form id="form">
                     <p:growl id="msgs" showDetail="true"/>
                     <h1 style="align-content: center;">Administración Académica.</h1>
-                    <p:tabView id="tw" orientation="top" dynamic="true" scrollable="true"
-                               effect="explote">
+                    <p:tabView id="tw" orientation="top" dynamic="true">
                         <p:tab title="Tipo Materia">
                             <p:dataTable id="tipomateria" var="tima" value="#{tipoController.tipoMaterias}" editable="true" 
                                          widgetVar="materia1" styleClass="tabla" emptyMessage="Sin registros aún.">
@@ -120,7 +120,6 @@
                             </div>
                         </p:tab>
                         <p:tab title="Horas Clase">
-
                             <p:dataTable id="horario" var="h" value="#{tipoController.horario}" rowKey="#{h.idhorario}"
                                          widgetVar="horario1" styleClass="tabla" emptyMessage="Sin registros aún."
                                          selection="#{tipoController.hora}" selectionMode="single" rows="5" 
@@ -278,8 +277,57 @@
 
 
                         </p:tab>
+                        <p:tab title="Días Laborales">
+                            <p:panel header="Días en los de la semana laboral">
+                                <p:dataTable id="dias" value="#{tipoController.dias}" var="d" rowKey="#{d.idDias}"
+                                             selectionMode="single" selection="#{tipoController.diasSelected}">
+                                    <f:facet name="header">
+                                        Administración de los días laborales
+                                    </f:facet>
+                                    <p:column headerText="Número del día" style="width: 50px;">
+                                        #{d.idDias}
+                                    </p:column>
+                                    <p:column headerText="Nombre del día">
+                                        #{d.diasEstudioNombre}
+                                    </p:column>
+                                </p:dataTable>
+                                <p:commandButton title="Agregar nuevo" icon="pi pi-plus-circle" update="dias :f1"
+                                                 actionListener="#{tipoController.nuevoDias()}"
+                                                 oncomplete="PF('Ddias').show()"/>
+                                <p:contextMenu id="ctxm" for="dias">
+                                    <p:menuitem value="Agregar nuevo" icon="pi pi-plus-circle" update="dias :f1"
+                                                actionListener="#{tipoController.nuevoDias()}"
+                                                oncomplete="PF('Ddias').show()"/>
+                                    <p:menuitem value="Editar" update="f1" icon="fa fa-edit"
+                                                actionListener="#{tipoController.editarDias()}"
+                                                oncomplete="PF('Ddias').show()" />
+                                    <p:menuitem value="Eliminar" icon="pi pi-minus-circle" 
+                                                actionListener="#{tipoController.eliminarDias()}"
+                                                update="dias :f1"/>
+                                </p:contextMenu>
+                            </p:panel>
+                        </p:tab>
                     </p:tabView>
                 </h:form>
+
+                <p:dialog header="Administración de los días laborales" widgetVar="Ddias" modal="true" 
+                          showEffect="fade" hideEffect="fade" resizable="false">                             
+                    <h:form id="f1">
+                        <h:panelGrid columns="3">
+                            <p:outputLabel for="ndias" value="Día: "/>
+                            <p:selectOneMenu id="ndias" value="#{tipoController.diasSelected}" 
+                                             requiredMessage="Es necesario que seleccione una opción válida."
+                                             converter="omnifaces.SelectItemsConverter" required="true">
+                                <f:selectItem itemLabel="Seleccione" itemValue="null" noSelectionOption="true"/>
+                                <f:selectItems value="#{tipoController.diasSeleccionables}" var="ds"
+                                               itemLabel="#{ds.diasEstudioNombre}" itemValue="#{ds}"/>
+                            </p:selectOneMenu>
+                            <p:column/>
+                            <p:commandButton value="Guaradr" actionListener="#{tipoController.guardarDias()}"
+                                             update=":form:tw:dias f1" oncomplete="PF('Ddias').hide()"/>
+                        </h:panelGrid>
+                    </h:form> 
+                </p:dialog>
 
                 <p:dialog header="Administración de horario" widgetVar="Dhorario" modal="true" 
                           showEffect="fade" hideEffect="fade" resizable="false">
@@ -300,6 +348,16 @@
                                          icon="pi pi-save" update="form:tw:horario form0:msgs"/>
                     </h:form>
                 </p:dialog>
+
+                <script>
+                    function socketListener(message, channel, event) {
+                        tipopp([{name: 'mss', value: message}]);
+                    }
+                </script>                
+                <o:socket channel="notificacion" onmessage="socketListener"/>
+                <h:form>
+                    <p:remoteCommand name="tipopp" actionListener="#{tipoController.escucha()}" update="form f1 h1 form0"/>
+                </h:form>
             </ui:define>
         </ui:composition>
     </body>

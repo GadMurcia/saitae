@@ -44,7 +44,7 @@ CREATE TABLE `acceso` (
 
 LOCK TABLES `acceso` WRITE;
 /*!40000 ALTER TABLE `acceso` DISABLE KEYS */;
-INSERT INTO `acceso` VALUES (9,'Configuración',NULL,'#','pi pi-key'),(10,'Administración',9,'tipopp.intex','pi pi-folder-open'),(11,'Permisos y Licencias',9,'lictp.intex','pi pi-th-large'),(12,'Académica',9,'academico.intex','fa fa-leaf'),(13,'Perfil',NULL,'#','pi pi-user'),(14,'Permisos',NULL,'#','pi pi-eye'),(15,'Solicitar Permiso',14,'permiso.intex','pi pi-briefcase'),(16,'Personal',NULL,'#','pi pi-users'),(17,'Agregar Maestro',27,'agregacion.intex','pi pi-user-plus'),(18,'Agregar Administrador',16,'agAdm.intex','pi pi-plus'),(19,'Plantel Institucional',16,'plantel.intex','pi pi-table'),(20,'Inventario',23,'inventario.intex','fa fa-thumb-tack'),(21,'Libros',23,'libros.intex','fa fa-tint'),(22,'Nuevo Ingreso',16,'nuevoIngreso.intex','pi pi-user'),(23,'Recursos',9,'#','fa fa-tint'),(24,'Nomina de Alumnos',16,'nominaA.intex','pi pi-user'),(25,'Administración de Recursos',23,'recurso.intex','pi pi-list'),(26,'Lista de Representantes',16,'listaRepresentantes.intex','pi pi-list'),(27,'Maestros',16,'#','pi pi-list'),(28,'Asignación de materias',27,'asignacionmaestro.intex','pi pi-plus');
+INSERT INTO `acceso` VALUES (9,'Configuración',NULL,'#','pi pi-key'),(10,'Administración',9,'tipopp.intex','pi pi-folder-open'),(11,'Permisos y Licencias',9,'lictp.intex','pi pi-th-large'),(12,'Académica',9,'academico.intex','fa fa-leaf'),(13,'Perfil',NULL,'#','pi pi-user'),(14,'Permisos',NULL,'#','pi pi-eye'),(15,'Solicitar Permiso',14,'permiso.intex','pi pi-briefcase'),(16,'Personal',NULL,'#','pi pi-users'),(17,'Agregar Maestro',27,'agregacion.intex','pi pi-user-plus'),(18,'Agregar Administrador',16,'agAdm.intex','pi pi-plus'),(19,'Plantel Institucional',16,'plantel.intex','pi pi-table'),(20,'Inventario',23,'inventario.intex','fa fa-thumb-tack'),(21,'Libros',23,'libros.intex','fa fa-tint'),(22,'Nuevo Ingreso',16,'nuevoIngreso.intex','pi pi-user'),(23,'Recursos',9,'#','fa fa-tint'),(24,'Nomina de Alumnos',16,'nominaA.intex','pi pi-user'),(25,'Administración de Recursos',23,'recurso.intex','pi pi-list'),(26,'Lista de Representantes',16,'listaRepresentantes.intex','pi pi-list'),(27,'Maestros',16,'#','pi pi-list'),(28,'Asignación de materias',27,'horario.intex','pi pi-plus');
 /*!40000 ALTER TABLE `acceso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -129,7 +129,7 @@ CREATE TABLE `aula` (
 
 LOCK TABLES `aula` WRITE;
 /*!40000 ALTER TABLE `aula` DISABLE KEYS */;
-INSERT INTO `aula` VALUES (1,1,''),(2,1,''),(3,1,''),(4,1,''),(5,1,''),(6,2,''),(7,2,'');
+INSERT INTO `aula` VALUES (1,2,''),(2,1,''),(3,1,''),(4,1,''),(5,1,''),(6,2,''),(7,2,'');
 /*!40000 ALTER TABLE `aula` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -145,7 +145,7 @@ CREATE TABLE `autor` (
   `autorNombre` varchar(30) NOT NULL,
   `autorComentario` varchar(140) DEFAULT NULL,
   PRIMARY KEY (`idautor`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -154,7 +154,7 @@ CREATE TABLE `autor` (
 
 LOCK TABLES `autor` WRITE;
 /*!40000 ALTER TABLE `autor` DISABLE KEYS */;
-INSERT INTO `autor` VALUES (1,'Rusou',''),(2,'loosss','');
+INSERT INTO `autor` VALUES (1,'Rusou 1',''),(2,'loosss','8'),(3,'Delsas','');
 /*!40000 ALTER TABLE `autor` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -238,7 +238,7 @@ CREATE TABLE `cargo` (
 
 LOCK TABLES `cargo` WRITE;
 /*!40000 ALTER TABLE `cargo` DISABLE KEYS */;
-INSERT INTO `cargo` VALUES (1,'Director',''),(2,'Profesor',''),(3,'Subdirector',''),(4,'Profesor Auxiliar',''),(5,'Coordinador de área Informática',''),(6,'Psicólogo','');
+INSERT INTO `cargo` VALUES (1,'Director',''),(2,'Profesor',''),(3,'Subdirector',''),(4,'Coordinador de área bibliográfica',''),(5,'Coordinador de área Informática',''),(6,'Psicólogo','');
 /*!40000 ALTER TABLE `cargo` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -263,7 +263,7 @@ CREATE TABLE `categoria` (
 
 LOCK TABLES `categoria` WRITE;
 /*!40000 ALTER TABLE `categoria` DISABLE KEYS */;
-INSERT INTO `categoria` VALUES (0,'Generalidades',NULL),(100,'Filosofías y Disciplinas afines',NULL),(300,'Ciencias Sociales',''),(400,'Leguas',''),(500,'Ciencias Puras',''),(600,'Ciencias Aplicadas',''),(700,'Bellas Artes',''),(800,' Literatura',''),(900,'Geografia e Historia','');
+INSERT INTO `categoria` VALUES (0,'Generalidades s',NULL),(100,'Filosofías y Disciplinas afines',NULL),(300,'Ciencias Sociales',''),(400,'Leguas',''),(500,'Ciencias Puras',''),(600,'Ciencias Aplicadas',''),(700,'Bellas Artes',''),(800,' Literatura',''),(900,'Geografia e Historia','');
 /*!40000 ALTER TABLE `categoria` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -424,6 +424,31 @@ LOCK TABLES `delagacionCargo` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `diasEstudio`
+--
+
+DROP TABLE IF EXISTS `diasEstudio`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `diasEstudio` (
+  `idDias` int(11) NOT NULL AUTO_INCREMENT,
+  `diasEstudioNombre` varchar(45) NOT NULL,
+  `diasEstudioComentario` varchar(140) DEFAULT NULL,
+  PRIMARY KEY (`idDias`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `diasEstudio`
+--
+
+LOCK TABLES `diasEstudio` WRITE;
+/*!40000 ALTER TABLE `diasEstudio` DISABLE KEYS */;
+INSERT INTO `diasEstudio` VALUES (1,'Lunes',NULL),(2,'Martes',''),(3,'Miércoles',NULL),(4,'Jueves',NULL),(5,'Viernes',NULL);
+/*!40000 ALTER TABLE `diasEstudio` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `documentos`
 --
 
@@ -470,7 +495,7 @@ CREATE TABLE `editorial` (
   `editorialNombre` varchar(50) NOT NULL,
   `editorialComentarios` varchar(140) DEFAULT NULL,
   PRIMARY KEY (`ideditorial`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -479,7 +504,7 @@ CREATE TABLE `editorial` (
 
 LOCK TABLES `editorial` WRITE;
 /*!40000 ALTER TABLE `editorial` DISABLE KEYS */;
-INSERT INTO `editorial` VALUES (1,'rousoes',NULL),(2,'lessss',NULL);
+INSERT INTO `editorial` VALUES (1,'rousoes',NULL),(2,'lessss ',NULL),(3,'Delsas',NULL);
 /*!40000 ALTER TABLE `editorial` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -534,7 +559,7 @@ CREATE TABLE `ejemplar` (
 
 LOCK TABLES `ejemplar` WRITE;
 /*!40000 ALTER TABLE `ejemplar` DISABLE KEYS */;
-INSERT INTO `ejemplar` VALUES (20,20,2019,''),(20,21,2019,''),(22,22,2019,''),(22,23,2019,''),(22,24,2019,''),(22,25,2019,''),(22,26,2019,''),(23,23,2019,''),(23,24,2019,''),(23,25,2019,''),(23,26,2019,''),(23,27,2019,''),(70,70,2019,''),(70,71,2019,''),(70,72,2019,''),(70,73,2019,''),(70,74,2019,''),(70,75,2019,''),(70,76,2019,''),(555,555,2019,''),(555,556,2019,''),(555,557,2019,''),(555,558,2019,''),(555,559,2019,''),(2212,2212,2019,''),(2212,2213,2019,''),(2212,2214,2019,''),(2212,2215,2019,''),(2212,2216,2019,''),(2212,2217,2019,''),(2212,2218,2019,''),(2212,2219,2019,''),(7030,7030,2019,''),(7030,7031,2019,''),(7030,7032,2019,''),(7030,7033,2019,''),(7030,7034,2019,''),(1258965,1258965,2019,''),(14706554,14706554,2019,''),(14706554,14706555,2019,'');
+INSERT INTO `ejemplar` VALUES (1,1,2019,''),(20,20,2019,''),(20,21,2019,''),(22,22,2019,''),(22,23,2019,''),(22,24,2019,''),(22,25,2019,''),(22,26,2019,''),(23,23,2019,''),(23,24,2019,''),(23,25,2019,''),(23,26,2019,''),(23,27,2019,''),(70,70,2019,''),(70,71,2019,''),(70,72,2019,''),(70,73,2019,''),(70,74,2019,''),(70,75,2019,''),(70,76,2019,''),(555,555,2019,''),(555,556,2019,''),(555,557,2019,''),(555,558,2019,''),(555,559,2019,''),(2212,2212,2019,''),(2212,2213,2019,''),(2212,2214,2019,''),(2212,2215,2019,''),(2212,2216,2019,''),(2212,2217,2019,''),(2212,2218,2019,''),(2212,2219,2019,''),(7030,7030,2019,''),(7030,7031,2019,''),(7030,7032,2019,''),(7030,7033,2019,''),(7030,7034,2019,''),(1258965,1258965,2019,''),(14706554,14706554,2019,''),(14706554,14706555,2019,'');
 /*!40000 ALTER TABLE `ejemplar` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -749,7 +774,7 @@ CREATE TABLE `grado` (
 
 LOCK TABLES `grado` WRITE;
 /*!40000 ALTER TABLE `grado` DISABLE KEYS */;
-INSERT INTO `grado` VALUES (1,'C','A',2019,1,'',1222222222,NULL),(1,'S','A',2019,5,'\0',1111111111,NULL),(1,'G','A',2019,3,'',1123456798,NULL),(1,'C','B',2019,7,'',NULL,NULL),(2,'C','A',2019,2,'',NULL,NULL),(2,'G','A',2019,4,'',NULL,NULL),(3,'C','A',2019,6,'',NULL,NULL);
+INSERT INTO `grado` VALUES (1,'C','A',2019,1,'',1222222222,NULL),(1,'S','A',2019,5,'',1111111111,NULL),(1,'G','A',2019,3,'',1123456798,NULL),(1,'C','B',2019,7,'',NULL,NULL),(2,'C','A',2019,2,'\0',NULL,NULL),(2,'G','A',2019,4,'\0',NULL,NULL),(3,'C','A',2019,6,'',1111111111,NULL);
 /*!40000 ALTER TABLE `grado` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -857,7 +882,7 @@ CREATE TABLE `maestoCargo` (
 
 LOCK TABLES `maestoCargo` WRITE;
 /*!40000 ALTER TABLE `maestoCargo` DISABLE KEYS */;
-INSERT INTO `maestoCargo` VALUES (1111111111,2,1,1,'2019-07-30',NULL,NULL,NULL),(1111111111,3,2,2,'2019-07-30',NULL,NULL,NULL),(1123456798,2,1,2,'2019-08-01',NULL,NULL,NULL),(1222222222,2,1,1,'2019-08-01',NULL,NULL,NULL);
+INSERT INTO `maestoCargo` VALUES (1111111111,2,1,1,'2019-07-30',NULL,NULL,NULL),(1111111111,3,2,2,'2019-07-30',NULL,NULL,NULL),(1123456789,1,1,1,'2019-08-24',NULL,NULL,NULL),(1123456798,2,1,2,'2019-08-01',NULL,NULL,NULL),(1222222222,2,1,1,'2019-08-01',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `maestoCargo` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -905,7 +930,7 @@ CREATE TABLE `maestro` (
 
 LOCK TABLES `maestro` WRITE;
 /*!40000 ALTER TABLE `maestro` DISABLE KEYS */;
-INSERT INTO `maestro` VALUES (1111111111,89,898989,8989898,9898989,898989,89898,1,'9898989',8989898,'2222-2222','Informática','2019-07-30','2019-07-30','2019-07-30','T','98','','Sueldo Base','',0,'','','',''),(1123456798,0,0,0,0,0,0,0,'45466879+658499468',0,'8979-8797','Lenguaje','2019-08-01','2019-08-01','2019-08-01','T','1','','Horas clases','',0,'\0','','',''),(1222222222,0,0,0,0,0,0,0,'0',0,'2222-2222','Educación Física','2019-08-01','2019-08-01','2019-08-01','T','0','\0','Sueldo Base','',0,'','\0','','');
+INSERT INTO `maestro` VALUES (1111111111,89,898989,8989898,9898989,898989,89898,1,'9898989',8989898,'2222-2222','Informática','2019-07-30','2019-07-30','2019-07-30','T','98','','Sueldo Base','',0,'','','',''),(1123456789,0,0,0,0,0,0,0,'kgh',0,'6767-6767','Ciencias Naturales','2019-08-24','2019-08-24','2019-08-24','M','1','','Horas clases','\0',0,'\0','\0','\0',''),(1123456798,0,0,0,0,0,0,0,'45466879+658499468',0,'8979-8797','Lenguaje','2019-08-01','2019-08-01','2019-08-01','T','1','','Horas clases','',0,'\0','','',''),(1222222222,0,0,0,0,0,0,0,'0',0,'2222-2222','Educación Física','2019-08-01','2019-08-01','2019-08-01','T','0','\0','Sueldo Base','',0,'','\0','','');
 /*!40000 ALTER TABLE `maestro` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -933,7 +958,7 @@ CREATE TABLE `materia` (
 
 LOCK TABLES `materia` WRITE;
 /*!40000 ALTER TABLE `materia` DISABLE KEYS */;
-INSERT INTO `materia` VALUES (1,'Matemática',1,''),(2,'Lenguaje',1,''),(3,'Inglés',1,''),(4,'Informática',1,''),(5,'Estudios Sociales',1,''),(6,'Educación Físiaca',1,''),(7,'Ciencias Naturales',1,''),(8,'Moral, Urbanidad y Cívica',1,''),(9,'Orientación Para La Vida',2,''),(10,'Seminario',2,''),(11,'Curso de Habilidad Laboral',2,''),(12,'Tecnología I',3,''),(13,'Tecnología II',3,''),(14,'Tecnología III',3,''),(15,'Práctica Profesional I',3,''),(16,'Práctica Profesional II',3,''),(17,'Práctica Profesional III',3,''),(18,'Laboratorio de Creatividad I',3,''),(19,'Laboratorio de Creatividad II',3,''),(20,'Laboratorio de Creatividad III',3,''),(21,'Contaduría',4,''),(22,'General',4,'');
+INSERT INTO `materia` VALUES (1,'Matemática',1,'20b057'),(2,'Lenguaje',1,'7184e3'),(3,'Inglés',1,'c73625'),(4,'Informática',1,'cf9dcf'),(5,'Estudios Sociales',1,'9fc7a3'),(6,'Educación Físiaca',1,''),(7,'Ciencias Naturales',1,''),(8,'Moral, Urbanidad y Cívica',1,''),(9,'Orientación Para La Vida',2,''),(10,'Seminario',2,''),(11,'Curso de Habilidad Laboral',2,''),(12,'Tecnología I',3,''),(13,'Tecnología II',3,''),(14,'Tecnología III',3,''),(15,'Práctica Profesional I',3,''),(16,'Práctica Profesional II',3,''),(17,'Práctica Profesional III',3,''),(18,'Laboratorio de Creatividad I',3,''),(19,'Laboratorio de Creatividad II',3,''),(20,'Laboratorio de Creatividad III',3,''),(21,'Contaduría',4,''),(22,'General',4,'d9b2d9');
 /*!40000 ALTER TABLE `materia` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -980,7 +1005,7 @@ CREATE TABLE `mestroHorarioMaterias` (
   `idMaestro` int(11) NOT NULL,
   `idMateria` int(11) NOT NULL COMMENT 'Detalle de las materias y horarios que cada docente imparte en la institución.',
   `idHorario` int(11) NOT NULL,
-  `diaSemana` enum('L','M','X','J','V') NOT NULL,
+  `diaSemana` int(11) NOT NULL,
   `idGrado` int(11) NOT NULL,
   `gradoModalidad` enum('C','S','G') NOT NULL,
   `seccionGrado` enum('A','B','C') NOT NULL,
@@ -990,10 +1015,12 @@ CREATE TABLE `mestroHorarioMaterias` (
   KEY `fk_mestroHorarioMaterias_2_idx` (`idMateria`),
   KEY `fk_mestroHorarioMaterias_3_idx` (`idHorario`),
   KEY `fk_mestroHorarioMaterias_4` (`idGrado`,`seccionGrado`,`añoGrado`,`gradoModalidad`),
+  KEY `fk_mestroHorarioMaterias_5_idx` (`diaSemana`),
   CONSTRAINT `fk_mestroHorarioMaterias_1` FOREIGN KEY (`idMaestro`) REFERENCES `maestro` (`idmaestro`) ON UPDATE CASCADE,
   CONSTRAINT `fk_mestroHorarioMaterias_2` FOREIGN KEY (`idMateria`) REFERENCES `materia` (`idmateria`) ON UPDATE CASCADE,
   CONSTRAINT `fk_mestroHorarioMaterias_3` FOREIGN KEY (`idHorario`) REFERENCES `horario` (`idhorario`) ON UPDATE CASCADE,
-  CONSTRAINT `fk_mestroHorarioMaterias_4` FOREIGN KEY (`idGrado`, `seccionGrado`, `añoGrado`, `gradoModalidad`) REFERENCES `grado` (`idgrado`, `gradoSeccion`, `gradoAño`, `gradoModalidad`) ON UPDATE CASCADE
+  CONSTRAINT `fk_mestroHorarioMaterias_4` FOREIGN KEY (`idGrado`, `seccionGrado`, `añoGrado`, `gradoModalidad`) REFERENCES `grado` (`idgrado`, `gradoSeccion`, `gradoAño`, `gradoModalidad`) ON UPDATE CASCADE,
+  CONSTRAINT `fk_mestroHorarioMaterias_5` FOREIGN KEY (`diaSemana`) REFERENCES `diasEstudio` (`idDias`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1003,6 +1030,7 @@ CREATE TABLE `mestroHorarioMaterias` (
 
 LOCK TABLES `mestroHorarioMaterias` WRITE;
 /*!40000 ALTER TABLE `mestroHorarioMaterias` DISABLE KEYS */;
+INSERT INTO `mestroHorarioMaterias` VALUES (1111111111,1,1,1,1,'S','A',2019,NULL),(1222222222,1,1,1,1,'C','A',2019,NULL);
 /*!40000 ALTER TABLE `mestroHorarioMaterias` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1139,7 +1167,7 @@ CREATE TABLE `persona` (
 
 LOCK TABLES `persona` WRITE;
 /*!40000 ALTER TABLE `persona` DISABLE KEYS */;
-INSERT INTO `persona` VALUES (1045367073,'Guillermo','Delsas',NULL,NULL,NULL,NULL,NULL,NULL,'02951a6cb9595ef475fed783e59c687e','Ingeniero',1,'',NULL,'\0',NULL,NULL,NULL,NULL,NULL),(1045367074,'Director','Directivo',NULL,NULL,NULL,NULL,NULL,NULL,'02951a6cb9595ef475fed783e59c687e','Director',2,'',NULL,'',NULL,NULL,NULL,NULL,NULL),(1045367075,'Estudiante','Estudioso','1991-01-01','7888787878787','8788-7878',0,1,'01#02','4fece643fea5732bb85533b5784c4dda','Estudiante',8,'','0444-444448-777-7','',0,'Salvadoreña','87878787878787','7878787',''),(1111111111,'Quintus Sestus','Septimus Octavios','1991-02-17','878787878787878','7777-7777',0,0,' #09','02951a6cb9595ef475fed783e59c687e','Primus Secuntus Tercius',6,'','1111-111111-111-1','\0',0,'Extrangera','878788888888888','121212',''),(1123456798,'fffffffffffff gf f','fgfgfgfgfgg','1991-02-17','789798','8979-8798',0,0,'02#13','e0c28158eeac6b5d9bcfe1e028185438','455545455',2,'','2111-111111-111-1','',1,'Salvadoreña','89798797979','ooooooo',''),(1131413141,'trece catorce','quince dieciséis','2019-08-20','','',0,0,' # ','','',10,'\0','','\0',0,'Salvadoreña','','',''),(1212121212,'doce trece','catorce quince','2019-08-20','','',0,0,' # ','','',11,'\0',NULL,'\0',0,'Salvadoreña',NULL,'',''),(1222222222,'dieciséis diecisiete ','dieciocho diecinueve','2019-08-20','','',0,0,' # ','','',10,'\0',NULL,'\0',0,'Salvadoreña',NULL,'',''),(1888888888,'padre padre1','padre2 padre3',NULL,NULL,NULL,NULL,NULL,NULL,'02951a6cb9595ef475fed783e59c687e',NULL,11,'\0',NULL,NULL,NULL,NULL,NULL,NULL,NULL),(1999999999,'representante','apellidos','1980-01-25','la dirección del representante','7999-9999',NULL,0,' # ','e9e2bcfcbdc37e5897e0c0def72b257c','Agricultor',9,'','9999-999999-999-9','\0',1,'9','representante@correo.com','ninguna',NULL);
+INSERT INTO `persona` VALUES (1045367073,'Guillermo','Delsas',NULL,NULL,NULL,NULL,NULL,NULL,'02951a6cb9595ef475fed783e59c687e','Ingeniero',1,'',NULL,'\0',NULL,NULL,NULL,NULL,NULL),(1045367074,'Director','Directivo',NULL,NULL,NULL,NULL,NULL,NULL,'02951a6cb9595ef475fed783e59c687e','Director',2,'',NULL,'',NULL,NULL,NULL,NULL,NULL),(1045367075,'Estudiante','Estudioso','1991-01-01','7888787878787','8788-7878',0,1,'01#02','4fece643fea5732bb85533b5784c4dda','Estudiante',8,'','0444-444448-777-7','',0,'Salvadoreña','87878787878787','7878787',''),(1111111111,'Quintus Sestus','Septimus Octavios','1991-02-17','878787878787878','7777-7777',0,0,' #09','02951a6cb9595ef475fed783e59c687e','Primus Secuntus Tercius',6,'','1111-111111-111-1','\0',0,'Extrangera','878788888888888','121212',''),(1123456789,'1111','111111','2019-08-24','ugukguguiguk','6767-6767',0,0,'01#01','25f9e794323b453885f5181f1b624d0b','jkg',4,'\0','1111-111111-111-1','\0',0,'Salvadoreña','676767','',''),(1123456798,'fffffffffffff gf f','fgfgfgfgfgg','1991-02-17','789798','8979-8798',0,0,'02#13','e0c28158eeac6b5d9bcfe1e028185438','455545455',2,'','2111-111111-111-1','',1,'Salvadoreña','89798797979','ooooooo',''),(1131413141,'trece catorce','quince dieciséis','2019-08-20','','',0,0,' # ','','',10,'\0','','\0',0,'Salvadoreña','','',''),(1212121212,'doce trece','catorce quince','2019-08-20','','',0,0,' # ','','',11,'\0',NULL,'\0',0,'Salvadoreña',NULL,'',''),(1222222222,'dieciséis diecisiete ','dieciocho diecinueve','2019-08-20','','',0,0,' # ','','',10,'\0',NULL,'\0',0,'Salvadoreña',NULL,'',''),(1888888888,'padre padre1','padre2 padre3',NULL,NULL,NULL,NULL,NULL,NULL,'02951a6cb9595ef475fed783e59c687e',NULL,11,'\0',NULL,NULL,NULL,NULL,NULL,NULL,NULL),(1999999999,'representante','apellidos','1980-01-25','la dirección del representante','7999-9999',NULL,0,' # ','e9e2bcfcbdc37e5897e0c0def72b257c','Agricultor',9,'','9999-999999-999-9','\0',1,'9','representante@correo.com','ninguna',NULL);
 /*!40000 ALTER TABLE `persona` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1245,7 +1273,7 @@ CREATE TABLE `recurso` (
 
 LOCK TABLES `recurso` WRITE;
 /*!40000 ALTER TABLE `recurso` DISABLE KEYS */;
-INSERT INTO `recurso` VALUES (20,'978987',NULL,1,1,NULL,'',20,'B','REAL','lpedr',NULL),(22,'ddddd',0,3,1,1,'\0',30.25,'B','REAL','f',NULL),(23,'hñoio',100,3,2,2,'',12.5,'B','ESTIMADO','78',NULL),(70,'7070',NULL,1,2,NULL,'',250,'B','REAL','f',NULL),(555,'yygi',0,3,1,1,'\0',15,'B','REAL','9u',NULL),(2212,'laptop2',600,1,1,1,'',250,'B','ESTIMADO','',NULL),(7030,'7030',NULL,2,2,NULL,'',1.35,'B','ESTIMADO','n/a',NULL),(1258965,'COmputadoras laptop lempita',600,3,1,7,'',350.78,'B','REAL','lpedr',NULL),(14706554,'sjhsuhihihi|',600,1,2,1,'',10,'B','ESTIMADO','wwwww','wwww');
+INSERT INTO `recurso` VALUES (1,'87t7t78t',NULL,1,1,NULL,'',0,'B','ESTIMADO','f',NULL),(20,'978987',NULL,1,1,NULL,'',0,'B','REAL','lpedr',NULL),(22,'ddddd',0,3,1,1,'\0',30.25,'B','REAL','f',NULL),(23,'hñoio',100,3,2,2,'',12.5,'B','ESTIMADO','78',NULL),(70,'7070',NULL,1,2,NULL,'',250,'B','REAL','f',NULL),(555,'yygi',0,3,1,1,'\0',15,'B','REAL','9u',NULL),(2212,'laptop2',600,1,1,1,'',250,'B','ESTIMADO','',NULL),(7030,'7030',NULL,2,2,NULL,'',1.35,'B','ESTIMADO','n/a',NULL),(1258965,'COmputadoras laptop lempita',600,3,1,7,'',350.78,'B','REAL','lpedr',NULL),(14706554,'sjhsuhihihi|',600,1,2,1,'',10,'B','ESTIMADO','wwwww','wwww');
 /*!40000 ALTER TABLE `recurso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1384,7 +1412,7 @@ CREATE TABLE `tipoCargo` (
 
 LOCK TABLES `tipoCargo` WRITE;
 /*!40000 ALTER TABLE `tipoCargo` DISABLE KEYS */;
-INSERT INTO `tipoCargo` VALUES (1,'Fondos Propios',NULL),(2,'Actividades de la institución',NULL),(3,'Donación',NULL);
+INSERT INTO `tipoCargo` VALUES (1,'Fondos Propios',NULL),(2,'Actividades de la institución',NULL),(3,'Donación 1',NULL);
 /*!40000 ALTER TABLE `tipoCargo` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1510,7 +1538,7 @@ CREATE TABLE `tipoRecurso` (
 
 LOCK TABLES `tipoRecurso` WRITE;
 /*!40000 ALTER TABLE `tipoRecurso` DISABLE KEYS */;
-INSERT INTO `tipoRecurso` VALUES (1,'Tecnológico CRA',NULL),(2,'Tecnológico Laboratorio de Ciencias Naturales',NULL),(3,'Bibliográfico',NULL);
+INSERT INTO `tipoRecurso` VALUES (1,'Tecnológico CRA 1',NULL),(2,'Tecnológico Laboratorio de Ciencias Naturales',NULL),(3,'Bibliográfico',NULL);
 /*!40000 ALTER TABLE `tipoRecurso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1535,7 +1563,7 @@ CREATE TABLE `tipoReserva` (
 
 LOCK TABLES `tipoReserva` WRITE;
 /*!40000 ALTER TABLE `tipoReserva` DISABLE KEYS */;
-INSERT INTO `tipoReserva` VALUES (1,'Uso en sala',NULL),(2,'Uso dentro de la institución',NULL),(3,'Uso en aula',NULL),(4,'Fuera de la institución',NULL);
+INSERT INTO `tipoReserva` VALUES (1,'Uso en sala',NULL),(2,'Uso dentro de la institución 1',NULL),(3,'Uso en aula',NULL),(4,'Fuera de la institución',NULL);
 /*!40000 ALTER TABLE `tipoReserva` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1563,7 +1591,7 @@ CREATE TABLE `tipoReservaRecurso` (
 
 LOCK TABLES `tipoReservaRecurso` WRITE;
 /*!40000 ALTER TABLE `tipoReservaRecurso` DISABLE KEYS */;
-INSERT INTO `tipoReservaRecurso` VALUES (1,22,''),(1,23,''),(1,70,''),(1,2212,''),(1,7030,''),(1,1258965,''),(1,14706554,''),(2,23,''),(2,70,''),(2,555,''),(3,23,''),(3,70,''),(3,2212,''),(3,1258965,''),(4,23,''),(4,70,'');
+INSERT INTO `tipoReservaRecurso` VALUES (1,1,''),(1,20,''),(1,22,''),(1,23,''),(1,70,''),(1,2212,''),(1,7030,''),(1,1258965,''),(1,14706554,''),(2,1,''),(2,20,''),(2,23,''),(2,70,''),(2,555,''),(3,1,''),(3,20,''),(3,23,''),(3,70,''),(3,2212,''),(3,1258965,''),(4,20,''),(4,23,''),(4,70,'');
 /*!40000 ALTER TABLE `tipoReservaRecurso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1616,7 +1644,7 @@ CREATE TABLE `zona` (
 
 LOCK TABLES `zona` WRITE;
 /*!40000 ALTER TABLE `zona` DISABLE KEYS */;
-INSERT INTO `zona` VALUES (1,'Zona 10',NULL),(2,'Zona 20',NULL),(3,'Zona 30',NULL),(4,'zona 40',NULL);
+INSERT INTO `zona` VALUES (1,'Zona 1',NULL),(2,'Zona 2',NULL),(3,'Zona 3',NULL),(4,'zona 4',NULL);
 /*!40000 ALTER TABLE `zona` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1637,4 +1665,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-08-21 16:26:41
+-- Dump completed on 2019-08-30 17:01:20
