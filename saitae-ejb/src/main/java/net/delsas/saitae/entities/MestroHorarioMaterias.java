@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "mestroHorarioMaterias", catalog = "intex", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "MestroHorarioMaterias.findAll", query = "SELECT m FROM MestroHorarioMaterias m")
+    @NamedQuery(name = "MestroHorarioMaterias.findAll", query = "SELECT m FROM MestroHorarioMaterias m ORDER BY m.diasEstudio, m.horario, m.materia, m.grado, m.maestro")
     , @NamedQuery(name = "MestroHorarioMaterias.findByIdMaestro", query = "SELECT m FROM MestroHorarioMaterias m WHERE m.mestroHorarioMateriasPK.idMaestro = :idMaestro")
     , @NamedQuery(name = "MestroHorarioMaterias.findByIdMateria", query = "SELECT m FROM MestroHorarioMaterias m WHERE m.mestroHorarioMateriasPK.idMateria = :idMateria")
     , @NamedQuery(name = "MestroHorarioMaterias.findByIdHorario", query = "SELECT m FROM MestroHorarioMaterias m WHERE m.mestroHorarioMateriasPK.idHorario = :idHorario")
@@ -34,8 +34,15 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "MestroHorarioMaterias.findByIdGrado", query = "SELECT m FROM MestroHorarioMaterias m WHERE m.mestroHorarioMateriasPK.idGrado = :idGrado")
     , @NamedQuery(name = "MestroHorarioMaterias.findBySeccionGrado", query = "SELECT m FROM MestroHorarioMaterias m WHERE m.mestroHorarioMateriasPK.seccionGrado = :seccionGrado")
     , @NamedQuery(name = "MestroHorarioMaterias.findByA\u00f1oGrado", query = "SELECT m FROM MestroHorarioMaterias m WHERE m.mestroHorarioMateriasPK.a\u00f1oGrado = :a\u00f1oGrado")
-    , @NamedQuery(name = "MestroHorarioMaterias.findByMestroHorarioMateriasComentarios", query = "SELECT m FROM MestroHorarioMaterias m WHERE m.mestroHorarioMateriasComentarios = :mestroHorarioMateriasComentarios")})
+    , @NamedQuery(name = "MestroHorarioMaterias.findByMestroHorarioMateriasComentarios", query = "SELECT m FROM MestroHorarioMaterias m WHERE m.mestroHorarioMateriasComentarios = :mestroHorarioMateriasComentarios")
+    , @NamedQuery(name = "MestroHorarioMaterias.findByHorarioAndGrado", query = "SELECT m FROM MestroHorarioMaterias m WHERE m.horario = :horario AND m.grado.gradoPK = :gradoPK AND m.diasEstudio = :dia")
+    , @NamedQuery(name = "MestroHorarioMaterias.findByHorarioAndMaestro", query = "SELECT m FROM MestroHorarioMaterias m WHERE m.horario = :horario AND m.maestro = :maestro AND m.diasEstudio = :dia")
+})
 public class MestroHorarioMaterias implements Serializable {
+
+    @JoinColumn(name = "diaSemana", referencedColumnName = "idDias", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private DiasEstudio diasEstudio;
 
     private static final long serialVersionUID = 1L;
     @EmbeddedId
@@ -67,7 +74,7 @@ public class MestroHorarioMaterias implements Serializable {
         this.mestroHorarioMateriasPK = mestroHorarioMateriasPK;
     }
 
-    public MestroHorarioMaterias(int idMaestro, int idMateria, int idHorario, String diaSemana, int idGrado, String seccionGrado, int añoGrado, String gradoModalidad) {
+    public MestroHorarioMaterias(int idMaestro, int idMateria, int idHorario, int diaSemana, int idGrado, String seccionGrado, int añoGrado, String gradoModalidad) {
         this.mestroHorarioMateriasPK = new MestroHorarioMateriasPK(idMaestro, idMateria, idHorario, diaSemana, idGrado, seccionGrado, gradoModalidad, añoGrado);
     }
 
@@ -142,6 +149,14 @@ public class MestroHorarioMaterias implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.MestroHorarioMaterias[ mestroHorarioMateriasPK=" + mestroHorarioMateriasPK + " ]";
+    }
+
+    public DiasEstudio getDiasEstudio() {
+        return diasEstudio;
+    }
+
+    public void setDiasEstudio(DiasEstudio diasEstudio) {
+        this.diasEstudio = diasEstudio;
     }
 
 }

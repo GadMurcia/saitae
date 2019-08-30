@@ -35,7 +35,7 @@ public class MestroHorarioMateriasPK implements Serializable {
     @NotNull
     @Size(min = 1, max = 2)
     @Column(name = "diaSemana")
-    private String diaSemana;
+    private int diaSemana;
     @Basic(optional = false)
     @NotNull
     @Column(name = "idGrado")
@@ -58,7 +58,7 @@ public class MestroHorarioMateriasPK implements Serializable {
     public MestroHorarioMateriasPK() {
     }
 
-    public MestroHorarioMateriasPK(int idMaestro, int idMateria, int idHorario, String diaSemana, int idGrado, String seccionGrado, String gradoModalidad, int añoGrado) {
+    public MestroHorarioMateriasPK(int idMaestro, int idMateria, int idHorario, int diaSemana, int idGrado, String seccionGrado, String gradoModalidad, int añoGrado) {
         this.idMaestro = idMaestro;
         this.idMateria = idMateria;
         this.idHorario = idHorario;
@@ -93,11 +93,11 @@ public class MestroHorarioMateriasPK implements Serializable {
         this.idHorario = idHorario;
     }
 
-    public String getDiaSemana() {
+    public int getDiaSemana() {
         return diaSemana;
     }
 
-    public void setDiaSemana(String diaSemana) {
+    public void setDiaSemana(int diaSemana) {
         this.diaSemana = diaSemana;
     }
 
@@ -139,7 +139,7 @@ public class MestroHorarioMateriasPK implements Serializable {
         hash += (int) idMaestro;
         hash += (int) idMateria;
         hash += (int) idHorario;
-        hash += (diaSemana != null ? diaSemana.hashCode() : 0);
+        hash += (int) diaSemana;
         hash += (int) idGrado;
         hash += (seccionGrado != null ? seccionGrado.hashCode() : 0);
         hash += (gradoModalidad != null ? gradoModalidad.hashCode() : 0);
@@ -163,7 +163,7 @@ public class MestroHorarioMateriasPK implements Serializable {
         if (this.idHorario != other.idHorario) {
             return false;
         }
-        if ((this.diaSemana == null && other.diaSemana != null) || (this.diaSemana != null && !this.diaSemana.equals(other.diaSemana))) {
+        if (this.diaSemana  != other.diaSemana) {
             return false;
         }
         if (this.idGrado != other.idGrado) {

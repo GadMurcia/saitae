@@ -16,6 +16,7 @@
     <class>net.delsas.saitae.entities.ContenidoLibro</class>
     <class>net.delsas.saitae.entities.Contribuciones</class>
     <class>net.delsas.saitae.entities.DelagacionCargo</class>
+    <class>net.delsas.saitae.entities.DiasEstudio</class>
     <class>net.delsas.saitae.entities.Documentos</class>
     <class>net.delsas.saitae.entities.Editorial</class>
     <class>net.delsas.saitae.entities.EditorialLibro</class>

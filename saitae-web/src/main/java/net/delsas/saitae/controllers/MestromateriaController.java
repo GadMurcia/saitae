@@ -132,7 +132,7 @@ public class MestromateriaController implements Serializable {
     public void onRowSelect(SelectEvent event) {
         this.mhm = this.selectmhm;
         this.control = mhmFL.find(selectmhm.getMestroHorarioMateriasPK());
-        this.diaSemanal = this.selectmhm.getMestroHorarioMateriasPK().getDiaSemana();
+       // this.diaSemanal = this.selectmhm.getMestroHorarioMateriasPK().getDiaSemana();
         btnCreate = false;
         btnEdit = true;
         //btnDelete = true;
@@ -149,7 +149,7 @@ public class MestromateriaController implements Serializable {
                 mhmPK.setSeccionGrado(mhm.getGrado().getGradoPK().getGradoSeccion());
                 mhmPK.setAñoGrado(mhm.getGrado().getGradoPK().getGradoAño());
                 mhmPK.setGradoModalidad(mhm.getGrado().getGradoPK().getGradoModalidad());
-                mhmPK.setDiaSemana(diaSemanal);
+               // mhmPK.setDiaSemana(diaSemanal);
                 mhmPK.setIdGrado(mhm.getGrado().getGradoPK().getIdgrado());
                 boolean modifica = false;
                 
@@ -228,7 +228,7 @@ public class MestromateriaController implements Serializable {
                     mhmPK.setIdHorario(((Horario) id).getIdhorario());
                     break;
                 case "dia":
-                    mhmPK.setDiaSemana(id.toString());
+                  //  mhmPK.setDiaSemana(id.toString());
                     break;
                 case "grado":
                     GradoPK pk = ((Grado) id).getGradoPK();

@@ -7,34 +7,119 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="content">
-        <h:form id="form">
-            <p:dataTable id="horario" var="h" value="#{horarioController.horario}" 
-                         widgetVar="horario1" styleClass="tabla" 
-                         emptyMessage="Sin registros aún.">
-                <f:facet name="header">
-                    Horario Institucional
-                </f:facet>
-                <p:column headerText="Hora inicio" style="width: 80px;">
-                    #{horarioController.getHora(h.horario.horaInicio)}
-                </p:column>
-                <p:column headerText="Horario Fin" style="width: 80px;">
-                    #{horarioController.getHora(h.horario.horaFin)}
-                </p:column>
-                <p:column headerText="Día" style="width: 80px;">
-                    #{h.mestroHorarioMateriasPK.diaSemana}
-                </p:column>
-                <p:column headerText="Materia" style="width: 80px;">
-                    #{h.materia.materiaNombre}
-                </p:column>
-                <p:column headerText="Grado">
-                    #{horarioController.getGrado(h.grado.gradoPK)}
-                </p:column>
-                <p:column headerText="Maestro"> 
-                    #{h.maestro.persona.personaNombre.split(" ")[0]} 
-                    #{h.maestro.persona.personaApellido.split(" ")[0]}
-                </p:column>
-            </p:dataTable> 
-        </h:form>
-    </ui:define>
+        <f:view>
+            <p:dialog header="Asignación de Materias" widgetVar="Dhorario" modal="true" 
+                      showEffect="fade" hideEffect="fade" resizable="false">                  
+                <h:form id="f1">
+                    <h:panelGrid columns="3">
+                        <p:outputLabel for="dia" value="Día: "/>
+                        <p:selectOneMenu id="dia" value="#{horarioController.selected.diasEstudio}" 
+                                         requiredMessage="Es necesario que seleccione una opción válida."
+                                         converter="omnifaces.SelectItemsConverter" required="true">
+                            <f:selectItem itemValue="null" itemLabel="Seleccione" noSelectionOption="true"/>
+                            <f:selectItems value="#{horarioController.dias}" var="d" 
+                                           itemLabel="#{d.diasEstudioNombre}" itemValue="#{d}"/>
+                        </p:selectOneMenu>
+                        <p:message for="dia"/>
 
+                        <p:outputLabel for="horai" value="Hora: "/>
+                        <p:selectOneMenu id="horai" value="#{horarioController.selected.horario}" 
+                                         requiredMessage="Es necesario que seleccione una opción válida."
+                                         converter="omnifaces.SelectItemsConverter" required="true">
+                            <f:selectItem itemValue="null" itemLabel="Seleccione" noSelectionOption="true"/>
+                            <f:selectItems value="#{horarioController.horasClase}" var="hi" 
+                                           itemLabel="#{horarioController.getHora(hi.horaInicio)} 
+                                           - #{horarioController.getHora(hi.horaFin)}" itemValue="#{hi}"/>
+                        </p:selectOneMenu>
+                        <p:message for="horai"/>
+
+                        <p:outputLabel for="materia" value="Materia: "/>
+                        <p:selectOneMenu id="materia" value="#{horarioController.selected.materia}" 
+                                         requiredMessage="Es necesario que seleccione una opción válida."
+                                         converter="omnifaces.SelectItemsConverter" required="true">
+                            <f:selectItem itemValue="null" itemLabel="Seleccione" noSelectionOption="true"/>
+                            <f:selectItems value="#{horarioController.materias}" var="mat" 
+                                           itemLabel="#{mat.materiaNombre}" itemValue="#{mat}"/>
+                        </p:selectOneMenu>
+                        <p:message for="materia"/>
+
+                        <p:outputLabel for="grado" value="Grado: "/>
+                        <p:selectOneMenu id="grado" value="#{horarioController.selected.grado}" 
+                                         requiredMessage="Es necesario que seleccione una opción válida."
+                                         converter="omnifaces.SelectItemsConverter" required="true">
+                            <f:selectItem itemValue="null" itemLabel="Seleccione" noSelectionOption="true"/>
+                            <f:selectItems value="#{horarioController.grados}" var="gr" 
+                                           itemLabel="#{horarioController.getGrado(gr.gradoPK)}" itemValue="#{gr}"/>
+                        </p:selectOneMenu>
+                        <p:message for="grado"/>
+
+                        <p:outputLabel for="maestro" value="Maestro: "/>
+                        <p:selectOneMenu id="maestro" value="#{horarioController.selected.maestro}" 
+                                         requiredMessage="Es necesario que seleccione una opción válida."
+                                         converter="omnifaces.SelectItemsConverter" required="true">
+                            <f:selectItem itemValue="null" itemLabel="Seleccione" noSelectionOption="true"/>
+                            <f:selectItems value="#{horarioController.maestros}" var="ms" 
+                                           itemLabel="#{ms.persona.personaNombre.split(' ')[0]} 
+                                           #{ms.persona.personaApellido.split(' ')[0]}" itemValue="#{ms}"/>
+                        </p:selectOneMenu>
+                        <p:message for="maestro"/>
+
+                        <p:column/>
+                        <p:commandButton value="Guaradr" actionListener="#{horarioController.guardar()}"
+                                         update="form f1" oncomplete="PF('Dhorario').hide()"/>
+
+                        <p:column/>
+                    </h:panelGrid>
+                </h:form>
+            </p:dialog>
+            <h:form id="form">
+                <p:growl id="growl" showDetail="true" life="15000" globalOnly="true"/>
+                <p:dataTable id="horario" var="h" value="#{horarioController.horario}" 
+                             rowKey="#{h.mestroHorarioMateriasPK}" selectionMode="single"
+                             selection="#{horarioController.selected}"
+                             emptyMessage="Sin registros aún.">
+                    <p:ajax event="rowSelect" listener="#{horarioController.onRowSelect}" update=":f1 :form"/>
+                    <f:facet name="header">
+                        Horario Institucional
+                    </f:facet>
+                    <p:column headerText="Día" 
+                              style="text-shadow: 1px 1px 8px white; color: black; width: 80px; background-color: ##{h.materia.materiaComentario}">
+                        #{h.diasEstudio.diasEstudioNombre}
+                    </p:column>
+                    <p:column headerText="Hora" 
+                              style="text-shadow: 1px 1px 8px white; color: black; width: 180px; background-color: ##{h.materia.materiaComentario}">
+                        #{horarioController.getHora(h.horario.horaInicio)} - 
+                        #{horarioController.getHora(h.horario.horaFin)}
+                    </p:column>
+                    <p:column headerText="Materia" 
+                              style="text-shadow: 1px 1px 8px white; color: black; width: 120px; background-color: ##{h.materia.materiaComentario};">
+                        #{h.materia.materiaNombre}
+                    </p:column>
+                    <p:column headerText="Grado" 
+                              style="text-shadow: 1px 1px 8px white; color: black; background-color: ##{h.materia.materiaComentario}">
+                        #{horarioController.getGrado(h.grado.gradoPK)}
+                    </p:column>
+                    <p:column headerText="Maestro" 
+                              style="text-shadow: 1px 1px 8px white; color: black; background-color: ##{h.materia.materiaComentario}"> 
+                        #{h.maestro.persona.personaNombre.split(" ")[0]} 
+                        #{h.maestro.persona.personaApellido.split(" ")[0]}
+                    </p:column>
+                </p:dataTable>
+                <p:commandButton title="Agregar nuevo" icon="pi pi-plus-circle" update=":form :f1"
+                                actionListener="#{horarioController.nuevo()}"
+                                oncomplete="PF('Dhorario').show()"/>
+                <p:contextMenu id="ctxm" for="horario">
+                    <p:menuitem value="Agregar nuevo" icon="pi pi-plus-circle" update=":form :f1"
+                                actionListener="#{horarioController.nuevo()}"
+                                oncomplete="PF('Dhorario').show()"/>
+                    <p:menuitem value="Editar" update="f1" icon="fa fa-edit"
+                                actionListener="#{horarioController.editar()}"
+                                oncomplete="PF('Dhorario').show()" />
+                    <p:menuitem value="Eliminar" icon="pi pi-minus-circle" 
+                                actionListener="#{horarioController.eliminar()}"
+                                update=":form :f1"/>
+                </p:contextMenu>
+            </h:form>
+        </f:view>
+    </ui:define>
 </ui:composition>

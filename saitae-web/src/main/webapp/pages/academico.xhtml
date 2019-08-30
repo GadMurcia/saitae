@@ -65,7 +65,7 @@
                         </p:tab>
                         <p:tab title="Materias">
                             <p:dataTable id="materia" var="m" value="#{tipoController.materias}" 
-                                         editable="true" rows="7" paginator="true"
+                                         editable="true" rows="7" paginator="true" styleClass="tabla"
                                          widgetVar="materia1" >
                                 <f:facet name="header">
                                     Administración de Materias
@@ -95,6 +95,15 @@
                                                 <f:selectItems value="#{tipoController.listaTipoMateria}"/>
                                                 <f:ajax render="console1" execute="SeleccionMateria"/>
                                             </p:selectOneMenu></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                <p:column headerText="Color" style="width: 50px; background-color: ##{m.materiaComentario};">
+                                    <p:cellEditor>
+                                        <f:facet name="output">#{m.materiaComentario}</f:facet>
+                                        <f:facet name="input">
+                                            <p:outputLabel value="Seleccione un color: " style="color: black; background-color: #fff;"/>
+                                            <p:colorPicker value="#{m.materiaComentario}" 
+                                                           style="width:100%"/></f:facet>
                                     </p:cellEditor>
                                 </p:column>
                                 <p:column style="width:35px">
