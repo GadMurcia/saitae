@@ -1,5 +1,6 @@
 package net.delsas.saitae.controllers;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -371,5 +372,9 @@ public class nuevoingresoController implements Serializable {
 
     public Documentos getDocs() {
         return docs;
+    }
+    
+    public File getFile(int idFile){
+        return null;
     }
 }

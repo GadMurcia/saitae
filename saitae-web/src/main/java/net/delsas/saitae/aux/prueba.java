@@ -17,6 +17,8 @@
 package net.delsas.saitae.aux;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -25,6 +27,7 @@ import javax.faces.model.SelectItem;
 import net.delsas.saitae.entities.Estudiante;
 import net.delsas.saitae.entities.MaestoCargo;
 import net.delsas.saitae.entities.Maestro;
+import net.delsas.saitae.entities.Matricula;
 import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.TipoPersona;
 
@@ -33,13 +36,13 @@ import net.delsas.saitae.entities.TipoPersona;
  * @author delsas
  */
 public class prueba {
-
+    
     private Persona user;
-
+    
     public prueba() {
         user = new Persona(0, "", "", false);
         user.setPersonaContrasenya("");
-        user.setPersonaNacimiento(new Date());
+        user.setPersonaNacimiento(getEdad(18));
         user.setPersonaDireccion("");
         user.setPersonaTelefono("");
         user.setPersonaCodigoResidencia(0);
@@ -54,9 +57,10 @@ public class prueba {
         user.setPersonaDiscapacidades("");
         user.setPersonaComentarios("");
     }
-
+    
     public Persona getEstudiante() {
         Persona e = (new prueba()).getUser();
+        e.setPersonaNacimiento(getEdad(12));
         e.setEstudiante(new Estudiante(e.getIdpersona(), false, 0, false, ""));
         e.getEstudiante().setEstudianteRiesgoVulnerabilidad("");
         e.getEstudiante().setEstudianteMedioTransporte(0);
@@ -73,13 +77,15 @@ public class prueba {
         e.getEstudiante().setEstudianteRepresentanteFamiliar(false);
         e.getEstudiante().setEstudiantePadre(getPadre());
         e.getEstudiante().setEstudianteMadre(getMadre());
-        e.getEstudiante().setEstudianteRepresentante(getRepresentante().getEstudiante());
+        e.getEstudiante().setMatriculaList(new ArrayList<Matricula>());
         e.getEstudiante().setEstudianteComentario("");
         e.getEstudiante().setPersona(e);
+        e.getEstudiante().setEstudianteEsEstudiante(true);
         e.setTipoPersona(new TipoPersona(8, "Estudiante"));
+        e.setPersonaActivo(true);
         return e;
     }
-
+    
     public Persona getRepresentante() {
         Persona r = (new prueba()).getUser();
         r.setEstudiante(new Estudiante(r.getIdpersona(), false, 0, false, ""));
@@ -100,27 +106,33 @@ public class prueba {
         r.getEstudiante().setEstudianteMadre(null);
         r.getEstudiante().setEstudianteRepresentante(null);
         r.getEstudiante().setEstudianteComentario("");
+        r.getEstudiante().setEstudianteEsEstudiante(false);
         r.setTipoPersona(new TipoPersona(9, "Representante"));
         r.getEstudiante().setPersona(r);
+        r.setPersonaActivo(true);
         return r;
     }
-
+    
     public Persona getMadre() {
         Persona m = (new prueba()).getUser();
         m.setTipoPersona(new TipoPersona(10, "Madre de familia"));
         m.setPersonaEmail(null);
         m.setPersonaNit(null);
+        m.setPersonaNacimiento(null);
+        m.setPersonaSexo(true);
         return m;
     }
-
+    
     public Persona getPadre() {
         Persona p = (new prueba()).getUser();
         p.setTipoPersona(new TipoPersona(11, "Padre de familia"));
         p.setPersonaEmail(null);
         p.setPersonaNit(null);
+        p.setPersonaSexo(true);
+        p.setPersonaNacimiento(null);
         return p;
     }
-
+    
     public Persona getMaestro() {
         Persona ma = (new prueba()).getUser();
         ma.setEstudiante(null);
@@ -152,45 +164,53 @@ public class prueba {
         ma.getMaestro().setPersona(ma);
         ma.getMaestro().setMaestoCargoList(new ArrayList<MaestoCargo>());
         ma.setTipoPersona(new TipoPersona(4, "Maestro"));
+        ma.setPersonaActivo(true);
         return ma;
     }
-
+    
     public Persona getBibliotecario() {
         Persona b = (new prueba()).getUser();
         b.setTipoPersona(new TipoPersona(5, "Bibliotecario"));
+        b.setPersonaActivo(true);
         return b;
     }
-
+    
     public Persona getAdministradorCra() {
         Persona a = (new prueba()).getUser();
         a.setTipoPersona(new TipoPersona(6, "Administrador CRA"));
+        a.setPersonaActivo(true);
         return a;
     }
-
+    
     public Persona getSubDirector() {
         Persona sd = (new prueba()).getUser();
         sd.setTipoPersona(new TipoPersona(3, "Subdirector"));
+        sd.setPersonaActivo(true);
         return sd;
     }
-
+    
     public Persona getLAboratorista() {
         Persona l = (new prueba()).getUser();
         l.setTipoPersona(new TipoPersona(7, "Laboratorista"));
+        l.setPersonaActivo(true);
         return l;
     }
-
+    
     public Persona getAmin() {
         Persona ad = (new prueba()).getUser();
         ad.setEstudiante(getEstudiante().getEstudiante());
         ad.setMaestro(getMaestro().getMaestro());
         ad.setTipoPersona(new TipoPersona(1, "Administrador"));
+        ad.setPersonaActivo(true);
         return ad;
     }
-
+    
     public List<SelectItem> getMunicipioLista(Persona p) {
         List<SelectItem> items = new ArrayList<>();
-        items.add(new SelectItem(" ", "Seleccione"));
-
+        SelectItem u = new SelectItem(" ", "Seleccione");
+        u.setNoSelectionOption(true);
+        items.add(u);
+        
         int i = 1;
         switch (getDepartamento(p)) {
             case "01":
@@ -318,15 +338,17 @@ public class prueba {
                 break;
             default:
                 p.setPersonaLugarNac(" # ");
-
+            
         }
-
+        
         return items;
     }
-
+    
     public List<SelectItem> getDepartamentoLista(Persona p) {
         List<SelectItem> items = new ArrayList<>();
-        items.add(new SelectItem(" ", "Seleccione"));
+        SelectItem u = new SelectItem(" ", "Seleccione");
+        u.setNoSelectionOption(true);
+        items.add(u);
         switch (p.getPersonaNacionalidad()) {
             case "Salvadoreña":
                 int t = 1;
@@ -345,25 +367,25 @@ public class prueba {
                 break;
         }
         return items;
-
+        
     }
-
+    
     public void setDepartamento(String dep, Persona p) {
         p.setPersonaLugarNac(dep + "#" + p.getPersonaLugarNac().split("#")[1]);
     }
-
+    
     public String getDepartamento(Persona p) {
         return p.getPersonaLugarNac().split("#")[0];
     }
-
+    
     public void setMunicipio(String mun, Persona p) {
         p.setPersonaLugarNac(p.getPersonaLugarNac().split("#")[0] + "#" + mun);
     }
-
+    
     public String getMunicipio(Persona p) {
         return p.getPersonaLugarNac().split("#")[1];
     }
-
+    
     public void setDui(String dui, Persona p) {
         String x[] = dui.split("=>");
         String i = "1";
@@ -374,7 +396,7 @@ public class prueba {
         }
         p.setIdpersona(Integer.valueOf(i));
     }
-
+    
     public String getDui(Persona p) {
         String i = "";
         String[] h = p.getIdpersona().toString().split("");
@@ -385,13 +407,24 @@ public class prueba {
         }
         return i;
     }
-
+    
     public Persona getUser() {
         return user;
     }
-
+    
     public void setUser(Persona user) {
         this.user = user;
     }
-
+    
+    private Date getEdad(int menos) {
+        String g = new SimpleDateFormat("dd-mm").format(new Date()) + (Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date())) - menos);
+        Date d;
+        try {
+            d = new SimpleDateFormat("dd-mm-yyyy").parse(g);
+        } catch (ParseException ex) {
+            d = null;
+        }
+        return d;
+    }
+    
 }

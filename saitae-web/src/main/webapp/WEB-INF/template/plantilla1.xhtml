@@ -23,13 +23,7 @@
             <ui:insert name="top">
                 <h:form id="form0">
                     <p:growl id="msgs" showDetail="true" />
-                    <p:menubar id="menubar" model="#{sessionController.mm}">
-                        <f:facet name="options">
-                            <p:outputLabel value="#{sessionController.us.personaNombre.split(' ')[0]} 
-                                           #{sessionController.us.personaApellido.split(' ')[0]}  "
-                                           title="Su nombre de usuario"/>
-                        </f:facet>
-                    </p:menubar>
+                    <p:menubar id="menubar" model="#{sessionController.mm}"/>
                 </h:form>
             </ui:insert>
         </div>

@@ -131,14 +131,12 @@ public class sessionController implements Serializable {
             mi.setUrl("cvista.intex");
             mm.addElement(mi);
         }
-        mi = new DefaultMenuItem(us.getPersonaNombre().split(" ")[0]+" "
-                +us.getPersonaApellido().split(" ")[0], "fa fa-user", "#");
-        mm.addElement(mi);
-        
-        mi = new DefaultMenuItem("salir", "fa fa-close");
-        mi.setAjax(false);
+        DefaultSubMenu s = new DefaultSubMenu(us.getPersonaNombre().split(" ")[0] + " "
+                + us.getPersonaApellido().split(" ")[0], "fa fa-user");
+        mi = new DefaultMenuItem("Cerrar Sesión", "pi pi-sign-out");
         mi.setCommand("#{sessionController.cerrarSesion()}");
-        mm.addElement(mi);
+        s.addElement(mi);
+        mm.addElement(s);
     }
 
     private MenuElement menu3(Acceso a, List<Acceso> ac) {
@@ -195,7 +193,7 @@ public class sessionController implements Serializable {
 
             if (!notificaciones.contains(n)) {
                 List<notificacion> n1 = new ArrayList<>();
-                for(notificacion nn : notificaciones){
+                for (notificacion nn : notificaciones) {
                     nn.setCollapsed(true);
                     n1.add(nn);
                 }

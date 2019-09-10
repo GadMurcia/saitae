@@ -59,19 +59,19 @@ public class Documentos implements Serializable {
     @Lob
     @Column(name = "estudianteDocNotas")
     private byte[] estudianteDocNotas;
-    @Size(max = 10)
+    @Size(max = 100)
     @Column(name = "estudianteExtencionPartida")
     private String estudianteExtencionPartida;
-    @Size(max = 10)
+    @Size(max = 100)
     @Column(name = "estudianteExtencionCertificado")
     private String estudianteExtencionCertificado;
-    @Size(max = 10)
+    @Size(max = 100)
     @Column(name = "estudianteExtencionConducta")
     private String estudianteExtencionConducta;
-    @Size(max = 10)
+    @Size(max = 100)
     @Column(name = "estudianteExtencionNotas")
     private String estudianteExtencionNotas;
-    @Size(max = 10)
+    @Size(max = 100)
     @Column(name = "estudianteExtencionDui")
     private String estudianteExtencionDui;
     @Size(max = 140)
