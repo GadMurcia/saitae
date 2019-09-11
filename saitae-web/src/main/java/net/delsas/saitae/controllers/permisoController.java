@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
@@ -29,6 +30,7 @@ import net.delsas.saitae.entities.Estudiante;
 import net.delsas.saitae.entities.MatriculaPK;
 import net.delsas.saitae.entities.TipoPermiso;
 import net.delsas.saitae.entities.TipopersonaPermiso;
+import org.primefaces.event.SelectEvent;
 
 /**
  *
@@ -55,11 +57,7 @@ public class permisoController implements Serializable {
     private List<Estudiante> e;
     private int id;
     private Permisos p;
-    private Date finicio, ffin;
 
-    /**
-     * Creates a new instance of permisoController
-     */
     public void inicial() {
         try {
             FacesContext context = FacesContext.getCurrentInstance();
@@ -75,28 +73,30 @@ public class permisoController implements Serializable {
                 p.setPermisosPK(new PermisosPK(0, Calendar.getInstance().getTime(), 0, Calendar.getInstance().getTime()));
                 permisos = u.getTipoPersona().getTipopersonaPermisoList();
                 e = u.getEstudiante().getEstudianteEsEstudiante()
-                        ? new ArrayList<Estudiante>() : u.getEstudiante().getEstudianteList();
+                        ? new ArrayList<Estudiante>()
+                        : u.getEstudiante().getEstudianteList();
                 p.setTipoPersona(tipoPersonaFL.find(8));
                 p.setPersona(new Persona(0));
+                p.setPermisoFechafin(p.getPermisosPK().getPermisoFechaInicio());
             }
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
     }
 
-    public permisoController() {
+    @PostConstruct
+    public void permisoController() {
         p = new Permisos();
         p.setTipoPermiso1(new TipoPermiso(0));
         e = new ArrayList<>();
         us = new Estudiante();
-        id = 0;
-        finicio = ffin = new Date();
-
+        permisos = new ArrayList<>();
+        inicial();
     }
 
     public ArrayList<SelectItem> listaPermisos() {
         ArrayList<SelectItem> items = new ArrayList<>();
-        items.add(new SelectItem(0, "Seleccione"));
+        items.add(new SelectItem(-1, "Seleccione"));
         for (TipopersonaPermiso t : permisos) {
             items.add(new SelectItem(t.getTipoPermiso().getIdtipoPermiso(), t.getTipoPermiso().getTipoPermisoNombre()));
         }
@@ -105,6 +105,10 @@ public class permisoController implements Serializable {
 
     public boolean isSeleccionPermiso() {
         return p.getTipoPermiso1().getIdtipoPermiso() > 0;
+    }
+
+    public void onItemSelect(SelectEvent event) {
+        id = (int) event.getObject();
     }
 
     public boolean isSeleccionEstudiante() {
@@ -125,7 +129,7 @@ public class permisoController implements Serializable {
 
     public ArrayList<SelectItem> listaEstudiantes() {
         ArrayList<SelectItem> items = new ArrayList<>();
-        items.add(new SelectItem(0, "Seleccione"));
+        items.add(new SelectItem(-1, "Seleccione"));
         if (e == null || e.isEmpty()) {
             items.add(new SelectItem(us.getPersona().getIdpersona(), us.getPersona().getPersonaNombre() + " "
                     + us.getPersona().getPersonaApellido()));
@@ -180,24 +184,6 @@ public class permisoController implements Serializable {
 
     public void setUs(Estudiante us) {
         this.us = us;
-    }
-
-    public Date getFinicio() {
-        return finicio;
-    }
-
-    public void setFinicio(Date finicio) {
-        System.out.println("fecha inicio: " + finicio.toString());
-        this.finicio = finicio;
-    }
-
-    public Date getFfin() {
-        return ffin;
-    }
-
-    public void setFfin(Date ffin) {
-        System.out.println("fecha fin: " + ffin.toString());
-        this.ffin = ffin;
     }
 
 }
