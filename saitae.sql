@@ -44,7 +44,7 @@ CREATE TABLE `acceso` (
 
 LOCK TABLES `acceso` WRITE;
 /*!40000 ALTER TABLE `acceso` DISABLE KEYS */;
-INSERT INTO `acceso` VALUES (9,'Configuración',NULL,'#','pi pi-key'),(10,'Administración',9,'tipopp.intex','pi pi-folder-open'),(11,'Permisos y Licencias',9,'lictp.intex','pi pi-th-large'),(12,'Académica',9,'academico.intex','fa fa-leaf'),(13,'Perfil',NULL,'#','pi pi-user'),(14,'Permisos',NULL,'#','pi pi-eye'),(15,'Solicitar Permiso',14,'permiso.intex','pi pi-briefcase'),(16,'Personal',NULL,'#','pi pi-users'),(17,'Agregar Maestro',27,'agregacion.intex','pi pi-user-plus'),(18,'Agregar Administrador',16,'agAdm.intex','pi pi-plus'),(19,'Plantel Institucional',16,'plantel.intex','pi pi-table'),(20,'Inventario',23,'inventario.intex','fa fa-thumb-tack'),(21,'Libros',23,'libros.intex','fa fa-tint'),(22,'Nuevo Ingreso',16,'inscripcion.intex','pi pi-user'),(23,'Recursos',9,'#','fa fa-tint'),(24,'Nomina de Alumnos',16,'nominaA.intex','pi pi-user'),(25,'Administración de Recursos',23,'recurso.intex','pi pi-list'),(26,'Lista de Representantes',16,'listaRepresentantes.intex','pi pi-list'),(27,'Maestros',16,'#','pi pi-list'),(28,'Asignación de materias',27,'horario.intex','pi pi-plus');
+INSERT INTO `acceso` VALUES (9,'Configuración',NULL,'#','pi pi-key'),(10,'Administración',9,'tipopp.intex','pi pi-folder-open'),(11,'Permisos y Licencias',9,'lictp.intex','pi pi-th-large'),(12,'Académica',9,'academico.intex','fa fa-leaf'),(13,'Perfil',NULL,'#','pi pi-user'),(14,'Permisos',NULL,'#','pi pi-eye'),(15,'Solicitar Permiso',14,'permisoE.intex','pi pi-briefcase'),(16,'Personal',NULL,'#','pi pi-users'),(17,'Agregar Maestro',27,'agregacion.intex','pi pi-user-plus'),(18,'Agregar Administrador',16,'agAdm.intex','pi pi-plus'),(19,'Plantel Institucional',16,'plantel.intex','pi pi-table'),(20,'Inventario',23,'inventario.intex','fa fa-thumb-tack'),(21,'Libros',23,'libros.intex','fa fa-tint'),(22,'Nuevo Ingreso',16,'inscripcion.intex','pi pi-user'),(23,'Recursos',9,'#','fa fa-tint'),(24,'Nomina de Alumnos',16,'nominaA.intex','pi pi-user'),(25,'Administración de Recursos',23,'recurso.intex','pi pi-list'),(26,'Lista de Representantes',16,'listaRepresentantes.intex','pi pi-list'),(27,'Maestros',16,'#','pi pi-list'),(28,'Asignación de materias',27,'horario.intex','pi pi-plus');
 /*!40000 ALTER TABLE `acceso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1102,7 +1102,7 @@ CREATE TABLE `permisos` (
   `permisoFechafin` date NOT NULL,
   `tipoPersona` int(11) NOT NULL,
   `permisosMotivo` varchar(250) NOT NULL,
-  `permisosAceptado` int(1) NOT NULL,
+  `permisosEstado` enum('1','2','0') NOT NULL DEFAULT '0',
   `permisosSolicitante` int(11) NOT NULL,
   `permisosComentario` varchar(250) DEFAULT NULL,
   PRIMARY KEY (`ipPersona`,`permisoFechaSolicitud`,`tipoPermiso`,`permisoFechaInicio`),
@@ -1123,6 +1123,7 @@ CREATE TABLE `permisos` (
 
 LOCK TABLES `permisos` WRITE;
 /*!40000 ALTER TABLE `permisos` DISABLE KEYS */;
+INSERT INTO `permisos` VALUES (11022,'2019-09-11',4,'2019-09-11','2019-09-11',8,'nada especial','0',11022,NULL),(11022,'2019-09-11',5,'2019-09-13','2019-09-13',8,'444444','0',11022,NULL);
 /*!40000 ALTER TABLE `permisos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1664,4 +1665,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-09-11 14:57:58
+-- Dump completed on 2019-09-11 21:30:38

@@ -8,68 +8,9 @@
 
     <body>
         <ui:composition template="./../WEB-INF/template/plantilla1.xhtml">
+
             <ui:define name="content">
-                <style>
-                    .centred-form{
-                        margin: 0 auto;
-                        align-content: center;
-                        align-items: center;
-                        width: 50%;
-                    }
-                </style>
-                <h:form styleClass="centred-form" id="frm">
-                    <p:panel header="Gestionar nuevo permiso">
-                        <h:panelGrid id="w" columns="2" columnClasses="label, value">
-                            <p:outputLabel for="console" value="Tipo del permiso: *" />
-                            <p:selectOneMenu id="console" value="#{permisoController.p.tipoPermiso1.idtipoPermiso}" 
-                                             style="width:200px;" title="Seleccione el permiso que necesita">
-                                <f:selectItems value="#{permisoController.listaPermisos()}"/>
-                                <p:ajax update="console1"/>
-                            </p:selectOneMenu>
 
-                            <p:outputLabel for="console1" value="¿Para quién es el permiso?: *" />
-                            <p:selectOneMenu id="console1" value="#{permisoController.id}" 
-                                             style="width:200px;" title="Seleccione el permiso que necesita"
-                                             disabled="#{!permisoController.seleccionPermiso}">
-                                <f:selectItems value="#{permisoController.listaEstudiantes()}" />
-                                <p:ajax event="itemSelect" listener="#{permisoController.onItemSelect}" 
-                                        update="m summit" />
-                            </p:selectOneMenu>
-
-                            <p:column/>
-                            <p:panelGrid id="m" columns="6">
-                                <h:outputLabel value="Bachillerato: "/>
-                                <h:outputLabel value="#{permisoController.m.grado.gradoPK.gradoModalidad}"/>
-
-                                <h:outputLabel value="Grado: "/>
-                                <h:outputLabel value="#{permisoController.m.grado.gradoPK.idgrado}"/>
-
-                                <h:outputLabel value="Sección: "/>
-                                <h:outputLabel value="#{permisoController.m.grado.gradoPK.gradoSeccion}"/>
-                            </p:panelGrid>
-
-                            <h:outputLabel value="Motivo: *"/>
-                            <p:inputText value="#{permisoController.p.permisosMotivo}" required="true" />
-
-                            <h:outputLabel value="Solicitado por: "/>
-                            <h:outputLabel value="#{permisoController.us.persona.personaNombre} 
-                                           #{permisoController.us.persona.personaApellido}"/>
-
-                            <p:outputLabel for="mask" value="Fecha de inicio:" />
-                            <p:calendar id="mask" value="#{permisoController.p.permisosPK.permisoFechaInicio}" 
-                                        pattern="dd-MM-yyyy" mask="true" required="true"/>
-
-                            <p:outputLabel for="mask1" value="Fecha de finalización: " />
-                            <p:calendar id="mask1" value="#{permisoController.p.permisoFechafin}" required="true" 
-                                        pattern="dd-MM-yyyy" mask="true" />
-
-                            <p:column/>
-                            <p:commandButton id="summit" value="Solicitar" disabled="#{!permisoController.seleccionEstudiante}"
-                                             actionListener="#{permisoController.guardar()}" update=":form0:msgs frm"/>
-                        </h:panelGrid>
-                    </p:panel>
-
-                </h:form>
             </ui:define>
 
         </ui:composition>

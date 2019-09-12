@@ -56,8 +56,9 @@ public class Permisos implements Serializable {
     private String permisosMotivo;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "permisosAceptado")
-    private int permisosAceptado;
+    @Size(min = 1, max = 2)
+    @Column(name = "permisosEstado")
+    private String permisosEstado;
     @Size(max = 250)
     @Column(name = "permisosComentario")
     private String permisosComentario;
@@ -81,11 +82,11 @@ public class Permisos implements Serializable {
         this.permisosPK = permisosPK;
     }
 
-    public Permisos(PermisosPK permisosPK, Date permisoFechafin, String permisosMotivo, int permisosAceptado) {
+    public Permisos(PermisosPK permisosPK, Date permisoFechafin, String permisosMotivo, String permisosEstado) {
         this.permisosPK = permisosPK;
         this.permisoFechafin = permisoFechafin;
         this.permisosMotivo = permisosMotivo;
-        this.permisosAceptado = permisosAceptado;
+        this.permisosEstado = permisosEstado;
     }
 
     public Permisos(int ipPersona, Date permisoFechaSolicitud, int tipoPermiso, Date permisoFechaInicio) {
@@ -116,12 +117,12 @@ public class Permisos implements Serializable {
         this.permisosMotivo = permisosMotivo;
     }
 
-    public int getPermisosAceptado() {
-        return permisosAceptado;
+    public String getPermisosEstado() {
+        return permisosEstado;
     }
 
-    public void setPermisosAceptado(int permisosAceptado) {
-        this.permisosAceptado = permisosAceptado;
+    public void setPermisosEstado(String permisosEstado) {
+        this.permisosEstado = permisosEstado;
     }
 
     public String getPermisosComentario() {
