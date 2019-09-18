@@ -26,7 +26,6 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -108,22 +107,23 @@ public class permisoEstController implements Serializable {
 
     public void guardar() {
         FacesMessage ms = null;
-        if (p.getPermisosPK().getPermisoFechaInicio().before(new Date())) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
-                    "Error en la fecha de inicio del permiso",
-                    "No debe seleccionar una fecha para el inicio del periodo del permiso anterior a la actual."));
-            p.getPermisosPK().setPermisoFechaInicio(new Date());
-        } else if (p.getPermisoFechafin().before(p.getPermisosPK().getPermisoFechaInicio())) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
-                    "Error en la fecha de fin del permiso",
-                    "No debe seleccionar una fecha para el final del periodo del permiso anterior a la fecha en la que inicia éste."));
-            p.setPermisoFechafin(p.getPermisosPK().getPermisoFechaInicio());
-        } else {
-            p.getPermisosPK().setTipoPermiso(p.getTipoPermiso1().getIdtipoPermiso());
-            p.setPermisosSolicitante(usuario);
-            p.setPersona(personaFL.find(id));
-            p.getPermisosPK().setIpPersona(id);
-            try {
+        try {
+            if (p.getPermisosPK().getPermisoFechaInicio().before(new SimpleDateFormat("dd/mm/yyyy").parse(new SimpleDateFormat("dd/mm/yyyy").format(new Date())))) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
+                        "Error en la fecha de inicio del permiso",
+                        "No debe seleccionar una fecha para el inicio del periodo del permiso anterior a la actual."));
+                p.getPermisosPK().setPermisoFechaInicio(new Date());
+            } else if (p.getPermisoFechafin().before(p.getPermisosPK().getPermisoFechaInicio())) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
+                        "Error en la fecha de fin del permiso",
+                        "No debe seleccionar una fecha para el final del periodo del permiso anterior a la fecha en la que inicia éste."));
+                p.setPermisoFechafin(p.getPermisosPK().getPermisoFechaInicio());
+            } else {
+                p.getPermisosPK().setTipoPermiso(p.getTipoPermiso1().getIdtipoPermiso());
+                p.setPermisosSolicitante(usuario);
+                p.setPersona(personaFL.find(id));
+                p.getPermisosPK().setIpPersona(id);
+                p.setPermisosEstado("0");
                 pfl.create(p);
                 ms = new FacesMessage(FacesMessage.SEVERITY_INFO, "Solicitud exitosa",
                         "Su permiso se ha solicitado para entre las fechas: "
@@ -132,9 +132,7 @@ public class permisoEstController implements Serializable {
                 sendMessage(new mensaje(0, usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
                         + " ha solicitado un nuevo permiso.",
                         "Solicitud de permiso nueva", FacesMessage.SEVERITY_INFO, id, "tp¿¿3").toString());
-            } catch (Exception e) {
-                ms = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage());
-            } finally {
+
                 FacesContext.getCurrentInstance().addMessage(null, ms);
                 p = new Permisos(new PermisosPK((usuario == null ? 0 : usuario.getIdpersona()), new Date(), 0, new Date()));
                 p.setTipoPersona(tipoPersonaFL.find(8));
@@ -143,6 +141,9 @@ public class permisoEstController implements Serializable {
                 p.setPermisoFechafin(p.getPermisosPK().getPermisoFechaInicio());
                 id = 0;
             }
+        } catch (Exception e) {
+            ms = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage());
+            FacesContext.getCurrentInstance().addMessage(null, ms);
         }
     }
 
@@ -219,13 +220,8 @@ public class permisoEstController implements Serializable {
     @Push
     private PushContext notificacion;
 
-    @Inject
-    @Push
-    private PushContext permiso;
-
     public void sendMessage(String message) {
         notificacion.send(message);
-        permiso.send(message);
     }
 
 }

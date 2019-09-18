@@ -5,6 +5,7 @@
  */
 package net.delsas.saitae.beans;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -29,4 +30,9 @@ public class PermisosFacade extends AbstractFacade<Permisos> implements Permisos
         super(Permisos.class);
     }
     
+    public List<Permisos> getPermisosPorEstado(String estado){
+        return em.createNamedQuery("Permisos.findByPermisosEstado")
+                .setParameter("permisoEstado", estado)
+                .getResultList();
+    }
 }

@@ -37,7 +37,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Permisos.findByPermisoFechaInicio", query = "SELECT p FROM Permisos p WHERE p.permisosPK.permisoFechaInicio = :permisoFechaInicio")
     , @NamedQuery(name = "Permisos.findByPermisoFechafin", query = "SELECT p FROM Permisos p WHERE p.permisoFechafin = :permisoFechafin")
     , @NamedQuery(name = "Permisos.findByPermisosMotivo", query = "SELECT p FROM Permisos p WHERE p.permisosMotivo = :permisosMotivo")
-    , @NamedQuery(name = "Permisos.findByPermisosAceptado", query = "SELECT p FROM Permisos p WHERE p.permisosAceptado = :permisosAceptado")
+    , @NamedQuery(name = "Permisos.findByPermisosEstado", query = "SELECT p FROM Permisos p WHERE p.permisosEstado = :permisoEstado ORDER BY p.permisosPK.permisoFechaSolicitud ASC")
     , @NamedQuery(name = "Permisos.findByPermisosComentario", query = "SELECT p FROM Permisos p WHERE p.permisosComentario = :permisosComentario")})
 public class Permisos implements Serializable {
 
