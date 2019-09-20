@@ -16,53 +16,6 @@
 
                     <h1 style="margin: 0 auto;">Administración de permisos de estudiantes</h1>
                     <p:accordionPanel>
-                        <p:tab title="Conceder Permiso">
-                            <h:panelGrid columns="2">
-                                <p:outputLabel for="tp" value="Tipo de permiso a conceder: "/>
-                                <p:selectOneMenu id="tp" immediate="true" required="true" style="width: 400px;"
-                                                 value="#{administraciónPermisoController.permiso.tipoPermiso1}"
-                                                 converter="omnifaces.SelectItemsConverter">
-                                    <f:selectItem itemValue="null" itemLabel="Seleccione" noSelectionOption="true"/>
-                                    <f:selectItems value="#{administraciónPermisoController.tipoPermiso}" var="tpe"
-                                                   itemValue="#{tpe}" itemLabel="#{tpe.tipoPermisoNombre}"/>
-                                </p:selectOneMenu>
-                                
-                                <p:outputLabel for="mod" value="Bachillerato: "/>
-                                <p:selectOneMenu id="mod" immediate="true" required="true" style="width: 400px;"
-                                                 value="#{administraciónPermisoController.gradoPK.gradoModalidad}">
-                                    <f:selectItem itemValue=" " itemLabel="Seleccione" noSelectionOption="true"/>
-                                    <f:selectItems value="#{administraciónPermisoController.modalidades}" />
-                                    <p:ajax update="niv"/>
-                                </p:selectOneMenu>
-                                
-                                <p:outputLabel for="niv" value="Año: "/>
-                                <p:selectOneMenu id="niv" immediate="true" required="true" style="width: 400px;"
-                                                 value="#{administraciónPermisoController.gradoPK.idgrado}">
-                                    <f:selectItem itemValue=" " itemLabel="Seleccione" noSelectionOption="true"/>
-                                    <f:selectItems value="#{administraciónPermisoController.niveles}" var="n"
-                                                   itemValue="#{n}" itemLabel="#{n}"/>
-                                    <p:ajax update="sec"/>
-                                </p:selectOneMenu>
-                                
-                                <p:outputLabel for="sec" value="Sección: "/>
-                                <p:selectOneMenu id="sec" immediate="true" required="true" style="width: 400px;"
-                                                 value="#{administraciónPermisoController.gradoPK.gradoSeccion}">
-                                    <f:selectItem itemValue=" " itemLabel="Seleccione" noSelectionOption="true"/>
-                                    <f:selectItems value="#{administraciónPermisoController.secciones}" var="s"
-                                                   itemValue="#{s}" itemLabel="#{s}"/>
-                                    <p:ajax update="es"/>
-                                </p:selectOneMenu>
-                                
-                                <p:outputLabel for="es" value="Estudiante: "/>
-                                <p:selectOneMenu id="es" immediate="true" required="true" style="width: 400px;"
-                                                 value="#{administraciónPermisoController.permiso.persona}"
-                                                 converter="omnifaces.SelectItemsConverter">
-                                    <f:selectItem itemValue="null" itemLabel="Seleccione" noSelectionOption="true"/>
-                                    <f:selectItems value="#{administraciónPermisoController.estudiantes}" var="e"
-                                                   itemValue="#{e}" itemLabel="#{e.personaNombre} #{e.personaApellido}"/>
-                                </p:selectOneMenu>
-                            </h:panelGrid>
-                        </p:tab>
                         <p:tab title="Permisos Solicitados">
                             <p:dataTable id="solicitados" value="#{administraciónPermisoController.solicitados}" var="p"
                                          paginator="true" rows="10" selection="#{administraciónPermisoController.acep}" 
@@ -80,8 +33,8 @@
                                                    #{p.persona.personaApellido.split(' ')[0]}"/>
                                 </p:column>
 
-                                <p:column headerText="Grado">
-                                    <p:outputLabel value="#{administraciónPermisoController.getGrado(p.persona.idpersona)}"/>
+                                <p:column headerText="Periodo del permiso">
+                                    <p:outputLabel value="#{administraciónPermisoController.getFechas(p.permisosPK.permisoFechaInicio, p.permisoFechafin)}"/>
                                 </p:column>
 
                                 <p:column headerText="Permiso Solicitado">
@@ -107,8 +60,8 @@
                                                        #{a.persona.personaApellido.split(' ')[0]}"/>
                                     </p:column>
 
-                                    <p:column headerText="Grado">
-                                        <p:outputLabel value="#{administraciónPermisoController.getGrado(a.persona.idpersona)}"/>
+                                    <p:column headerText="Periodo del permiso">
+                                        <p:outputLabel value="#{administraciónPermisoController.getFechas(a.permisosPK.permisoFechaInicio, a.permisoFechafin)}"/>
                                     </p:column>
 
                                     <p:column headerText="Permiso Solicitado">
@@ -135,14 +88,61 @@
                                                        #{r.persona.personaApellido.split(' ')[0]}"/>
                                     </p:column>
 
-                                    <p:column headerText="Grado">
-                                        <p:outputLabel value="#{administraciónPermisoController.getGrado(r.persona.idpersona)}"/>
+                                    <p:column headerText="Periodo del permiso">
+                                        <p:outputLabel value="#{administraciónPermisoController.getFechas(r.permisosPK.permisoFechaInicio, r.permisoFechafin)}"/>
                                     </p:column>
 
                                     <p:column headerText="Permiso Solicitado">
                                         <p:outputLabel value="#{r.tipoPermiso1.tipoPermisoNombre}"/>
                                     </p:column>
                                 </p:dataTable>
+                            </h:panelGrid>
+                        </p:tab>
+                        <p:tab title="Conceder Permiso">
+                            <h:panelGrid columns="2">
+                                <p:outputLabel for="tp" value="Tipo de permiso a conceder: "/>
+                                <p:selectOneMenu id="tp" immediate="true" required="true" style="width: 400px;"
+                                                 value="#{administraciónPermisoController.permiso.tipoPermiso1}"
+                                                 converter="omnifaces.SelectItemsConverter">
+                                    <f:selectItem itemValue="null" itemLabel="Seleccione" noSelectionOption="true"/>
+                                    <f:selectItems value="#{administraciónPermisoController.tipoPermiso}" var="tpe"
+                                                   itemValue="#{tpe}" itemLabel="#{tpe.tipoPermisoNombre}"/>
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="mod" value="Bachillerato: "/>
+                                <p:selectOneMenu id="mod" immediate="true" required="true" style="width: 400px;"
+                                                 value="#{administraciónPermisoController.gradoPK.gradoModalidad}">
+                                    <f:selectItem itemValue=" " itemLabel="Seleccione" noSelectionOption="true"/>
+                                    <f:selectItems value="#{administraciónPermisoController.modalidades}" />
+                                    <p:ajax update="niv"/>
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="niv" value="Año: "/>
+                                <p:selectOneMenu id="niv" immediate="true" required="true" style="width: 400px;"
+                                                 value="#{administraciónPermisoController.gradoPK.idgrado}">
+                                    <f:selectItem itemValue=" " itemLabel="Seleccione" noSelectionOption="true"/>
+                                    <f:selectItems value="#{administraciónPermisoController.niveles}" var="n"
+                                                   itemValue="#{n}" itemLabel="#{n}"/>
+                                    <p:ajax update="sec"/>
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="sec" value="Sección: "/>
+                                <p:selectOneMenu id="sec" immediate="true" required="true" style="width: 400px;"
+                                                 value="#{administraciónPermisoController.gradoPK.gradoSeccion}">
+                                    <f:selectItem itemValue=" " itemLabel="Seleccione" noSelectionOption="true"/>
+                                    <f:selectItems value="#{administraciónPermisoController.secciones}" var="s"
+                                                   itemValue="#{s}" itemLabel="#{s}"/>
+                                    <p:ajax update="es"/>
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="es" value="Estudiante: "/>
+                                <p:selectOneMenu id="es" immediate="true" required="true" style="width: 400px;"
+                                                 value="#{administraciónPermisoController.permiso.persona}"
+                                                 converter="omnifaces.SelectItemsConverter">
+                                    <f:selectItem itemValue="null" itemLabel="Seleccione" noSelectionOption="true"/>
+                                    <f:selectItems value="#{administraciónPermisoController.estudiantes}" var="e"
+                                                   itemValue="#{e}" itemLabel="#{e.personaNombre} #{e.personaApellido}"/>
+                                </p:selectOneMenu>
                             </h:panelGrid>
                         </p:tab>
                     </p:accordionPanel>
@@ -175,9 +175,9 @@
                                                     administraciónPermisoController.solc.permisoFechafin)}"/>
 
                             <p:commandButton value="Aceptar" actionListener="#{administraciónPermisoController.guardar(1)}"
-                                             oncomplete="PF('Dsol').hide();" update="form sol"/>
+                                             oncomplete="PF('Dsol').hide();" update="form sol :form0:msgs"/>
                             <p:commandButton value="Rechazar" actionListener="#{administraciónPermisoController.guardar(2)}"
-                                             oncomplete="PF('Dsol').hide();" update="form sol"/>
+                                             oncomplete="PF('Dsol').hide();" update="form sol :form0:msgs"/>
                         </h:panelGrid>
                     </h:form>
                 </p:dialog>

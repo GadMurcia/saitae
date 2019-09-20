@@ -32,12 +32,10 @@ import javax.inject.Named;
 import net.delsas.saitae.beans.GradoFacadeLocal;
 import net.delsas.saitae.beans.MatriculaFacadeLocal;
 import net.delsas.saitae.beans.PermisosFacadeLocal;
-import net.delsas.saitae.beans.TipoPermisoFacadeLocal;
 import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
 import net.delsas.saitae.entities.GradoPK;
 import net.delsas.saitae.entities.Matricula;
 import net.delsas.saitae.entities.MatriculaPK;
-import net.delsas.saitae.entities.MestroHorarioMaterias;
 import net.delsas.saitae.entities.Permisos;
 import net.delsas.saitae.entities.PermisosPK;
 import net.delsas.saitae.entities.Persona;
@@ -103,12 +101,12 @@ public class administraciónPermisoController implements Serializable {
     public List<Integer> getNiveles() {
         return grsoFL.getIdPorAñoyModalidad(getAño(), gradoPK.getGradoModalidad());
     }
-    
-    public List<String> getSecciones(){
+
+    public List<String> getSecciones() {
         return grsoFL.getSeccionPorAñoModalidadyId(getAño(), gradoPK.getGradoModalidad(), gradoPK.getIdgrado());
     }
-    
-    public List<Persona> getEstudiantes(){
+
+    public List<Persona> getEstudiantes() {
         return new ArrayList<>();
     }
 
@@ -141,7 +139,8 @@ public class administraciónPermisoController implements Serializable {
         return g;
     }
 
-    public void guardar(int w) {
+    public void guardar(int w) {        
+        solicitados.remove(solc);
         solc.setPermisosEstado(w + "");
         permisosFL.edit(solc);
         if (w == 1) {
@@ -149,8 +148,6 @@ public class administraciónPermisoController implements Serializable {
         } else if (w == 2) {
             rechazados.add(solc);
         }
-        solc.setPermisosEstado("0");
-        solicitados.remove(solc);
         FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_INFO, "Cambios gurdados", "el permiso ha sido "
                 + (w == 1 ? "aceptado" : (w == 2 ? "rechazado" : "")));
         FacesContext.getCurrentInstance().addMessage(null, m);
@@ -159,13 +156,17 @@ public class administraciónPermisoController implements Serializable {
 
     public String getGrado(int id) {
         Matricula mat = matriculaFL.find(new MatriculaPK(id, getAño()));
-        GradoPK gr = mat.getGrado().getGradoPK();
-        String g = "";
-        g = gr.getIdgrado() + "° " + (gr.getGradoModalidad().equals("C") ? "TVC Contador"
-                : (gr.getGradoModalidad().equals("S") ? "TVC Secretariado"
-                : (gr.getGradoModalidad().equals("G") ? "General" : "??")))
-                + " Sección " + gr.getGradoSeccion();
-        return g;
+        if (mat != null) {
+            GradoPK gr = mat.getGrado().getGradoPK();
+            String g = "";
+            g = gr.getIdgrado() + "° " + (gr.getGradoModalidad().equals("C") ? "TVC Contador"
+                    : (gr.getGradoModalidad().equals("S") ? "TVC Secretariado"
+                    : (gr.getGradoModalidad().equals("G") ? "General" : "??")))
+                    + " Sección " + gr.getGradoSeccion();
+            return g;
+        } else {
+            return " ";
+        }
     }
 
     public String getSolicitadoPor(Permisos s) {
@@ -244,5 +245,9 @@ public class administraciónPermisoController implements Serializable {
 
     public void setGradoPK(GradoPK gradoPK) {
         this.gradoPK = gradoPK;
+    }
+    
+    public boolean isEstudiante(){
+        return permiso.getTipoPersona().getIdtipoPersona()==8;
     }
 }
