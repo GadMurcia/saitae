@@ -24,7 +24,7 @@ import javax.inject.Named;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
-import net.delsas.saitae.aux.prueba;
+import net.delsas.saitae.ax.prueba;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.entities.Persona;
 import org.primefaces.event.SelectEvent;

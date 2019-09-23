@@ -28,7 +28,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import net.delsas.saitae.aux.mensaje;
+import net.delsas.saitae.ax.mensaje;
 import net.delsas.saitae.beans.DiasEstudioFacadeLocal;
 import net.delsas.saitae.beans.GradoFacadeLocal;
 import net.delsas.saitae.beans.HorarioFacadeLocal;

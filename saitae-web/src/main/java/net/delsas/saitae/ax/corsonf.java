@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.delsas.saitae.aux;
+package net.delsas.saitae.ax;
 
 import com.thetransactioncompany.cors.CORSFilter;
 import java.util.HashSet;

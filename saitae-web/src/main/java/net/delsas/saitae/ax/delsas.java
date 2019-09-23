@@ -1,5 +1,5 @@
 
-package net.delsas.saitae.aux;
+package net.delsas.saitae.ax;
 
 import org.apache.commons.codec.digest.DigestUtils;
 

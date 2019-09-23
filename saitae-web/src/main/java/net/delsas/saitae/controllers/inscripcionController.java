@@ -37,7 +37,7 @@ import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.imageio.ImageIO;
 import javax.inject.Named;
-import net.delsas.saitae.aux.prueba;
+import net.delsas.saitae.ax.prueba;
 import net.delsas.saitae.beans.DocumentosFacadeLocal;
 import net.delsas.saitae.beans.GradoFacadeLocal;
 import net.delsas.saitae.beans.MatriculaFacadeLocal;
