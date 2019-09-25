@@ -128,7 +128,7 @@ public class permisoMaController implements Serializable {
                 p.setPersona(new Persona(0));
                 p.setTipoPermiso1(new TipoPermiso(0));
                 p.setPermisoFechafin(p.getPermisosPK().getPermisoFechaInicio());
-                
+                p.setPermisosComentario("0¿¿0¿¿ ");
             }
         } catch (Exception e) {
             ms = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage());

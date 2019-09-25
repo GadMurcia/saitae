@@ -28,7 +28,10 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
+import net.delsas.saitae.ax.mensaje;
+import net.delsas.saitae.ax.prueba;
 import net.delsas.saitae.beans.GradoFacadeLocal;
 import net.delsas.saitae.beans.MatriculaFacadeLocal;
 import net.delsas.saitae.beans.PermisosFacadeLocal;
@@ -41,6 +44,8 @@ import net.delsas.saitae.entities.PermisosPK;
 import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.TipoPermiso;
 import net.delsas.saitae.entities.TipopersonaPermiso;
+import org.omnifaces.cdi.Push;
+import org.omnifaces.cdi.PushContext;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -59,6 +64,7 @@ public class administraciónPermisoController implements Serializable {
     private Permisos acep;
     private Permisos solc;
     private GradoPK gradoPK;
+    private Persona usuario;
 
     @EJB
     private PermisosFacadeLocal permisosFL;
@@ -71,11 +77,29 @@ public class administraciónPermisoController implements Serializable {
 
     @PostConstruct
     public void init() {
-        solicitados = permisosFL.getPermisosPorEstado("0");
-        aceptados = permisosFL.getPermisosPorEstado("1");
-        rechazados = permisosFL.getPermisosPorEstado("2");
-        acep = solc = new Permisos(new PermisosPK());
-        gradoPK = new GradoPK(0, " ", "", getAño());
+        try {
+            FacesContext context = FacesContext.getCurrentInstance();
+            usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
+            boolean r = usuario.getTipoPersona().getIdtipoPersona().equals(1) ? true
+                    : usuario.getTipoPersona().getIdtipoPersona().equals(2) ? true
+                    : usuario.getTipoPersona().getIdtipoPersona().equals(3);
+            if (usuario == null || !r) {
+                context.getExternalContext().getSessionMap().put("mensaje", new FacesMessage(FacesMessage.SEVERITY_FATAL,
+                        "Falla!", "Esa vista no le está permitida."));
+                context.getExternalContext().redirect("./../");
+            } else {
+                solicitados = permisosFL.getPermisosPorEstado("0");
+                aceptados = permisosFL.getPermisosPorEstado("1");
+                rechazados = permisosFL.getPermisosPorEstado("2");
+                acep = solc = new Permisos(new PermisosPK());
+                gradoPK = new GradoPK(0, " ", "", getAño());
+                permiso = new Permisos(new PermisosPK(0, new Date(), 0, new Date()), new Date(), "", "1");
+                permiso.setPermisosComentario("0¿¿ ¿¿ ¿¿ ");
+                permiso.setTipoPersona(tipoPersonaFL.find(8));
+            }
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 
     public List<TipoPermiso> getTipoPermiso() {
@@ -107,7 +131,7 @@ public class administraciónPermisoController implements Serializable {
     }
 
     public List<Persona> getEstudiantes() {
-        return new ArrayList<>();
+        return matriculaFL.findMatriculaByGrado(gradoPK);
     }
 
     public void onRowSelect(SelectEvent event) {
@@ -139,7 +163,43 @@ public class administraciónPermisoController implements Serializable {
         return g;
     }
 
-    public void guardar(int w) {        
+    public void concederPermiso() {
+        FacesMessage ms = null;
+        try {
+            if (permiso.getPermisosPK().getPermisoFechaInicio().before(new SimpleDateFormat("dd/mm/yyyy").parse(new SimpleDateFormat("dd/mm/yyyy").format(new Date())))) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
+                        "Error en la fecha de inicio del permiso",
+                        "No debe seleccionar una fecha para el inicio del periodo del permiso anterior a la actual."));
+                permiso.getPermisosPK().setPermisoFechaInicio(new Date());
+            } else if (permiso.getPermisoFechafin().before(permiso.getPermisosPK().getPermisoFechaInicio())) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
+                        "Error en la fecha de fin del permiso",
+                        "No debe seleccionar una fecha para el final del periodo del permiso anterior a la fecha en la que inicia éste."));
+                permiso.setPermisoFechafin(permiso.getPermisosPK().getPermisoFechaInicio());
+            } else {
+                permiso.getPermisosPK().setTipoPermiso(permiso.getTipoPermiso1().getIdtipoPermiso());
+                permiso.setPermisosSolicitante(usuario);
+                permiso.getPermisosPK().setIpPersona(permiso.getPersona().getIdpersona());
+                permiso.setPermisosEstado("1");
+                permisosFL.create(permiso);
+                ms = new FacesMessage(FacesMessage.SEVERITY_INFO, "Concesión exitosa",
+                        "El permiso se ha concedido para entre las fechas: "
+                        + (new SimpleDateFormat("dd/mm/yyyy").format(permiso.getPermisosPK().getPermisoFechaInicio())) + " y "
+                        + (new SimpleDateFormat("dd/mm/yyyy").format(permiso.getPermisoFechafin())));
+                sendMessage(new mensaje(permiso.getPermisosPK().getIpPersona(), usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
+                        + " le ha concedido un nuevo permiso a petición de " + getNombreSol() + " " + getApellidoSol() + ".",
+                        "Nueva concesión de permiso", FacesMessage.SEVERITY_INFO, permiso.getPermisosSolicitante().getIdpersona(), " ").toString());
+
+                FacesContext.getCurrentInstance().addMessage(null, ms);
+                init();
+            }
+        } catch (Exception e) {
+            ms = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage());
+            FacesContext.getCurrentInstance().addMessage(null, ms);
+        }
+    }
+
+    public void guardar(int w) {
         solicitados.remove(solc);
         solc.setPermisosEstado(w + "");
         permisosFL.edit(solc);
@@ -151,7 +211,10 @@ public class administraciónPermisoController implements Serializable {
         FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_INFO, "Cambios gurdados", "el permiso ha sido "
                 + (w == 1 ? "aceptado" : (w == 2 ? "rechazado" : "")));
         FacesContext.getCurrentInstance().addMessage(null, m);
-        solc = new Permisos(new PermisosPK());
+        sendMessage(new mensaje(solc.getPermisosPK().getIpPersona(), usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
+                        + " ha "+(w==1? "aceptado": "rechazado")+" su solicitud de permiso ",
+                        (w==1? "Aceptación" : "Rechado")+" de permiso", FacesMessage.SEVERITY_INFO, usuario.getIdpersona(), " ").toString());
+
     }
 
     public String getGrado(int id) {
@@ -172,8 +235,12 @@ public class administraciónPermisoController implements Serializable {
     public String getSolicitadoPor(Permisos s) {
         if (s.getPermisosSolicitante() != null) {
             Persona solicitante;
-            if (s.getPermisosSolicitante().getIdpersona() == 1000000000) {
-                solicitante = new Persona(Integer.valueOf(s.getPermisosComentario().split("¿¿")[0]));
+            boolean e = s.getPermisosSolicitante().getTipoPersona().getIdtipoPersona() == 3 ? true
+                    : s.getPermisosSolicitante().getTipoPersona().getIdtipoPersona() == 2 ? true
+                    : s.getPermisosSolicitante().getTipoPersona().getIdtipoPersona() == 1;
+            if (e) {
+                solicitante = new Persona();
+                new prueba().setDui(s.getPermisosComentario().split("¿¿")[0], solicitante);
                 solicitante.setPersonaNombre(s.getPermisosComentario().split("¿¿")[1]);
                 solicitante.setPersonaApellido(s.getPermisosComentario().split("¿¿")[2]);
             } else {
@@ -246,8 +313,72 @@ public class administraciónPermisoController implements Serializable {
     public void setGradoPK(GradoPK gradoPK) {
         this.gradoPK = gradoPK;
     }
-    
-    public boolean isEstudiante(){
-        return permiso.getTipoPersona().getIdtipoPersona()==8;
+
+    public boolean isEstudiante() {
+        return permiso.getTipoPersona().getIdtipoPersona() == 8;
+    }
+
+    public void setDuiSol(String dui) {
+        String d[] = dui.split("-");
+        permiso.setPermisosComentario(d[0] + d[1] + "¿¿" + getNombreSol() + "¿¿" + getApellidoSol() + "¿¿" + getComentario());
+    }
+
+    public String getDuiSol() {
+        String d = permiso.getPermisosComentario().split("¿¿")[0];
+        if (d.equals("0")) {
+            return "";
+        }
+        String m = d.substring(0, 7) + "-" + d.substring(8);
+        return m;
+    }
+
+    public void setNombreSol(String nombre) {
+        permiso.setPermisosComentario(getDuiSol() + "¿¿" + nombre + "¿¿" + getApellidoSol() + "¿¿" + getComentario());
+    }
+
+    public String getNombreSol() {
+        return permiso.getPermisosComentario().split("¿¿")[1];
+    }
+
+    public void setApellidoSol(String apellido) {
+        permiso.setPermisosComentario(getDuiSol() + "¿¿" + getNombreSol() + "¿¿" + apellido + "¿¿" + getComentario());
+    }
+
+    public String getApellidoSol() {
+        return permiso.getPermisosComentario().split("¿¿")[2];
+    }
+
+    public void setComentarioAcep(String comentario) {
+        String[] f = acep.getPermisosComentario() != null ? acep.getPermisosComentario().split("¿¿") : new String[]{" ", " ", " ", " "};
+        acep.setPermisosComentario(f[0] + "¿¿" + f[1] + "¿¿" + f[2] + "¿¿" + comentario);
+    }
+
+    public String getComentarioAcep() {
+        return acep.getPermisosComentario() == null ? " " : acep.getPermisosComentario().split("¿¿")[3];
+    }
+
+    public void setComentarioSolc(String comentario) {
+        String[] f = solc.getPermisosComentario() != null ? acep.getPermisosComentario().split("¿¿") : new String[]{" ", " ", " ", " "};
+        solc.setPermisosComentario(f[0] + "¿¿" + f[1] + "¿¿" + f[2] + "¿¿" + comentario);
+    }
+
+    public String getComentarioSolc() {
+        return solc.getPermisosComentario() == null ? " " : acep.getPermisosComentario().split("¿¿")[3];
+    }
+
+    public void setComentario(String comentario) {
+        permiso.setPermisosComentario(getDuiSol() + "¿¿" + getNombreSol() + "¿¿" + getApellidoSol() + "¿¿" + comentario);
+    }
+
+    public String getComentario() {
+        return permiso.getPermisosComentario().split("¿¿")[3];
+    }
+
+    @Inject
+    @Push
+    private PushContext notificacion;
+
+    public void sendMessage(String message) {
+        notificacion.send(message);
     }
 }

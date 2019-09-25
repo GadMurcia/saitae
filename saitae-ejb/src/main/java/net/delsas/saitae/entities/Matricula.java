@@ -32,7 +32,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Matricula.findByIdmatricula", query = "SELECT m FROM Matricula m WHERE m.matriculaPK.idmatricula = :idmatricula")
     , @NamedQuery(name = "Matricula.findByMatriculaAnyo", query = "SELECT m FROM Matricula m WHERE m.matriculaPK.matriculaAnyo = :matriculaAnyo")
     , @NamedQuery(name = "Matricula.findByMatriculaRepite", query = "SELECT m FROM Matricula m WHERE m.matriculaRepite = :matriculaRepite")
-    , @NamedQuery(name = "Matricula.findByMatriculaComentario", query = "SELECT m FROM Matricula m WHERE m.matriculaComentario = :matriculaComentario")})
+    , @NamedQuery(name = "Matricula.findByMatriculaComentario", query = "SELECT m FROM Matricula m WHERE m.matriculaComentario = :matriculaComentario")
+        , @NamedQuery(name = "Matricula.findEstudiantesByGrado", query = "SELECT m.estudiante.persona FROM Matricula m WHERE m.grado.gradoPK = :gradoPK")
+})
 public class Matricula implements Serializable {
 
     private static final long serialVersionUID = 1L;

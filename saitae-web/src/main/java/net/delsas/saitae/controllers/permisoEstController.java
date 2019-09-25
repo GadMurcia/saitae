@@ -93,6 +93,7 @@ public class permisoEstController implements Serializable {
                 p.setTipoPersona(tipoPersonaFL.find(8));
                 p.setPersona(new Persona(0));
                 p.setPermisoFechafin(p.getPermisosPK().getPermisoFechaInicio());
+                p.setPermisosComentario("0¿¿ ¿¿ ¿¿ ");
                 if (usuario.getTipoPersona().getIdtipoPersona() == 8) {
                     e = new ArrayList<>();
                     e.add(usuario.getEstudiante());

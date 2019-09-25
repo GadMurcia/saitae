@@ -7,7 +7,10 @@ package net.delsas.saitae.beans;
 
 import java.util.List;
 import javax.ejb.Local;
+import net.delsas.saitae.entities.Estudiante;
+import net.delsas.saitae.entities.GradoPK;
 import net.delsas.saitae.entities.Matricula;
+import net.delsas.saitae.entities.Persona;
 
 /**
  *
@@ -29,5 +32,12 @@ public interface MatriculaFacadeLocal {
     List<Matricula> findRange(int[] range);
 
     int count();
+
+    /**
+     * Genera una lista de estudiantes matriculados en el grado especificado.
+     * @param pk
+     * @return java.utilList net.delsas.saitae.entities.Estudiante
+     */
+    public List<Persona> findMatriculaByGrado(GradoPK pk);
     
 }
