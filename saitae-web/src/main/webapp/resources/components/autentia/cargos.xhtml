@@ -28,19 +28,19 @@
                         <f:facet name="output"><h:outputText value="#{c.cargo.cargoNombre}" /></f:facet>
                         <f:facet name="input">
                             <p:selectOneMenu value="#{c.cargo.idcargo}" style="width:100%">
-                                <f:selectItems value="#{tipoController.cargo}" var="tc" 
+                                <f:selectItems value="#{maestroController.cargos}" var="tc" 
                                                itemLabel="#{tc.cargoNombre}" itemValue="#{tc.idcargo}"/>
                             </p:selectOneMenu>
                         </f:facet>
                     </p:cellEditor>
                 </p:column>
 
-                <p:column headerText="Tipo deNombramiento">
+                <p:column headerText="Tipo de Nombramiento">
                     <p:cellEditor>
                         <f:facet name="output"><h:outputText value="#{c.tipoNombramiento.tipoNombramientoNombre}" /></f:facet>
                         <f:facet name="input">
                             <p:selectOneMenu value="#{c.tipoNombramiento.idtipoNombramiento}" style="width:100%">
-                                <f:selectItems value="#{tipoController.nombramientos}" 
+                                <f:selectItems value="#{maestroController.nombramientos}" 
                                                var="n" itemLabel="#{n.tipoNombramientoNombre}" itemValue="#{n.idtipoNombramiento}" />
                             </p:selectOneMenu>
                         </f:facet>
@@ -52,7 +52,7 @@
                         <f:facet name="output"><h:outputText value="#{c.financiamiento.financiamientoNombre}" /></f:facet>
                         <f:facet name="input">
                             <p:selectOneMenu value="#{c.financiamiento.idfinanciamiento}" style="width:100%">
-                                <f:selectItems value="#{tipoController.financiamientos}" 
+                                <f:selectItems value="#{maestroController.financiamientos}" 
                                                var="f" itemLabel="#{f.financiamientoNombre}" itemValue="#{f.idfinanciamiento}"/>
                             </p:selectOneMenu>
                         </f:facet>

@@ -125,6 +125,16 @@ public class permisoEstController implements Serializable {
                 p.setPersona(personaFL.find(id));
                 p.getPermisosPK().setIpPersona(id);
                 p.setPermisosEstado("0");
+                Permisos pp = pfl.find(p.getPermisosPK());
+                if (pp != null) {
+                    ms = new FacesMessage(FacesMessage.SEVERITY_WARN, "Imposible proceder",
+                            "En la base de datos ya hay un permiso del tipo '" + p.getTipoPermiso1().getTipoPermisoNombre() 
+                                    + "' para usted en el día "
+                            + (new SimpleDateFormat("dd/MM/yyy").format(p.getPermisosPK().getPermisoFechaInicio())
+                            + " por lo que no se procede con la petición del permiso"));
+                    FacesContext.getCurrentInstance().addMessage(null, ms);
+                    return;
+                }
                 pfl.create(p);
                 ms = new FacesMessage(FacesMessage.SEVERITY_INFO, "Solicitud exitosa",
                         "Su permiso se ha solicitado para entre las fechas: "

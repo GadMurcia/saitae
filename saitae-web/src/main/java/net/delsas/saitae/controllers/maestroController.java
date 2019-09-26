@@ -19,6 +19,7 @@ package net.delsas.saitae.controllers;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -53,6 +54,16 @@ import org.primefaces.event.RowEditEvent;
 @ViewScoped
 public class maestroController implements Serializable {
 
+    private List<Cargo> cargos;
+    @EJB
+    private CargoFacadeLocal cargoFL;
+    private List<Financiamiento> financiamientos;
+    @EJB
+    private FinanciamientoFacadeLocal financiamientoFL;
+    private List<TipoNombramiento> nombramientos;
+    @EJB
+    private TipoNombramientoFacadeLocal tipoNombramientoFL;
+
     private static final long serialVersionUID = 1L;
     private prueba auxiliar;
     private Maestro maestro;
@@ -76,6 +87,9 @@ public class maestroController implements Serializable {
     public void init() {
         auxiliar = new prueba();
         maestro = auxiliar.getMaestro().getMaestro();
+        cargos = cargoFL.findAll();
+        financiamientos = financiamientoFL.findAll();
+        nombramientos = tipoNombramientoFL.findAll();
     }
 
     public Maestro getMaestro() {
@@ -160,7 +174,7 @@ public class maestroController implements Serializable {
         FacesMessage msg = new FacesMessage("New Car added", "");
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
-    
+
     public void setChange() {
         maestro = mfl.find(axiliarController.getP().getIdpersona());
     }
@@ -190,6 +204,18 @@ public class maestroController implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
                     FacesMessage.SEVERITY_FATAL, "Error al intentar guardar", o.getMessage()));
         }
+    }
+
+    public List<Cargo> getCargos() {
+        return Collections.unmodifiableList(cargos);
+    }
+
+    public List<Financiamiento> getFinanciamientos() {
+        return Collections.unmodifiableList(financiamientos);
+    }
+
+    public List<TipoNombramiento> getNombramientos() {
+        return Collections.unmodifiableList(nombramientos);
     }
 
 }

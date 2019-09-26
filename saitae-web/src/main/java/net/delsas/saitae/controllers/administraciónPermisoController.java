@@ -181,6 +181,17 @@ public class administraciónPermisoController implements Serializable {
                 permiso.setPermisosSolicitante(usuario);
                 permiso.getPermisosPK().setIpPersona(permiso.getPersona().getIdpersona());
                 permiso.setPermisosEstado("1");
+                Permisos pp = permisosFL.find(permiso.getPermisosPK());
+                if (pp != null) {
+                    ms = new FacesMessage(FacesMessage.SEVERITY_WARN, "Imposible proceder",
+                            "En la base de datos ya hay un permiso del tipo '" + permiso.getTipoPermiso1().getTipoPermisoNombre() + "' para "
+                            + permiso.getPersona().getPersonaNombre().split(" ")[0]
+                            + " " + permiso.getPersona().getPersonaApellido().split(" ")[0] + " en el día "
+                            + (new SimpleDateFormat("dd/MM/yyy").format(permiso.getPermisosPK().getPermisoFechaInicio())
+                            + " por lo que no se procede con la concesión del permiso"));
+                    FacesContext.getCurrentInstance().addMessage(null, ms);
+                    return;
+                }
                 permisosFL.create(permiso);
                 ms = new FacesMessage(FacesMessage.SEVERITY_INFO, "Concesión exitosa",
                         "El permiso se ha concedido para entre las fechas: "
@@ -212,8 +223,8 @@ public class administraciónPermisoController implements Serializable {
                 + (w == 1 ? "aceptado" : (w == 2 ? "rechazado" : "")));
         FacesContext.getCurrentInstance().addMessage(null, m);
         sendMessage(new mensaje(solc.getPermisosPK().getIpPersona(), usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
-                        + " ha "+(w==1? "aceptado": "rechazado")+" su solicitud de permiso ",
-                        (w==1? "Aceptación" : "Rechado")+" de permiso", FacesMessage.SEVERITY_INFO, usuario.getIdpersona(), " ").toString());
+                + " ha " + (w == 1 ? "aceptado" : "rechazado") + " su solicitud de permiso ",
+                (w == 1 ? "Aceptación" : "Rechado") + " de permiso", FacesMessage.SEVERITY_INFO, usuario.getIdpersona(), " ").toString());
 
     }
 
