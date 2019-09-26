@@ -166,7 +166,7 @@ public class administraciónPermisoController implements Serializable {
     public void concederPermiso() {
         FacesMessage ms = null;
         try {
-            if (permiso.getPermisosPK().getPermisoFechaInicio().before(new SimpleDateFormat("dd/mm/yyyy").parse(new SimpleDateFormat("dd/mm/yyyy").format(new Date())))) {
+            if (permiso.getPermisosPK().getPermisoFechaInicio().before(new SimpleDateFormat("dd/MM/yyyy").parse(new SimpleDateFormat("dd/MM/yyyy").format(new Date())))) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
                         "Error en la fecha de inicio del permiso",
                         "No debe seleccionar una fecha para el inicio del periodo del permiso anterior a la actual."));
@@ -184,8 +184,8 @@ public class administraciónPermisoController implements Serializable {
                 permisosFL.create(permiso);
                 ms = new FacesMessage(FacesMessage.SEVERITY_INFO, "Concesión exitosa",
                         "El permiso se ha concedido para entre las fechas: "
-                        + (new SimpleDateFormat("dd/mm/yyyy").format(permiso.getPermisosPK().getPermisoFechaInicio())) + " y "
-                        + (new SimpleDateFormat("dd/mm/yyyy").format(permiso.getPermisoFechafin())));
+                        + (new SimpleDateFormat("dd/MM/yyyy").format(permiso.getPermisosPK().getPermisoFechaInicio())) + " y "
+                        + (new SimpleDateFormat("dd/MM/yyyy").format(permiso.getPermisoFechafin())));
                 sendMessage(new mensaje(permiso.getPermisosPK().getIpPersona(), usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
                         + " le ha concedido un nuevo permiso a petición de " + getNombreSol() + " " + getApellidoSol() + ".",
                         "Nueva concesión de permiso", FacesMessage.SEVERITY_INFO, permiso.getPermisosSolicitante().getIdpersona(), " ").toString());

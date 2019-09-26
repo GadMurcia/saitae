@@ -109,7 +109,7 @@ public class permisoEstController implements Serializable {
     public void guardar() {
         FacesMessage ms = null;
         try {
-            if (p.getPermisosPK().getPermisoFechaInicio().before(new SimpleDateFormat("dd/mm/yyyy").parse(new SimpleDateFormat("dd/mm/yyyy").format(new Date())))) {
+            if (p.getPermisosPK().getPermisoFechaInicio().before(new SimpleDateFormat("dd/MM/yyyy").parse(new SimpleDateFormat("dd/MM/yyyy").format(new Date())))) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
                         "Error en la fecha de inicio del permiso",
                         "No debe seleccionar una fecha para el inicio del periodo del permiso anterior a la actual."));
@@ -128,8 +128,8 @@ public class permisoEstController implements Serializable {
                 pfl.create(p);
                 ms = new FacesMessage(FacesMessage.SEVERITY_INFO, "Solicitud exitosa",
                         "Su permiso se ha solicitado para entre las fechas: "
-                        + (new SimpleDateFormat("dd/mm/yyyy").format(p.getPermisosPK().getPermisoFechaInicio())) + " y "
-                        + (new SimpleDateFormat("dd/mm/yyyy").format(p.getPermisoFechafin())));
+                        + (new SimpleDateFormat("dd/MM/yyyy").format(p.getPermisosPK().getPermisoFechaInicio())) + " y "
+                        + (new SimpleDateFormat("dd/MM/yyyy").format(p.getPermisoFechafin())));
                 sendMessage(new mensaje(0, usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
                         + " ha solicitado un nuevo permiso.",
                         "Solicitud de permiso nueva", FacesMessage.SEVERITY_INFO, id, "tp¿¿3").toString());
