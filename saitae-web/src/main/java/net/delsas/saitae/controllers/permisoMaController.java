@@ -71,7 +71,7 @@ public class permisoMaController implements Serializable {
             FacesContext context = FacesContext.getCurrentInstance();
             usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
              boolean r = usuario.getTipoPersona().getIdtipoPersona().equals(8) ? true
-                    : !usuario.getTipoPersona().getIdtipoPersona().equals(9);
+                    : usuario.getTipoPersona().getIdtipoPersona().equals(9);
             
             if (usuario == null || r) {
                 
