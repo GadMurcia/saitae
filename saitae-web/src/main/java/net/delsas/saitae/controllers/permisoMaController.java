@@ -70,8 +70,10 @@ public class permisoMaController implements Serializable {
         try {
             FacesContext context = FacesContext.getCurrentInstance();
             usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
+             boolean r = usuario.getTipoPersona().getIdtipoPersona().equals(8) ? true
+                    : !usuario.getTipoPersona().getIdtipoPersona().equals(9);
             
-            if (usuario == null) {
+            if (usuario == null || r) {
                 
                 context.getExternalContext().getSessionMap().put("mensaje", new FacesMessage(FacesMessage.SEVERITY_FATAL,
                         "Falla!", "Esa vista no le está permitida."));
@@ -86,7 +88,7 @@ public class permisoMaController implements Serializable {
                 p.setPersona(usuario);
                 p.setPermisoFechafin(p.getPermisosPK().getPermisoFechaInicio());
                 p.setPermisosSolicitante(usuario);
-                p.setPermisosComentario("0¿¿0¿¿ ");
+                p.setPermisosComentario("0¿¿0¿¿0¿¿0 ");
                 
             }
         } catch (Exception ex) {
@@ -128,7 +130,7 @@ public class permisoMaController implements Serializable {
                 p.setPersona(new Persona(0));
                 p.setTipoPermiso1(new TipoPermiso(0));
                 p.setPermisoFechafin(p.getPermisosPK().getPermisoFechaInicio());
-                p.setPermisosComentario("0¿¿0¿¿ ");
+                p.setPermisosComentario("0¿¿0¿¿0¿¿0 ");
             }
         } catch (Exception e) {
             ms = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage());
@@ -138,11 +140,14 @@ public class permisoMaController implements Serializable {
     
     public ArrayList<TipoPermiso> getListaPermisos() {
         ArrayList<TipoPermiso> items = new ArrayList<>();
+        if(permisos != null){
         for (TipopersonaPermiso t : permisos) {
             items.add(t.getTipoPermiso());
         }
+        }
         return items;
     }
+        
     
     public List<TipopersonaPermiso> getPermisos() {
         return permisos;
@@ -177,12 +182,13 @@ public class permisoMaController implements Serializable {
     }
     
     public boolean getGoceDeSueldo() {
-        return p.getPermisosComentario().split("¿¿")[0].equals("1");
+    return  p == null ? false : p.getPermisosComentario().split("¿¿")[0].equals("1");
+        
         
     }
     
     public boolean getLicenciasAnteriores() {
-        return p.getPermisosComentario().split("¿¿")[1].equals("1");
+        return p == null ? false : p.getPermisosComentario().split("¿¿")[1].equals("1");
     }
     
     public void setGoceDeSueldo(boolean goce) {

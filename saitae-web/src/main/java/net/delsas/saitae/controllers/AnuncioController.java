@@ -18,6 +18,7 @@ package net.delsas.saitae.controllers;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -25,7 +26,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import net.delsas.saitae.beans.AnuncioFacadeLocal;
-import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
 import net.delsas.saitae.entities.Anuncio;
 import net.delsas.saitae.entities.Persona;
 
@@ -43,10 +43,11 @@ public class AnuncioController implements Serializable {
 //    private TipoPersonaFacadeLocal tipoPersonaFL;
     @EJB
     private AnuncioFacadeLocal anuncioFL;
+    private Anuncio anuncio;
 
     @PostConstruct
     public void construct() {
-
+        anuncio=new Anuncio(0, "", new Date(), "");
     }
 
     public List<Anuncio> getAll() {
@@ -61,6 +62,14 @@ public class AnuncioController implements Serializable {
         }
         anuncios = anuncios == null ? new ArrayList<Anuncio>() : anuncios;
         return anuncios;
+    } 
+
+    public Anuncio getAnuncio() {
+        return anuncio;
+    }
+
+    public void setAnuncio(Anuncio anuncio) {
+        this.anuncio = anuncio;
     }
 
 }
