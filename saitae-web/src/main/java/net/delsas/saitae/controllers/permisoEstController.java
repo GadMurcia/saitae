@@ -82,7 +82,7 @@ public class permisoEstController implements Serializable {
             boolean r = usuario.getTipoPersona().getIdtipoPersona().equals(8) ? false
                     : !usuario.getTipoPersona().getIdtipoPersona().equals(9);
             if (usuario == null || r) {
-                context.getExternalContext().getSessionMap().put("mensaje", new FacesMessage(FacesMessage.SEVERITY_FATAL,
+               context.getExternalContext().getSessionMap().put("mensaje", new FacesMessage(FacesMessage.SEVERITY_FATAL,
                         "Falla!", "Esa vista no le está permitida."));
                 context.getExternalContext().redirect("./../");
             } else {
