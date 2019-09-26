@@ -81,11 +81,11 @@ public class permisoEstController implements Serializable {
                     : !usuario.getTipoPersona().getIdtipoPersona().equals(9);
             if (usuario == null || r) {
 
-                context.getExternalContext().getSessionMap().put("mensaje", new FacesMessage(FacesMessage.SEVERITY_FATAL,
+               context.getExternalContext().getSessionMap().put("mensaje", new FacesMessage(FacesMessage.SEVERITY_FATAL,
                         "Falla!", "Esa vista no le está permitida."));
                 context.getExternalContext().redirect("./../");
-
-            } else {
+            }
+            else {
                 p = new Permisos();
                 p.setTipoPermiso1(new TipoPermiso(0));
                 p.setPermisosPK(new PermisosPK(0, Calendar.getInstance().getTime(), 0, Calendar.getInstance().getTime()));
