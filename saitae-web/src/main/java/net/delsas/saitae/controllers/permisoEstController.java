@@ -150,14 +150,16 @@ public class permisoEstController implements Serializable {
 
     public ArrayList<TipoPermiso> getListaPermisos() {
         ArrayList<TipoPermiso> items = new ArrayList<>();
+        if(permisos != null){
         for (TipopersonaPermiso t : permisos) {
             items.add(t.getTipoPermiso());
         }
+         }
         return items;
     }
 
     public boolean isSeleccionPermiso() {
-        return p.getTipoPermiso1().getIdtipoPermiso() > 0;
+        return p == null ? false : p.getTipoPermiso1().getIdtipoPermiso() > 0;
     }
 
     public void onItemSelect(SelectEvent event) {
