@@ -574,19 +574,20 @@ DROP TABLE IF EXISTS `entregaUtiles`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `entregaUtiles` (
-  `idEntregante` int(11) NOT NULL,
   `idEstudiante` int(11) NOT NULL,
+  `año` int(4) NOT NULL,
+  `idEntregante` int(11) NOT NULL,
   `idRepresentante` int(11) NOT NULL,
   `zapatos` bit(1) NOT NULL,
   `uniforme` bit(1) NOT NULL,
   `utiles` bit(1) NOT NULL,
   `comentario` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`idEntregante`,`idEstudiante`),
-  KEY `fk_entregaUtiles_1_idx` (`idEstudiante`),
+  PRIMARY KEY (`idEstudiante`,`año`),
+  KEY `fk_entregaUtiles_2_idx` (`idEntregante`),
   KEY `fk_entregaUtiles_3_idx` (`idRepresentante`),
-  CONSTRAINT `fk_entregaUtiles_1` FOREIGN KEY (`idEstudiante`) REFERENCES `estudiante` (`idestudiante`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_entregaUtiles_2` FOREIGN KEY (`idEntregante`) REFERENCES `persona` (`idpersona`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  CONSTRAINT `fk_entregaUtiles_3` FOREIGN KEY (`idRepresentante`) REFERENCES `estudiante` (`idestudiante`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk_entregaUtiles_1` FOREIGN KEY (`idEstudiante`) REFERENCES `estudiante` (`idestudiante`) ON UPDATE CASCADE,
+  CONSTRAINT `fk_entregaUtiles_2` FOREIGN KEY (`idEntregante`) REFERENCES `persona` (`idpersona`) ON UPDATE CASCADE,
+  CONSTRAINT `fk_entregaUtiles_3` FOREIGN KEY (`idRepresentante`) REFERENCES `estudiante` (`idestudiante`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1033,7 +1034,6 @@ CREATE TABLE `mestroHorarioMaterias` (
 
 LOCK TABLES `mestroHorarioMaterias` WRITE;
 /*!40000 ALTER TABLE `mestroHorarioMaterias` DISABLE KEYS */;
-INSERT INTO `mestroHorarioMaterias` VALUES (1111111111,1,1,1,1,'S','A',2019,NULL),(1222222222,1,1,1,1,'C','A',2019,NULL);
 /*!40000 ALTER TABLE `mestroHorarioMaterias` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1668,4 +1668,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-09-30 15:44:10
+-- Dump completed on 2019-09-30 16:41:42

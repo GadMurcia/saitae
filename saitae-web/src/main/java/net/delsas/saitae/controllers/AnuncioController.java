@@ -36,6 +36,7 @@ import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.TipoPersona;
 import org.omnifaces.cdi.Push;
 import org.omnifaces.cdi.PushContext;
+import org.primefaces.event.SelectEvent;
 
 /**
  *
@@ -72,7 +73,9 @@ public class AnuncioController implements Serializable {
                 anuncio = new Anuncio(0, "", new Date(), "");
                 anuncio.setAnuncioAnunciante(usuario);
                 tiposPersonas = tipoPersonaFL.findAll();
-                tiposPersonas.remove(0);
+                tiposPersonas.remove(tipoPersonaFL.find(1));
+                tiposPersonas.remove(tipoPersonaFL.find(10));
+                tiposPersonas.remove(tipoPersonaFL.find(11));
                 activos = anuncioFL.getAnunciosActivos();
                 inactivos = anuncioFL.getAnunciosInactivos();
             }
@@ -94,6 +97,15 @@ public class AnuncioController implements Serializable {
         }
         anuncios = anuncios == null ? new ArrayList<Anuncio>() : anuncios;
         return anuncios;
+    }
+    
+    public void onRowSelect(SelectEvent event) {
+        System.out.println(event.getObject());
+        anuncio = (Anuncio) event.getObject();
+    }
+    
+    public void onHide(){
+        anuncio= new Anuncio(null, "", new Date(), "");
     }
 
     public void guardar() {

@@ -5,6 +5,8 @@
  */
 package net.delsas.saitae.beans;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -34,15 +36,23 @@ public class AnuncioFacade extends AbstractFacade<Anuncio> implements AnuncioFac
 
     @Override
     public List<Anuncio> getAnunciosActivos() {
+        Date d = null;
+        try {
+            d = (new SimpleDateFormat("dd-MM-yyyy").parse(new SimpleDateFormat("dd-MM-yyyy").format(new Date())));
+        } catch (ParseException e) {}
         return em.createNamedQuery("Anuncio.findAnunciosActivos")
-                .setParameter("fecha", new Date())
+                .setParameter("fecha", d==null ? new Date() : d)
                 .getResultList();
     }
-    
+
     @Override
     public List<Anuncio> getAnunciosInactivos() {
+        Date d = null;
+        try {
+            d = (new SimpleDateFormat("dd-MM-yyyy").parse(new SimpleDateFormat("dd-MM-yyyy").format(new Date())));
+        } catch (ParseException e) {}
         return em.createNamedQuery("Anuncio.findAnunciosInactivos")
-                .setParameter("fecha", new Date())
+                .setParameter("fecha", d==null ? new Date() : d)
                 .getResultList();
     }
 

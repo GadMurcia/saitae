@@ -10,7 +10,7 @@
     <ui:define name="content">
         <h:form id="form">  
             <p:growl id="msgs" showDetail="true" />
-            <h3>Administración de Anuncios del sistema</h3>
+            <h2>Administración de Anuncios del sistema</h2>
             <p:tabView dynamic="true" cache="true" effect="fold">
                 <p:tab title="Crear anuncio">
                     <h:panelGrid columns="2">
@@ -41,11 +41,14 @@
                     </h:panelGrid>
                 </p:tab>
                 <p:tab title="Anuncios Activos">
-                    <p:dataTable id="act" var="a" value="#{anuncioController.activos}" emptyMessage="Sin registros aún.">
+                    <p:dataTable id="act" var="a" value="#{anuncioController.activos}" 
+                                 emptyMessage="Sin registros aún." selectionMode="single" 
+                                 selection="#{anuncioController.anuncio}" rowKey="#{a.idanuncio}">
                         <f:facet name="header">
                             Anuncios Activos
                         </f:facet>
-
+                        <p:ajax event="rowSelect" listener="#{anuncioController.onRowSelect}" 
+                                update=":form" oncomplete="PF('Danuncio').show()"/>
                         <p:column headerText="Titulo">
                             <h:outputText value="#{a.anuncioTitulo}"/>
                         </p:column>
@@ -61,11 +64,14 @@
                     </p:dataTable> 
                 </p:tab>
                 <p:tab title="Anuncios Inactivos">
-                    <p:dataTable id="ina" var="i" value="#{anuncioController.inactivos}" emptyMessage="Sin registros aún.">
+                    <p:dataTable id="ina" var="i" value="#{anuncioController.inactivos}" 
+                                 emptyMessage="Sin registros aún." selection="#{anuncioController.anuncio}"
+                                 selectionMode="single" rowKey="#{i.idanuncio}">
                         <f:facet name="header">
                             Anuncios Activos
                         </f:facet>
-
+                        <p:ajax event="rowSelect" listener="#{anuncioController.onRowSelect}" 
+                                update=":form"/>
                         <p:column headerText="Titulo">
                             <h:outputText value="#{i.anuncioTitulo}"/>
                         </p:column>
@@ -83,5 +89,26 @@
             </p:tabView>
         </h:form>
         <h:outputScript library="js" name="locales.js"/>
+        <p:dialog header="Detalle del anuncio" modal="true" widgetVar="Danuncio" >
+            <h:form id="da">
+                <h:panelGrid columns="2">
+                    <p:outputLabel for="tit" value="Título: "/>
+                    <p:outputLabel id="tit" value="#{anuncioController.anuncio.anuncioTitulo}"
+                                   style="width: 480px"/>
+
+                    <p:outputLabel value="Cuerpo del aviso: "/>
+                    <p:inputTextarea value="#{anuncioController.anuncio.anuncioTexto}"
+                                     disabled="true" style="width: 480px"/>
+                    
+                    <p:outputLabel value="Fecha límite de visualización: "/>
+                    <p:datePicker value="#{anuncioController.anuncio.anuncioFechaFin}"
+                                  locale="es" disabled="true"/>
+
+                    <p:outputLabel value="Tipo de Persona a la que el anuncio va dirigido: "/>
+                    <p:outputLabel value="#{anuncioController.anuncio.anuncioTipoPersona.tipoPersonaNombre}"/>
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+        <p:
     </ui:define>
 </ui:composition>
