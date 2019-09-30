@@ -20,19 +20,27 @@ public class EntregaUtilesPK implements Serializable {
 
     @Basic(optional = false)
     @NotNull
-    @Column(name = "idEstudiante")
-    private int idEstudiante;
+    @Column(name = "idEntregante")
+    private int idEntregante;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "a\u00f1o")
-    private int año;
+    @Column(name = "idEstudiante")
+    private int idEstudiante;
 
     public EntregaUtilesPK() {
     }
 
-    public EntregaUtilesPK(int idEstudiante, int año) {
+    public EntregaUtilesPK(int idEntregante, int idEstudiante) {
+        this.idEntregante = idEntregante;
         this.idEstudiante = idEstudiante;
-        this.año = año;
+    }
+
+    public int getIdEntregante() {
+        return idEntregante;
+    }
+
+    public void setIdEntregante(int idEntregante) {
+        this.idEntregante = idEntregante;
     }
 
     public int getIdEstudiante() {
@@ -43,19 +51,11 @@ public class EntregaUtilesPK implements Serializable {
         this.idEstudiante = idEstudiante;
     }
 
-    public int getAño() {
-        return año;
-    }
-
-    public void setAño(int año) {
-        this.año = año;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
+        hash += (int) idEntregante;
         hash += (int) idEstudiante;
-        hash += (int) año;
         return hash;
     }
 
@@ -66,10 +66,10 @@ public class EntregaUtilesPK implements Serializable {
             return false;
         }
         EntregaUtilesPK other = (EntregaUtilesPK) object;
-        if (this.idEstudiante != other.idEstudiante) {
+        if (this.idEntregante != other.idEntregante) {
             return false;
         }
-        if (this.año != other.año) {
+        if (this.idEstudiante != other.idEstudiante) {
             return false;
         }
         return true;
@@ -77,7 +77,7 @@ public class EntregaUtilesPK implements Serializable {
 
     @Override
     public String toString() {
-        return "net.delsas.saitae.entities.EntregaUtilesPK[ idEstudiante=" + idEstudiante + ", a\u00f1o=" + año + " ]";
+        return "net.delsas.saitae.entities.EntregaUtilesPK[ idEntregante=" + idEntregante + ", idEstudiante=" + idEstudiante + " ]";
     }
     
 }

@@ -28,8 +28,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "EntregaUtiles.findAll", query = "SELECT e FROM EntregaUtiles e")
+    , @NamedQuery(name = "EntregaUtiles.findByIdEntregante", query = "SELECT e FROM EntregaUtiles e WHERE e.entregaUtilesPK.idEntregante = :idEntregante")
     , @NamedQuery(name = "EntregaUtiles.findByIdEstudiante", query = "SELECT e FROM EntregaUtiles e WHERE e.entregaUtilesPK.idEstudiante = :idEstudiante")
-    , @NamedQuery(name = "EntregaUtiles.findByA\u00f1o", query = "SELECT e FROM EntregaUtiles e WHERE e.entregaUtilesPK.a\u00f1o = :a\u00f1o")
     , @NamedQuery(name = "EntregaUtiles.findByZapatos", query = "SELECT e FROM EntregaUtiles e WHERE e.zapatos = :zapatos")
     , @NamedQuery(name = "EntregaUtiles.findByUniforme", query = "SELECT e FROM EntregaUtiles e WHERE e.uniforme = :uniforme")
     , @NamedQuery(name = "EntregaUtiles.findByUtiles", query = "SELECT e FROM EntregaUtiles e WHERE e.utiles = :utiles")
@@ -57,9 +57,9 @@ public class EntregaUtiles implements Serializable {
     @JoinColumn(name = "idEstudiante", referencedColumnName = "idestudiante", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Estudiante estudiante;
-    @JoinColumn(name = "idEntregante", referencedColumnName = "idpersona")
+    @JoinColumn(name = "idEntregante", referencedColumnName = "idpersona", insertable = false, updatable = false)
     @ManyToOne(optional = false)
-    private Persona idEntregante;
+    private Persona persona;
     @JoinColumn(name = "idRepresentante", referencedColumnName = "idestudiante")
     @ManyToOne(optional = false)
     private Estudiante idRepresentante;
@@ -78,8 +78,8 @@ public class EntregaUtiles implements Serializable {
         this.utiles = utiles;
     }
 
-    public EntregaUtiles(int idEstudiante, int año) {
-        this.entregaUtilesPK = new EntregaUtilesPK(idEstudiante, año);
+    public EntregaUtiles(int idEntregante, int idEstudiante) {
+        this.entregaUtilesPK = new EntregaUtilesPK(idEntregante, idEstudiante);
     }
 
     public EntregaUtilesPK getEntregaUtilesPK() {
@@ -130,12 +130,12 @@ public class EntregaUtiles implements Serializable {
         this.estudiante = estudiante;
     }
 
-    public Persona getIdEntregante() {
-        return idEntregante;
+    public Persona getPersona() {
+        return persona;
     }
 
-    public void setIdEntregante(Persona idEntregante) {
-        this.idEntregante = idEntregante;
+    public void setPersona(Persona persona) {
+        this.persona = persona;
     }
 
     public Estudiante getIdRepresentante() {
