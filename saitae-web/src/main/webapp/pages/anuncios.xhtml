@@ -48,7 +48,7 @@
                             Anuncios Activos
                         </f:facet>
                         <p:ajax event="rowSelect" listener="#{anuncioController.onRowSelect}" 
-                                update=":form" oncomplete="PF('Danuncio').show()"/>
+                                update=":form da" oncomplete="PF('Danuncio').show()"/>
                         <p:column headerText="Titulo">
                             <h:outputText value="#{a.anuncioTitulo}"/>
                         </p:column>
@@ -71,7 +71,7 @@
                             Anuncios Activos
                         </f:facet>
                         <p:ajax event="rowSelect" listener="#{anuncioController.onRowSelect}" 
-                                update=":form" oncomplete="PF('Danuncio').show()"/>
+                                update=":form da" oncomplete="PF('Danuncio').show()"/>
                         <p:column headerText="Titulo">
                             <h:outputText value="#{i.anuncioTitulo}"/>
                         </p:column>
@@ -91,7 +91,13 @@
         <h:outputScript library="js" name="locales.js"/>
         <p:dialog header="Detalle del anuncio" modal="true" widgetVar="Danuncio" onHide="onHide()">
             <h:form id="da">
-                <h:panelGrid columns="2">
+                <p:panelGrid columns="2">
+                    <p:outputLabel value="Anunciante: "/>
+                    <p:outputLabel value="#{anuncioController.anuncio.anuncioAnunciante.personaNombre.split(' ')[0]} 
+                                               #{anuncioController.anuncio.anuncioAnunciante.personaApellido.split(' ')[0]} 
+                                               (#{anuncioController.anuncio.anuncioAnunciante.tipoPersona.tipoPersonaNombre})"
+                                   style="width: 480px"/>
+                    
                     <p:outputLabel for="tit" value="Título: "/>
                     <p:outputLabel id="tit" value="#{anuncioController.anuncio.anuncioTitulo}"
                                    style="width: 480px"/>
@@ -105,10 +111,12 @@
                                   locale="es" disabled="true"/>
 
                     <p:outputLabel value="Tipo de Persona a la que el anuncio va dirigido: "/>
-                    <p:outputLabel value="#{anuncioController.anuncio.anuncioTipoPersona.tipoPersonaNombre}"/>
-                </h:panelGrid>
+                    <p:outputLabel value="#{anuncioController.anuncio.anuncioTipoPersona != null 
+                                            ? anuncioController.anuncio.anuncioTipoPersona.tipoPersonaNombre 
+                                            : 'Todos los usuarios'}"/>
+                </p:panelGrid>
+                <p:remoteCommand name="onHide" actionListener="#{anuncioController.onHide()}" update=":form"/>
             </h:form>
         </p:dialog>
-        <p:remoteCommand name="onHide" actionListener="#{anuncioController.onHide()}" update=":form"/>
     </ui:define>
 </ui:composition>
