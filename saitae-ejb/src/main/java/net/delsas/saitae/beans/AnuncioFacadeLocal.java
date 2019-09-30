@@ -32,14 +32,20 @@ public interface AnuncioFacadeLocal {
 
     /**
      *  Obtiene todos los anuncios que están activos a la fecha actual.
-     * @return java.til.List net.delsas.saitae.entities.Anuncio
+     * @return java.util.List net.delsas.saitae.entities.Anuncio
      */
     public List<Anuncio> getAnunciosActivos();
 
     /**
      *  Obtiene todos los anuncios que ya no se mostrarán en la vista del sistema.
-     * @return
+     * @return java.util.List net.delsas.saitae.entities.Anuncio
      */
     public List<Anuncio> getAnunciosInactivos();
+    
+    /**
+     * Obtiene todos los anuncios que sean para todos los usuarios.
+     * @return java.util.List net.delsas.saitae.entities.Anuncio
+     */
+    public List<Anuncio> getAnunciosParaTodos();
     
 }

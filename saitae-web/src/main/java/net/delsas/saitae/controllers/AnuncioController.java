@@ -23,22 +23,26 @@ import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
+import net.delsas.saitae.ax.mensaje;
 import net.delsas.saitae.beans.AnuncioFacadeLocal;
 import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
 import net.delsas.saitae.entities.Anuncio;
 import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.TipoPersona;
+import org.omnifaces.cdi.Push;
+import org.omnifaces.cdi.PushContext;
 
 /**
  *
  * @author delsas
  */
 @Named
-@ViewScoped
+@RequestScoped
 public class AnuncioController implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -49,6 +53,8 @@ public class AnuncioController implements Serializable {
     private Anuncio anuncio;
     private Persona usuario;
     private List<TipoPersona> tiposPersonas;
+    private List<Anuncio> activos;
+    private List<Anuncio> inactivos;
 
     @PostConstruct
     public void construct() {
@@ -67,6 +73,8 @@ public class AnuncioController implements Serializable {
                 anuncio.setAnuncioAnunciante(usuario);
                 tiposPersonas = tipoPersonaFL.findAll();
                 tiposPersonas.remove(0);
+                activos = anuncioFL.getAnunciosActivos();
+                inactivos = anuncioFL.getAnunciosInactivos();
             }
         } catch (Exception e) {
 
@@ -78,13 +86,34 @@ public class AnuncioController implements Serializable {
         if (usuario != null) {
             if (usuario.getTipoPersona().getIdtipoPersona() == 1
                     || usuario.getTipoPersona().getIdtipoPersona() == 2) {
-                anuncios = anuncioFL.findAll();
+                anuncios = anuncioFL.getAnunciosActivos();
             } else {
                 anuncios = usuario.getTipoPersona().getAnuncioList();
+                anuncios.addAll(anuncioFL.getAnunciosParaTodos());
             }
         }
         anuncios = anuncios == null ? new ArrayList<Anuncio>() : anuncios;
         return anuncios;
+    }
+
+    public void guardar() {
+        try {
+            anuncio.setIdanuncio(null);
+            anuncioFL.create(anuncio);
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Anunciado con éxito",
+                             "El anuncio ha sido publicado con éxito"));
+            sendMessage(new mensaje(0, "Nuevo auncio publicado recientemente por "
+                    + anuncio.getAnuncioAnunciante().getPersonaNombre().split(" ")[0]
+                    + " " + anuncio.getAnuncioAnunciante().getPersonaApellido().split(" ")[0],
+                     "Nuevo anuncio disponible", FacesMessage.SEVERITY_INFO, usuario.getIdpersona(),
+                    "tp¿¿" + (anuncio.getAnuncioTipoPersona() == null ? 0
+                    : anuncio.getAnuncioTipoPersona().getIdtipoPersona())).toString());
+            this.construct();
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "error en guardar anuncio " + e.getMessage()));
+        }
     }
 
     public Anuncio getAnuncio() {
@@ -97,5 +126,21 @@ public class AnuncioController implements Serializable {
 
     public List<TipoPersona> getTiposPersonas() {
         return Collections.unmodifiableList(tiposPersonas);
+    }
+
+    public List<Anuncio> getActivos() {
+        return Collections.unmodifiableList(activos);
+    }
+
+    public List<Anuncio> getInactivos() {
+        return Collections.unmodifiableList(inactivos);
+    }
+
+    @Inject
+    @Push
+    private PushContext notificacion;
+
+    public void sendMessage(String message) {
+        notificacion.send(message);
     }
 }

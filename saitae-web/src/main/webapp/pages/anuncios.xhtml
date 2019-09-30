@@ -10,31 +10,78 @@
     <ui:define name="content">
         <h:form id="form">  
             <p:growl id="msgs" showDetail="true" />
-            <h3>On-Demand Loading</h3>
+            <h3>Administración de Anuncios del sistema</h3>
             <p:tabView dynamic="true" cache="true" effect="fold">
                 <p:tab title="Crear anuncio">
                     <h:panelGrid columns="2">
                         <p:outputLabel for="tit" value="Título: "/>
                         <p:inputText id="tit" value="#{anuncioController.anuncio.anuncioTitulo}"
-                                     required="true" style="width: available;"/>
-                        
+                                     required="true" style="width: 480px"/>
+
                         <p:outputLabel for="cue" value="Cuerpo del aviso: "/>
                         <p:inputTextarea id="cue" value="#{anuncioController.anuncio.anuncioTexto}"
-                                     required="true" style="width: available;"/>
+                                         required="true" style="width: 480px"/>
                         <p:outputLabel for="fec" value="Fecha límite de visualización: "/>
-                        <p:inputText id="fec" value="#{anuncioController.anuncio.anuncioFechaFin}"
-                                     required="true" style="width: available;"/>
-                        
+                        <p:datePicker id="fec" value="#{anuncioController.anuncio.anuncioFechaFin}"
+                                      inputStyle="widht: 480px" yearNavigator="false" monthNavigator="true"
+                                      locale="es" required="true" showIcon="true"/>
+
                         <p:outputLabel for="tip" value="Tipo de Persona a la que el anuncio va dirigido: "/>
                         <p:selectOneMenu id="tip" value="#{anuncioController.anuncio.anuncioTipoPersona}"
-                                         required="true" converter="omnifaces.SelectItemsConverter">
-                            <f:selectItem itemValue="null" itemLabel="Todos"/>
+                                         converter="omnifaces.SelectItemsConverter"
+                                         style="width: 480px">
+                            <f:selectItem itemValue="#{null}" itemLabel="Todos"/>
                             <f:selectItems value="#{anuncioController.tiposPersonas}" var="tp"
                                            itemLabel="#{tp.tipoPersonaNombre}" itemValue="#{tp}"/>
                         </p:selectOneMenu>
+
+                        <p:column/>
+                        <p:commandButton value="Anunciar" actionListener="#{anuncioController.guardar()}"
+                                         update="form"/>
                     </h:panelGrid>
+                </p:tab>
+                <p:tab title="Anuncios Activos">
+                    <p:dataTable id="act" var="a" value="#{anuncioController.activos}" emptyMessage="Sin registros aún.">
+                        <f:facet name="header">
+                            Anuncios Activos
+                        </f:facet>
+
+                        <p:column headerText="Titulo">
+                            <h:outputText value="#{a.anuncioTitulo}"/>
+                        </p:column>
+
+                        <p:column headerText="Fecha límite de visualización">
+                            <p:datePicker value="#{a.anuncioFechaFin}" disabled="true"/>
+                        </p:column>
+
+                        <p:column headerText="Dirigido a">
+                            <p:outputLabel value="#{a.anuncioTipoPersona != null 
+                                                    ? a.anuncioTipoPersona.tipoPersonaNombre : 'Todos'}"/>
+                        </p:column>
+                    </p:dataTable> 
+                </p:tab>
+                <p:tab title="Anuncios Inactivos">
+                    <p:dataTable id="ina" var="i" value="#{anuncioController.inactivos}" emptyMessage="Sin registros aún.">
+                        <f:facet name="header">
+                            Anuncios Activos
+                        </f:facet>
+
+                        <p:column headerText="Titulo">
+                            <h:outputText value="#{i.anuncioTitulo}"/>
+                        </p:column>
+
+                        <p:column headerText="Fecha límite de visualización">
+                            <p:datePicker value="#{i.anuncioFechaFin}" disabled="true"/>
+                        </p:column>
+
+                        <p:column headerText="Dirigido a">
+                            <p:outputLabel value="#{i.anuncioTipoPersona != null 
+                                                    ? i.anuncioTipoPersona.tipoPersonaNombre : 'Todos'}"/>
+                        </p:column>
+                    </p:dataTable> 
                 </p:tab>
             </p:tabView>
         </h:form>
+        <h:outputScript library="js" name="locales.js"/>
     </ui:define>
 </ui:composition>

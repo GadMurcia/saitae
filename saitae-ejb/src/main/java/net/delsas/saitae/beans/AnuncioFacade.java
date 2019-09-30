@@ -45,4 +45,10 @@ public class AnuncioFacade extends AbstractFacade<Anuncio> implements AnuncioFac
                 .setParameter("fecha", new Date())
                 .getResultList();
     }
+
+    @Override
+    public List<Anuncio> getAnunciosParaTodos() {
+        return em.createNamedQuery("Anuncio.findAnunciosParaTodos")
+                .getResultList();
+    }
 }

@@ -32,7 +32,11 @@
                             </f:facet>
                             <h:outputText value="#{ann.anuncioTexto}"/>
                             <f:facet name="footer">
-                                <p:outputLabel value="Dirigido a: #{ann.anuncioTipoPersona.tipoPersonaNombre}"/> 
+                                <p:outputLabel value="Dirigido a: #{ann.anuncioTipoPersona != null ? ann.anuncioTipoPersona.tipoPersonaNombre : 'Todos'}"/> 
+                                <br/>
+                                <p:outputLabel value="Anunciante: #{ann.anuncioAnunciante.personaNombre.split(' ')[0]} 
+                                               #{ann.anuncioAnunciante.personaApellido.split(' ')[0]} 
+                                               (#{ann.anuncioAnunciante.tipoPersona.tipoPersonaNombre})"/> 
                             </f:facet>
                         </p:panelGrid>
                     </p:carousel>

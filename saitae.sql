@@ -35,7 +35,7 @@ CREATE TABLE `acceso` (
   UNIQUE KEY `idacceso_UNIQUE` (`idacceso`),
   KEY `fk_acceso_1_idx` (`accesoIndice`),
   CONSTRAINT `fk_acceso_1` FOREIGN KEY (`accesoIndice`) REFERENCES `acceso` (`idacceso`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -44,7 +44,7 @@ CREATE TABLE `acceso` (
 
 LOCK TABLES `acceso` WRITE;
 /*!40000 ALTER TABLE `acceso` DISABLE KEYS */;
-INSERT INTO `acceso` VALUES (9,'Configuración',NULL,'#','pi pi-key'),(10,'Administración',9,'tipopp.intex','pi pi-folder-open'),(11,'Permisos y Licencias',9,'lictp.intex','pi pi-th-large'),(12,'Académica',9,'academico.intex','fa fa-leaf'),(13,'Perfil',NULL,'#','pi pi-user'),(14,'Permisos',NULL,'#','pi pi-eye'),(15,'Solicitar Permiso',14,'permisoE.intex','pi pi-briefcase'),(16,'Personal',NULL,'#','pi pi-users'),(17,'Agregar Maestro',27,'agregacion.intex','pi pi-user-plus'),(18,'Agregar Administrador',16,'agAdm.intex','pi pi-plus'),(19,'Plantel Institucional',16,'plantel.intex','pi pi-table'),(20,'Inventario',23,'inventario.intex','fa fa-thumb-tack'),(21,'Libros',23,'libros.intex','fa fa-tint'),(22,'Nuevo Ingreso',16,'inscripcion.intex','pi pi-user'),(23,'Recursos',9,'#','fa fa-tint'),(24,'Nomina de Alumnos',16,'nominaA.intex','pi pi-user'),(25,'Administración de Recursos',23,'recurso.intex','pi pi-list'),(26,'Lista de Representantes',16,'listaRepresentantes.intex','pi pi-list'),(27,'Maestros',16,'#','pi pi-list'),(28,'Asignación de materias',27,'horario.intex','pi pi-plus'),(29,'Administración de permisos',14,'permiso.intex',''),(30,'Solicitud de permisos',14,'permisoM.intex','');
+INSERT INTO `acceso` VALUES (9,'Configuración',NULL,'#','pi pi-key'),(10,'Administración',9,'tipopp.intex','pi pi-folder-open'),(11,'Permisos y Licencias',9,'lictp.intex','pi pi-th-large'),(12,'Académica',9,'academico.intex','fa fa-leaf'),(13,'Perfil',NULL,'#','pi pi-user'),(14,'Permisos',NULL,'#','pi pi-eye'),(15,'Solicitar Permiso',14,'permisoE.intex','pi pi-briefcase'),(16,'Personal',NULL,'#','pi pi-users'),(17,'Agregar Maestro',27,'agregacion.intex','pi pi-user-plus'),(18,'Agregar Administrador',16,'agAdm.intex','pi pi-plus'),(19,'Plantel Institucional',16,'plantel.intex','pi pi-table'),(20,'Inventario',23,'inventario.intex','fa fa-thumb-tack'),(21,'Libros',23,'libros.intex','fa fa-tint'),(22,'Nuevo Ingreso',16,'inscripcion.intex','pi pi-user'),(23,'Recursos',9,'#','fa fa-tint'),(24,'Nomina de Alumnos',16,'nominaA.intex','pi pi-user'),(25,'Administración de Recursos',23,'recurso.intex','pi pi-list'),(26,'Lista de Representantes',16,'listaRepresentantes.intex','pi pi-list'),(27,'Maestros',16,'#','pi pi-list'),(28,'Asignación de materias',27,'horario.intex','pi pi-plus'),(29,'Administración de permisos',14,'permiso.intex',''),(30,'Solicitud de permisos',14,'permisoM.intex',''),(31,'Administrador de anuncios',9,'anuncios.intex','pi pi-list');
 /*!40000 ALTER TABLE `acceso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -72,7 +72,7 @@ CREATE TABLE `accesoTipoPersona` (
 
 LOCK TABLES `accesoTipoPersona` WRITE;
 /*!40000 ALTER TABLE `accesoTipoPersona` DISABLE KEYS */;
-INSERT INTO `accesoTipoPersona` VALUES (9,1,''),(9,2,''),(9,6,''),(10,1,''),(10,2,''),(11,1,''),(12,1,''),(12,2,''),(13,8,''),(14,1,''),(14,8,''),(15,8,''),(16,1,''),(17,1,''),(18,1,''),(19,1,''),(20,1,''),(21,1,''),(22,1,''),(23,1,''),(23,6,''),(24,1,''),(25,1,''),(25,6,''),(26,1,''),(27,1,''),(28,1,''),(29,1,''),(30,1,'');
+INSERT INTO `accesoTipoPersona` VALUES (9,1,''),(9,2,''),(9,6,''),(10,1,''),(10,2,''),(11,1,''),(12,1,''),(12,2,''),(13,8,''),(14,1,''),(14,8,''),(15,8,''),(16,1,''),(17,1,''),(18,1,''),(19,1,''),(20,1,''),(21,1,''),(22,1,''),(23,1,''),(23,6,''),(24,1,''),(25,1,''),(25,6,''),(26,1,''),(27,1,''),(28,1,''),(29,1,''),(30,1,''),(31,1,'');
 /*!40000 ALTER TABLE `accesoTipoPersona` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -88,11 +88,14 @@ CREATE TABLE `anuncio` (
   `anuncioTitulo` varchar(45) NOT NULL,
   `anuncioFechaFin` datetime NOT NULL,
   `anuncioTexto` text NOT NULL,
+  `anuncioAnunciante` int(11) NOT NULL,
   `anuncioTipoPersona` int(11) DEFAULT '0',
   `anuncioComentario` varchar(140) DEFAULT NULL,
-  PRIMARY KEY (`idanuncio`),
-  KEY `fk_anuncio_1_idx` (`anuncioTipoPersona`),
-  CONSTRAINT `fk_anuncio_1` FOREIGN KEY (`anuncioTipoPersona`) REFERENCES `tipoPersona` (`idtipoPersona`) ON DELETE CASCADE ON UPDATE CASCADE
+  PRIMARY KEY (`idanuncio`,`anuncioFechaFin`),
+  KEY `fk_anuncio_1_idx` (`anuncioAnunciante`),
+  KEY `fk_anuncio_2_idx` (`anuncioTipoPersona`),
+  CONSTRAINT `fk_anuncio_1` FOREIGN KEY (`anuncioAnunciante`) REFERENCES `persona` (`idpersona`) ON UPDATE CASCADE,
+  CONSTRAINT `fk_anuncio_2` FOREIGN KEY (`anuncioTipoPersona`) REFERENCES `tipoPersona` (`idtipoPersona`) ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -102,7 +105,7 @@ CREATE TABLE `anuncio` (
 
 LOCK TABLES `anuncio` WRITE;
 /*!40000 ALTER TABLE `anuncio` DISABLE KEYS */;
-INSERT INTO `anuncio` VALUES (1,'Odit, laudantium, dolores','2019-12-25 00:00:00','Odit, laudantium, dolores, natus distinctio labore voluptates in inventore quasi qui nobis quis adipisci fugit id! Aliquam alias ea modi. Porro, odio, sed veniam hic numquam qui ad molestiae sint placeat expedita? Perferendis, enim qui numquam sequi obcaecati molestiae fugiat!\n\nAperiam, odit, quasi, voluptate fugiat quisquam velit magni provident corporis animi facilis illo eveniet eum obcaecati adipisci blanditiis quas labore doloribus eos veniam repudiandae suscipit tempora ad harum odio eius distinctio hic deleniti. Sunt fuga ad perspiciatis repellat deleniti omnis!',8,NULL),(2,'Numquam, ut iure quia facere totam quas odit ','2019-07-10 00:00:00','Est, maiores, fuga sed nemo qui veritatis ducimus placeat odit quisquam dolorum. Rem, sunt, praesentium veniam maiores quia molestias eos fugit eaque ducimus veritatis provident assumenda. Quia, fuga, voluptates voluptatibus quis enim nam asperiores aliquam dignissimos ullam recusandae debitis iste.\n\nDignissimos, beatae, praesentium illum eos autem perspiciatis? Minus, non, tempore, illo, mollitia exercitationem tempora quas harum odio dolores delectus quidem laudantium adipisci ducimus ullam placeat eaque minima quae iure itaque corporis magni nesciunt eius sed dolor doloremque id quasi nisi.',8,NULL),(3,'A, quibusdam, nobis, eveniet consequatur','2019-12-20 00:00:00','A, quibusdam, nobis, eveniet consequatur alias doloremque officia blanditiis fuga et numquam labore reiciendis voluptas quis repellat quos sunt non dolore consectetur at sit nam tenetur dolorem? Harum, quas, sit perspiciatis esse odit temporibus aperiam nulla aspernatur sequi fugiat tempore?\n\nAd velit consequuntur quo qui odit quam sapiente repudiandae et ea pariatur? Ex sapiente beatae nobis consectetur ea. Deleniti, beatae, magnam, dolorum, fuga nostrum quas laboriosam sapiente temporibus enim voluptates ullam impedit atque quae provident quos mollitia aperiam perferendis amet.',8,NULL),(4,'Lorem ipsum dolor sit amet, consectetur.','2019-12-31 00:00:00','Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium, itaque, cumque, maxime obcaecati reprehenderit ea dignissimos amet voluptatem id excepturi facilis totam veritatis maiores eveniet neque explicabo temporibus quisquam in ex ab fugiat ipsa tempore sunt corporis nostrum quam illum!\n\nConsectetur cupiditate labore repudiandae beatae nisi fugiat facilis natus illum vitae doloremque. In, perspiciatis, natus, impedit voluptas itaque odio repudiandae placeat nisi totam repellendus earum dolores mollitia tempore quasi beatae alias cum dicta maxime laborum corporis harum porro magnam laboriosam.\n\nAut, eaque, minus atque alias odio mollitia cum nisi ipsa nulla natus quae minima similique ipsam aspernatur molestias animi in deleniti nam. Tempora, labore, modi eum perspiciatis doloremque sequi nam illo corporis iusto maiores nisi recusandae repellat animi reiciendis accusamus.',2,NULL);
+INSERT INTO `anuncio` VALUES (2,'Home','2019-10-10 00:00:00','Raw denim you probably haven\'t heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.',1045367073,NULL,''),(3,'Profile','2019-09-29 00:00:00','Food truck fixie locavore, accusamus mcsweeney\'s marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit.',1045367073,8,''),(4,'qwwqwq','2019-09-30 00:00:00','wqwq\r\nwq\r\nqw\r\nqw\r\nqw\r\n\r\nwq',1045367073,NULL,NULL);
 /*!40000 ALTER TABLE `anuncio` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1665,4 +1668,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-09-30 10:22:21
+-- Dump completed on 2019-09-30 15:44:10
