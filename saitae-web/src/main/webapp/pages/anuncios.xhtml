@@ -71,7 +71,7 @@
                             Anuncios Activos
                         </f:facet>
                         <p:ajax event="rowSelect" listener="#{anuncioController.onRowSelect}" 
-                                update=":form"/>
+                                update=":form" oncomplete="PF('Danuncio').show()"/>
                         <p:column headerText="Titulo">
                             <h:outputText value="#{i.anuncioTitulo}"/>
                         </p:column>
@@ -89,7 +89,7 @@
             </p:tabView>
         </h:form>
         <h:outputScript library="js" name="locales.js"/>
-        <p:dialog header="Detalle del anuncio" modal="true" widgetVar="Danuncio" >
+        <p:dialog header="Detalle del anuncio" modal="true" widgetVar="Danuncio" onHide="onHide()">
             <h:form id="da">
                 <h:panelGrid columns="2">
                     <p:outputLabel for="tit" value="Título: "/>
@@ -99,7 +99,7 @@
                     <p:outputLabel value="Cuerpo del aviso: "/>
                     <p:inputTextarea value="#{anuncioController.anuncio.anuncioTexto}"
                                      disabled="true" style="width: 480px"/>
-                    
+
                     <p:outputLabel value="Fecha límite de visualización: "/>
                     <p:datePicker value="#{anuncioController.anuncio.anuncioFechaFin}"
                                   locale="es" disabled="true"/>
@@ -109,6 +109,6 @@
                 </h:panelGrid>
             </h:form>
         </p:dialog>
-        <p:
+        <p:remoteCommand name="onHide" actionListener="#{anuncioController.onHide()}" update=":form"/>
     </ui:define>
 </ui:composition>
