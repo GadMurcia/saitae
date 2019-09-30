@@ -375,7 +375,7 @@ CREATE TABLE `contribuciones` (
   `idEstudiante` int(11) NOT NULL,
   `idColector` int(11) NOT NULL,
   `contribucionesComentario` varchar(140) DEFAULT NULL,
-  PRIMARY KEY (`fechaHora`,`mes`,`año`),
+  PRIMARY KEY (`fechaHora`),
   KEY `fk_contribuciones_1` (`idEstudiante`),
   KEY `fk_contribuciones_2` (`idColector`),
   CONSTRAINT `fk_contribuciones_1` FOREIGN KEY (`idEstudiante`) REFERENCES `estudiante` (`idestudiante`) ON UPDATE CASCADE,
@@ -1123,7 +1123,7 @@ CREATE TABLE `permisos` (
 
 LOCK TABLES `permisos` WRITE;
 /*!40000 ALTER TABLE `permisos` DISABLE KEYS */;
-INSERT INTO `permisos` VALUES (11022,'2019-09-25',4,'2019-09-25','2019-09-25',8,'97889898989898','2',11022,'0¿¿ ¿¿ ¿¿ni ideasssss '),(11022,'2019-09-25',4,'2019-09-26','2019-09-27',8,'446466446546','2',11022,'0¿¿ ¿¿ ¿¿no aplica para esto '),(11022,'2019-09-25',5,'2019-09-25','2019-09-25',8,'878787','1',11022,' ¿¿ ¿¿ ¿¿ni diea '),(11022,'2019-09-25',6,'2019-09-25','2019-09-25',8,'458484','2',11022,' ¿¿ ¿¿ ¿¿la vez pasada'),(16018,'2019-09-25',5,'2019-09-25','2019-09-25',8,'motivo','1',1045367073,'0231111-1¿¿nombre nombre1¿¿apellido apellido1¿¿ ');
+INSERT INTO `permisos` VALUES (11022,'2019-09-25',4,'2019-09-25','2019-09-25',8,'97889898989898','2',11022,'0¿¿ ¿¿ ¿¿ni ideasssss '),(11022,'2019-09-25',4,'2019-09-26','2019-09-27',8,'446466446546','2',11022,'0¿¿ ¿¿ ¿¿no aplica para esto '),(11022,'2019-09-25',5,'2019-09-11','2019-09-25',8,'Ugffguitfdfhj','2',11022,'0¿¿ ¿¿ ¿¿ 78787878887'),(11022,'2019-09-25',5,'2019-09-25','2019-09-25',8,'878787','1',11022,' ¿¿ ¿¿ ¿¿ni diea '),(11022,'2019-09-25',6,'2019-09-25','2019-09-25',8,'458484','2',11022,' ¿¿ ¿¿ ¿¿la vez pasada'),(16018,'2019-09-25',4,'2019-09-25','2019-09-25',8,'66456464654','1',1045367073,'0545555-5¿¿ 79878798798978879789¿¿797979798797987 9879 789 879 8798 ¿¿ '),(16018,'2019-09-25',5,'2019-09-25','2019-09-25',8,'motivo','1',1045367073,'0231111-1¿¿nombre nombre1¿¿apellido apellido1¿¿ '),(16018,'2019-09-25',6,'2019-09-11','2019-09-25',8,'Hgfghjj','1',1045367073,'0998777-6¿¿ Kgfsgmjfdcn¿¿ Fgjkjfdgllhdsgklbf¿¿ ');
 /*!40000 ALTER TABLE `permisos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1665,4 +1665,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-09-25 16:00:31
+-- Dump completed on 2019-09-30 10:22:21

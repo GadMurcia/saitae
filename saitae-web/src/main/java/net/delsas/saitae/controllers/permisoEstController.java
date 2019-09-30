@@ -21,12 +21,12 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -77,18 +77,15 @@ public class permisoEstController implements Serializable {
     @PostConstruct
     public void init() {
         try {
-            FacesContext context = FacesContext.getCurrentInstance();
-            usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
-            boolean r = usuario.getTipoPersona().getIdtipoPersona().equals(8) ? false
-                    : !usuario.getTipoPersona().getIdtipoPersona().equals(9);
-            if (usuario == null || r) {
-               context.getExternalContext().getSessionMap().put("mensaje", new FacesMessage(FacesMessage.SEVERITY_FATAL,
+            usuario = (Persona) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
+            if (!usuario.getTipoPersona().getIdtipoPersona().equals(8) || !usuario.getTipoPersona().getIdtipoPersona().equals(9)) {
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("mensaje", new FacesMessage(FacesMessage.SEVERITY_ERROR,
                         "Falla!", "Esa vista no le está permitida."));
-                context.getExternalContext().redirect("./../");
+                FacesContext.getCurrentInstance().getExternalContext().redirect("./../");
             } else {
                 p = new Permisos();
                 p.setTipoPermiso1(new TipoPermiso(0));
-                p.setPermisosPK(new PermisosPK(0, Calendar.getInstance().getTime(), 0, Calendar.getInstance().getTime()));
+                p.setPermisosPK(new PermisosPK(0, new Date(), 0, new Date()));
                 permisos = usuario.getTipoPersona().getTipopersonaPermisoList();
                 p.setTipoPersona(tipoPersonaFL.find(8));
                 p.setPersona(new Persona(0));

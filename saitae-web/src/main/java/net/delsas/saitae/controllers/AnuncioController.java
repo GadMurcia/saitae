@@ -26,8 +26,10 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import net.delsas.saitae.beans.AnuncioFacadeLocal;
+import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
 import net.delsas.saitae.entities.Anuncio;
 import net.delsas.saitae.entities.Persona;
+import net.delsas.saitae.entities.TipoPersona;
 
 /**
  *
@@ -38,9 +40,9 @@ import net.delsas.saitae.entities.Persona;
 public class AnuncioController implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    //private TipoPersona tipoPersona;
-//    @EJB
-//    private TipoPersonaFacadeLocal tipoPersonaFL;
+    private TipoPersona tipoPersona;
+    @EJB
+    private TipoPersonaFacadeLocal tipoPersonaFL;
     @EJB
     private AnuncioFacadeLocal anuncioFL;
     private Anuncio anuncio;
