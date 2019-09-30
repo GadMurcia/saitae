@@ -12,9 +12,26 @@
             <p:growl id="msgs" showDetail="true" />
             <h3>On-Demand Loading</h3>
             <p:tabView dynamic="true" cache="true" effect="fold">
-                <p:tab title="Crear aviso">
-                    <h:panelGrid columns="2" cellpadding="10">
-
+                <p:tab title="Crear anuncio">
+                    <h:panelGrid columns="2">
+                        <p:outputLabel for="tit" value="Título: "/>
+                        <p:inputText id="tit" value="#{anuncioController.anuncio.anuncioTitulo}"
+                                     required="true" style="width: available;"/>
+                        
+                        <p:outputLabel for="cue" value="Cuerpo del aviso: "/>
+                        <p:inputTextarea id="cue" value="#{anuncioController.anuncio.anuncioTexto}"
+                                     required="true" style="width: available;"/>
+                        <p:outputLabel for="fec" value="Fecha límite de visualización: "/>
+                        <p:inputText id="fec" value="#{anuncioController.anuncio.anuncioFechaFin}"
+                                     required="true" style="width: available;"/>
+                        
+                        <p:outputLabel for="tip" value="Tipo de Persona a la que el anuncio va dirigido: "/>
+                        <p:selectOneMenu id="tip" value="#{anuncioController.anuncio.anuncioTipoPersona}"
+                                         required="true" converter="omnifaces.SelectItemsConverter">
+                            <f:selectItem itemValue="null" itemLabel="Todos"/>
+                            <f:selectItems value="#{anuncioController.tiposPersonas}" var="tp"
+                                           itemLabel="#{tp.tipoPersonaNombre}" itemValue="#{tp}"/>
+                        </p:selectOneMenu>
                     </h:panelGrid>
                 </p:tab>
             </p:tabView>

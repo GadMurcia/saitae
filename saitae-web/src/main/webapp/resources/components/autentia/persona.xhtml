@@ -28,7 +28,8 @@
                             title="Ingrese el número de documento de identificación de la persona."
                             completeMethod="#{cc.attrs.onComplete}">
                 <f:validateLength minimum="9"/>
-                <p:ajax event="itemSelect" listener="#{axiliarController.onItemSelect}" update="form0:msgs form1"/>
+                <p:ajax event="itemSelect" listener="#{axiliarController.onItemSelect}" 
+                        update="form0:msgs form1"/>
                 <p:ajax event="itemSelect" listener="#{cc.attrs.onItemSelect}"/>
             </p:autoComplete>
             <p:message for="dui_#{cc.attrs.t}_x" showSummary="true" />

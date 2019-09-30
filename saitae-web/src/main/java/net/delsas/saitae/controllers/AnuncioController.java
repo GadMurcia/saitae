@@ -18,10 +18,12 @@ package net.delsas.saitae.controllers;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
@@ -40,31 +42,50 @@ import net.delsas.saitae.entities.TipoPersona;
 public class AnuncioController implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    private TipoPersona tipoPersona;
     @EJB
     private TipoPersonaFacadeLocal tipoPersonaFL;
     @EJB
     private AnuncioFacadeLocal anuncioFL;
     private Anuncio anuncio;
+    private Persona usuario;
+    private List<TipoPersona> tiposPersonas;
 
     @PostConstruct
     public void construct() {
-        anuncio=new Anuncio(0, "", new Date(), "");
+        FacesContext context = FacesContext.getCurrentInstance();
+        try {
+            usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
+            int t = usuario.getTipoPersona().getIdtipoPersona();
+            boolean r = t == 1 ? false : (t == 2 ? false : (t == 3 ? false : t != 4));
+            if (r) {
+                context.getExternalContext().getSessionMap().put("mensaje",
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                "Falla!", "Esa vista no le está permitida."));
+                context.getExternalContext().redirect("./../");
+            } else {
+                anuncio = new Anuncio(0, "", new Date(), "");
+                anuncio.setAnuncioAnunciante(usuario);
+                tiposPersonas = tipoPersonaFL.findAll();
+                tiposPersonas.remove(0);
+            }
+        } catch (Exception e) {
+
+        }
     }
 
     public List<Anuncio> getAll() {
-        Persona p = (Persona) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
         List<Anuncio> anuncios = null;
-        if (p != null) {
-            if (p.getTipoPersona().getIdtipoPersona() == 1 || p.getTipoPersona().getIdtipoPersona() == 0) {
+        if (usuario != null) {
+            if (usuario.getTipoPersona().getIdtipoPersona() == 1
+                    || usuario.getTipoPersona().getIdtipoPersona() == 2) {
                 anuncios = anuncioFL.findAll();
             } else {
-                anuncios = p.getTipoPersona().getAnuncioList();
+                anuncios = usuario.getTipoPersona().getAnuncioList();
             }
         }
         anuncios = anuncios == null ? new ArrayList<Anuncio>() : anuncios;
         return anuncios;
-    } 
+    }
 
     public Anuncio getAnuncio() {
         return anuncio;
@@ -74,4 +95,7 @@ public class AnuncioController implements Serializable {
         this.anuncio = anuncio;
     }
 
+    public List<TipoPersona> getTiposPersonas() {
+        return Collections.unmodifiableList(tiposPersonas);
+    }
 }

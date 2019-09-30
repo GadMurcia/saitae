@@ -62,6 +62,9 @@ import javax.xml.bind.annotation.XmlTransient;
 })
 public class Persona implements Serializable {
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "anuncioAnunciante")
+    private List<Anuncio> anuncioList;
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -454,6 +457,15 @@ public class Persona implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.Persona[ idpersona=" + idpersona + " ]";
+    }
+
+    @XmlTransient
+    public List<Anuncio> getAnuncioList() {
+        return anuncioList;
+    }
+
+    public void setAnuncioList(List<Anuncio> anuncioList) {
+        this.anuncioList = anuncioList;
     }
     
 }

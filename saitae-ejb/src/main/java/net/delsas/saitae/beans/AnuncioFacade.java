@@ -5,6 +5,9 @@
  */
 package net.delsas.saitae.beans;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,5 +31,18 @@ public class AnuncioFacade extends AbstractFacade<Anuncio> implements AnuncioFac
     public AnuncioFacade() {
         super(Anuncio.class);
     }
+
+    @Override
+    public List<Anuncio> getAnunciosActivos() {
+        return em.createNamedQuery("Anuncio.findAnunciosActivos")
+                .setParameter("fecha", new Date())
+                .getResultList();
+    }
     
+    @Override
+    public List<Anuncio> getAnunciosInactivos() {
+        return em.createNamedQuery("Anuncio.findAnunciosInactivos")
+                .setParameter("fecha", new Date())
+                .getResultList();
+    }
 }

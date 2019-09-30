@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -37,8 +38,15 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Anuncio.findByIdanuncio", query = "SELECT a FROM Anuncio a WHERE a.idanuncio = :idanuncio")
     , @NamedQuery(name = "Anuncio.findByAnuncioTitulo", query = "SELECT a FROM Anuncio a WHERE a.anuncioTitulo = :anuncioTitulo")
     , @NamedQuery(name = "Anuncio.findByAnuncioFechaFin", query = "SELECT a FROM Anuncio a WHERE a.anuncioFechaFin = :anuncioFechaFin")
-    , @NamedQuery(name = "Anuncio.findByAnuncioComentario", query = "SELECT a FROM Anuncio a WHERE a.anuncioComentario = :anuncioComentario")})
+    , @NamedQuery(name = "Anuncio.findByAnuncioComentario", query = "SELECT a FROM Anuncio a WHERE a.anuncioComentario = :anuncioComentario")
+    , @NamedQuery(name = "Anuncio.findAnunciosActivos", query = "SELECT a FROM Anuncio a WHERE a.anuncioFechaFin >= :fecha")
+    , @NamedQuery(name = "Anuncio.findAnunciosInactivos", query = "SELECT a FROM Anuncio a WHERE a.anuncioFechaFin < :fecha")
+})
 public class Anuncio implements Serializable {
+
+    @JoinColumn(name = "anuncioAnunciante", referencedColumnName = "idpersona")
+    @ManyToOne(optional = false)
+    private Persona anuncioAnunciante;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -155,5 +163,13 @@ public class Anuncio implements Serializable {
     public String toString() {
         return "net.delsas.saitae.entities.Anuncio[ idanuncio=" + idanuncio + " ]";
     }
-    
+
+    public Persona getAnuncioAnunciante() {
+        return anuncioAnunciante;
+    }
+
+    public void setAnuncioAnunciante(Persona anuncioAnunciante) {
+        this.anuncioAnunciante = anuncioAnunciante;
+    }
+
 }
