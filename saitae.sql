@@ -35,7 +35,7 @@ CREATE TABLE `acceso` (
   UNIQUE KEY `idacceso_UNIQUE` (`idacceso`),
   KEY `fk_acceso_1_idx` (`accesoIndice`),
   CONSTRAINT `fk_acceso_1` FOREIGN KEY (`accesoIndice`) REFERENCES `acceso` (`idacceso`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -44,7 +44,7 @@ CREATE TABLE `acceso` (
 
 LOCK TABLES `acceso` WRITE;
 /*!40000 ALTER TABLE `acceso` DISABLE KEYS */;
-INSERT INTO `acceso` VALUES (9,'Configuración',NULL,'#','pi pi-key'),(10,'Administración',9,'tipopp.intex','pi pi-folder-open'),(11,'Permisos y Licencias',9,'lictp.intex','pi pi-th-large'),(12,'Académica',9,'academico.intex','fa fa-leaf'),(13,'Perfil',NULL,'#','pi pi-user'),(14,'Permisos',NULL,'#','pi pi-eye'),(15,'Solicitar Permiso',14,'permisoE.intex','pi pi-briefcase'),(16,'Personal',NULL,'#','pi pi-users'),(17,'Agregar Maestro',27,'agregacion.intex','pi pi-user-plus'),(18,'Agregar Administrador',16,'agAdm.intex','pi pi-plus'),(19,'Plantel Institucional',16,'plantel.intex','pi pi-table'),(20,'Inventario',23,'inventario.intex','fa fa-thumb-tack'),(21,'Libros',23,'libros.intex','fa fa-tint'),(22,'Nuevo Ingreso',16,'inscripcion.intex','pi pi-user'),(23,'Recursos',9,'#','fa fa-tint'),(24,'Nomina de Alumnos',16,'nominaA.intex','pi pi-user'),(25,'Administración de Recursos',23,'recurso.intex','pi pi-list'),(26,'Lista de Representantes',16,'listaRepresentantes.intex','pi pi-list'),(27,'Maestros',16,'#','pi pi-list'),(28,'Asignación de materias',27,'horario.intex','pi pi-plus'),(29,'Administración de permisos',14,'permiso.intex',''),(30,'Solicitud de permisos',14,'permisoM.intex',''),(31,'Administrador de anuncios',9,'anuncios.intex','pi pi-list'),(32,'MAtricula',NULL,'matricula.intex','');
+INSERT INTO `acceso` VALUES (9,'Configuración',NULL,'#','pi pi-key'),(10,'Administración',9,'tipopp.intex','pi pi-folder-open'),(11,'Permisos y Licencias',9,'lictp.intex','pi pi-th-large'),(12,'Académica',9,'academico.intex','fa fa-leaf'),(13,'Perfil',NULL,'#','pi pi-user'),(14,'Permisos',NULL,'#','pi pi-eye'),(15,'Solicitar Permiso',14,'permisoE.intex','pi pi-briefcase'),(16,'Personal',NULL,'#','pi pi-users'),(17,'Agregar Maestro',27,'agregacion.intex','pi pi-user-plus'),(18,'Agregar Administrador',16,'agAdm.intex','pi pi-plus'),(19,'Plantel Institucional',16,'plantel.intex','pi pi-table'),(20,'Inventario',23,'inventario.intex','fa fa-thumb-tack'),(21,'Libros',23,'libros.intex','fa fa-tint'),(22,'Nuevo Ingreso',16,'inscripcion.intex','pi pi-user'),(23,'Recursos',9,'#','fa fa-tint'),(24,'Nomina de Alumnos',16,'nominaA.intex','pi pi-user'),(25,'Administración de Recursos',23,'recurso.intex','pi pi-list'),(26,'Lista de Representantes',16,'listaRepresentantes.intex','pi pi-list'),(27,'Maestros',16,'#','pi pi-list'),(28,'Asignación de materias',27,'horario.intex','pi pi-plus'),(29,'Administración de permisos',14,'permiso.intex',''),(30,'Solicitud de permisos',14,'permisoM.intex',''),(31,'Administrador de anuncios',9,'anuncios.intex','pi pi-list'),(32,'Matricula',16,'matricula.intex',''),(33,'Entrega de Útiles',9,'paquetes.intex','');
 /*!40000 ALTER TABLE `acceso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -72,7 +72,7 @@ CREATE TABLE `accesoTipoPersona` (
 
 LOCK TABLES `accesoTipoPersona` WRITE;
 /*!40000 ALTER TABLE `accesoTipoPersona` DISABLE KEYS */;
-INSERT INTO `accesoTipoPersona` VALUES (9,1,''),(9,2,''),(9,6,''),(10,1,''),(10,2,''),(11,1,''),(12,1,''),(12,2,''),(13,8,''),(14,1,''),(14,8,''),(15,8,''),(16,1,''),(17,1,''),(18,1,''),(19,1,''),(20,1,''),(21,1,''),(22,1,''),(23,1,''),(23,6,''),(24,1,''),(25,1,''),(25,6,''),(26,1,''),(27,1,''),(28,1,''),(29,1,''),(30,1,''),(31,1,''),(32,1,'');
+INSERT INTO `accesoTipoPersona` VALUES (9,1,''),(9,2,''),(9,6,''),(10,1,''),(10,2,''),(11,1,''),(12,1,''),(12,2,''),(13,8,''),(14,1,''),(14,8,''),(15,8,''),(16,1,''),(17,1,''),(18,1,''),(19,1,''),(20,1,''),(21,1,''),(22,1,''),(23,1,''),(23,6,''),(24,1,''),(25,1,''),(25,6,''),(26,1,''),(27,1,''),(28,1,''),(29,1,''),(30,1,''),(31,1,''),(32,1,''),(33,1,'');
 /*!40000 ALTER TABLE `accesoTipoPersona` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -597,6 +597,7 @@ CREATE TABLE `entregaUtiles` (
 
 LOCK TABLES `entregaUtiles` WRITE;
 /*!40000 ALTER TABLE `entregaUtiles` DISABLE KEYS */;
+INSERT INTO `entregaUtiles` VALUES (11022,2019,1045367073,1045367009,'','','',NULL);
 /*!40000 ALTER TABLE `entregaUtiles` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1668,4 +1669,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-10-01 11:23:10
+-- Dump completed on 2019-10-01 13:16:57

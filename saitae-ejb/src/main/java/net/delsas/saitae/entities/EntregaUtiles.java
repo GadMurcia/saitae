@@ -57,7 +57,7 @@ public class EntregaUtiles implements Serializable {
     @JoinColumn(name = "idEstudiante", referencedColumnName = "idestudiante", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Estudiante estudiante;
-    @JoinColumn(name = "idEntregante", referencedColumnName = "idpersona", insertable = false, updatable = false)
+    @JoinColumn(name = "idEntregante", referencedColumnName = "idpersona")
     @ManyToOne(optional = false)
     private Persona idEntregante;
     @JoinColumn(name = "idRepresentante", referencedColumnName = "idestudiante")
