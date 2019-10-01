@@ -13,14 +13,37 @@
 
             <h:panelGrid columns="2" cellpadding="5">
                 <p:outputLabel value="Alumno:" for="acSimple" />
-                <p:autoComplete id="acSimple" value="#{paquetesController.est}"  
-                                completeMethod="#{paquetesController.completeText}">
-                    <p:ajax event="itemSelect" 
+                <p:autoComplete style="width: 190px" id="acSimple" value="#{paquetesController.nie}"  
+                                completeMethod="#{paquetesController.completeText}"  >
+                   
+                       <p:ajax event="itemSelect" 
                             listener="#{paquetesController.onItemSelect}" 
-                            update="msgs"/>
+                            update="form1"/>
+                    
                 </p:autoComplete>
-            </h:panelGrid>    
+                 <p:outputLabel id="alumno" value="#{paquetesController.p.personaNombre} #{paquetesController.p.personaApellido}" />
+                 <p:outputLabel id="grado" value="#{paquetesController.gradoAlumno}" />
+                 <p:outputLabel value="Uniforme:"/>
+                 <p:selectBooleanButton value="#{paquetesController.entregaUtiles.uniforme}" 
+                                               onLabel="Entregado" offLabel="Sin entregar" style="width: 190px"/>
+                 <p:outputLabel value="Zapatos"/>
+                 <p:selectBooleanButton value="#{paquetesController.entregaUtiles.zapatos}" 
+                                               onLabel="Entregado" offLabel="Sin entregar" style="width: 190px"/>
+                 <p:outputLabel value="Utiles Escolares"/>
+                 <p:selectBooleanButton value="#{paquetesController.entregaUtiles.utiles}" 
+                                               onLabel="Entregado" offLabel="Sin entregar" style="width: 190px"/>
+                 <p:column/>
+                        <p:commandButton id="summit" value="Guardar" 
 
+                                         actionListener="#{paquetesController.guardar()}" 
+                                         update=":form1:msgs form1"/>
+            </h:panelGrid>  
+            
+                
+                   
+                    
+                
+            
 
         </h:form>
 
