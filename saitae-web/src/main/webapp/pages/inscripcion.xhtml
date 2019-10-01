@@ -249,16 +249,6 @@
                             </p:selectOneMenu>
                             <p:message for="console6"/>
 
-                            <p:outputLabel for="secc" value="Sección a la que aplica: " />
-                            <p:selectOneMenu id="secc" value="#{inscripcionController.matricula.grado.gradoPK.gradoSeccion}"  required="true"
-                                             style="width:190px" title="Seleccione la sección a la que desea inscribirse"
-                                             requiredMessage="Debe elegir una sección para poder inscribirse.">
-                                <f:validateLength minimum="1"/>
-                                <f:selectItem itemLabel="Seleccione" itemValue="" />
-                                <f:selectItems value="#{inscripcionController.secciones}"/>
-                            </p:selectOneMenu>
-                            <p:message for="secc"/>
-
                             <p:outputLabel value="¿Repite año?: " />
                             <p:selectBooleanButton value="#{inscripcionController.matricula.matriculaRepite}" required="true"
                                                    onLabel="Sí" offLabel="No" style="width:190px"/>

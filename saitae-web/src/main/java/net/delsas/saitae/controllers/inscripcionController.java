@@ -65,10 +65,10 @@ public class inscripcionController implements Serializable {
     private GradoFacadeLocal gfl;
     @EJB
     private PersonaFacadeLocal personaFL;
-    @EJB
-    private DocumentosFacadeLocal documentosFL;
-    @EJB
-    private MatriculaFacadeLocal matriculaFL;
+//    @EJB
+//    private DocumentosFacadeLocal documentosFL;
+//    @EJB
+//    private MatriculaFacadeLocal matriculaFL;
 
     private Persona estP;
     private Persona repP;
@@ -109,6 +109,12 @@ public class inscripcionController implements Serializable {
         doc.setIddocumentos(estP.getIdpersona());
         doc.setEstudiante(estP.getEstudiante());
         mat.getMatriculaPK().setIdmatricula(estP.getIdpersona());
+        mat.setMatriculaComentario("N");
+        mat.getGrado().getGradoPK().setGradoSeccion(
+                gfl.getSeccionPorAñoModalidadyId(
+                        getAño(),
+                        mat.getGrado().getGradoPK().getGradoModalidad(),
+                        mat.getGrado().getGradoPK().getIdgrado()).get(0));
         estP.getEstudiante().setDocumentos(doc);
         estP.getEstudiante().getMatriculaList().add(mat);
 
@@ -198,14 +204,24 @@ public class inscripcionController implements Serializable {
     }
 
     public int getAño() {
-        return Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date()));
+        Date r = new Date();
+        int y;
+        try {
+            y = r.before(new SimpleDateFormat("dd-MM-yyyy").parse("24-11-"
+                    + new SimpleDateFormat("yyyy").format(r)))
+                    ? Integer.valueOf(new SimpleDateFormat("yyyy").format(r))
+                    : (Integer.valueOf(new SimpleDateFormat("yyyy").format(r)) + 1);
+        } catch (ParseException ex) {
+            y = Integer.valueOf(new SimpleDateFormat("yyyy").format(r));
+        }
+        return y;
     }
 
     public boolean isTime() {
         try {
             Date d = new Date();
-            Date d1 = (new SimpleDateFormat("dd-mm-yyyy").parse("15-11-" + getAño()));
-            return (d.before(d1) || d1.equals(d));
+            Date d1 = new SimpleDateFormat("dd-mm-yyyy").parse("24-11-" + new SimpleDateFormat("yyyy").format(d));
+            return !d.before(d1);
         } catch (ParseException ex) {
             System.out.println(ex);
             return false;
