@@ -137,7 +137,7 @@ public class paquetesController implements Serializable {
 
     }
 
-    public void Guardar() {
+    public void guardar() {
           FacesMessage msj = null;
         entregaUtiles.setIdEntregante(usuario);
         entregaUFL.edit(entregaUtiles);
