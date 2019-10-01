@@ -16,9 +16,22 @@
  */
 package net.delsas.saitae.controllers;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import net.delsas.saitae.ax.prueba;
+import net.delsas.saitae.beans.GradoFacadeLocal;
+import net.delsas.saitae.beans.MatriculaFacadeLocal;
+import net.delsas.saitae.entities.Matricula;
+import net.delsas.saitae.entities.Persona;
 
 /**
  *
@@ -26,9 +39,45 @@ import javax.inject.Named;
  */
 @Named
 @ViewScoped
-public class matriculaController implements Serializable{
-    
+public class matriculaController implements Serializable {
+
     private static final long serialVersionUID = 1L;
+
+    @EJB
+    private MatriculaFacadeLocal matriculaFL;
+    @EJB
+    private GradoFacadeLocal gradoFL;
+    private List<Matricula> nuevasMatriculas;
+    private Persona usuario;
+
+    @PostConstruct
+    public void init() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
+        boolean r = usuario.getTipoPersona().getIdtipoPersona().equals(1) ? false
+                : usuario.getTipoPersona().getIdtipoPersona().equals(2) ? false
+                : !usuario.getTipoPersona().getIdtipoPersona().equals(13);
+        if (r) {
+            context.getExternalContext().getSessionMap().put("mensaje", new FacesMessage(FacesMessage.SEVERITY_FATAL,
+                    "Falla!", "Esa vista no le está permitida."));
+            try {
+                context.getExternalContext().redirect("./../");
+            } catch (IOException ex) {
+                Logger.getLogger(paquetesController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }else{
+            
+        }
+    }
+
+    public List<Matricula> getNuevasMatriculas() {
+        return nuevasMatriculas;
+    }
+
+    public void setNuevasMatriculas(List<Matricula> nuevasMatriculas) {
+        this.nuevasMatriculas = nuevasMatriculas;
+    }
     
     
+
 }

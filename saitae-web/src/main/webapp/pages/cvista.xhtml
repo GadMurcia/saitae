@@ -38,10 +38,14 @@
 
                                 <p:column headerText="Índice">
                                     <p:cellEditor>
-                                        <f:facet name="output"><h:outputText value="#{a.accesoIndice.accesoNombre}" /></f:facet>
-                                        <f:facet name="input"><p:selectOneMenu id="console" value="#{a.accesoIndice.accesoNombre}" 
-                                                                               style="width:125px" title="Seleccione un tipo ">
-                                                <f:selectItems value="#{vistasMenuController.accesosItems}"/>
+                                        <f:facet name="output">
+                                            <h:outputText value="#{a.accesoIndice.accesoNombre}" />
+                                        </f:facet>
+                                        <f:facet name="input">
+                                            <p:selectOneMenu id="console" value="#{a.accesoIndice}" style="width:125px"
+                                                             converter="omnifaces.SelectItemsConverter" title="Seleccione un tipo ">
+                                                <f:selectItems value="#{vistasMenuController.accesos}" var="acc"
+                                                               itemValue="#{acc}" itemLabel="#{acc.accesoNombre}"/>
                                             </p:selectOneMenu>
                                         </f:facet>
                                     </p:cellEditor>
