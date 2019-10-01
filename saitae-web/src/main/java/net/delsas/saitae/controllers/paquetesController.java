@@ -16,17 +16,31 @@
  */
 package net.delsas.saitae.controllers;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import net.delsas.saitae.ax.prueba;
+import net.delsas.saitae.beans.EntregaUtilesFacadeLocal;
 import net.delsas.saitae.beans.EstudianteFacadeLocal;
+import net.delsas.saitae.beans.MatriculaFacadeLocal;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
+import net.delsas.saitae.entities.EntregaUtiles;
+import net.delsas.saitae.entities.EntregaUtilesPK;
 import net.delsas.saitae.entities.Estudiante;
+import net.delsas.saitae.entities.GradoPK;
+import net.delsas.saitae.entities.Matricula;
+import net.delsas.saitae.entities.MatriculaPK;
 import net.delsas.saitae.entities.Persona;
 import org.primefaces.event.SelectEvent;
 
@@ -34,37 +48,96 @@ import org.primefaces.event.SelectEvent;
  *
  * @author gabriela
  */
-@Named(value = "paquetesController")
+@Named
 
 @ViewScoped
 public class paquetesController implements Serializable {
-  @EJB
-  private EstudianteFacadeLocal estudianteFL;
-  private Estudiante estudiante;
-  private String est;
-  
-  
-    
 
+    @EJB
+    private PersonaFacadeLocal personaFL;
+    private Persona p;
+    private String est;
+
+    @EJB
+    private EntregaUtilesFacadeLocal entregaUFL;
+    private EntregaUtiles entregaUtiles;
+
+    @EJB
+    private MatriculaFacadeLocal matriculaFL;
+
+    @PostConstruct
+    public void init() {
+
+        p = new prueba().getEstudiante();
+        FacesContext context = FacesContext.getCurrentInstance();
+        p = (Persona) context.getExternalContext().getSessionMap().get("usuario");
+        boolean r = p.getTipoPersona().getIdtipoPersona().equals(2) ? false
+                : p.getTipoPersona().getIdtipoPersona().equals(12) ? false
+                : !p.getTipoPersona().getIdtipoPersona().equals(1);
+
+        if (r) {
+
+            context.getExternalContext().getSessionMap().put("mensaje", new FacesMessage(FacesMessage.SEVERITY_FATAL,
+                    "Falla!", "Esa vista no le está permitida."));
+            try {
+                context.getExternalContext().redirect("./../");
+            } catch (IOException ex) {
+                Logger.getLogger(paquetesController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
     private static final long serialVersionUID = 1L;
 
-    
- public List<String> completeText(String query) {
-        List<String> results = new ArrayList<String>();
-       
-         
+    public List<String> completeText(String query) {
+        List<String> results = new ArrayList<>();
+        List<Persona> listp;
+        try {
+            (new prueba()).setDui(query, p);
+            listp = personaFL.getPersonaByLikeIdAndType(p.getIdpersona(), 8);
+            for (Persona datos : listp) {
+                results.add(datos.getPersonaNombre() + " "
+                        + datos.getPersonaApellido() + "=>" + datos.getIdpersona().toString().substring(1));
+            }
+        } catch (Exception m) {
+            System.out.println(m.getMessage());
+        }
+
         return results;
     }
- public void onItemSelect(SelectEvent event) {
+
+    public void onItemSelect(SelectEvent event) {
+        new prueba().setDui(event.getObject().toString(), p);
+        p = personaFL.find(p.getIdpersona());
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Alumno seleccionado", event.getObject().toString()));
+        entregaUtiles.setIdRepresentante(p.getEstudiante().getEstudianteRepresentante());
+        entregaUtiles.setEstudiante(p.getEstudiante());
+
+        entregaUtiles = entregaUFL.find(new EntregaUtilesPK(p.getIdpersona(), getAño()));
+        entregaUtiles = entregaUtiles == null ? new EntregaUtiles(p.getIdpersona(), getAño()) : entregaUtiles;
     }
 
-    public Estudiante getEstudiante() {
-        return estudiante;
+    public int getAño() {
+        return Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date()));
     }
 
-    public void setEstudiante(Estudiante estudiante) {
-        this.estudiante = estudiante;
+    public String getGradoAlumno() {
+        String grado = "";
+        Matricula mati = matriculaFL.find(new MatriculaPK(p.getIdpersona(), getAño()));
+        if (mati != null) {
+            GradoPK pk = mati.getGrado().getGradoPK();
+            grado += pk.getIdgrado() == 1 ? "Primero" : pk.getIdgrado() == 2 ? "Segundo"
+                    : pk.getIdgrado() == 3 ? "Tercero" : "";
+            grado += " " + (pk.getGradoModalidad().equals("G") ? "General"
+                    : pk.getGradoModalidad().equals("S") ? " T.V.C Secretariado"
+                    : pk.getGradoModalidad().equals("C") ? "T.V.C Contador" : "");
+        }
+        return grado;
+
+    }
+
+    public void Guardar() {
+        p.getEstudiante().getEntregaUtilesList().add(entregaUtiles);
+
     }
 
     public String getEst() {
@@ -74,6 +147,26 @@ public class paquetesController implements Serializable {
     public void setEst(String est) {
         this.est = est;
     }
+
+    public Persona getP() {
+        return p;
+    }
+
+    public void setNie(String nie) {
+        new prueba().setDui(nie, p);
+    }
     
- 
+
+    public String getNie() {
+        return p.getIdpersona().toString().substring(1);
+    }
+
+    public EntregaUtiles getEntregaUtiles() {
+        return entregaUtiles;
+    }
+
+    public void setEntregaUtiles(EntregaUtiles entregaUtiles) {
+        this.entregaUtiles = entregaUtiles;
+    }
+
 }

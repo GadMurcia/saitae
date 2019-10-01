@@ -1,10 +1,10 @@
 CREATE DATABASE  IF NOT EXISTS `intex` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `intex`;
--- MySQL dump 10.16  Distrib 10.1.41-MariaDB, for debian-linux-gnu (x86_64)
+-- MySQL dump 10.16  Distrib 10.1.38-MariaDB, for debian-linux-gnu (x86_64)
 --
 -- Host: 127.0.0.1    Database: intex
 -- ------------------------------------------------------
--- Server version	10.1.41-MariaDB-0+deb9u1
+-- Server version	10.1.38-MariaDB-0+deb9u1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -1507,7 +1507,7 @@ CREATE TABLE `tipoPersona` (
   `tipoPersonaNombre` varchar(45) NOT NULL,
   `tipoPersonaComentario` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idtipoPersona`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1516,7 +1516,7 @@ CREATE TABLE `tipoPersona` (
 
 LOCK TABLES `tipoPersona` WRITE;
 /*!40000 ALTER TABLE `tipoPersona` DISABLE KEYS */;
-INSERT INTO `tipoPersona` VALUES (1,'Administrador',''),(2,'Director',''),(3,'Subdirector',''),(4,'Maestro',''),(5,'Bibliotecario',''),(6,'Administrador CRA',''),(7,'Laboratorista',''),(8,'Estudiante',''),(9,'Representante',''),(10,'Madre de familia',''),(11,'Padre de familia','');
+INSERT INTO `tipoPersona` VALUES (1,'Administrador',''),(2,'Director',''),(3,'Subdirector',''),(4,'Maestro',''),(5,'Bibliotecario',''),(6,'Administrador CRA',''),(7,'Laboratorista',''),(8,'Estudiante',''),(9,'Representante',''),(10,'Madre de familia',''),(11,'Padre de familia',''),(12,'Colector',NULL),(13,'Secretaria',NULL);
 /*!40000 ALTER TABLE `tipoPersona` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1650,14 +1650,6 @@ LOCK TABLES `zona` WRITE;
 INSERT INTO `zona` VALUES (1,'Zona 1',NULL),(2,'Zona 2',NULL),(3,'Zona 3',NULL),(4,'zona 4',NULL);
 /*!40000 ALTER TABLE `zona` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Dumping events for database 'intex'
---
-
---
--- Dumping routines for database 'intex'
---
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -1668,4 +1660,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-09-30 16:41:42
+-- Dump completed on 2019-10-01 10:50:30

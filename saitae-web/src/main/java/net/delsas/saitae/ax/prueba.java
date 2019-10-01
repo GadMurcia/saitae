@@ -389,7 +389,7 @@ public class prueba {
     public void setDui(String dui, Persona p) {
         String x[] = dui.split("=>");
         String i = "1";
-        for (String g : (x.length > 1 ? x[1].substring(1) : x[0]).split("")) {// dui.split("")) {
+        for (String g : (x.length > 1 ? x[1] : x[0]).split("")) {// dui.split("")) {
             if (!g.equals("-")) {
                 i += g;
             }
