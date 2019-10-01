@@ -42,9 +42,10 @@
                     <p:commandButton actionListener="#{loginController.login()}" value="Ingresar"/>
                     <p:column/>
                     <f:facet name="footer">
-                        <h:link value="Nuevo ingreso" outcome="pages/inscripcion.intex"/>
+                        <h:link value="Nuevo ingreso" outcome="pages/inscripcion.intex"
+                                rendered="#{inscripcionController.time}"/>
                     </f:facet>
-                    <p:focus context="panel"/>
+                    <p:focus context="frm:user"/>
                 </h:panelGrid>
             </div>
         </h:form>

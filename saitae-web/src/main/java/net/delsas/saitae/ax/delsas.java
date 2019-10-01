@@ -18,13 +18,11 @@ public class delsas {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-//        int g=6018;
-//        String a=DigestUtils.md5Hex(g+"");
-//        System.out.println("contrseña sin encriptar: "+g);
-//        System.out.println("contraseña encriptada: "+a);
-//        System.out.println("longitud contrseña encriptada: "+a.toCharArray().length);
-        System.out.println("Año en curso: " 
-                + Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date())));
+        int g=6018;
+        String a=DigestUtils.md5Hex(g+"");
+        System.out.println("contrseña sin encriptar: "+g);
+        System.out.println("contraseña encriptada: "+a);
+        System.out.println("longitud contrseña encriptada: "+a.toCharArray().length);
 
     }
 
