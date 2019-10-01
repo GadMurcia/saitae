@@ -56,6 +56,7 @@ public class paquetesController implements Serializable {
     @EJB
     private PersonaFacadeLocal personaFL;
     private Persona p;
+    private Persona usuario;
     private String est;
 
     @EJB
@@ -68,12 +69,12 @@ public class paquetesController implements Serializable {
     @PostConstruct
     public void init() {
 
-        p = new prueba().getEstudiante();
+        usuario = new prueba().getEstudiante();
         FacesContext context = FacesContext.getCurrentInstance();
-        p = (Persona) context.getExternalContext().getSessionMap().get("usuario");
-        boolean r = p.getTipoPersona().getIdtipoPersona().equals(2) ? false
-                : p.getTipoPersona().getIdtipoPersona().equals(12) ? false
-                : !p.getTipoPersona().getIdtipoPersona().equals(1);
+        usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
+        boolean r = usuario.getTipoPersona().getIdtipoPersona().equals(2) ? false
+                : usuario.getTipoPersona().getIdtipoPersona().equals(12) ? false
+                : !usuario.getTipoPersona().getIdtipoPersona().equals(1);
 
         if (r) {
 
@@ -108,12 +109,13 @@ public class paquetesController implements Serializable {
     public void onItemSelect(SelectEvent event) {
         new prueba().setDui(event.getObject().toString(), p);
         p = personaFL.find(p.getIdpersona());
+         entregaUtiles = entregaUFL.find(new EntregaUtilesPK(p.getIdpersona(), getAño()));
+        entregaUtiles = entregaUtiles == null ? new EntregaUtiles(p.getIdpersona(), getAño()) : entregaUtiles;
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Alumno seleccionado", event.getObject().toString()));
         entregaUtiles.setIdRepresentante(p.getEstudiante().getEstudianteRepresentante());
         entregaUtiles.setEstudiante(p.getEstudiante());
 
-        entregaUtiles = entregaUFL.find(new EntregaUtilesPK(p.getIdpersona(), getAño()));
-        entregaUtiles = entregaUtiles == null ? new EntregaUtiles(p.getIdpersona(), getAño()) : entregaUtiles;
+       
     }
 
     public int getAño() {
