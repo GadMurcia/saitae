@@ -7,7 +7,6 @@ package net.delsas.saitae.beans;
 
 import java.util.List;
 import javax.ejb.Local;
-import net.delsas.saitae.entities.Estudiante;
 import net.delsas.saitae.entities.GradoPK;
 import net.delsas.saitae.entities.Matricula;
 import net.delsas.saitae.entities.Persona;
@@ -39,5 +38,7 @@ public interface MatriculaFacadeLocal {
      * @return java.utilList net.delsas.saitae.entities.Estudiante
      */
     public List<Persona> findMatriculaByGrado(GradoPK pk);
+
+    public List<Matricula> findAllNewEstudent(GradoPK pk);
     
 }

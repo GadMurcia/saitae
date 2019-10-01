@@ -9,7 +9,6 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import net.delsas.saitae.entities.Estudiante;
 import net.delsas.saitae.entities.GradoPK;
 import net.delsas.saitae.entities.Matricula;
 import net.delsas.saitae.entities.Persona;
@@ -39,5 +38,14 @@ public class MatriculaFacade extends AbstractFacade<Matricula> implements Matric
                 .setParameter("gradoPK", pk)
                 .getResultList();
 }
+    
+    @Override
+    public List<Matricula> findAllNewEstudent(GradoPK pk){
+        return em.createNamedQuery("Matricula.findAllNew")
+                .setParameter("año", pk.getGradoAño())
+                .setParameter("mod", pk.getGradoModalidad())
+                .setParameter("idgrado", pk.getIdgrado())
+                .getResultList();
+    }
 
 }

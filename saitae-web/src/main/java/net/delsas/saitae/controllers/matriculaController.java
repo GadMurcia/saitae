@@ -18,6 +18,7 @@ package net.delsas.saitae.controllers;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -65,19 +66,19 @@ public class matriculaController implements Serializable {
             } catch (IOException ex) {
                 Logger.getLogger(paquetesController.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }else{
-            
+        } else {
+
         }
     }
 
     public List<Matricula> getNuevasMatriculas() {
-        return nuevasMatriculas;
+        return Collections.unmodifiableList(nuevasMatriculas);
     }
 
     public void setNuevasMatriculas(List<Matricula> nuevasMatriculas) {
         this.nuevasMatriculas = nuevasMatriculas;
     }
-    
+
     
 
 }
