@@ -34,5 +34,5 @@ public class PermisosFacade extends AbstractFacade<Permisos> implements Permisos
         return em.createNamedQuery("Permisos.findByPermisosEstado")
                 .setParameter("permisoEstado", estado)
                 .getResultList();
-    }
+}
 }

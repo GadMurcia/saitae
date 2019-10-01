@@ -38,6 +38,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Contribuciones.findByContribucionesComentario", query = "SELECT c FROM Contribuciones c WHERE c.contribucionesComentario = :contribucionesComentario")})
 public class Contribuciones implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
@@ -52,8 +53,6 @@ public class Contribuciones implements Serializable {
     @NotNull
     @Column(name = "a\u00f1o")
     private int año;
-
-    private static final long serialVersionUID = 1L;
     @Size(max = 140)
     @Column(name = "contribucionesComentario")
     private String contribucionesComentario;
@@ -74,6 +73,30 @@ public class Contribuciones implements Serializable {
     public Contribuciones(Date fechaHora, int mes, int año) {
         this.fechaHora = fechaHora;
         this.mes = mes;
+        this.año = año;
+    }
+
+    public Date getFechaHora() {
+        return fechaHora;
+    }
+
+    public void setFechaHora(Date fechaHora) {
+        this.fechaHora = fechaHora;
+    }
+
+    public int getMes() {
+        return mes;
+    }
+
+    public void setMes(int mes) {
+        this.mes = mes;
+    }
+
+    public int getAño() {
+        return año;
+    }
+
+    public void setAño(int año) {
         this.año = año;
     }
 
@@ -115,36 +138,15 @@ public class Contribuciones implements Serializable {
             return false;
         }
         Contribuciones other = (Contribuciones) object;
-        return !((this.fechaHora == null && other.fechaHora != null) || (this.fechaHora!= null && !this.fechaHora.equals(other.fechaHora)));
+        if ((this.fechaHora == null && other.fechaHora != null) || (this.fechaHora != null && !this.fechaHora.equals(other.fechaHora))) {
+            return false;
+        }
+        return true;
     }
 
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.Contribuciones[ fechaHora =" + fechaHora + " ]";
     }
-
-    public Date getFechaHora() {
-        return fechaHora;
-    }
-
-    public void setFechaHora(Date fechaHora) {
-        this.fechaHora = fechaHora;
-    }
-
-    public int getMes() {
-        return mes;
-    }
-
-    public void setMes(int mes) {
-        this.mes = mes;
-    }
-
-    public int getAño() {
-        return año;
-    }
-
-    public void setAño(int año) {
-        this.año = año;
-    }
-
+    
 }

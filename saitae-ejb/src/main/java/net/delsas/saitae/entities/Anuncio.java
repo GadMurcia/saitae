@@ -45,11 +45,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 })
 public class Anuncio implements Serializable {
 
-    @JoinColumn(name = "anuncioAnunciante", referencedColumnName = "idpersona")
-    @ManyToOne(optional = false)
-    private Persona anuncioAnunciante;
-
-    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -57,14 +52,16 @@ public class Anuncio implements Serializable {
     private Integer idanuncio;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "anuncioTitulo")
-    private String anuncioTitulo;
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "anuncioFechaFin")
     @Temporal(TemporalType.TIMESTAMP)
     private Date anuncioFechaFin;
+
+    private static final long serialVersionUID = 1L;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 45)
+    @Column(name = "anuncioTitulo")
+    private String anuncioTitulo;
     @Basic(optional = false)
     @NotNull
     @Lob
@@ -74,6 +71,9 @@ public class Anuncio implements Serializable {
     @Size(max = 140)
     @Column(name = "anuncioComentario")
     private String anuncioComentario;
+    @JoinColumn(name = "anuncioAnunciante", referencedColumnName = "idpersona")
+    @ManyToOne(optional = false)
+    private Persona anuncioAnunciante;
     @JoinColumn(name = "anuncioTipoPersona", referencedColumnName = "idtipoPersona")
     @ManyToOne
     private TipoPersona anuncioTipoPersona;
@@ -132,6 +132,14 @@ public class Anuncio implements Serializable {
         this.anuncioComentario = anuncioComentario;
     }
 
+    public Persona getAnuncioAnunciante() {
+        return anuncioAnunciante;
+    }
+
+    public void setAnuncioAnunciante(Persona anuncioAnunciante) {
+        this.anuncioAnunciante = anuncioAnunciante;
+    }
+
     public TipoPersona getAnuncioTipoPersona() {
         return anuncioTipoPersona;
     }
@@ -163,14 +171,5 @@ public class Anuncio implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.Anuncio[ idanuncio=" + idanuncio + " ]";
-    }
-
-    public Persona getAnuncioAnunciante() {
-        return anuncioAnunciante;
-    }
-
-    public void setAnuncioAnunciante(Persona anuncioAnunciante) {
-        this.anuncioAnunciante = anuncioAnunciante;
-    }
-
+    }    
 }

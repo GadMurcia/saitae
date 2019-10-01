@@ -41,7 +41,7 @@ public class MestroHorarioMateriasFacade extends AbstractFacade<MestroHorarioMat
                 .setParameter("gradoPK", gradoPK)
                 .setParameter("dia", dia)
                 .getResultList();
-    }
+}
     
     @Override
     public List<MestroHorarioMaterias> findByhorarioAndMaestro(Horario horario, Maestro maestro, DiasEstudio dia){

@@ -113,5 +113,5 @@ public class AccesoTipoPersona implements Serializable {
     public String toString() {
         return "net.delsas.saitae.entities.AccesoTipoPersona[ accesoTipoPersonaPK=" + accesoTipoPersonaPK + " ]";
     }
-
+    
 }

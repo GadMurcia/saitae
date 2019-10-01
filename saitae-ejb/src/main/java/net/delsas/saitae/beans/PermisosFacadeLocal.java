@@ -29,7 +29,7 @@ public interface PermisosFacadeLocal {
     List<Permisos> findRange(int[] range);
 
     int count();
-
+    
     /**
      *  Busca los permisos que estén en el estado indicado.
      * @param estado

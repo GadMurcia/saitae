@@ -33,7 +33,7 @@ public class AnuncioFacade extends AbstractFacade<Anuncio> implements AnuncioFac
     public AnuncioFacade() {
         super(Anuncio.class);
     }
-
+    
     @Override
     public List<Anuncio> getAnunciosActivos() {
         Date d = null;
@@ -43,7 +43,7 @@ public class AnuncioFacade extends AbstractFacade<Anuncio> implements AnuncioFac
         return em.createNamedQuery("Anuncio.findAnunciosActivos")
                 .setParameter("fecha", d==null ? new Date() : d)
                 .getResultList();
-    }
+}
 
     @Override
     public List<Anuncio> getAnunciosInactivos() {

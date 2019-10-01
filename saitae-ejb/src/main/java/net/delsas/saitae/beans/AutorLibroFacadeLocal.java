@@ -29,5 +29,5 @@ public interface AutorLibroFacadeLocal {
     List<AutorLibro> findRange(int[] range);
 
     int count();
-        
+    
 }

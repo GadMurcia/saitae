@@ -32,12 +32,12 @@ public class MatriculaFacade extends AbstractFacade<Matricula> implements Matric
     public MatriculaFacade() {
         super(Matricula.class);
     }
-
+    
     @Override
     public List<Persona> findMatriculaByGrado(GradoPK pk) {
         return em.createNamedQuery("Matricula.findEstudiantesByGrado")
                 .setParameter("gradoPK", pk)
                 .getResultList();
-    }
+}
 
 }

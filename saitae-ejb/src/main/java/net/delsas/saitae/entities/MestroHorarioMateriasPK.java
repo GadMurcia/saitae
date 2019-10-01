@@ -43,17 +43,17 @@ public class MestroHorarioMateriasPK implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 2)
+    @Column(name = "gradoModalidad")
+    private String gradoModalidad;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 2)
     @Column(name = "seccionGrado")
     private String seccionGrado;
     @Basic(optional = false)
     @NotNull
     @Column(name = "a\u00f1oGrado")
     private int añoGrado;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 2)
-    @Column(name = "gradoModalidad")
-    private String gradoModalidad;
 
     public MestroHorarioMateriasPK() {
     }
@@ -64,6 +64,7 @@ public class MestroHorarioMateriasPK implements Serializable {
         this.idHorario = idHorario;
         this.diaSemana = diaSemana;
         this.idGrado = idGrado;
+        this.gradoModalidad = gradoModalidad;
         this.seccionGrado = seccionGrado;
         this.añoGrado = añoGrado;
         this.gradoModalidad = gradoModalidad;
@@ -109,6 +110,14 @@ public class MestroHorarioMateriasPK implements Serializable {
         this.idGrado = idGrado;
     }
 
+    public String getGradoModalidad() {
+        return gradoModalidad;
+    }
+
+    public void setGradoModalidad(String gradoModalidad) {
+        this.gradoModalidad = gradoModalidad;
+    }
+
     public String getSeccionGrado() {
         return seccionGrado;
     }
@@ -125,14 +134,6 @@ public class MestroHorarioMateriasPK implements Serializable {
         this.añoGrado = añoGrado;
     }
 
-    public String getGradoModalidad() {
-        return gradoModalidad;
-    }
-
-    public void setGradoModalidad(String gradoModalidad) {
-        this.gradoModalidad = gradoModalidad;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -141,8 +142,8 @@ public class MestroHorarioMateriasPK implements Serializable {
         hash += (int) idHorario;
         hash += (int) diaSemana;
         hash += (int) idGrado;
-        hash += (seccionGrado != null ? seccionGrado.hashCode() : 0);
         hash += (gradoModalidad != null ? gradoModalidad.hashCode() : 0);
+        hash += (seccionGrado != null ? seccionGrado.hashCode() : 0);
         hash += (int) añoGrado;
         return hash;
     }
@@ -185,5 +186,5 @@ public class MestroHorarioMateriasPK implements Serializable {
     public String toString() {
         return "net.delsas.saitae.entities.MestroHorarioMateriasPK[ idMaestro=" + idMaestro + ", idMateria=" + idMateria + ", idHorario=" + idHorario + ", diaSemana=" + diaSemana + ", idGrado=" + idGrado + ", seccionGrado=" + seccionGrado + ", gradoModalidad=" + gradoModalidad + ", a\u00f1oGrado=" + añoGrado + " ]";
     }
-
+    
 }

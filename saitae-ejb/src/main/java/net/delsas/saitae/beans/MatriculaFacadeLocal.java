@@ -32,7 +32,7 @@ public interface MatriculaFacadeLocal {
     List<Matricula> findRange(int[] range);
 
     int count();
-
+    
     /**
      * Genera una lista de estudiantes matriculados en el grado especificado.
      * @param pk

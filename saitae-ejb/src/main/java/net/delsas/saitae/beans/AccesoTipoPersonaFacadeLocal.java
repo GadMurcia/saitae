@@ -31,7 +31,7 @@ public interface AccesoTipoPersonaFacadeLocal {
     List<AccesoTipoPersona> findRange(int[] range);
 
     int count();
-
+    
     /**
      * Busca Los tipos de personas que está habilitados para ver el acceso identificado por el Id
      * @param a

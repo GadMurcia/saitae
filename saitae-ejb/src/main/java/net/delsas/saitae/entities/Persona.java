@@ -62,9 +62,6 @@ import javax.xml.bind.annotation.XmlTransient;
 })
 public class Persona implements Serializable {
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "anuncioAnunciante")
-    private List<Anuncio> anuncioList;
-
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -128,6 +125,8 @@ public class Persona implements Serializable {
     private String personaComentarios;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idColector")
     private List<Contribuciones> contribucionesList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "anuncioAnunciante")
+    private List<Anuncio> anuncioList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "evaluador")
     private List<GradoEvaluacion> gradoEvaluacionList;
     @JoinColumn(name = "tipoPersona", referencedColumnName = "idtipoPersona")
@@ -143,7 +142,7 @@ public class Persona implements Serializable {
     private List<Estudiante> estudianteList;
     @OneToMany(mappedBy = "estudianteMadre")
     private List<Estudiante> estudianteList1;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "persona")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEntregante")
     private List<EntregaUtiles> entregaUtilesList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "persona")
     private List<Permisos> permisosList;
@@ -330,6 +329,15 @@ public class Persona implements Serializable {
     }
 
     @XmlTransient
+    public List<Anuncio> getAnuncioList() {
+        return anuncioList;
+    }
+
+    public void setAnuncioList(List<Anuncio> anuncioList) {
+        this.anuncioList = anuncioList;
+    }
+
+    @XmlTransient
     public List<GradoEvaluacion> getGradoEvaluacionList() {
         return gradoEvaluacionList;
     }
@@ -457,15 +465,6 @@ public class Persona implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.Persona[ idpersona=" + idpersona + " ]";
-    }
-
-    @XmlTransient
-    public List<Anuncio> getAnuncioList() {
-        return anuncioList;
-    }
-
-    public void setAnuncioList(List<Anuncio> anuncioList) {
-        this.anuncioList = anuncioList;
     }
     
 }

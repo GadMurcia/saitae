@@ -29,7 +29,7 @@ public interface AnuncioFacadeLocal {
     List<Anuncio> findRange(int[] range);
 
     int count();
-
+    
     /**
      *  Obtiene todos los anuncios que están activos a la fecha actual.
      * @return java.util.List net.delsas.saitae.entities.Anuncio

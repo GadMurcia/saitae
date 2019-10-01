@@ -29,7 +29,7 @@ public interface AccesoFacadeLocal {
     List<Acceso> findRange(int[] range);
 
     int count();
-
+    
     /**
      *Busca un acceso en la base de datos saitae por medio de su url Relativa
      * @param url

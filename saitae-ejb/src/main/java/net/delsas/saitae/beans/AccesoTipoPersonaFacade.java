@@ -37,6 +37,6 @@ public class AccesoTipoPersonaFacade extends AbstractFacade<AccesoTipoPersona> i
         return em.createNamedQuery("AccesoTipoPersona.findTipoPersonaByAccesoUrl")
                 .setParameter("idacceso", a.getIdacceso())
                 .getResultList();
-    }
+}
     
 }

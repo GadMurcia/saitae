@@ -33,7 +33,7 @@ public interface MestroHorarioMateriasFacadeLocal {
     List<MestroHorarioMaterias> findRange(int[] range);
 
     int count();
-
+    
     /**
      * Busca en la base de datos la existencia de un horario asignado en un grado y dia especificados
      * @param horario
