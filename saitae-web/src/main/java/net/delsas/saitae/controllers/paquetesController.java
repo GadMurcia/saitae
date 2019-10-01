@@ -69,7 +69,7 @@ public class paquetesController implements Serializable {
     @PostConstruct
     public void init() {
 
-        usuario = new prueba().getEstudiante();
+        p = new prueba().getEstudiante();
         FacesContext context = FacesContext.getCurrentInstance();
         usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
         boolean r = usuario.getTipoPersona().getIdtipoPersona().equals(2) ? false
@@ -138,7 +138,11 @@ public class paquetesController implements Serializable {
     }
 
     public void Guardar() {
-        p.getEstudiante().getEntregaUtilesList().add(entregaUtiles);
+          FacesMessage msj = null;
+        entregaUtiles.setIdEntregante(usuario);
+        entregaUFL.edit(entregaUtiles);
+          msj = new FacesMessage(FacesMessage.SEVERITY_INFO, "Guardado con 'éxito","Se guardaron los datos");
+        
 
     }
 
