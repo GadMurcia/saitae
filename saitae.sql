@@ -1,10 +1,10 @@
 CREATE DATABASE  IF NOT EXISTS `intex` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `intex`;
--- MySQL dump 10.16  Distrib 10.1.41-MariaDB, for debian-linux-gnu (x86_64)
+-- MySQL dump 10.16  Distrib 10.1.38-MariaDB, for debian-linux-gnu (x86_64)
 --
 -- Host: 127.0.0.1    Database: intex
 -- ------------------------------------------------------
--- Server version	10.1.41-MariaDB-0+deb9u1
+-- Server version	10.1.38-MariaDB-0+deb9u1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -372,17 +372,21 @@ DROP TABLE IF EXISTS `contribuciones`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `contribuciones` (
-  `fechaHora` datetime NOT NULL,
-  `mes` int(2) NOT NULL,
-  `año` int(4) NOT NULL,
   `idEstudiante` int(11) NOT NULL,
-  `idColector` int(11) NOT NULL,
-  `contribucionesComentario` varchar(140) DEFAULT NULL,
-  PRIMARY KEY (`fechaHora`),
-  KEY `fk_contribuciones_1` (`idEstudiante`),
-  KEY `fk_contribuciones_2` (`idColector`),
-  CONSTRAINT `fk_contribuciones_1` FOREIGN KEY (`idEstudiante`) REFERENCES `estudiante` (`idestudiante`) ON UPDATE CASCADE,
-  CONSTRAINT `fk_contribuciones_2` FOREIGN KEY (`idColector`) REFERENCES `persona` (`idpersona`) ON UPDATE CASCADE
+  `año` int(4) NOT NULL,
+  `enero` date DEFAULT NULL,
+  `febrero` date DEFAULT NULL,
+  `marzo` date DEFAULT NULL,
+  `abril` date DEFAULT NULL,
+  `mayo` date DEFAULT NULL,
+  `junio` date DEFAULT NULL,
+  `julio` date DEFAULT NULL,
+  `agosto` date DEFAULT NULL,
+  `septiembre` date DEFAULT NULL,
+  `octubre` date DEFAULT NULL,
+  `comentario` date DEFAULT NULL,
+  PRIMARY KEY (`idEstudiante`,`año`),
+  CONSTRAINT `fk_contribuciones_1` FOREIGN KEY (`idEstudiante`) REFERENCES `estudiante` (`idestudiante`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -597,7 +601,7 @@ CREATE TABLE `entregaUtiles` (
 
 LOCK TABLES `entregaUtiles` WRITE;
 /*!40000 ALTER TABLE `entregaUtiles` DISABLE KEYS */;
-INSERT INTO `entregaUtiles` VALUES (11022,2019,1045367073,1045367009,'','','',NULL);
+INSERT INTO `entregaUtiles` VALUES (11022,2019,1045367073,1045367009,'','','\0',NULL),(16018,2019,1045367073,1045367072,'','\0','\0',NULL);
 /*!40000 ALTER TABLE `entregaUtiles` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1651,14 +1655,6 @@ LOCK TABLES `zona` WRITE;
 INSERT INTO `zona` VALUES (1,'Zona 1',NULL),(2,'Zona 2',NULL),(3,'Zona 3',NULL),(4,'zona 4',NULL);
 /*!40000 ALTER TABLE `zona` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Dumping events for database 'intex'
---
-
---
--- Dumping routines for database 'intex'
---
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -1669,4 +1665,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-10-01 13:16:57
+-- Dump completed on 2019-10-01 18:16:15

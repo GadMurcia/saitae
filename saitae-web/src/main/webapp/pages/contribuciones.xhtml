@@ -1,0 +1,105 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../WEB-INF/template/plantilla1.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="content">
+        <h:form id="form1">
+
+            <p:growl id="msgs" showDetail="true" />
+
+            <h:panelGrid columns="1" cellpadding="5">
+                <h:panelGrid columns="2" cellspacing="10" >
+                    <p:outputLabel value="Alumno:" for="acSimple" />
+                    <p:autoComplete style="width: 190px" id="acSimple" value="#{paquetesController.nie}"  
+                                    completeMethod="#{contribucionesController.completeText}"  >
+
+                        <p:ajax event="itemSelect" 
+                                listener="#{contribucionesController.onItemSelect}" 
+                                update="form1"/>
+
+                    </p:autoComplete>
+                   
+                </h:panelGrid>     
+                    <h:panelGrid columns="2" cellspacing="10" >
+                     <p:outputLabel value="Alumno:"/>
+                     <p:outputLabel id="alumno" value="#{contribucionesController.p.personaNombre} #{contribucionesController.p.personaApellido}" />
+                     <p:outputLabel value="Grado:"/>
+                     <p:outputLabel id="grado" value="#{contribucionesController.gradoAlumno}" />
+                    </h:panelGrid>
+                <h:panelGrid columns="3" cellspacing="10" >
+                        <p:outputLabel value="ENERO"/>
+                        <p:selectBooleanButton value="#{contribucionesController.eneroPagado}" 
+                                               onLabel="Cancelado" offLabel="Pendiente" style="width: 190px" disabled= "#{contribucionesController.eneroPagado}"/>
+
+                        <p:datePicker id="mask0" value="#{contribucionesController.contr.enero}"
+                                      showIcon="true" required="true" pattern="dd/MM/yyyy" disabled= "#{contribucionesController.eneroPagado}"/>
+                        
+                        <p:outputLabel value="FEBRERO"/>
+                        <p:selectBooleanButton value="#{paquetesController.entregaUtiles.uniforme}" 
+                                               onLabel="Cancelado" offLabel="Pendiente" style="width: 190px"/>
+                        <p:datePicker id="mask1" value="#{permisoMaController.p.permisosPK.permisoFechaInicio}"
+                                      showIcon="true" required="true" pattern="dd/MM/yyyy"/>
+                        <p:outputLabel value="MARZO"/>
+                        <p:selectBooleanButton value="#{paquetesController.entregaUtiles.uniforme}" 
+                                               onLabel="Cancelado" offLabel="Pendiente" style="width: 190px"/>
+                        <p:datePicker id="mask2" value="#{permisoMaController.p.permisosPK.permisoFechaInicio}"
+                                      showIcon="true" required="true" pattern="dd/MM/yyyy"/>
+                        <p:outputLabel value="ABRIL"/>
+                        <p:selectBooleanButton value="#{paquetesController.entregaUtiles.uniforme}" 
+                                               onLabel="Cancelado" offLabel="Pendiente" style="width: 190px"/>
+                        <p:datePicker id="mask3" value="#{permisoMaController.p.permisosPK.permisoFechaInicio}"
+                                      showIcon="true" required="true" pattern="dd/MM/yyyy"/>
+                        <p:outputLabel value="MAYO"/>
+                        <p:selectBooleanButton value="#{paquetesController.entregaUtiles.uniforme}" 
+                                               onLabel="Cancelado" offLabel="Pendiente" style="width: 190px"/>
+                        <p:datePicker id="mask4" value="#{permisoMaController.p.permisosPK.permisoFechaInicio}"
+                                      showIcon="true" required="true" pattern="dd/MM/yyyy"/>
+                        <p:outputLabel value="JUNIO"/>
+                        <p:selectBooleanButton value="#{paquetesController.entregaUtiles.uniforme}" 
+                                               onLabel="Cancelado" offLabel="Pendiente" style="width: 190px"/>
+                        <p:datePicker id="mask5" value="#{permisoMaController.p.permisosPK.permisoFechaInicio}"
+                                      showIcon="true" required="true" pattern="dd/MM/yyyy"/>
+                        <p:outputLabel value="JULIO"/>
+                        <p:selectBooleanButton value="#{paquetesController.entregaUtiles.uniforme}" 
+                                               onLabel="Cancelado" offLabel="Pendiente" style="width: 190px"/>
+                        <p:datePicker id="mask6" value="#{permisoMaController.p.permisosPK.permisoFechaInicio}"
+                                      showIcon="true" required="true" pattern="dd/MM/yyyy"/>
+                        <p:outputLabel value="AGOSTO"/>
+                        <p:selectBooleanButton value="#{paquetesController.entregaUtiles.uniforme}" 
+                                               onLabel="Cancelado" offLabel="Pendiente" style="width: 190px"/>
+                        <p:datePicker id="mask7" value="#{permisoMaController.p.permisosPK.permisoFechaInicio}"
+                                      showIcon="true" required="true" pattern="dd/MM/yyyy"/>
+                        <p:outputLabel value="SEPTIEMBRE"/>
+                        <p:selectBooleanButton value="#{paquetesController.entregaUtiles.uniforme}" 
+                                               onLabel="Cancelado" offLabel="Pendiente" style="width: 190px"/>
+                        <p:datePicker id="mask8" value="#{permisoMaController.p.permisosPK.permisoFechaInicio}"
+                                      showIcon="true" required="true" pattern="dd/MM/yyyy"/>
+
+                        <p:outputLabel value="OCTUBRE"/>
+                        <p:selectBooleanButton value="#{paquetesController.entregaUtiles.uniforme}" 
+                                               onLabel="Cancelado" offLabel="Pendiente" style="width: 190px"/>
+                        <p:datePicker id="mask9" value="#{permisoMaController.p.permisosPK.permisoFechaInicio}"
+                                      showIcon="true" required="true" pattern="dd/MM/yyyy"/>
+
+
+                        <p:column/>
+                        <p:commandButton id="summit" value="Guardar" 
+                                         style="width: 200px" 
+                                         actionListener="#{paquetesController.guardar()}" 
+                                         update=":form1:msgs: form1"/>
+                    </h:panelGrid>  
+
+
+                 
+
+
+            </h:panelGrid>  
+
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>

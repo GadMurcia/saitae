@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author delsas
+ * @author gabriela
  */
 @Entity
 @Table(name = "persona", catalog = "intex", schema = "")
@@ -123,12 +123,9 @@ public class Persona implements Serializable {
     @Size(max = 250)
     @Column(name = "personaComentarios")
     private String personaComentarios;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idColector")
-    private List<Contribuciones> contribucionesList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "anuncioAnunciante")
     private List<Anuncio> anuncioList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "evaluador")
-    private List<GradoEvaluacion> gradoEvaluacionList;
+    
     @JoinColumn(name = "tipoPersona", referencedColumnName = "idtipoPersona")
     @ManyToOne
     private TipoPersona tipoPersona;
@@ -320,15 +317,6 @@ public class Persona implements Serializable {
     }
 
     @XmlTransient
-    public List<Contribuciones> getContribucionesList() {
-        return contribucionesList;
-    }
-
-    public void setContribucionesList(List<Contribuciones> contribucionesList) {
-        this.contribucionesList = contribucionesList;
-    }
-
-    @XmlTransient
     public List<Anuncio> getAnuncioList() {
         return anuncioList;
     }
@@ -337,14 +325,7 @@ public class Persona implements Serializable {
         this.anuncioList = anuncioList;
     }
 
-    @XmlTransient
-    public List<GradoEvaluacion> getGradoEvaluacionList() {
-        return gradoEvaluacionList;
-    }
-
-    public void setGradoEvaluacionList(List<GradoEvaluacion> gradoEvaluacionList) {
-        this.gradoEvaluacionList = gradoEvaluacionList;
-    }
+  
 
     public TipoPersona getTipoPersona() {
         return tipoPersona;
