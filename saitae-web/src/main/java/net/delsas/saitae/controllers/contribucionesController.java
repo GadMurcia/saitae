@@ -30,6 +30,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import net.delsas.saitae.ax.mensaje;
 import net.delsas.saitae.ax.prueba;
 import net.delsas.saitae.beans.ContribucionesFacadeLocal;
 
@@ -41,6 +42,7 @@ import net.delsas.saitae.entities.GradoPK;
 import net.delsas.saitae.entities.Matricula;
 import net.delsas.saitae.entities.MatriculaPK;
 import net.delsas.saitae.entities.Persona;
+
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -51,7 +53,7 @@ import org.primefaces.event.SelectEvent;
 
 @ViewScoped
 public class contribucionesController implements Serializable {
-
+boolean boton ;
     @EJB
     private PersonaFacadeLocal personaFL;
     private Persona p;
@@ -69,6 +71,7 @@ public class contribucionesController implements Serializable {
 
     @PostConstruct
     public void init() {
+        boton = false;
         contr = new Contribuciones(new ContribucionesPK(0,getAño()));
         
         p = new prueba().getEstudiante();
@@ -111,12 +114,13 @@ public class contribucionesController implements Serializable {
     
     
     public void onItemSelect(SelectEvent event) {
-        
+       
         new prueba().setDui(event.getObject().toString(), p);
         p = personaFL.find(p.getIdpersona());
         contr.getContribucionesPK().setIdEstudiante(p.getIdpersona()); 
         contr = contrFL.find(contr.getContribucionesPK());
         contr = contr == null ? new Contribuciones(new ContribucionesPK(p.getIdpersona(), getAño())) : contr;
+        boton = true;
     }
 
     public int getAño() {
@@ -139,12 +143,21 @@ public class contribucionesController implements Serializable {
     }
 
     public void guardar() {
-          FacesMessage msj = null;
-          contrFL.edit(contr);
-          
-             msj = new FacesMessage(FacesMessage.SEVERITY_INFO, "Guardado con éxito","Se guardaron los datos de la contribución");
-       
         
+          FacesMessage msj = null;
+      Contribuciones  contrG =  contrFL.find(contr.getContribucionesPK());
+      if (){
+            contrFL.edit(contr);
+          
+          FacesContext.getCurrentInstance().addMessage(null,
+                  new FacesMessage(FacesMessage.SEVERITY_INFO, "Guardado con éxito","Se guardaron los datos de la contribución"));
+           this.init();
+      }
+      else{
+      FacesContext.getCurrentInstance().addMessage(null,
+                  new FacesMessage(FacesMessage.SEVERITY_WARN, "Falló","No se seleccionaron datos"));
+      }
+
 
     }
 
@@ -244,5 +257,14 @@ public class contribucionesController implements Serializable {
 
     
     }
+
+    public boolean isBoton() {
+        return boton;
+    }
+
+    public void setBoton(boolean boton) {
+        this.boton = boton;
+    }
+    
 }
 
