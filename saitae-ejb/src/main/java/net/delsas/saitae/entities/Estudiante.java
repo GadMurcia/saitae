@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author delsas
+ * @author gabriela
  */
 @Entity
 @Table(name = "estudiante", catalog = "intex", schema = "")
@@ -116,7 +116,7 @@ public class Estudiante implements Serializable {
     @Size(max = 145)
     @Column(name = "estudianteComentario")
     private String estudianteComentario;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEstudiante")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "estudiante")
     private List<Contribuciones> contribucionesList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "estudiante")
     private List<Matricula> matriculaList;

@@ -7,11 +7,9 @@ package net.delsas.saitae.entities;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -19,115 +17,191 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author delsas
+ * @author gabriela
  */
 @Entity
 @Table(name = "contribuciones", catalog = "intex", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Contribuciones.findAll", query = "SELECT c FROM Contribuciones c")
-    , @NamedQuery(name = "Contribuciones.findByFechaHora", query = "SELECT c FROM Contribuciones c WHERE c.fechaHora = :fechaHora")
-    , @NamedQuery(name = "Contribuciones.findByMes", query = "SELECT c FROM Contribuciones c WHERE c.mes = :mes")
-    , @NamedQuery(name = "Contribuciones.findByA\u00f1o", query = "SELECT c FROM Contribuciones c WHERE c.a\u00f1o = :a\u00f1o")
-    , @NamedQuery(name = "Contribuciones.findByContribucionesComentario", query = "SELECT c FROM Contribuciones c WHERE c.contribucionesComentario = :contribucionesComentario")})
+    , @NamedQuery(name = "Contribuciones.findByIdEstudiante", query = "SELECT c FROM Contribuciones c WHERE c.contribucionesPK.idEstudiante = :idEstudiante")
+    , @NamedQuery(name = "Contribuciones.findByA\u00f1o", query = "SELECT c FROM Contribuciones c WHERE c.contribucionesPK.a\u00f1o = :a\u00f1o")
+    , @NamedQuery(name = "Contribuciones.findByEnero", query = "SELECT c FROM Contribuciones c WHERE c.enero = :enero")
+    , @NamedQuery(name = "Contribuciones.findByFebrero", query = "SELECT c FROM Contribuciones c WHERE c.febrero = :febrero")
+    , @NamedQuery(name = "Contribuciones.findByMarzo", query = "SELECT c FROM Contribuciones c WHERE c.marzo = :marzo")
+    , @NamedQuery(name = "Contribuciones.findByAbril", query = "SELECT c FROM Contribuciones c WHERE c.abril = :abril")
+    , @NamedQuery(name = "Contribuciones.findByMayo", query = "SELECT c FROM Contribuciones c WHERE c.mayo = :mayo")
+    , @NamedQuery(name = "Contribuciones.findByJunio", query = "SELECT c FROM Contribuciones c WHERE c.junio = :junio")
+    , @NamedQuery(name = "Contribuciones.findByJulio", query = "SELECT c FROM Contribuciones c WHERE c.julio = :julio")
+    , @NamedQuery(name = "Contribuciones.findByAgosto", query = "SELECT c FROM Contribuciones c WHERE c.agosto = :agosto")
+    , @NamedQuery(name = "Contribuciones.findBySeptiembre", query = "SELECT c FROM Contribuciones c WHERE c.septiembre = :septiembre")
+    , @NamedQuery(name = "Contribuciones.findByOctubre", query = "SELECT c FROM Contribuciones c WHERE c.octubre = :octubre")
+    , @NamedQuery(name = "Contribuciones.findByComentario", query = "SELECT c FROM Contribuciones c WHERE c.comentario = :comentario")})
 public class Contribuciones implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "fechaHora")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaHora;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "mes")
-    private int mes;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "a\u00f1o")
-    private int año;
-    @Size(max = 140)
-    @Column(name = "contribucionesComentario")
-    private String contribucionesComentario;
-    @JoinColumn(name = "idEstudiante", referencedColumnName = "idestudiante")
+    @EmbeddedId
+    protected ContribucionesPK contribucionesPK;
+    @Column(name = "enero")
+    @Temporal(TemporalType.DATE)
+    private Date enero;
+    @Column(name = "febrero")
+    @Temporal(TemporalType.DATE)
+    private Date febrero;
+    @Column(name = "marzo")
+    @Temporal(TemporalType.DATE)
+    private Date marzo;
+    @Column(name = "abril")
+    @Temporal(TemporalType.DATE)
+    private Date abril;
+    @Column(name = "mayo")
+    @Temporal(TemporalType.DATE)
+    private Date mayo;
+    @Column(name = "junio")
+    @Temporal(TemporalType.DATE)
+    private Date junio;
+    @Column(name = "julio")
+    @Temporal(TemporalType.DATE)
+    private Date julio;
+    @Column(name = "agosto")
+    @Temporal(TemporalType.DATE)
+    private Date agosto;
+    @Column(name = "septiembre")
+    @Temporal(TemporalType.DATE)
+    private Date septiembre;
+    @Column(name = "octubre")
+    @Temporal(TemporalType.DATE)
+    private Date octubre;
+    @Column(name = "comentario")
+    @Temporal(TemporalType.DATE)
+    private Date comentario;
+    @JoinColumn(name = "idEstudiante", referencedColumnName = "idestudiante", insertable = false, updatable = false)
     @ManyToOne(optional = false)
-    private Estudiante idEstudiante;
-    @JoinColumn(name = "idColector", referencedColumnName = "idpersona")
-    @ManyToOne(optional = false)
-    private Persona idColector;
+    private Estudiante estudiante;
 
     public Contribuciones() {
     }
 
-    public Contribuciones(Date fechaHora) {
-        this.fechaHora = fechaHora;
+    public Contribuciones(ContribucionesPK contribucionesPK) {
+        this.contribucionesPK = contribucionesPK;
     }
 
-    public Contribuciones(Date fechaHora, int mes, int año) {
-        this.fechaHora = fechaHora;
-        this.mes = mes;
-        this.año = año;
+    public Contribuciones(int idEstudiante, int año) {
+        this.contribucionesPK = new ContribucionesPK(idEstudiante, año);
     }
 
-    public Date getFechaHora() {
-        return fechaHora;
+    public ContribucionesPK getContribucionesPK() {
+        return contribucionesPK;
     }
 
-    public void setFechaHora(Date fechaHora) {
-        this.fechaHora = fechaHora;
+    public void setContribucionesPK(ContribucionesPK contribucionesPK) {
+        this.contribucionesPK = contribucionesPK;
     }
 
-    public int getMes() {
-        return mes;
+    public Date getEnero() {
+        return enero;
     }
 
-    public void setMes(int mes) {
-        this.mes = mes;
+    public void setEnero(Date enero) {
+        this.enero = enero;
     }
 
-    public int getAño() {
-        return año;
+    public Date getFebrero() {
+        return febrero;
     }
 
-    public void setAño(int año) {
-        this.año = año;
+    public void setFebrero(Date febrero) {
+        this.febrero = febrero;
     }
 
-    public String getContribucionesComentario() {
-        return contribucionesComentario;
+    public Date getMarzo() {
+        return marzo;
     }
 
-    public void setContribucionesComentario(String contribucionesComentario) {
-        this.contribucionesComentario = contribucionesComentario;
+    public void setMarzo(Date marzo) {
+        this.marzo = marzo;
     }
 
-    public Estudiante getIdEstudiante() {
-        return idEstudiante;
+    public Date getAbril() {
+        return abril;
     }
 
-    public void setIdEstudiante(Estudiante idEstudiante) {
-        this.idEstudiante = idEstudiante;
+    public void setAbril(Date abril) {
+        this.abril = abril;
     }
 
-    public Persona getIdColector() {
-        return idColector;
+    public Date getMayo() {
+        return mayo;
     }
 
-    public void setIdColector(Persona idColector) {
-        this.idColector = idColector;
+    public void setMayo(Date mayo) {
+        this.mayo = mayo;
+    }
+
+    public Date getJunio() {
+        return junio;
+    }
+
+    public void setJunio(Date junio) {
+        this.junio = junio;
+    }
+
+    public Date getJulio() {
+        return julio;
+    }
+
+    public void setJulio(Date julio) {
+        this.julio = julio;
+    }
+
+    public Date getAgosto() {
+        return agosto;
+    }
+
+    public void setAgosto(Date agosto) {
+        this.agosto = agosto;
+    }
+
+    public Date getSeptiembre() {
+        return septiembre;
+    }
+
+    public void setSeptiembre(Date septiembre) {
+        this.septiembre = septiembre;
+    }
+
+    public Date getOctubre() {
+        return octubre;
+    }
+
+    public void setOctubre(Date octubre) {
+        this.octubre = octubre;
+    }
+
+    public Date getComentario() {
+        return comentario;
+    }
+
+    public void setComentario(Date comentario) {
+        this.comentario = comentario;
+    }
+
+    public Estudiante getEstudiante() {
+        return estudiante;
+    }
+
+    public void setEstudiante(Estudiante estudiante) {
+        this.estudiante = estudiante;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (fechaHora!= null ? fechaHora.hashCode() : 0);
+        hash += (contribucionesPK != null ? contribucionesPK.hashCode() : 0);
         return hash;
     }
 
@@ -138,7 +212,7 @@ public class Contribuciones implements Serializable {
             return false;
         }
         Contribuciones other = (Contribuciones) object;
-        if ((this.fechaHora == null && other.fechaHora != null) || (this.fechaHora != null && !this.fechaHora.equals(other.fechaHora))) {
+        if ((this.contribucionesPK == null && other.contribucionesPK != null) || (this.contribucionesPK != null && !this.contribucionesPK.equals(other.contribucionesPK))) {
             return false;
         }
         return true;
@@ -146,7 +220,7 @@ public class Contribuciones implements Serializable {
 
     @Override
     public String toString() {
-        return "net.delsas.saitae.entities.Contribuciones[ fechaHora =" + fechaHora + " ]";
+        return "net.delsas.saitae.entities.Contribuciones[ contribucionesPK=" + contribucionesPK + " ]";
     }
     
 }

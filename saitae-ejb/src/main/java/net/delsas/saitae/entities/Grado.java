@@ -46,6 +46,9 @@ import javax.xml.bind.annotation.XmlTransient;
 })
 public class Grado implements Serializable {
 
+   
+    
+
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected GradoPK gradoPK;

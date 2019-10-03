@@ -22,6 +22,7 @@
                             update="form1"/>
                     
                 </p:autoComplete>
+                
                  <p:outputLabel id="alumno" value="#{paquetesController.p.personaNombre} #{paquetesController.p.personaApellido}" />
                  <p:outputLabel id="grado" value="#{paquetesController.gradoAlumno}" />
                  <p:outputLabel value="Uniforme:"/>
@@ -37,7 +38,7 @@
                         <p:commandButton id="summit" value="Guardar" 
 
                                          actionListener="#{paquetesController.guardar()}" 
-                                         update=":form1"/>
+                                         update=":form1:msgs: form1"/>
             </h:panelGrid>  
             
                 

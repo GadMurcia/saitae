@@ -45,6 +45,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 })
 public class Anuncio implements Serializable {
 
+  
+  
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -172,4 +175,6 @@ public class Anuncio implements Serializable {
     public String toString() {
         return "net.delsas.saitae.entities.Anuncio[ idanuncio=" + idanuncio + " ]";
     }    
+
+    
 }
