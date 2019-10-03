@@ -146,7 +146,7 @@ boolean boton ;
         
           FacesMessage msj = null;
       Contribuciones  contrG =  contrFL.find(contr.getContribucionesPK());
-      if (){
+      if (contr.equals(contrG)){
             contrFL.edit(contr);
           
           FacesContext.getCurrentInstance().addMessage(null,
