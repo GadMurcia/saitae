@@ -42,7 +42,6 @@ public class MatriculaFacade extends AbstractFacade<Matricula> implements Matric
     @Override
     public List<Matricula> findAllNewEstudent(GradoPK pk){
         return em.createNamedQuery("Matricula.findAllNew")
-                .setParameter("año", pk.getGradoAño())
                 .setParameter("mod", pk.getGradoModalidad())
                 .setParameter("idgrado", pk.getIdgrado())
                 .getResultList();

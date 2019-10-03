@@ -18,7 +18,10 @@ package net.delsas.saitae.controllers;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,11 +31,13 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
-import net.delsas.saitae.ax.prueba;
 import net.delsas.saitae.beans.GradoFacadeLocal;
 import net.delsas.saitae.beans.MatriculaFacadeLocal;
+import net.delsas.saitae.entities.Grado;
+import net.delsas.saitae.entities.GradoPK;
 import net.delsas.saitae.entities.Matricula;
 import net.delsas.saitae.entities.Persona;
+import org.primefaces.event.SelectEvent;
 
 /**
  *
@@ -48,8 +53,13 @@ public class matriculaController implements Serializable {
     private MatriculaFacadeLocal matriculaFL;
     @EJB
     private GradoFacadeLocal gradoFL;
-    private List<Matricula> nuevasMatriculas;
+    private List<Matricula> nuevasMatriculasF;
+    private List<Matricula> nuevasMatriculasM;
+    private List<Grado> grados;
     private Persona usuario;
+    private String descTabla;
+    private GradoPK selectedPK;
+    private boolean btnGuardar;
 
     @PostConstruct
     public void init() {
@@ -67,18 +77,148 @@ public class matriculaController implements Serializable {
                 Logger.getLogger(paquetesController.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
-
+            grados = new ArrayList<>();
+            List<String> modalidades = gradoFL.getModalidadPorAño(getAño());
+            for (String d : modalidades) {
+                List<Integer> niveles = gradoFL.getIdPorAñoyModalidad(getAño(), d);
+                for (Integer i : niveles) {
+                    grados.add(new Grado(new GradoPK(i, d, "", 0)));
+                }
+            }
+            nuevasMatriculasF = new ArrayList<>();
+            nuevasMatriculasM = new ArrayList<>();
+            descTabla = "";
+            selectedPK = new GradoPK(0, "", "", 0);
         }
     }
 
-    public List<Matricula> getNuevasMatriculas() {
-        return Collections.unmodifiableList(nuevasMatriculas);
+    public void guardar() {
+        int s = getSecciones().size() > 0 ? getSecciones().size() : 1;
+        int m = nuevasMatriculasM.size() / s;
+        int f = nuevasMatriculasF.size() / s;
+        int iF = 0;
+        int iM = 0;
+        List<Matricula> masc = new ArrayList<>();
+        List<Matricula> fem = new ArrayList<>();
+        List<String> secciones = getSecciones();
+        for (String sec : secciones) {
+            for (int y = 0; y < f; y++) {
+                Matricula ff = matriculaFL.find(nuevasMatriculasF.get(iF).getMatriculaPK());
+                ff.getGrado().getGradoPK().setGradoSeccion(sec);
+                fem.add(ff);
+                iF++;
+            }
+            for (int y = 0; y < m; y++) {
+                Matricula mm = matriculaFL.find(nuevasMatriculasM.get(iM).getMatriculaPK());
+                mm.getGrado().getGradoPK().setGradoSeccion(sec);
+                masc.add(mm);
+                iM++;
+            }
+        }
+        nuevasMatriculasF.clear();
+        nuevasMatriculasM.clear();
+        nuevasMatriculasF.addAll(fem);
+        nuevasMatriculasM.addAll(masc);
+        for (Matricula mat : getAllNew()) {
+            System.out.println(mat.getEstudiante().getPersona().getPersonaNombre()
+                    + " matriculado en seccion "
+                    + (mat.getEstudiante().getPersona().getPersonaSexo() ? " Femenino " : " Masculino ")
+                    + mat.getGrado().getGradoPK().getGradoSeccion());
+        }
+
     }
 
-    public void setNuevasMatriculas(List<Matricula> nuevasMatriculas) {
-        this.nuevasMatriculas = nuevasMatriculas;
+    public List<Matricula> getAllNew() {
+        List<Matricula> newE = new ArrayList<>();
+        newE.addAll(nuevasMatriculasF);
+        newE.addAll(nuevasMatriculasM);
+        return newE;
     }
 
-    
+    public List<Matricula> getNuevasMatriculasF() {
+        return Collections.unmodifiableList(nuevasMatriculasF);
+    }
 
+    public void setNuevasMatriculasF(List<Matricula> nuevasMatriculasF) {
+        this.nuevasMatriculasF = nuevasMatriculasF;
+    }
+
+    private int getAño() {
+        return Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date()));
+    }
+
+    public List<Grado> getGrados() {
+        return Collections.unmodifiableList(grados);
+    }
+
+    public void setGrados(List<Grado> grados) {
+        this.grados = grados;
+    }
+
+    public void selectAño(SelectEvent event) {
+        nuevasMatriculasF = new ArrayList<>();
+        nuevasMatriculasM = new ArrayList<>();
+        selectedPK = (GradoPK) event.getObject();
+        descTabla = selectedPK != null ? getGradosLabel(selectedPK) : "";
+        List<Matricula> nuevasMatriculas = selectedPK == null ? new ArrayList<Matricula>()
+                : matriculaFL.findAllNewEstudent(selectedPK);
+        asignaSexo(nuevasMatriculas);
+        btnGuardar = selectedPK != null;
+        selectedPK = selectedPK == null ? new GradoPK(0, "", "", 0) : selectedPK;
+    }
+
+    private void asignaSexo(List<Matricula> nuevasMatriculas) {
+        for (Matricula mat : nuevasMatriculas) {
+            if (mat.getEstudiante().getPersona().getPersonaSexo()) {
+                nuevasMatriculasF.add(mat);
+            } else {
+                nuevasMatriculasM.add(mat);
+            }
+        }
+    }
+
+    public String getGradosLabel(GradoPK pk) {
+        String l = "";
+        l += pk.getIdgrado() == 1
+                ? "Primero "
+                : pk.getIdgrado() == 2
+                ? "Segundo "
+                : pk.getIdgrado() == 3
+                ? "Tercero " : "";
+        l += pk.getGradoModalidad().equals("C")
+                ? "T.V.C Contador"
+                : pk.getGradoModalidad().equals("G")
+                ? "General"
+                : pk.getGradoModalidad().equals("S")
+                ? "T.V.C Secretariado" : "";
+        return l;
+    }
+
+    public String getDescTabla() {
+        return descTabla;
+    }
+
+    public void setDescTabla(String descTabla) {
+        this.descTabla = descTabla;
+    }
+
+    public List<String> getSecciones() {
+        return gradoFL.getSeccionPorAñoModalidadyId(getAño(), selectedPK.getGradoModalidad(), selectedPK.getIdgrado());
+    }
+
+    public List<Matricula> getNuevasMatriculasM() {
+        return Collections.unmodifiableList(nuevasMatriculasM);
+    }
+
+    public void setNuevasMatriculasM(List<Matricula> nuevasMatriculasM) {
+        this.nuevasMatriculasM = nuevasMatriculasM;
+    }
+
+    public boolean isBtnGuardar() {
+        return btnGuardar;
+    }
+
+    public void setBtnGuardar(boolean btnGuardar) {
+        this.btnGuardar = btnGuardar;
+    }
 }

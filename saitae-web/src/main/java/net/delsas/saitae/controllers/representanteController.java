@@ -64,7 +64,7 @@ public class representanteController {
         if (id.length == 3) {
             Grado g = gFL.find(new GradoPK(Integer.valueOf(id[0]), id[1], id[2], getAñoActual()));
             for (Matricula m : g.getMatriculaList()) {
-                representantes.add(m.getEstudiante().getEstudianteRepresentante());
+                representantes.add(m.getEstudiante());
             }
             nombreGrado = getLabel(g.getGradoPK());
         } else {

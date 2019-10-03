@@ -186,5 +186,5 @@ public class Grado implements Serializable {
     public String toString() {
         return "net.delsas.saitae.entities.Grado[ gradoPK=" + gradoPK + " ]";
     }
-    
+
 }

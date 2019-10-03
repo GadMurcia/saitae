@@ -1,10 +1,83 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="./../WEB-INF/template/plantilla1.xhtml">
+                template="./../WEB-INF/template/plantilla1.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="content">
-        content
+        <h:form id="form1">
+            <h:panelGrid columns="1" cellspacing="30">
+                <h:panelGrid columns="2">
+                    <p:outputLabel for="box" value="Seleccione Modalidad"/>
+                    <p:selectOneMenu id="box" dynamic="true"  converter="omnifaces.SelectItemsConverter">
+                        <f:selectItem itemLabel="Seleccione" itemValue="#{null}"/>
+                        <f:selectItems value="#{matriculaController.grados}" var="g"
+                                       itemLabel="#{matriculaController.getGradosLabel(g.gradoPK)}"
+                                       itemValue="#{g.gradoPK}"/>
+                        <p:ajax event="itemSelect" listener="#{matriculaController.selectAño}" update="tw"/>
+                    </p:selectOneMenu>
+                </h:panelGrid>
+                <p:tabView dynamic="true" id="tw">
+                    <p:tab title="Selección Automática">
+                        <h:panelGrid columns="1">
+                            <p:panel header="Información de los aspirantes">
+                                <h:panelGrid columns="2" cellspacing="20">
+                                    <p:outputLabel value="Número de Aspirantes: "/>
+                                    <p:outputLabel value="#{matriculaController.nuevasMatriculasF.size()+matriculaController.nuevasMatriculasM.size()}" />
+
+                                    <p:outputLabel value="Aspirantes Femeninas: "/>
+                                    <p:outputLabel value="#{matriculaController.nuevasMatriculasF.size()}" />
+
+                                    <p:outputLabel value="Aspirantes Masculinos: "/>
+                                    <p:outputLabel value="#{matriculaController.nuevasMatriculasM.size()}" />
+                                </h:panelGrid>
+                            </p:panel>
+                            <p:panel header="Información de la matrícula disponible">
+                                <h:panelGrid columns="2" cellspacing="20">
+                                    <p:outputLabel value="Número de Secciones Disponibles: "/>
+                                    <p:outputLabel value="#{matriculaController.secciones.size()}" />
+
+                                    <p:outputLabel value="Número de Estudiantes por sección: "/>
+                                    <p:outputLabel value="#{(matriculaController.nuevasMatriculasF.size()/matriculaController.secciones.size())+(matriculaController.nuevasMatriculasM.size()/matriculaController.secciones.size())}" />
+
+                                    <p:outputLabel value="Número de aspirantes femeninas por sección: "/>
+                                    <p:outputLabel value="#{matriculaController.nuevasMatriculasF.size()/matriculaController.secciones.size()}" />
+
+                                    <p:outputLabel value="Número de aspirantes masculinos por sección: "/>
+                                    <p:outputLabel value="#{matriculaController.nuevasMatriculasM.size()/matriculaController.secciones.size()}" />
+                                    
+                                    <p:column/>
+                                    <p:commandButton id="summit" value="Proceder con la Matrícula automática" 
+                                                     actionListener="#{matriculaController.guardar()}" 
+                                                     update=":form1 :form0:msgs"
+                                                     disabled="#{!matriculaController.btnGuardar}"/>
+                                </h:panelGrid>
+                            </p:panel>
+                        </h:panelGrid>
+                    </p:tab>
+                    <p:tab title="Selección Manual">
+                        <p:dataTable id="matr" value="#{matriculaController.allNew}" var="nm"
+                                     scrollable="true" emptyMessage="Nada que mostrar.">
+                            <f:facet name="header">
+                                #{matriculaController.descTabla}
+                            </f:facet>
+                            <p:column headerText="Nie" style="width: 100px;">
+                                #{nm.matriculaPK.idmatricula}
+                            </p:column>
+                            <p:column headerText="Nombres">
+                                #{nm.estudiante.persona.personaNombre} #{nm.estudiante.persona.personaApellido}
+                            </p:column>
+
+                            <p:column headerText="Género">
+                                #{nm.estudiante.persona.personaSexo? "Femenino" : "Masculino"}
+                            </p:column>
+                        </p:dataTable>
+                    </p:tab>
+                </p:tabView>
+            </h:panelGrid>
+        </h:form>
     </ui:define>
 
 </ui:composition>
