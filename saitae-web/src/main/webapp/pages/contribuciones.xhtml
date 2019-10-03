@@ -32,63 +32,88 @@
                 <h:panelGrid columns="3" cellspacing="10" >
                         <p:outputLabel value="ENERO"/>
                         <p:selectBooleanButton value="#{contribucionesController.eneroPagado}" 
-                                               onLabel="Cancelado" offLabel="Pendiente" style="width: 190px" disabled= "#{contribucionesController.eneroPagado}"/>
+                                               onLabel="Cancelado" offLabel="Pendiente"
+                                               style="width: 190px" disabled= "#{contribucionesController.eneroPagado}"/>
 
                         <p:datePicker id="mask0" value="#{contribucionesController.contr.enero}"
-                                      showIcon="true" required="true" pattern="dd/MM/yyyy" disabled= "#{contribucionesController.eneroPagado}"/>
+                                      showIcon="true"  pattern="dd/MM/yyyy" 
+                                      disabled= "#{contribucionesController.eneroPagado}"/>
                         
                         <p:outputLabel value="FEBRERO"/>
-                        <p:selectBooleanButton value="#{paquetesController.entregaUtiles.uniforme}" 
-                                               onLabel="Cancelado" offLabel="Pendiente" style="width: 190px"/>
-                        <p:datePicker id="mask1" value="#{permisoMaController.p.permisosPK.permisoFechaInicio}"
-                                      showIcon="true" required="true" pattern="dd/MM/yyyy"/>
+                        <p:selectBooleanButton value="#{contribucionesController.febreroPagado}" 
+                                               onLabel="Cancelado" offLabel="Pendiente"
+                                               style="width: 190px" disabled="#{contribucionesController.febreroPagado}" />
+                        <p:datePicker id="mask1" value="#{contribucionesController.contr.febrero}"
+                                      showIcon="true"  pattern="dd/MM/yyyy"
+                                      disabled="#{contribucionesController.febreroPagado}"/>
+                       
                         <p:outputLabel value="MARZO"/>
-                        <p:selectBooleanButton value="#{paquetesController.entregaUtiles.uniforme}" 
-                                               onLabel="Cancelado" offLabel="Pendiente" style="width: 190px"/>
-                        <p:datePicker id="mask2" value="#{permisoMaController.p.permisosPK.permisoFechaInicio}"
-                                      showIcon="true" required="true" pattern="dd/MM/yyyy"/>
+                        <p:selectBooleanButton value="#{contribucionesController.marzoPagado}" 
+                                               onLabel="Cancelado" offLabel="Pendiente" 
+                                               style="width: 190px" disabled="#{contribucionesController.marzoPagado}"/>
+                        <p:datePicker id="mask2" value="#{contribucionesController.contr.marzo}"
+                                      showIcon="true"  pattern="dd/MM/yyyy"
+                                      disabled="#{contribucionesController.marzoPagado}"/>
+                        
                         <p:outputLabel value="ABRIL"/>
-                        <p:selectBooleanButton value="#{paquetesController.entregaUtiles.uniforme}" 
-                                               onLabel="Cancelado" offLabel="Pendiente" style="width: 190px"/>
-                        <p:datePicker id="mask3" value="#{permisoMaController.p.permisosPK.permisoFechaInicio}"
-                                      showIcon="true" required="true" pattern="dd/MM/yyyy"/>
+                        <p:selectBooleanButton value="#{contribucionesController.abrilPagado}" 
+                                               onLabel="Cancelado" offLabel="Pendiente" 
+                                               style="width: 190px" disabled="#{contribucionesController.abrilPagado}" />
+                        <p:datePicker id="mask3" value="#{contribucionesController.contr.abril}"
+                                      showIcon="true" pattern="dd/MM/yyyy"
+                                      disabled="#{contribucionesController.abrilPagado}"/>
+                        
                         <p:outputLabel value="MAYO"/>
-                        <p:selectBooleanButton value="#{paquetesController.entregaUtiles.uniforme}" 
-                                               onLabel="Cancelado" offLabel="Pendiente" style="width: 190px"/>
-                        <p:datePicker id="mask4" value="#{permisoMaController.p.permisosPK.permisoFechaInicio}"
-                                      showIcon="true" required="true" pattern="dd/MM/yyyy"/>
+                        <p:selectBooleanButton value="#{contribucionesController.mayoPagado}" 
+                                               onLabel="Cancelado" offLabel="Pendiente" style="width: 190px"
+                                               disabled="#{contribucionesController.mayoPagado}"/>
+                        <p:datePicker id="mask4" value="#{contribucionesController.contr.mayo}"
+                                      showIcon="true" pattern="dd/MM/yyyy"
+                                      disabled="#{contribucionesController.mayoPagado}"/>
+                        
                         <p:outputLabel value="JUNIO"/>
-                        <p:selectBooleanButton value="#{paquetesController.entregaUtiles.uniforme}" 
-                                               onLabel="Cancelado" offLabel="Pendiente" style="width: 190px"/>
-                        <p:datePicker id="mask5" value="#{permisoMaController.p.permisosPK.permisoFechaInicio}"
-                                      showIcon="true" required="true" pattern="dd/MM/yyyy"/>
+                        <p:selectBooleanButton value="#{contribucionesController.junioPagado}" 
+                                               onLabel="Cancelado" offLabel="Pendiente" 
+                                               style="width: 190px" disabled="#{contribucionesController.junioPagado}"/>
+                        <p:datePicker id="mask5" value="#{contribucionesController.contr.junio}"
+                                      showIcon="true" pattern="dd/MM/yyyy"
+                                      disabled="#{contribucionesController.junioPagado}"/>
                         <p:outputLabel value="JULIO"/>
-                        <p:selectBooleanButton value="#{paquetesController.entregaUtiles.uniforme}" 
-                                               onLabel="Cancelado" offLabel="Pendiente" style="width: 190px"/>
-                        <p:datePicker id="mask6" value="#{permisoMaController.p.permisosPK.permisoFechaInicio}"
-                                      showIcon="true" required="true" pattern="dd/MM/yyyy"/>
+                        <p:selectBooleanButton value="#{contribucionesController.julioPagado}" 
+                                               onLabel="Cancelado" offLabel="Pendiente" 
+                                               style="width: 190px" disabled="#{contribucionesController.julioPagado}"/>
+                        <p:datePicker id="mask6" value="#{contribucionesController.contr.julio}"
+                                      showIcon="true"  pattern="dd/MM/yyyy"
+                                      disabled="#{contribucionesController.julioPagado}"/>
                         <p:outputLabel value="AGOSTO"/>
-                        <p:selectBooleanButton value="#{paquetesController.entregaUtiles.uniforme}" 
-                                               onLabel="Cancelado" offLabel="Pendiente" style="width: 190px"/>
-                        <p:datePicker id="mask7" value="#{permisoMaController.p.permisosPK.permisoFechaInicio}"
-                                      showIcon="true" required="true" pattern="dd/MM/yyyy"/>
+                        <p:selectBooleanButton value="#{contribucionesController.agostoPagado}" 
+                                               onLabel="Cancelado" offLabel="Pendiente" 
+                                               style="width: 190px" disabled="#{contribucionesController.agostoPagado}"/>
+                        <p:datePicker id="mask7" value="#{contribucionesController.contr.agosto}"
+                                      showIcon="true"  pattern="dd/MM/yyyy"
+                                      disabled="#{contribucionesController.agostoPagado}"/>
+                        
                         <p:outputLabel value="SEPTIEMBRE"/>
-                        <p:selectBooleanButton value="#{paquetesController.entregaUtiles.uniforme}" 
-                                               onLabel="Cancelado" offLabel="Pendiente" style="width: 190px"/>
-                        <p:datePicker id="mask8" value="#{permisoMaController.p.permisosPK.permisoFechaInicio}"
-                                      showIcon="true" required="true" pattern="dd/MM/yyyy"/>
+                        <p:selectBooleanButton value="#{contribucionesController.septiembrePagado}" 
+                                               onLabel="Cancelado" offLabel="Pendiente" 
+                                               style="width: 190px" disabled="#{contribucionesController.septiembrePagado}"/>
+                        <p:datePicker id="mask8" value="#{contribucionesController.contr.septiembre}"
+                                      showIcon="true" pattern="dd/MM/yyyy"
+                                      disabled="#{contribucionesController.septiembrePagado}"/>
 
                         <p:outputLabel value="OCTUBRE"/>
-                        <p:selectBooleanButton value="#{paquetesController.entregaUtiles.uniforme}" 
-                                               onLabel="Cancelado" offLabel="Pendiente" style="width: 190px"/>
-                        <p:datePicker id="mask9" value="#{permisoMaController.p.permisosPK.permisoFechaInicio}"
-                                      showIcon="true" required="true" pattern="dd/MM/yyyy"/>
+                        <p:selectBooleanButton value="#{contribucionesController.octubrePagado}" 
+                                               onLabel="Cancelado" offLabel="Pendiente" 
+                                               style="width: 190px" disabled="#{contribucionesController.octubrePagado}"/>
+                        <p:datePicker id="mask9" value="#{contribucionesController.contr.octubre}"
+                                      showIcon="true"  pattern="dd/MM/yyyy"
+                                      disabled="#{contribucionesController.octubrePagado}"/>
 
 
                         <p:column/>
                         <p:commandButton id="summit" value="Guardar" 
                                          style="width: 200px" 
-                                         actionListener="#{paquetesController.guardar()}" 
+                                         actionListener="#{contribucionesController.guardar()}" 
                                          update=":form1:msgs: form1"/>
                     </h:panelGrid>  
 

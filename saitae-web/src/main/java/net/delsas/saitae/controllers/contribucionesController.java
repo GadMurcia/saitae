@@ -140,7 +140,9 @@ public class contribucionesController implements Serializable {
 
     public void guardar() {
           FacesMessage msj = null;
+          contrFL.edit(contr);
           
+             msj = new FacesMessage(FacesMessage.SEVERITY_INFO, "Guardado con éxito","Se guardaron los datos de la contribución");
        
         
 
@@ -179,6 +181,66 @@ public class contribucionesController implements Serializable {
     }
     public void setEneroPagado(boolean e){
      contr.setEnero( contr.getEnero() ==null ? (e ? new Date() : null) : contr.getEnero());
+
+    
+    }
+     public boolean getFebreroPagado(){
+    return contr != null ? (contr.getFebrero()!=null): false;
+    }
+    public void setFebreroPagado(boolean e){
+     contr.setFebrero(contr.getFebrero() ==null ? (e ? new Date() : null) : contr.getFebrero());
+
+    }
+     public boolean getMarzoPagado(){
+    return contr != null ? (contr.getMarzo()!=null): false;
+    }
+    public void setMarzoPagado(boolean e){
+     contr.setMarzo(contr.getMarzo() ==null ? (e ? new Date() : null) : contr.getMarzo());
+    }
+     public boolean getAbrilPagado(){
+    return contr != null ? (contr.getAbril()!=null): false;
+    }
+    public void setAbrilPagado(boolean e){
+     contr.setAbril(contr.getAbril() ==null ? (e ? new Date() : null) : contr.getAbril());
+
+    }
+     public boolean getMayoPagado(){
+    return contr != null ? (contr.getMayo()!=null): false;
+    }
+    public void setMayoPagado(boolean e){
+     contr.setMayo(contr.getMayo() ==null ? (e ? new Date() : null) : contr.getMayo());
+
+    }
+     public boolean getJunioPagado(){
+    return contr != null ? (contr.getJunio()!=null): false;
+    }
+    public void setJunioPagado(boolean e){
+     contr.setJunio(contr.getJunio()==null ? (e ? new Date() : null) : contr.getJunio());
+    }
+     public boolean getJulioPagado(){
+    return contr != null ? (contr.getJulio()!=null): false;
+    }
+    public void setJulioPagado(boolean e){
+     contr.setJulio(contr.getJulio() ==null ? (e ? new Date() : null) : contr.getJulio());
+    }
+     public boolean getAgostoPagado(){
+    return contr != null ? (contr.getAgosto()!=null): false;
+    }
+    public void setAgostoPagado(boolean e){
+     contr.setAgosto(contr.getAgosto() ==null ? (e ? new Date() : null) : contr.getAgosto());
+
+    }
+     public boolean getSeptiembrePagado(){
+    return contr != null ? (contr.getSeptiembre()!=null): false;
+    }
+    public void setSeptiembrePagado(boolean e){
+     contr.setSeptiembre(contr.getSeptiembre() ==null ? (e ? new Date() : null) : contr.getSeptiembre());
+    }
+     public boolean getOctubrePagado(){
+    return contr != null ? (contr.getOctubre()!=null):false;
+    }
+    public void setOctubrePagado(boolean e){
+     contr.setOctubre(contr.getOctubre() ==null ? (e ? new Date() : null) : contr.getOctubre());
 
     
     }
