@@ -144,7 +144,6 @@ boolean boton ;
 
     public void guardar() {
         
-          FacesMessage msj = null;
       Contribuciones  contrG =  contrFL.find(contr.getContribucionesPK());
       if (contr.equals(contrG)){
             contrFL.edit(contr);
