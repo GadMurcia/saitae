@@ -34,15 +34,17 @@
                  <p:selectBooleanButton value="#{paquetesController.entregaUtiles.zapatos}" 
                                                onLabel="Entregado" offLabel="Sin entregar" style="width: 190px"
                                                disabled= "#{paquetesController.entregaUtiles.zapatos}">
+                     
                             </p:selectBooleanButton>
                  <p:outputLabel value="Utiles Escolares"/>
                  <p:selectBooleanButton value="#{paquetesController.entregaUtiles.utiles}" 
                                                onLabel="Entregado" offLabel="Sin entregar" style="width: 190px"
                                                disabled= "#{paquetesController.entregaUtiles.utiles}">
-                            </p:selectBooleanButton>
+                       </p:selectBooleanButton>
                  <p:column/>
                         <p:commandButton id="summit" value="Guardar" 
-
+                                         type="submit"
+                                         process="@this"
                                          actionListener="#{paquetesController.guardar()}"
                                          disabled="#{paquetesController.boton}"
                                          update=":form1:msgs: form1"/>

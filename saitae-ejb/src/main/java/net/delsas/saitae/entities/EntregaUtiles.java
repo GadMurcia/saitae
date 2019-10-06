@@ -160,14 +160,14 @@ public class EntregaUtiles implements Serializable {
             return false;
         }
         EntregaUtiles other = (EntregaUtiles) object;
-        if (
+        if (other == null ||
                 (this.entregaUtilesPK == null && other.entregaUtilesPK != null)
                 || (this.entregaUtilesPK != null && !this.entregaUtilesPK.equals(other.entregaUtilesPK))
-                || (!this.uniforme && this.uniforme)
+                
                 || (this.uniforme && !this.uniforme)
-                || (!this.zapatos && this.zapatos)
+               
                 || (this.zapatos && !this.zapatos)
-                || (!this.utiles && this.utiles)
+              
                 || (this.utiles && !this.utiles)
                 
                 ) {
