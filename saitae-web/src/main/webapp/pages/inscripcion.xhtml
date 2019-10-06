@@ -441,6 +441,12 @@
                                     <h:outputText value="Apellidos del padre: *" />
                                     <p:inputText value="#{inscripcionController.padre.personaApellido}" required="true" label="Apellidos" 
                                                  title="Ingrese los apellidos del padre"/>
+                                    
+                                    <h:outputText value="Teléfono: "/>
+                                    <p:inputMask value="#{inscripcionController.padre.personaTelefono}" 
+                                                 label="Número de teléfono del padre" 
+                                                 title="Ingrese el número de teléfono del padre" mask="9999-9999"/>
+                                    
                                 </h:panelGrid>
                             </p:panel>
                             <p:panel header="Datos de la madre">
@@ -451,13 +457,18 @@
                                                  label="Número de Documento Único de Identiad" 
                                                  title="Ingrese el número de DUI de la madre" mask="99999999-9"/>
 
-                                    <h:outputText value="Nombres de la madre: *" />
+                                    <h:outputText value="Nombres de la madre: " />
                                     <p:inputText value="#{inscripcionController.madre.personaNombre}" required="true" label="Nombres" 
                                                  title="Ingrese los nombres de la madre"/>
 
-                                    <h:outputText value="Apellidos de la madre: *" />
+                                    <h:outputText value="Apellidos de la madre: " />
                                     <p:inputText value="#{inscripcionController.madre.personaApellido}" required="true" label="Apellidos" 
                                                  title="Ingrese los apellidos de la madre"/>
+                                    
+                                    <h:outputText value="Teléfono: "/>
+                                    <p:inputMask value="#{inscripcionController.madre.personaTelefono}" 
+                                                 label="Número de teléfono del madre." 
+                                                 title="Ingrese el número de teléfono de la madre." mask="9999-9999"/>
                                 </h:panelGrid>
                             </p:panel>
                         </h:panelGrid>

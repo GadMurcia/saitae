@@ -145,7 +145,7 @@ boolean boton ;
     public void guardar() {
         
       Contribuciones  contrG =  contrFL.find(contr.getContribucionesPK());
-      if (contr.equals(contrG)){
+      if (!contr.equals(contrG)){
             contrFL.edit(contr);
           
           FacesContext.getCurrentInstance().addMessage(null,

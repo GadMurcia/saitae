@@ -213,7 +213,10 @@ public class Contribuciones implements Serializable {
         }
         Contribuciones other = (Contribuciones) object;
         if ((this.contribucionesPK == null && other.contribucionesPK != null) || (this.contribucionesPK != null && !this.contribucionesPK.equals(other.contribucionesPK))
+                || (this.enero == null && other.enero != null)
+                || (this.enero!=null && other.enero==null)
                 || !this.enero.equals(other.enero)
+                
                 || !this.febrero.equals(other.febrero)
                 || !this.marzo.equals(other.marzo)
                 || !this.abril.equals(other.abril)
@@ -222,8 +225,7 @@ public class Contribuciones implements Serializable {
                 || !this.julio.equals(other.julio)
                 || !this.agosto.equals(other.agosto)
                 || !this.septiembre.equals(other.septiembre)
-                || !this.octubre.equals(other.octubre)
-                ) {
+                || !this.octubre.equals(other.octubre)) {
             return false;
         }
         return true;
@@ -233,5 +235,5 @@ public class Contribuciones implements Serializable {
     public String toString() {
         return "net.delsas.saitae.entities.Contribuciones[ contribucionesPK=" + contribucionesPK + " ]";
     }
-    
+
 }

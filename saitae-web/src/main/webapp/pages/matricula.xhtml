@@ -47,7 +47,7 @@
 
                                     <p:outputLabel value="Número de aspirantes masculinos por sección: "/>
                                     <p:outputLabel value="#{matriculaController.nuevasMatriculasM.size()/matriculaController.secciones.size()}" />
-                                    
+
                                     <p:column/>
                                     <p:commandButton id="summit" value="Proceder con la Matrícula automática" 
                                                      actionListener="#{matriculaController.guardar()}" 
@@ -78,6 +78,452 @@
                 </p:tabView>
             </h:panelGrid>
         </h:form>
+        <p:dialog header="Asignación de Materias" widgetVar="Dhorario" modal="true" 
+                  showEffect="fade" hideEffect="fade" resizable="false">                  
+            <h:form id="f1">
+                <p:wizard id="wd" flowListener="#{inscripcionController.onFlowProcess}" 
+                      nextLabel="Siguiente" backLabel="Atrás">                
+                <p:tab id="e1" title="Estudiante">
+                    <p:panel header="Datos personales del aspirante a estudiante de nuevo ingreso">
+                        <p:messages />
+                        <h:panelGrid columns="2" columnClasses="label, value">
+                            <p:outputLabel for="nie" value="NIE: "/>
+                            <p:inputText id="nie" value="#{inscripcionController.nie}" required="true" 
+                                         label="Número de Identificación Estudiantil"
+                                         title="Ingrese su NIE">
+                                <f:validateLength maximum="10" minimum="4"/>
+                            </p:inputText>
+
+                            <p:outputLabel value="Nombres: " for="nom"/>
+                            <p:inputText id="nom" value="#{inscripcionController.est.personaNombre}" 
+                                         required="true" label="Nombres" title="Ingrese sus nombres"/>
+
+                            <p:outputLabel value="Apellidos: " for="apel"/>
+                            <p:inputText id="apel" value="#{inscripcionController.est.personaApellido}" 
+                                         required="true" label="Apellidos" title="Ingrese sus apellidos"/>
+
+                            <p:outputLabel for="button" value="Fecha de Nacimiento :" />
+                            <p:datePicker id="button" value="#{inscripcionController.est.personaNacimiento}"
+                                          showIcon="true" required="true" yearRange="1980:#{inscripcionController.año-12}"
+                                          yearNavigator="true" pattern="dd/MM/yyyy" monthNavigator="true" locale="es"/>
+
+                            <h:outputText value="Nacionalidad: *" />
+                            <p:selectBooleanButton id="nacionalidadE" value="#{inscripcionController.nacionalidad}" 
+                                                   onLabel="Salvadoreña" offLabel="Extrangera" style="width:190px">
+                                <p:ajax update="dep mun"/>
+                            </p:selectBooleanButton>
+
+                            <p:outputLabel value="Partida de nacimiento?: " />
+                            <p:selectBooleanButton value="#{inscripcionController.est.estudiante.estudiantePartidaNac}" 
+                                                   onLabel="Sí tengo" offLabel="No tengo" style="width: 190px">
+                                <p:ajax update="w"/>
+                            </p:selectBooleanButton>
+
+                            <p:outputLabel for="w" value="Porqué no tiene partida de nacimiento?: " />
+                            <p:inputText id="w" value="#{inscripcionController.est.estudiante.estudianteNoPartida}" 
+                                         disabled="#{inscripcionController.est.estudiante.estudiantePartidaNac}" 
+                                         title="¿Por qué no tiene partida de nacimiento?"/>
+
+                            <p:outputLabel value="NIT: " />
+                            <p:inputMask value="#{inscripcionController.est.personaNit}" mask="9999-999999-999-9" 
+                                         title="Ingrese su NIT si posee uno. No ingrese guiones"/>
+
+                            <p:outputLabel value="Sexo: *" />
+                            <p:selectBooleanButton value="#{inscripcionController.est.personaSexo}" 
+                                                   onLabel="Femenino" offLabel="Masculino" style="width: 190px"/>
+
+                            <p:outputLabel for="console1" value="Estado Familiar: " />
+                            <p:selectOneMenu id="console1" value="#{inscripcionController.est.personaEstadoFamiliar}" 
+                                             style="width: 190px" title="Seleccione su sexo">
+                                <f:selectItem itemLabel="Seleccione" itemValue="" noSelectionOption="true"/>
+                                <f:selectItem itemLabel="Solter@" itemValue="0" />
+                                <f:selectItem itemLabel="Casad@" itemValue="1" />
+                                <f:selectItem itemLabel="Acompañad@" itemValue="2"/>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel for="dep" value="Departamento de nacimiento: *" />
+                            <p:selectOneMenu id="dep" value="#{inscripcionController.dep}" required="true"
+                                             style="width: 190px" title="Seleccione el departaento de nacimiento.">
+                                <f:selectItems value="#{inscripcionController.depLista}"/>
+                                <p:ajax update="mun"/>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel for="mun" value="Municipio de nacimiento: " />
+                            <p:selectOneMenu id="mun" value="#{inscripcionController.mun}" required="true" 
+                                             style="width: 190px" title="Seleccione el municipio de nacimiento.">
+                                <f:selectItems value="#{inscripcionController.munLista}"/>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel value="Discapacidades: " />
+                            <p:inputText value="#{inscripcionController.est.personaDiscapacidades}"
+                                         title="Si tiene alguna discapacidad, escríbalas separadas por comas"/>
+
+                            <p:outputLabel value="Enfermedades que padece: " />
+                            <p:inputText value="#{inscripcionController.est.estudiante.estudianteEnfermedades}"
+                                         title="Si padece de alguna(s) enfermedad(es), escríbalas separadas por comas"/>
+
+                            <p:outputLabel value="Medicamentos prescritos de carácter permanente: " />
+                            <p:inputText value="#{inscripcionController.est.estudiante.estudianteMedicamentos}"
+                                         title="Si usa permenentemente dedicamentos, escriba los nombres separados por comas"/>
+                        </h:panelGrid>
+                    </p:panel>
+                </p:tab>
+                <p:tab id="e2" title="Contacto">
+                    <p:panel header="Información de contacto">
+                        <p:messages />
+                        <h:panelGrid columns="2" columnClasses="label, value">
+                            <p:outputLabel value="Teléfono: " />
+                            <p:inputMask value="#{inscripcionController.est.personaTelefono}" 
+                                         type="telephone" mask="9999-9999" 
+                                         title="Ingrese su número telefónico"/>
+
+
+                            <p:outputLabel value="email: " />
+                            <p:inputText value="#{inscripcionController.est.personaEmail}" type="email" 
+                                         title="Ingrese su correo electrónico"/>
+
+                            <p:outputLabel value="Dirección: *" />
+                            <p:inputText value="#{inscripcionController.est.personaDireccion}" 
+                                         required="true" 
+                                         title="Ingrese su dirección de recidencia completa"/>
+                        </h:panelGrid>
+                    </p:panel>
+                </p:tab>
+                <p:tab title="Socioeconómico">
+                    <p:panel header="Información Socio-económica del aspirante">
+                        <p:messages />
+                        <h:panelGrid columns="2" columnClasses="label, value">
+                            <p:outputLabel for="console2" value="Zona de residencia: " />
+                            <p:selectOneMenu id="console2" value="#{inscripcionController.est.personaZonaVivienda}" 
+                                             required="true" style="width:190px" title="Seleccione su Zona donde vive">
+                                <f:selectItem itemLabel="Seleccione" itemValue="" noSelectionOption="true"/>
+                                <f:selectItem itemLabel="Rural" itemValue="1" />
+                                <f:selectItem itemLabel="Urbana" itemValue="2" />
+                            </p:selectOneMenu>
+
+                            <p:outputLabel for="console3" value="Tipo de calle de donde vive: *" />
+                            <p:selectOneMenu id="console3"  required="true"
+                                             value="#{inscripcionController.est.estudiante.estudianteTipoCalle}"
+                                             style="width:190px" title="Seleccione el tipo de calle de el lugar donde vive">
+                                <f:selectItem itemLabel="Seleccione" itemValue=" " noSelectionOption="true"/>
+                                <f:selectItem itemLabel="Tierra" itemValue="0" />
+                                <f:selectItem itemLabel="Pavimentada" itemValue="1" />
+                            </p:selectOneMenu>
+
+                            <p:outputLabel for="console4" value="Medio de transporte: *" />
+                            <p:selectOneMenu id="console4" value="#{inscripcionController.est.estudiante.estudianteMedioTransporte}"  
+                                             required="true" style="width:190px" 
+                                             title="Seleccione la forma en que habitualmete viajaría al centro de estudios">
+                                <f:selectItem itemLabel="Seleccione" itemValue=" " noSelectionOption="true"/>
+                                <f:selectItem itemLabel="A pie" itemValue="0" />
+                                <f:selectItem itemLabel="Bicicleta" itemValue="1" />
+                                <f:selectItem itemLabel="Moto" itemValue="2" />
+                                <f:selectItem itemLabel="Carro propio" itemValue="3" />
+                                <f:selectItem itemLabel="Bus" itemValue="4" />
+                                <f:selectItem itemLabel="Microbús" itemValue="5" />
+                            </p:selectOneMenu>
+
+                            <p:outputLabel value="Riesgo o vulnerabilidad: " />
+                            <p:inputText value="#{inscripcionController.est.estudiante.estudianteRiesgoVulnerabilidad}"  
+                                         title="Escriba los riesgos o vulnarabilidades del lugar en donde vive, si los hubiera."/>
+
+                            <p:outputLabel value="Distancia en KM que recorrería hasta al INTEX: *"/>
+                            <p:inputNumber id="input1" value="#{inscripcionController.est.estudiante.estudianteDistanciaAlCentro}" required="true"
+                                           symbol=" Km" symbolPosition="s" decimalSeparator="." thousandSeparator=","/> 
+
+                            <p:outputLabel value="Trabaja?: *" />
+                            <p:selectBooleanButton id="value2" value="#{inscripcionController.est.estudiante.estudianteTrabaja}" 
+                                                   required="true" onLabel="Sí" offLabel="No" style="width:190px">
+                                <p:ajax update="r2" />
+                            </p:selectBooleanButton>
+
+                            <p:outputLabel value="¿En qué trabaja?: "/>
+                            <p:inputText id="r2" value="#{inscripcionController.est.estudiante.estudianteFormaTrabajo}" 
+                                         disabled="#{!inscripcionController.est.estudiante.estudianteTrabaja}" 
+                                         title="Escriba en qué trabaja"/>
+
+                            <p:outputLabel for="basic" value="¿De quién depende económicamente?: " />
+                            <p:selectManyCheckbox id="basic" value="#{inscripcionController.dependencia}"  required="true"
+                                                  style="width:190px" immediate="true">
+                                <f:selectItem itemLabel="Padre" itemValue="Padre" />
+                                <f:selectItem itemLabel="Madre" itemValue="Madre" />
+                                <f:selectItem itemLabel="Abuelos" itemValue="Abuelo/a" />
+                                <f:selectItem itemLabel="Hermanos" itemValue="Hermano/a" />
+                                <f:selectItem itemLabel="Otro" itemValue="Otro"  /> 
+                                <p:ajax update="ot"/>
+                            </p:selectManyCheckbox>
+
+                            <p:outputLabel value="Especifique: "/>
+                            <p:inputText id="ot" value="#{inscripcionController.otraDependenciaEcon}"  
+                                         title="Escriba quién más le ayuda para sus estudios" 
+                                         disabled="#{!inscripcionController.otraDependencia}"/>
+
+
+                        </h:panelGrid>
+                    </p:panel>
+                </p:tab>
+                <p:tab title="Matrícula">
+                    <p:panel header="Datos sobre la mátricula del aspirante">
+                        <h:panelGrid columns="3" columnClasses="label, value">
+                            <h:outputLabel for="cent"  value="Centro educativo de procedencia: " />
+                            <p:inputText id="cent" value="#{inscripcionController.est.estudiante.estudianteCentroProcedencia}" 
+                                         required="true"
+                                         title="Ecriba el nombre completo del Centro Escolar donde solía estudiar."/>
+                            <p:message for="cent"/>
+
+                            <p:outputLabel for="console5" value="Modalidad de bachillerato a la que aplica: " />
+                            <p:selectOneMenu id="console5" value="#{inscripcionController.matricula.grado.gradoPK.gradoModalidad}"  
+                                             required="true"
+                                             style="width:190px" title="Seleccione la modalidad de bachillerato en la que va a iscribirse">
+                                <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                <f:selectItems value="#{inscripcionController.modalidades}" />
+                                <p:ajax update="console6"/>
+                            </p:selectOneMenu>
+                            <p:message for="console5"/>
+
+                            <p:outputLabel for="console6" value="Año de bachillerato al que aplica: " />
+                            <p:selectOneMenu id="console6" value="#{inscripcionController.matricula.grado.gradoPK.idgrado}"  
+                                             required="true"
+                                             style="width:190px" title="Seleccione el año al que desea inscribirse"
+                                             requiredMessage="Debe elegir un año de bachillerato para poder inscribirse.">
+                                <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                <f:selectItems value="#{inscripcionController.niveles}"/>
+                                <p:ajax update="secc"/>
+                            </p:selectOneMenu>
+                            <p:message for="console6"/>
+
+                            <p:outputLabel value="¿Repite año?: " />
+                            <p:selectBooleanButton value="#{inscripcionController.matricula.matriculaRepite}" required="true"
+                                                   onLabel="Sí" offLabel="No" style="width:190px"/>
+                            <p:column/>
+
+                            <p:outputLabel value="¿Cursó parvularia?: " />
+                            <p:selectBooleanButton value="#{inscripcionController.est.estudiante.estudianteParvularia}" required="true"
+                                                   onLabel="Sí" offLabel="No" style="width:190px"/>
+                            <p:column/>
+                        </h:panelGrid>
+                    </p:panel>
+                </p:tab>
+                <p:tab title="Documentos">
+                    <p:panel header="Ingrese los documentos que a continuación se le requieren">
+                        <p:outputLabel value="Recuerde que debe llevar al INTEX los documentos originales para su confrontación."/>
+                        <p:outputLabel value="No es necesario el llenado de estos campos en este momento. Si así lo desea, salte este paso."/>
+                        <p:messages />
+                        <h:panelGrid columns="4" columnClasses="label, value">
+                            <p:outputLabel value="partida de nacimiento: " />
+                            <p:fileUpload id="partida" fileUploadListener="#{inscripcionController.partida}" mode="advanced"
+                                          update="messagesp p"  sizeLimit="10000000" label="Elejir"
+                                          allowTypes="/(\.|\/)(jpe?g|png)$/" auto="true"/>
+                            <p:outputLabel id="p" value="Documento subido: #{inscripcionController.documentos.estudianteExtencionPartida.split('¿¿')[0]}" />
+                            <p:growl id="messagesp" showDetail="true" for="partida"/> 
+
+                            <p:outputLabel value="Certificado de 9° Grado: " />
+                            <p:fileUpload fileUploadListener="#{inscripcionController.noveno}" mode="advanced"
+                                          update="messagesc9 c9"  sizeLimit="10000000" label="Elejir" 
+                                          allowTypes="/(\.|\/)(jpe?g|png)$/" auto="true"/>
+                            <p:outputLabel id="c9" value="Documento subido: #{inscripcionController.documentos.estudianteExtencionCertificado.split('¿¿')[0]}" />
+                            <p:growl id="messagesc9" showDetail="true" />
+
+                            <p:outputLabel value="Constancia de conducta: " />
+                            <p:fileUpload fileUploadListener="#{inscripcionController.conducta}" mode="advanced"
+                                          update="messagescc cc"  sizeLimit="10000000" label="Elejir"
+                                          allowTypes="/(\.|\/)(jpe?g|png)$/" auto="true"/>
+                            <p:outputLabel id="cc" value="Documento subido: #{inscripcionController.documentos.estudianteExtencionConducta.split('¿¿')[0]}" />
+                            <p:growl id="messagescc" showDetail="true" />
+
+                            <p:outputLabel value="Certificado de notas de bachillerato: " />
+                            <p:fileUpload fileUploadListener="#{inscripcionController.notas}" mode="advanced"
+                                          update="messagescn cn"  sizeLimit="10000000" label="Elejir"
+                                          allowTypes="/(\.|\/)(jpe?g|png)$/" auto="true"/>
+                            <p:outputLabel id="cn" value="Documento subido: #{inscripcionController.documentos.estudianteExtencionNotas.split('¿¿')[0]}" />
+                            <p:growl id="messagescn" showDetail="true" />
+
+                            <p:outputLabel value="Fotocopia de DUI: " />
+                            <p:fileUpload fileUploadListener="#{inscripcionController.dui}" mode="advanced"
+                                          update="messagesd d"  sizeLimit="10000000" label="Elejir"
+                                          allowTypes="/(\.|\/)(jpe?g|png)$/" auto="true"/>
+                            <p:outputLabel id="d" value="Documento subido: #{inscripcionController.documentos.estudianteExtencionDui.split('¿¿')[0]}" />
+                            <p:growl id="messagesd" showDetail="true" /> 
+                        </h:panelGrid>
+                    </p:panel>
+                </p:tab>
+                <p:tab title="Repesentante">
+                    <p:panel header="Ingrese los datos del representante.">
+                        <p:messages />
+                        <h:panelGrid columns="2">
+                            <h:outputText value="DUI: *"/>
+                            <p:inputMask value="#{inscripcionController.duiR}" mask="99999999-9" 
+                                         title="Ingrese su DUI"/>
+
+                            <h:outputText value="Nombres: *" />
+                            <p:inputText value="#{inscripcionController.representante.personaNombre}" required="true" 
+                                         label="Nombres" title="Ingrese los nombres del responsable"/>
+
+                            <h:outputText value="Apellidos: *" />
+                            <p:inputText value="#{inscripcionController.representante.personaApellido}" required="true" label="Apellidos" 
+                                         title="Ingrese los apellidos del reponsable"/>
+
+                            <p:outputLabel for="fechaR" value="Fecha de Nacimiento :" />
+                            <p:datePicker id="fechaR" value="#{inscripcionController.representante.personaNacimiento}"
+                                          showIcon="true" required="true" yearRange="#{inscripcionController.año-80}:#{inscripcionController.año-18}"
+                                          yearNavigator="true" pattern="dd/MM/yyyy" monthNavigator="true" locale="es"/>
+
+                            <h:outputText value="Nacionalidad: *" />
+                            <p:selectBooleanButton id="nacionalidad" value="#{inscripcionController.nacionalidadR}" 
+                                                   onLabel="Salvadoreña" offLabel="Extrangera" style="width:190px">
+                                <p:ajax update="depR munR"/>
+                            </p:selectBooleanButton>
+
+                            <h:outputText value="¿Es familiar del estudiante?: *" />
+                            <p:selectBooleanButton id="value3" value="#{inscripcionController.representante.estudiante.estudianteRepresentanteFamiliar}" 
+                                                   onLabel="Sí" offLabel="No" style="width:190px"/>
+
+                            <h:outputText value="Parentesco con el estudiante: *" />
+                            <p:inputText value="#{inscripcionController.representante.estudiante.estudianteParentescoRepresentante}" 
+                                         required="true" label="Apellidos"
+                                         title="Ingrese el parentesco con el estudiante."/>
+
+
+                            <h:outputText value="NIT: " />
+                            <p:inputMask value="#{inscripcionController.representante.personaNit}" mask="9999-999999-999-9" 
+                                         title="Ingrese su NIT si posee uno."/>
+
+                            <p:outputLabel for="console7" value="Sexo: *" />
+                            <p:selectBooleanButton id="console7" value="#{inscripcionController.representante.personaSexo}" 
+                                                   onLabel="Femenino" offLabel="Masculino" style="width:190px"/>
+
+                            <p:outputLabel for="console8" value="Estado Familiar: *" />
+                            <p:selectOneMenu id="console8" value="#{inscripcionController.representante.personaEstadoFamiliar}" 
+                                             style="width: 190px">
+                                <f:selectItem itemLabel="Solter@" itemValue="0" />
+                                <f:selectItem itemLabel="Casad@" itemValue="1" />
+                            </p:selectOneMenu>
+
+                            <h:outputText value="¿Posee partida de nacimiento?: *" />
+                            <p:selectBooleanButton id="value4" value="#{inscripcionController.representante.estudiante.estudiantePartidaNac}" 
+                                                   onLabel="Sí" offLabel="No" style="width:190px">
+                                <p:ajax update="m"/>
+                            </p:selectBooleanButton>
+
+                            <h:outputText value="¿Por qué no tiene partida de nacimiento: " />
+                            <p:inputText id="m" value="#{inscripcionController.representante.estudiante.estudianteNoPartida}" 
+                                         label="Apellidos" disabled="#{inscripcionController.representante.estudiante.estudiantePartidaNac}"
+                                         title="Ingrese el motivo por el que no tiene partidas de nacimiento en la actualidad"/>
+
+                            <p:outputLabel for="depR" value="Departamento de nacimiento: *" />
+                            <p:selectOneMenu id="depR" value="#{inscripcionController.depR}" required="true"
+                                             style="width: 190px" title="Seleccione el departaento de nacimiento.">
+                                <f:selectItems value="#{inscripcionController.depListaR}"/>
+                                <p:ajax update="munR"/>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel for="munR" value="Municipio de nacimiento: " />
+                            <p:selectOneMenu id="munR" value="#{inscripcionController.munR}" required="true" 
+                                             style="width: 190px" title="Seleccione el municipio de nacimiento.">
+                                <f:selectItems value="#{inscripcionController.munListaR}"/>
+                            </p:selectOneMenu>
+
+                            <h:outputText value="Teléfono: " />
+                            <p:inputMask value="#{inscripcionController.representante.personaTelefono}" type="telephone" mask="9999-9999" 
+                                         title="Ingrese su número telefónico"/>
+
+
+                            <h:outputText value="email: " />
+                            <p:inputText value="#{inscripcionController.representante.personaEmail}" type="email" 
+                                         title="Ingrese su correo electrónico"/>
+
+                            <h:outputText value="Dirección: *" />
+                            <p:inputText label="Dirección" value="#{inscripcionController.representante.personaDireccion}" required="true" 
+                                         title="Ingrese su dirección de recidencia completa"/>
+
+                            <p:outputLabel for="console9" value="Zona de residencia: *" />
+                            <p:selectOneMenu id="console9" value="#{inscripcionController.representante.personaZonaVivienda}" required="true"
+                                             style="width:190px" title="Seleccione su Zona donde vive">
+                                <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                <f:selectItem itemLabel="Rural" itemValue="0" />
+                                <f:selectItem itemLabel="Urbana" itemValue="1" />
+                            </p:selectOneMenu>
+
+                            <p:outputLabel for="console10" value="Tipo de calle de donde vive: *" />
+                            <p:selectOneMenu id="console10" value="#{inscripcionController.representante.estudiante.estudianteTipoCalle}"  required="true"
+                                             style="width:190px" title="Seleccione el tipo de calle de el lugar donde vive">
+                                <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                <f:selectItem itemLabel="Tierra" itemValue="0" />
+                                <f:selectItem itemLabel="Pavimentada" itemValue="1" />
+                            </p:selectOneMenu>
+
+                            <h:outputText value="Riesgos o vulnarebilidades: " />
+                            <p:inputText value="#{inscripcionController.representante.estudiante.estudianteRiesgoVulnerabilidad}" 
+                                         title="Escriba las vulnarebilidades que perciba en el lugar donde vive."/>
+
+                            <h:outputText value="Profesión u oficio: *" />
+                            <p:inputText label="Profesión" value="#{inscripcionController.representante.estudiante.estudianteFormaTrabajo}" required="true" 
+                                         title="Ingrese su profesión u oficio segun su DUI"/>
+
+                            <h:outputText value="Escolaridad: *" />
+                            <p:inputText label="Escolaridad" value="#{inscripcionController.representante.estudiante.estudianteEscolaridad}" required="true" 
+                                         title="Escriba hasta qué grado estudió."/>
+                        </h:panelGrid>
+                    </p:panel>
+                </p:tab>
+                <p:tab title="Padres">
+                    <p:panel header="Información de los padres del aspirante">
+                        <h:panelGrid >
+                            <p:panel header="Datos del padre">
+                                <p:messages />
+                                <h:panelGrid columns="2" columnClasses="label, value">
+                                    <h:outputText value="DUI del padre: *"/>
+                                    <p:inputMask value="#{inscripcionController.duiP}" rendered="true" 
+                                                 label="Número de Documento Único de Identiad" 
+                                                 title="Ingrese el número de DUI del padre" mask="99999999-9"/>
+
+                                    <h:outputText value="Nombres del padre: *" />
+                                    <p:inputText value="#{inscripcionController.padre.personaNombre}" required="true" label="Nombres" 
+                                                 title="Ingrese los nombres del padre"/>
+
+                                    <h:outputText value="Apellidos del padre: *" />
+                                    <p:inputText value="#{inscripcionController.padre.personaApellido}" required="true" label="Apellidos" 
+                                                 title="Ingrese los apellidos del padre"/>
+                                    
+                                    <h:outputText value="Teléfono: "/>
+                                    <p:inputMask value="#{inscripcionController.padre.personaTelefono}" 
+                                                 label="Número de teléfono del padre" 
+                                                 title="Ingrese el número de teléfono del padre" mask="9999-9999"/>
+                                    
+                                </h:panelGrid>
+                            </p:panel>
+                            <p:panel header="Datos de la madre">
+                                <p:messages />
+                                <h:panelGrid columns="2" columnClasses="label, value">
+                                    <h:outputText value="DUI de la madre: *"/>
+                                    <p:inputMask value="#{inscripcionController.duiM}" rendered="true" 
+                                                 label="Número de Documento Único de Identiad" 
+                                                 title="Ingrese el número de DUI de la madre" mask="99999999-9"/>
+
+                                    <h:outputText value="Nombres de la madre: " />
+                                    <p:inputText value="#{inscripcionController.madre.personaNombre}" required="true" label="Nombres" 
+                                                 title="Ingrese los nombres de la madre"/>
+
+                                    <h:outputText value="Apellidos de la madre: " />
+                                    <p:inputText value="#{inscripcionController.madre.personaApellido}" required="true" label="Apellidos" 
+                                                 title="Ingrese los apellidos de la madre"/>
+                                    
+                                    <h:outputText value="Teléfono: "/>
+                                    <p:inputMask value="#{inscripcionController.madre.personaTelefono}" 
+                                                 label="Número de teléfono del madre." 
+                                                 title="Ingrese el número de teléfono de la madre." mask="9999-9999"/>
+                                </h:panelGrid>
+                            </p:panel>
+                        </h:panelGrid>
+                    </p:panel>
+                </p:tab>
+                <p:tab id="c1" title="Confirmación">
+                    <p:panel header="Última información.">
+                    </p:panel>
+                </p:tab> 
+            </p:wizard>
+            </h:form>
+        </p:dialog>
     </ui:define>
 
 </ui:composition>

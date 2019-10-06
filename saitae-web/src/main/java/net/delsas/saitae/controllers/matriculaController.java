@@ -37,6 +37,7 @@ import net.delsas.saitae.entities.Grado;
 import net.delsas.saitae.entities.GradoPK;
 import net.delsas.saitae.entities.Matricula;
 import net.delsas.saitae.entities.Persona;
+import org.primefaces.event.FlowEvent;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -221,5 +222,9 @@ public class matriculaController implements Serializable {
 
     public void setBtnGuardar(boolean btnGuardar) {
         this.btnGuardar = btnGuardar;
+    }
+    
+    public String onFlowProcess(FlowEvent event) {
+        return event.getNewStep();
     }
 }
