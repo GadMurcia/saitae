@@ -27,17 +27,24 @@
                  <p:outputLabel id="grado" value="#{paquetesController.gradoAlumno}" />
                  <p:outputLabel value="Uniforme:"/>
                  <p:selectBooleanButton value="#{paquetesController.entregaUtiles.uniforme}" 
-                                               onLabel="Entregado" offLabel="Sin entregar" style="width: 190px"/>
+                                               onLabel="Entregado" offLabel="Sin entregar" style="width: 190px"
+                                               disabled= "#{paquetesController.entregaUtiles.uniforme}">
+                            </p:selectBooleanButton>
                  <p:outputLabel value="Zapatos"/>
                  <p:selectBooleanButton value="#{paquetesController.entregaUtiles.zapatos}" 
-                                               onLabel="Entregado" offLabel="Sin entregar" style="width: 190px"/>
+                                               onLabel="Entregado" offLabel="Sin entregar" style="width: 190px"
+                                               disabled= "#{paquetesController.entregaUtiles.zapatos}">
+                            </p:selectBooleanButton>
                  <p:outputLabel value="Utiles Escolares"/>
                  <p:selectBooleanButton value="#{paquetesController.entregaUtiles.utiles}" 
-                                               onLabel="Entregado" offLabel="Sin entregar" style="width: 190px"/>
+                                               onLabel="Entregado" offLabel="Sin entregar" style="width: 190px"
+                                               disabled= "#{paquetesController.entregaUtiles.utiles}">
+                            </p:selectBooleanButton>
                  <p:column/>
                         <p:commandButton id="summit" value="Guardar" 
 
-                                         actionListener="#{paquetesController.guardar()}" 
+                                         actionListener="#{paquetesController.guardar()}"
+                                         disabled="#{paquetesController.boton}"
                                          update=":form1:msgs: form1"/>
             </h:panelGrid>  
             

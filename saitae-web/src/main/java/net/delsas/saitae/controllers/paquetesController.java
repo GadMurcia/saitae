@@ -52,7 +52,7 @@ import org.primefaces.event.SelectEvent;
 
 @ViewScoped
 public class paquetesController implements Serializable {
-
+boolean boton;
     @EJB
     private PersonaFacadeLocal personaFL;
     private Persona p;
@@ -68,7 +68,8 @@ public class paquetesController implements Serializable {
 
     @PostConstruct
     public void init() {
-
+         boton = true;
+         entregaUtiles = new EntregaUtiles(new EntregaUtilesPK(0,getAño()));
         p = new prueba().getEstudiante();
         FacesContext context = FacesContext.getCurrentInstance();
         usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
@@ -114,7 +115,7 @@ public class paquetesController implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Alumno seleccionado", event.getObject().toString()));
         entregaUtiles.setIdRepresentante(p.getEstudiante().getEstudianteRepresentante());
         entregaUtiles.setEstudiante(p.getEstudiante());
-
+        boton = false;
        
     }
 
@@ -138,10 +139,26 @@ public class paquetesController implements Serializable {
     }
 
     public void guardar() {
-          FacesMessage msj = null;
-        entregaUtiles.setIdEntregante(usuario);
-        entregaUFL.edit(entregaUtiles);
-          msj = new FacesMessage(FacesMessage.SEVERITY_INFO, "Guardado con 'éxito","Se guardaron los datos");
+        
+        
+        EntregaUtiles  entregaG =  entregaUFL.find(entregaUtiles.getEntregaUtilesPK());
+      if (!entregaUtiles.equals(entregaG)){
+            entregaUtiles.setIdEntregante(usuario);
+            entregaUFL.edit(entregaUtiles);
+          
+          FacesContext.getCurrentInstance().addMessage(null,
+                  new FacesMessage(FacesMessage.SEVERITY_INFO, "Guardado con éxito","Se guardaron los datos de paquetes entregados"));
+           this.init();
+      }
+      else{
+      FacesContext.getCurrentInstance().addMessage(null,
+                  new FacesMessage(FacesMessage.SEVERITY_WARN, "Falló","No se seleccionaron datos"));
+      }
+
+//          FacesMessage msj = null;
+//        entregaUtiles.setIdEntregante(usuario);
+//        entregaUFL.edit(entregaUtiles);
+//          msj = new FacesMessage(FacesMessage.SEVERITY_INFO, "Guardado con 'éxito","Se guardaron los datos");
         
 
     }
@@ -173,6 +190,14 @@ public class paquetesController implements Serializable {
 
     public void setEntregaUtiles(EntregaUtiles entregaUtiles) {
         this.entregaUtiles = entregaUtiles;
+    }
+
+    public boolean isBoton() {
+        return boton;
+    }
+
+    public void setBoton(boolean boton) {
+        this.boton = boton;
     }
 
 }
