@@ -212,11 +212,12 @@ public class Contribuciones implements Serializable {
             return false;
         }
         Contribuciones other = (Contribuciones) object;
-        if ((this.contribucionesPK == null && other.contribucionesPK != null) || (this.contribucionesPK != null && !this.contribucionesPK.equals(other.contribucionesPK))
+        if (other == null
+                || (this.contribucionesPK == null && other.contribucionesPK != null)
+                || (this.contribucionesPK != null && !this.contribucionesPK.equals(other.contribucionesPK))
                 || (this.enero == null && other.enero != null)
-                || (this.enero!=null && other.enero==null)
-                || !this.enero.equals(other.enero)
-                
+                || (this.enero != null && other.enero == null)
+                || (!(this.enero == null && other.enero == null) && !this.enero.equals(other.enero))
                 || !this.febrero.equals(other.febrero)
                 || !this.marzo.equals(other.marzo)
                 || !this.abril.equals(other.abril)
