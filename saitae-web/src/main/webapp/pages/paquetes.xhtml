@@ -39,7 +39,8 @@
                  <p:outputLabel value="Utiles Escolares"/>
                  <p:selectBooleanButton value="#{paquetesController.entregaUtiles.utiles}" 
                                                onLabel="Entregado" offLabel="Sin entregar" style="width: 190px"
-                                               disabled= "#{paquetesController.entregaUtiles.utiles}">
+                                               disabled= "#{paquetesController.entregaUtiles.utiles}" >
+                     <p:ajax update="form1"/>
                        </p:selectBooleanButton>
                  <p:column/>
                         <p:commandButton id="summit" value="Guardar" 

@@ -229,7 +229,6 @@ public class permisoEstController implements Serializable {
     @Inject
     @Push
     private PushContext notificacion;
-
     public void sendMessage(String message) {
         notificacion.send(message);
     }

@@ -36,9 +36,9 @@ import net.delsas.saitae.entities.TipoPersona;
  * @author delsas
  */
 public class prueba {
-    
+
     private Persona user;
-    
+
     public prueba() {
         user = new Persona(0, "", "", false);
         user.setPersonaContrasenya("");
@@ -57,7 +57,7 @@ public class prueba {
         user.setPersonaDiscapacidades("");
         user.setPersonaComentarios("");
     }
-    
+
     public Persona getEstudiante() {
         Persona e = (new prueba()).getUser();
         e.setPersonaNacimiento(getEdad(12));
@@ -85,7 +85,7 @@ public class prueba {
         e.setPersonaActivo(true);
         return e;
     }
-    
+
     public Persona getRepresentante() {
         Persona r = (new prueba()).getUser();
         r.setEstudiante(new Estudiante(r.getIdpersona(), false, 0, false, ""));
@@ -112,7 +112,7 @@ public class prueba {
         r.setPersonaActivo(true);
         return r;
     }
-    
+
     public Persona getMadre() {
         Persona m = (new prueba()).getUser();
         m.setTipoPersona(new TipoPersona(10, "Madre de familia"));
@@ -122,7 +122,7 @@ public class prueba {
         m.setPersonaSexo(true);
         return m;
     }
-    
+
     public Persona getPadre() {
         Persona p = (new prueba()).getUser();
         p.setTipoPersona(new TipoPersona(11, "Padre de familia"));
@@ -132,7 +132,7 @@ public class prueba {
         p.setPersonaNacimiento(null);
         return p;
     }
-    
+
     public Persona getMaestro() {
         Persona ma = (new prueba()).getUser();
         ma.setEstudiante(null);
@@ -167,35 +167,35 @@ public class prueba {
         ma.setPersonaActivo(true);
         return ma;
     }
-    
+
     public Persona getBibliotecario() {
         Persona b = (new prueba()).getUser();
         b.setTipoPersona(new TipoPersona(5, "Bibliotecario"));
         b.setPersonaActivo(true);
         return b;
     }
-    
+
     public Persona getAdministradorCra() {
         Persona a = (new prueba()).getUser();
         a.setTipoPersona(new TipoPersona(6, "Administrador CRA"));
         a.setPersonaActivo(true);
         return a;
     }
-    
+
     public Persona getSubDirector() {
         Persona sd = (new prueba()).getUser();
         sd.setTipoPersona(new TipoPersona(3, "Subdirector"));
         sd.setPersonaActivo(true);
         return sd;
     }
-    
+
     public Persona getLAboratorista() {
         Persona l = (new prueba()).getUser();
         l.setTipoPersona(new TipoPersona(7, "Laboratorista"));
         l.setPersonaActivo(true);
         return l;
     }
-    
+
     public Persona getAmin() {
         Persona ad = (new prueba()).getUser();
         ad.setEstudiante(getEstudiante().getEstudiante());
@@ -204,13 +204,12 @@ public class prueba {
         ad.setPersonaActivo(true);
         return ad;
     }
-    
+
     public List<SelectItem> getMunicipioLista(Persona p) {
         List<SelectItem> items = new ArrayList<>();
         SelectItem u = new SelectItem(" ", "Seleccione");
         u.setNoSelectionOption(true);
         items.add(u);
-        
         int i = 1;
         switch (getDepartamento(p)) {
             case "01":
@@ -337,19 +336,20 @@ public class prueba {
                 items.add(new SelectItem("9", "Extrangero"));
                 break;
             default:
-                p.setPersonaLugarNac(" # ");
-            
+                if (p != null) {
+                    p.setPersonaLugarNac(" # ");
+                }
         }
-        
+
         return items;
     }
-    
+
     public List<SelectItem> getDepartamentoLista(Persona p) {
         List<SelectItem> items = new ArrayList<>();
         SelectItem u = new SelectItem(" ", "Seleccione");
         u.setNoSelectionOption(true);
         items.add(u);
-        switch (p.getPersonaNacionalidad()) {
+        switch (p == null ? " " : p.getPersonaNacionalidad()) {
             case "Salvadoreña":
                 int t = 1;
                 for (String f : new String[]{"Ahuachapán", "Santa Ana", "Sonsonate", "Chalatenango",
@@ -363,29 +363,30 @@ public class prueba {
                 items.add(new SelectItem("9", "Extrangero"));
                 break;
             default:
-                p.setPersonaLugarNac(" # ");
-                break;
+                if (p != null) {
+                    p.setPersonaLugarNac(" # ");
+                }
         }
         return items;
-        
+
     }
-    
+
     public void setDepartamento(String dep, Persona p) {
         p.setPersonaLugarNac(dep + "#" + p.getPersonaLugarNac().split("#")[1]);
     }
-    
+
     public String getDepartamento(Persona p) {
-        return p.getPersonaLugarNac().split("#")[0];
+        return p != null ? p.getPersonaLugarNac().split("#")[0] : " ";
     }
-    
+
     public void setMunicipio(String mun, Persona p) {
         p.setPersonaLugarNac(p.getPersonaLugarNac().split("#")[0] + "#" + mun);
     }
-    
+
     public String getMunicipio(Persona p) {
-        return p.getPersonaLugarNac().split("#")[1];
+        return p != null ? p.getPersonaLugarNac().split("#")[1] : " ";
     }
-    
+
     public void setDui(String dui, Persona p) {
         String x[] = dui.split("=>");
         String i = "1";
@@ -396,7 +397,7 @@ public class prueba {
         }
         p.setIdpersona(Integer.valueOf(i));
     }
-    
+
     public String getDui(Persona p) {
         String i = "";
         String[] h = p.getIdpersona().toString().split("");
@@ -407,15 +408,15 @@ public class prueba {
         }
         return i;
     }
-    
+
     public Persona getUser() {
         return user;
     }
-    
+
     public void setUser(Persona user) {
         this.user = user;
     }
-    
+
     private Date getEdad(int menos) {
         String g = new SimpleDateFormat("dd-mm").format(new Date()) + (Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date())) - menos);
         Date d;
@@ -426,5 +427,5 @@ public class prueba {
         }
         return d;
     }
-    
+
 }
