@@ -92,31 +92,32 @@ public class matriculaController implements Serializable {
         }
     }
 
+    private void procesoSeleccion(int f, List<Matricula> source, String sec, List<Matricula> dest) {
+        for (int y = 0; y < f; y++) {
+            Matricula ff = matriculaFL.find(source.get(0).getMatriculaPK());
+            source.remove(ff);
+            ff.getGrado().getGradoPK().setGradoSeccion(sec);
+            dest.add(ff);
+        }
+    }
+
     public void guardar() {
         int s = getSecciones().size() > 0 ? getSecciones().size() : 1;
         int m = nuevasMatriculasM.size() / s;
         int f = nuevasMatriculasF.size() / s;
-        int iF = 0;
-        int iM = 0;
         List<Matricula> masc = new ArrayList<>();
         List<Matricula> fem = new ArrayList<>();
         List<String> secciones = getSecciones();
         for (String sec : secciones) {
-            for (int y = 0; y < f; y++) {
-                Matricula ff = matriculaFL.find(nuevasMatriculasF.get(iF).getMatriculaPK());
-                ff.getGrado().getGradoPK().setGradoSeccion(sec);
-                fem.add(ff);
-                iF++;
-            }
-            for (int y = 0; y < m; y++) {
-                Matricula mm = matriculaFL.find(nuevasMatriculasM.get(iM).getMatriculaPK());
-                mm.getGrado().getGradoPK().setGradoSeccion(sec);
-                masc.add(mm);
-                iM++;
-            }
+            procesoSeleccion(f, nuevasMatriculasF, sec, fem);
+            procesoSeleccion(m, nuevasMatriculasM, sec, masc);
         }
-        nuevasMatriculasF.clear();
-        nuevasMatriculasM.clear();
+        while (nuevasMatriculasF.size() > 0) {
+            procesoSeleccion(1, nuevasMatriculasF, secciones.get(nuevasMatriculasF.size()-1), fem);
+        }
+        while (nuevasMatriculasM.size() > 0) {
+            procesoSeleccion(1, nuevasMatriculasM, secciones.get(nuevasMatriculasM.size()-1), masc);
+        }
         nuevasMatriculasF.addAll(fem);
         nuevasMatriculasM.addAll(masc);
         for (Matricula mat : getAllNew()) {

@@ -66,7 +66,7 @@ public class sessionController implements Serializable {
     public void log() {
         FacesContext context = FacesContext.getCurrentInstance();
         try {
-            Persona u = (Persona) context.getExternalContext().getSessionMap().get("usuario");
+            Persona u = (Persona) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
             if (u == null) {
 
                 context.getExternalContext().getSessionMap().put("mensaje", new FacesMessage(FacesMessage.SEVERITY_ERROR,

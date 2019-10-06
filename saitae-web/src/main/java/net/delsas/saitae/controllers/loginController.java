@@ -80,7 +80,7 @@ public class loginController implements Serializable {
         try {
             if (p != null && p.getPersonaActivo() && p.getPersonaContrasenya().equals(passwd)) {
                 System.out.println("logueado");
-                context.getExternalContext().getSessionMap().put("usuario", p);
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuario", p);
                 context.getExternalContext().getSessionMap().put("primerInicio", true);
                 context.getExternalContext().redirect("pages/perfil.intex");
             } else {
