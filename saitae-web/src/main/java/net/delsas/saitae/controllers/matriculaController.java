@@ -117,7 +117,9 @@ public class matriculaController implements Serializable {
     }
 
     public void cambiarSeccion() {
-        matriculaFL.edit(mat);
+        Matricula m = matriculaFL.find(mat.getMatriculaPK());
+        matriculaFL.remove(m);
+        matriculaFL.create(mat);
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
                 "Cambio de sección exitoso!", "El estudiante" + buscado.getPersonaNombre() + " "
                 + buscado.getPersonaApellido() + " ha sido cambiado a la sección "
@@ -130,9 +132,11 @@ public class matriculaController implements Serializable {
                 : mat.getGrado().getGradoPK().getGradoModalidad().equals("G") ? " General" : " ")
                 + ". Vea la nómina de alumnos para comproobar el cambio."));
         sendMessage(new mensaje(buscado.getIdpersona(), usuario.getPersonaNombre().split(" ")[0] + " "
-                + usuario.getPersonaApellido().split(" ")[0] + " Ha cambiado la sección donde estaba inscrito.",
+                + usuario.getPersonaApellido().split(" ")[0] + " ha cambiado la sección donde usted estaba inscrito de '"
+                +m.getGrado().getGradoPK().getGradoSeccion()+"' a '"+mat.getGrado().getGradoPK().getGradoSeccion()+"'.",
                 "Se ha registrado un cambio de sección", FacesMessage.SEVERITY_INFO, usuario.getIdpersona(),
                 " ").toString());
+        init();
     }
 
     public void guardar() {
@@ -155,14 +159,16 @@ public class matriculaController implements Serializable {
         nuevasMatriculasF.addAll(fem);
         nuevasMatriculasM.addAll(masc);
         for (Matricula matr : getAllNew()) {
+            System.out.println(matr.getGrado().getGradoPK().getGradoSeccion());
+            matriculaFL.remove(matr);
             matr.setMatriculaComentario("R");
-            matriculaFL.edit(matr);
+            matriculaFL.create(matr);
         }
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
                 "Asignación de secciones exitosa!",
                 "Todos los datos se han guardado con éxito. "
                 + "Vea la nómina de alumnos para ver con detalle la distribución."));
-
+        init();
     }
 
     public List<Matricula> getAllNew() {
@@ -201,6 +207,7 @@ public class matriculaController implements Serializable {
 
     private void asignaSexo(List<Matricula> nuevasMatriculas) {
         for (Matricula matr : nuevasMatriculas) {
+            matr = matriculaFL.find(matr.getMatriculaPK());
             if (matr.getEstudiante().getPersona().getPersonaSexo()) {
                 nuevasMatriculasF.add(matr);
             } else {

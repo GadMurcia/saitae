@@ -65,17 +65,17 @@
                             <p:autoComplete id="aut" value="#{matriculaController.nie}" required="true"
                                             title="Ingrese el número de documento de identificación de la persona."
                                             completeMethod="#{matriculaController.completeText}">
-                                <f:validateLength minimum="9"/>
+                                <f:validateLength minimum="4"/>
                                 <p:ajax event="itemSelect" listener="#{matriculaController.onItemSelect}" 
-                                        update="form0:msgs console5 console6 secc aut nom ape"/>
+                                        update="form0:msgs aut nom ape console5 console6 secc"/>
                             </p:autoComplete>
 
-                            <p:outputLabel value="Nombres"/>
+                            <p:outputLabel value="Nombres: "/>
                             <p:outputLabel id="nom" value="#{matriculaController.buscado.personaNombre}"/>
 
-                            <p:outputLabel value="Apellidos"/>
+                            <p:outputLabel value="Apellidos: "/>
                             <p:outputLabel id="ape" value="#{matriculaController.buscado.personaApellido}"/>
-
+                            
                             <p:outputLabel for="console5" value="Modalidad de bachillerato a la que aplica: " />
                             <p:selectOneMenu id="console5" value="#{matriculaController.mat.grado.gradoPK.gradoModalidad}"  required="true"
                                              style="width:190px" title="Seleccione la modalidad de bachillerato en la que va a iscribirse">
@@ -99,7 +99,9 @@
                                 <f:selectItems value="#{matriculaController.seccionesCambio}"/>
                             </p:selectOneMenu>
                             <p:column/>
-                            <p:commandButton value="Guardar" style="width: 150px"/>
+                            <p:commandButton id="summit1" value="Guardar cambios" 
+                                             actionListener="#{matriculaController.cambiarSeccion()}" 
+                                                     update=":form1 form0:msgs aut nom ape console5 console6 secc"/>
                         </h:panelGrid>
                     </p:tab>
                 </p:tabView>
