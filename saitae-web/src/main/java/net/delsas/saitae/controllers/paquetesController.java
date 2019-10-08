@@ -140,10 +140,11 @@ public class paquetesController implements Serializable {
     }
 
     public void guardar() {
-
-        EntregaUtiles entregaG = entregaUFL.find(entregaUtiles.getEntregaUtilesPK());
-        if (!entregaUtiles.equals(entregaG)) {
-            entregaUtiles.setIdEntregante(usuario);
+        
+        
+        EntregaUtiles  entregaG =  entregaUFL.find(entregaUtiles.getEntregaUtilesPK());
+      if (!entregaUtiles.equals(entregaG)){
+             entregaUtiles.setIdEntregante(usuario);
             entregaUFL.edit(entregaUtiles);
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Guardado con éxito", "Se guardaron los datos de paquetes entregados"));

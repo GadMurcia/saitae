@@ -30,7 +30,7 @@
                      <p:outputLabel value="Grado:"/>
                      <p:outputLabel id="grado" value="#{contribucionesController.gradoAlumno}" />
                     </h:panelGrid>
-                <h:panelGrid columns="3" cellspacing="10" >
+                <h:panelGrid columns="4" cellspacing="10" >
                         <p:outputLabel value="ENERO"/>
                         <p:selectBooleanButton value="#{contribucionesController.eneroPagado}" 
                                                onLabel="Cancelado" offLabel="Pendiente"
@@ -38,6 +38,7 @@
                                                disabled= "#{contribucionesController.eneroPagado}">
                             <p:ajax update="mask0"/>  </p:selectBooleanButton>
 
+                         <p:outputLabel value="FECHA"/>
                         <p:datePicker id="mask0" value="#{contribucionesController.contr.enero}"
                                       showIcon="false"  pattern="dd/MM/yyyy" 
                                       disabled= "true"/>
@@ -49,6 +50,7 @@
                                                disabled="#{contribucionesController.febreroPagado}">
                          <p:ajax  update="mask1"/>  
                         </p:selectBooleanButton>
+                         <p:outputLabel value="FECHA"/>
                         <p:datePicker id="mask1" value="#{contribucionesController.contr.febrero}"
                                       showIcon="false"  pattern="dd/MM/yyyy"
                                       disabled="true"/>
@@ -59,6 +61,7 @@
                                                style="width: 190px"
                              disabled="#{contribucionesController.marzoPagado}">
                             <p:ajax  update="mask2"/>  </p:selectBooleanButton>
+                          <p:outputLabel value="FECHA"/>
                         <p:datePicker id="mask2" value="#{contribucionesController.contr.marzo}"
                                       showIcon="false"  pattern="dd/MM/yyyy"
                                       disabled="true"/>
@@ -69,6 +72,7 @@
                                                style="width: 190px" 
                               disabled="#{contribucionesController.abrilPagado}">
                             <p:ajax  update="mask3"/></p:selectBooleanButton>
+                         <p:outputLabel value="FECHA"/>
                         <p:datePicker id="mask3" value="#{contribucionesController.contr.abril}"
                                       showIcon="false" pattern="dd/MM/yyyy"
                                       disabled="true"/>
@@ -78,7 +82,7 @@
                                                onLabel="Cancelado" offLabel="Pendiente" style="width: 190px"
                                                disabled="#{contribucionesController.mayoPagado}">
                             <p:ajax  update="mask4"/></p:selectBooleanButton>
-                        
+                          <p:outputLabel value="FECHA"/>
                         <p:datePicker id="mask4" value="#{contribucionesController.contr.mayo}"
                                       showIcon="false" pattern="dd/MM/yyyy"
                                       disabled="true"/>
@@ -88,6 +92,7 @@
                                                onLabel="Cancelado" offLabel="Pendiente" 
                                                style="width: 190px" disabled="#{contribucionesController.junioPagado}">
                             <p:ajax  update="mask5"/></p:selectBooleanButton>
+                         <p:outputLabel value="FECHA"/>
                         <p:datePicker id="mask5" value="#{contribucionesController.contr.junio}"
                                       showIcon="false" pattern="dd/MM/yyyy"
                                       disabled="true"/>
@@ -96,6 +101,7 @@
                                                onLabel="Cancelado" offLabel="Pendiente" 
                                                style="width: 190px" disabled="#{contribucionesController.julioPagado}">
                             <p:ajax  update="mask6"/></p:selectBooleanButton>
+                          <p:outputLabel value="FECHA"/>
                         <p:datePicker id="mask6" value="#{contribucionesController.contr.julio}"
                                       showIcon="false"  pattern="dd/MM/yyyy"
                                       disabled="true"/>
@@ -104,6 +110,7 @@
                                                onLabel="Cancelado" offLabel="Pendiente" 
                                                style="width: 190px" disabled="#{contribucionesController.agostoPagado}">
                             <p:ajax  update="mask7"/></p:selectBooleanButton>
+                         <p:outputLabel value="FECHA"/>
                         <p:datePicker id="mask7" value="#{contribucionesController.contr.agosto}"
                                       showIcon="false"  pattern="dd/MM/yyyy"
                                       disabled="true"/>
@@ -113,6 +120,7 @@
                                                onLabel="Cancelado" offLabel="Pendiente" 
                                                style="width: 190px" disabled="#{contribucionesController.septiembrePagado}">
                             <p:ajax  update="mask8"/></p:selectBooleanButton>
+                          <p:outputLabel value="FECHA"/>
                         <p:datePicker id="mask8" value="#{contribucionesController.contr.septiembre}"
                                       showIcon="false" pattern="dd/MM/yyyy"
                                       disabled="true"/>
@@ -122,14 +130,18 @@
                                                onLabel="Cancelado" offLabel="Pendiente" 
                                                style="width: 190px" disabled="#{contribucionesController.octubrePagado}">
                             <p:ajax  update="mask9"/></p:selectBooleanButton>
+                        <p:outputLabel value="FECHA"/>
                         <p:datePicker id="mask9" value="#{contribucionesController.contr.octubre}"
                                       showIcon="false"  pattern="dd/MM/yyyy"
                                       disabled="true"/>
 
 
                         <p:column/>
+                        
                         <p:commandButton id="summit" value="Guardar" 
-                                         style="width: 200px" 
+                                         style="width: 190px "
+                                         
+                                        
                                          actionListener="#{contribucionesController.guardar()}" 
                                          disabled="#{!contribucionesController.boton}"
                                          update=":form1:msgs:  form1"/>
