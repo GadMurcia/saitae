@@ -29,15 +29,24 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
+import net.delsas.saitae.ax.mensaje;
+import net.delsas.saitae.ax.prueba;
 import net.delsas.saitae.beans.GradoFacadeLocal;
 import net.delsas.saitae.beans.MatriculaFacadeLocal;
+import net.delsas.saitae.beans.PersonaFacadeLocal;
+import static net.delsas.saitae.controllers.axiliarController.getP;
+import net.delsas.saitae.entities.Estudiante;
 import net.delsas.saitae.entities.Grado;
 import net.delsas.saitae.entities.GradoPK;
 import net.delsas.saitae.entities.Matricula;
+import net.delsas.saitae.entities.MatriculaPK;
 import net.delsas.saitae.entities.Persona;
-import org.primefaces.event.FlowEvent;
+import org.omnifaces.cdi.Push;
+import org.omnifaces.cdi.PushContext;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -54,13 +63,16 @@ public class matriculaController implements Serializable {
     private MatriculaFacadeLocal matriculaFL;
     @EJB
     private GradoFacadeLocal gradoFL;
+    @EJB
+    private PersonaFacadeLocal personaFL;
     private List<Matricula> nuevasMatriculasF;
     private List<Matricula> nuevasMatriculasM;
     private List<Grado> grados;
     private Persona usuario;
-    private String descTabla;
     private GradoPK selectedPK;
     private boolean btnGuardar;
+    private Persona buscado;
+    private Matricula mat;
 
     @PostConstruct
     public void init() {
@@ -88,8 +100,10 @@ public class matriculaController implements Serializable {
             }
             nuevasMatriculasF = new ArrayList<>();
             nuevasMatriculasM = new ArrayList<>();
-            descTabla = "";
             selectedPK = new GradoPK(0, "", "", 0);
+            buscado = new prueba().getEstudiante();
+            mat = new Matricula(0, getAño());
+            mat.setGrado(new Grado(0, " ", "", 0));
         }
     }
 
@@ -100,6 +114,25 @@ public class matriculaController implements Serializable {
             ff.getGrado().getGradoPK().setGradoSeccion(sec);
             dest.add(ff);
         }
+    }
+
+    public void cambiarSeccion() {
+        matriculaFL.edit(mat);
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+                "Cambio de sección exitoso!", "El estudiante" + buscado.getPersonaNombre() + " "
+                + buscado.getPersonaApellido() + " ha sido cambiado a la sección "
+                + mat.getGrado().getGradoPK().getGradoSeccion()
+                + " del " + (mat.getGrado().getGradoPK().getIdgrado() == 1 ? " Primero "
+                : mat.getGrado().getGradoPK().getIdgrado() == 2 ? " Segundo"
+                : mat.getGrado().getGradoPK().getIdgrado() == 3 ? " Tercero" : "")
+                + (mat.getGrado().getGradoPK().getGradoModalidad().equals("C") ? " Contador"
+                : mat.getGrado().getGradoPK().getGradoModalidad().equals("S") ? " Secretariado"
+                : mat.getGrado().getGradoPK().getGradoModalidad().equals("G") ? " General" : " ")
+                + ". Vea la nómina de alumnos para comproobar el cambio."));
+        sendMessage(new mensaje(buscado.getIdpersona(), usuario.getPersonaNombre().split(" ")[0] + " "
+                + usuario.getPersonaApellido().split(" ")[0] + " Ha cambiado la sección donde estaba inscrito.",
+                "Se ha registrado un cambio de sección", FacesMessage.SEVERITY_INFO, usuario.getIdpersona(),
+                " ").toString());
     }
 
     public void guardar() {
@@ -114,19 +147,21 @@ public class matriculaController implements Serializable {
             procesoSeleccion(m, nuevasMatriculasM, sec, masc);
         }
         while (nuevasMatriculasF.size() > 0) {
-            procesoSeleccion(1, nuevasMatriculasF, secciones.get(nuevasMatriculasF.size()-1), fem);
+            procesoSeleccion(1, nuevasMatriculasF, secciones.get(nuevasMatriculasF.size() - 1), fem);
         }
         while (nuevasMatriculasM.size() > 0) {
-            procesoSeleccion(1, nuevasMatriculasM, secciones.get(nuevasMatriculasM.size()-1), masc);
+            procesoSeleccion(1, nuevasMatriculasM, secciones.get(nuevasMatriculasM.size() - 1), masc);
         }
         nuevasMatriculasF.addAll(fem);
         nuevasMatriculasM.addAll(masc);
-        for (Matricula mat : getAllNew()) {
-            System.out.println(mat.getEstudiante().getPersona().getPersonaNombre()
-                    + " matriculado en seccion "
-                    + (mat.getEstudiante().getPersona().getPersonaSexo() ? " Femenino " : " Masculino ")
-                    + mat.getGrado().getGradoPK().getGradoSeccion());
+        for (Matricula matr : getAllNew()) {
+            matr.setMatriculaComentario("R");
+            matriculaFL.edit(matr);
         }
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+                "Asignación de secciones exitosa!",
+                "Todos los datos se han guardado con éxito. "
+                + "Vea la nómina de alumnos para ver con detalle la distribución."));
 
     }
 
@@ -153,15 +188,10 @@ public class matriculaController implements Serializable {
         return Collections.unmodifiableList(grados);
     }
 
-    public void setGrados(List<Grado> grados) {
-        this.grados = grados;
-    }
-
     public void selectAño(SelectEvent event) {
         nuevasMatriculasF = new ArrayList<>();
         nuevasMatriculasM = new ArrayList<>();
         selectedPK = (GradoPK) event.getObject();
-        descTabla = selectedPK != null ? getGradosLabel(selectedPK) : "";
         List<Matricula> nuevasMatriculas = selectedPK == null ? new ArrayList<Matricula>()
                 : matriculaFL.findAllNewEstudent(selectedPK);
         asignaSexo(nuevasMatriculas);
@@ -170,11 +200,11 @@ public class matriculaController implements Serializable {
     }
 
     private void asignaSexo(List<Matricula> nuevasMatriculas) {
-        for (Matricula mat : nuevasMatriculas) {
-            if (mat.getEstudiante().getPersona().getPersonaSexo()) {
-                nuevasMatriculasF.add(mat);
+        for (Matricula matr : nuevasMatriculas) {
+            if (matr.getEstudiante().getPersona().getPersonaSexo()) {
+                nuevasMatriculasF.add(matr);
             } else {
-                nuevasMatriculasM.add(mat);
+                nuevasMatriculasM.add(matr);
             }
         }
     }
@@ -192,16 +222,38 @@ public class matriculaController implements Serializable {
                 : pk.getGradoModalidad().equals("G")
                 ? "General"
                 : pk.getGradoModalidad().equals("S")
-                ? "T.V.C Secretariado" : "";
+                ? "T.V.C Secretariado" : " ";
         return l;
     }
 
-    public String getDescTabla() {
-        return descTabla;
+    public List<String> completeText(String query) {
+        List<String> results = new ArrayList<>();
+        List<Persona> list;
+        try {
+            (new prueba()).setDui(query, getP());
+            list = personaFL.getPersonaByLikeIdAndType(getP().getIdpersona(), 8);
+            for (Persona o : list) {
+                results.add(o.getPersonaNombre() + " "
+                        + o.getPersonaApellido() + "=>" + o.getIdpersona().toString().substring(1));
+            }
+
+        } catch (Exception m) {
+            System.out.println(m.getMessage());
+        }
+        return results;
     }
 
-    public void setDescTabla(String descTabla) {
-        this.descTabla = descTabla;
+    public void onItemSelect(SelectEvent event) {
+        setBuscado(new Persona(0));
+        try {
+            String x[] = event.getObject().toString().split("=>");
+            (new prueba()).setDui(x.length > 1 ? x[1] : x[0], getBuscado());
+            setBuscado(personaFL.find(getBuscado().getIdpersona()));
+            mat = matriculaFL.find(new MatriculaPK(buscado.getIdpersona(), getAño()));
+            mat = mat == null ? new Matricula(0, 0) : mat;
+        } catch (Exception o) {
+            System.out.println("Error en (new prueba()).onItemSelect: " + o.getMessage());
+        }
     }
 
     public List<String> getSecciones() {
@@ -220,11 +272,99 @@ public class matriculaController implements Serializable {
         return btnGuardar;
     }
 
-    public void setBtnGuardar(boolean btnGuardar) {
-        this.btnGuardar = btnGuardar;
+    public String getDepartamento(Persona p) {
+        return p != null ? p.getPersonaLugarNac().split("#").length > 1 ? p.getPersonaLugarNac().split("#")[0] : " " : " ";
     }
-    
-    public String onFlowProcess(FlowEvent event) {
-        return event.getNewStep();
+
+    public String getMunicipio(Persona p) {
+        return p != null ? p.getPersonaLugarNac().split("#").length > 1 ? p.getPersonaLugarNac().split("#")[1] : " " : " ";
+    }
+
+    public List<SelectItem> getDepLista(Persona p) {
+        return new prueba().getDepartamentoLista(p);
+    }
+
+    public List<SelectItem> getMunLista(Persona p) {
+        return new prueba().getMunicipioLista(p);
+    }
+
+    public String[] getDependencia(Estudiante e) {
+        return e.getEstudianteDependenciaEconomica().split("¿")[0].split("#");
+    }
+
+    public String getOtraDependenciaEcon(Estudiante e) {
+        String d[] = e.getEstudianteDependenciaEconomica().split("¿");
+        String ot = d.length > 1 ? d[1] : " ";
+        return ot;
+    }
+
+    public GradoPK getSelectedPK() {
+        return selectedPK;
+    }
+
+    public void setSelectedPK(GradoPK selectedPK) {
+        this.selectedPK = selectedPK;
+    }
+
+    public Persona getBuscado() {
+        return buscado;
+    }
+
+    public void setBuscado(Persona buscado) {
+        this.buscado = buscado;
+    }
+
+    public void setNie(String nie) {
+        new prueba().setDui(nie, buscado);
+    }
+
+    public String getNie() {
+        return buscado.getIdpersona() > 0 ? buscado.getIdpersona().toString().substring(1) : "";
+    }
+
+    public Matricula getMat() {
+        return mat;
+    }
+
+    public void setMat(Matricula mat) {
+        this.mat = mat;
+    }
+
+    public List<SelectItem> getModalidades() {
+        List<SelectItem> it = new ArrayList<>();
+        it.add(new SelectItem(" ", "Selecione"));
+        List<String> m = gradoFL.getModalidadPorAño(getAño());
+        for (String mo : m) {
+            it.add(new SelectItem(mo, mo.equals("C") ? "TVC Contador" : mo.equals("S") ? "TVC Secretariado" : mo.equals("G") ? "General" : " "));
+        }
+        return it;
+    }
+
+    public List<SelectItem> getNiveles() {
+        List<SelectItem> it = new ArrayList<>();
+        it.add(new SelectItem(" ", "Selecione"));
+        List<Integer> m = gradoFL.getIdPorAñoyModalidad(getAño(), mat.getGrado().getGradoPK().getGradoModalidad());
+        for (int mo : m) {
+            it.add(new SelectItem(mo, mo == 1 ? "Primero" : mo == 2 ? "Segundo" : mo == 3 ? "Tercero" : " "));
+        }
+        return it;
+    }
+
+    public List<SelectItem> getSeccionesCambio() {
+        List<SelectItem> it = new ArrayList<>();
+        it.add(new SelectItem(" ", "Selecione"));
+        List<String> m = gradoFL.getSeccionPorAñoModalidadyId(getAño(), mat.getGrado().getGradoPK().getGradoModalidad(), mat.getGrado().getGradoPK().getIdgrado());
+        for (String mo : m) {
+            it.add(new SelectItem(mo, mo));
+        }
+        return it;
+    }
+
+    @Inject
+    @Push
+    private PushContext notificacion;
+
+    public void sendMessage(String message) {
+        notificacion.send(message);
     }
 }

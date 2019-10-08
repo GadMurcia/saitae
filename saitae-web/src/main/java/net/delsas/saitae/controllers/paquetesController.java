@@ -52,7 +52,8 @@ import org.primefaces.event.SelectEvent;
 
 @ViewScoped
 public class paquetesController implements Serializable {
-boolean boton;
+
+    boolean boton;
     @EJB
     private PersonaFacadeLocal personaFL;
     private Persona p;
@@ -68,8 +69,8 @@ boolean boton;
 
     @PostConstruct
     public void init() {
-         boton = true;
-         entregaUtiles = new EntregaUtiles(new EntregaUtilesPK(0,getAño()));
+        boton = true;
+        entregaUtiles = new EntregaUtiles(new EntregaUtilesPK(0, getAño()));
         p = new prueba().getEstudiante();
         FacesContext context = FacesContext.getCurrentInstance();
         usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
@@ -110,13 +111,13 @@ boolean boton;
     public void onItemSelect(SelectEvent event) {
         new prueba().setDui(event.getObject().toString(), p);
         p = personaFL.find(p.getIdpersona());
-         entregaUtiles = entregaUFL.find(new EntregaUtilesPK(p.getIdpersona(), getAño()));
+        entregaUtiles = entregaUFL.find(new EntregaUtilesPK(p.getIdpersona(), getAño()));
         entregaUtiles = entregaUtiles == null ? new EntregaUtiles(p.getIdpersona(), getAño()) : entregaUtiles;
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Alumno seleccionado", event.getObject().toString()));
         entregaUtiles.setIdRepresentante(p.getEstudiante().getEstudianteRepresentante());
         entregaUtiles.setEstudiante(p.getEstudiante());
         boton = false;
-       
+
     }
 
     public int getAño() {
@@ -145,22 +146,18 @@ boolean boton;
       if (!entregaUtiles.equals(entregaG)){
              entregaUtiles.setIdEntregante(usuario);
             entregaUFL.edit(entregaUtiles);
-         
-          FacesContext.getCurrentInstance().addMessage(null,
-                  new FacesMessage(FacesMessage.SEVERITY_INFO, "Guardado con éxito","Se guardaron los datos de paquetes entregados"));
-           this.init();
-      }
-      else{
-      FacesContext.getCurrentInstance().addMessage(null,
-                  new FacesMessage(FacesMessage.SEVERITY_WARN, "Falló","No se seleccionaron datos"));
-      }
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Guardado con éxito", "Se guardaron los datos de paquetes entregados"));
+            this.init();
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_WARN, "Falló", "No se seleccionaron datos"));
+        }
 
 //          FacesMessage msj = null;
 //        entregaUtiles.setIdEntregante(usuario);
 //        entregaUFL.edit(entregaUtiles);
 //          msj = new FacesMessage(FacesMessage.SEVERITY_INFO, "Guardado con 'éxito","Se guardaron los datos");
-        
-
     }
 
     public String getEst() {
@@ -178,7 +175,6 @@ boolean boton;
     public void setNie(String nie) {
         new prueba().setDui(nie, p);
     }
-    
 
     public String getNie() {
         return p.getIdpersona().toString().substring(1);
