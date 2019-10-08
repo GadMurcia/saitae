@@ -143,9 +143,9 @@ boolean boton;
         
         EntregaUtiles  entregaG =  entregaUFL.find(entregaUtiles.getEntregaUtilesPK());
       if (!entregaUtiles.equals(entregaG)){
-            
+             entregaUtiles.setIdEntregante(usuario);
             entregaUFL.edit(entregaUtiles);
-          entregaUtiles.setIdEntregante(usuario);
+         
           FacesContext.getCurrentInstance().addMessage(null,
                   new FacesMessage(FacesMessage.SEVERITY_INFO, "Guardado con éxito","Se guardaron los datos de paquetes entregados"));
            this.init();
