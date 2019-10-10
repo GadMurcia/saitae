@@ -16,11 +16,15 @@
  */
 package net.delsas.saitae.ax;
 
+import java.io.Serializable;
+
 /**
  *
  * @author delsas
  */
-public class notificacion {
+public class notificacion implements Serializable{
+
+    private static final long serialVersionUID = 1L;
 
     private String nombreNoti;
     private String cuerpoNoti;

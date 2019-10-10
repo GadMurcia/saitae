@@ -63,8 +63,11 @@ public class AnuncioController implements Serializable {
         try {
             usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
             int t = usuario.getTipoPersona().getIdtipoPersona();
-            boolean r = t == 1 ? false : (t == 2 ? false : (t == 3 ? false : t != 4));
-            if (r) {
+            //boolean r = t == 1 ? false : (t == 2 ? false : (t == 3 ? false : t != 4));
+            if (/**
+                     * r
+                     */
+                    usuario == null) {
                 context.getExternalContext().getSessionMap().put("mensaje",
                         new FacesMessage(FacesMessage.SEVERITY_ERROR,
                                 "Falla!", "Esa vista no le está permitida."));
@@ -98,14 +101,14 @@ public class AnuncioController implements Serializable {
         anuncios = anuncios == null ? new ArrayList<Anuncio>() : anuncios;
         return anuncios;
     }
-    
+
     public void onRowSelect(SelectEvent event) {
         System.out.println(event.getObject());
         anuncio = (Anuncio) event.getObject();
     }
-    
-    public void onHide(){
-        anuncio= new Anuncio(null, "", new Date(), "");
+
+    public void onHide() {
+        anuncio = new Anuncio(null, "", new Date(), "");
     }
 
     public void guardar() {
@@ -114,11 +117,11 @@ public class AnuncioController implements Serializable {
             anuncioFL.create(anuncio);
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Anunciado con éxito",
-                             "El anuncio ha sido publicado con éxito"));
+                            "El anuncio ha sido publicado con éxito"));
             sendMessage(new mensaje(0, "Nuevo auncio publicado recientemente por "
                     + anuncio.getAnuncioAnunciante().getPersonaNombre().split(" ")[0]
                     + " " + anuncio.getAnuncioAnunciante().getPersonaApellido().split(" ")[0],
-                     "Nuevo anuncio disponible", FacesMessage.SEVERITY_INFO, usuario.getIdpersona(),
+                    "Nuevo anuncio disponible", FacesMessage.SEVERITY_INFO, usuario.getIdpersona(),
                     "tp¿¿" + (anuncio.getAnuncioTipoPersona() == null ? 0
                     : anuncio.getAnuncioTipoPersona().getIdtipoPersona())).toString());
             this.construct();

@@ -6,6 +6,7 @@
 package net.delsas.saitae.ax;
 
 import com.thetransactioncompany.cors.CORSFilter;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,8 +14,9 @@ import java.util.Set;
  *
  * @author delsas
  */
-public class corsonf extends CORSFilter{
-	
+public class corsonf extends CORSFilter implements Serializable{
+
+    private static final long serialVersionUID = 1L;	
 	
 	
 	public final boolean allowGenericHttpRequests=true;

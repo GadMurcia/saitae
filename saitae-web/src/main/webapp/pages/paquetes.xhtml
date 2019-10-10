@@ -8,65 +8,42 @@
 
     <ui:define name="content">
         <h:form id="form1">
-
             <p:growl id="msgs" showDetail="true" />
-            
-         <h:panelGrid columns="1">
-            <h:panelGrid columns="2" cellpadding="5">
-                <p:outputLabel value="Alumno:" for="acSimple" />
-                <p:autoComplete style="width: 190px" id="acSimple" value="#{paquetesController.nie}"  
-                                completeMethod="#{paquetesController.completeText}"  >
-                   
-                       <p:ajax event="itemSelect" 
-                            listener="#{paquetesController.onItemSelect}" 
-                            update="form1"/>
-                    
-                </p:autoComplete>
+            <h:panelGrid columns="1">
+                <h:panelGrid columns="2" cellpadding="5">
+                    <p:outputLabel value="Alumno:" for="acSimple" />
+                    <p:autoComplete style="width: 190px" id="acSimple" value="#{paquetesController.nie}"  
+                                    completeMethod="#{paquetesController.completeText}">
+                        <p:ajax event="itemSelect" 
+                                listener="#{paquetesController.onItemSelect}" 
+                                update="form1"/>
+
+                    </p:autoComplete>
+                </h:panelGrid>
+                <h:panelGrid columns="2" cellspacing="10" >
+                    <p:outputLabel value="Alumno:"/>
+                    <p:outputLabel id="alumno" value="#{paquetesController.p.personaNombre} #{paquetesController.p.personaApellido}" />
+                    <p:outputLabel value="Grado:"/>
+                    <p:outputLabel id="grado" value="#{paquetesController.gradoAlumno}" />
+                </h:panelGrid>
+                <h:panelGrid columns="2" cellspacing="10" >
+                    <p:outputLabel value="Uniforme:"/>
+                    <p:selectBooleanButton value="#{paquetesController.uni}" 
+                                           onLabel="Entregado" offLabel="Pendiente" style="width: 190px"/>
+                    <p:outputLabel value="Zapatos:"/>
+                    <p:selectBooleanButton value="#{paquetesController.zap}" 
+                                           onLabel="Entregado" offLabel="Pendiente" style="width: 190px"/>
+                    <p:outputLabel value="Utiles Escolares:"/>
+                    <p:selectBooleanButton value="#{paquetesController.esc}" 
+                                           onLabel="Entregado" offLabel="Pendiente" style="width: 190px"/>
+                    <p:column/>
+                    <p:commandButton id="summit" value="Guardar" 
+                                     style="width: 190px"
+                                     actionListener="#{paquetesController.guardar()}"
+                                     disabled="#{paquetesController.boton}"
+                                     update=":form1:msgs: form1"/>
+                </h:panelGrid>
             </h:panelGrid>
-                  <h:panelGrid columns="2" cellspacing="10" >
-                 <p:outputLabel value="Alumno:"/>
-                 <p:outputLabel id="alumno" value="#{paquetesController.p.personaNombre} #{paquetesController.p.personaApellido}" />
-                 <p:outputLabel value="Grado:"/>
-                 <p:outputLabel id="grado" value="#{paquetesController.gradoAlumno}" />
-                  </h:panelGrid>
-                 <h:panelGrid columns="2" cellspacing="10" >
-                 <p:outputLabel value="Uniforme:"/>
-                 <p:selectBooleanButton value="#{paquetesController.entregaUtiles.uniforme}" 
-                                               onLabel="Entregado" offLabel="Pendiente" style="width: 190px"
-                                               disabled= "#{paquetesController.entregaUtiles.uniforme}">
-                   <p:ajax update="form1"/>           
-                 </p:selectBooleanButton>
-                 <p:outputLabel value="Zapatos:"/>
-                 <p:selectBooleanButton value="#{paquetesController.entregaUtiles.zapatos}" 
-                                               onLabel="Entregado" offLabel="Pendiente" style="width: 190px"
-                                               disabled= "#{paquetesController.entregaUtiles.zapatos}">
-                       <p:ajax update="form1"/> 
-                            </p:selectBooleanButton>
-                 <p:outputLabel value="Utiles Escolares:"/>
-                 <p:selectBooleanButton value="#{paquetesController.entregaUtiles.utiles}" 
-                                               onLabel="Entregado" offLabel="Pendiente" style="width: 190px"
-                                               disabled= "#{paquetesController.entregaUtiles.utiles}">
-                                               <p:ajax update="form1"/> 
-                       </p:selectBooleanButton>
-                 <p:column/>
-                        <p:commandButton id="summit" value="Guardar" 
-                                         style="width: 190px"
-                                         type="submit"
-                                         process="@this"
-                                         actionListener="#{paquetesController.guardar()}"
-                                         disabled="#{paquetesController.boton}"
-                                      update=":form1:msgs: form1"/>
-                 </h:panelGrid>
-            </h:panelGrid>  
- 
-                
-                   
-                    
-                
-            
-
         </h:form>
-
     </ui:define>
-
 </ui:composition>

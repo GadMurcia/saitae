@@ -50,39 +50,33 @@ import org.primefaces.event.SelectEvent;
  * @author gabriela
  */
 @Named
-
 @ViewScoped
 public class contribucionesController implements Serializable {
-boolean boton ;
+    
+    private static final long serialVersionUID = 1L;
+    boolean boton;
     @EJB
     private PersonaFacadeLocal personaFL;
     private Persona p;
     private Persona usuario;
     private String est;
-
-
     @EJB
     private MatriculaFacadeLocal matriculaFL;
-   
     @EJB
     private ContribucionesFacadeLocal contrFL;
     private Contribuciones contr;
-    
 
     @PostConstruct
     public void init() {
         boton = false;
-        contr = new Contribuciones(new ContribucionesPK(0,getAño()));
-        
-        p = new prueba().getEstudiante();
+        contr = new Contribuciones(new ContribucionesPK(0, getAño()));
+        p = new Persona(0, " ", " ", true);
         FacesContext context = FacesContext.getCurrentInstance();
         usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
         boolean r = usuario.getTipoPersona().getIdtipoPersona().equals(2) ? false
                 : usuario.getTipoPersona().getIdtipoPersona().equals(12) ? false
                 : !usuario.getTipoPersona().getIdtipoPersona().equals(1);
-
         if (r) {
-
             context.getExternalContext().getSessionMap().put("mensaje", new FacesMessage(FacesMessage.SEVERITY_FATAL,
                     "Falla!", "Esa vista no le está permitida."));
             try {
@@ -92,8 +86,7 @@ boolean boton ;
             }
         }
     }
-    private static final long serialVersionUID = 1L;
-
+    
     public List<String> completeText(String query) {
         List<String> results = new ArrayList<>();
         List<Persona> listp;
@@ -107,17 +100,13 @@ boolean boton ;
         } catch (Exception m) {
             System.out.println(m.getMessage());
         }
-
         return results;
     }
 
-    
-    
     public void onItemSelect(SelectEvent event) {
-       
         new prueba().setDui(event.getObject().toString(), p);
         p = personaFL.find(p.getIdpersona());
-        contr.getContribucionesPK().setIdEstudiante(p.getIdpersona()); 
+        contr.getContribucionesPK().setIdEstudiante(p.getIdpersona());
         contr = contrFL.find(contr.getContribucionesPK());
         contr = contr == null ? new Contribuciones(new ContribucionesPK(p.getIdpersona(), getAño())) : contr;
         boton = true;
@@ -139,25 +128,19 @@ boolean boton ;
                     : pk.getGradoModalidad().equals("C") ? "T.V.C Contador" : "");
         }
         return grado;
-
     }
 
     public void guardar() {
-        
-      Contribuciones  contrG =  contrFL.find(contr.getContribucionesPK());
-      if (!contr.equals(contrG)){
+        Contribuciones contrG = contrFL.find(contr.getContribucionesPK());
+        if (!contr.equals(contrG)) {
             contrFL.edit(contr);
-          
-          FacesContext.getCurrentInstance().addMessage(null,
-                  new FacesMessage(FacesMessage.SEVERITY_INFO, "Guardado con éxito","Se guardaron los datos de la contribución"));
-           this.init();
-      }
-      else{
-      FacesContext.getCurrentInstance().addMessage(null,
-                  new FacesMessage(FacesMessage.SEVERITY_WARN, "Falló","No se seleccionaron datos"));
-      }
-
-
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Guardado con éxito", "Se guardaron los datos de la contribución"));
+            this.init();
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_WARN, "Falló", "No se seleccionaron datos"));
+        }
     }
 
     public String getEst() {
@@ -175,7 +158,6 @@ boolean boton ;
     public void setNie(String nie) {
         new prueba().setDui(nie, p);
     }
-    
 
     public String getNie() {
         return p.getIdpersona().toString().substring(1);
@@ -188,73 +170,85 @@ boolean boton ;
     public void setContr(Contribuciones contr) {
         this.contr = contr;
     }
-    public boolean getEneroPagado(){
-    return contr != null ? (contr.getEnero()!=null): false;
-    }
-    public void setEneroPagado(boolean e){
-     contr.setEnero( contr.getEnero() ==null ? (e ? new Date() : null) : contr.getEnero());
 
-    
+    public boolean getEneroPagado() {
+        return contr.getEnero() != null;
     }
-     public boolean getFebreroPagado(){
-    return contr != null ? (contr.getFebrero()!=null): false;
-    }
-    public void setFebreroPagado(boolean e){
-     contr.setFebrero(contr.getFebrero() ==null ? (e ? new Date() : null) : contr.getFebrero());
 
+    public void setEneroPagado(boolean e) {
+        contr.setEnero(e ? new Date() : null);
     }
-     public boolean getMarzoPagado(){
-    return contr != null ? (contr.getMarzo()!=null): false;
-    }
-    public void setMarzoPagado(boolean e){
-     contr.setMarzo(contr.getMarzo() ==null ? (e ? new Date() : null) : contr.getMarzo());
-    }
-     public boolean getAbrilPagado(){
-    return contr != null ? (contr.getAbril()!=null): false;
-    }
-    public void setAbrilPagado(boolean e){
-     contr.setAbril(contr.getAbril() ==null ? (e ? new Date() : null) : contr.getAbril());
 
+    public boolean getFebreroPagado() {
+        return contr.getFebrero() != null;
     }
-     public boolean getMayoPagado(){
-    return contr != null ? (contr.getMayo()!=null): false;
-    }
-    public void setMayoPagado(boolean e){
-     contr.setMayo(contr.getMayo() ==null ? (e ? new Date() : null) : contr.getMayo());
 
+    public void setFebreroPagado(boolean e) {
+        contr.setFebrero(e ? new Date() : null);
     }
-     public boolean getJunioPagado(){
-    return contr != null ? (contr.getJunio()!=null): false;
-    }
-    public void setJunioPagado(boolean e){
-     contr.setJunio(contr.getJunio()==null ? (e ? new Date() : null) : contr.getJunio());
-    }
-     public boolean getJulioPagado(){
-    return contr != null ? (contr.getJulio()!=null): false;
-    }
-    public void setJulioPagado(boolean e){
-     contr.setJulio(contr.getJulio() ==null ? (e ? new Date() : null) : contr.getJulio());
-    }
-     public boolean getAgostoPagado(){
-    return contr != null ? (contr.getAgosto()!=null): false;
-    }
-    public void setAgostoPagado(boolean e){
-     contr.setAgosto(contr.getAgosto() ==null ? (e ? new Date() : null) : contr.getAgosto());
 
+    public boolean getMarzoPagado() {
+        return contr.getMarzo() != null;
     }
-     public boolean getSeptiembrePagado(){
-    return contr != null ? (contr.getSeptiembre()!=null): false;
-    }
-    public void setSeptiembrePagado(boolean e){
-     contr.setSeptiembre(contr.getSeptiembre() ==null ? (e ? new Date() : null) : contr.getSeptiembre());
-    }
-     public boolean getOctubrePagado(){
-    return contr != null ? (contr.getOctubre()!=null):false;
-    }
-    public void setOctubrePagado(boolean e){
-     contr.setOctubre(contr.getOctubre() ==null ? (e ? new Date() : null) : contr.getOctubre());
 
-    
+    public void setMarzoPagado(boolean e) {
+        contr.setMarzo(e ? new Date() : null);
+    }
+
+    public boolean getAbrilPagado() {
+        return contr.getAbril() != null;
+    }
+
+    public void setAbrilPagado(boolean e) {
+        contr.setAbril(e ? new Date() : null);
+    }
+
+    public boolean getMayoPagado() {
+        return contr.getMayo() != null;
+    }
+
+    public void setMayoPagado(boolean e) {
+        contr.setMayo(e ? new Date() : null);
+    }
+
+    public boolean getJunioPagado() {
+        return contr.getJunio() != null;
+    }
+
+    public void setJunioPagado(boolean e) {
+        contr.setJunio(e ? new Date() : null);
+    }
+
+    public boolean getJulioPagado() {
+        return contr.getJulio() != null;
+    }
+
+    public void setJulioPagado(boolean e) {
+        contr.setJulio(e ? new Date() : null);
+    }
+
+    public boolean getAgostoPagado() {
+        return contr.getAgosto() != null;
+    }
+
+    public void setAgostoPagado(boolean e) {
+        contr.setAgosto(e ? new Date() : null);
+    }
+
+    public boolean getSeptiembrePagado() {
+        return contr.getSeptiembre() != null;
+    }
+
+    public void setSeptiembrePagado(boolean e) {
+        contr.setSeptiembre(e ? new Date() : null);
+    }
+
+    public boolean getOctubrePagado() {
+        return contr.getOctubre() != null;
+    }
+
+    public void setOctubrePagado(boolean e) {
+        contr.setOctubre(e ? new Date() : null);
     }
 
     public boolean isBoton() {
@@ -264,6 +258,5 @@ boolean boton ;
     public void setBoton(boolean boton) {
         this.boton = boton;
     }
-    
-}
 
+}

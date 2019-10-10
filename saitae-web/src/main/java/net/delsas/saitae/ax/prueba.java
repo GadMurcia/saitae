@@ -16,6 +16,7 @@
  */
 package net.delsas.saitae.ax;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -35,7 +36,9 @@ import net.delsas.saitae.entities.TipoPersona;
  *
  * @author delsas
  */
-public class prueba {
+public class prueba implements Serializable{
+
+    private static final long serialVersionUID = 1L;
 
     private Persona user;
 

@@ -8,9 +8,9 @@
                 xmlns:t="http://xmlns.jcp.org/jsf/composite/components/autentia">
 
     <ui:define name="content">
-        <h:form id="form1" style="margin: 0 auto; width: 50%;">
+        <h:form id="form1" style="margin: 0 auto; width: 80%;">
             <h:panelGrid columns="1" cellspacing="30">                
-                <p:tabView dynamic="true" id="tw">
+                <p:tabView id="tw" orientation="top">
                     <p:tab title="Selección Automática">
                         <h:panelGrid columns="1">
                             <h:panelGrid columns="2">
@@ -21,7 +21,7 @@
                                     <f:selectItems value="#{matriculaController.grados}" var="g"
                                                    itemLabel="#{matriculaController.getGradosLabel(g.gradoPK)}"
                                                    itemValue="#{g.gradoPK}"/>
-                                    <p:ajax event="itemSelect" listener="#{matriculaController.selectAño}" update="tw"/>
+                                    <p:ajax event="itemSelect" listener="#{matriculaController.selectAño}" update="form1"/>
                                 </p:selectOneMenu>
                             </h:panelGrid>
                             <p:panel header="Información de los aspirantes">
@@ -77,24 +77,24 @@
                             <p:outputLabel id="ape" value="#{matriculaController.buscado.personaApellido}"/>
                             
                             <p:outputLabel for="console5" value="Modalidad de bachillerato a la que aplica: " />
-                            <p:selectOneMenu id="console5" value="#{matriculaController.mat.grado.gradoPK.gradoModalidad}"  required="true"
-                                             style="width:190px" title="Seleccione la modalidad de bachillerato en la que va a iscribirse">
+                            <p:selectOneMenu id="console5" value="#{matriculaController.seccion.gradoModalidad}"  required="true"
+                                             style="width:190px" title="Seleccione la modalidad de bachillerato" disabled="true">
                                 <f:selectItems value="#{matriculaController.modalidades}" />
                                 <p:ajax update="console6 secc"/>
                             </p:selectOneMenu>
 
                             <p:outputLabel for="console6" value="Año de bachillerato al que aplica: " />
-                            <p:selectOneMenu id="console6" value="#{matriculaController.mat.grado.gradoPK.idgrado}"  required="true"
-                                             style="width:190px" title="Seleccione el año al que desea inscribirse"
-                                             requiredMessage="Debe elegir un año de bachillerato para poder inscribirse.">
+                            <p:selectOneMenu id="console6" value="#{matriculaController.seccion.idgrado}"  required="true"
+                                             style="width:190px" disabled="true"
+                                             requiredMessage="Debe elegir un año de bachillerato.">
                                 <f:selectItems value="#{matriculaController.niveles}"/>
                                 <p:ajax update="secc"/>
                             </p:selectOneMenu>
 
                             <p:outputLabel for="secc" value="Sección a la que aplica: " />
-                            <p:selectOneMenu id="secc" value="#{matriculaController.mat.grado.gradoPK.gradoSeccion}"  required="true"
-                                             style="width:190px" title="Seleccione la sección a la que desea inscribirse"
-                                             requiredMessage="Debe elegir una sección para poder inscribirse.">
+                            <p:selectOneMenu id="secc" value="#{matriculaController.seccion.gradoSeccion}"  required="true"
+                                             style="width:190px" 
+                                             requiredMessage="Debe elegir una sección.">
                                 <f:validateLength minimum="1"/>
                                 <f:selectItems value="#{matriculaController.seccionesCambio}"/>
                             </p:selectOneMenu>

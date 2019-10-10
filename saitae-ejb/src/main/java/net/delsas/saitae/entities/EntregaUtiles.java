@@ -160,25 +160,17 @@ public class EntregaUtiles implements Serializable {
             return false;
         }
         EntregaUtiles other = (EntregaUtiles) object;
-        if ((other == null && (this.uniforme || this.utiles || this.zapatos)) 
-                ||(this.entregaUtilesPK == null && other.entregaUtilesPK != null)
+        return !((other == null && (this.uniforme || this.utiles || this.zapatos))
+                || (this.entregaUtilesPK == null && other.entregaUtilesPK != null)
                 || (this.entregaUtilesPK != null && !this.entregaUtilesPK.equals(other.entregaUtilesPK))
-                
-                || (this.uniforme && !other.uniforme)
-               
-                || (this.zapatos && !other.zapatos)
-              
-                || (this.utiles && !other.utiles)
-                
-                ) {
-            return false;
-        }
-        return true;
+                || (this.uniforme == !other.uniforme)
+                || (this.zapatos == !other.zapatos)
+                || (this.utiles == !other.utiles));
     }
 
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.EntregaUtiles[ entregaUtilesPK=" + entregaUtilesPK + " ]";
     }
-    
+
 }

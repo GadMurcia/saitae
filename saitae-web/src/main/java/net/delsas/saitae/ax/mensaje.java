@@ -16,6 +16,7 @@
  */
 package net.delsas.saitae.ax;
 
+import java.io.Serializable;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
 
@@ -23,7 +24,9 @@ import javax.faces.application.FacesMessage.Severity;
  *
  * @author delsas
  */
-public class mensaje {
+public class mensaje implements Serializable{
+
+    private static final long serialVersionUID = 1L;
 
     private int destinatario;
     private String cuerpoMensaje;

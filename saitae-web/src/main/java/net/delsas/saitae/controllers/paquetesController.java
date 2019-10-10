@@ -32,12 +32,10 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import net.delsas.saitae.ax.prueba;
 import net.delsas.saitae.beans.EntregaUtilesFacadeLocal;
-import net.delsas.saitae.beans.EstudianteFacadeLocal;
 import net.delsas.saitae.beans.MatriculaFacadeLocal;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.entities.EntregaUtiles;
 import net.delsas.saitae.entities.EntregaUtilesPK;
-import net.delsas.saitae.entities.Estudiante;
 import net.delsas.saitae.entities.GradoPK;
 import net.delsas.saitae.entities.Matricula;
 import net.delsas.saitae.entities.MatriculaPK;
@@ -53,17 +51,17 @@ import org.primefaces.event.SelectEvent;
 @ViewScoped
 public class paquetesController implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     boolean boton;
     @EJB
     private PersonaFacadeLocal personaFL;
     private Persona p;
     private Persona usuario;
     private String est;
-
     @EJB
     private EntregaUtilesFacadeLocal entregaUFL;
     private EntregaUtiles entregaUtiles;
-
     @EJB
     private MatriculaFacadeLocal matriculaFL;
 
@@ -77,9 +75,7 @@ public class paquetesController implements Serializable {
         boolean r = usuario.getTipoPersona().getIdtipoPersona().equals(2) ? false
                 : usuario.getTipoPersona().getIdtipoPersona().equals(12) ? false
                 : !usuario.getTipoPersona().getIdtipoPersona().equals(1);
-
         if (r) {
-
             context.getExternalContext().getSessionMap().put("mensaje", new FacesMessage(FacesMessage.SEVERITY_FATAL,
                     "Falla!", "Esa vista no le está permitida."));
             try {
@@ -89,7 +85,6 @@ public class paquetesController implements Serializable {
             }
         }
     }
-    private static final long serialVersionUID = 1L;
 
     public List<String> completeText(String query) {
         List<String> results = new ArrayList<>();
@@ -104,7 +99,6 @@ public class paquetesController implements Serializable {
         } catch (Exception m) {
             System.out.println(m.getMessage());
         }
-
         return results;
     }
 
@@ -117,7 +111,6 @@ public class paquetesController implements Serializable {
         entregaUtiles.setIdRepresentante(p.getEstudiante().getEstudianteRepresentante());
         entregaUtiles.setEstudiante(p.getEstudiante());
         boton = false;
-
     }
 
     public int getAño() {
@@ -136,15 +129,12 @@ public class paquetesController implements Serializable {
                     : pk.getGradoModalidad().equals("C") ? "T.V.C Contador" : "");
         }
         return grado;
-
     }
 
     public void guardar() {
-        
-        
-        EntregaUtiles  entregaG =  entregaUFL.find(entregaUtiles.getEntregaUtilesPK());
-      if (!entregaUtiles.equals(entregaG)){
-             entregaUtiles.setIdEntregante(usuario);
+        EntregaUtiles entregaG = entregaUFL.find(entregaUtiles.getEntregaUtilesPK());
+        if (!entregaUtiles.equals(entregaG)) {
+            entregaUtiles.setIdEntregante(usuario);
             entregaUFL.edit(entregaUtiles);
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Guardado con éxito", "Se guardaron los datos de paquetes entregados"));
@@ -153,11 +143,6 @@ public class paquetesController implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_WARN, "Falló", "No se seleccionaron datos"));
         }
-
-//          FacesMessage msj = null;
-//        entregaUtiles.setIdEntregante(usuario);
-//        entregaUFL.edit(entregaUtiles);
-//          msj = new FacesMessage(FacesMessage.SEVERITY_INFO, "Guardado con 'éxito","Se guardaron los datos");
     }
 
     public String getEst() {
@@ -194,6 +179,30 @@ public class paquetesController implements Serializable {
 
     public void setBoton(boolean boton) {
         this.boton = boton;
+    }
+    
+    public boolean getUni() {
+        return this.entregaUtiles.getUniforme();
+    }
+
+    public void setUni(boolean boton) {
+        this.entregaUtiles.setUniforme(boton);
+    }
+    
+    public boolean getZap() {
+        return this.entregaUtiles.getZapatos();
+    }
+
+    public void setZap(boolean boton) {
+        this.entregaUtiles.setZapatos(boton);
+    }
+    
+    public boolean getEsc() {
+        return this.entregaUtiles.getUtiles();
+    }
+
+    public void setEsc(boolean boton) {
+        this.entregaUtiles.setUtiles(boton);
     }
 
 }
