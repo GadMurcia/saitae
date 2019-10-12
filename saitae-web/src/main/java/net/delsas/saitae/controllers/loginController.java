@@ -5,10 +5,10 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.ejb.EJB;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
-import javax.faces.view.ViewScoped;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.entities.Persona;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -18,7 +18,7 @@ import org.apache.commons.codec.digest.DigestUtils;
  * @author delsas
  */
 @Named
-@ViewScoped
+@RequestScoped
 public class loginController implements Serializable {
 
     private static final long serialVersionUID = 1L;

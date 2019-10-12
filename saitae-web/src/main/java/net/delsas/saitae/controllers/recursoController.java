@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -229,7 +230,6 @@ public class recursoController implements Serializable {
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error iniesperado",
                     (ex != null ? ex.getMessage() : "Error desconocido.")));
         }
-
     }
 
     public String onFlowProcess(FlowEvent event) {
@@ -263,15 +263,12 @@ public class recursoController implements Serializable {
 
         for (int i = 0; i < ejemplares; i++) {
             Ejemplar e = new Ejemplar(new EjemplarPK(Seleccionado.getIdrecurso(), (Seleccionado.getIdrecurso() + i)));
-            //e.getEjemplarPK().setIdRecurso(Seleccionado.getIdrecurso());
             e.setEjemplarAnioDeIngreso(ejemplar);
             e.setEjemplarComentario("");
             e.setRecurso(Seleccionado);
             ej.add(e);
-
         }
         Seleccionado.setEjemplarList(ej);
-
     }
 
     public void agregarRecurso() {
@@ -288,25 +285,25 @@ public class recursoController implements Serializable {
                     Seleccionado.getTipoReservaRecursoList().clear();
                     Seleccionado.getAutorLibroList().clear();
                     Seleccionado.getEditorialLibroList().clear();
-                    for (Ejemplar ej : r.getEjemplarList()) {
+                    r.getEjemplarList().forEach((ej) -> {
                         ejemplarFL.remove(ej);
-                    }
+                    });
 
-                    for (ContenidoLibro c : r.getContenidoLibroList()) {
+                    r.getContenidoLibroList().forEach((c) -> {
                         contenidoFL.remove(c);
-                    }
+                    });
 
-                    for (TipoReservaRecurso trr : r.getTipoReservaRecursoList()) {
+                    r.getTipoReservaRecursoList().forEach((trr) -> {
                         trrFL.remove(trr);
-                    }
+                    });
 
-                    for (AutorLibro au : r.getAutorLibroList()) {
+                    r.getAutorLibroList().forEach((au) -> {
                         alFL.remove(au);
-                    }
+                    });
 
-                    for (EditorialLibro el : r.getEditorialLibroList()) {
+                    r.getEditorialLibroList().forEach((el) -> {
                         elFL.remove(el);
-                    }
+                    });
                     recursoFL.remove(r);
                 }
                 ejemplar();
@@ -416,7 +413,7 @@ public class recursoController implements Serializable {
     }
 
     public List<Recurso> getRecurso() {
-        return recurso;
+        return Collections.unmodifiableList(recurso);
     }
 
     public void setRecurso(List<Recurso> recurso) {
@@ -486,7 +483,7 @@ public class recursoController implements Serializable {
     }
 
     public List<Categoria> getCategorialist() {
-        return categorialist;
+        return Collections.unmodifiableList(categorialist);
     }
 
     public void setCategorialist(List<Categoria> categorialist) {
@@ -494,7 +491,7 @@ public class recursoController implements Serializable {
     }
 
     public List<TipoRecurso> getTiporecursolist() {
-        return tiporecursolist;
+        return Collections.unmodifiableList(tiporecursolist);
     }
 
     public void setTiporecursolist(List<TipoRecurso> tiporecursolist) {
@@ -502,7 +499,7 @@ public class recursoController implements Serializable {
     }
 
     public List<TipoCargo> getTipocargolist() {
-        return tipocargolist;
+        return Collections.unmodifiableList(tipocargolist);
     }
 
     public void setTipocargolist(List<TipoCargo> tipocargolist) {
@@ -510,7 +507,7 @@ public class recursoController implements Serializable {
     }
 
     public List<Pais> getPaislist() {
-        return paislist;
+        return Collections.unmodifiableList(paislist);
     }
 
     public void setPaislist(List<Pais> paislist) {
@@ -518,7 +515,7 @@ public class recursoController implements Serializable {
     }
 
     public List<TipoReservaRecurso> getListaTipoReservaRecursos() {
-        return listaTipoReservaRecursos;
+        return Collections.unmodifiableList(listaTipoReservaRecursos);
     }
 
     public void setListaTipoReservaRecursos(List<TipoReservaRecurso> listaTipoReservaRecursos) {
@@ -526,7 +523,7 @@ public class recursoController implements Serializable {
     }
 
     public List<TipoReserva> getListaTipoReserva() {
-        return listaTipoReserva;
+        return Collections.unmodifiableList(listaTipoReserva);
     }
 
     public void setListaTipoReserva(List<TipoReserva> listaTipoReserva) {
@@ -585,7 +582,7 @@ public class recursoController implements Serializable {
     }
 
     public List<ContenidoLibro> getContenido() {
-        return contenido;
+        return Collections.unmodifiableList(contenido);
     }
 
     public void setContenido(List<ContenidoLibro> contenido) {
@@ -626,7 +623,7 @@ public class recursoController implements Serializable {
     }
 
     public List<Autor> getAutores() {
-        return autores;
+        return Collections.unmodifiableList(autores);
     }
 
     public void setAutores(List<Autor> autores) {
@@ -634,7 +631,7 @@ public class recursoController implements Serializable {
     }
 
     public List<Editorial> getEditoriales() {
-        return editoriales;
+        return Collections.unmodifiableList(editoriales);
     }
 
     public void setEditoriales(List<Editorial> editoriales) {
@@ -684,11 +681,9 @@ public class recursoController implements Serializable {
     @Inject
     @Push
     private PushContext recursoAC;
-
     @Inject
     @Push
     private PushContext notificacion;
-
     private void notificar(String mensaje) {
         recursoAC.send(mensaje);
         notificacion.send(mensaje);

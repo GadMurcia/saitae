@@ -17,8 +17,13 @@
 package net.delsas.saitae.ax;
 
 import java.io.Serializable;
+import java.util.Date;
+import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
+import net.delsas.saitae.beans.PersonaFacadeLocal;
+import net.delsas.saitae.entities.Notificaciones;
+import net.delsas.saitae.entities.Persona;
 
 /**
  *
@@ -35,6 +40,7 @@ public class mensaje implements Serializable{
     private int remitente;
     private String cadenaAccion;
     private FacesMessage facesmessage;
+    private Notificaciones notificacion;
 
     public mensaje(int destinatario, String cuerpoMensaje, String tituloMensaje, Severity severidad, int remitente, String cadenaAccion) {
         this.destinatario = destinatario;
@@ -44,6 +50,7 @@ public class mensaje implements Serializable{
         this.remitente = remitente;
         this.cadenaAccion = cadenaAccion;
         this.facesmessage = new FacesMessage(severidad, tituloMensaje, cuerpoMensaje);
+        this.notificacion = new Notificaciones(cuerpoMensaje, tituloMensaje, false, remitente+"", new Persona(this.destinatario), new Date());
     }
 
     public mensaje(int destinatario, int remitente, String cadenaAccion, FacesMessage facesmessage) {
@@ -54,6 +61,7 @@ public class mensaje implements Serializable{
         this.cuerpoMensaje = facesmessage.getDetail();
         this.tituloMensaje = facesmessage.getSummary();
         this. severidad= facesmessage.getSeverity();
+        this.notificacion = new Notificaciones(cuerpoMensaje, tituloMensaje, false, remitente+"", new Persona(this.destinatario), new Date());
     }
 
     public mensaje(String mensajePush) throws Exception{
@@ -66,6 +74,7 @@ public class mensaje implements Serializable{
             this.remitente = Integer.valueOf(msj[4]);
             this.cadenaAccion = msj[5];
             this.facesmessage = new FacesMessage(severidad, tituloMensaje, cuerpoMensaje);
+            this.notificacion = new Notificaciones(cuerpoMensaje, tituloMensaje, false, remitente+"", new Persona(this.destinatario), new Date());
         } else {
             throw new Exception("La cadena ingresada no tiene el formato indicado para la conversión.");
         }
@@ -161,6 +170,25 @@ public class mensaje implements Serializable{
 
     public void setFacesmessage(FacesMessage facesmessage) {
         this.facesmessage = facesmessage;
+    }
+
+    public Notificaciones getNotificacion() {
+        return notificacion;
+    }
+
+    public void setNotificacion(Notificaciones notificacion) {
+        this.notificacion = notificacion;
+        this.destinatario = notificacion.getDestinatario().getIdpersona();
+        try{
+        this.remitente = Integer.valueOf(notificacion.getComentario());
+        }catch(NumberFormatException e){
+            this.remitente= 0;
+        }
+        this.cadenaAccion = " ";
+        this.cuerpoMensaje = notificacion.getNotificacionCuerpo();
+        this.tituloMensaje = notificacion.getNotificacionTitulo();
+        this. severidad= FacesMessage.SEVERITY_INFO;
+        this.facesmessage = new FacesMessage(severidad, tituloMensaje, cuerpoMensaje);
     }
 
 }

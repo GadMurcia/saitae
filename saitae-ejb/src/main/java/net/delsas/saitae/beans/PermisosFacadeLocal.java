@@ -31,10 +31,17 @@ public interface PermisosFacadeLocal {
     int count();
     
     /**
-     *  Busca los permisos que estén en el estado indicado.
+     * Busca los permisos que estén en el estado indicado.
      * @param estado
      * @return java.util.List net.delsas.saitae.entities.Permisos
      */
     public List<Permisos> getPermisosPorEstado(String estado);
+
+    /**
+     * Busca los permisos pa estudiantes que estén en el estado indicado.
+     * @param estado
+     * @return java.util.List net.delsas.saitae.entities.Permisos
+     */
+    public List<Permisos> findByPEPEs(String estado);
     
 }

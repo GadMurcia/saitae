@@ -218,7 +218,7 @@ public class matriculaController implements Serializable {
         nuevasMatriculasF = new ArrayList<>();
         nuevasMatriculasM = new ArrayList<>();
         selectedPK = (GradoPK) event.getObject();
-        List<Matricula> nuevasMatriculas = selectedPK == null ? new ArrayList<Matricula>()
+        List<Matricula> nuevasMatriculas = selectedPK == null ? new ArrayList<>()
                 : matriculaFL.findAllNewEstudent(selectedPK);
         asignaSexo(nuevasMatriculas);
         btnGuardar = selectedPK != null;
@@ -227,8 +227,9 @@ public class matriculaController implements Serializable {
 
     private void asignaSexo(List<Matricula> nuevasMatriculas) {
         for (Matricula matr : nuevasMatriculas) {
-            matr = matriculaFL.find(matr.getMatriculaPK());
-            if (matr.getEstudiante().getPersona().getPersonaSexo()) {
+            Persona p= personaFL.find(matr.getMatriculaPK().getIdmatricula());
+            matr.setEstudiante(p.getEstudiante());
+            if (p.getPersonaSexo()) {
                 nuevasMatriculasF.add(matr);
             } else {
                 nuevasMatriculasM.add(matr);
