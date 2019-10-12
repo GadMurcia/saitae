@@ -9,7 +9,6 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -41,7 +40,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Anuncio.findByAnuncioComentario", query = "SELECT a FROM Anuncio a WHERE a.anuncioComentario = :anuncioComentario")
     , @NamedQuery(name = "Anuncio.findAnunciosActivos", query = "SELECT a FROM Anuncio a WHERE a.anuncioFechaFin >= :fecha")
     , @NamedQuery(name = "Anuncio.findAnunciosInactivos", query = "SELECT a FROM Anuncio a WHERE a.anuncioFechaFin < :fecha")
-    , @NamedQuery(name = "Anuncio.findAnunciosParaTodos", query = "SELECT a FROM Anuncio a WHERE a.anuncioTipoPersona = NULL")
+    , @NamedQuery(name = "Anuncio.findAnunciosParaTodos", query = "SELECT a FROM Anuncio a WHERE a.anuncioTipoPersona = :tipo and a.anuncioFechaFin >= :fecha")
 })
 public class Anuncio implements Serializable {
 

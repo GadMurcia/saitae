@@ -36,7 +36,7 @@ import net.delsas.saitae.entities.TipoPersona;
  *
  * @author delsas
  */
-public class prueba implements Serializable{
+public class prueba implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -391,14 +391,36 @@ public class prueba implements Serializable{
     }
 
     public void setDui(String dui, Persona p) {
-        String x[] = dui.split("=>");
+        String x[] = dui != null ? dui.split("=>") : new String[]{"-"};
         String i = "1";
         for (String g : (x.length > 1 ? x[1] : x[0]).split("")) {// dui.split("")) {
-            if (!g.equals("-")) {
+            if (isNumber(g)) {
                 i += g;
             }
         }
         p.setIdpersona(Integer.valueOf(i));
+    }
+
+    private boolean isNumber(String a) {
+        String[] aa = a.split("");
+        for (String aaa : aa) {
+            switch (aaa) {
+                case "0":
+                case "1":
+                case "2":
+                case "3":
+                case "4":
+                case "5":
+                case "6":
+                case "7":
+                case "8":
+                case "9":
+                    return true;
+                default:
+                    return false;
+            }
+        }
+        return false;
     }
 
     public String getDui(Persona p) {

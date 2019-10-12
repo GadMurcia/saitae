@@ -4,8 +4,7 @@
                 template="./../WEB-INF/template/plantilla1.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:t="http://xmlns.jcp.org/jsf/composite/components/autentia">
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="content">
         <h:form id="form1" style="margin: 0 auto; width: 80%;">
@@ -21,7 +20,8 @@
                                     <f:selectItems value="#{matriculaController.grados}" var="g"
                                                    itemLabel="#{matriculaController.getGradosLabel(g.gradoPK)}"
                                                    itemValue="#{g.gradoPK}"/>
-                                    <p:ajax event="itemSelect" listener="#{matriculaController.selectAño}" update="form1"/>
+                                    <p:ajax event="itemSelect" listener="#{matriculaController.selectAño}" 
+                                            update="tw"/>
                                 </p:selectOneMenu>
                             </h:panelGrid>
                             <p:panel header="Información de los aspirantes">
@@ -53,8 +53,8 @@
                                     <p:column/>
                                     <p:commandButton id="summit" value="Proceder con la Matrícula automática" 
                                                      actionListener="#{matriculaController.guardar()}" 
-                                                     update=":form1 :form0:msgs"
-                                                     disabled="#{!matriculaController.btnGuardar}"/>
+                                                     disabled="#{!matriculaController.btnGuardar}"
+                                                     update="tw box summit :form0:msgs form1"/>
                                 </h:panelGrid>
                             </p:panel>
                         </h:panelGrid>
@@ -62,12 +62,11 @@
                     <p:tab title="Cambio de secciones">
                         <h:panelGrid columns="2">
                             <p:outputLabel for="aut" value="NIE del estudiante: "/>
-                            <p:autoComplete id="aut" value="#{matriculaController.nie}" required="true"
-                                            title="Ingrese el número de documento de identificación de la persona."
+                            <p:autoComplete id="aut" value="#{matriculaController.nie}"
+                                            title="Ingrese el número de documento de identificación del estudiante."
                                             completeMethod="#{matriculaController.completeText}">
-                                <f:validateLength minimum="4"/>
                                 <p:ajax event="itemSelect" listener="#{matriculaController.onItemSelect}" 
-                                        update="form0:msgs aut nom ape console5 console6 secc"/>
+                                        update="form0:msgs aut nom ape console5 console6 secc summit1"/>
                             </p:autoComplete>
 
                             <p:outputLabel value="Nombres: "/>
@@ -101,7 +100,8 @@
                             <p:column/>
                             <p:commandButton id="summit1" value="Guardar cambios" 
                                              actionListener="#{matriculaController.cambiarSeccion()}" 
-                                                     update=":form1 form0:msgs aut nom ape console5 console6 secc"/>
+                                             disabled="#{!matriculaController.btnGuardarp2}"
+                                             update=":form1 form0:msgs aut nom ape console5 console6 secc summit1"/>
                         </h:panelGrid>
                     </p:tab>
                 </p:tabView>

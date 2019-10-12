@@ -8,6 +8,7 @@ package net.delsas.saitae.beans;
 import java.util.List;
 import javax.ejb.Local;
 import net.delsas.saitae.entities.Anuncio;
+import net.delsas.saitae.entities.TipoPersona;
 
 /**
  *
@@ -46,6 +47,12 @@ public interface AnuncioFacadeLocal {
      * Obtiene todos los anuncios que sean para todos los usuarios.
      * @return java.util.List net.delsas.saitae.entities.Anuncio
      */
-    public List<Anuncio> getAnunciosParaTodos();
+    public List<Anuncio> getAnunciosActivosParaTodos();
+    
+    /**
+     * Obtiene todos los anuncios que sean para el tipo de usuario especificado.
+     * @return java.util.List net.delsas.saitae.entities.Anuncio
+     */
+    public List<Anuncio> getAnunciosActivosParaUnTipo(TipoPersona tipo);
     
 }

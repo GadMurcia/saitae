@@ -29,13 +29,19 @@
                 <h:panelGrid columns="2" cellspacing="10" >
                     <p:outputLabel value="Uniforme:"/>
                     <p:selectBooleanButton value="#{paquetesController.uni}" 
-                                           onLabel="Entregado" offLabel="Pendiente" style="width: 190px"/>
+                                           onLabel="Entregado" offLabel="Pendiente" 
+                                           style="width: 190px"
+                                           disabled="#{paquetesController.boton}"/>
                     <p:outputLabel value="Zapatos:"/>
                     <p:selectBooleanButton value="#{paquetesController.zap}" 
-                                           onLabel="Entregado" offLabel="Pendiente" style="width: 190px"/>
+                                           onLabel="Entregado" offLabel="Pendiente" 
+                                           style="width: 190px"
+                                           disabled="#{paquetesController.boton}"/>
                     <p:outputLabel value="Utiles Escolares:"/>
                     <p:selectBooleanButton value="#{paquetesController.esc}" 
-                                           onLabel="Entregado" offLabel="Pendiente" style="width: 190px"/>
+                                           onLabel="Entregado" offLabel="Pendiente" 
+                                           style="width: 190px"
+                                           disabled="#{paquetesController.boton}"/>
                     <p:column/>
                     <p:commandButton id="summit" value="Guardar" 
                                      style="width: 190px"

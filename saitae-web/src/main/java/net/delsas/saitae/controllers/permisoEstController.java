@@ -78,7 +78,9 @@ public class permisoEstController implements Serializable {
     public void init() {
         try {
             usuario = (Persona) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
-            if (!usuario.getTipoPersona().getIdtipoPersona().equals(8) || !usuario.getTipoPersona().getIdtipoPersona().equals(9)) {
+            boolean r = usuario.getTipoPersona().getIdtipoPersona() == 8 ? false 
+                    : usuario.getTipoPersona().getIdtipoPersona() != 9;
+            if (r) {
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("mensaje", new FacesMessage(FacesMessage.SEVERITY_ERROR,
                         "Falla!", "Esa vista no le está permitida."));
                 FacesContext.getCurrentInstance().getExternalContext().redirect("./../");
@@ -229,6 +231,7 @@ public class permisoEstController implements Serializable {
     @Inject
     @Push
     private PushContext notificacion;
+
     public void sendMessage(String message) {
         notificacion.send(message);
     }

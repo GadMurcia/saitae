@@ -62,12 +62,6 @@ import javax.xml.bind.annotation.XmlTransient;
 })
 public class Persona implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "idpersona")
-    private Integer idpersona;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
@@ -78,19 +72,12 @@ public class Persona implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "personaApellido")
     private String personaApellido;
-    @Column(name = "personaNacimiento")
-    @Temporal(TemporalType.DATE)
-    private Date personaNacimiento;
     @Size(max = 250)
     @Column(name = "personaDireccion")
     private String personaDireccion;
     @Size(max = 9)
     @Column(name = "personaTelefono")
     private String personaTelefono;
-    @Column(name = "personaCodigoResidencia")
-    private Integer personaCodigoResidencia;
-    @Column(name = "personaZonaVivienda")
-    private Integer personaZonaVivienda;
     @Size(max = 100)
     @Column(name = "personaLugarNac")
     private String personaLugarNac;
@@ -107,10 +94,6 @@ public class Persona implements Serializable {
     @Size(max = 20)
     @Column(name = "personaNit")
     private String personaNit;
-    @Column(name = "personaSexo")
-    private Boolean personaSexo;
-    @Column(name = "personaEstadoFamiliar")
-    private Integer personaEstadoFamiliar;
     @Size(max = 45)
     @Column(name = "personaNacionalidad")
     private String personaNacionalidad;
@@ -123,22 +106,40 @@ public class Persona implements Serializable {
     @Size(max = 250)
     @Column(name = "personaComentarios")
     private String personaComentarios;
+
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "idpersona")
+    private Integer idpersona;
+    @Column(name = "personaNacimiento")
+    @Temporal(TemporalType.DATE)
+    private Date personaNacimiento;
+    @Column(name = "personaCodigoResidencia")
+    private Integer personaCodigoResidencia;
+    @Column(name = "personaZonaVivienda")
+    private Integer personaZonaVivienda;
+    @Column(name = "personaSexo")
+    private Boolean personaSexo;
+    @Column(name = "personaEstadoFamiliar")
+    private Integer personaEstadoFamiliar;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "anuncioAnunciante")
     private List<Anuncio> anuncioList;
     
     @JoinColumn(name = "tipoPersona", referencedColumnName = "idtipoPersona")
     @ManyToOne
     private TipoPersona tipoPersona;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPersona")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "destinatario")
     private List<Notificaciones> notificacionesList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idpersona")
     private List<DelagacionCargo> delagacionCargoList;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "persona")
     private Estudiante estudiante;
     @OneToMany(mappedBy = "estudiantePadre")
-    private List<Estudiante> estudianteList;
+    private List<Estudiante> estudianteListpadre;
     @OneToMany(mappedBy = "estudianteMadre")
-    private List<Estudiante> estudianteList1;
+    private List<Estudiante> estudianteListMadre;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEntregante")
     private List<EntregaUtiles> entregaUtilesList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "persona")
@@ -172,21 +173,6 @@ public class Persona implements Serializable {
         this.idpersona = idpersona;
     }
 
-    public String getPersonaNombre() {
-        return personaNombre;
-    }
-
-    public void setPersonaNombre(String personaNombre) {
-        this.personaNombre = personaNombre;
-    }
-
-    public String getPersonaApellido() {
-        return personaApellido;
-    }
-
-    public void setPersonaApellido(String personaApellido) {
-        this.personaApellido = personaApellido;
-    }
 
     public Date getPersonaNacimiento() {
         return personaNacimiento;
@@ -196,21 +182,6 @@ public class Persona implements Serializable {
         this.personaNacimiento = personaNacimiento;
     }
 
-    public String getPersonaDireccion() {
-        return personaDireccion;
-    }
-
-    public void setPersonaDireccion(String personaDireccion) {
-        this.personaDireccion = personaDireccion;
-    }
-
-    public String getPersonaTelefono() {
-        return personaTelefono;
-    }
-
-    public void setPersonaTelefono(String personaTelefono) {
-        this.personaTelefono = personaTelefono;
-    }
 
     public Integer getPersonaCodigoResidencia() {
         return personaCodigoResidencia;
@@ -228,45 +199,6 @@ public class Persona implements Serializable {
         this.personaZonaVivienda = personaZonaVivienda;
     }
 
-    public String getPersonaLugarNac() {
-        return personaLugarNac;
-    }
-
-    public void setPersonaLugarNac(String personaLugarNac) {
-        this.personaLugarNac = personaLugarNac;
-    }
-
-    public String getPersonaContrasenya() {
-        return personaContrasenya;
-    }
-
-    public void setPersonaContrasenya(String personaContrasenya) {
-        this.personaContrasenya = personaContrasenya;
-    }
-
-    public String getPersonaOCupacion() {
-        return personaOCupacion;
-    }
-
-    public void setPersonaOCupacion(String personaOCupacion) {
-        this.personaOCupacion = personaOCupacion;
-    }
-
-    public boolean getPersonaActivo() {
-        return personaActivo;
-    }
-
-    public void setPersonaActivo(boolean personaActivo) {
-        this.personaActivo = personaActivo;
-    }
-
-    public String getPersonaNit() {
-        return personaNit;
-    }
-
-    public void setPersonaNit(String personaNit) {
-        this.personaNit = personaNit;
-    }
 
     public Boolean getPersonaSexo() {
         return personaSexo;
@@ -284,37 +216,6 @@ public class Persona implements Serializable {
         this.personaEstadoFamiliar = personaEstadoFamiliar;
     }
 
-    public String getPersonaNacionalidad() {
-        return personaNacionalidad;
-    }
-
-    public void setPersonaNacionalidad(String personaNacionalidad) {
-        this.personaNacionalidad = personaNacionalidad;
-    }
-
-    public String getPersonaEmail() {
-        return personaEmail;
-    }
-
-    public void setPersonaEmail(String personaEmail) {
-        this.personaEmail = personaEmail;
-    }
-
-    public String getPersonaDiscapacidades() {
-        return personaDiscapacidades;
-    }
-
-    public void setPersonaDiscapacidades(String personaDiscapacidades) {
-        this.personaDiscapacidades = personaDiscapacidades;
-    }
-
-    public String getPersonaComentarios() {
-        return personaComentarios;
-    }
-
-    public void setPersonaComentarios(String personaComentarios) {
-        this.personaComentarios = personaComentarios;
-    }
 
     @XmlTransient
     public List<Anuncio> getAnuncioList() {
@@ -362,21 +263,21 @@ public class Persona implements Serializable {
     }
 
     @XmlTransient
-    public List<Estudiante> getEstudianteList() {
-        return estudianteList;
+    public List<Estudiante> getEstudianteListPadre() {
+        return estudianteListpadre;
     }
 
-    public void setEstudianteList(List<Estudiante> estudianteList) {
-        this.estudianteList = estudianteList;
+    public void setEstudianteListPadre(List<Estudiante> estudianteList) {
+        this.estudianteListpadre = estudianteList;
     }
 
     @XmlTransient
-    public List<Estudiante> getEstudianteList1() {
-        return estudianteList1;
+    public List<Estudiante> getEstudianteListMadre() {
+        return estudianteListMadre;
     }
 
-    public void setEstudianteList1(List<Estudiante> estudianteList1) {
-        this.estudianteList1 = estudianteList1;
+    public void setEstudianteListMadre(List<Estudiante> estudianteList) {
+        this.estudianteListMadre = estudianteList;
     }
 
     @XmlTransient
@@ -446,6 +347,110 @@ public class Persona implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.Persona[ idpersona=" + idpersona + " ]";
+    }
+
+    public String getPersonaNombre() {
+        return personaNombre;
+    }
+
+    public void setPersonaNombre(String personaNombre) {
+        this.personaNombre = personaNombre;
+    }
+
+    public String getPersonaApellido() {
+        return personaApellido;
+    }
+
+    public void setPersonaApellido(String personaApellido) {
+        this.personaApellido = personaApellido;
+    }
+
+    public String getPersonaDireccion() {
+        return personaDireccion;
+    }
+
+    public void setPersonaDireccion(String personaDireccion) {
+        this.personaDireccion = personaDireccion;
+    }
+
+    public String getPersonaTelefono() {
+        return personaTelefono;
+    }
+
+    public void setPersonaTelefono(String personaTelefono) {
+        this.personaTelefono = personaTelefono;
+    }
+
+    public String getPersonaLugarNac() {
+        return personaLugarNac;
+    }
+
+    public void setPersonaLugarNac(String personaLugarNac) {
+        this.personaLugarNac = personaLugarNac;
+    }
+
+    public String getPersonaContrasenya() {
+        return personaContrasenya;
+    }
+
+    public void setPersonaContrasenya(String personaContrasenya) {
+        this.personaContrasenya = personaContrasenya;
+    }
+
+    public String getPersonaOCupacion() {
+        return personaOCupacion;
+    }
+
+    public void setPersonaOCupacion(String personaOCupacion) {
+        this.personaOCupacion = personaOCupacion;
+    }
+
+    public boolean getPersonaActivo() {
+        return personaActivo;
+    }
+
+    public void setPersonaActivo(boolean personaActivo) {
+        this.personaActivo = personaActivo;
+    }
+
+    public String getPersonaNit() {
+        return personaNit;
+    }
+
+    public void setPersonaNit(String personaNit) {
+        this.personaNit = personaNit;
+    }
+
+    public String getPersonaNacionalidad() {
+        return personaNacionalidad;
+    }
+
+    public void setPersonaNacionalidad(String personaNacionalidad) {
+        this.personaNacionalidad = personaNacionalidad;
+    }
+
+    public String getPersonaEmail() {
+        return personaEmail;
+    }
+
+    public void setPersonaEmail(String personaEmail) {
+        this.personaEmail = personaEmail;
+    }
+
+    public String getPersonaDiscapacidades() {
+        return personaDiscapacidades;
+    }
+
+    public void setPersonaDiscapacidades(String personaDiscapacidades) {
+        this.personaDiscapacidades = personaDiscapacidades;
+    }
+
+    public String getPersonaComentarios() {
+        return personaComentarios;
+    }
+
+    public void setPersonaComentarios(String personaComentarios) {
+        this.personaComentarios = personaComentarios;
     }
     
 }

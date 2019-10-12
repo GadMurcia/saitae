@@ -29,7 +29,9 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
+import net.delsas.saitae.ax.mensaje;
 import net.delsas.saitae.ax.prueba;
 import net.delsas.saitae.beans.EntregaUtilesFacadeLocal;
 import net.delsas.saitae.beans.MatriculaFacadeLocal;
@@ -40,6 +42,8 @@ import net.delsas.saitae.entities.GradoPK;
 import net.delsas.saitae.entities.Matricula;
 import net.delsas.saitae.entities.MatriculaPK;
 import net.delsas.saitae.entities.Persona;
+import org.omnifaces.cdi.Push;
+import org.omnifaces.cdi.PushContext;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -138,11 +142,25 @@ public class paquetesController implements Serializable {
             entregaUFL.edit(entregaUtiles);
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Guardado con éxito", "Se guardaron los datos de paquetes entregados"));
+            String g = entrega(entregaUtiles);
+            sendMessage(new mensaje(entregaUtiles.getEntregaUtilesPK().getIdEstudiante(),
+                    usuario.getIdpersona(),
+                    " ",
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Se ha registrado actividad en la entrega de paquetes.",
+                            (g.split("").length > 2 ? "Lo que se le ha entregado es: " + g
+                            : "No hay registro de entregas en este año."))).toString());
             this.init();
         } else {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_WARN, "Falló", "No se seleccionaron datos"));
         }
+    }
+
+    private String entrega(EntregaUtiles e) {
+        return (e.getUtiles() ? "Útiles" : "")
+                + (e.getUniforme() ? ", Uniforme" : "")
+                + (e.getZapatos() ? ", Zapatos" : "")
+                + ".";
     }
 
     public String getEst() {
@@ -180,7 +198,7 @@ public class paquetesController implements Serializable {
     public void setBoton(boolean boton) {
         this.boton = boton;
     }
-    
+
     public boolean getUni() {
         return this.entregaUtiles.getUniforme();
     }
@@ -188,7 +206,7 @@ public class paquetesController implements Serializable {
     public void setUni(boolean boton) {
         this.entregaUtiles.setUniforme(boton);
     }
-    
+
     public boolean getZap() {
         return this.entregaUtiles.getZapatos();
     }
@@ -196,13 +214,21 @@ public class paquetesController implements Serializable {
     public void setZap(boolean boton) {
         this.entregaUtiles.setZapatos(boton);
     }
-    
+
     public boolean getEsc() {
         return this.entregaUtiles.getUtiles();
     }
 
     public void setEsc(boolean boton) {
         this.entregaUtiles.setUtiles(boton);
+    }
+
+    @Inject
+    @Push
+    private PushContext notificacion;
+
+    public void sendMessage(String message) {
+        notificacion.send(message);
     }
 
 }

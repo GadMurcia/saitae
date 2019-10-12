@@ -10,10 +10,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import net.delsas.saitae.entities.Anuncio;
+import net.delsas.saitae.entities.TipoPersona;
 
 /**
  *
@@ -33,32 +36,58 @@ public class AnuncioFacade extends AbstractFacade<Anuncio> implements AnuncioFac
     public AnuncioFacade() {
         super(Anuncio.class);
     }
-    
-    @Override
-    public List<Anuncio> getAnunciosActivos() {
-        Date d = null;
-        try {
-            d = (new SimpleDateFormat("dd-MM-yyyy").parse(new SimpleDateFormat("dd-MM-yyyy").format(new Date())));
-        } catch (ParseException e) {}
-        return em.createNamedQuery("Anuncio.findAnunciosActivos")
-                .setParameter("fecha", d==null ? new Date() : d)
-                .getResultList();
-}
 
     @Override
-    public List<Anuncio> getAnunciosInactivos() {
-        Date d = null;
+    public List<Anuncio> getAnunciosActivos() {
+        Date d;
         try {
             d = (new SimpleDateFormat("dd-MM-yyyy").parse(new SimpleDateFormat("dd-MM-yyyy").format(new Date())));
-        } catch (ParseException e) {}
-        return em.createNamedQuery("Anuncio.findAnunciosInactivos")
-                .setParameter("fecha", d==null ? new Date() : d)
+        } catch (ParseException e) {
+            d = new Date();
+        }
+        return em.createNamedQuery("Anuncio.findAnunciosActivos")
+                .setParameter("fecha", d)
                 .getResultList();
     }
 
     @Override
-    public List<Anuncio> getAnunciosParaTodos() {
+    public List<Anuncio> getAnunciosInactivos() {
+        Date d;
+        try {
+            d = (new SimpleDateFormat("dd-MM-yyyy").parse(new SimpleDateFormat("dd-MM-yyyy").format(new Date())));
+        } catch (ParseException e) {
+            d = new Date();
+        }
+        return em.createNamedQuery("Anuncio.findAnunciosInactivos")
+                .setParameter("fecha", d)
+                .getResultList();
+    }
+
+    @Override
+    public List<Anuncio> getAnunciosActivosParaTodos() {
+        Date d;
+        try {
+            d = (new SimpleDateFormat("dd-MM-yyyy").parse(new SimpleDateFormat("dd-MM-yyyy").format(new Date())));
+        } catch (ParseException e) {
+            d = new Date();
+        }
         return em.createNamedQuery("Anuncio.findAnunciosParaTodos")
+                .setParameter("tipo", null)
+                .setParameter("fecha", d)
+                .getResultList();
+    }
+
+    @Override
+    public List<Anuncio> getAnunciosActivosParaUnTipo(TipoPersona tipo) {
+        Date d;
+        try {
+            d = (new SimpleDateFormat("dd-MM-yyyy").parse(new SimpleDateFormat("dd-MM-yyyy").format(new Date())));
+        } catch (ParseException e) {
+            d = new Date();
+        }
+        return em.createNamedQuery("Anuncio.findAnunciosParaTodos")
+                .setParameter("tipo", tipo)
+                .setParameter("fecha", d)
                 .getResultList();
     }
 }

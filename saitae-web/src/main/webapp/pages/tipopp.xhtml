@@ -151,8 +151,9 @@
                                            zid="#{z.idfinanciamiento}" znombre="#{z.financiamientoNombre}"/>
                         </p:tab>
                         <p:tab title="cargo">
-                            <p:dataTable id="cargo1" var="c" value="#{tipoController.cargo}" editable="true" 
-                                         widgetVar="cargo0" styleClass="tabla" emptyMessage="Sin registros aún.">
+                            <p:dataTable id="cargo1" var="c" value="#{tipoController.cargo}" 
+                                         editable="true" widgetVar="cargo0" styleClass="tabla" 
+                                         emptyMessage="Sin registros aún.">
                                 <f:facet name="header">
                                     Administración de autores.
                                 </f:facet>
@@ -166,16 +167,29 @@
 
                                 <p:column headerText="Nombre">
                                     <p:cellEditor>
-                                        <f:facet name="output"><h:outputText value="#{c.cargoNombre}" /></f:facet>
-                                        <f:facet name="input"><p:inputText value="#{c.cargoNombre}" 
-                                                                           style="width:100%" label="Nombre"/></f:facet>
+                                        <f:facet name="output">
+                                            <h:outputText value="#{c.cargoNombre}" />
+                                        </f:facet>
+                                        <f:facet name="input">
+                                            <p:inputText value="#{c.cargoNombre}" 
+                                                         style="width:100%" label="Nombre"/>
+                                        </f:facet>
                                     </p:cellEditor>
                                 </p:column>
-                                <p:column headerText="Comentario">
+                                <p:column headerText="Función dentro del sistema">
                                     <p:cellEditor>
-                                        <f:facet name="output"><h:outputText value="#{c.cargoComentario}" /></f:facet>
-                                        <f:facet name="input"><p:inputText value="#{c.cargoComentario}" 
-                                                                           style="width:100%" label="Comentario"/></f:facet>
+                                        <f:facet name="output">
+                                            <h:outputText value="#{c.cargoTipoPersona.tipoPersonaNombre}" />
+                                        </f:facet>
+                                        <f:facet name="input">
+                                            <p:selectOneMenu converter="omnifaces.SelectItemsConverter"
+                                                             value="#{c.cargoTipoPersona}">
+                                                <f:selectItem itemLabel="Seleccione" itemValue="#{null}"/>
+                                                <f:selectItems value="#{tipoController.personas}" var="tpc"
+                                                               itemLabel="#{tpc.tipoPersonaNombre}"
+                                                               itemValue="#{tpc}"/>
+                                            </p:selectOneMenu>
+                                        </f:facet>
                                     </p:cellEditor>
                                 </p:column>
                                 <p:column style="width:35px">

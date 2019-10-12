@@ -70,6 +70,7 @@ public class matriculaController implements Serializable {
     private Persona usuario;
     private GradoPK selectedPK;
     private boolean btnGuardar;
+    private boolean btnGuardarp2;
     private Persona buscado;
     private Matricula mat;
     private GradoPK seccion;
@@ -105,6 +106,7 @@ public class matriculaController implements Serializable {
             seccion = new GradoPK(0, " ", "", 0);
             mat = new Matricula(0, getAño());
             mat.setGrado(new Grado(seccion));
+            btnGuardarp2 = btnGuardar = false;
         }
     }
 
@@ -150,12 +152,10 @@ public class matriculaController implements Serializable {
         List<Matricula> masc = new ArrayList<>();
         List<Matricula> fem = new ArrayList<>();
         List<String> secciones = getSecciones();
-        secciones.stream().map((sec) -> {
+        for (String sec : secciones) {
             procesoSeleccion(f, nuevasMatriculasF, sec, fem);
-            return sec;
-        }).forEachOrdered((sec) -> {
             procesoSeleccion(m, nuevasMatriculasM, sec, masc);
-        });
+        }
         while (nuevasMatriculasF.size() > 0) {
             procesoSeleccion(1, nuevasMatriculasF, secciones.get(nuevasMatriculasF.size() - 1), fem);
         }
@@ -164,21 +164,26 @@ public class matriculaController implements Serializable {
         }
         nuevasMatriculasF.addAll(fem);
         nuevasMatriculasM.addAll(masc);
-        getAllNew().stream().map((matr) -> {
+        for (Matricula matr : getAllNew()) {
             System.out.println(matr.getGrado().getGradoPK().getGradoSeccion());
-            return matr;
-        }).map((matr) -> {
             matriculaFL.remove(matr);
-            return matr;
-        }).map((matr) -> {
             matr.setMatriculaComentario("R");
-            return matr;
-        }).map((matr) -> {
             matriculaFL.create(matr);
-            return matr;
-        }).forEachOrdered((matr) -> {
             matriculaFL.edit(matr);
-        });
+            GradoPK pk = matr.getGrado().getGradoPK();
+            sendMessage(new mensaje(matr.getMatriculaPK().getIdmatricula(),
+                    "Usted ha sido aceptado en el Instituto Nacional 'Texistepeque'! "
+                    + "Ha sido inscrito en " + (pk.getIdgrado() == 1 ? "Primero"
+                    : (pk.getIdgrado() == 2 ? "Segundo"
+                    : (pk.getIdgrado() == 3 ? "Tercero" : "")))
+                    + " " + (pk.getGradoModalidad().equals("C") ? "Contador"
+                    : (pk.getGradoModalidad().equals("S") ? "Secretariado"
+                    : (pk.getGradoModalidad().equals("G") ? "General" : "")))
+                    + " Sección " + pk.getGradoSeccion(),
+                    "Su solicitud de nuevo ingreso ha sido aceptada",
+                    FacesMessage.SEVERITY_INFO, usuario.getIdpersona(),
+                    " ").toString());
+        }
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
                 "Asignación de secciones exitosa!",
                 "Todos los datos se han guardado con éxito. "
@@ -213,7 +218,7 @@ public class matriculaController implements Serializable {
         nuevasMatriculasF = new ArrayList<>();
         nuevasMatriculasM = new ArrayList<>();
         selectedPK = (GradoPK) event.getObject();
-        List<Matricula> nuevasMatriculas = selectedPK == null ? new ArrayList<>()
+        List<Matricula> nuevasMatriculas = selectedPK == null ? new ArrayList<Matricula>()
                 : matriculaFL.findAllNewEstudent(selectedPK);
         asignaSexo(nuevasMatriculas);
         btnGuardar = selectedPK != null;
@@ -221,13 +226,14 @@ public class matriculaController implements Serializable {
     }
 
     private void asignaSexo(List<Matricula> nuevasMatriculas) {
-        nuevasMatriculas.stream().map((matr) -> matriculaFL.find(matr.getMatriculaPK())).forEachOrdered((matr) -> {
+        for (Matricula matr : nuevasMatriculas) {
+            matr = matriculaFL.find(matr.getMatriculaPK());
             if (matr.getEstudiante().getPersona().getPersonaSexo()) {
                 nuevasMatriculasF.add(matr);
             } else {
                 nuevasMatriculasM.add(matr);
             }
-        });
+        }
     }
 
     public String getGradosLabel(GradoPK pk) {
@@ -253,11 +259,10 @@ public class matriculaController implements Serializable {
         try {
             (new prueba()).setDui(query, buscado);
             list = personaFL.getPersonaByLikeIdAndType(buscado.getIdpersona(), 8);
-            for (Persona o : list) {
+            list.forEach((o) -> {
                 results.add(o.getPersonaNombre() + " "
                         + o.getPersonaApellido() + "=>" + o.getIdpersona().toString().substring(1));
-            }
-
+            });
         } catch (Exception m) {
             System.out.println(m.getMessage());
         }
@@ -271,6 +276,7 @@ public class matriculaController implements Serializable {
             (new prueba()).setDui(x.length > 1 ? x[1] : x[0], getBuscado());
             setBuscado(personaFL.find(getBuscado().getIdpersona()));
             mat = matriculaFL.find(new MatriculaPK(buscado.getIdpersona(), getAño()));
+            btnGuardarp2 = mat != null;
             mat = mat == null ? new Matricula(0, 0) : mat;
             seccion = mat.getGrado() != null ? mat.getGrado().getGradoPK() : new GradoPK(0, " ", " ", getAño());
         } catch (Exception o) {
@@ -292,6 +298,10 @@ public class matriculaController implements Serializable {
 
     public boolean isBtnGuardar() {
         return btnGuardar;
+    }
+
+    public boolean isBtnGuardarp2() {
+        return btnGuardarp2;
     }
 
     public String getDepartamento(Persona p) {
@@ -356,9 +366,9 @@ public class matriculaController implements Serializable {
         List<SelectItem> it = new ArrayList<>();
         it.add(new SelectItem(" ", "Selecione"));
         List<String> m = gradoFL.getModalidadPorAño(getAño());
-        m.forEach((mo) -> {
+        for (String mo : m) {
             it.add(new SelectItem(mo, mo.equals("C") ? "TVC Contador" : mo.equals("S") ? "TVC Secretariado" : mo.equals("G") ? "General" : " "));
-        });
+        }
         return it;
     }
 
@@ -366,9 +376,9 @@ public class matriculaController implements Serializable {
         List<SelectItem> it = new ArrayList<>();
         it.add(new SelectItem(" ", "Selecione"));
         List<Integer> m = gradoFL.getIdPorAñoyModalidad(getAño(), mat.getGrado().getGradoPK().getGradoModalidad());
-        m.forEach((mo) -> {
+        for (int mo : m) {
             it.add(new SelectItem(mo, mo == 1 ? "Primero" : mo == 2 ? "Segundo" : mo == 3 ? "Tercero" : " "));
-        });
+        }
         return it;
     }
 
@@ -376,14 +386,14 @@ public class matriculaController implements Serializable {
         List<SelectItem> it = new ArrayList<>();
         it.add(new SelectItem(" ", "Selecione"));
         List<String> m = gradoFL.getSeccionPorAñoModalidadyId(getAño(), mat.getGrado().getGradoPK().getGradoModalidad(), mat.getGrado().getGradoPK().getIdgrado());
-        m.forEach((mo) -> {
+        for (String mo : m) {
             it.add(new SelectItem(mo, mo));
-        });
+        }
         return it;
     }
 
-    @Push
     @Inject
+    @Push
     private PushContext notificacion;
 
     public void sendMessage(String message) {

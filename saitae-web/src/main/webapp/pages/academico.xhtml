@@ -33,10 +33,10 @@
                                 <f:facet name="header">
                                     Administración de los tipos de Materias.
                                 </f:facet>
-
-                                <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" update=":form:msgs" />
-                                <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" update=":form:msgs" />
-
+                                <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" 
+                                        update=":form:msgs" />
+                                <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" 
+                                        update=":form:msgs" />
                                 <p:column headerText="Id" style="width: 10px">
                                     <p:outputLabel value="#{tima.idtipoMateria}"/>
                                 </p:column>
@@ -69,11 +69,10 @@
                                 <f:facet name="header">
                                     Administración de Materias
                                 </f:facet>
-
-                                <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" update=":form:msgs" />
-                                <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" update=":form:msgs" />
-
-
+                                <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" 
+                                        update=":form:msgs" />
+                                <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" 
+                                        update=":form:msgs" />
                                 <p:column headerText="Id" style="width: 10px;">
                                     <p:outputLabel value="#{m.idmateria}" />
                                 </p:column>
@@ -84,7 +83,6 @@
                                         </f:facet>
                                     </p:cellEditor>
                                 </p:column>
-
                                 <p:column headerText="Tipo Materia">
                                     <p:cellEditor>
                                         <f:facet name="output"><p:outputLabel value="#{m.tipoMateria.tipoMateriaNombre}" />
@@ -146,7 +144,6 @@
                                                      update=":form0:msgs h1"
                                                      onclick="PF('Dhorario').show();"
                                                      title="Agregar Horario."/>
-
                                     <p:contextMenu for="horario">
                                         <p:menuitem value="Modificar" update="h1 form0:msgs form:tw:horario"
                                                     icon="fa fa-edit" onclick="PF('Dhorario').show()"/>
@@ -162,19 +159,18 @@
                                 <f:facet name="header">
                                     Administración de Grados
                                 </f:facet>
-
-                                <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" update=":form:msgs" />
-                                <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" update=":form:msgs" />
-
-
-                                <p:column headerText="Nivel" style="width: 20px;">
+                                <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" 
+                                        update=":form:msgs" />
+                                <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}"
+                                        update=":form:msgs" />
+                                <p:column headerText="Nivel">
                                     <p:cellEditor>
                                         <f:facet name="output">
                                             <p:outputLabel value="#{g.gradoPK.idgrado}" />
                                         </f:facet>
                                         <f:facet name="input">
                                             <p:inputText value="#{g.gradoPK.idgrado}" label="ID">
-                                                <f:validateLength minimum="1" />
+                                                <f:validateLength minimum="1" maximum="1" />
                                             </p:inputText>
                                         </f:facet>
                                     </p:cellEditor>
@@ -197,7 +193,7 @@
                                         </f:facet>
                                     </p:cellEditor>
                                 </p:column>
-                                <p:column headerText="Sección" style="width: 15px;">
+                                <p:column headerText="Sección" >
                                     <p:cellEditor>
                                         <f:facet name="output">
                                             <p:outputLabel value="#{g.gradoPK.gradoSeccion}" /></f:facet>
@@ -228,8 +224,18 @@
                                         </f:facet>
                                     </p:cellEditor>
                                 </p:column>
-                                <p:column headerText="Año" style="width: 30px;">
-                                    <p:outputLabel value="#{g.gradoPK.gradoAño}" />
+                                <p:column headerText="Año">
+                                    <p:cellEditor>
+                                        <f:facet name="output">
+                                            <p:outputLabel value="#{g.gradoPK.gradoAño}" />
+                                        </f:facet>
+                                        <f:facet name="input">
+                                            <p:selectOneMenu value="#{g.gradoPK.gradoAño}">
+                                                <f:selectItem itemLabel="#{g.gradoPK.gradoAño}" itemValue="#{g.gradoPK.gradoAño}"/>
+                                                <f:selectItem itemLabel="#{g.gradoPK.gradoAño+1}" itemValue="#{g.gradoPK.gradoAño+1}"/>
+                                            </p:selectOneMenu>
+                                        </f:facet>
+                                    </p:cellEditor>
                                 </p:column>
                                 <p:column headerText="Maestro Guía">
                                     <p:cellEditor>
@@ -273,7 +279,6 @@
                                                      title="Agregar Nuevo Grado"/>
                                 </div>
                             </div>
-
 
                         </p:tab>
                         <p:tab title="Días Laborales">
@@ -347,7 +352,6 @@
                                          icon="pi pi-save" update="form:tw:horario form0:msgs"/>
                     </h:form>
                 </p:dialog>
-
                 <script>
                     function socketListener(message, channel, event) {
                         tipopp([{name: 'mss', value: message}]);

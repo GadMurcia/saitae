@@ -32,6 +32,7 @@ import net.delsas.saitae.ax.mensaje;
 import net.delsas.saitae.beans.AnuncioFacadeLocal;
 import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
 import net.delsas.saitae.entities.Anuncio;
+import net.delsas.saitae.entities.MaestoCargo;
 import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.TipoPersona;
 import org.omnifaces.cdi.Push;
@@ -56,6 +57,7 @@ public class AnuncioController implements Serializable {
     private List<TipoPersona> tiposPersonas;
     private List<Anuncio> activos;
     private List<Anuncio> inactivos;
+    private List<Anuncio> individual;
 
     @PostConstruct
     public void construct() {
@@ -81,27 +83,39 @@ public class AnuncioController implements Serializable {
                 tiposPersonas.remove(tipoPersonaFL.find(11));
                 activos = anuncioFL.getAnunciosActivos();
                 inactivos = anuncioFL.getAnunciosInactivos();
+                int tp = usuario.getTipoPersona().getIdtipoPersona();
+                individual = (tp == 1 || tp == 2) ? activos
+                        : anuncioFL.getAnunciosActivosParaUnTipo(usuario.getTipoPersona());
+                individual = individual == null ? new ArrayList<>() : individual;
+                if (tp != 1 && tp != 2) {
+                    individual.addAll(anuncioFL.getAnunciosActivosParaTodos());
+                }
+                if(usuario.getMaestro()!=null){
+                    List<MaestoCargo> mcl = usuario.getMaestro().getMaestoCargoList();
+                    for(MaestoCargo mc : mcl){
+                        individual.addAll(anuncioFL.getAnunciosActivosParaUnTipo(mc.getCargo().getCargoTipoPersona()));
+                    }
+                }
             }
         } catch (Exception e) {
 
         }
     }
 
-    public List<Anuncio> getAll() {
-        List<Anuncio> anuncios = null;
-        if (usuario != null) {
-            if (usuario.getTipoPersona().getIdtipoPersona() == 1
-                    || usuario.getTipoPersona().getIdtipoPersona() == 2) {
-                anuncios = anuncioFL.getAnunciosActivos();
-            } else {
-                anuncios = usuario.getTipoPersona().getAnuncioList();
-                anuncios.addAll(anuncioFL.getAnunciosParaTodos());
-            }
-        }
-        anuncios = anuncios == null ? new ArrayList<Anuncio>() : anuncios;
-        return anuncios;
-    }
-
+//    public List<Anuncio> getAll() {
+//        List<Anuncio> anuncios = null;
+//        if (usuario != null) {
+//            if (usuario.getTipoPersona().getIdtipoPersona() == 1
+//                    || usuario.getTipoPersona().getIdtipoPersona() == 2) {
+//                anuncios = anuncioFL.getAnunciosActivos();
+//            } else {
+//                anuncios = usuario.getTipoPersona().getAnuncioList();
+//                anuncios.addAll(anuncioFL.getAnunciosParaTodos());
+//            }
+//        }
+//        anuncios = anuncios == null ? new ArrayList<>() : anuncios;
+//        return anuncios;
+//    }
     public void onRowSelect(SelectEvent event) {
         System.out.println(event.getObject());
         anuncio = (Anuncio) event.getObject();
@@ -157,5 +171,9 @@ public class AnuncioController implements Serializable {
 
     public void sendMessage(String message) {
         notificacion.send(message);
+    }
+
+    public List<Anuncio> getIndividual() {
+        return Collections.unmodifiableList(individual);
     }
 }

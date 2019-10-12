@@ -37,6 +37,7 @@ import net.delsas.saitae.beans.MatriculaFacadeLocal;
 import net.delsas.saitae.beans.PermisosFacadeLocal;
 import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
 import net.delsas.saitae.entities.GradoPK;
+import net.delsas.saitae.entities.MaestoCargo;
 import net.delsas.saitae.entities.Matricula;
 import net.delsas.saitae.entities.MatriculaPK;
 import net.delsas.saitae.entities.Permisos;
@@ -55,7 +56,7 @@ import org.primefaces.event.SelectEvent;
 @Named
 @ViewScoped
 public class administraciónPermisoController implements Serializable {
-
+    
     private static final long serialVersionUID = 1L;
     private List<Permisos> solicitados;
     private List<Permisos> aceptados;
@@ -65,7 +66,7 @@ public class administraciónPermisoController implements Serializable {
     private Permisos solc;
     private GradoPK gradoPK;
     private Persona usuario;
-
+    
     @EJB
     private PermisosFacadeLocal permisosFL;
     @EJB
@@ -74,16 +75,21 @@ public class administraciónPermisoController implements Serializable {
     private MatriculaFacadeLocal matriculaFL;
     @EJB
     private TipoPersonaFacadeLocal tipoPersonaFL;
-
+    
     @PostConstruct
     public void init() {
         try {
             FacesContext context = FacesContext.getCurrentInstance();
             usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
-            boolean r = usuario.getTipoPersona().getIdtipoPersona().equals(1) ? true
-                    : usuario.getTipoPersona().getIdtipoPersona().equals(2) ? true
-                    : usuario.getTipoPersona().getIdtipoPersona().equals(3);
-            if (usuario == null || !r) {
+            List<Integer> tps = new ArrayList<>();
+            if (usuario.getMaestro() != null) {
+                usuario.getMaestro().getMaestoCargoList().forEach((mc) -> {
+                    tps.add(mc.getCargo().getCargoTipoPersona().getIdtipoPersona());
+                });
+            }
+            int tp = usuario.getTipoPersona().getIdtipoPersona();
+            boolean r = (tp == 1 || tp == 2 || tp == 3) ? true : (tps.contains(3) || tps.contains(2) || tps.contains(1));
+            if (!r) {
                 context.getExternalContext().getSessionMap().put("mensaje", new FacesMessage(FacesMessage.SEVERITY_FATAL,
                         "Falla!", "Esa vista no le está permitida."));
                 context.getExternalContext().redirect("./../");
@@ -101,7 +107,7 @@ public class administraciónPermisoController implements Serializable {
             System.out.println(ex.getMessage());
         }
     }
-
+    
     public List<TipoPermiso> getTipoPermiso() {
         List<TipoPermiso> items = new ArrayList<>();
         List<TipopersonaPermiso> tt = tipoPersonaFL.find(8).getTipopersonaPermisoList();
@@ -110,7 +116,7 @@ public class administraciónPermisoController implements Serializable {
         }
         return items;
     }
-
+    
     public List<SelectItem> getModalidades() {
         List<SelectItem> items = new ArrayList<>();
         List<String> mo = grsoFL.getModalidadPorAño(getAño());
@@ -121,19 +127,19 @@ public class administraciónPermisoController implements Serializable {
         }
         return items;
     }
-
+    
     public List<Integer> getNiveles() {
         return grsoFL.getIdPorAñoyModalidad(getAño(), gradoPK.getGradoModalidad());
     }
-
+    
     public List<String> getSecciones() {
         return grsoFL.getSeccionPorAñoModalidadyId(getAño(), gradoPK.getGradoModalidad(), gradoPK.getIdgrado());
     }
-
+    
     public List<Persona> getEstudiantes() {
         return matriculaFL.findMatriculaByGrado(gradoPK);
     }
-
+    
     public void onRowSelect(SelectEvent event) {
         String id = event.getComponent().getId();
         switch (id) {
@@ -144,11 +150,11 @@ public class administraciónPermisoController implements Serializable {
                 acep = (Permisos) event.getObject();
         }
     }
-
+    
     public String getFecha(Date a) {
         return a != null ? new SimpleDateFormat("dd-MM-yyyy").format(a) : "";
     }
-
+    
     public String getFechas(Date i, Date f) {
         String g = "";
         if (i != null) {
@@ -162,7 +168,7 @@ public class administraciónPermisoController implements Serializable {
         }
         return g;
     }
-
+    
     public void concederPermiso() {
         FacesMessage ms = null;
         try {
@@ -200,7 +206,7 @@ public class administraciónPermisoController implements Serializable {
                 sendMessage(new mensaje(permiso.getPermisosPK().getIpPersona(), usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
                         + " le ha concedido un nuevo permiso a petición de " + getNombreSol() + " " + getApellidoSol() + ".",
                         "Nueva concesión de permiso", FacesMessage.SEVERITY_INFO, permiso.getPermisosSolicitante().getIdpersona(), " ").toString());
-
+                
                 FacesContext.getCurrentInstance().addMessage(null, ms);
                 init();
             }
@@ -209,7 +215,7 @@ public class administraciónPermisoController implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, ms);
         }
     }
-
+    
     public void guardar(int w) {
         solicitados.remove(solc);
         solc.setPermisosEstado(w + "");
@@ -225,9 +231,9 @@ public class administraciónPermisoController implements Serializable {
         sendMessage(new mensaje(solc.getPermisosPK().getIpPersona(), usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
                 + " ha " + (w == 1 ? "aceptado" : "rechazado") + " su solicitud de permiso ",
                 (w == 1 ? "Aceptación" : "Rechado") + " de permiso", FacesMessage.SEVERITY_INFO, usuario.getIdpersona(), " ").toString());
-
+        
     }
-
+    
     public String getGrado(int id) {
         Matricula mat = matriculaFL.find(new MatriculaPK(id, getAño()));
         if (mat != null) {
@@ -242,7 +248,7 @@ public class administraciónPermisoController implements Serializable {
             return " ";
         }
     }
-
+    
     public String getSolicitadoPor(Permisos s) {
         if (s.getPermisosSolicitante() != null) {
             Persona solicitante;
@@ -264,76 +270,76 @@ public class administraciónPermisoController implements Serializable {
             return "";
         }
     }
-
+    
     public List<Permisos> getSolicitados() {
         return Collections.unmodifiableList(solicitados);
     }
-
+    
     public void setSolicitados(List<Permisos> solicitados) {
         this.solicitados = solicitados;
     }
-
+    
     public List<Permisos> getAceptados() {
         return Collections.unmodifiableList(aceptados);
     }
-
+    
     public void setAceptados(List<Permisos> aceptados) {
         this.aceptados = aceptados;
     }
-
+    
     public List<Permisos> getRechazados() {
         return Collections.unmodifiableList(rechazados);
     }
-
+    
     public void setRechazados(List<Permisos> rechazados) {
         this.rechazados = rechazados;
     }
-
+    
     public Permisos getPermiso() {
         return permiso;
     }
-
+    
     public void setPermiso(Permisos permiso) {
         this.permiso = permiso;
     }
-
+    
     public Integer getAño() {
         return Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date()));
     }
-
+    
     public Permisos getAcep() {
         return acep;
     }
-
+    
     public void setAcep(Permisos acep) {
         this.acep = acep;
     }
-
+    
     public Permisos getSolc() {
         return solc;
     }
-
+    
     public void setSolc(Permisos solc) {
         this.solc = solc;
     }
-
+    
     public GradoPK getGradoPK() {
         return gradoPK;
     }
-
+    
     public void setGradoPK(GradoPK gradoPK) {
         this.gradoPK = gradoPK;
     }
-
+    
     public boolean isEstudiante() {
         return permiso.getTipoPersona().getIdtipoPersona() == 8;
     }
-
+    
     public void setDuiSol(String dui) {
         String d[] = dui.split("-");
         permiso.setPermisosComentario(d[0] + d[1] + "¿¿" + getNombreSol() + "¿¿" + getApellidoSol() + "¿¿" + getComentario());
     }
-
+    
     public String getDuiSol() {
         String d = permiso.getPermisosComentario().split("¿¿")[0];
         if (d.equals("0")) {
@@ -342,53 +348,53 @@ public class administraciónPermisoController implements Serializable {
         String m = d.substring(0, 7) + "-" + d.substring(8);
         return m;
     }
-
+    
     public void setNombreSol(String nombre) {
         permiso.setPermisosComentario(getDuiSol() + "¿¿" + nombre + "¿¿" + getApellidoSol() + "¿¿" + getComentario());
     }
-
+    
     public String getNombreSol() {
         return permiso.getPermisosComentario().split("¿¿")[1];
     }
-
+    
     public void setApellidoSol(String apellido) {
         permiso.setPermisosComentario(getDuiSol() + "¿¿" + getNombreSol() + "¿¿" + apellido + "¿¿" + getComentario());
     }
-
+    
     public String getApellidoSol() {
         return permiso.getPermisosComentario().split("¿¿")[2];
     }
-
+    
     public void setComentarioAcep(String comentario) {
         String[] f = acep.getPermisosComentario() != null ? acep.getPermisosComentario().split("¿¿") : new String[]{" ", " ", " ", " "};
         acep.setPermisosComentario(f[0] + "¿¿" + f[1] + "¿¿" + f[2] + "¿¿" + comentario);
     }
-
+    
     public String getComentarioAcep() {
         return acep.getPermisosComentario() == null ? " " : acep.getPermisosComentario().split("¿¿")[3];
     }
-
+    
     public void setComentarioSolc(String comentario) {
         String[] f = solc.getPermisosComentario() != null ? acep.getPermisosComentario().split("¿¿") : new String[]{" ", " ", " ", " "};
         solc.setPermisosComentario(f[0] + "¿¿" + f[1] + "¿¿" + f[2] + "¿¿" + comentario);
     }
-
+    
     public String getComentarioSolc() {
         return solc.getPermisosComentario() == null ? " " : acep.getPermisosComentario().split("¿¿")[3];
     }
-
+    
     public void setComentario(String comentario) {
         permiso.setPermisosComentario(getDuiSol() + "¿¿" + getNombreSol() + "¿¿" + getApellidoSol() + "¿¿" + comentario);
     }
-
+    
     public String getComentario() {
         return permiso.getPermisosComentario().split("¿¿")[3];
     }
-
+    
     @Inject
     @Push
     private PushContext notificacion;
-
+    
     public void sendMessage(String message) {
         notificacion.send(message);
     }

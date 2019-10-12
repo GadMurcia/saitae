@@ -23,10 +23,15 @@ import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import net.delsas.saitae.ax.mensaje;
 import net.delsas.saitae.ax.notificacion;
+import net.delsas.saitae.beans.DelagacionCargoFacade;
 import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
 import net.delsas.saitae.entities.Acceso;
 import net.delsas.saitae.entities.AccesoTipoPersona;
+import net.delsas.saitae.entities.DelagacionCargo;
+import net.delsas.saitae.entities.MaestoCargo;
+import net.delsas.saitae.entities.Notificaciones;
 import net.delsas.saitae.entities.Persona;
+import net.delsas.saitae.entities.TipoPersona;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.ToggleEvent;
 import org.primefaces.model.menu.DefaultMenuItem;
@@ -50,7 +55,7 @@ public class sessionController implements Serializable {
     private TipoPersonaFacadeLocal tpfl;
 
     //para notificaciones
-    private List<notificacion> notificaciones;
+    private List<Notificaciones> notificaciones;
     private String nombreNoti;
     private String cuerpoNoti;
     private boolean verNoti;
@@ -66,16 +71,21 @@ public class sessionController implements Serializable {
     public void log() {
         FacesContext context = FacesContext.getCurrentInstance();
         try {
-            Persona u = (Persona) context.getExternalContext().getSessionMap().get("usuario");
-            if (u == null) {
+            us = (Persona) context.getExternalContext().getSessionMap().get("usuario");
+            if (us == null) {
 
                 context.getExternalContext().getSessionMap().put("mensaje", new FacesMessage(FacesMessage.SEVERITY_ERROR,
                         "Falla!", "Esa vista no le está permitida aún porque usted no se a logueado."));
                 context.getExternalContext().redirect("./../");
 
             } else {
-                this.setUs(u);
                 FacesMessage ms = (FacesMessage) context.getExternalContext().getSessionMap().get("mensaje");
+                List<Notificaciones> not = us.getNotificacionesList();
+                for (int y = 0; y < 6; y++) {
+                    if (not != null && y < not.size()) {
+                        notificaciones.add(not.get(y));
+                    }
+                }
                 if (!((boolean) context.getExternalContext().getSessionMap().get("primerInicio"))) {
                     if (ms != null) {
                         context.addMessage("growl", ms);
@@ -83,10 +93,10 @@ public class sessionController implements Serializable {
                     }
                 } else {
                     context.addMessage("growl", new FacesMessage(FacesMessage.SEVERITY_INFO, "Bienvenido",
-                            "Gracias por iniciar Sesión " + u.getPersonaNombre()));
+                            "Gracias por iniciar Sesión " + us.getPersonaNombre()));
                     context.getExternalContext().getSessionMap().remove("primerInicio");
                     context.getExternalContext().getSessionMap().put("primerInicio", false);
-                    this.menu2();
+                    this.menu();
                 }
             }
         } catch (Exception ex) {
@@ -110,20 +120,30 @@ public class sessionController implements Serializable {
         this.mm = mm;
     }
 
-    public void menu2() {
+    public void menu() {
         mm = new DefaultMenuModel();
         DefaultMenuItem mi;
         mi = new DefaultMenuItem("Inicio");
         mi.setIcon("pi pi-home");
         mi.setUrl("perfil.intex");
         mm.addElement(mi);
-        List<Acceso> ac = new ArrayList<>();
-        for (AccesoTipoPersona atp : us.getTipoPersona().getAccesoTipoPersonaList()) {
-            ac.add(atp.getAcceso());
-        }
-        for (Acceso a : ac) {
-            if (a.getAccesoIndice() == null) {
-                mm.addElement(menu3(a, ac));
+        mm.addElement(menu2(us.getTipoPersona().getAccesoTipoPersonaList(),
+                us.getTipoPersona().getTipoPersonaNombre(),
+                us.getTipoPersona().getTipoPersonaComentario()));
+        us.getDelagacionCargoList().forEach((dlc) -> {
+            mm.addElement(menu2(dlc.getIdTipoPersona().getAccesoTipoPersonaList(),
+                    dlc.getIdTipoPersona().getTipoPersonaNombre(),
+                    dlc.getIdTipoPersona().getTipoPersonaComentario()));
+        });
+        if (us.getMaestro() != null) {
+            TipoPersona tp;
+            for (MaestoCargo mc : us.getMaestro().getMaestoCargoList()) {
+                tp = mc.getCargo().getCargoTipoPersona();
+                if (tp != null) {
+                    mm.addElement(menu2(tp.getAccesoTipoPersonaList(),
+                            tp.getTipoPersonaNombre(),
+                            tp.getTipoPersonaComentario()));
+                }
             }
         }
         if (us.getTipoPersona().getIdtipoPersona() == 1) {
@@ -139,17 +159,28 @@ public class sessionController implements Serializable {
         mm.addElement(s);
     }
 
+    public DefaultSubMenu menu2(List<AccesoTipoPersona> accesos, String nombreMenu, String icono) {
+        DefaultSubMenu sm = new DefaultSubMenu(nombreMenu, icono);
+        DefaultMenuItem mi;
+        List<Acceso> ac = new ArrayList<>();
+        accesos.forEach((atp) -> {
+            ac.add(atp.getAcceso());
+        });
+        ac.stream().filter((a) -> (a.getAccesoIndice() == null)).forEachOrdered((a) -> {
+            sm.addElement(menu3(a, ac));
+        });
+        return sm;
+    }
+
     private MenuElement menu3(Acceso a, List<Acceso> ac) {
         DefaultSubMenu s = new DefaultSubMenu(a.getAccesoNombre(), a.getAccesoComentario());
-        for (Acceso b : a.getAccesoList()) {
-            if (ac.contains(b)) {
-                if (b.getAccesoList() == null || b.getAccesoList().isEmpty()) {
-                    s.addElement(new DefaultMenuItem(b.getAccesoNombre(), b.getAccesoComentario(), b.getAccesourl()));
-                } else {
-                    s.addElement(menu3(b, ac));
-                }
+        a.getAccesoList().stream().filter((b) -> (ac.contains(b))).forEachOrdered((b) -> {
+            if (b.getAccesoList() == null || b.getAccesoList().isEmpty()) {
+                s.addElement(new DefaultMenuItem(b.getAccesoNombre(), b.getAccesoComentario(), b.getAccesourl()));
+            } else {
+                s.addElement(menu3(b, ac));
             }
-        }
+        });
         return s;
     }
 
@@ -184,34 +215,32 @@ public class sessionController implements Serializable {
 
     public void escucha() {
         try {
-            String mss = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("mss");
-            mensaje m = new mensaje(mss);
-            if (m.getRemitente() != us.getIdpersona()) {
-                System.out.println("Rmitente: " + m.getRemitente() + ". Escucha: " + us.getIdpersona());
-            }
-            notificacion n = new notificacion(m.getTituloMensaje(), m.getCuerpoMensaje());
-
-            if (!notificaciones.contains(n)) {
-                List<notificacion> n1 = new ArrayList<>();
-                for (notificacion nn : notificaciones) {
-                    nn.setCollapsed(true);
-                    n1.add(nn);
-                }
-                notificaciones.clear();
-                notificaciones.add(n);
-                if (n1.size() < 4) {
-                    notificaciones.addAll(n1);
-                } else {
-                    for (notificacion not : n1) {
-                        if (n1.indexOf(not) < 4) {
+            mensaje m = new mensaje(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("mss"));
+            int tp = Integer.valueOf(m.getCadenaAccion().contains("tp¿¿") ? m.getCadenaAccion().split("¿¿")[1] : "0");
+            if (m.getDestinatario() == us.getIdpersona() || tp == us.getTipoPersona().getIdtipoPersona()) {
+                Notificaciones n = new Notificaciones(m.getCuerpoMensaje(), m.getTituloMensaje(),
+                        false, m.getRemitente() + "", new Persona(m.getDestinatario()), new Date());
+                if (!notificaciones.contains(n)) {
+                    List<Notificaciones> n1 = new ArrayList<>();
+                    notificaciones.stream().map((nn) -> {
+                        nn.setVista(true);
+                        return nn;
+                    }).forEachOrdered((nn) -> {
+                        n1.add(nn);
+                    });
+                    notificaciones.clear();
+                    notificaciones.add(n);
+                    if (n1.size() < 4) {
+                        notificaciones.addAll(n1);
+                    } else {
+                        n1.stream().filter((not) -> (n1.indexOf(not) < 4)).forEachOrdered((not) -> {
                             notificaciones.add(not);
-                        }
+                        });
                     }
                 }
             }
             verNoti = true;
             PrimeFaces.current().ajax().update("noti");
-            //FacesContext.getCurrentInstance().addMessage(null, m.getFacesmessage());
         } catch (Exception ex) {
             Logger.getLogger(sessionController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -241,12 +270,7 @@ public class sessionController implements Serializable {
         this.verNoti = verNoti;
     }
 
-    public List<notificacion> getNotificaciones() {
+    public List<Notificaciones> getNotificaciones() {
         return Collections.unmodifiableList(notificaciones);
     }
-
-    public void setNotificaciones(List<notificacion> notificaciones) {
-        this.notificaciones = notificaciones;
-    }
-
 }

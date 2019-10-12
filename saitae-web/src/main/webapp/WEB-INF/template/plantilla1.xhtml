@@ -39,11 +39,11 @@
                     <h1>Área de Notificaciones</h1>
                     <p:remoteCommand name="notificar" actionListener="#{sessionController.escucha()}" update=":form0"/>
                     <ui:repeat value="#{sessionController.notificaciones}" var="n">
-                        <p:panel header="#{n.nombreNoti}" toggleable="true" 
-                                 toggleSpeed="500" rendered="#{n.verNoti}" collapsed="#{n.collapsed}" 
+                        <p:panel header="#{n.notificacionTitulo}" toggleable="true" 
+                                 toggleSpeed="500" collapsed="#{n.vista}" 
                                  style="margin-bottom:20px">
                             <h:panelGrid columns="1" >
-                                <h:outputText value="#{n.cuerpoNoti}" />
+                                <h:outputText value="#{n.notificacionCuerpo}" />
                             </h:panelGrid>
                         </p:panel>
                     </ui:repeat>

@@ -242,9 +242,10 @@ public class TipoController implements Serializable {
                 zonas = zfl.findAll();
                 nombramientos = tipoNombramientoFL.findAll();
                 financiamientos = financiamientoFL.findAll();
+                Personas = personaFL.findAll();
                 break;
             case "lictp.intex":
-                model = new DualListModel<>(new ArrayList<String>(), new ArrayList<String>());
+                model = new DualListModel<>(new ArrayList<>(), new ArrayList<String>());
                 tipoPersona = new TipoPersona(0);
                 Personas = personaFL.findAll();
                 all = tpfl.findAll();
@@ -414,116 +415,122 @@ public class TipoController implements Serializable {
     }
 
     public void onRowEdit(RowEditEvent event) {
-        String titulo = "", mensaje = "", id = event.getComponent().getClientId();
-        switch (id) {
-            case "form:tw:recurso":
-                tipoRecursoFL.edit((TipoRecurso) event.getObject());
-                titulo = "Tipo de recurso";
-                mensaje = ((TipoRecurso) event.getObject()).getTipoRecursoNombre();
-                break;
-            case "form:tw:tp1":
-                TipoPermiso name = (TipoPermiso) event.getObject();
-                tpfl.edit(name);
-                titulo = "Tipo de Permiso";
-                mensaje = ((TipoPermiso) event.getObject()).getTipoPermisoNombre();
-                tipoPersona = new TipoPersona(0);
-                onItemSelect(null);
-                break;
-            case "form:tw:cargo":
-                TipoCargo tc = (TipoCargo) event.getObject();
-                tipoCargoFL.edit(tc);
-                titulo = "Tipo Cargo";
-                mensaje = tc.getNombre();
-                break;
-            case "form:tw:nombramiento":
-                tipoNombramientoFL.edit((TipoNombramiento) event.getObject());
-                titulo = "Tipo Nombramiento";
-                mensaje = ((TipoNombramiento) event.getObject()).getTipoNombramientoNombre();
-                break;
-            case "form:tw:zona":
-                zfl.edit((Zona) event.getObject());
-                titulo = "Zona";
-                mensaje = ((Zona) event.getObject()).getZonaNombre();
-                break;
-            case "form:tw:reserva":
-                tipoReservaFL.edit((TipoReserva) event.getObject());
-                titulo = "Tipo Reserva";
-                mensaje = ((TipoReserva) event.getObject()).getTipoReservaNombre();
-                break;
-            case "form:tw:tipomateria":
-                TipoMateria m = (TipoMateria) event.getObject();
-                tipoMateriaFL.edit(m);
-                titulo = "Tipo de Materia";
-                mensaje = m.getTipoMateriaNombre();
-                break;
-            case "form:tw:materia":
-                Materia ma = (Materia) event.getObject();
-                ma.setTipoMateria(tipoMateriaFL.find(ma.getTipoMateria().getIdtipoMateria()));
-                materiaFL.edit(ma);
-                titulo = "Materia";
-                mensaje = ma.getMateriaNombre();
-                break;
-            case "form:tw:aula":
-                Aula a = (Aula) event.getObject();
-                a.setZonaAula(zfl.find(a.getZonaAula().getIdzona()));
-                afl.edit(a);
-                titulo = "Aula";
-                mensaje = "Aula N° " + a.getIdaula();
-                break;
-            case "form:tw:autor":
-                Autor au = (Autor) event.getObject();
-                autorFL.edit(au);
-                titulo = "Autor";
-                mensaje = au.getAutorNombre();
-                break;
-            case "form:tw:cargo1":
-                Cargo c = (Cargo) event.getObject();
-                cargoFL.edit(c);
-                titulo = "Cargo";
-                mensaje = c.getCargoNombre();
-                break;
-            case "form:tw:categoria":
-                Categoria ca = (Categoria) event.getObject();
-                categoriaFL.edit(ca);
-                titulo = "Editorial";
-                mensaje = ca.getCategoriaNombre();
-                break;
-            case "form:tw:editorial":
-                Editorial e = (Editorial) event.getObject();
-                editorialFL.edit(e);
-                mensaje = e.getEditorialNombre();
-                break;
-            case "form:tw:horario":
-                Horario h = (Horario) event.getObject();
-                horarioFL.edit(h);
-                titulo = "Horario";
-                mensaje = "Horario Agregado";
-                break;
-            case "form:tw:tabla1:financiamiento":
-                Financiamiento f = (Financiamiento) event.getObject();
-                financiamientoFL.edit(f);
-                titulo = "Fianciamiento";
-                mensaje = f.getFinanciamientoNombre();
-                break;
-            case "form:tw:grado":
-                Grado g = (Grado) event.getObject();
-                g.setAulaGrado(afl.find(g.getAulaGrado().getIdaula()));
-                g.setGradoMaestroGuia(g.getGradoMaestroGuia() == null
-                        || g.getGradoMaestroGuia().getIdmaestro() == 0
-                        ? null : maestroFL.find(g.getGradoMaestroGuia().getIdmaestro()));
-                gradoFL.edit(g);
-                titulo = "Grado";
-                mensaje = g.getGradoPK().getIdgrado() + "° " + g.getGradoPK().getGradoModalidad() + " "
-                        + g.getGradoPK().getGradoSeccion() + " para el año"
-                        + g.getGradoPK().getGradoAño() + " fue agregado.";
-                break;
-            default:
-                System.out.println(id);
+        FacesMessage msg = null;
+        try {
+            String titulo = "", mensaje = "", id = event.getComponent().getClientId();
+            switch (id) {
+                case "form:tw:recurso":
+                    tipoRecursoFL.edit((TipoRecurso) event.getObject());
+                    titulo = "Tipo de recurso";
+                    mensaje = ((TipoRecurso) event.getObject()).getTipoRecursoNombre();
+                    break;
+                case "form:tw:tp1":
+                    TipoPermiso name = (TipoPermiso) event.getObject();
+                    tpfl.edit(name);
+                    titulo = "Tipo de Permiso";
+                    mensaje = ((TipoPermiso) event.getObject()).getTipoPermisoNombre();
+                    tipoPersona = new TipoPersona(0);
+                    onItemSelect(null);
+                    break;
+                case "form:tw:cargo":
+                    TipoCargo tc = (TipoCargo) event.getObject();
+                    tipoCargoFL.edit(tc);
+                    titulo = "Tipo Cargo";
+                    mensaje = tc.getNombre();
+                    break;
+                case "form:tw:nombramiento":
+                    tipoNombramientoFL.edit((TipoNombramiento) event.getObject());
+                    titulo = "Tipo Nombramiento";
+                    mensaje = ((TipoNombramiento) event.getObject()).getTipoNombramientoNombre();
+                    break;
+                case "form:tw:zona":
+                    zfl.edit((Zona) event.getObject());
+                    titulo = "Zona";
+                    mensaje = ((Zona) event.getObject()).getZonaNombre();
+                    break;
+                case "form:tw:reserva":
+                    tipoReservaFL.edit((TipoReserva) event.getObject());
+                    titulo = "Tipo Reserva";
+                    mensaje = ((TipoReserva) event.getObject()).getTipoReservaNombre();
+                    break;
+                case "form:tw:tipomateria":
+                    TipoMateria m = (TipoMateria) event.getObject();
+                    tipoMateriaFL.edit(m);
+                    titulo = "Tipo de Materia";
+                    mensaje = m.getTipoMateriaNombre();
+                    break;
+                case "form:tw:materia":
+                    Materia ma = (Materia) event.getObject();
+                    ma.setTipoMateria(tipoMateriaFL.find(ma.getTipoMateria().getIdtipoMateria()));
+                    materiaFL.edit(ma);
+                    titulo = "Materia";
+                    mensaje = ma.getMateriaNombre();
+                    break;
+                case "form:tw:aula":
+                    Aula a = (Aula) event.getObject();
+                    a.setZonaAula(zfl.find(a.getZonaAula().getIdzona()));
+                    afl.edit(a);
+                    titulo = "Aula";
+                    mensaje = "Aula N° " + a.getIdaula();
+                    break;
+                case "form:tw:autor":
+                    Autor au = (Autor) event.getObject();
+                    autorFL.edit(au);
+                    titulo = "Autor";
+                    mensaje = au.getAutorNombre();
+                    break;
+                case "form:tw:cargo1":
+                    Cargo c = (Cargo) event.getObject();
+                    cargoFL.edit(c);
+                    titulo = "Cargo";
+                    mensaje = c.getCargoNombre();
+                    break;
+                case "form:tw:categoria":
+                    Categoria ca = (Categoria) event.getObject();
+                    categoriaFL.edit(ca);
+                    titulo = "Editorial";
+                    mensaje = ca.getCategoriaNombre();
+                    break;
+                case "form:tw:editorial":
+                    Editorial e = (Editorial) event.getObject();
+                    editorialFL.edit(e);
+                    mensaje = e.getEditorialNombre();
+                    break;
+                case "form:tw:horario":
+                    Horario h = (Horario) event.getObject();
+                    horarioFL.edit(h);
+                    titulo = "Horario";
+                    mensaje = "Horario Agregado";
+                    break;
+                case "form:tw:tabla1:financiamiento":
+                    Financiamiento f = (Financiamiento) event.getObject();
+                    financiamientoFL.edit(f);
+                    titulo = "Fianciamiento";
+                    mensaje = f.getFinanciamientoNombre();
+                    break;
+                case "form:tw:grado":
+                    Grado g = (Grado) event.getObject();
+                    g.setAulaGrado(afl.find(g.getAulaGrado().getIdaula()));
+                    g.setGradoMaestroGuia(g.getGradoMaestroGuia() == null
+                            || g.getGradoMaestroGuia().getIdmaestro() == 0
+                            ? null : maestroFL.find(g.getGradoMaestroGuia().getIdmaestro()));
+                    gradoFL.edit(g);
+                    titulo = "Grado";
+                    mensaje = g.getGradoPK().getIdgrado() + "° " + g.getGradoPK().getGradoModalidad() + " "
+                            + g.getGradoPK().getGradoSeccion() + " para el año"
+                            + g.getGradoPK().getGradoAño() + " fue agregado.";
+                    break;
+                default:
+                    System.out.println(id);
+            }
+            init();
+            PrimeFaces.current().ajax().update(id);
+            enviarNotificación(titulo + " Editado", mensaje);
+            msg = new FacesMessage(titulo + " Editado", mensaje);
+        } catch (Exception e) {
+            msg = new FacesMessage("Error en la edición", e.getMessage() != null ? e.getMessage() : "Error desconocido");
+            PrimeFaces.current().ajax().update("form");
         }
-        init();
-        PrimeFaces.current().ajax().update(id);
-        enviarNotificación(titulo + " Editado", mensaje);
-        FacesMessage msg = new FacesMessage(titulo + " Editado", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 

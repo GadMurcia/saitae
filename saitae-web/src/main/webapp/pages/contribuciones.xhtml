@@ -30,7 +30,8 @@
                     <p:outputLabel value="ENERO" for="en"/>
                     <p:selectBooleanButton id="en" value="#{contribucionesController.eneroPagado}" 
                                            onLabel="Cancelado" offLabel="Pendiente"
-                                           style="width: 190px">
+                                           style="width: 190px"
+                                           disabled="#{!contribucionesController.boton}">
                         <p:ajax update="mask0"/>
                     </p:selectBooleanButton>
                     <p:outputLabel value="FECHA"/>
@@ -42,7 +43,8 @@
                     <p:outputLabel value="FEBRERO"/>
                     <p:selectBooleanButton value="#{contribucionesController.febreroPagado}" 
                                            onLabel="Cancelado" offLabel="Pendiente"
-                                           style="width: 190px">
+                                           style="width: 190px"
+                                           disabled="#{!contribucionesController.boton}">
                         <p:ajax  update="mask1"/>  
                     </p:selectBooleanButton>
                     <p:outputLabel value="FECHA"/>
@@ -53,7 +55,8 @@
                     <p:outputLabel value="MARZO"/>
                     <p:selectBooleanButton value="#{contribucionesController.marzoPagado}" 
                                            onLabel="Cancelado" offLabel="Pendiente" 
-                                           style="width: 190px">
+                                           style="width: 190px"
+                                           disabled="#{!contribucionesController.boton}">
                         <p:ajax  update="mask2"/>
                     </p:selectBooleanButton>
                     <p:outputLabel value="FECHA"/>
@@ -64,7 +67,8 @@
                     <p:outputLabel value="ABRIL"/>
                     <p:selectBooleanButton value="#{contribucionesController.abrilPagado}" 
                                            onLabel="Cancelado" offLabel="Pendiente" 
-                                           style="width: 190px" >
+                                           style="width: 190px"
+                                           disabled="#{!contribucionesController.boton}">
                         <p:ajax  update="mask3"/>
                     </p:selectBooleanButton>
                     <p:outputLabel value="FECHA"/>
@@ -74,7 +78,9 @@
 
                     <p:outputLabel value="MAYO"/>
                     <p:selectBooleanButton value="#{contribucionesController.mayoPagado}" 
-                                           onLabel="Cancelado" offLabel="Pendiente" style="width: 190px">
+                                           onLabel="Cancelado" offLabel="Pendiente" 
+                                           style="width: 190px"
+                                           disabled="#{!contribucionesController.boton}">
                         <p:ajax  update="mask4"/>
                     </p:selectBooleanButton>
                     <p:outputLabel value="FECHA"/>
@@ -85,7 +91,8 @@
                     <p:outputLabel value="JUNIO"/>
                     <p:selectBooleanButton value="#{contribucionesController.junioPagado}" 
                                            onLabel="Cancelado" offLabel="Pendiente" 
-                                           style="width: 190px">
+                                           style="width: 190px"
+                                           disabled="#{!contribucionesController.boton}">
                         <p:ajax  update="mask5"/>
                     </p:selectBooleanButton>
                     <p:outputLabel value="FECHA"/>
@@ -95,7 +102,8 @@
                     <p:outputLabel value="JULIO"/>
                     <p:selectBooleanButton value="#{contribucionesController.julioPagado}" 
                                            onLabel="Cancelado" offLabel="Pendiente" 
-                                           style="width: 190px">
+                                           style="width: 190px"
+                                           disabled="#{!contribucionesController.boton}">
                         <p:ajax  update="mask6"/>
                     </p:selectBooleanButton>
                     <p:outputLabel value="FECHA"/>
@@ -105,7 +113,8 @@
                     <p:outputLabel value="AGOSTO"/>
                     <p:selectBooleanButton value="#{contribucionesController.agostoPagado}" 
                                            onLabel="Cancelado" offLabel="Pendiente" 
-                                           style="width: 190px">
+                                           style="width: 190px"
+                                           disabled="#{!contribucionesController.boton}">
                         <p:ajax  update="mask7"/>
                     </p:selectBooleanButton>
                     <p:outputLabel value="FECHA"/>
@@ -116,7 +125,8 @@
                     <p:outputLabel value="SEPTIEMBRE"/>
                     <p:selectBooleanButton value="#{contribucionesController.septiembrePagado}" 
                                            onLabel="Cancelado" offLabel="Pendiente" 
-                                           style="width: 190px">
+                                           style="width: 190px"
+                                           disabled="#{!contribucionesController.boton}">
                         <p:ajax  update="mask8"/>
                     </p:selectBooleanButton>
                     <p:outputLabel value="FECHA"/>
@@ -127,7 +137,8 @@
                     <p:outputLabel value="OCTUBRE"/>
                     <p:selectBooleanButton value="#{contribucionesController.octubrePagado}" 
                                            onLabel="Cancelado" offLabel="Pendiente" 
-                                           style="width: 190px">
+                                           style="width: 190px"
+                                           disabled="#{!contribucionesController.boton}">
                         <p:ajax  update="mask9"/>
                     </p:selectBooleanButton>
                     <p:outputLabel value="FECHA"/>

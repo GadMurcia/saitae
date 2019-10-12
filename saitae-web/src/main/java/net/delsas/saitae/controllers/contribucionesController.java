@@ -29,6 +29,7 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 import net.delsas.saitae.ax.mensaje;
 import net.delsas.saitae.ax.prueba;
@@ -42,6 +43,8 @@ import net.delsas.saitae.entities.GradoPK;
 import net.delsas.saitae.entities.Matricula;
 import net.delsas.saitae.entities.MatriculaPK;
 import net.delsas.saitae.entities.Persona;
+import org.omnifaces.cdi.Push;
+import org.omnifaces.cdi.PushContext;
 
 import org.primefaces.event.SelectEvent;
 
@@ -52,7 +55,7 @@ import org.primefaces.event.SelectEvent;
 @Named
 @ViewScoped
 public class contribucionesController implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
     boolean boton;
     @EJB
@@ -86,7 +89,7 @@ public class contribucionesController implements Serializable {
             }
         }
     }
-    
+
     public List<String> completeText(String query) {
         List<String> results = new ArrayList<>();
         List<Persona> listp;
@@ -135,12 +138,30 @@ public class contribucionesController implements Serializable {
         if (!contr.equals(contrG)) {
             contrFL.edit(contr);
             FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Guardado con éxito", "Se guardaron los datos de la contribución"));
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Guardado con éxito",
+                            "Se guardaron los datos de la contribución"));
+            String g = mesesPagados(contr);
+            sendMessage(new mensaje(contr.getContribucionesPK().getIdEstudiante(),
+                    usuario.getIdpersona(),
+                    " ",
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Actividad en las contribuciones registrado.",
+                            (g.split("").length > 8 ? "Los meses que ya ha pagado son : " + g
+                            : (g.split("").length > 2 ? "El mes pagado es " + g
+                            : "No tiene registro de pago de las contribuciones para el año en curso.")))).toString());
             this.init();
         } else {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_WARN, "Falló", "No se seleccionaron datos"));
         }
+    }
+
+    private String mesesPagados(Contribuciones c) {
+        return (c.getEnero() != null ? "Enero" : "") + (c.getFebrero() != null ? ", Febrero" : "")
+                + (c.getMarzo() != null ? ", Marzo" : "") + (c.getAbril() != null ? ", Abril" : "")
+                + (c.getMayo() != null ? ", Mayo" : "") + (c.getJunio() != null ? ", Junio" : "")
+                + (c.getJulio() != null ? ", Julio" : "") + (c.getAgosto() != null ? ", Agosto" : "")
+                + (c.getSeptiembre() != null ? ", Septiembre" : "") + (c.getOctubre() != null ? ", Octubre" : "")
+                + ".";
     }
 
     public String getEst() {
@@ -257,6 +278,14 @@ public class contribucionesController implements Serializable {
 
     public void setBoton(boolean boton) {
         this.boton = boton;
+    }
+
+    @Inject
+    @Push
+    private PushContext notificacion;
+
+    public void sendMessage(String message) {
+        notificacion.send(message);
     }
 
 }
