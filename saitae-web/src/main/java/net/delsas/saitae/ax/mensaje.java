@@ -18,10 +18,8 @@ package net.delsas.saitae.ax;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
-import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.entities.Notificaciones;
 import net.delsas.saitae.entities.Persona;
 
@@ -88,6 +86,7 @@ public class mensaje implements Serializable{
 
     public void setDestinatario(int destinatario) {
         this.destinatario = destinatario;
+        this.notificacion.setDestinatario(new Persona(destinatario));
     }
 
     public String getCuerpoMensaje() {
@@ -120,6 +119,7 @@ public class mensaje implements Serializable{
 
     public void setRemitente(int remitente) {
         this.remitente = remitente;
+        this.notificacion.setComentario(remitente+"");
     }
 
     public String getCadenaAccion() {

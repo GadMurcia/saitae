@@ -65,7 +65,6 @@ public class sessionController implements Serializable {
         nombreNoti = " ";
         cuerpoNoti = " ";
         verNoti = false;
-        notificaciones = new ArrayList<>();
     }
 
     public void log() {
@@ -81,6 +80,7 @@ public class sessionController implements Serializable {
             } else {
                 FacesMessage ms = (FacesMessage) context.getExternalContext().getSessionMap().get("mensaje");
                 List<Notificaciones> not = us.getNotificacionesList();
+                notificaciones = new ArrayList<>();
                 for (int y = 0; y < 6; y++) {
                     if (not != null && y < not.size()) {
                         notificaciones.add(not.get(y));
@@ -237,10 +237,11 @@ public class sessionController implements Serializable {
                             notificaciones.add(not);
                         });
                     }
+
+                    verNoti = true;
+                    PrimeFaces.current().ajax().update("noti");
                 }
             }
-            verNoti = true;
-            PrimeFaces.current().ajax().update("noti");
         } catch (Exception ex) {
             Logger.getLogger(sessionController.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -33,10 +33,13 @@ import net.delsas.saitae.ax.mensaje;
 import net.delsas.saitae.beans.NotificacionesFacadeLocal;
 import net.delsas.saitae.beans.PermisosFacadeLocal;
 import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
+import net.delsas.saitae.entities.Cargo;
+import net.delsas.saitae.entities.MaestoCargo;
 import net.delsas.saitae.entities.Permisos;
 import net.delsas.saitae.entities.PermisosPK;
 import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.TipoPermiso;
+import net.delsas.saitae.entities.TipoPersona;
 import net.delsas.saitae.entities.TipopersonaPermiso;
 import org.omnifaces.cdi.Push;
 import org.omnifaces.cdi.PushContext;
@@ -118,11 +121,19 @@ public class permisoMaController implements Serializable {
                         + (new SimpleDateFormat("dd/mm/yyyy").format(p.getPermisoFechafin())));
                 mensaje x = new mensaje(0, usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
                         + " ha solicitado un nuevo permiso.",
-                        "Solicitud de permiso nueva", FacesMessage.SEVERITY_INFO, usuario.getIdpersona(), "tp¿¿3");
+                        "Solicitud de permiso nueva", FacesMessage.SEVERITY_INFO, usuario.getIdpersona(),
+                        "tp¿¿" + (usuario.getTipoPersona().getIdtipoPersona() == 4 ? 3 : 2));
                 sendMessage(x.toString());
-                try {
-                    notFL.create(x.getNotificacion());
-                } catch (Exception e) {
+                TipoPersona tp = tipoPersonaFL.find(usuario.getTipoPersona().getIdtipoPersona() == 4 ? 3 : 2);
+                for (Persona t : tp.getPersonaList()) {
+                    x.setDestinatario(t.getIdpersona());
+                    persistirNotificación(x);
+                }
+                for (Cargo g : tp.getCargoList()) {
+                    for (MaestoCargo mg : g.getMaestoCargoList()) {
+                        x.setDestinatario(mg.getMaestoCargoPK().getIdMaesto());
+                        persistirNotificación(x);
+                    }
                 }
                 FacesContext.getCurrentInstance().addMessage(null, ms);
                 p = new Permisos(new PermisosPK((usuario == null ? 0 : usuario.getIdpersona()), new Date(), 0, new Date()));
@@ -135,6 +146,13 @@ public class permisoMaController implements Serializable {
         } catch (Exception e) {
             ms = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage());
             FacesContext.getCurrentInstance().addMessage(null, ms);
+        }
+    }
+
+    private void persistirNotificación(mensaje x) {
+        try {
+            notFL.create(x.getNotificacion());
+        } catch (Exception e) {
         }
     }
 

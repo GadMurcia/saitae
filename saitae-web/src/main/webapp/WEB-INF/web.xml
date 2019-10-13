@@ -30,7 +30,7 @@
     <context-param>
         <description>flick south-street luna-[pink, amber, green, blue]</description>
         <param-name>primefaces.THEME</param-name>
-        <param-value>nova-colored</param-value>
+        <param-value>luna-pink</param-value>
     </context-param>
     <context-param>
         <param-name>primefaces.FONT_AWESOME</param-name>
