@@ -19,6 +19,7 @@ package net.delsas.saitae.controllers;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -29,8 +30,8 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import net.delsas.saitae.ax.mensaje;
+import net.delsas.saitae.beans.NotificacionesFacadeLocal;
 import net.delsas.saitae.beans.PermisosFacadeLocal;
-import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
 import net.delsas.saitae.entities.Permisos;
 import net.delsas.saitae.entities.PermisosPK;
@@ -49,15 +50,14 @@ import org.omnifaces.cdi.PushContext;
 public class permisoMaController implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    @EJB
+    private NotificacionesFacadeLocal notFL;
     @EJB
     private PermisosFacadeLocal pfl;
     @EJB
     private TipoPersonaFacadeLocal tipoPersonaFL;
-
     private List<TipopersonaPermiso> permisos;
     private Persona usuario;
-
     private Permisos p;
 
     @PostConstruct
@@ -116,10 +116,14 @@ public class permisoMaController implements Serializable {
                         "Su permiso se ha solicitado para entre las fechas: "
                         + (new SimpleDateFormat("dd/mm/yyyy").format(p.getPermisosPK().getPermisoFechaInicio())) + " y "
                         + (new SimpleDateFormat("dd/mm/yyyy").format(p.getPermisoFechafin())));
-                sendMessage(new mensaje(0, usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
+                mensaje x = new mensaje(0, usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
                         + " ha solicitado un nuevo permiso.",
-                        "Solicitud de permiso nueva", FacesMessage.SEVERITY_INFO, usuario.getIdpersona(), "tp¿¿3").toString());
-
+                        "Solicitud de permiso nueva", FacesMessage.SEVERITY_INFO, usuario.getIdpersona(), "tp¿¿3");
+                sendMessage(x.toString());
+                try {
+                    notFL.create(x.getNotificacion());
+                } catch (Exception e) {
+                }
                 FacesContext.getCurrentInstance().addMessage(null, ms);
                 p = new Permisos(new PermisosPK((usuario == null ? 0 : usuario.getIdpersona()), new Date(), 0, new Date()));
                 p.setTipoPersona(tipoPersonaFL.find(8));
@@ -137,15 +141,15 @@ public class permisoMaController implements Serializable {
     public ArrayList<TipoPermiso> getListaPermisos() {
         ArrayList<TipoPermiso> items = new ArrayList<>();
         if (permisos != null) {
-            for (TipopersonaPermiso t : permisos) {
+            permisos.forEach((t) -> {
                 items.add(t.getTipoPermiso());
-            }
+            });
         }
         return items;
     }
 
     public List<TipopersonaPermiso> getPermisos() {
-        return permisos;
+        return Collections.unmodifiableList(permisos);
     }
 
     public void setPermisos(List<TipopersonaPermiso> permisos) {

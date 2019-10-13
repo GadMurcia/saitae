@@ -37,6 +37,7 @@ import net.delsas.saitae.ax.mensaje;
 import net.delsas.saitae.ax.prueba;
 import net.delsas.saitae.beans.GradoFacadeLocal;
 import net.delsas.saitae.beans.MatriculaFacadeLocal;
+import net.delsas.saitae.beans.NotificacionesFacadeLocal;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.entities.Estudiante;
 import net.delsas.saitae.entities.Grado;
@@ -57,7 +58,8 @@ import org.primefaces.event.SelectEvent;
 public class matriculaController implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    @EJB
+    private NotificacionesFacadeLocal notFL;
     @EJB
     private MatriculaFacadeLocal matriculaFL;
     @EJB
@@ -93,12 +95,12 @@ public class matriculaController implements Serializable {
         } else {
             grados = new ArrayList<>();
             List<String> modalidades = gradoFL.getModalidadPorAño(getAño());
-            for (String d : modalidades) {
+            modalidades.forEach((d) -> {
                 List<Integer> niveles = gradoFL.getIdPorAñoyModalidad(getAño(), d);
-                for (Integer i : niveles) {
+                niveles.forEach((i) -> {
                     grados.add(new Grado(new GradoPK(i, d, "", 0)));
-                }
-            }
+                });
+            });
             nuevasMatriculasF = new ArrayList<>();
             nuevasMatriculasM = new ArrayList<>();
             selectedPK = new GradoPK(0, "", "", 0);
@@ -120,6 +122,7 @@ public class matriculaController implements Serializable {
     }
 
     public void cambiarSeccion() {
+        mensaje x;
         matriculaFL.remove(mat);
         mat.setGrado(gradoFL.find(seccion));
         matriculaFL.create(mat);
@@ -135,27 +138,35 @@ public class matriculaController implements Serializable {
                 : mat.getGrado().getGradoPK().getGradoModalidad().equals("S") ? " Secretariado"
                 : mat.getGrado().getGradoPK().getGradoModalidad().equals("G") ? " General" : " ")
                 + ". Vea la nómina de alumnos para comproobar el cambio."));
-        sendMessage(new mensaje(buscado.getIdpersona(), usuario.getPersonaNombre().split(" ")[0] + " "
+        x = new mensaje(buscado.getIdpersona(), usuario.getPersonaNombre().split(" ")[0] + " "
                 + usuario.getPersonaApellido().split(" ")[0]
                 + " ha cambiado la sección donde usted estaba inscrito "
                 + "a la sección '" + mat.getGrado().getGradoPK().getGradoSeccion() + "'.",
                 "Se ha registrado un cambio de sección",
                 FacesMessage.SEVERITY_INFO, usuario.getIdpersona(),
-                " ").toString());
+                " ");
+        sendMessage(x.toString());
+        try {
+            notFL.create(x.getNotificacion());
+        } catch (Exception e) {
+        }
         init();
     }
 
     public void guardar() {
+        mensaje x;
         int s = getSecciones().size() > 0 ? getSecciones().size() : 1;
         int m = nuevasMatriculasM.size() / s;
         int f = nuevasMatriculasF.size() / s;
         List<Matricula> masc = new ArrayList<>();
         List<Matricula> fem = new ArrayList<>();
         List<String> secciones = getSecciones();
-        for (String sec : secciones) {
+        secciones.stream().map((sec) -> {
             procesoSeleccion(f, nuevasMatriculasF, sec, fem);
+            return sec;
+        }).forEachOrdered((sec) -> {
             procesoSeleccion(m, nuevasMatriculasM, sec, masc);
-        }
+        });
         while (nuevasMatriculasF.size() > 0) {
             procesoSeleccion(1, nuevasMatriculasF, secciones.get(nuevasMatriculasF.size() - 1), fem);
         }
@@ -171,7 +182,7 @@ public class matriculaController implements Serializable {
             matriculaFL.create(matr);
             matriculaFL.edit(matr);
             GradoPK pk = matr.getGrado().getGradoPK();
-            sendMessage(new mensaje(matr.getMatriculaPK().getIdmatricula(),
+            x = new mensaje(matr.getMatriculaPK().getIdmatricula(),
                     "Usted ha sido aceptado en el Instituto Nacional 'Texistepeque'! "
                     + "Ha sido inscrito en " + (pk.getIdgrado() == 1 ? "Primero"
                     : (pk.getIdgrado() == 2 ? "Segundo"
@@ -182,7 +193,12 @@ public class matriculaController implements Serializable {
                     + " Sección " + pk.getGradoSeccion(),
                     "Su solicitud de nuevo ingreso ha sido aceptada",
                     FacesMessage.SEVERITY_INFO, usuario.getIdpersona(),
-                    " ").toString());
+                    " ");
+            sendMessage(x.toString());
+            try {
+                notFL.create(x.getNotificacion());
+            } catch (Exception e) {
+            }
         }
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
                 "Asignación de secciones exitosa!",
@@ -226,15 +242,17 @@ public class matriculaController implements Serializable {
     }
 
     private void asignaSexo(List<Matricula> nuevasMatriculas) {
-        for (Matricula matr : nuevasMatriculas) {
-            Persona p= personaFL.find(matr.getMatriculaPK().getIdmatricula());
-            matr.setEstudiante(p.getEstudiante());
+        nuevasMatriculas.forEach((Matricula matr) -> {
+            Persona p = matr.getEstudiante() == null
+                    ? personaFL.find(matr.getMatriculaPK().getIdmatricula())
+                    : matr.getEstudiante().getPersona();
+            matr.setEstudiante(matr.getEstudiante() == null ? p.getEstudiante() : matr.getEstudiante());
             if (p.getPersonaSexo()) {
                 nuevasMatriculasF.add(matr);
             } else {
                 nuevasMatriculasM.add(matr);
             }
-        }
+        });
     }
 
     public String getGradosLabel(GradoPK pk) {
@@ -367,9 +385,9 @@ public class matriculaController implements Serializable {
         List<SelectItem> it = new ArrayList<>();
         it.add(new SelectItem(" ", "Selecione"));
         List<String> m = gradoFL.getModalidadPorAño(getAño());
-        for (String mo : m) {
+        m.forEach((mo) -> {
             it.add(new SelectItem(mo, mo.equals("C") ? "TVC Contador" : mo.equals("S") ? "TVC Secretariado" : mo.equals("G") ? "General" : " "));
-        }
+        });
         return it;
     }
 
@@ -377,9 +395,9 @@ public class matriculaController implements Serializable {
         List<SelectItem> it = new ArrayList<>();
         it.add(new SelectItem(" ", "Selecione"));
         List<Integer> m = gradoFL.getIdPorAñoyModalidad(getAño(), mat.getGrado().getGradoPK().getGradoModalidad());
-        for (int mo : m) {
+        m.forEach((mo) -> {
             it.add(new SelectItem(mo, mo == 1 ? "Primero" : mo == 2 ? "Segundo" : mo == 3 ? "Tercero" : " "));
-        }
+        });
         return it;
     }
 
@@ -387,9 +405,9 @@ public class matriculaController implements Serializable {
         List<SelectItem> it = new ArrayList<>();
         it.add(new SelectItem(" ", "Selecione"));
         List<String> m = gradoFL.getSeccionPorAñoModalidadyId(getAño(), mat.getGrado().getGradoPK().getGradoModalidad(), mat.getGrado().getGradoPK().getIdgrado());
-        for (String mo : m) {
+        m.forEach((mo) -> {
             it.add(new SelectItem(mo, mo));
-        }
+        });
         return it;
     }
 
