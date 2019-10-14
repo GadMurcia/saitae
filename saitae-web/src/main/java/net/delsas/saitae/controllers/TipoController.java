@@ -996,6 +996,10 @@ public class TipoController implements Serializable {
         notificacion.send(message);
         tipopp.send(message);
     }
+    
+    public int getAño(){
+        return Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date()));
+    }
 
     public void escucha() {
         try {

@@ -45,6 +45,9 @@
                             <h:panelGrid columns="1" >
                                 <h:outputText value="#{n.notificacionCuerpo}" />
                             </h:panelGrid>
+                            <f:facet name="footer">
+                                #{sessionController.getDetalle_Fecha(n.fechaHora)}
+                            </f:facet>
                         </p:panel>
                     </ui:repeat>
                 </h:form>

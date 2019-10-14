@@ -34,6 +34,7 @@ import net.delsas.saitae.beans.NotificacionesFacadeLocal;
 import net.delsas.saitae.beans.PermisosFacadeLocal;
 import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
 import net.delsas.saitae.entities.Cargo;
+import net.delsas.saitae.entities.DelagacionCargo;
 import net.delsas.saitae.entities.MaestoCargo;
 import net.delsas.saitae.entities.Permisos;
 import net.delsas.saitae.entities.PermisosPK;
@@ -123,15 +124,21 @@ public class permisoMaController implements Serializable {
                         + " ha solicitado un nuevo permiso.",
                         "Solicitud de permiso nueva", FacesMessage.SEVERITY_INFO, usuario.getIdpersona(),
                         "tp¿¿" + (usuario.getTipoPersona().getIdtipoPersona() == 4 ? 3 : 2));
-                sendMessage(x.toString());
                 TipoPersona tp = tipoPersonaFL.find(usuario.getTipoPersona().getIdtipoPersona() == 4 ? 3 : 2);
                 for (Persona t : tp.getPersonaList()) {
                     x.setDestinatario(t.getIdpersona());
+                    sendMessage(x.toString());
+                    persistirNotificación(x);
+                }
+                for(DelagacionCargo dl:tp.getDelagacionCargoList()){
+                    x.setDestinatario(dl.getIdpersona().getIdpersona());
+                    sendMessage(x.toString());
                     persistirNotificación(x);
                 }
                 for (Cargo g : tp.getCargoList()) {
                     for (MaestoCargo mg : g.getMaestoCargoList()) {
                         x.setDestinatario(mg.getMaestoCargoPK().getIdMaesto());
+                        sendMessage(x.toString());
                         persistirNotificación(x);
                     }
                 }

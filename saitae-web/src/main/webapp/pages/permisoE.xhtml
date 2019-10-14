@@ -12,73 +12,72 @@
 
             <ui:define name="content">
                 <h:form id="frm">
-                    <p:panel header="Solicitud de Permisos">
-                        <h:panelGrid columns="3">
-                            <p:outputLabel for="tp" value="Tipo de permiso a solicitar: "/>
-                            <p:selectOneMenu id="tp" immediate="true" required="true" style="width: 400px;"
-                                             value="#{permisoEstController.p.tipoPermiso1}"
-                                             converter="omnifaces.SelectItemsConverter">
-                                <f:selectItem itemValue="null" itemLabel="Seleccione" noSelectionOption="true"/>
-                                <f:selectItems value="#{permisoEstController.listaPermisos}" var="tpe"
-                                               itemValue="#{tpe}" itemLabel="#{tpe.tipoPermisoNombre}"/>
-                                <p:ajax update="es"/>
-                            </p:selectOneMenu>
-                            <p:message for="tp"/>
+                    <h1 header="Solicitud de Permisos"/>
+                    <h:panelGrid columns="3">
+                        <p:outputLabel for="tp" value="Tipo de permiso a solicitar: "/>
+                        <p:selectOneMenu id="tp" immediate="true" required="true" style="width: 400px;"
+                                         value="#{permisoEstController.p.tipoPermiso1}"
+                                         converter="omnifaces.SelectItemsConverter">
+                            <f:selectItem itemValue="null" itemLabel="Seleccione" noSelectionOption="true"/>
+                            <f:selectItems value="#{permisoEstController.listaPermisos}" var="tpe"
+                                           itemValue="#{tpe}" itemLabel="#{tpe.tipoPermisoNombre}"/>
+                            <p:ajax update="es"/>
+                        </p:selectOneMenu>
+                        <p:message for="tp"/>
 
-                            <p:outputLabel for="es" value="¿Para quién es el permiso? "/>
-                            <p:selectOneMenu id="es" immediate="true" required="true" 
-                                             value="#{permisoEstController.id}" style="width: 400px;"
-                                             disabled="#{!permisoEstController.seleccionPermiso}"
-                                             converter="omnifaces.SelectItemsConverter">
-                                <f:selectItem itemValue="0" itemLabel="Seleccione" noSelectionOption="true"/>
-                                <f:selectItems value="#{permisoEstController.e}" var="ess"
-                                               itemValue="#{ess.idestudiante}" 
-                                               itemLabel="#{ess.persona.personaNombre.split(' ')[0]} 
-                                               #{ess.persona.personaApellido.split(' ')[0]}"/>
-                                <p:ajax event="itemSelect" listener="#{permisoEstController.onItemSelect}" 
-                                        update="m summit"/>
-                            </p:selectOneMenu>
-                            <p:message for="es"/>
+                        <p:outputLabel for="es" value="¿Para quién es el permiso? "/>
+                        <p:selectOneMenu id="es" immediate="true" required="true" 
+                                         value="#{permisoEstController.id}" style="width: 400px;"
+                                         disabled="#{!permisoEstController.seleccionPermiso}"
+                                         converter="omnifaces.SelectItemsConverter">
+                            <f:selectItem itemValue="0" itemLabel="Seleccione" noSelectionOption="true"/>
+                            <f:selectItems value="#{permisoEstController.e}" var="ess"
+                                           itemValue="#{ess.idestudiante}" 
+                                           itemLabel="#{ess.persona.personaNombre.split(' ')[0]} 
+                                           #{ess.persona.personaApellido.split(' ')[0]}"/>
+                            <p:ajax event="itemSelect" listener="#{permisoEstController.onItemSelect}" 
+                                    update="m summit"/>
+                        </p:selectOneMenu>
+                        <p:message for="es"/>
 
-                            <p:outputLabel for="m" value="El estudiante está matriculado en:  "/>
-                            <p:outputLabel id="m" value="   #{permisoEstController.m.grado.gradoPK.idgrado==1
-                                                              ? 'Primero': (permisoEstController.m.grado.gradoPK.idgrado==2
-                                                              ? 'Segundo' : (permisoEstController.m.grado.gradoPK.idgrado==3
-                                                              ? 'Tercero': ' '))} #{permisoEstController.m.grado.gradoPK.gradoModalidad.equals('C') 
-                                                              ? 'Contador' : (permisoEstController.m.grado.gradoPK.gradoModalidad.equals('S')
-                                                              ? 'Secretariado' : (permisoEstController.m.grado.gradoPK.gradoModalidad.equals('G')
-                                                              ? 'General' : ' '))} #{permisoEstController.m.grado.gradoPK.gradoSeccion} "
-                                           style="width: 400px;"/>
-                            <p:column/>
+                        <p:outputLabel for="m" value="El estudiante está matriculado en:  "/>
+                        <p:outputLabel id="m" value="   #{permisoEstController.m.grado.gradoPK.idgrado==1
+                                                          ? 'Primero': (permisoEstController.m.grado.gradoPK.idgrado==2
+                                                          ? 'Segundo' : (permisoEstController.m.grado.gradoPK.idgrado==3
+                                                          ? 'Tercero': ' '))} #{permisoEstController.m.grado.gradoPK.gradoModalidad.equals('C') 
+                                                          ? 'Contador' : (permisoEstController.m.grado.gradoPK.gradoModalidad.equals('S')
+                                                          ? 'Secretariado' : (permisoEstController.m.grado.gradoPK.gradoModalidad.equals('G')
+                                                          ? 'General' : ' '))} #{permisoEstController.m.grado.gradoPK.gradoSeccion} "
+                                       style="width: 400px;"/>
+                        <p:column/>
 
-                            <p:outputLabel for="mot" value="Motivo: *"/>
-                            <p:inputText id="mot" value="#{permisoEstController.p.permisosMotivo}" required="true" 
-                                         label="El motivo de la solicitud de permiso" style="width: 400px;"/>
-                            <p:message for="mot"/>
+                        <p:outputLabel for="mot" value="Motivo: *"/>
+                        <p:inputText id="mot" value="#{permisoEstController.p.permisosMotivo}" required="true" 
+                                     label="El motivo de la solicitud de permiso" style="width: 400px;"/>
+                        <p:message for="mot"/>
 
-                            <p:outputLabel value="Solicitado por: "/>
-                            <p:outputLabel value="#{permisoEstController.usuario.personaNombre} 
-                                           #{permisoEstController.usuario.personaApellido}" 
-                                           style="width: 400px;"/>
-                            <p:column/>
+                        <p:outputLabel value="Solicitado por: "/>
+                        <p:outputLabel value="#{permisoEstController.usuario.personaNombre} 
+                                       #{permisoEstController.usuario.personaApellido}" 
+                                       style="width: 400px;"/>
+                        <p:column/>
 
-                            <p:outputLabel for="mask" value="Fecha de inicio:" />
-                            <p:datePicker id="mask" value="#{permisoEstController.p.permisosPK.permisoFechaInicio}"
-                                          showIcon="true" required="true" pattern="dd/MM/yyyy"/>
-                            <p:message for="mask"/>
+                        <p:outputLabel for="mask" value="Fecha de inicio:" />
+                        <p:datePicker id="mask" value="#{permisoEstController.p.permisosPK.permisoFechaInicio}"
+                                      showIcon="true" required="true" pattern="dd/MM/yyyy"/>
+                        <p:message for="mask"/>
 
-                            <p:outputLabel for="mask1" value="Fecha de finalización: " />
-                            <p:datePicker id="mask1" value="#{permisoEstController.p.permisoFechafin}"
-                                          showIcon="true" required="true" pattern="dd/MM/yyyy"/>
+                        <p:outputLabel for="mask1" value="Fecha de finalización: " />
+                        <p:datePicker id="mask1" value="#{permisoEstController.p.permisoFechafin}"
+                                      showIcon="true" required="true" pattern="dd/MM/yyyy"/>
 
-                            <p:column/>
-                            <p:column/>
-                            <p:commandButton id="summit" value="Solicitar" 
-                                             disabled="#{!permisoEstController.seleccionEstudiante}"
-                                             actionListener="#{permisoEstController.guardar()}" 
-                                             update=":form0:msgs frm"/>
-                        </h:panelGrid>
-                    </p:panel>
+                        <p:column/>
+                        <p:column/>
+                        <p:commandButton id="summit" value="Solicitar" 
+                                         disabled="#{!permisoEstController.seleccionEstudiante}"
+                                         actionListener="#{permisoEstController.guardar()}" 
+                                         update=":form0:msgs frm"/>
+                    </h:panelGrid>
                 </h:form>
                 <h:outputScript library="js" name="locales.js"/>
             </ui:define>

@@ -22,12 +22,10 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import net.delsas.saitae.ax.mensaje;
-import net.delsas.saitae.ax.notificacion;
-import net.delsas.saitae.beans.DelagacionCargoFacade;
+import net.delsas.saitae.beans.NotificacionesFacadeLocal;
 import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
 import net.delsas.saitae.entities.Acceso;
 import net.delsas.saitae.entities.AccesoTipoPersona;
-import net.delsas.saitae.entities.DelagacionCargo;
 import net.delsas.saitae.entities.MaestoCargo;
 import net.delsas.saitae.entities.Notificaciones;
 import net.delsas.saitae.entities.Persona;
@@ -55,16 +53,15 @@ public class sessionController implements Serializable {
     private TipoPersonaFacadeLocal tpfl;
 
     //para notificaciones
+    @EJB
+    private NotificacionesFacadeLocal notiFL;
     private List<Notificaciones> notificaciones;
-    private String nombreNoti;
-    private String cuerpoNoti;
     private boolean verNoti;
 
     @PostConstruct
     public void init() {
-        nombreNoti = " ";
-        cuerpoNoti = " ";
         verNoti = false;
+        notificaciones = new ArrayList<>();
     }
 
     public void log() {
@@ -80,10 +77,17 @@ public class sessionController implements Serializable {
             } else {
                 FacesMessage ms = (FacesMessage) context.getExternalContext().getSessionMap().get("mensaje");
                 List<Notificaciones> not = us.getNotificacionesList();
-                notificaciones = new ArrayList<>();
-                for (int y = 0; y < 6; y++) {
-                    if (not != null && y < not.size()) {
-                        notificaciones.add(not.get(y));
+                notificaciones.clear();
+                if (not != null) {
+                    Collections.sort(not, (Notificaciones o1, Notificaciones o2) -> o2.getFechaHora().hashCode() - o1.getFechaHora().hashCode());
+                    if (not.size() <= 5) {
+                        notificaciones.addAll(not);
+                    } else {
+                        for (int y = 0; y < 6; y++) {
+                            if (y < not.size()) {
+                                notificaciones.add(not.get(y));
+                            }
+                        }
                     }
                 }
                 if (!((boolean) context.getExternalContext().getSessionMap().get("primerInicio"))) {
@@ -222,6 +226,15 @@ public class sessionController implements Serializable {
                         false, m.getRemitente() + "", new Persona(m.getDestinatario()), new Date());
                 if (!notificaciones.contains(n)) {
                     List<Notificaciones> n1 = new ArrayList<>();
+                    notificaciones.forEach((Notificaciones not) -> {
+                        try {
+                            not.setVista(true);
+                            notiFL.edit(not);
+                        } catch (Exception e) {
+                            System.out.println(e.getMessage() != null ? e.getMessage()
+                                    : "Error al actualizar las notificaciones");
+                        }
+                    });
                     notificaciones.stream().map((nn) -> {
                         nn.setVista(true);
                         return nn;
@@ -237,7 +250,6 @@ public class sessionController implements Serializable {
                             notificaciones.add(not);
                         });
                     }
-
                     verNoti = true;
                     PrimeFaces.current().ajax().update("noti");
                 }
@@ -247,28 +259,13 @@ public class sessionController implements Serializable {
         }
     }
 
-    public String getNombreNoti() {
-        return nombreNoti;
-    }
-
-    public void setNombreNoti(String nombreNoti) {
-        this.nombreNoti = nombreNoti;
-    }
-
-    public String getCuerpoNoti() {
-        return cuerpoNoti;
-    }
-
-    public void setCuerpoNoti(String cuerpoNoti) {
-        this.cuerpoNoti = cuerpoNoti;
+    public String getDetalle_Fecha(Date e) {
+        String x[]= new SimpleDateFormat("EEEEE dd-MMMMM-yyyy hh:mm:ss a").format(e).split("-");
+        return x[0]+" de "+x[1]+" de "+x[2];
     }
 
     public boolean isVerNoti() {
         return verNoti;
-    }
-
-    public void setVerNoti(boolean verNoti) {
-        this.verNoti = verNoti;
     }
 
     public List<Notificaciones> getNotificaciones() {
