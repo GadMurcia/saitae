@@ -33,7 +33,6 @@ public class MestroHorarioMateriasPK implements Serializable {
     private int idHorario;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 2)
     @Column(name = "diaSemana")
     private int diaSemana;
     @Basic(optional = false)
@@ -67,7 +66,6 @@ public class MestroHorarioMateriasPK implements Serializable {
         this.gradoModalidad = gradoModalidad;
         this.seccionGrado = seccionGrado;
         this.añoGrado = añoGrado;
-        this.gradoModalidad = gradoModalidad;
     }
 
     public int getIdMaestro() {

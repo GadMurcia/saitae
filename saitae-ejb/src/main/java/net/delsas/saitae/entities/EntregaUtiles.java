@@ -166,11 +166,11 @@ public class EntregaUtiles implements Serializable {
                 || (this.uniforme == !other.uniforme)
                 || (this.zapatos == !other.zapatos)
                 || (this.utiles == !other.utiles));
-    }
+        }
 
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.EntregaUtiles[ entregaUtilesPK=" + entregaUtilesPK + " ]";
     }
-
+    
 }

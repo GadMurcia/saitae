@@ -34,7 +34,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import net.delsas.saitae.ax.mensaje;
-import net.delsas.saitae.ax.prueba;
+import net.delsas.saitae.ax.Auxiliar;
 import net.delsas.saitae.beans.GradoFacadeLocal;
 import net.delsas.saitae.beans.MatriculaFacadeLocal;
 import net.delsas.saitae.beans.NotificacionesFacadeLocal;
@@ -104,7 +104,7 @@ public class matriculaController implements Serializable {
             nuevasMatriculasF = new ArrayList<>();
             nuevasMatriculasM = new ArrayList<>();
             selectedPK = new GradoPK(0, "", "", 0);
-            buscado = new prueba().getEstudiante();
+            buscado = new Auxiliar().getEstudiante();
             seccion = new GradoPK(0, " ", "", 0);
             mat = new Matricula(0, getAño());
             mat.setGrado(new Grado(seccion));
@@ -276,7 +276,7 @@ public class matriculaController implements Serializable {
         List<String> results = new ArrayList<>();
         List<Persona> list;
         try {
-            (new prueba()).setDui(query, buscado);
+            (new Auxiliar()).setDui(query, buscado);
             list = personaFL.getPersonaByLikeIdAndType(buscado.getIdpersona(), 8);
             list.forEach((o) -> {
                 results.add(o.getPersonaNombre() + " "
@@ -292,7 +292,7 @@ public class matriculaController implements Serializable {
         setBuscado(new Persona(0));
         try {
             String x[] = event.getObject().toString().split("=>");
-            (new prueba()).setDui(x.length > 1 ? x[1] : x[0], getBuscado());
+            (new Auxiliar()).setDui(x.length > 1 ? x[1] : x[0], getBuscado());
             setBuscado(personaFL.find(getBuscado().getIdpersona()));
             mat = matriculaFL.find(new MatriculaPK(buscado.getIdpersona(), getAño()));
             btnGuardarp2 = mat != null;
@@ -332,11 +332,11 @@ public class matriculaController implements Serializable {
     }
 
     public List<SelectItem> getDepLista(Persona p) {
-        return new prueba().getDepartamentoLista(p);
+        return new Auxiliar().getDepartamentoLista(p);
     }
 
     public List<SelectItem> getMunLista(Persona p) {
-        return new prueba().getMunicipioLista(p);
+        return new Auxiliar().getMunicipioLista(p);
     }
 
     public String[] getDependencia(Estudiante e) {
@@ -366,7 +366,7 @@ public class matriculaController implements Serializable {
     }
 
     public void setNie(String nie) {
-        new prueba().setDui(nie, buscado);
+        new Auxiliar().setDui(nie, buscado);
     }
 
     public String getNie() {

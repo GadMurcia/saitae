@@ -28,7 +28,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
-import net.delsas.saitae.ax.prueba;
+import net.delsas.saitae.ax.Auxiliar;
 import net.delsas.saitae.beans.CargoFacadeLocal;
 import net.delsas.saitae.beans.FinanciamientoFacadeLocal;
 import net.delsas.saitae.beans.MaestoCargoFacadeLocal;
@@ -65,7 +65,7 @@ public class maestroController implements Serializable {
     private TipoNombramientoFacadeLocal tipoNombramientoFL;
 
     private static final long serialVersionUID = 1L;
-    private prueba auxiliar;
+    private Auxiliar auxiliar;
     private Maestro maestro;
     @EJB
     private MaestroFacadeLocal mfl;
@@ -85,7 +85,7 @@ public class maestroController implements Serializable {
      */
     @PostConstruct
     public void init() {
-        auxiliar = new prueba();
+        auxiliar = new Auxiliar();
         maestro = auxiliar.getMaestro().getMaestro();
         cargos = cargoFL.findAll();
         financiamientos = financiamientoFL.findAll();

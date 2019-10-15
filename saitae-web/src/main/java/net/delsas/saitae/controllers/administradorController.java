@@ -28,7 +28,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
-import net.delsas.saitae.ax.prueba;
+import net.delsas.saitae.ax.Auxiliar;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
 import net.delsas.saitae.entities.Persona;
@@ -54,11 +54,11 @@ public class administradorController implements Serializable {
     @EJB
     private TipoPersonaFacadeLocal tpfl;
     private List<TipoPersona> tipos;
-    private prueba aux;
+    private Auxiliar aux;
 
     @PostConstruct
     public void init() {
-        aux = new prueba();
+        aux = new Auxiliar();
         selected=new Persona();
         adm = aux.getAdministradorCra();
         adm.setTipoPersona(new TipoPersona());

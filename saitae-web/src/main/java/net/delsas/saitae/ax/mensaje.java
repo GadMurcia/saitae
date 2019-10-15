@@ -48,7 +48,7 @@ public class mensaje implements Serializable{
         this.remitente = remitente;
         this.cadenaAccion = cadenaAccion;
         this.facesmessage = new FacesMessage(severidad, tituloMensaje, cuerpoMensaje);
-        this.notificacion = new Notificaciones(new Persona(remitente), tituloMensaje, cuerpoMensaje, false, "", new Persona(remitente), new Date());
+        this.notificacion = new Notificaciones(new Date(), tituloMensaje, cuerpoMensaje, false, "", new Persona(destinatario), new Persona(remitente));
     }
 
     public mensaje(int destinatario, int remitente, String cadenaAccion, FacesMessage facesmessage) {
@@ -59,7 +59,7 @@ public class mensaje implements Serializable{
         this.cuerpoMensaje = facesmessage.getDetail();
         this.tituloMensaje = facesmessage.getSummary();
         this. severidad= facesmessage.getSeverity();
-        this.notificacion = new Notificaciones(new Persona(remitente), tituloMensaje, cuerpoMensaje, false, "", new Persona(remitente), new Date());
+        this.notificacion = new Notificaciones(new Date(), tituloMensaje, cuerpoMensaje, false, "", new Persona(destinatario), new Persona(remitente));
     }
 
     public mensaje(String mensajePush) throws Exception{
@@ -72,7 +72,7 @@ public class mensaje implements Serializable{
             this.remitente = Integer.valueOf(msj[4]);
             this.cadenaAccion = msj[5];
             this.facesmessage = new FacesMessage(severidad, tituloMensaje, cuerpoMensaje);
-            this.notificacion = new Notificaciones(new Persona(remitente), tituloMensaje, cuerpoMensaje, false, "", new Persona(remitente), new Date());
+            this.notificacion = new Notificaciones(new Date(), tituloMensaje, cuerpoMensaje, false, "", new Persona(destinatario), new Persona(remitente));
         } else {
             throw new Exception("La cadena ingresada no tiene el formato indicado para la conversión.");
         }

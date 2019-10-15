@@ -36,13 +36,13 @@ import net.delsas.saitae.entities.TipoPersona;
  *
  * @author delsas
  */
-public class prueba implements Serializable {
+public class Auxiliar implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private Persona user;
 
-    public prueba() {
+    public Auxiliar() {
         user = new Persona(0, "", "", false);
         user.setPersonaContrasenya("");
         user.setPersonaNacimiento(getEdad(18));
@@ -62,7 +62,7 @@ public class prueba implements Serializable {
     }
 
     public Persona getEstudiante() {
-        Persona e = (new prueba()).getUser();
+        Persona e = (new Auxiliar()).getUser();
         e.setPersonaNacimiento(getEdad(12));
         e.setEstudiante(new Estudiante(e.getIdpersona(), false, 0, false, ""));
         e.getEstudiante().setEstudianteRiesgoVulnerabilidad("");
@@ -90,7 +90,7 @@ public class prueba implements Serializable {
     }
 
     public Persona getRepresentante() {
-        Persona r = (new prueba()).getUser();
+        Persona r = (new Auxiliar()).getUser();
         r.setEstudiante(new Estudiante(r.getIdpersona(), false, 0, false, ""));
         r.getEstudiante().setEstudianteRiesgoVulnerabilidad("");
         r.getEstudiante().setEstudianteMedioTransporte(null);
@@ -117,7 +117,7 @@ public class prueba implements Serializable {
     }
 
     public Persona getMadre() {
-        Persona m = (new prueba()).getUser();
+        Persona m = (new Auxiliar()).getUser();
         m.setTipoPersona(new TipoPersona(10, "Madre de familia"));
         m.setPersonaEmail(null);
         m.setPersonaNit(null);
@@ -127,7 +127,7 @@ public class prueba implements Serializable {
     }
 
     public Persona getPadre() {
-        Persona p = (new prueba()).getUser();
+        Persona p = (new Auxiliar()).getUser();
         p.setTipoPersona(new TipoPersona(11, "Padre de familia"));
         p.setPersonaEmail(null);
         p.setPersonaNit(null);
@@ -137,7 +137,7 @@ public class prueba implements Serializable {
     }
 
     public Persona getMaestro() {
-        Persona ma = (new prueba()).getUser();
+        Persona ma = (new Auxiliar()).getUser();
         ma.setEstudiante(null);
         ma.setMaestro(new Maestro(ma.getIdpersona()));
         ma.getMaestro().setMaestroAfp("");
@@ -172,35 +172,35 @@ public class prueba implements Serializable {
     }
 
     public Persona getBibliotecario() {
-        Persona b = (new prueba()).getUser();
+        Persona b = (new Auxiliar()).getUser();
         b.setTipoPersona(new TipoPersona(5, "Bibliotecario"));
         b.setPersonaActivo(true);
         return b;
     }
 
     public Persona getAdministradorCra() {
-        Persona a = (new prueba()).getUser();
+        Persona a = (new Auxiliar()).getUser();
         a.setTipoPersona(new TipoPersona(6, "Administrador CRA"));
         a.setPersonaActivo(true);
         return a;
     }
 
     public Persona getSubDirector() {
-        Persona sd = (new prueba()).getUser();
+        Persona sd = (new Auxiliar()).getUser();
         sd.setTipoPersona(new TipoPersona(3, "Subdirector"));
         sd.setPersonaActivo(true);
         return sd;
     }
 
     public Persona getLAboratorista() {
-        Persona l = (new prueba()).getUser();
+        Persona l = (new Auxiliar()).getUser();
         l.setTipoPersona(new TipoPersona(7, "Laboratorista"));
         l.setPersonaActivo(true);
         return l;
     }
 
     public Persona getAmin() {
-        Persona ad = (new prueba()).getUser();
+        Persona ad = (new Auxiliar()).getUser();
         ad.setEstudiante(getEstudiante().getEstudiante());
         ad.setMaestro(getMaestro().getMaestro());
         ad.setTipoPersona(new TipoPersona(1, "Administrador"));

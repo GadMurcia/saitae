@@ -139,5 +139,5 @@ public class Matricula implements Serializable {
     public String toString() {
         return "net.delsas.saitae.entities.Matricula[ matriculaPK=" + matriculaPK + " ]";
     }
-
+    
 }

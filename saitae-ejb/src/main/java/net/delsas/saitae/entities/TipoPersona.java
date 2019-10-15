@@ -45,8 +45,6 @@ public class TipoPersona implements Serializable {
     @Size(max = 145)
     @Column(name = "tipoPersonaComentario")
     private String tipoPersonaComentario;
-    @OneToMany(mappedBy = "cargoTipoPersona")
-    private List<Cargo> cargoList;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -56,6 +54,8 @@ public class TipoPersona implements Serializable {
     private Integer idtipoPersona;
     @OneToMany(mappedBy = "anuncioTipoPersona")
     private List<Anuncio> anuncioList;
+    @OneToMany(mappedBy = "cargoTipoPersona")
+    private List<Cargo> cargoList;
     @OneToMany(mappedBy = "tipoPersona")
     private List<Persona> personaList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTipoPersona")
@@ -98,6 +98,15 @@ public class TipoPersona implements Serializable {
     }
 
     @XmlTransient
+    public List<Cargo> getCargoList() {
+        return cargoList;
+    }
+
+    public void setCargoList(List<Cargo> cargoList) {
+        this.cargoList = cargoList;
+    }
+
+    @XmlTransient
     public List<Persona> getPersonaList() {
         return personaList;
     }
@@ -107,12 +116,12 @@ public class TipoPersona implements Serializable {
     }
 
     @XmlTransient
-    public List<DelagacionCargo> getDelagacionCargoList() {
+    public List<DelagacionCargo> getDelegacionCargoList() {
         return delagacionCargoList;
     }
 
-    public void setDelagacionCargoList(List<DelagacionCargo> delagacionCargoList) {
-        this.delagacionCargoList = delagacionCargoList;
+    public void setDelegacionCargoList(List<DelagacionCargo> delegacionCargoList) {
+        this.delagacionCargoList = delegacionCargoList;
     }
 
     @XmlTransient
@@ -165,16 +174,6 @@ public class TipoPersona implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.TipoPersona[ idtipoPersona=" + idtipoPersona + " ]";
-    }
-
-
-    @XmlTransient
-    public List<Cargo> getCargoList() {
-        return cargoList;
-    }
-
-    public void setCargoList(List<Cargo> cargoList) {
-        this.cargoList = cargoList;
     }
 
     public String getTipoPersonaNombre() {

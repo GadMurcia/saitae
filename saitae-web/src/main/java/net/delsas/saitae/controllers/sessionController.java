@@ -16,6 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -42,7 +43,7 @@ import org.primefaces.model.menu.MenuElement;
  * @author delsas
  */
 @Named
-@ViewScoped
+@SessionScoped
 public class sessionController implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -70,15 +71,12 @@ public class sessionController implements Serializable {
         try {
             us = (Persona) context.getExternalContext().getSessionMap().get("usuario");
             if (us == null) {
-
                 context.getExternalContext().getSessionMap().put("mensaje", new FacesMessage(FacesMessage.SEVERITY_ERROR,
                         "Falla!", "Esa vista no le está permitida aún porque usted no se a logueado."));
                 context.getExternalContext().redirect("./../");
-
             } else {
-                this.menu();
                 FacesMessage ms = (FacesMessage) context.getExternalContext().getSessionMap().get("mensaje");
-                List<Notificaciones> not = us.getNotificacionesRecibidasList();
+                List<Notificaciones> not = us.getNotificacionesDestinatarioList();
                 notificaciones.clear();
                 if (not != null) {
                     Collections.sort(not, (Notificaciones o1, Notificaciones o2) -> o2.getFechaHora().hashCode() - o1.getFechaHora().hashCode());
@@ -103,6 +101,7 @@ public class sessionController implements Serializable {
                     context.getExternalContext().getSessionMap().remove("primerInicio");
                     context.getExternalContext().getSessionMap().put("primerInicio", false);
                 }
+                this.menu();
             }
         } catch (Exception ex) {
             context.addMessage("growl", new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error Inesperado", ex.getMessage()));
@@ -228,6 +227,7 @@ public class sessionController implements Serializable {
                     n1.add(m.getNotificacion());
                     notificaciones.forEach((Notificaciones not) -> {
                         try {
+                            not = notiFL.find(not.getFechaHora());
                             not.setVista(true);
                             notiFL.edit(not);
                         } catch (Exception e) {
@@ -246,7 +246,7 @@ public class sessionController implements Serializable {
                     if (n1.size() < 4) {
                         notificaciones.addAll(n1);
                     } else {
-                        for (int y = 0; y < 6; y++) {
+                        for (int y = 0; y < 4; y++) {
                             notificaciones.add(n1.get(y));
                         }
                     }

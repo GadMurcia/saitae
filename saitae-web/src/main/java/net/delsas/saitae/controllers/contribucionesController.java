@@ -32,7 +32,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import net.delsas.saitae.ax.mensaje;
-import net.delsas.saitae.ax.prueba;
+import net.delsas.saitae.ax.Auxiliar;
 import net.delsas.saitae.beans.ContribucionesFacadeLocal;
 
 import net.delsas.saitae.beans.MatriculaFacadeLocal;
@@ -94,7 +94,7 @@ public class contribucionesController implements Serializable {
         List<String> results = new ArrayList<>();
         List<Persona> listp;
         try {
-            (new prueba()).setDui(query, p);
+            (new Auxiliar()).setDui(query, p);
             listp = personaFL.getPersonaByLikeIdAndType(p.getIdpersona(), 8);
             for (Persona datos : listp) {
                 results.add(datos.getPersonaNombre() + " "
@@ -107,7 +107,7 @@ public class contribucionesController implements Serializable {
     }
 
     public void onItemSelect(SelectEvent event) {
-        new prueba().setDui(event.getObject().toString(), p);
+        new Auxiliar().setDui(event.getObject().toString(), p);
         p = personaFL.find(p.getIdpersona());
         contr.getContribucionesPK().setIdEstudiante(p.getIdpersona());
         contr = contrFL.find(contr.getContribucionesPK());
@@ -177,7 +177,7 @@ public class contribucionesController implements Serializable {
     }
 
     public void setNie(String nie) {
-        new prueba().setDui(nie, p);
+        new Auxiliar().setDui(nie, p);
     }
 
     public String getNie() {

@@ -32,7 +32,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import net.delsas.saitae.ax.mensaje;
-import net.delsas.saitae.ax.prueba;
+import net.delsas.saitae.ax.Auxiliar;
 import net.delsas.saitae.beans.GradoFacadeLocal;
 import net.delsas.saitae.beans.MatriculaFacadeLocal;
 import net.delsas.saitae.beans.NotificacionesFacadeLocal;
@@ -283,7 +283,7 @@ public class administraciónPermisoController implements Serializable {
                     : s.getPermisosSolicitante().getTipoPersona().getIdtipoPersona() == 1;
             if (e) {
                 solicitante = new Persona();
-                new prueba().setDui(s.getPermisosComentario().split("¿¿")[0], solicitante);
+                new Auxiliar().setDui(s.getPermisosComentario().split("¿¿")[0], solicitante);
                 solicitante.setPersonaNombre(s.getPermisosComentario().split("¿¿")[1]);
                 solicitante.setPersonaApellido(s.getPermisosComentario().split("¿¿")[2]);
             } else {

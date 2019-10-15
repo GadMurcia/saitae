@@ -32,7 +32,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import net.delsas.saitae.ax.mensaje;
-import net.delsas.saitae.ax.prueba;
+import net.delsas.saitae.ax.Auxiliar;
 import net.delsas.saitae.beans.EntregaUtilesFacadeLocal;
 import net.delsas.saitae.beans.MatriculaFacadeLocal;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
@@ -73,7 +73,7 @@ public class paquetesController implements Serializable {
     public void init() {
         boton = true;
         entregaUtiles = new EntregaUtiles(new EntregaUtilesPK(0, getAño()));
-        p = new prueba().getEstudiante();
+        p = new Auxiliar().getEstudiante();
         FacesContext context = FacesContext.getCurrentInstance();
         usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
         boolean r = usuario.getTipoPersona().getIdtipoPersona().equals(2) ? false
@@ -94,7 +94,7 @@ public class paquetesController implements Serializable {
         List<String> results = new ArrayList<>();
         List<Persona> listp;
         try {
-            (new prueba()).setDui(query, p);
+            (new Auxiliar()).setDui(query, p);
             listp = personaFL.getPersonaByLikeIdAndType(p.getIdpersona(), 8);
             for (Persona datos : listp) {
                 results.add(datos.getPersonaNombre() + " "
@@ -107,7 +107,7 @@ public class paquetesController implements Serializable {
     }
 
     public void onItemSelect(SelectEvent event) {
-        new prueba().setDui(event.getObject().toString(), p);
+        new Auxiliar().setDui(event.getObject().toString(), p);
         p = personaFL.find(p.getIdpersona());
         entregaUtiles = entregaUFL.find(new EntregaUtilesPK(p.getIdpersona(), getAño()));
         entregaUtiles = entregaUtiles == null ? new EntregaUtiles(p.getIdpersona(), getAño()) : entregaUtiles;
@@ -176,7 +176,7 @@ public class paquetesController implements Serializable {
     }
 
     public void setNie(String nie) {
-        new prueba().setDui(nie, p);
+        new Auxiliar().setDui(nie, p);
     }
 
     public String getNie() {

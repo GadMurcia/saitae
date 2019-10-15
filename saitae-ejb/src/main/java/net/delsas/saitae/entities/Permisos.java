@@ -191,5 +191,5 @@ public class Permisos implements Serializable {
     public String toString() {
         return "net.delsas.saitae.entities.Permisos[ permisosPK=" + permisosPK + " ]";
     }
-
+    
 }

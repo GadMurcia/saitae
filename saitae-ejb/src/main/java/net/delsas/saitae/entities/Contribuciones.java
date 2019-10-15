@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author gabriela
+ * @author delsas
  */
 @Entity
 @Table(name = "contribuciones", catalog = "intex", schema = "")
@@ -212,40 +212,7 @@ public class Contribuciones implements Serializable {
             return false;
         }
         Contribuciones other = (Contribuciones) object;
-        if (other == null
-                || (this.contribucionesPK == null && other.contribucionesPK != null)
-                || (this.contribucionesPK != null && !this.contribucionesPK.equals(other.contribucionesPK))
-                || (this.enero == null && other.enero != null)
-                || (this.enero != null && other.enero == null)
-                || (!(this.enero == null && other.enero == null) && !this.enero.equals(other.enero))
-                || (this.febrero == null && other.febrero != null)
-                || (this.febrero != null && other.febrero == null)
-                || (!(this.febrero == null && other.febrero == null) && !this.febrero.equals(other.febrero))
-                || (this.marzo == null && other.marzo!= null)
-                || (this.marzo != null && other.marzo == null)
-                || (!(this.marzo == null && other.marzo == null) && !this.marzo.equals(other.marzo))
-                || (this.abril == null && other.abril != null)
-                || (this.abril != null && other.abril == null)
-                || (!(this.abril == null && other.abril == null) && !this.abril.equals(other.abril))
-                || (this.mayo== null && other.mayo != null)
-                || (this.mayo != null && other.mayo == null)
-                || (!(this.mayo == null && other.mayo == null) && !this.mayo.equals(other.mayo))
-                || (this.junio == null && other.junio != null)
-                || (this.junio != null && other.junio == null)
-                || (!(this.junio == null && other.junio == null) && !this.junio.equals(other.junio))
-                || (this.julio == null && other.julio != null)
-                || (this.julio != null && other.julio == null)
-                || (!(this.julio == null && other.julio == null) && !this.julio.equals(other.julio))
-                || (this.agosto == null && other.agosto != null)
-                || (this.agosto != null && other.agosto == null)
-                || (!(this.agosto == null && other.agosto == null) && !this.agosto.equals(other.agosto))
-                || (this.septiembre == null && other.septiembre != null)
-                || (this.septiembre != null && other.septiembre == null)
-                || (!(this.septiembre == null && other.septiembre == null) && !this.septiembre.equals(other.septiembre))
-                || (this.octubre == null && other.octubre != null)
-                || (this.octubre != null && other.octubre == null)
-                || (!(this.octubre == null && other.octubre == null) && !this.octubre.equals(other.octubre))
-                ) {
+        if ((this.contribucionesPK == null && other.contribucionesPK != null) || (this.contribucionesPK != null && !this.contribucionesPK.equals(other.contribucionesPK))) {
             return false;
         }
         return true;
@@ -255,5 +222,5 @@ public class Contribuciones implements Serializable {
     public String toString() {
         return "net.delsas.saitae.entities.Contribuciones[ contribucionesPK=" + contribucionesPK + " ]";
     }
-
+    
 }

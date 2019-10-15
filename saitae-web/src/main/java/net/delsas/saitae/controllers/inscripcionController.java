@@ -37,7 +37,7 @@ import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.imageio.ImageIO;
 import javax.inject.Named;
-import net.delsas.saitae.ax.prueba;
+import net.delsas.saitae.ax.Auxiliar;
 import net.delsas.saitae.beans.DocumentosFacadeLocal;
 import net.delsas.saitae.beans.GradoFacadeLocal;
 import net.delsas.saitae.beans.MatriculaFacadeLocal;
@@ -79,10 +79,10 @@ public class inscripcionController implements Serializable {
 
     @PostConstruct
     public void init() {
-        estP = new prueba().getEstudiante();
-        repP = new prueba().getRepresentante();
-        madre = new prueba().getMadre();
-        padre = new prueba().getPadre();
+        estP = new Auxiliar().getEstudiante();
+        repP = new Auxiliar().getRepresentante();
+        madre = new Auxiliar().getMadre();
+        padre = new Auxiliar().getPadre();
         mat = new Matricula(0, getAño());
         mat.setGrado(new Grado(0, "", "", getAño()));
         doc = new Documentos(0);
@@ -281,83 +281,83 @@ public class inscripcionController implements Serializable {
     }
 
     public void setNie(String nie) {
-        new prueba().setDui(nie, estP);
+        new Auxiliar().setDui(nie, estP);
     }
 
     public String getNie() {
-        return new prueba().getDui(estP);
+        return new Auxiliar().getDui(estP);
     }
 
     public void setDuiP(String dui) {
-        new prueba().setDui(dui, padre);
+        new Auxiliar().setDui(dui, padre);
     }
 
     public String getDuiP() {
-        return new prueba().getDui(padre);
+        return new Auxiliar().getDui(padre);
     }
 
     public void setDuiM(String dui) {
-        new prueba().setDui(dui, madre);
+        new Auxiliar().setDui(dui, madre);
     }
 
     public String getDuiM() {
-        return new prueba().getDui(madre);
+        return new Auxiliar().getDui(madre);
     }
 
     public void setDuiR(String dui) {
-        new prueba().setDui(dui, repP);
+        new Auxiliar().setDui(dui, repP);
     }
 
     public String getDuiR() {
-        return new prueba().getDui(repP);
+        return new Auxiliar().getDui(repP);
     }
 
     public void setDep(String dep) {
-        new prueba().setDepartamento(dep, estP);
+        new Auxiliar().setDepartamento(dep, estP);
     }
 
     public String getDep() {
-        return new prueba().getDepartamento(estP);
+        return new Auxiliar().getDepartamento(estP);
     }
 
     public void setDepR(String dep) {
-        new prueba().setDepartamento(dep, repP);
+        new Auxiliar().setDepartamento(dep, repP);
     }
 
     public String getDepR() {
-        return new prueba().getDepartamento(repP);
+        return new Auxiliar().getDepartamento(repP);
     }
 
     public void setMun(String mun) {
-        new prueba().setMunicipio(mun, estP);
+        new Auxiliar().setMunicipio(mun, estP);
     }
 
     public String getMun() {
-        return new prueba().getMunicipio(estP);
+        return new Auxiliar().getMunicipio(estP);
     }
 
     public void setMunR(String mun) {
-        new prueba().setMunicipio(mun, repP);
+        new Auxiliar().setMunicipio(mun, repP);
     }
 
     public String getMunR() {
-        return new prueba().getMunicipio(repP);
+        return new Auxiliar().getMunicipio(repP);
     }
 
     public List<SelectItem> getDepLista() {
-        return new prueba().getDepartamentoLista(estP);
+        return new Auxiliar().getDepartamentoLista(estP);
     }
 
     public List<SelectItem> getMunLista() {
-        return new prueba().getMunicipioLista(estP);
+        return new Auxiliar().getMunicipioLista(estP);
     }
 
     public List<SelectItem> getDepListaR() {
-        return new prueba().getDepartamentoLista(repP);
+        return new Auxiliar().getDepartamentoLista(repP);
     }
 
     public List<SelectItem> getMunListaR() {
-        return new prueba().getMunicipioLista(repP);
+        return new Auxiliar().getMunicipioLista(repP);
     }
 
     public String onFlowProcess(FlowEvent event) {

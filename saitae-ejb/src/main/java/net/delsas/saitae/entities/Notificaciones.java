@@ -37,9 +37,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 })
 public class Notificaciones implements Serializable {
 
-    @JoinColumn(name = "remitente", referencedColumnName = "idpersona")
-    @ManyToOne(optional = false)
-    private Persona remitente;
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "fechaHora")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaHora;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 140)
@@ -60,13 +64,9 @@ public class Notificaciones implements Serializable {
     @JoinColumn(name = "destinatario", referencedColumnName = "idpersona")
     @ManyToOne(optional = false)
     private Persona destinatario;
-    private static final long serialVersionUID = 1L;
-    @Id
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "fechaHora")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaHora;
+    @JoinColumn(name = "remitente", referencedColumnName = "idpersona")
+    @ManyToOne(optional = false)
+    private Persona remitente;
 
     public Notificaciones() {
     }
@@ -75,60 +75,22 @@ public class Notificaciones implements Serializable {
         this.fechaHora = fechaHora;
     }
 
-    public Notificaciones(Persona remitente, String notificacionTitulo, String notificacionCuerpo, boolean vista, String notificacionComentario, Persona destinatario, Date fechaHora) {
-        this.remitente = remitente;
+    public Notificaciones(Date fechaHora, String notificacionTitulo, String notificacionCuerpo, boolean vista, String notificacionComentario, Persona destinatario, Persona remitente) {
+        this.fechaHora = fechaHora;
         this.notificacionTitulo = notificacionTitulo;
         this.notificacionCuerpo = notificacionCuerpo;
         this.vista = vista;
         this.notificacionComentario = notificacionComentario;
         this.destinatario = destinatario;
-        this.fechaHora = fechaHora;
+        this.remitente = remitente;
     }
     
     public Date getFechaHora() {
         return fechaHora;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (fechaHora != null ? fechaHora.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Notificaciones)) {
-            return false;
-        }
-        Notificaciones other = (Notificaciones) object;
-        if ((this.fechaHora == null && other.fechaHora != null) 
-                || (this.fechaHora != null && !this.fechaHora.equals(other.fechaHora))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "net.delsas.saitae.entities.Notificaciones[ fechaHora=" + fechaHora + " ]";
-    }
-
-    public Persona getDestinatario() {
-        return destinatario;
-    }
-
-    public void setDestinatario(Persona destinatario) {
-        this.destinatario = destinatario;
-    }
-
-    public Persona getRemitente() {
-        return remitente;
-    }
-
-    public void setRemitente(Persona remitente) {
-        this.remitente = remitente;
+    public void setFechaHora(Date fechaHora) {
+        this.fechaHora = fechaHora;
     }
 
     public String getNotificacionTitulo() {
@@ -161,6 +123,47 @@ public class Notificaciones implements Serializable {
 
     public void setNotificacionComentario(String notificacionComentario) {
         this.notificacionComentario = notificacionComentario;
+    }
+
+    public Persona getDestinatario() {
+        return destinatario;
+    }
+
+    public void setDestinatario(Persona destinatario) {
+        this.destinatario = destinatario;
+    }
+
+    public Persona getRemitente() {
+        return remitente;
+    }
+
+    public void setRemitente(Persona remitente) {
+        this.remitente = remitente;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (fechaHora != null ? fechaHora.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Notificaciones)) {
+            return false;
+        }
+        Notificaciones other = (Notificaciones) object;
+        if ((this.fechaHora == null && other.fechaHora != null) || (this.fechaHora != null && !this.fechaHora.equals(other.fechaHora))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "net.delsas.saitae.entities.Notificaciones[ fechaHora=" + fechaHora + " ]";
     }
     
 }

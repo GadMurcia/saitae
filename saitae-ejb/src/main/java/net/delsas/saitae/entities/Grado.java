@@ -46,9 +46,6 @@ import javax.xml.bind.annotation.XmlTransient;
 })
 public class Grado implements Serializable {
 
-   
-    
-
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected GradoPK gradoPK;
@@ -189,5 +186,5 @@ public class Grado implements Serializable {
     public String toString() {
         return "net.delsas.saitae.entities.Grado[ gradoPK=" + gradoPK + " ]";
     }
-
+    
 }

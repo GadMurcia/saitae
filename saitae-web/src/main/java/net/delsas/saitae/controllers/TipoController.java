@@ -32,7 +32,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import net.delsas.saitae.ax.mensaje;
-import net.delsas.saitae.ax.prueba;
+import net.delsas.saitae.ax.Auxiliar;
 import net.delsas.saitae.beans.AccesoFacadeLocal;
 import net.delsas.saitae.beans.AccesoTipoPersonaFacadeLocal;
 import net.delsas.saitae.beans.AulaFacadeLocal;
@@ -401,7 +401,7 @@ public class TipoController implements Serializable {
                         Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date()))), true);
                 g.setAulaGrado(new Aula(0));
                 g.getAulaGrado().setZonaAula(new Zona(0, ""));
-                g.setGradoMaestroGuia(new prueba().getMaestro().getMaestro());
+                g.setGradoMaestroGuia(new Auxiliar().getMaestro().getMaestro());
                 grados.add(g);
                 break;
             default:

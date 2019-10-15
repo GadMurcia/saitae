@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author gabriela
+ * @author delsas
  */
 @Entity
 @Table(name = "persona", catalog = "intex", schema = "")
@@ -125,29 +125,30 @@ public class Persona implements Serializable {
     @Column(name = "personaEstadoFamiliar")
     private Integer personaEstadoFamiliar;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "anuncioAnunciante")
-    private List<Anuncio> anunciosCreados;
-
+    private List<Anuncio> anuncioList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "evaluador")
+    private List<GradoEvaluacion> gradoEvaluacionList;
     @JoinColumn(name = "tipoPersona", referencedColumnName = "idtipoPersona")
     @ManyToOne
     private TipoPersona tipoPersona;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "destinatario")
-    private List<Notificaciones> notificacionesRecibidasList;
+    private List<Notificaciones> notificacionesDestinatarioList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "remitente")
-    private List<Notificaciones> notificacionesEnviadasList;
+    private List<Notificaciones> notificacionesremitenteList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idpersona")
     private List<DelagacionCargo> delagacionCargoList;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "persona")
     private Estudiante estudiante;
     @OneToMany(mappedBy = "estudiantePadre")
-    private List<Estudiante> estudianteDeLosQueEsPadreList;
+    private List<Estudiante> estudianDeLosQueEsPadreteList;
     @OneToMany(mappedBy = "estudianteMadre")
     private List<Estudiante> estudianteDeLosQueEsMadreList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEntregante")
-    private List<EntregaUtiles> entregaUtilesList;
+    private List<EntregaUtiles> entregaUtilesEntreganteList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "persona")
-    private List<Permisos> permisosList;
+    private List<Permisos> BeneficiarioDePermisosList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "permisosSolicitante")
-    private List<Permisos> permisosSolicitadosList;
+    private List<Permisos> SolicitanteDePermisosList;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "persona")
     private Maestro maestro;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "persona")
@@ -175,6 +176,7 @@ public class Persona implements Serializable {
         this.idpersona = idpersona;
     }
 
+
     public Date getPersonaNacimiento() {
         return personaNacimiento;
     }
@@ -182,6 +184,7 @@ public class Persona implements Serializable {
     public void setPersonaNacimiento(Date personaNacimiento) {
         this.personaNacimiento = personaNacimiento;
     }
+
 
     public Integer getPersonaCodigoResidencia() {
         return personaCodigoResidencia;
@@ -199,6 +202,7 @@ public class Persona implements Serializable {
         this.personaZonaVivienda = personaZonaVivienda;
     }
 
+
     public Boolean getPersonaSexo() {
         return personaSexo;
     }
@@ -215,13 +219,23 @@ public class Persona implements Serializable {
         this.personaEstadoFamiliar = personaEstadoFamiliar;
     }
 
+
     @XmlTransient
-    public List<Anuncio> getAnunciosCreados() {
-        return anunciosCreados;
+    public List<Anuncio> getAnuncioList() {
+        return anuncioList;
     }
 
-    public void setAnunciosCreados(List<Anuncio> anuncioList) {
-        this.anunciosCreados = anuncioList;
+    public void setAnuncioList(List<Anuncio> anuncioList) {
+        this.anuncioList = anuncioList;
+    }
+
+    @XmlTransient
+    public List<GradoEvaluacion> getGradoEvaluacionList() {
+        return gradoEvaluacionList;
+    }
+
+    public void setGradoEvaluacionList(List<GradoEvaluacion> gradoEvaluacionList) {
+        this.gradoEvaluacionList = gradoEvaluacionList;
     }
 
     public TipoPersona getTipoPersona() {
@@ -230,15 +244,6 @@ public class Persona implements Serializable {
 
     public void setTipoPersona(TipoPersona tipoPersona) {
         this.tipoPersona = tipoPersona;
-    }
-
-    @XmlTransient
-    public List<Notificaciones> getNotificacionesRecibidasList() {
-        return notificacionesRecibidasList;
-    }
-
-    public void setNotificacionesRecibidasList(List<Notificaciones> notificacionesList) {
-        this.notificacionesRecibidasList = notificacionesList;
     }
 
     @XmlTransient
@@ -256,51 +261,6 @@ public class Persona implements Serializable {
 
     public void setEstudiante(Estudiante estudiante) {
         this.estudiante = estudiante;
-    }
-
-    @XmlTransient
-    public List<Estudiante> getEstudianteDeLosQueEsPadreList() {
-        return estudianteDeLosQueEsPadreList;
-    }
-
-    public void setEstudianteDeLosQueEsPadreList(List<Estudiante> estudianteList) {
-        this.estudianteDeLosQueEsPadreList = estudianteList;
-    }
-
-    @XmlTransient
-    public List<Estudiante> getEstudianteDeLosQueEsMadreList() {
-        return estudianteDeLosQueEsMadreList;
-    }
-
-    public void setEstudianteDeLosQueEsMadreList(List<Estudiante> estudianteList) {
-        this.estudianteDeLosQueEsMadreList = estudianteList;
-    }
-
-    @XmlTransient
-    public List<EntregaUtiles> getEntregaUtilesList() {
-        return entregaUtilesList;
-    }
-
-    public void setEntregaUtilesList(List<EntregaUtiles> entregaUtilesList) {
-        this.entregaUtilesList = entregaUtilesList;
-    }
-
-    @XmlTransient
-    public List<Permisos> getPermisosList() {
-        return permisosList;
-    }
-
-    public void setPermisosList(List<Permisos> permisosList) {
-        this.permisosList = permisosList;
-    }
-
-    @XmlTransient
-    public List<Permisos> getPermisosSolicitadosList() {
-        return permisosSolicitadosList;
-    }
-
-    public void setPermisosSolicitadosList(List<Permisos> permisosList1) {
-        this.permisosSolicitadosList = permisosList1;
     }
 
     public Maestro getMaestro() {
@@ -448,14 +408,68 @@ public class Persona implements Serializable {
     public void setPersonaComentarios(String personaComentarios) {
         this.personaComentarios = personaComentarios;
     }
-    
+
     @XmlTransient
-    public List<Notificaciones> getNotificacionesEnviadasList() {
-        return notificacionesEnviadasList;
+    public List<Notificaciones> getNotificacionesDestinatarioList() {
+        return notificacionesDestinatarioList;
     }
 
-    public void setNotificacionesEnviadasList(List<Notificaciones> notificacionesEnviadasList) {
-        this.notificacionesEnviadasList = notificacionesEnviadasList;
+    public void setNotificacionesDestinatarioList(List<Notificaciones> notificacionesDestinatarioList) {
+        this.notificacionesDestinatarioList = notificacionesDestinatarioList;
     }
 
+    @XmlTransient
+    public List<Notificaciones> getNotificacionesremitenteList() {
+        return notificacionesremitenteList;
+    }
+
+    public void setNotificacionesremitenteList(List<Notificaciones> notificacionesremitenteList) {
+        this.notificacionesremitenteList = notificacionesremitenteList;
+    }
+
+    @XmlTransient
+    public List<Estudiante> getEstudianDeLosQueEsPadreteList() {
+        return estudianDeLosQueEsPadreteList;
+    }
+
+    public void setEstudianDeLosQueEsPadreteList(List<Estudiante> estudianDeLosQueEsPadreteList) {
+        this.estudianDeLosQueEsPadreteList = estudianDeLosQueEsPadreteList;
+    }
+
+    @XmlTransient
+    public List<Estudiante> getEstudianteDeLosQueEsMadreList() {
+        return estudianteDeLosQueEsMadreList;
+    }
+
+    public void setEstudianteDeLosQueEsMadreList(List<Estudiante> estudianteDeLosQueEsMadreList) {
+        this.estudianteDeLosQueEsMadreList = estudianteDeLosQueEsMadreList;
+    }
+
+    @XmlTransient
+    public List<EntregaUtiles> getEntregaUtilesEntreganteList() {
+        return entregaUtilesEntreganteList;
+    }
+
+    public void setEntregaUtilesEntreganteList(List<EntregaUtiles> entregaUtilesEntreganteList) {
+        this.entregaUtilesEntreganteList = entregaUtilesEntreganteList;
+    }
+
+    @XmlTransient
+    public List<Permisos> getBeneficiarioDePermisosList() {
+        return BeneficiarioDePermisosList;
+    }
+
+    public void setBeneficiarioDePermisosList(List<Permisos> BeneficiarioDePermisosList) {
+        this.BeneficiarioDePermisosList = BeneficiarioDePermisosList;
+    }
+
+    @XmlTransient
+    public List<Permisos> getSolicitanteDePermisosList() {
+        return SolicitanteDePermisosList;
+    }
+
+    public void setSolicitanteDePermisosList(List<Permisos> SolicitanteDePermisosList) {
+        this.SolicitanteDePermisosList = SolicitanteDePermisosList;
+    }
+    
 }

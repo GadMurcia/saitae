@@ -54,16 +54,14 @@ public class Anuncio implements Serializable {
     private Integer idanuncio;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "anuncioFechaFin")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date anuncioFechaFin;
-
-    private static final long serialVersionUID = 1L;
-    @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 45)
     @Column(name = "anuncioTitulo")
     private String anuncioTitulo;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "anuncioFechaFin")
+    @Temporal(TemporalType.DATE)
+    private Date anuncioFechaFin;
     @Basic(optional = false)
     @NotNull
     @Lob
@@ -173,7 +171,6 @@ public class Anuncio implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.Anuncio[ idanuncio=" + idanuncio + " ]";
-    }    
-
+    }
     
 }
