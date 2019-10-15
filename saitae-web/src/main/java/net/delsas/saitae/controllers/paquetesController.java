@@ -33,6 +33,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import net.delsas.saitae.ax.mensaje;
 import net.delsas.saitae.ax.Auxiliar;
+import net.delsas.saitae.beans.AccesoFacadeLocal;
+import net.delsas.saitae.beans.AccesoTipoPersonaFacadeLocal;
 import net.delsas.saitae.beans.EntregaUtilesFacadeLocal;
 import net.delsas.saitae.beans.MatriculaFacadeLocal;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
@@ -68,6 +70,10 @@ public class paquetesController implements Serializable {
     private EntregaUtiles entregaUtiles;
     @EJB
     private MatriculaFacadeLocal matriculaFL;
+    @EJB
+    private AccesoFacadeLocal accesoFL;
+    @EJB
+    private AccesoTipoPersonaFacadeLocal accesoTPFL;
 
     @PostConstruct
     public void init() {
@@ -76,16 +82,15 @@ public class paquetesController implements Serializable {
         p = new Auxiliar().getEstudiante();
         FacesContext context = FacesContext.getCurrentInstance();
         usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
-        boolean r = usuario.getTipoPersona().getIdtipoPersona().equals(2) ? false
-                : usuario.getTipoPersona().getIdtipoPersona().equals(12) ? false
-                : !usuario.getTipoPersona().getIdtipoPersona().equals(1);
-        if (r) {
+        String pagina = context.getExternalContext().getRequestServletPath().split("/")[2];
+        if (!(new Auxiliar().permitirAcceso(usuario, accesoTPFL.findTipoPersonaPermitidos(accesoFL.getAccesoByUrl(pagina))))) {
             context.getExternalContext().getSessionMap().put("mensaje", new FacesMessage(FacesMessage.SEVERITY_FATAL,
                     "Falla!", "Esa vista no le está permitida."));
             try {
                 context.getExternalContext().redirect("./../");
-            } catch (IOException ex) {
-                Logger.getLogger(paquetesController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex0) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error iniesperado",
+                        (ex0 != null ? ex0.getMessage() : "Error desconocido.")));
             }
         }
     }

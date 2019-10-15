@@ -15,6 +15,7 @@
         <h:outputStylesheet library="css" name="cssLayout.css"/>
         <h:outputStylesheet library="css" name="main.css"/>
         <h:outputScript library="js" name="locales.js"/>
+        <f:event listener="#{sessionController.log()}" type="preRenderView"/>
     </h:head>
     <!-- color: #ffffff"  style="background-color: #323232; color: white;"-->
     <h:body style="background-color: #323232; color: white;">

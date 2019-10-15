@@ -33,6 +33,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import net.delsas.saitae.ax.mensaje;
 import net.delsas.saitae.ax.Auxiliar;
+import net.delsas.saitae.beans.AccesoFacadeLocal;
+import net.delsas.saitae.beans.AccesoTipoPersonaFacadeLocal;
 import net.delsas.saitae.beans.ContribucionesFacadeLocal;
 
 import net.delsas.saitae.beans.MatriculaFacadeLocal;
@@ -68,6 +70,10 @@ public class contribucionesController implements Serializable {
     @EJB
     private ContribucionesFacadeLocal contrFL;
     private Contribuciones contr;
+    @EJB
+    private AccesoFacadeLocal accesoFL;
+    @EJB
+    private AccesoTipoPersonaFacadeLocal accesoTPFL;
 
     @PostConstruct
     public void init() {
@@ -76,10 +82,8 @@ public class contribucionesController implements Serializable {
         p = new Persona(0, " ", " ", true);
         FacesContext context = FacesContext.getCurrentInstance();
         usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
-        boolean r = usuario.getTipoPersona().getIdtipoPersona().equals(2) ? false
-                : usuario.getTipoPersona().getIdtipoPersona().equals(12) ? false
-                : !usuario.getTipoPersona().getIdtipoPersona().equals(1);
-        if (r) {
+        String pagina = context.getExternalContext().getRequestServletPath().split("/")[2];
+        if (!(new Auxiliar().permitirAcceso(usuario, accesoTPFL.findTipoPersonaPermitidos(accesoFL.getAccesoByUrl(pagina))))) {
             context.getExternalContext().getSessionMap().put("mensaje", new FacesMessage(FacesMessage.SEVERITY_FATAL,
                     "Falla!", "Esa vista no le está permitida."));
             try {

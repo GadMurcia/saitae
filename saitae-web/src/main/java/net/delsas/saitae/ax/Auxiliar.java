@@ -25,6 +25,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.faces.model.SelectItem;
+import net.delsas.saitae.entities.DelagacionCargo;
 import net.delsas.saitae.entities.Estudiante;
 import net.delsas.saitae.entities.MaestoCargo;
 import net.delsas.saitae.entities.Maestro;
@@ -451,6 +452,37 @@ public class Auxiliar implements Serializable {
             d = null;
         }
         return d;
+    }
+
+    public List<Integer> getTiposPersonas(Persona p) {
+        List<Integer> items = new ArrayList<>();
+        if (p != null) {
+            items.add(p.getTipoPersona().getIdtipoPersona());
+            p.getDelagacionCargoList().forEach((dl) -> {
+                items.add(dl.getIdTipoPersona().getIdtipoPersona());
+            });
+            if (p.getMaestro() != null) {
+                p.getMaestro().getMaestoCargoList().forEach((mc) -> {
+                    items.add(mc.getCargo().getCargoTipoPersona().getIdtipoPersona());
+                });
+            }
+        }
+        return items;
+    }
+
+    public boolean permitirAcceso(Persona p, List<TipoPersona> lista) {
+        List<Integer> permitidos = new ArrayList<>();
+        List<Integer> tps = new Auxiliar().getTiposPersonas(p);
+        lista.forEach((tp) -> {
+            permitidos.add(tp.getIdtipoPersona());
+        });
+        boolean r = false;
+        for (int i : tps) {
+            if (permitidos.contains(i)) {
+                r = true;
+            }
+        }
+        return r;
     }
 
 }

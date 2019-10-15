@@ -81,10 +81,9 @@ public class matriculaController implements Serializable {
     public void init() {
         FacesContext context = FacesContext.getCurrentInstance();
         usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
-        boolean r = usuario.getTipoPersona().getIdtipoPersona().equals(1) ? false
-                : usuario.getTipoPersona().getIdtipoPersona().equals(2) ? false
-                : !usuario.getTipoPersona().getIdtipoPersona().equals(13);
-        if (r) {
+        List<Integer> tps= new Auxiliar().getTiposPersonas(usuario);
+        boolean r= (tps.contains(1) || tps.contains(2) || tps.contains(13));
+        if (!r) {
             context.getExternalContext().getSessionMap().put("mensaje", new FacesMessage(FacesMessage.SEVERITY_FATAL,
                     "Falla!", "Esa vista no le está permitida."));
             try {

@@ -55,8 +55,6 @@ import net.delsas.saitae.beans.TipoRecursoFacadeLocal;
 import net.delsas.saitae.beans.TipoReservaFacadeLocal;
 import net.delsas.saitae.beans.TipopersonaPermisoFacadeLocal;
 import net.delsas.saitae.beans.ZonaFacadeLocal;
-import net.delsas.saitae.entities.AccesoTipoPersona;
-import net.delsas.saitae.entities.AccesoTipoPersonaPK;
 import net.delsas.saitae.entities.Aula;
 import net.delsas.saitae.entities.Autor;
 import net.delsas.saitae.entities.Cargo;
@@ -94,7 +92,7 @@ import org.primefaces.model.DualListModel;
 @Named
 @ViewScoped
 public class TipoController implements Serializable {
-
+    
     private static final long serialVersionUID = 1L;
     //Tipo Recurso
     private List<TipoRecurso> recursos;
@@ -204,7 +202,7 @@ public class TipoController implements Serializable {
     private AccesoTipoPersonaFacadeLocal accesoTPFL;
     @EJB
     private AccesoFacadeLocal accesoFL;
-
+    
     @PostConstruct
     public void init() {
         context = FacesContext.getCurrentInstance();
@@ -212,18 +210,14 @@ public class TipoController implements Serializable {
         String pagina = context.getExternalContext().getRequestServletPath().split("/")[2];
         controlUsuarios(pagina);
     }
-
+    
     public void controlUsuarios(String pagina) {
         try {
-            AccesoTipoPersonaPK pk = new AccesoTipoPersonaPK(
-                    accesoFL.getAccesoByUrl(pagina).getIdacceso(),
-                    usuario.getTipoPersona().getIdtipoPersona());
-            AccesoTipoPersona f = accesoTPFL.find(pk);
-            if (f == null) {
+            if (!(new Auxiliar().permitirAcceso(usuario, accesoTPFL.findTipoPersonaPermitidos(accesoFL.getAccesoByUrl(pagina))))) {
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("mensaje",
                         new FacesMessage(FacesMessage.SEVERITY_WARN, "Página prohibida",
                                 "Usted no tiene los permisos suficientes para ver y utilizar esa página."));
-                FacesContext.getCurrentInstance().getExternalContext().redirect("perfil.intex");
+                FacesContext.getCurrentInstance().getExternalContext().redirect("./../");
             }
             variables(pagina);
         } catch (IOException ex) {
@@ -231,9 +225,9 @@ public class TipoController implements Serializable {
                     new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error Inesperado",
                             ex.getMessage() == null ? "Error de causa desconocida." : ex.getMessage()));
         }
-
+        
     }
-
+    
     private void variables(String pg) {
         switch (pg) {
             case "tipopp.intex":
@@ -245,7 +239,7 @@ public class TipoController implements Serializable {
                 Personas = personaFL.findAll();
                 break;
             case "lictp.intex":
-                model = new DualListModel<>(new ArrayList<>(), new ArrayList<String>());
+                model = new DualListModel<>(new ArrayList<>(), new ArrayList<>());
                 tipoPersona = new TipoPersona(0);
                 Personas = personaFL.findAll();
                 all = tpfl.findAll();
@@ -281,26 +275,26 @@ public class TipoController implements Serializable {
                 break;
         }
     }
-
+    
     public void nuevoDias() {
         diasSelected = new DiasEstudio(0, "");
         editarDia = 0;
     }
-
+    
     public void onRowSelected(SelectEvent event) {
         if (event.getObject() instanceof DiasEstudio) {
             setDiasSelected((DiasEstudio) event.getObject());
             this.editarDia = diasSelected.getIdDias();
         }
     }
-
+    
     private int editarDia = 0;
-
+    
     public void editarDias() {
         editarDia = diasSelected.getIdDias();
         PrimeFaces.current().ajax().update(":form:tw:dias", "f1");
     }
-
+    
     public void eliminarDias() {
         try {
             if (diasSelected != null) {
@@ -325,7 +319,7 @@ public class TipoController implements Serializable {
         init();
         PrimeFaces.current().ajax().update(":form0:msgs", ":form:tw:dias", "f1");
     }
-
+    
     public void guardarDias() {
         if (diasSelected != null) {
             if (editarDia > 0) {
@@ -343,7 +337,7 @@ public class TipoController implements Serializable {
         init();
         PrimeFaces.current().ajax().update(":form0", ":form:tw:dias", "f1");
     }
-
+    
     public void onAddNew(String id) {
         // Add one new car to the table:
         switch (id) {
@@ -406,14 +400,14 @@ public class TipoController implements Serializable {
                 break;
             default:
                 System.out.println(id);
-
+            
         }
-
+        
         FacesMessage msg = new FacesMessage("Campos Nuevos agregados.",
                 "Edite los campos para que las modificaciones sean permenentes");
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
-
+    
     public void onRowEdit(RowEditEvent event) {
         FacesMessage msg = null;
         try {
@@ -533,7 +527,7 @@ public class TipoController implements Serializable {
         }
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
-
+    
     public void onRowCancel(RowEditEvent event) {
         String mensaje = "", id = event.getComponent().getClientId();
         switch (id) {
@@ -614,7 +608,7 @@ public class TipoController implements Serializable {
                 }
                 mensaje = c.getCargoNombre();
                 break;
-
+            
             case "form:tw:categoria":
                 Categoria ca = (Categoria) event.getObject();
                 if (ca.getCategoriaNombre() == null || ca.getCategoriaNombre().isEmpty()) {
@@ -659,24 +653,24 @@ public class TipoController implements Serializable {
         FacesMessage msg = new FacesMessage("Edición cancelada", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
-
+    
     public List<SelectItem> getListaZonas() {
         List<SelectItem> ListaZonas = new ArrayList<>();
-        for (Zona z : zonas) {
+        zonas.forEach((z) -> {
             ListaZonas.add(new SelectItem(z.getIdzona(), z.getZonaNombre()));
-        }
+        });
         return ListaZonas;
-
+        
     }
-
+    
     public List<SelectItem> getListaTipoMateria() {
         List<SelectItem> ListaTipoMateria = new ArrayList<>();
-        for (TipoMateria tp : tipoMaterias) {
+        tipoMaterias.forEach((tp) -> {
             ListaTipoMateria.add(new SelectItem(tp.getIdtipoMateria(), tp.getTipoMateriaNombre()));
-        }
+        });
         return ListaTipoMateria;
     }
-
+    
     public void onItemSelect(ItemSelectEvent event) {
         tipoPersona = personaFL.find(tipoPersona.getIdtipoPersona());
         tipoPersona = tipoPersona == null ? new TipoPersona(0) : tipoPersona;
@@ -684,59 +678,59 @@ public class TipoController implements Serializable {
         List<String> target = new ArrayList<>();
         List<String> source = new ArrayList<>();
         if (tipoPersona.getIdtipoPersona() > 0) {
-            for (TipopersonaPermiso a : tipoPersona.getTipopersonaPermisoList()) {
+            tipoPersona.getTipopersonaPermisoList().stream().map((a) -> {
                 l.add(a.getTipoPermiso());
+                return a;
+            }).forEachOrdered((a) -> {
                 target.add(a.getTipoPermiso().getTipoPermisoNombre());
-            }
-
-            for (TipoPermiso p : permisoFL.findAll()) {
-                if (!l.contains(p)) {
-                    source.add(p.getTipoPermisoNombre());
-                }
-            }
+            });
+            
+            permisoFL.findAll().stream().filter((p) -> (!l.contains(p))).forEachOrdered((p) -> {
+                source.add(p.getTipoPermisoNombre());
+            });
             FacesMessage msg = new FacesMessage("Persona seleccionada", tipoPersona.getTipoPersonaNombre());
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
         model.setTarget(target);
         model.setSource(source);
     }
-
+    
     public List<SelectItem> getTiposPersonas() {
         List<SelectItem> list = new ArrayList<>();
         list.add(new SelectItem(0, "Seleccione"));
-        for (TipoPersona p : Personas) {
+        Personas.forEach((p) -> {
             list.add(new SelectItem(p.getIdtipoPersona(), p.getTipoPersonaNombre()));
-        }
+        });
         return list;
     }
-
+    
     public void guardar() {
         if (tipoPersona.getIdtipoPersona() > 0) {
             List<TipopersonaPermiso> permisos = new ArrayList<>();
-            for (String g : model.getTarget()) {
-                for (TipoPermiso t : permisoFL.findAll()) {
-                    if (g.equals(t.getTipoPermisoNombre())) {
-                        TipopersonaPermiso r = new TipopersonaPermiso(tipoPersona.getIdtipoPersona(), t.getIdtipoPermiso());
-                        r.setTipoPermiso(t);
-                        r.setTipoPersona(tipoPersona);
-                        r.setTipopersonaPermisoComentario("");
-                        permisos.add(r);
-                    }
-                }
-            }
-            for (TipopersonaPermiso t : tipoPersona.getTipopersonaPermisoList()) {
-                if (!permisos.contains(t)) {
-                    tppfl.remove(t);
-                }
-            }
+            model.getTarget().forEach((g) -> {
+                permisoFL.findAll().stream().filter((t) -> (g.equals(t.getTipoPermisoNombre()))).map((t) -> {
+                    TipopersonaPermiso r = new TipopersonaPermiso(tipoPersona.getIdtipoPersona(), t.getIdtipoPermiso());
+                    r.setTipoPermiso(t);
+                    return r;
+                }).map((r) -> {
+                    r.setTipoPersona(tipoPersona);
+                    return r;
+                }).map((r) -> {
+                    r.setTipopersonaPermisoComentario("");
+                    return r;
+                }).forEachOrdered((r) -> {
+                    permisos.add(r);
+                });
+            });
+            tipoPersona.getTipopersonaPermisoList().stream().filter((t) -> (!permisos.contains(t))).forEachOrdered((t) -> {
+                tppfl.remove(t);
+            });
             tipoPersona.setTipopersonaPermisoList(permisos);
             personaFL.edit(tipoPersona);
             String m = "Al Tipo de Ususario " + tipoPersona.getTipoPersonaNombre();
             if (model.getTarget().size() > 0) {
                 m += " se le han asignado los Tipos de permisos:";
-                for (String d : model.getTarget()) {
-                    m += "\n* " + d + ".";
-                }
+                m = model.getTarget().stream().map((d) -> "\n* " + d + ".").reduce(m, String::concat);
             } else {
                 m += " Se le han removido todos los tipos de permisos.";
             }
@@ -745,7 +739,7 @@ public class TipoController implements Serializable {
             PrimeFaces.current().ajax().update("form:msgs");
         }
     }
-
+    
     public void agregarHorario() {
         FacesMessage msg;
         if (hora.getIdhorario() > 0) {
@@ -761,7 +755,7 @@ public class TipoController implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, msg);
         PrimeFaces.current().ajax().update("form", "h1");
     }
-
+    
     public void eliminarHorario() {
         FacesMessage ms;
         try {
@@ -780,227 +774,228 @@ public class TipoController implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, ms);
         PrimeFaces.current().ajax().update("form", "h1");
     }
-
+    
     public List<TipoRecurso> getRecursos() {
         return Collections.unmodifiableList(recursos);
     }
-
+    
     public void setRecursos(List<TipoRecurso> recursos) {
         this.recursos = recursos;
     }
-
+    
     public List<TipoPermiso> getAll() {
         return Collections.unmodifiableList(all);
     }
-
+    
     public void setAll(List<TipoPermiso> all) {
         this.all = all;
     }
-
+    
     public List<TipoCargo> getCargos() {
         return Collections.unmodifiableList(cargos);
     }
-
+    
     public void setCargos(List<TipoCargo> cargos) {
         this.cargos = cargos;
     }
-
+    
     public List<TipoPersona> getPersonas() {
         return Collections.unmodifiableList(Personas);
     }
-
+    
     public void setPersonas(List<TipoPersona> Personas) {
         this.Personas = Personas;
     }
-
+    
     public TipoPersona getTipoPersona() {
         return tipoPersona;
     }
-
+    
     public void setTipoPersona(TipoPersona tipoPersona) {
         this.tipoPersona = tipoPersona;
     }
-
+    
     public DualListModel<String> getModel() {
         return model;
     }
-
+    
     public void setModel(DualListModel<String> model) {
         this.model = model;
     }
-
+    
     public List<Zona> getZonas() {
         return Collections.unmodifiableList(zonas);
     }
-
+    
     public void setZonas(List<Zona> zonas) {
         this.zonas = zonas;
     }
-
+    
     public List<TipoReserva> getReservas() {
         return Collections.unmodifiableList(reservas);
     }
-
+    
     public void setReservas(List<TipoReserva> reservas) {
         this.reservas = reservas;
     }
-
+    
     public List<TipoNombramiento> getNombramientos() {
         return Collections.unmodifiableList(nombramientos);
     }
-
+    
     public void setNombramientos(List<TipoNombramiento> nombramientos) {
         this.nombramientos = nombramientos;
     }
-
+    
     public List<Materia> getMaterias() {
         return Collections.unmodifiableList(materias);
     }
-
+    
     public void setMaterias(List<Materia> materias) {
         this.materias = materias;
     }
-
+    
     public List<TipoMateria> getTipoMaterias() {
         return Collections.unmodifiableList(tipoMaterias);
     }
-
+    
     public void setTipoMaterias(List<TipoMateria> tipoMaterias) {
         this.tipoMaterias = tipoMaterias;
     }
-
+    
     public List<Aula> getAulas() {
         return Collections.unmodifiableList(aulas);
     }
-
+    
     public void setAulas(List<Aula> aulas) {
         this.aulas = aulas;
     }
-
+    
     public List<Autor> getAutor() {
         return Collections.unmodifiableList(autor);
     }
-
+    
     public void setAutor(List<Autor> autor) {
         this.autor = autor;
     }
-
+    
     public List<Cargo> getCargo() {
         return Collections.unmodifiableList(cargo);
     }
-
+    
     public void setCargo(List<Cargo> cargo) {
         this.cargo = cargo;
     }
-
+    
     public List<Categoria> getCategoria() {
         return Collections.unmodifiableList(categoria);
     }
-
+    
     public void setCategoria(List<Categoria> categoria) {
         this.categoria = categoria;
     }
-
+    
     public List<Editorial> getEditorial() {
         return Collections.unmodifiableList(editorial);
     }
-
+    
     public void setEditorial(List<Editorial> editorial) {
         this.editorial = editorial;
     }
-
+    
     public List<Horario> getHorario() {
         return Collections.unmodifiableList(horario);
     }
-
+    
     public void setHorario(List<Horario> horario) {
         this.horario = horario;
     }
-
+    
     public List<Financiamiento> getFinanciamientos() {
         return Collections.unmodifiableList(financiamientos);
     }
-
+    
     public void setFinanciamientos(List<Financiamiento> financiamientos) {
         this.financiamientos = financiamientos;
     }
-
+    
     public List<Grado> getGrados() {
         List<Grado> i = new ArrayList<>();
-        for (Grado g : grados) {
+        grados.stream().map((g) -> {
             if (g.getGradoMaestroGuia() == null) {
                 g.setGradoMaestroGuia(new Maestro(0));
                 g.getGradoMaestroGuia().setPersona(new Persona(0, "", "", true));
             }
-
+            return g;
+        }).forEachOrdered((g) -> {
             i.add(g);
-        }
+        });
         return i;
     }
-
+    
     public void setGrados(List<Grado> grados) {
         this.grados = grados;
     }
-
+    
     public List<Maestro> getMaestros() {
         return maestroFL.findAll();
     }
-
+    
     public Horario getHora() {
         return hora;
     }
-
+    
     public void setHora(Horario horario) {
         this.hora = horario == null ? new Horario(0, new Date(), new Date()) : horario;
     }
-
+    
     public List<DiasEstudio> getDias() {
         return Collections.unmodifiableList(dias);
     }
-
+    
     public void setDias(List<DiasEstudio> dias) {
         this.dias = dias;
     }
-
+    
     public DiasEstudio getDiasSelected() {
         return diasSelected;
     }
-
+    
     public void setDiasSelected(DiasEstudio diasSelected) {
         this.diasSelected = diasSelected;
     }
-
+    
     private void enviarNotificación(String titulo, String mensaje) {
         sendMessage(new mensaje(0, usuario.getIdpersona(), "??",
                 new FacesMessage(FacesMessage.SEVERITY_INFO, titulo,
                         mensaje)).toString());
     }
-
+    
     public List<DiasEstudio> getDiasSeleccionables() {
-        return diasSeleccionables;
+        return Collections.unmodifiableList(diasSeleccionables);
     }
-
+    
     public void setDiasSeleccionables(List<DiasEstudio> diasSeleccionables) {
         this.diasSeleccionables = diasSeleccionables;
     }
-
+    
     @Inject
     @Push
     private PushContext notificacion;
-
+    
     @Inject
     @Push
     private PushContext tipopp;
-
+    
     public void sendMessage(String message) {
         notificacion.send(message);
         tipopp.send(message);
     }
     
-    public int getAño(){
+    public int getAño() {
         return Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date()));
     }
-
+    
     public void escucha() {
         try {
             String mss = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("mss");

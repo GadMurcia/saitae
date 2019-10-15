@@ -38,6 +38,7 @@ import net.delsas.saitae.beans.MatriculaFacadeLocal;
 import net.delsas.saitae.beans.NotificacionesFacadeLocal;
 import net.delsas.saitae.beans.PermisosFacadeLocal;
 import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
+import net.delsas.saitae.entities.DelagacionCargo;
 import net.delsas.saitae.entities.GradoPK;
 import net.delsas.saitae.entities.MaestoCargo;
 import net.delsas.saitae.entities.Matricula;
@@ -94,19 +95,14 @@ public class administraciónPermisoController implements Serializable {
             if (usuario == null) {
                 redirect();
             } else {
-                if (usuario.getMaestro() != null) {
-                    usuario.getMaestro().getMaestoCargoList().forEach((mc) -> {
-                        tps.add(mc.getCargo().getCargoTipoPersona().getIdtipoPersona());
-                    });
-                }
-                int tp = usuario.getTipoPersona().getIdtipoPersona();
-                boolean r = (tp == 1 || tp == 2 || tp == 3) ? true : (tps.contains(3) || tps.contains(2) || tps.contains(1));
+                tps = new Auxiliar().getTiposPersonas(usuario);
+                boolean r = (tps.contains(3) || tps.contains(2) || tps.contains(1));
                 if (!r) {
                     redirect();
                 } else {
-                    solicitados = (tp == 1 || tp == 2) ? permisosFL.getPermisosPorEstado("0") : permisosFL.findByPEPEs("0");
-                    aceptados = (tp == 1 || tp == 2) ? permisosFL.getPermisosPorEstado("1") : permisosFL.findByPEPEs("1");
-                    rechazados = (tp == 1 || tp == 2) ? permisosFL.getPermisosPorEstado("2") : permisosFL.findByPEPEs("2");
+                    solicitados = (tps.contains(1) || tps.contains(2)) ? permisosFL.getPermisosPorEstado("0") : permisosFL.findByPEPEs("0");
+                    aceptados = (tps.contains(1) || tps.contains(2)) ? permisosFL.getPermisosPorEstado("1") : permisosFL.findByPEPEs("1");
+                    rechazados = (tps.contains(1) || tps.contains(2)) ? permisosFL.getPermisosPorEstado("2") : permisosFL.findByPEPEs("2");
                 }
             }
 

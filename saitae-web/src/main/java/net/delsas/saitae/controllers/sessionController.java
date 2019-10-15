@@ -43,7 +43,7 @@ import org.primefaces.model.menu.MenuElement;
  * @author delsas
  */
 @Named
-@SessionScoped
+@ViewScoped
 public class sessionController implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -62,13 +62,12 @@ public class sessionController implements Serializable {
     @PostConstruct
     public void init() {
         verNoti = false;
-        notificaciones = new ArrayList<>();
-        log();
     }
 
     public void log() {
         FacesContext context = FacesContext.getCurrentInstance();
         try {
+            notificaciones = new ArrayList<>();
             us = (Persona) context.getExternalContext().getSessionMap().get("usuario");
             if (us == null) {
                 context.getExternalContext().getSessionMap().put("mensaje", new FacesMessage(FacesMessage.SEVERITY_ERROR,

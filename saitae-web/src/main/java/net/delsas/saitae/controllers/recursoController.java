@@ -31,6 +31,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import net.delsas.saitae.ax.Auxiliar;
 import net.delsas.saitae.ax.mensaje;
 import net.delsas.saitae.beans.AutorFacadeLocal;
 import net.delsas.saitae.beans.AutorLibroFacadeLocal;
@@ -57,6 +58,7 @@ import net.delsas.saitae.entities.EditorialLibro;
 import net.delsas.saitae.entities.EditorialLibroPK;
 import net.delsas.saitae.entities.Ejemplar;
 import net.delsas.saitae.entities.EjemplarPK;
+import net.delsas.saitae.entities.Notificaciones;
 import net.delsas.saitae.entities.Pais;
 import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.Recurso;
@@ -185,8 +187,8 @@ public class recursoController implements Serializable {
         pais = (new Pais(0, ""));
         cl = new ContenidoLibro(new ContenidoLibroPK(0, "", 0));
         contenido = new ArrayList<>();
-        editarID=true;
-        editarTipo=true;
+        editarID = true;
+        editarTipo = true;
     }
 
     private void llenado(int tr, boolean verPaneles) {
@@ -203,7 +205,23 @@ public class recursoController implements Serializable {
     public void controlUsuarios() {
         try {
             usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
-            switch (usuario.getTipoPersona().getIdtipoPersona()) {
+            int i = 0;
+            List<Integer> tps = new Auxiliar().getTiposPersonas(usuario);
+            List<Integer> permitidos = new ArrayList<>();
+            permitidos.add(1);
+            permitidos.add(2);
+            permitidos.add(5);
+            permitidos.add(6);
+            permitidos.add(7);
+            Collections.sort(tps);
+            for (int a : tps) {
+                if (permitidos.contains(a)) {
+                    i = a;
+                    System.out.println(a);
+                    break;
+                }
+            }
+            switch (i) {
                 case 1:
                 case 2:
                     verTipos = true;
@@ -221,14 +239,19 @@ public class recursoController implements Serializable {
                     llenado(2, false);
                     break;
                 default:
-                    context.getExternalContext().getSessionMap().put("mensaje",
+                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("mensaje",
                             new FacesMessage(FacesMessage.SEVERITY_WARN, "Página prohibida",
                                     "Usted no tiene los permisos suficientes para ver y utilizar esa página."));
-                    context.getExternalContext().redirect("perfil.intex");
+                    try {
+                        FacesContext.getCurrentInstance().getExternalContext().redirect("./../");
+                    } catch (IOException ex0) {
+                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error iniesperado",
+                                (ex0 != null ? ex0.getMessage() : "Error desconocido.")));
+                    }
             }
-        } catch (IOException ex) {
+        } catch (Exception ex1) {
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error iniesperado",
-                    (ex != null ? ex.getMessage() : "Error desconocido.")));
+                    (ex1 != null ? ex1.getMessage() : "Error desconocido.")));
         }
     }
 
@@ -447,7 +470,7 @@ public class recursoController implements Serializable {
             contenido.addAll(Seleccionado.getContenidoLibroList());
             ejemplares = Seleccionado.getEjemplarList().size();
             tipoRecursoSelect(new SelectEvent(new SelectManyMenu(), new BehaviorBase(), Seleccionado.getIdTipoRecurso().getIdtipoRecurso()));
-            editarID=editarTipo=false;
+            editarID = editarTipo = false;
         }
     }
 
@@ -617,8 +640,8 @@ public class recursoController implements Serializable {
         } else {
             init();
         }
-        editarID=true;
-        editarTipo=true;
+        editarID = true;
+        editarTipo = true;
         PrimeFaces.current().ajax().update("h1", "h2");
     }
 
@@ -684,6 +707,7 @@ public class recursoController implements Serializable {
     @Inject
     @Push
     private PushContext notificacion;
+
     private void notificar(String mensaje) {
         recursoAC.send(mensaje);
         notificacion.send(mensaje);
@@ -724,5 +748,5 @@ public class recursoController implements Serializable {
     public void setEditarTipo(boolean editarTipo) {
         this.editarTipo = editarTipo;
     }
-    
+
 }
