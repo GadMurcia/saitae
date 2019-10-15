@@ -16,6 +16,7 @@
  */
 package net.delsas.saitae.controllers;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -82,31 +83,43 @@ public class administraciónPermisoController implements Serializable {
     @PostConstruct
     public void init() {
         try {
-            FacesContext context = FacesContext.getCurrentInstance();
-            usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
+            usuario = (Persona) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
             List<Integer> tps = new ArrayList<>();
-            if (usuario.getMaestro() != null) {
-                usuario.getMaestro().getMaestoCargoList().forEach((mc) -> {
-                    tps.add(mc.getCargo().getCargoTipoPersona().getIdtipoPersona());
-                });
+            if (usuario == null) {
+                redirect();
+                if (usuario.getMaestro() != null) {
+                    usuario.getMaestro().getMaestoCargoList().forEach((mc) -> {
+                        tps.add(mc.getCargo().getCargoTipoPersona().getIdtipoPersona());
+                    });
+                }
+                int tp = usuario.getTipoPersona().getIdtipoPersona();
+                boolean r = (tp == 1 || tp == 2 || tp == 3) ? true : (tps.contains(3) || tps.contains(2) || tps.contains(1));
+                if (!r) {
+                    redirect();
+                } else {
+                    solicitados = (tp == 1 || tp == 2) ? permisosFL.getPermisosPorEstado("0") : permisosFL.findByPEPEs("0");
+                    aceptados = (tp == 1 || tp == 2) ? permisosFL.getPermisosPorEstado("1") : permisosFL.findByPEPEs("1");
+                    rechazados = (tp == 1 || tp == 2) ? permisosFL.getPermisosPorEstado("2") : permisosFL.findByPEPEs("2");
+                    acep = solc = new Permisos(new PermisosPK());
+                    gradoPK = new GradoPK(0, " ", "", getAño());
+                    permiso = new Permisos(new PermisosPK(0, new Date(), 0, new Date()), new Date(), "", "1");
+                    permiso.setPermisosComentario("0¿¿ ¿¿ ¿¿ ");
+                    permiso.setTipoPersona(tipoPersonaFL.find(8));
+                }
             }
-            int tp = usuario.getTipoPersona().getIdtipoPersona();
-            boolean r = (tp == 1 || tp == 2 || tp == 3) ? true : (tps.contains(3) || tps.contains(2) || tps.contains(1));
-            if (!r) {
-                context.getExternalContext().getSessionMap().put("mensaje", new FacesMessage(FacesMessage.SEVERITY_FATAL,
-                        "Falla!", "Esa vista no le está permitida."));
-                context.getExternalContext().redirect("./../");
-            } else {
-                solicitados = (tp == 1 || tp == 2) ? permisosFL.getPermisosPorEstado("0") : permisosFL.findByPEPEs("0");
-                aceptados = (tp == 1 || tp == 2) ? permisosFL.getPermisosPorEstado("1") : permisosFL.findByPEPEs("1");
-                rechazados = (tp == 1 || tp == 2) ? permisosFL.getPermisosPorEstado("2") : permisosFL.findByPEPEs("2");
-                acep = solc = new Permisos(new PermisosPK());
-                gradoPK = new GradoPK(0, " ", "", getAño());
-                permiso = new Permisos(new PermisosPK(0, new Date(), 0, new Date()), new Date(), "", "1");
-                permiso.setPermisosComentario("0¿¿ ¿¿ ¿¿ ");
-                permiso.setTipoPersona(tipoPersonaFL.find(8));
-            }
+
         } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
+    public void redirect() {
+        try {
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.getExternalContext().getSessionMap().put("mensaje", new FacesMessage(FacesMessage.SEVERITY_FATAL,
+                    "Falla!", "Esa vista no le está permitida."));
+            context.getExternalContext().redirect("./../");
+        } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
     }
@@ -114,20 +127,20 @@ public class administraciónPermisoController implements Serializable {
     public List<TipoPermiso> getTipoPermiso() {
         List<TipoPermiso> items = new ArrayList<>();
         List<TipopersonaPermiso> tt = tipoPersonaFL.find(8).getTipopersonaPermisoList();
-        for (TipopersonaPermiso t : tt) {
+        tt.forEach((t) -> {
             items.add(t.getTipoPermiso());
-        }
+        });
         return items;
     }
 
     public List<SelectItem> getModalidades() {
         List<SelectItem> items = new ArrayList<>();
         List<String> mo = grsoFL.getModalidadPorAño(getAño());
-        for (String s : mo) {
+        mo.forEach((s) -> {
             items.add(new SelectItem(s, s.equals("C") ? "TVC Contador"
                     : (s.equals("S") ? "TVC Secretariado"
                     : (s.equals("G") ? "General" : "??"))));
-        }
+        });
         return items;
     }
 

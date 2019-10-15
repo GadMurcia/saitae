@@ -167,6 +167,16 @@ public class TipoPersona implements Serializable {
         return "net.delsas.saitae.entities.TipoPersona[ idtipoPersona=" + idtipoPersona + " ]";
     }
 
+
+    @XmlTransient
+    public List<Cargo> getCargoList() {
+        return cargoList;
+    }
+
+    public void setCargoList(List<Cargo> cargoList) {
+        this.cargoList = cargoList;
+    }
+
     public String getTipoPersonaNombre() {
         return tipoPersonaNombre;
     }
@@ -181,15 +191,6 @@ public class TipoPersona implements Serializable {
 
     public void setTipoPersonaComentario(String tipoPersonaComentario) {
         this.tipoPersonaComentario = tipoPersonaComentario;
-    }
-
-    @XmlTransient
-    public List<Cargo> getCargoList() {
-        return cargoList;
-    }
-
-    public void setCargoList(List<Cargo> cargoList) {
-        this.cargoList = cargoList;
     }
     
 }

@@ -16,10 +16,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import net.delsas.saitae.ax.mensaje;
 import net.delsas.saitae.beans.NotificacionesFacadeLocal;
@@ -42,7 +42,7 @@ import org.primefaces.model.menu.MenuElement;
  * @author delsas
  */
 @Named
-@SessionScoped
+@ViewScoped
 public class sessionController implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -62,9 +62,6 @@ public class sessionController implements Serializable {
     public void init() {
         verNoti = false;
         notificaciones = new ArrayList<>();
-    }
-
-    public void log() {
         FacesContext context = FacesContext.getCurrentInstance();
         try {
             us = (Persona) context.getExternalContext().getSessionMap().get("usuario");
@@ -76,7 +73,7 @@ public class sessionController implements Serializable {
 
             } else {
                 FacesMessage ms = (FacesMessage) context.getExternalContext().getSessionMap().get("mensaje");
-                List<Notificaciones> not = us.getNotificacionesList();
+                List<Notificaciones> not = us.getNotificacionesRecibidasList();
                 notificaciones.clear();
                 if (not != null) {
                     Collections.sort(not, (Notificaciones o1, Notificaciones o2) -> o2.getFechaHora().hashCode() - o1.getFechaHora().hashCode());
@@ -222,10 +219,9 @@ public class sessionController implements Serializable {
             mensaje m = new mensaje(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("mss"));
             int tp = Integer.valueOf(m.getCadenaAccion().contains("tp¿¿") ? m.getCadenaAccion().split("¿¿")[1] : "0");
             if (m.getDestinatario() == us.getIdpersona() || tp == us.getTipoPersona().getIdtipoPersona()) {
-                Notificaciones n = new Notificaciones(m.getCuerpoMensaje(), m.getTituloMensaje(),
-                        false, m.getRemitente() + "", new Persona(m.getDestinatario()), new Date());
-                if (!notificaciones.contains(n)) {
+                if (!notificaciones.contains(m.getNotificacion())) {
                     List<Notificaciones> n1 = new ArrayList<>();
+                    n1.add(m.getNotificacion());
                     notificaciones.forEach((Notificaciones not) -> {
                         try {
                             not.setVista(true);
@@ -241,16 +237,17 @@ public class sessionController implements Serializable {
                     }).forEachOrdered((nn) -> {
                         n1.add(nn);
                     });
+                    Collections.sort(n1, (Notificaciones o1, Notificaciones o2) -> o2.getFechaHora().hashCode() - o1.getFechaHora().hashCode());
                     notificaciones.clear();
-                    notificaciones.add(n);
                     if (n1.size() < 4) {
                         notificaciones.addAll(n1);
                     } else {
-                        n1.stream().filter((not) -> (n1.indexOf(not) < 4)).forEachOrdered((not) -> {
-                            notificaciones.add(not);
-                        });
+                        for(int y=0; y<6; y++){
+                            notificaciones.add(n1.get(y));
+                        }
                     }
                     verNoti = true;
+                    FacesContext.getCurrentInstance().addMessage(null, m.getFacesmessage());
                     PrimeFaces.current().ajax().update("noti");
                 }
             }

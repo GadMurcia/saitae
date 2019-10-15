@@ -15,7 +15,6 @@
         <h:outputStylesheet library="css" name="cssLayout.css"/>
         <h:outputStylesheet library="css" name="main.css"/>
         <h:outputScript library="js" name="locales.js"/>
-        <f:event type="preRenderView" listener="#{sessionController.log()}"/>
     </h:head>
     <!-- color: #ffffff"  style="background-color: #323232; color: white;"-->
     <h:body style="background-color: #323232; color: white;">
@@ -37,7 +36,8 @@
                 <o:socket channel="notificacion" onmessage="socketListener"/>
                 <h:form id="noti">
                     <h1>Área de Notificaciones</h1>
-                    <p:remoteCommand name="notificar" actionListener="#{sessionController.escucha()}" update=":form0"/>
+                    <p:remoteCommand name="notificar" actionListener="#{sessionController.escucha()}" 
+                                     update=":form0 noti"/>
                     <ui:repeat value="#{sessionController.notificaciones}" var="n">
                         <p:panel header="#{n.notificacionTitulo}" toggleable="true" 
                                  toggleSpeed="500" collapsed="#{n.vista}" 

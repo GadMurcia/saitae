@@ -48,7 +48,7 @@ public class mensaje implements Serializable{
         this.remitente = remitente;
         this.cadenaAccion = cadenaAccion;
         this.facesmessage = new FacesMessage(severidad, tituloMensaje, cuerpoMensaje);
-        this.notificacion = new Notificaciones(cuerpoMensaje, tituloMensaje, false, remitente+"", new Persona(this.destinatario), new Date());
+        this.notificacion = new Notificaciones(new Persona(remitente), tituloMensaje, cuerpoMensaje, false, "", new Persona(remitente), new Date());
     }
 
     public mensaje(int destinatario, int remitente, String cadenaAccion, FacesMessage facesmessage) {
@@ -59,7 +59,7 @@ public class mensaje implements Serializable{
         this.cuerpoMensaje = facesmessage.getDetail();
         this.tituloMensaje = facesmessage.getSummary();
         this. severidad= facesmessage.getSeverity();
-        this.notificacion = new Notificaciones(cuerpoMensaje, tituloMensaje, false, remitente+"", new Persona(this.destinatario), new Date());
+        this.notificacion = new Notificaciones(new Persona(remitente), tituloMensaje, cuerpoMensaje, false, "", new Persona(remitente), new Date());
     }
 
     public mensaje(String mensajePush) throws Exception{
@@ -72,7 +72,7 @@ public class mensaje implements Serializable{
             this.remitente = Integer.valueOf(msj[4]);
             this.cadenaAccion = msj[5];
             this.facesmessage = new FacesMessage(severidad, tituloMensaje, cuerpoMensaje);
-            this.notificacion = new Notificaciones(cuerpoMensaje, tituloMensaje, false, remitente+"", new Persona(this.destinatario), new Date());
+            this.notificacion = new Notificaciones(new Persona(remitente), tituloMensaje, cuerpoMensaje, false, "", new Persona(remitente), new Date());
         } else {
             throw new Exception("La cadena ingresada no tiene el formato indicado para la conversión.");
         }
@@ -119,7 +119,7 @@ public class mensaje implements Serializable{
 
     public void setRemitente(int remitente) {
         this.remitente = remitente;
-        this.notificacion.setComentario(remitente+"");
+        this.notificacion.setRemitente(new Persona(remitente));
     }
 
     public String getCadenaAccion() {
@@ -179,11 +179,7 @@ public class mensaje implements Serializable{
     public void setNotificacion(Notificaciones notificacion) {
         this.notificacion = notificacion;
         this.destinatario = notificacion.getDestinatario().getIdpersona();
-        try{
-        this.remitente = Integer.valueOf(notificacion.getComentario());
-        }catch(NumberFormatException e){
-            this.remitente= 0;
-        }
+        this.remitente = notificacion.getRemitente().getIdpersona();
         this.cadenaAccion = " ";
         this.cuerpoMensaje = notificacion.getNotificacionCuerpo();
         this.tituloMensaje = notificacion.getNotificacionTitulo();

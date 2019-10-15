@@ -62,9 +62,10 @@ public class AnuncioController implements Serializable {
     @PostConstruct
     public void construct() {
         FacesContext context = FacesContext.getCurrentInstance();
+        individual = new ArrayList<>();
         try {
             usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
-            int t = usuario.getTipoPersona().getIdtipoPersona();
+//            int t = usuario.getTipoPersona().getIdtipoPersona();
             //boolean r = t == 1 ? false : (t == 2 ? false : (t == 3 ? false : t != 4));
             if (/**
                      * r
@@ -90,9 +91,9 @@ public class AnuncioController implements Serializable {
                 if (tp != 1 && tp != 2) {
                     individual.addAll(anuncioFL.getAnunciosActivosParaTodos());
                 }
-                if(usuario.getMaestro()!=null){
+                if (usuario.getMaestro() != null) {
                     List<MaestoCargo> mcl = usuario.getMaestro().getMaestoCargoList();
-                    for(MaestoCargo mc : mcl){
+                    for (MaestoCargo mc : mcl) {
                         individual.addAll(anuncioFL.getAnunciosActivosParaUnTipo(mc.getCargo().getCargoTipoPersona()));
                     }
                 }
