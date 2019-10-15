@@ -62,6 +62,10 @@ public class sessionController implements Serializable {
     public void init() {
         verNoti = false;
         notificaciones = new ArrayList<>();
+        log();
+    }
+
+    public void log() {
         FacesContext context = FacesContext.getCurrentInstance();
         try {
             us = (Persona) context.getExternalContext().getSessionMap().get("usuario");
@@ -72,6 +76,7 @@ public class sessionController implements Serializable {
                 context.getExternalContext().redirect("./../");
 
             } else {
+                this.menu();
                 FacesMessage ms = (FacesMessage) context.getExternalContext().getSessionMap().get("mensaje");
                 List<Notificaciones> not = us.getNotificacionesRecibidasList();
                 notificaciones.clear();
@@ -97,7 +102,6 @@ public class sessionController implements Serializable {
                             "Gracias por iniciar Sesión " + us.getPersonaNombre()));
                     context.getExternalContext().getSessionMap().remove("primerInicio");
                     context.getExternalContext().getSessionMap().put("primerInicio", false);
-                    this.menu();
                 }
             }
         } catch (Exception ex) {
@@ -242,7 +246,7 @@ public class sessionController implements Serializable {
                     if (n1.size() < 4) {
                         notificaciones.addAll(n1);
                     } else {
-                        for(int y=0; y<6; y++){
+                        for (int y = 0; y < 6; y++) {
                             notificaciones.add(n1.get(y));
                         }
                     }
@@ -257,8 +261,8 @@ public class sessionController implements Serializable {
     }
 
     public String getDetalle_Fecha(Date e) {
-        String x[]= new SimpleDateFormat("EEEEE dd-MMMMM-yyyy hh:mm:ss a").format(e).split("-");
-        return x[0]+" de "+x[1]+" de "+x[2];
+        String x[] = new SimpleDateFormat("EEEEE dd-MMMMM-yyyy hh:mm:ss a").format(e).split("-");
+        return x[0] + " de " + x[1] + " de " + x[2];
     }
 
     public boolean isVerNoti() {
