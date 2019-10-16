@@ -16,7 +16,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -28,10 +27,8 @@ import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
 import net.delsas.saitae.entities.Acceso;
 import net.delsas.saitae.entities.AccesoTipoPersona;
 import net.delsas.saitae.entities.DelagacionCargo;
-import net.delsas.saitae.entities.MaestoCargo;
 import net.delsas.saitae.entities.Notificaciones;
 import net.delsas.saitae.entities.Persona;
-import net.delsas.saitae.entities.TipoPersona;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.ToggleEvent;
 import org.primefaces.model.menu.DefaultMenuItem;
@@ -131,35 +128,25 @@ public class sessionController implements Serializable {
         mi.setIcon("pi pi-home");
         mi.setUrl("perfil.intex");
         mm.addElement(mi);
-
         List<Acceso> menusDisponibles = new ArrayList<>();
-        for (AccesoTipoPersona atp : us.getTipoPersona().getAccesoTipoPersonaList()) {
-            if (!menusDisponibles.contains(atp.getAcceso())) {
+        us.getTipoPersona().getAccesoTipoPersonaList().stream().filter((atp) -> (!menusDisponibles.contains(atp.getAcceso()))).forEachOrdered((atp) -> {
+            menusDisponibles.add(atp.getAcceso());
+        });
+        us.getDelagacionCargoList().forEach((DelagacionCargo dc) -> {
+            dc.getIdTipoPersona().getAccesoTipoPersonaList().stream().filter((atp) -> (!menusDisponibles.contains(atp.getAcceso()))).forEachOrdered((atp) -> {
                 menusDisponibles.add(atp.getAcceso());
-            }
-        }
-        for (DelagacionCargo dc : us.getDelagacionCargoList()) {
-            for (AccesoTipoPersona atp : dc.getIdTipoPersona().getAccesoTipoPersonaList()) {
-                if (!menusDisponibles.contains(atp.getAcceso())) {
-                    menusDisponibles.add(atp.getAcceso());
-                }
-            }
-        }
+            });
+        });
         if (us.getMaestro() != null) {
-            for (MaestoCargo mc : us.getMaestro().getMaestoCargoList()) {
-                for (AccesoTipoPersona atp : mc.getCargo().getCargoTipoPersona().getAccesoTipoPersonaList()) {
-                    if (!menusDisponibles.contains(atp.getAcceso())) {
-                        menusDisponibles.add(atp.getAcceso());
-                    }
-                }
-            }
+            us.getMaestro().getMaestoCargoList().forEach((mc) -> {
+                mc.getCargo().getCargoTipoPersona().getAccesoTipoPersonaList().stream().filter((atp) -> (!menusDisponibles.contains(atp.getAcceso()))).forEachOrdered((atp) -> {
+                    menusDisponibles.add(atp.getAcceso());
+                });
+            });
         }
-        for (Acceso a : menusDisponibles) {
-            if (a.getAccesoIndice() == null) {
-                mm.addElement(menu3(a, menusDisponibles));
-            }
-        }
-
+        menusDisponibles.stream().filter((a) -> (a.getAccesoIndice() == null)).forEachOrdered((a) -> {
+            mm.addElement(menu3(a, menusDisponibles));
+        });
         if (us.getTipoPersona().getIdtipoPersona() == 1) {
             mi = new DefaultMenuItem("Control de vistas", "fa fa-wrench");
             mi.setUrl("cvista.intex");
