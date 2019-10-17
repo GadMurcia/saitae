@@ -38,8 +38,8 @@
                 <h:form id="noti">
                     <h1>Área de Notificaciones</h1>
                     <p:remoteCommand name="notificar" actionListener="#{sessionController.escucha()}" 
-                                     update=":form0 noti"/>
-                    <ui:repeat value="#{sessionController.notificaciones}" var="n">
+                                     update=":form0 :noti:not"/>
+                    <ui:repeat id="not" value="#{sessionController.notificaciones}" var="n">
                         <p:panel header="#{n.notificacionTitulo}" toggleable="true" 
                                  toggleSpeed="500" collapsed="#{n.vista}" 
                                  style="margin-bottom:20px">

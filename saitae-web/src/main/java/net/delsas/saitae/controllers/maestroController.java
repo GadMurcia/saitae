@@ -18,6 +18,7 @@ package net.delsas.saitae.controllers;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
@@ -188,13 +189,19 @@ public class maestroController implements Serializable {
             pfl.edit(p);
             Maestro m1 = mfl.find(maestro.getIdmaestro());
             if (m1 != null) {
-                for (MaestoCargo mc : m1.getMaestoCargoList()) {
-                    if (!maestro.getMaestoCargoList().contains(mc)) {
-                        mcfl.remove(mc);
-                    }
-                }
+                m1.getMaestoCargoList().forEach(mcfl::remove);
             }
+            List<MaestoCargo> mc = new ArrayList<>();
+            maestro.getMaestoCargoList().forEach(mc::add);
+            maestro.setMaestoCargoList(null);
             mfl.edit(maestro);
+            mc.forEach((maestoCargo) -> {
+                try {
+                    mcfl.create(maestoCargo);
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            });
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("mensaje",
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Guardado con éxito",
                             "Los datos de " + maestro.getPersona().getPersonaNombre()
