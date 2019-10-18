@@ -25,7 +25,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.faces.model.SelectItem;
-import net.delsas.saitae.entities.DelagacionCargo;
 import net.delsas.saitae.entities.Estudiante;
 import net.delsas.saitae.entities.MaestoCargo;
 import net.delsas.saitae.entities.Maestro;
@@ -428,9 +427,10 @@ public class Auxiliar implements Serializable {
         String i = "";
         String[] h = p.getIdpersona().toString().split("");
         for (int g = 1; g < h.length; g++) {
-            if (!h[g].equals("-")) {
-                i += h[g];
+            if (g == h.length - 1) {
+                i += "-";
             }
+            i += h[g];
         }
         return i;
     }

@@ -27,9 +27,11 @@
                     <p:cellEditor>
                         <f:facet name="output"><h:outputText value="#{c.cargo.cargoNombre}" /></f:facet>
                         <f:facet name="input">
-                            <p:selectOneMenu value="#{c.cargo.idcargo}" style="width:100%">
+                            <p:selectOneMenu value="#{c.cargo}" style="width:100%"
+                                             converter="omnifaces.SelectItemsConverter">
+                                <f:selectItem itemValue="#{null}" itemLabel="Seleccione"/>
                                 <f:selectItems value="#{maestroController.cargos}" var="tc" 
-                                               itemLabel="#{tc.cargoNombre}" itemValue="#{tc.idcargo}"/>
+                                               itemLabel="#{tc.cargoNombre}" itemValue="#{tc}"/>
                             </p:selectOneMenu>
                         </f:facet>
                     </p:cellEditor>
@@ -39,9 +41,11 @@
                     <p:cellEditor>
                         <f:facet name="output"><h:outputText value="#{c.tipoNombramiento.tipoNombramientoNombre}" /></f:facet>
                         <f:facet name="input">
-                            <p:selectOneMenu value="#{c.tipoNombramiento.idtipoNombramiento}" style="width:100%">
+                            <p:selectOneMenu value="#{c.tipoNombramiento}" style="width:100%"
+                                             converter="omnifaces.SelectItemsConverter">
+                                <f:selectItem itemValue="#{null}" itemLabel="Seleccione"/>
                                 <f:selectItems value="#{maestroController.nombramientos}" 
-                                               var="n" itemLabel="#{n.tipoNombramientoNombre}" itemValue="#{n.idtipoNombramiento}" />
+                                               var="n" itemLabel="#{n.tipoNombramientoNombre}" itemValue="#{n}" />
                             </p:selectOneMenu>
                         </f:facet>
                     </p:cellEditor>
@@ -51,9 +55,11 @@
                     <p:cellEditor>
                         <f:facet name="output"><h:outputText value="#{c.financiamiento.financiamientoNombre}" /></f:facet>
                         <f:facet name="input">
-                            <p:selectOneMenu value="#{c.financiamiento.idfinanciamiento}" style="width:100%">
+                            <p:selectOneMenu value="#{c.financiamiento}" style="width:100%"
+                                             converter="omnifaces.SelectItemsConverter">
+                                <f:selectItem itemValue="#{null}" itemLabel="Seleccione"/>
                                 <f:selectItems value="#{maestroController.financiamientos}" 
-                                               var="f" itemLabel="#{f.financiamientoNombre}" itemValue="#{f.idfinanciamiento}"/>
+                                               var="f" itemLabel="#{f.financiamientoNombre}" itemValue="#{f}"/>
                             </p:selectOneMenu>
                         </f:facet>
                     </p:cellEditor>

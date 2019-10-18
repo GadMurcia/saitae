@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -86,8 +87,7 @@ public class maestroController implements Serializable {
      */
     @PostConstruct
     public void init() {
-        auxiliar = new Auxiliar();
-        maestro = auxiliar.getMaestro().getMaestro();
+        maestro = new Auxiliar().getMaestro().getMaestro();
         cargos = cargoFL.findAll();
         financiamientos = financiamientoFL.findAll();
         nombramientos = tipoNombramientoFL.findAll();
@@ -102,36 +102,36 @@ public class maestroController implements Serializable {
     }
 
     public void setDepartamento(String dep) {
-        auxiliar.setDepartamento(dep, maestro.getPersona());
+        new Auxiliar().setDepartamento(dep, maestro.getPersona());
     }
 
     public String getDepartamento() {
-        return auxiliar.getDepartamento(maestro.getPersona());
+        return new Auxiliar().getDepartamento(maestro.getPersona());
     }
 
     public void setMunicipio(String mun) {
-        auxiliar.setMunicipio(mun, maestro.getPersona());
+        new Auxiliar().setMunicipio(mun, maestro.getPersona());
     }
 
     public String getMunicipio() {
-        return auxiliar.getMunicipio(maestro.getPersona());
+        return new Auxiliar().getMunicipio(maestro.getPersona());
     }
 
     public void setDui(String dui) {
-        auxiliar.setDui(dui, maestro.getPersona());
+        new Auxiliar().setDui(dui, maestro.getPersona());
         maestro.setIdmaestro(maestro.getPersona().getIdpersona());
     }
 
     public String getDui() {
-        return auxiliar.getDui(maestro.getPersona());
+        return new Auxiliar().getDui(maestro.getPersona());
     }
 
     public List<SelectItem> getMunicipiosLista() {
-        return auxiliar.getMunicipioLista(maestro.getPersona());
+        return new Auxiliar().getMunicipioLista(maestro.getPersona());
     }
 
     public List<SelectItem> getDepartamentosLista() {
-        return auxiliar.getDepartamentoLista(maestro.getPersona());
+        return new Auxiliar().getDepartamentoLista(maestro.getPersona());
     }
 
     public String onFlowProcess(FlowEvent event) {
@@ -140,9 +140,6 @@ public class maestroController implements Serializable {
 
     public void onRowEdit(RowEditEvent event) {
         MaestoCargo mc = (MaestoCargo) event.getObject();
-        mc.setCargo(cfl.find(mc.getCargo().getIdcargo()));
-        mc.setFinanciamiento(ffl.find(mc.getFinanciamiento().getIdfinanciamiento()));
-        mc.setTipoNombramiento(tnfl.find(mc.getTipoNombramiento().getIdtipoNombramiento()));
         mc.getMaestoCargoPK().setIdCargo(mc.getCargo().getIdcargo());
         mc.getMaestoCargoPK().setIdFinanciamiento(mc.getFinanciamiento().getIdfinanciamiento());
         mc.getMaestoCargoPK().setIdNombramiento(mc.getTipoNombramiento().getIdtipoNombramiento());
@@ -172,7 +169,8 @@ public class maestroController implements Serializable {
         mc.setMaestro(maestro);
         maestro.getMaestoCargoList().add(mc);
         index = maestro.getMaestoCargoList().indexOf(mc);
-        FacesMessage msg = new FacesMessage("New Car added", "");
+        FacesMessage msg = new FacesMessage("Campos nuevos agregados",
+                "Seleccione los datos adecuados antes de proceder a guardarlos");
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
@@ -182,26 +180,37 @@ public class maestroController implements Serializable {
 
     public void guardar() {
         try {
-            maestro.getPersona().setPersonaContrasenya(DigestUtils.md5Hex(auxiliar.getDui(maestro.getPersona())));
-            Persona p = maestro.getPersona();
-            p.setMaestro(null);
-            p.setTipoPersona(new TipoPersona(4, "Maestro"));
-            pfl.edit(p);
+            maestro.getPersona().setPersonaContrasenya(DigestUtils.md5Hex(new Auxiliar().getDui(maestro.getPersona())));
+            try {
+                mfl.edit(maestro);
+            } catch (Exception o) {
+            }
             Maestro m1 = mfl.find(maestro.getIdmaestro());
             if (m1 != null) {
-                m1.getMaestoCargoList().forEach(mcfl::remove);
-            }
-            List<MaestoCargo> mc = new ArrayList<>();
-            maestro.getMaestoCargoList().forEach(mc::add);
-            maestro.setMaestoCargoList(null);
-            mfl.edit(maestro);
-            mc.forEach((maestoCargo) -> {
-                try {
-                    mcfl.create(maestoCargo);
-                } catch (Exception e) {
-                    System.out.println(e);
+                for (MaestoCargo mc1 : m1.getMaestoCargoList()) {
+                    if (!maestro.getMaestoCargoList().contains(mc1)) {
+                        try {
+                            mcfl.remove(mc1);
+                        } catch (Exception o) {
+                        }
+                    }
                 }
-            });
+                for (MaestoCargo mc1 : maestro.getMaestoCargoList()) {
+                    if (!m1.getMaestoCargoList().contains(mc1)) {
+                        try {
+                            mcfl.create(mc1);
+                        } catch (Exception o) {
+                        }
+                    }
+                }
+            }
+            if (maestro.getMaestoCargoList().size() > 0) {
+                maestro = mcfl.find(maestro.getMaestoCargoList().get(0).getMaestoCargoPK()).getMaestro();
+            }
+            try {
+                mfl.edit(maestro);
+            } catch (Exception o) {
+            }
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("mensaje",
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Guardado con éxito",
                             "Los datos de " + maestro.getPersona().getPersonaNombre()
