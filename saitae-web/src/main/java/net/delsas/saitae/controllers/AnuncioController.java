@@ -65,12 +65,7 @@ public class AnuncioController implements Serializable {
         individual = new ArrayList<>();
         try {
             usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
-//            int t = usuario.getTipoPersona().getIdtipoPersona();
-            //boolean r = t == 1 ? false : (t == 2 ? false : (t == 3 ? false : t != 4));
-            if (/**
-                     * r
-                     */
-                    usuario == null) {
+            if (usuario == null) {
                 context.getExternalContext().getSessionMap().put("mensaje",
                         new FacesMessage(FacesMessage.SEVERITY_ERROR,
                                 "Falla!", "Esa vista no le está permitida."));
@@ -88,14 +83,16 @@ public class AnuncioController implements Serializable {
                 individual = (tp == 1 || tp == 2) ? activos
                         : anuncioFL.getAnunciosActivosParaUnTipo(usuario.getTipoPersona());
                 individual = individual == null ? new ArrayList<>() : individual;
-                if (tp != 1 && tp != 2) {
-                    individual.addAll(anuncioFL.getAnunciosActivosParaTodos());
+                if (!(tp == 1 || tp == 2)) {
+                    activos.stream().filter((an) -> (an.getAnuncioTipoPersona() == null || an.getAnuncioTipoPersona() == usuario.getTipoPersona())).forEachOrdered((an) -> {
+                        individual.add(an);
+                    });
                 }
                 if (usuario.getMaestro() != null) {
                     List<MaestoCargo> mcl = usuario.getMaestro().getMaestoCargoList();
-                    for (MaestoCargo mc : mcl) {
+                    mcl.forEach((mc) -> {
                         individual.addAll(anuncioFL.getAnunciosActivosParaUnTipo(mc.getCargo().getCargoTipoPersona()));
-                    }
+                    });
                 }
             }
         } catch (Exception e) {
@@ -103,20 +100,6 @@ public class AnuncioController implements Serializable {
         }
     }
 
-//    public List<Anuncio> getAll() {
-//        List<Anuncio> anuncios = null;
-//        if (usuario != null) {
-//            if (usuario.getTipoPersona().getIdtipoPersona() == 1
-//                    || usuario.getTipoPersona().getIdtipoPersona() == 2) {
-//                anuncios = anuncioFL.getAnunciosActivos();
-//            } else {
-//                anuncios = usuario.getTipoPersona().getAnuncioList();
-//                anuncios.addAll(anuncioFL.getAnunciosParaTodos());
-//            }
-//        }
-//        anuncios = anuncios == null ? new ArrayList<>() : anuncios;
-//        return anuncios;
-//    }
     public void onRowSelect(SelectEvent event) {
         System.out.println(event.getObject());
         anuncio = (Anuncio) event.getObject();

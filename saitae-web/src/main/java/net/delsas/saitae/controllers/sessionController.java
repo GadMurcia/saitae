@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -29,9 +28,7 @@ import net.delsas.saitae.beans.MaestoCargoFacadeLocal;
 import net.delsas.saitae.beans.MaestroFacadeLocal;
 import net.delsas.saitae.beans.NotificacionesFacadeLocal;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
-import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
 import net.delsas.saitae.entities.Acceso;
-import net.delsas.saitae.entities.AccesoTipoPersona;
 import net.delsas.saitae.entities.DelagacionCargo;
 import net.delsas.saitae.entities.Notificaciones;
 import net.delsas.saitae.entities.Persona;
@@ -172,7 +169,7 @@ public class sessionController implements Serializable {
             mm.addElement(menu3(a, menusDisponibles));
         });
         if (us.getTipoPersona().getIdtipoPersona() == 1) {
-            mi = new DefaultMenuItem("Control de vistas", "fa fa-wrench");
+            mi = new DefaultMenuItem("Control de vistas", "fa fa-cogs");
             mi.setUrl("cvista.intex");
             mm.addElement(mi);
         }

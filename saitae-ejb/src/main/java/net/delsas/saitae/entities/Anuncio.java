@@ -38,14 +38,11 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Anuncio.findByAnuncioTitulo", query = "SELECT a FROM Anuncio a WHERE a.anuncioTitulo = :anuncioTitulo")
     , @NamedQuery(name = "Anuncio.findByAnuncioFechaFin", query = "SELECT a FROM Anuncio a WHERE a.anuncioFechaFin = :anuncioFechaFin")
     , @NamedQuery(name = "Anuncio.findByAnuncioComentario", query = "SELECT a FROM Anuncio a WHERE a.anuncioComentario = :anuncioComentario")
-    , @NamedQuery(name = "Anuncio.findAnunciosActivos", query = "SELECT a FROM Anuncio a WHERE a.anuncioFechaFin >= :fecha")
     , @NamedQuery(name = "Anuncio.findAnunciosInactivos", query = "SELECT a FROM Anuncio a WHERE a.anuncioFechaFin < :fecha")
-    , @NamedQuery(name = "Anuncio.findAnunciosParaTodos", query = "SELECT a FROM Anuncio a WHERE a.anuncioTipoPersona = :tipo and a.anuncioFechaFin >= :fecha")
+    , @NamedQuery(name = "Anuncio.findAnunciosActivos", query = "SELECT a FROM Anuncio a WHERE a.anuncioFechaFin >= :fecha")
+    , @NamedQuery(name = "Anuncio.findAnunciosParaTodos", query = "SELECT a FROM Anuncio a WHERE a.anuncioFechaFin >= :fecha AND a.anuncioTipoPersona = :tipo")
 })
 public class Anuncio implements Serializable {
-
-  
-  
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -172,5 +169,5 @@ public class Anuncio implements Serializable {
     public String toString() {
         return "net.delsas.saitae.entities.Anuncio[ idanuncio=" + idanuncio + " ]";
     }
-    
+
 }

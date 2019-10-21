@@ -44,7 +44,7 @@ CREATE TABLE `acceso` (
 
 LOCK TABLES `acceso` WRITE;
 /*!40000 ALTER TABLE `acceso` DISABLE KEYS */;
-INSERT INTO `acceso` VALUES (9,'Configuración',NULL,'#','pi pi-key'),(10,'Administración',9,'tipopp.intex','pi pi-folder-open'),(11,'Permisos y Licencias',9,'lictp.intex','pi pi-th-large'),(12,'Académica',9,'academico.intex','fa fa-leaf'),(13,'Perfil',NULL,'#','pi pi-user'),(14,'Permisos',NULL,'#','pi pi-eye'),(15,'Solicitar Permiso',14,'permisoE.intex','pi pi-briefcase'),(16,'Personal',NULL,'#','pi pi-users'),(17,'Agregar Maestro',27,'agregacion.intex','pi pi-user-plus'),(18,'Agregar Administrador',16,'agAdm.intex','pi pi-plus'),(19,'Plantel Institucional',16,'plantel.intex','pi pi-table'),(20,'Inventario',23,'inventario.intex','fa fa-thumb-tack'),(21,'Libros',23,'libros.intex','fa fa-tint'),(22,'Nuevo Ingreso',16,'inscripcion.intex','pi pi-user'),(23,'Recursos',9,'#','fa fa-tint'),(24,'Nomina de Alumnos',16,'nominaA.intex','pi pi-user'),(25,'Administración de Recursos',23,'recurso.intex','pi pi-list'),(26,'Lista de Representantes',16,'listaRepresentantes.intex','pi pi-list'),(27,'Maestros',16,'#','pi pi-list'),(28,'Asignación de materias',27,'horario.intex','pi pi-plus'),(29,'Administración de permisos',14,'permiso.intex',''),(30,'Solicitud de permisos',14,'permisoM.intex',''),(31,'Administrador de anuncios',9,'anuncios.intex','pi pi-list'),(32,'Matricula',16,'matricula.intex',''),(33,'Entrega de Útiles',9,'paquetes.intex',''),(34,'Contribuciones',9,'contribuciones.intex','fa fa-money');
+INSERT INTO `acceso` VALUES (9,'Configuración',NULL,'#','fa fa-cog'),(10,'Administración',9,'tipopp.intex','pi pi-folder-open'),(11,'Permisos y Licencias',9,'lictp.intex','pi pi-th-large'),(12,'Académica',9,'academico.intex','fa fa-leaf'),(13,'Perfil',NULL,'#','pi pi-user'),(14,'Permisos',NULL,'#','pi pi-eye'),(15,'Solicitar Permiso',14,'permisoE.intex','pi pi-briefcase'),(16,'Personal',NULL,'#','pi pi-users'),(17,'Agregar Maestro',27,'agregacion.intex','pi pi-user-plus'),(18,'Agregar Administrador',16,'agAdm.intex','pi pi-plus'),(19,'Plantel Institucional',16,'plantel.intex','pi pi-table'),(20,'Inventario',23,'inventario.intex','fa fa-barcode'),(21,'Libros',23,'libros.intex','fa fa-book'),(22,'Nuevo Ingreso',16,'inscripcion.intex','pi pi-user'),(23,'Recursos',9,'#','fa fa-tint'),(24,'Nomina de Alumnos',16,'nominaA.intex','pi pi-user'),(25,'Administración de Recursos',23,'recurso.intex','fa fa-table'),(26,'Lista de Representantes',16,'listaRepresentantes.intex','pi pi-list'),(27,'Maestros',16,'#','pi pi-list'),(28,'Asignación de materias',27,'horario.intex','pi pi-plus'),(29,'Administración de permisos',14,'permiso.intex','fa fa-legal'),(30,'Solicitud de permisos',14,'permisoM.intex','fa fa-ge'),(31,'Administrador de anuncios',9,'anuncios.intex','fa fa-bell'),(32,'Matricula',16,'matricula.intex','fa fa-slideshare'),(33,'Entrega de Útiles',9,'paquetes.intex','fa fa-sliders'),(34,'Contribuciones',9,'contribuciones.intex','fa fa-money');
 /*!40000 ALTER TABLE `acceso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -72,7 +72,7 @@ CREATE TABLE `accesoTipoPersona` (
 
 LOCK TABLES `accesoTipoPersona` WRITE;
 /*!40000 ALTER TABLE `accesoTipoPersona` DISABLE KEYS */;
-INSERT INTO `accesoTipoPersona` VALUES (9,1,''),(9,2,''),(9,3,''),(9,6,''),(10,1,''),(10,2,''),(10,3,''),(11,1,''),(11,2,''),(11,3,''),(12,1,''),(12,2,''),(14,1,''),(14,2,''),(14,3,''),(14,4,''),(14,8,''),(15,8,''),(16,1,''),(16,2,''),(16,3,''),(16,4,''),(17,1,''),(17,2,''),(18,1,''),(18,2,''),(19,1,''),(19,2,''),(20,1,''),(20,2,''),(21,1,''),(21,2,''),(22,1,''),(22,2,''),(22,3,''),(23,1,''),(23,2,''),(23,6,''),(24,1,''),(24,2,''),(24,3,''),(24,4,''),(25,1,''),(25,2,''),(25,6,''),(26,1,''),(26,2,''),(26,3,''),(26,4,''),(27,1,''),(27,2,''),(28,1,''),(28,2,''),(29,1,''),(29,2,''),(29,3,''),(30,1,''),(30,2,''),(30,3,''),(30,4,''),(31,1,''),(31,2,''),(31,3,''),(31,4,''),(32,1,''),(32,2,''),(33,1,''),(33,2,''),(34,1,''),(34,2,'');
+INSERT INTO `accesoTipoPersona` VALUES (9,1,''),(9,2,''),(9,3,''),(10,1,''),(10,2,''),(11,1,''),(11,2,''),(11,3,''),(12,1,''),(12,2,''),(14,1,''),(14,2,''),(14,3,''),(14,4,''),(14,8,''),(15,8,''),(16,1,''),(16,2,''),(16,3,''),(16,4,''),(17,1,''),(17,2,''),(18,1,''),(18,2,''),(19,1,''),(19,2,''),(19,3,''),(20,1,''),(20,2,''),(21,1,''),(21,2,''),(22,1,''),(22,2,''),(22,3,''),(23,1,''),(23,2,''),(24,1,''),(24,2,''),(24,3,''),(24,4,''),(25,1,''),(25,2,''),(26,1,''),(26,2,''),(26,3,''),(26,4,''),(27,1,''),(27,2,''),(28,1,''),(28,2,''),(29,1,''),(29,2,''),(29,3,''),(30,1,''),(30,2,''),(30,3,''),(30,4,''),(31,1,''),(31,2,''),(31,3,''),(31,4,''),(32,1,''),(32,2,''),(33,1,''),(33,2,''),(34,1,''),(34,2,'');
 /*!40000 ALTER TABLE `accesoTipoPersona` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -105,7 +105,7 @@ CREATE TABLE `anuncio` (
 
 LOCK TABLES `anuncio` WRITE;
 /*!40000 ALTER TABLE `anuncio` DISABLE KEYS */;
-INSERT INTO `anuncio` VALUES (2,'Home','2019-10-14','Raw denim you probably haven\'t heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.',1045367073,NULL,''),(3,'Profile','2019-10-14','Food truck fixie locavore, accusamus mcsweeney\'s marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit.',1045367073,8,''),(4,'qwwqwq','2019-10-14','wqwq\r\nwq\r\nqw\r\nqw\r\nqw\r\n\r\nwq',1045367073,NULL,NULL),(5,'SUSPENCIÓN DE CLASES','2019-10-14','Se suspenderán las clases el próximo Viernes 11 de Octubre. \r\nClases normales al regresar el LUNES 14. \r\n',1045367073,NULL,NULL),(6,'iglliglgiguligilggilgl','2019-10-14','lvlvl lil igl igligligl gl gligligli ilglig ligli gl ili glig ilglgy',1045367073,3,NULL),(7,'anuncio ara todos','2019-10-14','oñasdchodashoñ hcñhc ñhc dh hcd hch ñcd ccoñ oc ocas hñ hñcao ñhoas ñsdchsodgvgvsduñ ñcdsagño asd gcñovsguñvoagcva ñsdcgañso cgñoasgñocgañscgñasocasdcñvgsñoasdñgcñosc gvaoñsgcñ osagdcñsodgcñosagdcvoasñvga',1045367073,NULL,NULL),(8,'ioyoyooñy','2019-10-12','ouyñouyobviyfiijklljhjhj  hl hg s ñc ñsdcv ñvfdv fñ vdf vfd vdf ñvfd ñvfwpv pv pvfe vfe vephhpf vh k vvjh vfwe ippwvfe ih{pv ihvf ihvwe iwep {ve hhfvuoeu yeyuyeutyu ew ywewyeye yey g8 y49tu u ovfh ñvhjvsdh vh ñsdhñ dvhdls',1045367073,8,NULL);
+INSERT INTO `anuncio` VALUES (2,'Home','2019-10-20','Raw denim you probably haven\'t heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.',1045367073,NULL,''),(3,'Profile','2019-10-20','Food truck fixie locavore, accusamus mcsweeney\'s marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit.',1045367073,8,''),(4,'qwwqwq','2019-10-20','wqwq\r\nwq\r\nqw\r\nqw\r\nqw\r\n\r\nwq',1045367073,NULL,NULL),(5,'SUSPENCIÓN DE CLASES','2019-10-14','Se suspenderán las clases el próximo Viernes 11 de Octubre. \r\nClases normales al regresar el LUNES 14. \r\n',1045367073,NULL,NULL),(6,'iglliglgiguligilggilgl','2019-10-20','lvlvl lil igl igligligl gl gligligli ilglig ligli gl ili glig ilglgy',1045367073,3,NULL),(7,'anuncio ara todos','2019-10-14','oñasdchodashoñ hcñhc ñhc dh hcd hch ñcd ccoñ oc ocas hñ hñcao ñhoas ñsdchsodgvgvsduñ ñcdsagño asd gcñovsguñvoagcva ñsdcgañso cgñoasgñocgañscgñasocasdcñvgsñoasdñgcñosc gvaoñsgcñ osagdcñsodgcñosagdcvoasñvga',1045367073,NULL,NULL),(8,'ioyoyooñy','2019-10-20','ouyñouyobviyfiijklljhjhj  hl hg s ñc ñsdcv ñvfdv fñ vdf vfd vdf ñvfd ñvfwpv pv pvfe vfe vephhpf vh k vvjh vfwe ippwvfe ih{pv ihvf ihvwe iwep {ve hhfvuoeu yeyuyeutyu ew ywewyeye yey g8 y49tu u ovfh ñvhjvsdh vh ñsdhñ dvhdls',1045367073,8,NULL);
 /*!40000 ALTER TABLE `anuncio` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -235,7 +235,7 @@ CREATE TABLE `cargo` (
   PRIMARY KEY (`idcargo`),
   KEY `fk_cargo_1_idx` (`cargoTipoPersona`),
   CONSTRAINT `fk_cargo_1` FOREIGN KEY (`cargoTipoPersona`) REFERENCES `tipoPersona` (`idtipoPersona`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -244,7 +244,7 @@ CREATE TABLE `cargo` (
 
 LOCK TABLES `cargo` WRITE;
 /*!40000 ALTER TABLE `cargo` DISABLE KEYS */;
-INSERT INTO `cargo` VALUES (1,'Director',2,''),(2,'Profesor',4,''),(3,'Subdirector',3,''),(4,'Coordinador de área bibliográfica',5,''),(5,'Coordinador de área Informática',6,''),(6,'Psicólogo',NULL,'');
+INSERT INTO `cargo` VALUES (1,'Director',2,''),(2,'Subdirector',3,''),(3,'Coordinador de área bibliográfica',5,''),(4,'Coordinador de área Informática',6,''),(5,'Psicólogo',14,'');
 /*!40000 ALTER TABLE `cargo` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -895,7 +895,7 @@ CREATE TABLE `maestoCargo` (
 
 LOCK TABLES `maestoCargo` WRITE;
 /*!40000 ALTER TABLE `maestoCargo` DISABLE KEYS */;
-INSERT INTO `maestoCargo` VALUES (1045367080,1,1,2,'2019-10-12',NULL,NULL,NULL),(1045367080,3,1,1,'2019-10-11',NULL,NULL,NULL);
+INSERT INTO `maestoCargo` VALUES (1045367080,1,1,1,'2019-10-20',NULL,NULL,NULL),(1045367080,2,1,1,'2019-10-20',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `maestoCargo` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -943,7 +943,7 @@ CREATE TABLE `maestro` (
 
 LOCK TABLES `maestro` WRITE;
 /*!40000 ALTER TABLE `maestro` DISABLE KEYS */;
-INSERT INTO `maestro` VALUES (1045367080,0,0,0,0,0,0,0,'Guillermo Aldolfo Delsas Murcia',0,'8878-7878','Ciencias Sociales','2019-10-11','2019-10-11','2019-10-11','T','1','','Sueldo Base','',0,'','','','');
+INSERT INTO `maestro` VALUES (1045367080,0,0,0,0,0,0,0,'Guillermo Aldolfo Delsas Murcia',6,'8878-7878','Ciencias Sociales','2019-10-11','2019-10-11','2019-10-11','T','2','','Sueldo Base','',0,'','','','');
 /*!40000 ALTER TABLE `maestro` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1075,6 +1075,7 @@ CREATE TABLE `notificaciones` (
 
 LOCK TABLES `notificaciones` WRITE;
 /*!40000 ALTER TABLE `notificaciones` DISABLE KEYS */;
+INSERT INTO `notificaciones` VALUES ('2019-10-20 21:32:51',1045367080,1045367073,'Relevación de Cargo','Ha sido relevado de su cargo como Subdirector Por Guillermo Delsas','',''),('2019-10-20 21:33:38',1045367080,1045367073,'Asignación de Cargo','Guillermo Delsas le ha asignado el cargo de Subdirector','',''),('2019-10-20 21:34:11',1045367080,1045367073,'Relevación de Cargo','Ha sido relevado de su cargo como Subdirector Por Guillermo Delsas','',''),('2019-10-20 21:34:49',1045367080,1045367073,'Asignación de Cargo','Guillermo Delsas le ha asignado el cargo de Director','',''),('2019-10-20 21:35:30',1045367080,1045367073,'Asignación de Cargo','Guillermo Delsas le ha asignado el cargo de Subdirector','',''),('2019-10-20 21:36:04',1045367080,16018,'Solicitud de permiso nueva','Estudiante1 Nombre Apellido estudiante1 ha solicitado un nuevo permiso.','',''),('2019-10-20 21:36:37',16018,1045367080,'Rechado de permiso','Mestro1 Nombre Apellido Maestro1 ha rechazado su solicitud de permiso ','',''),('2019-10-20 21:37:13',1045367080,16018,'Solicitud de permiso nueva','Estudiante1 Nombre Apellido estudiante1 ha solicitado un nuevo permiso.','',''),('2019-10-20 21:37:31',16018,1045367080,'Aceptación de permiso','Mestro1 Nombre Apellido Maestro1 ha aceptado su solicitud de permiso ','\0',''),('2019-10-20 21:38:07',1045367080,1045367073,'Solicitud de permiso nueva','Guillermo Delsas ha solicitado un nuevo permiso.','',''),('2019-10-20 21:38:22',1045367073,1045367080,'Aceptación de permiso','Mestro1 Nombre Apellido Maestro1 ha aceptado su solicitud de permiso ','',''),('2019-10-20 21:39:07',1045367080,1045367073,'Solicitud de permiso nueva','Guillermo Delsas ha solicitado un nuevo permiso.','\0',''),('2019-10-20 21:39:25',1045367073,1045367080,'Rechado de permiso','Mestro1 Nombre Apellido Maestro1 ha rechazado su solicitud de permiso ','','');
 /*!40000 ALTER TABLE `notificaciones` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1139,7 +1140,7 @@ CREATE TABLE `permisos` (
 
 LOCK TABLES `permisos` WRITE;
 /*!40000 ALTER TABLE `permisos` DISABLE KEYS */;
-INSERT INTO `permisos` VALUES (16018,'2019-10-14',4,'2019-10-14','2019-10-14',8,'4984884884','1',1045367080,'8788787-8¿¿88787887888 88 8 87 87¿¿87877888 87 87 8778 78 8 ¿¿ '),(16022,'2019-10-14',4,'2019-10-14','2019-10-14',8,'77777777','1',1045367080,'8787888-8¿¿8787887878¿¿78788887878778¿¿ ');
+INSERT INTO `permisos` VALUES (16018,'2019-10-14',4,'2019-10-14','2019-10-14',8,'4984884884','1',1045367080,'8788787-8¿¿88787887888 88 8 87 87¿¿87877888 87 87 8778 78 8 ¿¿ '),(16018,'2019-10-20',4,'2019-10-20','2019-10-20',8,'4112242225','2',16018,'0¿¿ ¿¿ ¿¿no aplica '),(16018,'2019-10-20',5,'2019-10-20','2019-10-20',8,'456464645','1',16018,'0¿¿ ¿¿ ¿¿ '),(16022,'2019-10-14',4,'2019-10-14','2019-10-14',8,'77777777','1',1045367080,'8787888-8¿¿8787887878¿¿78788887878778¿¿ '),(1045367073,'2019-10-20',1,'2019-10-20','2019-10-20',1,' ','1',1045367073,'1¿¿1¿¿ ¿¿ '),(1045367073,'2019-10-20',1,'2019-10-22','2019-10-22',1,' ','2',1045367073,'1¿¿1¿¿ ¿¿no aplica ');
 /*!40000 ALTER TABLE `permisos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1183,7 +1184,7 @@ CREATE TABLE `persona` (
 
 LOCK TABLES `persona` WRITE;
 /*!40000 ALTER TABLE `persona` DISABLE KEYS */;
-INSERT INTO `persona` VALUES (16018,'Estudiante1 Nombre','Apellido estudiante1','1995-01-17','544554454545455454 545 454 54 54 54 5454','',0,1,'02#01','8d2a5f7d4afa5d0530789d3066945330','',8,'','','',0,'Salvadoreña','','',''),(16022,'6022 nombre','6022 Apellido','1995-10-12','Cas. LA Y Griega, Cantón Chilcuyo, Texistepeque, Santa Ana','5037-0337',0,1,'01#01','da54dd5a0398011cdfa50d559c2c0ef8','',8,'','5454-545454-545-4','\0',0,'Salvadoreña','guillermox020@gmail.com','',''),(1045367070,'Repreentante1 Nombre','Apellido Representante1','1980-10-10','fuhwuo hfohuofhouh owheof ','',0,1,'01#02','ab8a338aa2b1da6d97c11ba6e67be768','',9,'','','\0',1,'Salvadoreña','','',''),(1045367071,'Paden1 Nombre','Apellido Padre1',NULL,'','8878-7878',0,0,' # ','cd9187113425eae93d8116205d03bdde','',11,'\0',NULL,'',0,'Salvadoreña',NULL,'',''),(1045367072,'Madre1 Nombre','Apellido Madre1',NULL,'','4554-4554',0,0,' # ','7845e7b45be70d2391a2b16c2ffb68e3','',10,'\0',NULL,'',0,'Salvadoreña',NULL,'',''),(1045367073,'Guillermo','Delsas',NULL,NULL,NULL,NULL,NULL,NULL,'02951a6cb9595ef475fed783e59c687e','Ingeniero',1,'',NULL,'\0',NULL,NULL,NULL,NULL,NULL),(1045367080,'Mestro1 Nombre','Apellido Maestro1','1969-06-11','Cas. LA Y Griega, Cantón Chilcuyo, Texistepeque, Santa Ana','5037-0337',213,1,'01#01','6e80cf219e79bc8a8d83ce9a5b757f64','Licenciada en Ciencias jurídicas',4,'','0202-020202-020-0','',0,'Salvadoreña','guillermox020@gmail.com','',''),(1045367081,'04536708-1 repre','04536708-1 apell','1980-05-12','Cas. LA Y Griega, Cantón Chilcuyo, Texistepeque, Santa Ana','7033-7878',0,0,'01#01','ad9f88eb26394a8ad9f46975cf79a133','',9,'','','',1,'Salvadoreña','guillermox020@gmail.com','',''),(1045367082,'04536708-2 padre','04536708-2 apee',NULL,'','2020-2020',0,0,' # ','5f04b909d4b1bca2e6e57dbbf7208c51','',11,'\0',NULL,'',0,'Salvadoreña',NULL,'',''),(1045367083,'04536708-3 madre','04536708-3 apeel',NULL,'','2220-2020',0,0,' # ','a6ba5f99ff9616298b2212c76ea111dc','',10,'\0',NULL,'',0,'Salvadoreña',NULL,'','');
+INSERT INTO `persona` VALUES (16018,'Estudiante1 Nombre','Apellido estudiante1','1995-01-17','544554454545455454 545 454 54 54 54 5454','',0,1,'02#01','8d2a5f7d4afa5d0530789d3066945330','',8,'','','',0,'Salvadoreña','','',''),(16022,'6022 nombre','6022 Apellido','1995-10-12','Cas. LA Y Griega, Cantón Chilcuyo, Texistepeque, Santa Ana','5037-0337',0,1,'01#01','da54dd5a0398011cdfa50d559c2c0ef8','',8,'','5454-545454-545-4','\0',0,'Salvadoreña','guillermox020@gmail.com','',''),(1045367070,'Repreentante1 Nombre','Apellido Representante1','1980-10-10','fuhwuo hfohuofhouh owheof ','',0,1,'01#02','ab8a338aa2b1da6d97c11ba6e67be768','',9,'','','\0',1,'Salvadoreña','','',''),(1045367071,'Paden1 Nombre','Apellido Padre1',NULL,'','8878-7878',0,0,' # ','cd9187113425eae93d8116205d03bdde','',11,'\0',NULL,'',0,'Salvadoreña',NULL,'',''),(1045367072,'Madre1 Nombre','Apellido Madre1',NULL,'','4554-4554',0,0,' # ','7845e7b45be70d2391a2b16c2ffb68e3','',10,'\0',NULL,'',0,'Salvadoreña',NULL,'',''),(1045367073,'Guillermo','Delsas',NULL,NULL,NULL,NULL,NULL,NULL,'02951a6cb9595ef475fed783e59c687e','Ingeniero',1,'',NULL,'\0',NULL,NULL,NULL,NULL,NULL),(1045367080,'Mestro1 Nombre','Apellido Maestro1','1969-06-11','Cas. LA Y Griega, Cantón Chilcuyo, Texistepeque, Santa Ana','5037-0337',2256,0,'01#01','6e80cf219e79bc8a8d83ce9a5b757f64','Licenciada en Ciencias jurídicas',4,'','0202-020202-020-0','',0,'Salvadoreña','guillermox020@gmail.com','',''),(1045367081,'04536708-1 repre','04536708-1 apell','1980-05-12','Cas. LA Y Griega, Cantón Chilcuyo, Texistepeque, Santa Ana','7033-7878',0,0,'01#01','ad9f88eb26394a8ad9f46975cf79a133','',9,'','','',1,'Salvadoreña','guillermox020@gmail.com','',''),(1045367082,'04536708-2 padre','04536708-2 apee',NULL,'','2020-2020',0,0,' # ','5f04b909d4b1bca2e6e57dbbf7208c51','',11,'\0',NULL,'',0,'Salvadoreña',NULL,'',''),(1045367083,'04536708-3 madre','04536708-3 apeel',NULL,'','2220-2020',0,0,' # ','a6ba5f99ff9616298b2212c76ea111dc','',10,'\0',NULL,'',0,'Salvadoreña',NULL,'','');
 /*!40000 ALTER TABLE `persona` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1520,7 +1521,7 @@ CREATE TABLE `tipoPersona` (
   `tipoPersonaNombre` varchar(45) NOT NULL,
   `tipoPersonaComentario` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idtipoPersona`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1529,7 +1530,7 @@ CREATE TABLE `tipoPersona` (
 
 LOCK TABLES `tipoPersona` WRITE;
 /*!40000 ALTER TABLE `tipoPersona` DISABLE KEYS */;
-INSERT INTO `tipoPersona` VALUES (1,'Administrador','fa fa-diamond'),(2,'Director','pi pi-circle-on'),(3,'Subdirector','pi pi-circle-off'),(4,'Maestro','fa fa-street-view'),(5,'Bibliotecario','fa fa-forumbee'),(6,'Administrador CRA','fa fa-transgender-alt'),(7,'Laboratorista','fa fa-android'),(8,'Estudiante','fa fa-child'),(9,'Representante','fa fa-user-secret'),(10,'Madre de familia',''),(11,'Padre de familia',''),(12,'Colector','fa fa-cc-mastercard'),(13,'Secretaria','fa fa-database');
+INSERT INTO `tipoPersona` VALUES (1,'Administrador','fa fa-diamond'),(2,'Director','pi pi-circle-on'),(3,'Subdirector','pi pi-circle-off'),(4,'Maestro','fa fa-street-view'),(5,'Bibliotecario','fa fa-forumbee'),(6,'Administrador CRA','fa fa-transgender-alt'),(7,'Laboratorista','fa fa-android'),(8,'Estudiante','fa fa-child'),(9,'Representante','fa fa-user-secret'),(10,'Madre de familia',''),(11,'Padre de familia',''),(12,'Colector','fa fa-cc-mastercard'),(13,'Secretaria','fa fa-database'),(14,'Pscologo','');
 /*!40000 ALTER TABLE `tipoPersona` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1681,4 +1682,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-10-14 18:59:48
+-- Dump completed on 2019-10-20 23:40:22

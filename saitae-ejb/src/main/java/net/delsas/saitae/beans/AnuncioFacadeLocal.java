@@ -51,6 +51,7 @@ public interface AnuncioFacadeLocal {
     
     /**
      * Obtiene todos los anuncios que sean para el tipo de usuario especificado.
+     * @param tipo
      * @return java.util.List net.delsas.saitae.entities.Anuncio
      */
     public List<Anuncio> getAnunciosActivosParaUnTipo(TipoPersona tipo);
