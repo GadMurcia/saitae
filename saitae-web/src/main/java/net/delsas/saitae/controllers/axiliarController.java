@@ -51,10 +51,10 @@ public class axiliarController implements Serializable {
             list = tipo != 100
                     ? pfl.getPersonaByLikeIdAndType(getP().getIdpersona(), tipo)
                     : pfl.getAdminsByLikeId(getP().getIdpersona());
-            for (Persona o : list) {
+            list.forEach((o) -> {
                 results.add(o.getPersonaNombre() + " "
                         + o.getPersonaApellido() + "=>" + o.getIdpersona().toString().substring(1));
-            }
+            });
 
         } catch (Exception m) {
             System.out.println(m.getMessage());
@@ -67,16 +67,16 @@ public class axiliarController implements Serializable {
     }
 
     public void onItemSelect(SelectEvent event) {
-        setP(new Persona(0));
+        p = new Persona(0);
         try {
             String x[] = event.getObject().toString().split("=>");
-            (new Auxiliar()).setDui(x.length > 1 ? x[1] : x[0], getP());
-            setP(pfl.find(getP().getIdpersona()));
+            (new Auxiliar()).setDui(x.length > 1 ? x[1] : x[0], p);
+            p = pfl.find(p.getIdpersona());
         } catch (Exception o) {
             System.out.println("Error en (new prueba()).onItemSelect: " + o.getMessage());
         }
         FacesContext.getCurrentInstance().addMessage(null,
-                new FacesMessage("Selected", getP().getPersonaNombre()));
+                new FacesMessage("Carga de datos", "Cargados los datos de " + p.getPersonaNombre() + " " + p.getPersonaApellido()));
     }
 
     public List<String> completeTextRep(String query) {
@@ -98,7 +98,7 @@ public class axiliarController implements Serializable {
         tipo = 8;
         return completeText(query);
     }
-    
+
     public List<String> completeTextMae(String query) {
         tipo = 4;
         return completeText(query);

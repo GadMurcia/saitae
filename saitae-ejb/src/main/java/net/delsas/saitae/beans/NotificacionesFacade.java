@@ -5,6 +5,7 @@
  */
 package net.delsas.saitae.beans;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -27,6 +28,13 @@ public class NotificacionesFacade extends AbstractFacade<Notificaciones> impleme
 
     public NotificacionesFacade() {
         super(Notificaciones.class);
+    }
+    
+    @Override
+    public List<Notificaciones> getNotificacionesByIdDestinatario(Integer id){
+        return em.createNamedQuery("Notificaciones.findByIdPersona")
+                .setParameter("idpersona", id)
+                .getResultList();
     }
     
 }

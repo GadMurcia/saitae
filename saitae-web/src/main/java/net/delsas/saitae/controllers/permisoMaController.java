@@ -16,6 +16,7 @@
  */
 package net.delsas.saitae.controllers;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -125,34 +126,48 @@ public class permisoMaController implements Serializable {
                         "Solicitud de permiso nueva", FacesMessage.SEVERITY_INFO, usuario.getIdpersona(),
                         "tp¿¿" + (usuario.getTipoPersona().getIdtipoPersona() == 4 ? 3 : 2));
                 TipoPersona tp = tipoPersonaFL.find(usuario.getTipoPersona().getIdtipoPersona() == 4 ? 3 : 2);
-                for (Persona t : tp.getPersonaList()) {
+                tp.getPersonaList().stream().map((t) -> {
                     x.setDestinatario(t.getIdpersona());
+                    return t;
+                }).map((_item) -> {
                     sendMessage(x.toString());
+                    return _item;
+                }).forEachOrdered((_item) -> {
                     persistirNotificación(x);
-                }
-                for(DelagacionCargo dl:tp.getDelegacionCargoList()){
+                });
+                tp.getDelegacionCargoList().stream().map((dl) -> {
                     x.setDestinatario(dl.getIdpersona().getIdpersona());
+                    return dl;
+                }).map((_item) -> {
                     sendMessage(x.toString());
+                    return _item;
+                }).forEachOrdered((_item) -> {
                     persistirNotificación(x);
-                }
-                for (Cargo g : tp.getCargoList()) {
-                    for (MaestoCargo mg : g.getMaestoCargoList()) {
+                });
+                tp.getCargoList().forEach((g) -> {
+                    g.getMaestoCargoList().stream().map((mg) -> {
                         x.setDestinatario(mg.getMaestoCargoPK().getIdMaesto());
+                        return mg;
+                    }).map((_item) -> {
                         sendMessage(x.toString());
+                        return _item;
+                    }).forEachOrdered((_item) -> {
                         persistirNotificación(x);
-                    }
-                }
-                FacesContext.getCurrentInstance().addMessage(null, ms);
-                p = new Permisos(new PermisosPK((usuario == null ? 0 : usuario.getIdpersona()), new Date(), 0, new Date()));
-                p.setTipoPersona(tipoPersonaFL.find(8));
-                p.setPersona(new Persona(0));
-                p.setTipoPermiso1(new TipoPermiso(0));
-                p.setPermisoFechafin(p.getPermisosPK().getPermisoFechaInicio());
-                p.setPermisosComentario("0¿¿0¿¿0¿¿0 ");
+                    });
+                });
             }
         } catch (Exception e) {
             ms = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage());
             FacesContext.getCurrentInstance().addMessage(null, ms);
+        } finally {
+            try {
+                FacesContext.getCurrentInstance().getExternalContext().redirect("permisoM.intex");
+            } catch (IOException ex) {
+                init();
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
+                        FacesMessage.SEVERITY_FATAL, "Error Desconocido", ex.getMessage() == null ? "Error desconocido al intentar guardar"
+                        : ex.getMessage()));
+            }
         }
     }
 

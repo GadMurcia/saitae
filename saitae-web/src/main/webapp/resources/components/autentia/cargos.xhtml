@@ -20,8 +20,8 @@
                     Cargos que ostenta #{maestroController.maestro.persona.personaNombre}
                 </f:facet>
 
-                <p:ajax event="rowEdit" listener="#{maestroController.onRowEdit}" update=":form0:msgs" />
-                <p:ajax event="rowEditCancel" listener="#{maestroController.onRowCancel}" update=":form0:msgs" />
+                <p:ajax event="rowEdit" listener="#{maestroController.onRowEdit}" update=":form0:msgs cargos" />
+                <p:ajax event="rowEditCancel" listener="#{maestroController.onRowCancel}" update=":form0:msgs cargos" />
 
                 <p:column headerText="cargo">
                     <p:cellEditor>

@@ -29,5 +29,12 @@ public interface NotificacionesFacadeLocal {
     List<Notificaciones> findRange(int[] range);
 
     int count();
+
+    /**
+     * DEVUELVE UNA LISTA DE NOTIFICACIONES CUYO DESTINATARIO SE IDENTIFICA MEDIANTE EL ID PROPORCIONADO
+     * @param id
+     * @return java.util.List net.delsas.saitae.entities.Notificaciones
+     */
+    public List<Notificaciones> getNotificacionesByIdDestinatario(Integer id);
     
 }

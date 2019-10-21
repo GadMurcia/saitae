@@ -34,7 +34,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "DelagacionCargo.findByIddelagacionCargo", query = "SELECT d FROM DelagacionCargo d WHERE d.iddelagacionCargo = :iddelagacionCargo")
     , @NamedQuery(name = "DelagacionCargo.findByFechaInicio", query = "SELECT d FROM DelagacionCargo d WHERE d.fechaInicio = :fechaInicio")
     , @NamedQuery(name = "DelagacionCargo.findByFechaFin", query = "SELECT d FROM DelagacionCargo d WHERE d.fechaFin = :fechaFin")
-    , @NamedQuery(name = "DelagacionCargo.findByDelagacionCargoComentario", query = "SELECT d FROM DelagacionCargo d WHERE d.delagacionCargoComentario = :delagacionCargoComentario")})
+    , @NamedQuery(name = "DelagacionCargo.findByDelagacionCargoByIdPersona", query = "SELECT d FROM DelagacionCargo d WHERE d.idpersona.idpersona = :idpersona")
+})
 public class DelagacionCargo implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -148,5 +149,5 @@ public class DelagacionCargo implements Serializable {
     public String toString() {
         return "net.delsas.saitae.entities.DelagacionCargo[ iddelagacionCargo=" + iddelagacionCargo + " ]";
     }
-    
+
 }

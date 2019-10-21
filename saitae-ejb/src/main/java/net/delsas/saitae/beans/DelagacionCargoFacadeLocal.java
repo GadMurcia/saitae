@@ -29,5 +29,12 @@ public interface DelagacionCargoFacadeLocal {
     List<DelagacionCargo> findRange(int[] range);
 
     int count();
+
+    /**
+     *  Devuelve ua lista de delegaciones para el id de la persona proporcionado
+     * @param id
+     * @return java.util.List net.delsas.saitae.entities.DelagacionCargo
+     */
+    public List<DelagacionCargo> getDelegacionCargoByIdPersona(Integer id);
     
 }

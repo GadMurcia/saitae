@@ -29,5 +29,12 @@ public interface MaestoCargoFacadeLocal {
     List<MaestoCargo> findRange(int[] range);
 
     int count();
+
+    /**
+     * Devuelve una lista de cargos para el maestro identificado por el id proporcionado
+     * @param id
+     * @return java.util.List net.delsas.saitae.entities.MaestoCargo
+     */
+    public List<MaestoCargo> getMaestroCargoByIdMaestro(Integer id);
     
 }

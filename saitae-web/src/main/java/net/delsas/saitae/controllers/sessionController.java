@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -22,7 +23,9 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import net.delsas.saitae.ax.mensaje;
+import net.delsas.saitae.beans.DelagacionCargoFacadeLocal;
 import net.delsas.saitae.beans.EstudianteFacadeLocal;
+import net.delsas.saitae.beans.MaestoCargoFacadeLocal;
 import net.delsas.saitae.beans.MaestroFacadeLocal;
 import net.delsas.saitae.beans.NotificacionesFacadeLocal;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
@@ -46,9 +49,9 @@ import org.primefaces.model.menu.MenuElement;
 @Named
 @ViewScoped
 public class sessionController implements Serializable {
-
+    
     private static final long serialVersionUID = 1L;
-
+    
     private DefaultMenuModel mm;
     private Persona us;
     @EJB
@@ -57,18 +60,22 @@ public class sessionController implements Serializable {
     private PersonaFacadeLocal personaFL;
     @EJB
     private EstudianteFacadeLocal eFL;
+    @EJB
+    private MaestoCargoFacadeLocal mcFL;
+    @EJB
+    private DelagacionCargoFacadeLocal dcFL;
 
     //para notificaciones
     @EJB
     private NotificacionesFacadeLocal notiFL;
     private List<Notificaciones> notificaciones;
     private boolean verNoti;
-
+    
     @PostConstruct
     public void init() {
         verNoti = false;
     }
-
+    
     public void log() {
         FacesContext context = FacesContext.getCurrentInstance();
         try {
@@ -83,6 +90,11 @@ public class sessionController implements Serializable {
                 us = personaFL.find(us.getIdpersona());
                 us.setMaestro(mfl.find(us.getIdpersona()));
                 us.setEstudiante(eFL.find(us.getIdpersona()));
+                if (us.getMaestro() != null) {
+                    us.getMaestro().setMaestoCargoList(mcFL.getMaestroCargoByIdMaestro(us.getIdpersona()));
+                }
+                us.setDelagacionCargoList(dcFL.getDelegacionCargoByIdPersona(us.getIdpersona()));
+                us.setNotificacionesDestinatarioList(notiFL.getNotificacionesByIdDestinatario(us.getIdpersona()));
                 context.getExternalContext().getSessionMap().remove("usuario");
                 context.getExternalContext().getSessionMap().put("usuario", us);
                 List<Notificaciones> not = us.getNotificacionesDestinatarioList();
@@ -90,7 +102,7 @@ public class sessionController implements Serializable {
                 if (not != null) {
                     Collections.sort(not, (Notificaciones o1, Notificaciones o2) -> o2.getFechaHora().hashCode() - o1.getFechaHora().hashCode());
                     if (not.size() > 5) {
-                        for (int y = 0; y < 6; y++) {
+                        for (int y = 0; y < 5; y++) {
                             if (y < not.size()) {
                                 notificaciones.add(not.get(y));
                             }
@@ -116,23 +128,23 @@ public class sessionController implements Serializable {
             context.addMessage("growl", new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error Inesperado", ex.getMessage()));
         }
     }
-
+    
     public Persona getUs() {
         return us;
     }
-
+    
     public void setUs(Persona us) {
         this.us = us;
     }
-
+    
     public DefaultMenuModel getMm() {
         return mm;
     }
-
+    
     public void setMm(DefaultMenuModel mm) {
         this.mm = mm;
     }
-
+    
     public void menu() {
         mm = new DefaultMenuModel();
         DefaultMenuItem mi;
@@ -171,20 +183,7 @@ public class sessionController implements Serializable {
         s.addElement(mi);
         mm.addElement(s);
     }
-
-    public DefaultSubMenu menu2(List<AccesoTipoPersona> accesos, String nombreMenu, String icono) {
-        DefaultSubMenu sm = new DefaultSubMenu(nombreMenu, icono);
-        DefaultMenuItem mi;
-        List<Acceso> ac = new ArrayList<>();
-        accesos.forEach((atp) -> {
-            ac.add(atp.getAcceso());
-        });
-        ac.stream().filter((a) -> (a.getAccesoIndice() == null)).forEachOrdered((a) -> {
-            sm.addElement(menu3(a, ac));
-        });
-        return sm;
-    }
-
+    
     private MenuElement menu3(Acceso a, List<Acceso> ac) {
         DefaultSubMenu s = new DefaultSubMenu(a.getAccesoNombre(), a.getAccesoComentario());
         a.getAccesoList().stream().filter((b) -> (ac.contains(b))).forEachOrdered((b) -> {
@@ -196,7 +195,7 @@ public class sessionController implements Serializable {
         });
         return s;
     }
-
+    
     public void cerrarSesion() {
         ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
         context.getSessionMap().remove("usuario");
@@ -207,25 +206,25 @@ public class sessionController implements Serializable {
             Logger.getLogger(sessionController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
     public void onToggle(ToggleEvent event) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
                 event.getComponent().getId() + " toggled", "Status:" + event.getVisibility().name());
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
-
+    
     public int getUsNie() {
         return Integer.valueOf(us.getIdpersona().toString().subSequence(1, us.getIdpersona().toString().split("").length - 1).toString());
     }
-
+    
     public void setUsNie(int nie) {
         us.setIdpersona(Integer.valueOf("1" + nie));
     }
-
+    
     public int getAño() {
         return Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date()));
     }
-
+    
     public void escucha() {
         try {
             mensaje m = new mensaje(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("mss"));
@@ -236,7 +235,6 @@ public class sessionController implements Serializable {
                     n1.add(m.getNotificacion());
                     notificaciones.forEach((Notificaciones not) -> {
                         try {
-                            not = notiFL.find(not.getFechaHora());
                             not.setVista(true);
                             notiFL.edit(not);
                         } catch (Exception e) {
@@ -268,16 +266,16 @@ public class sessionController implements Serializable {
             Logger.getLogger(sessionController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
     public String getDetalle_Fecha(Date e) {
         String x[] = new SimpleDateFormat("EEEEE dd-MMMMM-yyyy hh:mm:ss a").format(e).split("-");
         return x[0] + " de " + x[1] + " de " + x[2];
     }
-
+    
     public boolean isVerNoti() {
         return verNoti;
     }
-
+    
     public List<Notificaciones> getNotificaciones() {
         return Collections.unmodifiableList(notificaciones);
     }

@@ -22,19 +22,23 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 import net.delsas.saitae.ax.Auxiliar;
+import net.delsas.saitae.ax.mensaje;
 import net.delsas.saitae.beans.CargoFacadeLocal;
 import net.delsas.saitae.beans.FinanciamientoFacadeLocal;
 import net.delsas.saitae.beans.MaestoCargoFacadeLocal;
 import net.delsas.saitae.beans.MaestroFacadeLocal;
+import net.delsas.saitae.beans.NotificacionesFacadeLocal;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.beans.TipoNombramientoFacadeLocal;
 import net.delsas.saitae.entities.Cargo;
@@ -43,8 +47,9 @@ import net.delsas.saitae.entities.MaestoCargo;
 import net.delsas.saitae.entities.Maestro;
 import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.TipoNombramiento;
-import net.delsas.saitae.entities.TipoPersona;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.omnifaces.cdi.Push;
+import org.omnifaces.cdi.PushContext;
 import org.primefaces.event.FlowEvent;
 import org.primefaces.event.RowEditEvent;
 
@@ -67,7 +72,6 @@ public class maestroController implements Serializable {
     private TipoNombramientoFacadeLocal tipoNombramientoFL;
 
     private static final long serialVersionUID = 1L;
-    private Auxiliar auxiliar;
     private Maestro maestro;
     @EJB
     private MaestroFacadeLocal mfl;
@@ -81,6 +85,9 @@ public class maestroController implements Serializable {
     private PersonaFacadeLocal pfl;
     @EJB
     private MaestoCargoFacadeLocal mcfl;
+    @EJB
+    private NotificacionesFacadeLocal notiFL;
+    private Persona usuario;
 
     /**
      * Creates a new instance of maestro
@@ -91,6 +98,7 @@ public class maestroController implements Serializable {
         cargos = cargoFL.findAll();
         financiamientos = financiamientoFL.findAll();
         nombramientos = tipoNombramientoFL.findAll();
+        usuario = (Persona) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
     }
 
     public Maestro getMaestro() {
@@ -176,49 +184,60 @@ public class maestroController implements Serializable {
 
     public void setChange() {
         maestro = mfl.find(axiliarController.getP().getIdpersona());
+        maestro.setMaestoCargoList(mcfl.getMaestroCargoByIdMaestro(maestro.getIdmaestro()));
     }
 
     public void guardar() {
         try {
-            maestro.getPersona().setPersonaContrasenya(DigestUtils.md5Hex(new Auxiliar().getDui(maestro.getPersona())));
-            try {
-                mfl.edit(maestro);
-            } catch (Exception o) {
-            }
-            Maestro m1 = mfl.find(maestro.getIdmaestro());
-            if (m1 != null) {
-                for (MaestoCargo mc1 : m1.getMaestoCargoList()) {
-                    if (!maestro.getMaestoCargoList().contains(mc1)) {
-                        try {
-                            mcfl.remove(mc1);
-                        } catch (Exception o) {
-                        }
+            Persona p = maestro.getPersona();
+            p.setMaestro(maestro);
+            Persona m = pfl.find(p.getIdpersona());
+            if (m == null) {
+                maestro.getPersona().setPersonaContrasenya(DigestUtils.md5Hex(new Auxiliar().getDui(maestro.getPersona())));
+                pfl.create(p);
+            } else {
+                List<MaestoCargo> mm = new ArrayList<>();
+                List<MaestoCargo> mm0 = mcfl.getMaestroCargoByIdMaestro(m.getIdpersona());
+                maestro.getMaestoCargoList().forEach(mm::add);
+                maestro.setMaestoCargoList(new ArrayList<>());
+                pfl.edit(p);
+                mm0.forEach((mc) -> {
+                    if (!mm.contains(mc)) {
+                        mcfl.remove(mc);
+                        persistirNotificación(new mensaje(maestro.getIdmaestro(), usuario.getIdpersona(), " ",
+                                new FacesMessage(FacesMessage.SEVERITY_INFO, "Relevación de Cargo",
+                                        "Ha sido relevado de su cargo como " + mc.getCargo().getCargoNombre() + " "
+                                        + "Por " + usuario.getPersonaNombre().split(" ")[0] + " "
+                                        + usuario.getPersonaApellido().split(" ")[0])));
+                    } else {
+                        mm.remove(mc);
                     }
-                }
-                for (MaestoCargo mc1 : maestro.getMaestoCargoList()) {
-                    if (!m1.getMaestoCargoList().contains(mc1)) {
-                        try {
-                            mcfl.create(mc1);
-                        } catch (Exception o) {
-                        }
-                    }
-                }
-            }
-            if (maestro.getMaestoCargoList().size() > 0) {
-                maestro = mcfl.find(maestro.getMaestoCargoList().get(0).getMaestoCargoPK()).getMaestro();
-            }
-            try {
-                mfl.edit(maestro);
-            } catch (Exception o) {
+                });
+                mm.forEach((mc) -> {
+                    mcfl.create(mc);
+                    persistirNotificación(new mensaje(maestro.getIdmaestro(), usuario.getIdpersona(), " ",
+                            new FacesMessage(FacesMessage.SEVERITY_INFO, "Asignación de Cargo",
+                                    usuario.getPersonaNombre().split(" ")[0] + " "
+                                    + usuario.getPersonaApellido().split(" ")[0]
+                                    + " le ha asignado el cargo de " + mc.getCargo().getCargoNombre())));
+                });
             }
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("mensaje",
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Guardado con éxito",
                             "Los datos de " + maestro.getPersona().getPersonaNombre()
                             + " han sido guardados con éxito."));
-            FacesContext.getCurrentInstance().getExternalContext().redirect("agregacion.intex");
-        } catch (IOException o) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
+        } catch (Exception o) {
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("mensaje", new FacesMessage(
                     FacesMessage.SEVERITY_FATAL, "Error al intentar guardar", o.getMessage()));
+        } finally {
+            try {
+                FacesContext.getCurrentInstance().getExternalContext().redirect("agregacion.intex");
+            } catch (IOException ex) {
+                init();
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
+                        FacesMessage.SEVERITY_FATAL, "Error Desconocido", ex.getMessage() == null ? "Error desconocido al intentar guardar"
+                        : ex.getMessage()));
+            }
         }
     }
 
@@ -232,6 +251,22 @@ public class maestroController implements Serializable {
 
     public List<TipoNombramiento> getNombramientos() {
         return Collections.unmodifiableList(nombramientos);
+    }
+
+    private void persistirNotificación(mensaje x) {
+        try {
+            notiFL.create(x.getNotificacion());
+            sendMessage(x.toString());
+        } catch (Exception e) {
+        }
+    }
+
+    @Inject
+    @Push
+    private PushContext notificacion;
+
+    public void sendMessage(String message) {
+        notificacion.send(message);
     }
 
 }

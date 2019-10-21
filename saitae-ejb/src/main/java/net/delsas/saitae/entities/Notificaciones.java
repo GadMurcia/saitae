@@ -34,6 +34,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Notificaciones.findByFechaHora", query = "SELECT n FROM Notificaciones n WHERE n.fechaHora = :fechaHora")
     , @NamedQuery(name = "Notificaciones.findByNotificacionTitulo", query = "SELECT n FROM Notificaciones n WHERE n.notificacionTitulo = :titulo")
     , @NamedQuery(name = "Notificaciones.findByVista", query = "SELECT n FROM Notificaciones n WHERE n.vista = :vista")
+    , @NamedQuery(name = "Notificaciones.findByIdPersona", query = "SELECT n FROM Notificaciones n WHERE n.destinatario.idpersona = :idpersona")
 })
 public class Notificaciones implements Serializable {
 
@@ -84,7 +85,7 @@ public class Notificaciones implements Serializable {
         this.destinatario = destinatario;
         this.remitente = remitente;
     }
-    
+
     public Date getFechaHora() {
         return fechaHora;
     }
@@ -165,5 +166,5 @@ public class Notificaciones implements Serializable {
     public String toString() {
         return "net.delsas.saitae.entities.Notificaciones[ fechaHora=" + fechaHora + " ]";
     }
-    
+
 }

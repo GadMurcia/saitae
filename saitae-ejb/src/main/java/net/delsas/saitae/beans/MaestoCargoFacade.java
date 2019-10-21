@@ -5,6 +5,7 @@
  */
 package net.delsas.saitae.beans;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -27,6 +28,13 @@ public class MaestoCargoFacade extends AbstractFacade<MaestoCargo> implements Ma
 
     public MaestoCargoFacade() {
         super(MaestoCargo.class);
+    }
+    
+    @Override
+    public List<MaestoCargo> getMaestroCargoByIdMaestro(Integer id){
+        return em.createNamedQuery("MaestoCargo.findByIdMaesto")
+                .setParameter("idMaesto", id)
+                .getResultList();
     }
     
 }

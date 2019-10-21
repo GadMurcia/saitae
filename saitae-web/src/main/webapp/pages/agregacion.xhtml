@@ -9,69 +9,43 @@
         <ui:composition template="./../WEB-INF/template/plantilla1.xhtml">
             <ui:define name="content">
                 <h:form id="form1">
-                    <style type="text/css">
-                        .label {
-                            width:20%;
-                            padding:4px;
-                        }
-
-                        .value {
-                            width:80%;
-                            padding:4px;
-                        }
-
-                        .grid {
-                            width:100%;
-                        }
-
-                        .error {
-                            color: red;
-                        }
-
-                        .outputLabel {
-                            font-weight: bold;
-                        }
-
-                        .grid {
-                            width:33%;
-                            padding:4px;
-                        }
-                    </style>
-                    <p:wizard flowListener="#{maestroController.onFlowProcess}" 
-                              backLabel="Atrás" nextLabel="Siguiente">
-                        <p:tab id="personal" title="Personal">
-                            <p:panel header="Información Personal.">
-                                <t:persona departamento="#{maestroController.departamento}" 
-                                           departamentoLista="#{maestroController.departamentosLista}" 
-                                           dui="#{maestroController.dui}" municipio="#{maestroController.municipio}" 
-                                           municipioLista="#{maestroController.municipiosLista}" 
-                                           persona="#{maestroController.maestro.persona}"
-                                           onItemSelect="#{maestroController.setChange()}"
-                                           t="4" onComplete="#{axiliarController.completeTextMae}"/>
-                            </p:panel>
-                        </p:tab>
-                        <p:tab id="address" title="Contacto">
-                            <p:panel header="Información de Constacto.">
-                                <t:persona1 persona="#{maestroController.maestro.persona}"                                            
-                                            maestro="#{maestroController.maestro}"/>
-                            </p:panel>
-                        </p:tab>
-                        <p:tab id="contact" title="Profesional">
-                            <p:panel header="Información Profesional.">
-                                <t:maestro maestro="#{maestroController.maestro}"/>
-                            </p:panel>
-                        </p:tab>
-                        <p:tab id="confirm" title="Contratación">
-                            <p:panel header="Información de Contratación.">
-                                <t:maestro1 maestro="#{maestroController.maestro}"/>
-                            </p:panel>
-                        </p:tab>
-                        <p:tab title="Cargos Ostentados">
-                            <t:cargos id="cargos"/>
-                            <p:commandButton value="Guardar" update=":form0:msgs" process="@this"
-                                             actionListener="#{maestroController.guardar()}"/>
-                        </p:tab>
-                    </p:wizard>
+                    <h:panelGrid columns="1">
+                        <p:wizard flowListener="#{maestroController.onFlowProcess}" 
+                                  backLabel="Atrás" nextLabel="Siguiente">
+                            <p:tab id="personal" title="Personal">
+                                <p:panel header="Información Personal.">
+                                    <t:persona departamento="#{maestroController.departamento}" 
+                                               departamentoLista="#{maestroController.departamentosLista}" 
+                                               dui="#{maestroController.dui}" municipio="#{maestroController.municipio}" 
+                                               municipioLista="#{maestroController.municipiosLista}" 
+                                               persona="#{maestroController.maestro.persona}"
+                                               onItemSelect="#{maestroController.setChange()}"
+                                               t="4" onComplete="#{axiliarController.completeTextMae}"/>
+                                </p:panel>
+                            </p:tab>
+                            <p:tab id="address" title="Contacto">
+                                <p:panel header="Información de Constacto.">
+                                    <t:persona1 persona="#{maestroController.maestro.persona}"                                            
+                                                maestro="#{maestroController.maestro}"/>
+                                </p:panel>
+                            </p:tab>
+                            <p:tab id="contact" title="Profesional">
+                                <p:panel header="Información Profesional.">
+                                    <t:maestro maestro="#{maestroController.maestro}"/>
+                                </p:panel>
+                            </p:tab>
+                            <p:tab id="confirm" title="Contratación">
+                                <p:panel header="Información de Contratación.">
+                                    <t:maestro1 maestro="#{maestroController.maestro}"/>
+                                </p:panel>
+                            </p:tab>
+                            <p:tab title="Cargos Ostentados">
+                                <t:cargos id="cargos"/>
+                                <p:commandButton value="Guardar" update=":form0:msgs" process="@this"
+                                                 actionListener="#{maestroController.guardar()}"/>
+                            </p:tab>
+                        </p:wizard>
+                    </h:panelGrid>
                 </h:form>
             </ui:define>
         </ui:composition>
