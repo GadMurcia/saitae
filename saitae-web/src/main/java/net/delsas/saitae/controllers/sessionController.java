@@ -28,6 +28,7 @@ import net.delsas.saitae.beans.MaestoCargoFacadeLocal;
 import net.delsas.saitae.beans.MaestroFacadeLocal;
 import net.delsas.saitae.beans.NotificacionesFacadeLocal;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
+import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
 import net.delsas.saitae.entities.Acceso;
 import net.delsas.saitae.entities.DelagacionCargo;
 import net.delsas.saitae.entities.Notificaciones;
@@ -61,6 +62,8 @@ public class sessionController implements Serializable {
     private MaestoCargoFacadeLocal mcFL;
     @EJB
     private DelagacionCargoFacadeLocal dcFL;
+    @EJB
+    private TipoPersonaFacadeLocal tipopFL;
 
     //para notificaciones
     @EJB
@@ -92,6 +95,7 @@ public class sessionController implements Serializable {
                 }
                 us.setDelagacionCargoList(dcFL.getDelegacionCargoByIdPersona(us.getIdpersona()));
                 us.setNotificacionesDestinatarioList(notiFL.getNotificacionesByIdDestinatario(us.getIdpersona()));
+                us.setTipoPersona(tipopFL.find(us.getTipoPersona().getIdtipoPersona()));
                 context.getExternalContext().getSessionMap().remove("usuario");
                 context.getExternalContext().getSessionMap().put("usuario", us);
                 List<Notificaciones> not = us.getNotificacionesDestinatarioList();
