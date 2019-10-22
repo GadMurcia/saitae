@@ -305,6 +305,70 @@ public class Persona implements Serializable {
         return "net.delsas.saitae.entities.Persona[ idpersona=" + idpersona + " ]";
     }
 
+
+    @XmlTransient
+    public List<Notificaciones> getNotificacionesDestinatarioList() {
+        return notificacionesDestinatarioList;
+    }
+
+    public void setNotificacionesDestinatarioList(List<Notificaciones> notificacionesDestinatarioList) {
+        this.notificacionesDestinatarioList = notificacionesDestinatarioList;
+    }
+
+    @XmlTransient
+    public List<Notificaciones> getNotificacionesremitenteList() {
+        return notificacionesremitenteList;
+    }
+
+    public void setNotificacionesremitenteList(List<Notificaciones> notificacionesremitenteList) {
+        this.notificacionesremitenteList = notificacionesremitenteList;
+    }
+
+    @XmlTransient
+    public List<Estudiante> getEstudianDeLosQueEsPadreteList() {
+        return estudianDeLosQueEsPadreteList;
+    }
+
+    public void setEstudianDeLosQueEsPadreteList(List<Estudiante> estudianDeLosQueEsPadreteList) {
+        this.estudianDeLosQueEsPadreteList = estudianDeLosQueEsPadreteList;
+    }
+
+    @XmlTransient
+    public List<Estudiante> getEstudianteDeLosQueEsMadreList() {
+        return estudianteDeLosQueEsMadreList;
+    }
+
+    public void setEstudianteDeLosQueEsMadreList(List<Estudiante> estudianteDeLosQueEsMadreList) {
+        this.estudianteDeLosQueEsMadreList = estudianteDeLosQueEsMadreList;
+    }
+
+    @XmlTransient
+    public List<EntregaUtiles> getEntregaUtilesEntreganteList() {
+        return entregaUtilesEntreganteList;
+    }
+
+    public void setEntregaUtilesEntreganteList(List<EntregaUtiles> entregaUtilesEntreganteList) {
+        this.entregaUtilesEntreganteList = entregaUtilesEntreganteList;
+    }
+
+    @XmlTransient
+    public List<Permisos> getBeneficiarioDePermisosList() {
+        return BeneficiarioDePermisosList;
+    }
+
+    public void setBeneficiarioDePermisosList(List<Permisos> BeneficiarioDePermisosList) {
+        this.BeneficiarioDePermisosList = BeneficiarioDePermisosList;
+    }
+
+    @XmlTransient
+    public List<Permisos> getSolicitanteDePermisosList() {
+        return SolicitanteDePermisosList;
+    }
+
+    public void setSolicitanteDePermisosList(List<Permisos> SolicitanteDePermisosList) {
+        this.SolicitanteDePermisosList = SolicitanteDePermisosList;
+    }
+
     public String getPersonaNombre() {
         return personaNombre;
     }
@@ -407,69 +471,6 @@ public class Persona implements Serializable {
 
     public void setPersonaComentarios(String personaComentarios) {
         this.personaComentarios = personaComentarios;
-    }
-
-    @XmlTransient
-    public List<Notificaciones> getNotificacionesDestinatarioList() {
-        return notificacionesDestinatarioList;
-    }
-
-    public void setNotificacionesDestinatarioList(List<Notificaciones> notificacionesDestinatarioList) {
-        this.notificacionesDestinatarioList = notificacionesDestinatarioList;
-    }
-
-    @XmlTransient
-    public List<Notificaciones> getNotificacionesremitenteList() {
-        return notificacionesremitenteList;
-    }
-
-    public void setNotificacionesremitenteList(List<Notificaciones> notificacionesremitenteList) {
-        this.notificacionesremitenteList = notificacionesremitenteList;
-    }
-
-    @XmlTransient
-    public List<Estudiante> getEstudianDeLosQueEsPadreteList() {
-        return estudianDeLosQueEsPadreteList;
-    }
-
-    public void setEstudianDeLosQueEsPadreteList(List<Estudiante> estudianDeLosQueEsPadreteList) {
-        this.estudianDeLosQueEsPadreteList = estudianDeLosQueEsPadreteList;
-    }
-
-    @XmlTransient
-    public List<Estudiante> getEstudianteDeLosQueEsMadreList() {
-        return estudianteDeLosQueEsMadreList;
-    }
-
-    public void setEstudianteDeLosQueEsMadreList(List<Estudiante> estudianteDeLosQueEsMadreList) {
-        this.estudianteDeLosQueEsMadreList = estudianteDeLosQueEsMadreList;
-    }
-
-    @XmlTransient
-    public List<EntregaUtiles> getEntregaUtilesEntreganteList() {
-        return entregaUtilesEntreganteList;
-    }
-
-    public void setEntregaUtilesEntreganteList(List<EntregaUtiles> entregaUtilesEntreganteList) {
-        this.entregaUtilesEntreganteList = entregaUtilesEntreganteList;
-    }
-
-    @XmlTransient
-    public List<Permisos> getBeneficiarioDePermisosList() {
-        return BeneficiarioDePermisosList;
-    }
-
-    public void setBeneficiarioDePermisosList(List<Permisos> BeneficiarioDePermisosList) {
-        this.BeneficiarioDePermisosList = BeneficiarioDePermisosList;
-    }
-
-    @XmlTransient
-    public List<Permisos> getSolicitanteDePermisosList() {
-        return SolicitanteDePermisosList;
-    }
-
-    public void setSolicitanteDePermisosList(List<Permisos> SolicitanteDePermisosList) {
-        this.SolicitanteDePermisosList = SolicitanteDePermisosList;
     }
     
 }

@@ -30,7 +30,9 @@ import net.delsas.saitae.entities.MaestoCargo;
 import net.delsas.saitae.entities.Maestro;
 import net.delsas.saitae.entities.Matricula;
 import net.delsas.saitae.entities.Persona;
+import net.delsas.saitae.entities.TipoEspecialidades;
 import net.delsas.saitae.entities.TipoPersona;
+import net.delsas.saitae.entities.TipoSueldos;
 
 /**
  *
@@ -80,7 +82,7 @@ public class Auxiliar implements Serializable {
         e.getEstudiante().setEstudianteRepresentanteFamiliar(false);
         e.getEstudiante().setEstudiantePadre(getPadre());
         e.getEstudiante().setEstudianteMadre(getMadre());
-        e.getEstudiante().setMatriculaList(new ArrayList<Matricula>());
+        e.getEstudiante().setMatriculaList(new ArrayList<>());
         e.getEstudiante().setEstudianteComentario("");
         e.getEstudiante().setPersona(e);
         e.getEstudiante().setEstudianteEsEstudiante(true);
@@ -146,7 +148,7 @@ public class Auxiliar implements Serializable {
         ma.getMaestro().setMaestroCategoria(0);
         ma.getMaestro().setMaestroCodigo(0);
         ma.getMaestro().setMaestroComentario("");
-        ma.getMaestro().setMaestroEspecialidad("");
+        ma.getMaestro().setMaestroEspecialidad(new TipoEspecialidades(0));
         ma.getMaestro().setMaestroFechaInstitucion(Calendar.getInstance().getTime());
         ma.getMaestro().setMaestroFechaMagisterio(Calendar.getInstance().getTime());
         ma.getMaestro().setMaestroFechaProximoAsenso(Calendar.getInstance().getTime());
@@ -159,13 +161,13 @@ public class Auxiliar implements Serializable {
         ma.getMaestro().setMaestroSinEscalafon(false);
         ma.getMaestro().setMaestroSubnumeros(0);
         ma.getMaestro().setMaestroTiempoCategoria("");
-        ma.getMaestro().setMaestroTipoSalario("");
+        ma.getMaestro().setMaestroTipoSalario(new TipoSueldos(0));
         ma.getMaestro().setMaestroTurno("");
         ma.getMaestro().setMaestroUsoVideoconferencias(false);
         ma.getMaestro().setMaestroUtilidadTecnologica(false);
         ma.getMaestro().setMaestrocolTelefonoResidencia("");
         ma.getMaestro().setPersona(ma);
-        ma.getMaestro().setMaestoCargoList(new ArrayList<MaestoCargo>());
+        ma.getMaestro().setMaestoCargoList(new ArrayList<>());
         ma.setTipoPersona(new TipoPersona(4, "Maestro"));
         ma.setPersonaActivo(true);
         return ma;

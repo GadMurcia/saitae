@@ -55,6 +55,8 @@
     <class>net.delsas.saitae.entities.TipoReservaRecurso</class>
     <class>net.delsas.saitae.entities.TipopersonaPermiso</class>
     <class>net.delsas.saitae.entities.Zona</class>
+    <class>net.delsas.saitae.entities.TipoEspecialidades</class>
+    <class>net.delsas.saitae.entities.TipoSueldos</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties/>
   </persistence-unit>

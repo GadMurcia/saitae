@@ -35,7 +35,7 @@ CREATE TABLE `acceso` (
   UNIQUE KEY `idacceso_UNIQUE` (`idacceso`),
   KEY `fk_acceso_1_idx` (`accesoIndice`),
   CONSTRAINT `fk_acceso_1` FOREIGN KEY (`accesoIndice`) REFERENCES `acceso` (`idacceso`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -44,7 +44,7 @@ CREATE TABLE `acceso` (
 
 LOCK TABLES `acceso` WRITE;
 /*!40000 ALTER TABLE `acceso` DISABLE KEYS */;
-INSERT INTO `acceso` VALUES (9,'Configuración',NULL,'#','fa fa-cog'),(10,'Administración',9,'tipopp.intex','pi pi-folder-open'),(11,'Permisos y Licencias',9,'lictp.intex','pi pi-th-large'),(12,'Académica',9,'academico.intex','fa fa-leaf'),(13,'Perfil',NULL,'#','pi pi-user'),(14,'Permisos',NULL,'#','pi pi-eye'),(15,'Solicitar Permiso',14,'permisoE.intex','pi pi-briefcase'),(16,'Personal',NULL,'#','pi pi-users'),(17,'Agregar Maestro',27,'agregacion.intex','pi pi-user-plus'),(18,'Agregar Administrador',16,'agAdm.intex','pi pi-plus'),(19,'Plantel Institucional',16,'plantel.intex','pi pi-table'),(20,'Inventario',23,'inventario.intex','fa fa-barcode'),(21,'Libros',23,'libros.intex','fa fa-book'),(22,'Nuevo Ingreso',16,'inscripcion.intex','pi pi-user'),(23,'Recursos',9,'#','fa fa-tint'),(24,'Nomina de Alumnos',16,'nominaA.intex','pi pi-user'),(25,'Administración de Recursos',23,'recurso.intex','fa fa-table'),(26,'Lista de Representantes',16,'listaRepresentantes.intex','pi pi-list'),(27,'Maestros',16,'#','pi pi-list'),(28,'Asignación de materias',27,'horario.intex','pi pi-plus'),(29,'Administración de permisos',14,'permiso.intex','fa fa-legal'),(30,'Solicitud de permisos',14,'permisoM.intex','fa fa-ge'),(31,'Administrador de anuncios',9,'anuncios.intex','fa fa-bell'),(32,'Matricula',16,'matricula.intex','fa fa-slideshare'),(33,'Entrega de Útiles',9,'paquetes.intex','fa fa-sliders'),(34,'Contribuciones',9,'contribuciones.intex','fa fa-money');
+INSERT INTO `acceso` VALUES (9,'Configuración',NULL,'#','fa fa-cog'),(10,'Administración',9,'tipopp.intex','pi pi-folder-open'),(11,'Permisos y Licencias',9,'lictp.intex','pi pi-th-large'),(12,'Académica',9,'academico.intex','fa fa-leaf'),(13,'Perfil',NULL,'#','pi pi-user'),(14,'Permisos',NULL,'#','pi pi-eye'),(15,'Solicitar Permiso',14,'permisoE.intex','pi pi-briefcase'),(16,'Personal',NULL,'#','pi pi-users'),(17,'Agregar Maestro',27,'agregacion.intex','pi pi-user-plus'),(18,'Agregar Administrador',16,'agAdm.intex','pi pi-plus'),(19,'Plantel Institucional',35,'plantel.intex','pi pi-table'),(20,'Inventario',23,'inventario.intex','fa fa-barcode'),(21,'Libros',23,'libros.intex','fa fa-book'),(22,'Nuevo Ingreso',36,'inscripcion.intex','pi pi-user'),(23,'Recursos',9,'#','fa fa-yelp'),(24,'Nomina de Alumnos',36,'nominaA.intex','pi pi-user'),(25,'Administración de Recursos',23,'recurso.intex','fa fa-table'),(26,'Lista de Representantes',35,'listaRepresentantes.intex','pi pi-list'),(27,'Maestros',16,'#','fa fa-puzzle-piece'),(28,'Asignación de materias',27,'horario.intex','pi pi-plus'),(29,'Administración de permisos',14,'permiso.intex','fa fa-legal'),(30,'Solicitud de permisos',14,'permisoM.intex','fa fa-ge'),(31,'Administrador de anuncios',9,'anuncios.intex','fa fa-bell'),(32,'Matricula',36,'matricula.intex','fa fa-slideshare'),(33,'Entrega de Útiles',36,'paquetes.intex','fa fa-sliders'),(34,'Contribuciones',36,'contribuciones.intex','fa fa-money'),(35,'Listados',16,'#','fa fa-list-ul'),(36,'Alumnos',16,'#','fa fa-graduation-cap'),(37,'Reservas de Equipo',NULL,'#','fa fa-gamepad');
 /*!40000 ALTER TABLE `acceso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -72,7 +72,7 @@ CREATE TABLE `accesoTipoPersona` (
 
 LOCK TABLES `accesoTipoPersona` WRITE;
 /*!40000 ALTER TABLE `accesoTipoPersona` DISABLE KEYS */;
-INSERT INTO `accesoTipoPersona` VALUES (9,1,''),(9,2,''),(9,3,''),(10,1,''),(10,2,''),(11,1,''),(11,2,''),(11,3,''),(12,1,''),(12,2,''),(14,1,''),(14,2,''),(14,3,''),(14,4,''),(14,8,''),(15,8,''),(16,1,''),(16,2,''),(16,3,''),(16,4,''),(17,1,''),(17,2,''),(18,1,''),(18,2,''),(19,1,''),(19,2,''),(19,3,''),(20,1,''),(20,2,''),(21,1,''),(21,2,''),(22,1,''),(22,2,''),(22,3,''),(23,1,''),(23,2,''),(24,1,''),(24,2,''),(24,3,''),(24,4,''),(25,1,''),(25,2,''),(26,1,''),(26,2,''),(26,3,''),(26,4,''),(27,1,''),(27,2,''),(28,1,''),(28,2,''),(29,1,''),(29,2,''),(29,3,''),(30,1,''),(30,2,''),(30,3,''),(30,4,''),(31,1,''),(31,2,''),(31,3,''),(31,4,''),(32,1,''),(32,2,''),(33,1,''),(33,2,''),(34,1,''),(34,2,'');
+INSERT INTO `accesoTipoPersona` VALUES (9,1,''),(9,2,''),(9,3,''),(9,5,''),(9,7,''),(10,1,''),(10,2,''),(10,6,''),(11,1,''),(11,2,''),(11,3,''),(12,1,''),(12,2,''),(14,1,''),(14,2,''),(14,3,''),(14,4,''),(14,5,''),(14,6,''),(14,7,''),(14,8,''),(14,9,''),(14,12,''),(14,13,''),(14,14,''),(15,8,''),(15,9,''),(16,1,''),(16,2,''),(16,3,''),(16,4,''),(16,12,''),(16,13,''),(17,1,''),(17,2,''),(18,1,''),(18,2,''),(19,1,''),(19,2,''),(19,3,''),(19,13,''),(20,1,''),(20,2,''),(20,5,''),(20,6,''),(20,7,''),(21,1,''),(21,2,''),(21,5,''),(22,1,''),(22,2,''),(22,3,''),(22,13,''),(23,1,''),(23,2,''),(23,5,''),(23,6,''),(23,7,''),(24,1,''),(24,2,''),(24,3,''),(24,4,''),(24,13,''),(25,1,''),(25,2,''),(25,5,''),(25,6,''),(25,7,''),(26,1,''),(26,2,''),(26,3,''),(26,4,''),(26,13,''),(27,1,''),(27,2,''),(28,1,''),(28,2,''),(29,1,''),(29,2,''),(29,3,''),(30,1,''),(30,2,''),(30,3,''),(30,4,''),(30,5,''),(30,6,''),(30,7,''),(30,12,''),(30,13,''),(30,14,''),(31,1,''),(31,2,''),(31,3,''),(31,4,''),(31,5,''),(31,6,''),(31,7,''),(31,13,''),(32,1,''),(32,2,''),(32,13,''),(33,1,''),(33,2,''),(33,12,''),(34,1,''),(34,2,''),(34,12,''),(35,1,''),(35,2,''),(35,3,''),(35,4,''),(35,13,''),(36,1,''),(36,2,''),(36,3,''),(36,4,''),(36,13,''),(37,1,''),(37,2,''),(37,3,''),(37,4,''),(37,5,''),(37,6,''),(37,7,''),(37,8,''),(37,13,''),(37,14,'');
 /*!40000 ALTER TABLE `accesoTipoPersona` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -96,7 +96,7 @@ CREATE TABLE `anuncio` (
   KEY `fk_anuncio_2_idx` (`anuncioTipoPersona`),
   CONSTRAINT `fk_anuncio_1` FOREIGN KEY (`anuncioAnunciante`) REFERENCES `persona` (`idpersona`) ON UPDATE CASCADE,
   CONSTRAINT `fk_anuncio_2` FOREIGN KEY (`anuncioTipoPersona`) REFERENCES `tipoPersona` (`idtipoPersona`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -105,7 +105,7 @@ CREATE TABLE `anuncio` (
 
 LOCK TABLES `anuncio` WRITE;
 /*!40000 ALTER TABLE `anuncio` DISABLE KEYS */;
-INSERT INTO `anuncio` VALUES (2,'Home','2019-10-20','Raw denim you probably haven\'t heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.',1045367073,NULL,''),(3,'Profile','2019-10-20','Food truck fixie locavore, accusamus mcsweeney\'s marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit.',1045367073,8,''),(4,'qwwqwq','2019-10-20','wqwq\r\nwq\r\nqw\r\nqw\r\nqw\r\n\r\nwq',1045367073,NULL,NULL),(5,'SUSPENCIÓN DE CLASES','2019-10-14','Se suspenderán las clases el próximo Viernes 11 de Octubre. \r\nClases normales al regresar el LUNES 14. \r\n',1045367073,NULL,NULL),(6,'iglliglgiguligilggilgl','2019-10-20','lvlvl lil igl igligligl gl gligligli ilglig ligli gl ili glig ilglgy',1045367073,3,NULL),(7,'anuncio ara todos','2019-10-14','oñasdchodashoñ hcñhc ñhc dh hcd hch ñcd ccoñ oc ocas hñ hñcao ñhoas ñsdchsodgvgvsduñ ñcdsagño asd gcñovsguñvoagcva ñsdcgañso cgñoasgñocgañscgñasocasdcñvgsñoasdñgcñosc gvaoñsgcñ osagdcñsodgcñosagdcvoasñvga',1045367073,NULL,NULL),(8,'ioyoyooñy','2019-10-20','ouyñouyobviyfiijklljhjhj  hl hg s ñc ñsdcv ñvfdv fñ vdf vfd vdf ñvfd ñvfwpv pv pvfe vfe vephhpf vh k vvjh vfwe ippwvfe ih{pv ihvf ihvwe iwep {ve hhfvuoeu yeyuyeutyu ew ywewyeye yey g8 y49tu u ovfh ñvhjvsdh vh ñsdhñ dvhdls',1045367073,8,NULL);
+INSERT INTO `anuncio` VALUES (2,'Home','2019-10-20','Raw denim you probably haven\'t heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.',1045367073,NULL,''),(3,'Profile','2019-10-20','Food truck fixie locavore, accusamus mcsweeney\'s marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit.',1045367073,8,''),(4,'qwwqwq','2019-10-20','wqwq\r\nwq\r\nqw\r\nqw\r\nqw\r\n\r\nwq',1045367073,NULL,NULL),(5,'SUSPENCIÓN DE CLASES','2019-10-14','Se suspenderán las clases el próximo Viernes 11 de Octubre. \r\nClases normales al regresar el LUNES 14. \r\n',1045367073,NULL,NULL),(6,'iglliglgiguligilggilgl','2019-10-20','lvlvl lil igl igligligl gl gligligli ilglig ligli gl ili glig ilglgy',1045367073,3,NULL),(7,'anuncio ara todos','2019-10-14','oñasdchodashoñ hcñhc ñhc dh hcd hch ñcd ccoñ oc ocas hñ hñcao ñhoas ñsdchsodgvgvsduñ ñcdsagño asd gcñovsguñvoagcva ñsdcgañso cgñoasgñocgañscgñasocasdcñvgsñoasdñgcñosc gvaoñsgcñ osagdcñsodgcñosagdcvoasñvga',1045367073,NULL,NULL),(8,'ioyoyooñy','2019-10-20','ouyñouyobviyfiijklljhjhj  hl hg s ñc ñsdcv ñvfdv fñ vdf vfd vdf ñvfd ñvfwpv pv pvfe vfe vephhpf vh k vvjh vfwe ippwvfe ih{pv ihvf ihvwe iwep {ve hhfvuoeu yeyuyeutyu ew ywewyeye yey g8 y49tu u ovfh ñvhjvsdh vh ñsdhñ dvhdls',1045367073,8,NULL),(9,'Hola a todos','2019-10-22','hola k hace',1045367073,NULL,NULL);
 /*!40000 ALTER TABLE `anuncio` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -753,7 +753,7 @@ CREATE TABLE `financiamiento` (
 
 LOCK TABLES `financiamiento` WRITE;
 /*!40000 ALTER TABLE `financiamiento` DISABLE KEYS */;
-INSERT INTO `financiamiento` VALUES (1,'MINED',NULL),(2,'CDE',NULL),(3,'Alcaldía',NULL),(4,'ONG',NULL);
+INSERT INTO `financiamiento` VALUES (1,'MINED',NULL),(2,'CDE',NULL),(3,'Alcaldía',NULL),(4,'ONG2',NULL);
 /*!40000 ALTER TABLE `financiamiento` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -918,14 +918,14 @@ CREATE TABLE `maestro` (
   `maestroAfp` varchar(45) NOT NULL,
   `maestroBienestar` int(11) NOT NULL,
   `maestrocolTelefonoResidencia` varchar(9) NOT NULL,
-  `maestroEspecialidad` varchar(80) NOT NULL,
+  `maestroEspecialidad` int(11) NOT NULL,
   `maestroFechaMagisterio` date NOT NULL,
   `maestroFechaInstitucion` date NOT NULL,
   `maestroFechaProximoAsenso` date DEFAULT NULL,
   `maestroTurno` enum('M','V','T') NOT NULL,
   `maestroTiempoCategoria` varchar(10) NOT NULL,
   `maestroSinEscalafon` bit(1) NOT NULL DEFAULT b'1',
-  `maestroTipoSalario` varchar(45) NOT NULL,
+  `maestroTipoSalario` int(11) NOT NULL,
   `maestroUtilidadTecnologica` bit(1) NOT NULL DEFAULT b'1',
   `maestroHorasUsoTecnologia` int(11) NOT NULL DEFAULT '0',
   `maestroUsoVideoconferencias` bit(1) NOT NULL DEFAULT b'0',
@@ -933,7 +933,11 @@ CREATE TABLE `maestro` (
   `maestroCapacitacionesVirtuales` bit(1) NOT NULL DEFAULT b'1',
   `maestroComentario` varchar(45) DEFAULT NULL COMMENT 'Detalle de la información de todos los docentes de la institución.',
   PRIMARY KEY (`idmaestro`),
-  CONSTRAINT `fk_maestro_1` FOREIGN KEY (`idmaestro`) REFERENCES `persona` (`idpersona`) ON UPDATE CASCADE
+  KEY `fk_maestro_2_idx` (`maestroTipoSalario`),
+  KEY `fk_maestro_3_idx` (`maestroEspecialidad`),
+  CONSTRAINT `fk_maestro_1` FOREIGN KEY (`idmaestro`) REFERENCES `persona` (`idpersona`) ON UPDATE CASCADE,
+  CONSTRAINT `fk_maestro_2` FOREIGN KEY (`maestroTipoSalario`) REFERENCES `tipoSueldos` (`idtipoSueldo`) ON UPDATE CASCADE,
+  CONSTRAINT `fk_maestro_3` FOREIGN KEY (`maestroEspecialidad`) REFERENCES `tipoEspecialidades` (`idtipoEspecialidades`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -943,7 +947,7 @@ CREATE TABLE `maestro` (
 
 LOCK TABLES `maestro` WRITE;
 /*!40000 ALTER TABLE `maestro` DISABLE KEYS */;
-INSERT INTO `maestro` VALUES (1045367080,0,0,0,0,0,0,0,'Guillermo Aldolfo Delsas Murcia',6,'8878-7878','Ciencias Sociales','2019-10-11','2019-10-11','2019-10-11','T','2','','Sueldo Base','',0,'','','','');
+INSERT INTO `maestro` VALUES (1045367080,0,0,0,0,0,0,0,'Guillermo Aldolfo Delsas Murcia',6,'8878-7878',4,'2019-10-11','2019-10-11','2019-10-11','T','2','',3,'',0,'','','','');
 /*!40000 ALTER TABLE `maestro` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1434,6 +1438,31 @@ INSERT INTO `tipoCargo` VALUES (1,'Fondos Propios',NULL),(2,'Actividades de la i
 UNLOCK TABLES;
 
 --
+-- Table structure for table `tipoEspecialidades`
+--
+
+DROP TABLE IF EXISTS `tipoEspecialidades`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tipoEspecialidades` (
+  `idtipoEspecialidades` int(11) NOT NULL AUTO_INCREMENT,
+  `tipoEspecialidadesNombre` varchar(70) NOT NULL,
+  `tipoEspecialidadesComentario` varchar(145) DEFAULT '',
+  PRIMARY KEY (`idtipoEspecialidades`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tipoEspecialidades`
+--
+
+LOCK TABLES `tipoEspecialidades` WRITE;
+/*!40000 ALTER TABLE `tipoEspecialidades` DISABLE KEYS */;
+INSERT INTO `tipoEspecialidades` VALUES (1,'Matemáticas',''),(2,'Ciencias Naturales',''),(3,'Educación Física',''),(4,'Ciencias de la Educación',''),(5,'Lenguaje',''),(6,'Ciencias Sociales',''),(7,'Administración y Ciencias Comerciales',''),(8,'Inglés',''),(9,'Informática','');
+/*!40000 ALTER TABLE `tipoEspecialidades` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `tipoMateria`
 --
 
@@ -1613,6 +1642,31 @@ INSERT INTO `tipoReservaRecurso` VALUES (1,1,''),(1,20,''),(1,22,''),(1,23,''),(
 UNLOCK TABLES;
 
 --
+-- Table structure for table `tipoSueldos`
+--
+
+DROP TABLE IF EXISTS `tipoSueldos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tipoSueldos` (
+  `idtipoSueldo` int(11) NOT NULL AUTO_INCREMENT,
+  `tipoSueldoNombre` varchar(50) NOT NULL,
+  `tipoSueldosComentario` varchar(145) DEFAULT NULL,
+  PRIMARY KEY (`idtipoSueldo`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tipoSueldos`
+--
+
+LOCK TABLES `tipoSueldos` WRITE;
+/*!40000 ALTER TABLE `tipoSueldos` DISABLE KEYS */;
+INSERT INTO `tipoSueldos` VALUES (1,'Sueldo Base',''),(2,'Horas Clase',''),(3,'Ad Honorem','');
+/*!40000 ALTER TABLE `tipoSueldos` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `tipopersonaPermiso`
 --
 
@@ -1682,4 +1736,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-10-20 23:40:22
+-- Dump completed on 2019-10-21 23:57:23

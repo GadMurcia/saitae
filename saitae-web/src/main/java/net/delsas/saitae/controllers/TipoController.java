@@ -47,12 +47,14 @@ import net.delsas.saitae.beans.HorarioFacadeLocal;
 import net.delsas.saitae.beans.MaestroFacadeLocal;
 import net.delsas.saitae.beans.MateriaFacadeLocal;
 import net.delsas.saitae.beans.TipoCargoFacadeLocal;
+import net.delsas.saitae.beans.TipoEspecialidadesFacadeLocal;
 import net.delsas.saitae.beans.TipoMateriaFacadeLocal;
 import net.delsas.saitae.beans.TipoNombramientoFacadeLocal;
 import net.delsas.saitae.beans.TipoPermisoFacadeLocal;
 import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
 import net.delsas.saitae.beans.TipoRecursoFacadeLocal;
 import net.delsas.saitae.beans.TipoReservaFacadeLocal;
+import net.delsas.saitae.beans.TipoSueldosFacadeLocal;
 import net.delsas.saitae.beans.TipopersonaPermisoFacadeLocal;
 import net.delsas.saitae.beans.ZonaFacadeLocal;
 import net.delsas.saitae.entities.Aula;
@@ -69,12 +71,14 @@ import net.delsas.saitae.entities.Maestro;
 import net.delsas.saitae.entities.Materia;
 import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.TipoCargo;
+import net.delsas.saitae.entities.TipoEspecialidades;
 import net.delsas.saitae.entities.TipoMateria;
 import net.delsas.saitae.entities.TipoNombramiento;
 import net.delsas.saitae.entities.TipoPermiso;
 import net.delsas.saitae.entities.TipoPersona;
 import net.delsas.saitae.entities.TipoRecurso;
 import net.delsas.saitae.entities.TipoReserva;
+import net.delsas.saitae.entities.TipoSueldos;
 import net.delsas.saitae.entities.TipopersonaPermiso;
 import net.delsas.saitae.entities.Zona;
 import org.omnifaces.cdi.Push;
@@ -92,7 +96,7 @@ import org.primefaces.model.DualListModel;
 @Named
 @ViewScoped
 public class TipoController implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
     //Tipo Recurso
     private List<TipoRecurso> recursos;
@@ -195,6 +199,16 @@ public class TipoController implements Serializable {
     private List<DiasEstudio> diasSeleccionables;
     private DiasEstudio diasSelected;
 
+    //TipoDeEspecialidades
+    @EJB
+    private TipoEspecialidadesFacadeLocal tipoeFL;
+    private List<TipoEspecialidades> tipoE;
+
+    //tipoDeSueldos
+    @EJB
+    private TipoSueldosFacadeLocal tiposFL;
+    private List<TipoSueldos> tipoS;
+
     //controlde usuarios    
     private FacesContext context;
     private Persona usuario;
@@ -202,7 +216,7 @@ public class TipoController implements Serializable {
     private AccesoTipoPersonaFacadeLocal accesoTPFL;
     @EJB
     private AccesoFacadeLocal accesoFL;
-    
+
     @PostConstruct
     public void init() {
         context = FacesContext.getCurrentInstance();
@@ -210,7 +224,7 @@ public class TipoController implements Serializable {
         String pagina = context.getExternalContext().getRequestServletPath().split("/")[2];
         controlUsuarios(pagina);
     }
-    
+
     public void controlUsuarios(String pagina) {
         try {
             if (!(new Auxiliar().permitirAcceso(usuario, accesoTPFL.findTipoPersonaPermitidos(accesoFL.getAccesoByUrl(pagina))))) {
@@ -225,9 +239,9 @@ public class TipoController implements Serializable {
                     new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error Inesperado",
                             ex.getMessage() == null ? "Error de causa desconocida." : ex.getMessage()));
         }
-        
+
     }
-    
+
     private void variables(String pg) {
         switch (pg) {
             case "tipopp.intex":
@@ -237,6 +251,8 @@ public class TipoController implements Serializable {
                 nombramientos = tipoNombramientoFL.findAll();
                 financiamientos = financiamientoFL.findAll();
                 Personas = personaFL.findAll();
+                tipoS = tiposFL.findAll();
+                tipoE = tipoeFL.findAll();
                 break;
             case "lictp.intex":
                 model = new DualListModel<>(new ArrayList<>(), new ArrayList<>());
@@ -275,26 +291,26 @@ public class TipoController implements Serializable {
                 break;
         }
     }
-    
+
     public void nuevoDias() {
         diasSelected = new DiasEstudio(0, "");
         editarDia = 0;
     }
-    
+
     public void onRowSelected(SelectEvent event) {
         if (event.getObject() instanceof DiasEstudio) {
             setDiasSelected((DiasEstudio) event.getObject());
             this.editarDia = diasSelected.getIdDias();
         }
     }
-    
+
     private int editarDia = 0;
-    
+
     public void editarDias() {
         editarDia = diasSelected.getIdDias();
         PrimeFaces.current().ajax().update(":form:tw:dias", "f1");
     }
-    
+
     public void eliminarDias() {
         try {
             if (diasSelected != null) {
@@ -319,7 +335,7 @@ public class TipoController implements Serializable {
         init();
         PrimeFaces.current().ajax().update(":form0:msgs", ":form:tw:dias", "f1");
     }
-    
+
     public void guardarDias() {
         if (diasSelected != null) {
             if (editarDia > 0) {
@@ -337,7 +353,7 @@ public class TipoController implements Serializable {
         init();
         PrimeFaces.current().ajax().update(":form0", ":form:tw:dias", "f1");
     }
-    
+
     public void onAddNew(String id) {
         // Add one new car to the table:
         switch (id) {
@@ -390,6 +406,12 @@ public class TipoController implements Serializable {
             case "financiamiento":
                 financiamientos.add(new Financiamiento(0));
                 break;
+            case "especialidades":
+                tipoE.add(new TipoEspecialidades(0));
+                break;
+            case "sueldos":
+                tipoS.add(new TipoSueldos(0));
+                break;
             case "grado":
                 Grado g = new Grado(new GradoPK(0, "", "",
                         Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date()))), true);
@@ -400,14 +422,14 @@ public class TipoController implements Serializable {
                 break;
             default:
                 System.out.println(id);
-            
+
         }
-        
+
         FacesMessage msg = new FacesMessage("Campos Nuevos agregados.",
                 "Edite los campos para que las modificaciones sean permenentes");
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
-    
+
     public void onRowEdit(RowEditEvent event) {
         FacesMessage msg = null;
         try {
@@ -502,6 +524,18 @@ public class TipoController implements Serializable {
                     titulo = "Fianciamiento";
                     mensaje = f.getFinanciamientoNombre();
                     break;
+                case "form:tw:especialidades:especialidades":
+                    TipoEspecialidades es = (TipoEspecialidades) event.getObject();
+                    tipoeFL.edit(es);
+                    titulo = "Tipo De Especialidades";
+                    mensaje = es.getTipoEspecialidadesNombre();
+                    break;
+                case "form:tw:sueldos:sueldos":
+                    TipoSueldos s = (TipoSueldos) event.getObject();
+                    tiposFL.edit(s);
+                    titulo = "Tipo De Sueldo";
+                    mensaje = s.getTipoSueldoNombre();
+                    break;
                 case "form:tw:grado":
                     Grado g = (Grado) event.getObject();
                     g.setAulaGrado(afl.find(g.getAulaGrado().getIdaula()));
@@ -527,7 +561,7 @@ public class TipoController implements Serializable {
         }
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
-    
+
     public void onRowCancel(RowEditEvent event) {
         String mensaje = "", id = event.getComponent().getClientId();
         switch (id) {
@@ -608,7 +642,7 @@ public class TipoController implements Serializable {
                 }
                 mensaje = c.getCargoNombre();
                 break;
-            
+
             case "form:tw:categoria":
                 Categoria ca = (Categoria) event.getObject();
                 if (ca.getCategoriaNombre() == null || ca.getCategoriaNombre().isEmpty()) {
@@ -637,6 +671,20 @@ public class TipoController implements Serializable {
                 }
                 mensaje = "Financiamiento";
                 break;
+            case "form:tw:especialidades:especialidades":
+                TipoEspecialidades es = (TipoEspecialidades) event.getObject();
+                if (es.getTipoEspecialidadesNombre() == null | es.getTipoEspecialidadesNombre().isEmpty()) {
+                    tipoE.remove(es);
+                }
+                mensaje = "Tipo De Especialidades";
+                break;
+            case "form:tw:sueldos:sueldos":
+                TipoSueldos s = (TipoSueldos) event.getObject();
+                if (s.getTipoSueldoNombre() == null | s.getTipoSueldoNombre().isEmpty()) {
+                    tipoS.remove(s);
+                }
+                mensaje = "Tipo De Sueldo";
+                break;
             case "form:tw:grado":
                 Grado g = (Grado) event.getObject();
                 if (g.getGradoPK().getIdgrado() == 0 | g.getGradoPK().getGradoModalidad().isEmpty()
@@ -653,16 +701,16 @@ public class TipoController implements Serializable {
         FacesMessage msg = new FacesMessage("Edición cancelada", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
-    
+
     public List<SelectItem> getListaZonas() {
         List<SelectItem> ListaZonas = new ArrayList<>();
         zonas.forEach((z) -> {
             ListaZonas.add(new SelectItem(z.getIdzona(), z.getZonaNombre()));
         });
         return ListaZonas;
-        
+
     }
-    
+
     public List<SelectItem> getListaTipoMateria() {
         List<SelectItem> ListaTipoMateria = new ArrayList<>();
         tipoMaterias.forEach((tp) -> {
@@ -670,7 +718,7 @@ public class TipoController implements Serializable {
         });
         return ListaTipoMateria;
     }
-    
+
     public void onItemSelect(ItemSelectEvent event) {
         tipoPersona = personaFL.find(tipoPersona.getIdtipoPersona());
         tipoPersona = tipoPersona == null ? new TipoPersona(0) : tipoPersona;
@@ -684,7 +732,7 @@ public class TipoController implements Serializable {
             }).forEachOrdered((a) -> {
                 target.add(a.getTipoPermiso().getTipoPermisoNombre());
             });
-            
+
             permisoFL.findAll().stream().filter((p) -> (!l.contains(p))).forEachOrdered((p) -> {
                 source.add(p.getTipoPermisoNombre());
             });
@@ -694,7 +742,7 @@ public class TipoController implements Serializable {
         model.setTarget(target);
         model.setSource(source);
     }
-    
+
     public List<SelectItem> getTiposPersonas() {
         List<SelectItem> list = new ArrayList<>();
         list.add(new SelectItem(0, "Seleccione"));
@@ -703,7 +751,7 @@ public class TipoController implements Serializable {
         });
         return list;
     }
-    
+
     public void guardar() {
         if (tipoPersona.getIdtipoPersona() > 0) {
             List<TipopersonaPermiso> permisos = new ArrayList<>();
@@ -739,7 +787,7 @@ public class TipoController implements Serializable {
             PrimeFaces.current().ajax().update("form:msgs");
         }
     }
-    
+
     public void agregarHorario() {
         FacesMessage msg;
         if (hora.getIdhorario() > 0) {
@@ -755,7 +803,7 @@ public class TipoController implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, msg);
         PrimeFaces.current().ajax().update("form", "h1");
     }
-    
+
     public void eliminarHorario() {
         FacesMessage ms;
         try {
@@ -774,151 +822,151 @@ public class TipoController implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, ms);
         PrimeFaces.current().ajax().update("form", "h1");
     }
-    
+
     public List<TipoRecurso> getRecursos() {
         return Collections.unmodifiableList(recursos);
     }
-    
+
     public void setRecursos(List<TipoRecurso> recursos) {
         this.recursos = recursos;
     }
-    
+
     public List<TipoPermiso> getAll() {
         return Collections.unmodifiableList(all);
     }
-    
+
     public void setAll(List<TipoPermiso> all) {
         this.all = all;
     }
-    
+
     public List<TipoCargo> getCargos() {
         return Collections.unmodifiableList(cargos);
     }
-    
+
     public void setCargos(List<TipoCargo> cargos) {
         this.cargos = cargos;
     }
-    
+
     public List<TipoPersona> getPersonas() {
         return Collections.unmodifiableList(Personas);
     }
-    
+
     public void setPersonas(List<TipoPersona> Personas) {
         this.Personas = Personas;
     }
-    
+
     public TipoPersona getTipoPersona() {
         return tipoPersona;
     }
-    
+
     public void setTipoPersona(TipoPersona tipoPersona) {
         this.tipoPersona = tipoPersona;
     }
-    
+
     public DualListModel<String> getModel() {
         return model;
     }
-    
+
     public void setModel(DualListModel<String> model) {
         this.model = model;
     }
-    
+
     public List<Zona> getZonas() {
         return Collections.unmodifiableList(zonas);
     }
-    
+
     public void setZonas(List<Zona> zonas) {
         this.zonas = zonas;
     }
-    
+
     public List<TipoReserva> getReservas() {
         return Collections.unmodifiableList(reservas);
     }
-    
+
     public void setReservas(List<TipoReserva> reservas) {
         this.reservas = reservas;
     }
-    
+
     public List<TipoNombramiento> getNombramientos() {
         return Collections.unmodifiableList(nombramientos);
     }
-    
+
     public void setNombramientos(List<TipoNombramiento> nombramientos) {
         this.nombramientos = nombramientos;
     }
-    
+
     public List<Materia> getMaterias() {
         return Collections.unmodifiableList(materias);
     }
-    
+
     public void setMaterias(List<Materia> materias) {
         this.materias = materias;
     }
-    
+
     public List<TipoMateria> getTipoMaterias() {
         return Collections.unmodifiableList(tipoMaterias);
     }
-    
+
     public void setTipoMaterias(List<TipoMateria> tipoMaterias) {
         this.tipoMaterias = tipoMaterias;
     }
-    
+
     public List<Aula> getAulas() {
         return Collections.unmodifiableList(aulas);
     }
-    
+
     public void setAulas(List<Aula> aulas) {
         this.aulas = aulas;
     }
-    
+
     public List<Autor> getAutor() {
         return Collections.unmodifiableList(autor);
     }
-    
+
     public void setAutor(List<Autor> autor) {
         this.autor = autor;
     }
-    
+
     public List<Cargo> getCargo() {
         return Collections.unmodifiableList(cargo);
     }
-    
+
     public void setCargo(List<Cargo> cargo) {
         this.cargo = cargo;
     }
-    
+
     public List<Categoria> getCategoria() {
         return Collections.unmodifiableList(categoria);
     }
-    
+
     public void setCategoria(List<Categoria> categoria) {
         this.categoria = categoria;
     }
-    
+
     public List<Editorial> getEditorial() {
         return Collections.unmodifiableList(editorial);
     }
-    
+
     public void setEditorial(List<Editorial> editorial) {
         this.editorial = editorial;
     }
-    
+
     public List<Horario> getHorario() {
         return Collections.unmodifiableList(horario);
     }
-    
+
     public void setHorario(List<Horario> horario) {
         this.horario = horario;
     }
-    
+
     public List<Financiamiento> getFinanciamientos() {
         return Collections.unmodifiableList(financiamientos);
     }
-    
+
     public void setFinanciamientos(List<Financiamiento> financiamientos) {
         this.financiamientos = financiamientos;
     }
-    
+
     public List<Grado> getGrados() {
         List<Grado> i = new ArrayList<>();
         grados.stream().map((g) -> {
@@ -932,70 +980,70 @@ public class TipoController implements Serializable {
         });
         return i;
     }
-    
+
     public void setGrados(List<Grado> grados) {
         this.grados = grados;
     }
-    
+
     public List<Maestro> getMaestros() {
         return maestroFL.findAll();
     }
-    
+
     public Horario getHora() {
         return hora;
     }
-    
+
     public void setHora(Horario horario) {
         this.hora = horario == null ? new Horario(0, new Date(), new Date()) : horario;
     }
-    
+
     public List<DiasEstudio> getDias() {
         return Collections.unmodifiableList(dias);
     }
-    
+
     public void setDias(List<DiasEstudio> dias) {
         this.dias = dias;
     }
-    
+
     public DiasEstudio getDiasSelected() {
         return diasSelected;
     }
-    
+
     public void setDiasSelected(DiasEstudio diasSelected) {
         this.diasSelected = diasSelected;
     }
-    
+
     private void enviarNotificación(String titulo, String mensaje) {
         sendMessage(new mensaje(0, usuario.getIdpersona(), "??",
                 new FacesMessage(FacesMessage.SEVERITY_INFO, titulo,
                         mensaje)).toString());
     }
-    
+
     public List<DiasEstudio> getDiasSeleccionables() {
         return Collections.unmodifiableList(diasSeleccionables);
     }
-    
+
     public void setDiasSeleccionables(List<DiasEstudio> diasSeleccionables) {
         this.diasSeleccionables = diasSeleccionables;
     }
-    
+
     @Inject
     @Push
     private PushContext notificacion;
-    
+
     @Inject
     @Push
     private PushContext tipopp;
-    
+
     public void sendMessage(String message) {
         notificacion.send(message);
         tipopp.send(message);
     }
-    
+
     public int getAño() {
         return Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date()));
     }
-    
+
     public void escucha() {
         try {
             String mss = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("mss");
@@ -1008,5 +1056,21 @@ public class TipoController implements Serializable {
         } catch (Exception e) {
             System.out.println("Error en tipoController/escucha: " + (e.getMessage() == null ? "Error desconocido" : e.getMessage()));
         }
+    }
+
+    public List<TipoEspecialidades> getTipoE() {
+        return Collections.unmodifiableList(tipoE);
+    }
+
+    public void setTipoE(List<TipoEspecialidades> tipoE) {
+        this.tipoE = tipoE;
+    }
+
+    public List<TipoSueldos> getTipoS() {
+        return Collections.unmodifiableList(tipoS);
+    }
+
+    public void setTipoS(List<TipoSueldos> tipoS) {
+        this.tipoS = tipoS;
     }
 }

@@ -14,6 +14,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -46,14 +47,12 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Maestro.findByMaestroAfp", query = "SELECT m FROM Maestro m WHERE m.maestroAfp = :maestroAfp")
     , @NamedQuery(name = "Maestro.findByMaestroBienestar", query = "SELECT m FROM Maestro m WHERE m.maestroBienestar = :maestroBienestar")
     , @NamedQuery(name = "Maestro.findByMaestrocolTelefonoResidencia", query = "SELECT m FROM Maestro m WHERE m.maestrocolTelefonoResidencia = :maestrocolTelefonoResidencia")
-    , @NamedQuery(name = "Maestro.findByMaestroEspecialidad", query = "SELECT m FROM Maestro m WHERE m.maestroEspecialidad = :maestroEspecialidad")
     , @NamedQuery(name = "Maestro.findByMaestroFechaMagisterio", query = "SELECT m FROM Maestro m WHERE m.maestroFechaMagisterio = :maestroFechaMagisterio")
     , @NamedQuery(name = "Maestro.findByMaestroFechaInstitucion", query = "SELECT m FROM Maestro m WHERE m.maestroFechaInstitucion = :maestroFechaInstitucion")
     , @NamedQuery(name = "Maestro.findByMaestroFechaProximoAsenso", query = "SELECT m FROM Maestro m WHERE m.maestroFechaProximoAsenso = :maestroFechaProximoAsenso")
     , @NamedQuery(name = "Maestro.findByMaestroTurno", query = "SELECT m FROM Maestro m WHERE m.maestroTurno = :maestroTurno")
     , @NamedQuery(name = "Maestro.findByMaestroTiempoCategoria", query = "SELECT m FROM Maestro m WHERE m.maestroTiempoCategoria = :maestroTiempoCategoria")
     , @NamedQuery(name = "Maestro.findByMaestroSinEscalafon", query = "SELECT m FROM Maestro m WHERE m.maestroSinEscalafon = :maestroSinEscalafon")
-    , @NamedQuery(name = "Maestro.findByMaestroTipoSalario", query = "SELECT m FROM Maestro m WHERE m.maestroTipoSalario = :maestroTipoSalario")
     , @NamedQuery(name = "Maestro.findByMaestroUtilidadTecnologica", query = "SELECT m FROM Maestro m WHERE m.maestroUtilidadTecnologica = :maestroUtilidadTecnologica")
     , @NamedQuery(name = "Maestro.findByMaestroHorasUsoTecnologia", query = "SELECT m FROM Maestro m WHERE m.maestroHorasUsoTecnologia = :maestroHorasUsoTecnologia")
     , @NamedQuery(name = "Maestro.findByMaestroUsoVideoconferencias", query = "SELECT m FROM Maestro m WHERE m.maestroUsoVideoconferencias = :maestroUsoVideoconferencias")
@@ -114,11 +113,6 @@ public class Maestro implements Serializable {
     private String maestrocolTelefonoResidencia;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 80)
-    @Column(name = "maestroEspecialidad")
-    private String maestroEspecialidad;
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "maestroFechaMagisterio")
     @Temporal(TemporalType.DATE)
     private Date maestroFechaMagisterio;
@@ -144,11 +138,6 @@ public class Maestro implements Serializable {
     @NotNull
     @Column(name = "maestroSinEscalafon")
     private boolean maestroSinEscalafon;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "maestroTipoSalario")
-    private String maestroTipoSalario;
     @Basic(optional = false)
     @NotNull
     @Column(name = "maestroUtilidadTecnologica")
@@ -185,6 +174,12 @@ public class Maestro implements Serializable {
     @JoinColumn(name = "idmaestro", referencedColumnName = "idpersona", insertable = false, updatable = false)
     @OneToOne(optional = false)
     private Persona persona;
+    @JoinColumn(name = "maestroTipoSalario", referencedColumnName = "idtipoSueldo")
+    @ManyToOne(optional = false)
+    private TipoSueldos maestroTipoSalario;
+    @JoinColumn(name = "maestroEspecialidad", referencedColumnName = "idtipoEspecialidades")
+    @ManyToOne(optional = false)
+    private TipoEspecialidades maestroEspecialidad;
 
     public Maestro() {
     }
@@ -193,7 +188,7 @@ public class Maestro implements Serializable {
         this.idmaestro = idmaestro;
     }
 
-    public Maestro(Integer idmaestro, int maestroNip, int maestroNup, int maestroCodigo, int maestroPartidas, int maestroSubnumeros, int maestroNivel, int maestroCategoria, String maestroAfp, int maestroBienestar, String maestrocolTelefonoResidencia, String maestroEspecialidad, Date maestroFechaMagisterio, Date maestroFechaInstitucion, String maestroTurno, String maestroTiempoCategoria, boolean maestroSinEscalafon, String maestroTipoSalario, boolean maestroUtilidadTecnologica, int maestroHorasUsoTecnologia, boolean maestroUsoVideoconferencias, boolean maestroRecursosWeb, boolean maestroCapacitacionesVirtuales) {
+    public Maestro(Integer idmaestro, int maestroNip, int maestroNup, int maestroCodigo, int maestroPartidas, int maestroSubnumeros, int maestroNivel, int maestroCategoria, String maestroAfp, int maestroBienestar, String maestrocolTelefonoResidencia, Date maestroFechaMagisterio, Date maestroFechaInstitucion, String maestroTurno, String maestroTiempoCategoria, boolean maestroSinEscalafon, boolean maestroUtilidadTecnologica, int maestroHorasUsoTecnologia, boolean maestroUsoVideoconferencias, boolean maestroRecursosWeb, boolean maestroCapacitacionesVirtuales) {
         this.idmaestro = idmaestro;
         this.maestroNip = maestroNip;
         this.maestroNup = maestroNup;
@@ -205,13 +200,11 @@ public class Maestro implements Serializable {
         this.maestroAfp = maestroAfp;
         this.maestroBienestar = maestroBienestar;
         this.maestrocolTelefonoResidencia = maestrocolTelefonoResidencia;
-        this.maestroEspecialidad = maestroEspecialidad;
         this.maestroFechaMagisterio = maestroFechaMagisterio;
         this.maestroFechaInstitucion = maestroFechaInstitucion;
         this.maestroTurno = maestroTurno;
         this.maestroTiempoCategoria = maestroTiempoCategoria;
         this.maestroSinEscalafon = maestroSinEscalafon;
-        this.maestroTipoSalario = maestroTipoSalario;
         this.maestroUtilidadTecnologica = maestroUtilidadTecnologica;
         this.maestroHorasUsoTecnologia = maestroHorasUsoTecnologia;
         this.maestroUsoVideoconferencias = maestroUsoVideoconferencias;
@@ -307,14 +300,6 @@ public class Maestro implements Serializable {
         this.maestrocolTelefonoResidencia = maestrocolTelefonoResidencia;
     }
 
-    public String getMaestroEspecialidad() {
-        return maestroEspecialidad;
-    }
-
-    public void setMaestroEspecialidad(String maestroEspecialidad) {
-        this.maestroEspecialidad = maestroEspecialidad;
-    }
-
     public Date getMaestroFechaMagisterio() {
         return maestroFechaMagisterio;
     }
@@ -361,14 +346,6 @@ public class Maestro implements Serializable {
 
     public void setMaestroSinEscalafon(boolean maestroSinEscalafon) {
         this.maestroSinEscalafon = maestroSinEscalafon;
-    }
-
-    public String getMaestroTipoSalario() {
-        return maestroTipoSalario;
-    }
-
-    public void setMaestroTipoSalario(String maestroTipoSalario) {
-        this.maestroTipoSalario = maestroTipoSalario;
     }
 
     public boolean getMaestroUtilidadTecnologica() {
@@ -419,31 +396,28 @@ public class Maestro implements Serializable {
         this.maestroComentario = maestroComentario;
     }
 
-    @XmlTransient
-    public List<Grado> getGradoList() {
-        return gradoList;
+    public Persona getPersona() {
+        return persona;
     }
 
-    public void setGradoList(List<Grado> gradoList) {
-        this.gradoList = gradoList;
+    public void setPersona(Persona persona) {
+        this.persona = persona;
     }
 
-    @XmlTransient
-    public List<MestroHorarioMaterias> getMestroHorarioMateriasList() {
-        return mestroHorarioMateriasList;
+    public TipoSueldos getMaestroTipoSalario() {
+        return maestroTipoSalario;
     }
 
-    public void setMestroHorarioMateriasList(List<MestroHorarioMaterias> mestroHorarioMateriasList) {
-        this.mestroHorarioMateriasList = mestroHorarioMateriasList;
+    public void setMaestroTipoSalario(TipoSueldos maestroTipoSalario) {
+        this.maestroTipoSalario = maestroTipoSalario;
     }
 
-    @XmlTransient
-    public List<MaestoCargo> getMaestoCargoList() {
-        return maestoCargoList;
+    public TipoEspecialidades getMaestroEspecialidad() {
+        return maestroEspecialidad;
     }
 
-    public void setMaestoCargoList(List<MaestoCargo> maestoCargoList) {
-        this.maestoCargoList = maestoCargoList;
+    public void setMaestroEspecialidad(TipoEspecialidades maestroEspecialidad) {
+        this.maestroEspecialidad = maestroEspecialidad;
     }
 
     @XmlTransient
@@ -462,14 +436,6 @@ public class Maestro implements Serializable {
 
     public void setEvaluacionMaestroList(List<EvaluacionMaestro> evaluacionMaestroList) {
         this.evaluacionMaestroList = evaluacionMaestroList;
-    }
-
-    public Persona getPersona() {
-        return persona;
-    }
-
-    public void setPersona(Persona persona) {
-        this.persona = persona;
     }
 
     @Override
@@ -495,6 +461,30 @@ public class Maestro implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.Maestro[ idmaestro=" + idmaestro + " ]";
+    }
+
+    public List<Grado> getGradoList() {
+        return gradoList;
+    }
+
+    public void setGradoList(List<Grado> gradoList) {
+        this.gradoList = gradoList;
+    }
+
+    public List<MestroHorarioMaterias> getMestroHorarioMateriasList() {
+        return mestroHorarioMateriasList;
+    }
+
+    public void setMestroHorarioMateriasList(List<MestroHorarioMaterias> mestroHorarioMateriasList) {
+        this.mestroHorarioMateriasList = mestroHorarioMateriasList;
+    }
+
+    public List<MaestoCargo> getMaestoCargoList() {
+        return maestoCargoList;
+    }
+
+    public void setMaestoCargoList(List<MaestoCargo> maestoCargoList) {
+        this.maestoCargoList = maestoCargoList;
     }
     
 }

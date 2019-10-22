@@ -22,8 +22,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -40,13 +38,17 @@ import net.delsas.saitae.beans.MaestoCargoFacadeLocal;
 import net.delsas.saitae.beans.MaestroFacadeLocal;
 import net.delsas.saitae.beans.NotificacionesFacadeLocal;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
+import net.delsas.saitae.beans.TipoEspecialidadesFacadeLocal;
 import net.delsas.saitae.beans.TipoNombramientoFacadeLocal;
+import net.delsas.saitae.beans.TipoSueldosFacadeLocal;
 import net.delsas.saitae.entities.Cargo;
 import net.delsas.saitae.entities.Financiamiento;
 import net.delsas.saitae.entities.MaestoCargo;
 import net.delsas.saitae.entities.Maestro;
 import net.delsas.saitae.entities.Persona;
+import net.delsas.saitae.entities.TipoEspecialidades;
 import net.delsas.saitae.entities.TipoNombramiento;
+import net.delsas.saitae.entities.TipoSueldos;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.omnifaces.cdi.Push;
 import org.omnifaces.cdi.PushContext;
@@ -87,6 +89,12 @@ public class maestroController implements Serializable {
     private MaestoCargoFacadeLocal mcfl;
     @EJB
     private NotificacionesFacadeLocal notiFL;
+    @EJB
+    private TipoSueldosFacadeLocal tiposFL;
+    private List<TipoSueldos> tipoS;
+    @EJB
+    private TipoEspecialidadesFacadeLocal tipoeFL;
+    private List<TipoEspecialidades> tipoE;
     private Persona usuario;
 
     /**
@@ -98,6 +106,8 @@ public class maestroController implements Serializable {
         cargos = cargoFL.findAll();
         financiamientos = financiamientoFL.findAll();
         nombramientos = tipoNombramientoFL.findAll();
+        tipoE = tipoeFL.findAll();
+        tipoS = tiposFL.findAll();
         usuario = (Persona) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
     }
 
@@ -267,6 +277,22 @@ public class maestroController implements Serializable {
 
     public void sendMessage(String message) {
         notificacion.send(message);
+    }
+
+    public List<TipoSueldos> getTipoS() {
+        return tipoS;
+    }
+
+    public void setTipoS(List<TipoSueldos> tipoS) {
+        this.tipoS = tipoS;
+    }
+
+    public List<TipoEspecialidades> getTipoE() {
+        return tipoE;
+    }
+
+    public void setTipoE(List<TipoEspecialidades> tipoE) {
+        this.tipoE = tipoE;
     }
 
 }

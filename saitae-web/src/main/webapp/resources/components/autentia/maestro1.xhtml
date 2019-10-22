@@ -16,17 +16,10 @@
         <h:panelGrid columns="3">
             <p:outputLabel for="esp" value="Especialidad: "/>
             <p:selectOneMenu id="esp" value="#{cc.attrs.maestro.maestroEspecialidad}" required="true" 
-                             style="width:100%" effect="fold" editable="true" >
-                <f:selectItem itemLabel="Matemáticas" itemValue="Matemáticas"/>
-                <f:selectItem itemLabel="Ciencias Naturales" itemValue="Ciencias Naturales"/>
-                <f:selectItem itemLabel="Educación Física" itemValue="Educación Física"/>
-                <f:selectItem itemLabel="Ciencias de la Educación" itemValue="Ciencias de la Educación"/>
-                <f:selectItem itemLabel="Lenguaje" itemValue="Lenguaje"/>
-                <f:selectItem itemLabel="Ciencias Sociales" itemValue="Ciencias Sociales"/>
-                <f:selectItem itemLabel="Administración y Ciencias Comerciales" itemValue="Administración y Ciencias Comerciales"/>
-                <f:selectItem itemLabel="Inglés" itemValue="Inglés"/>
-                <f:selectItem itemLabel="Informática" itemValue="Informática"/>
-                <f:selectItem itemLabel="Otro" itemValue="Otro"/>
+                             converter="omnifaces.SelectItemsConverter">
+                <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
+                <f:selectItems value="#{maestroController.tipoE}" var="e" 
+                               itemLabel="#{e.tipoEspecialidadesNombre}" itemValue="#{e}"/>
             </p:selectOneMenu>
             <p:message for="esp"/>
 
@@ -43,11 +36,12 @@
             </p:selectOneMenu>
             <p:message for="turno"/>
 
-            <p:outputLabel for="sal" value="Tipo de salario: "/>
-            <p:selectOneMenu id="sal" value="#{cc.attrs.maestro.maestroTipoSalario}" required="true" style="width:100%">
-                <f:selectItem itemLabel="Sueldo Base" itemValue="Sueldo Base"/>
-                <f:selectItem itemLabel="Horas clases" itemValue="Horas clases"/>
-                <f:selectItem itemLabel="Ad honorem" itemValue="Ad honorem"/>
+            <p:outputLabel for="sal" value="Tipo de sueldo: "/>
+            <p:selectOneMenu id="sal" value="#{cc.attrs.maestro.maestroTipoSalario}" required="true" 
+                             converter="omnifaces.SelectItemsConverter">
+                <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
+                <f:selectItems value="#{maestroController.tipoS}" var="s"
+                               itemLabel="#{s.tipoSueldoNombre}" itemValue="#{s}"/>
             </p:selectOneMenu>
             <p:message for="sal"/>
 

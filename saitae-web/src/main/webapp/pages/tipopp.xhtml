@@ -147,10 +147,11 @@
                             </div>
                         </p:tab>
                         <p:tab title="Tipo de Financionamiento">
-                            <t:tablasTipos id="tabla1" Lista="#{tipoController.financiamientos}" NombreTabla="financiamiento" 
+                            <t:tablasTipos id="tabla1" Lista="#{tipoController.financiamientos}" 
+                                           NombreTabla="financiamiento" 
                                            zid="#{z.idfinanciamiento}" znombre="#{z.financiamientoNombre}"/>
                         </p:tab>
-                        <p:tab title="cargo">
+                        <p:tab title="Cargos Institucionales">
                             <p:dataTable id="cargo1" var="c" value="#{tipoController.cargo}" 
                                          editable="true" widgetVar="cargo0" styleClass="tabla" 
                                          emptyMessage="Sin registros aún.">
@@ -205,6 +206,16 @@
                                                      title="Agregar nuevo autor."/>
                                 </div>
                             </div>
+                        </p:tab>
+                        <p:tab title="Tipo de Especialidades">
+                            <t:tablasTipos id="especialidades" Lista="#{tipoController.tipoE}" 
+                                           NombreTabla="especialidades" 
+                                           zid="#{z.idtipoEspecialidades}" znombre="#{z.tipoEspecialidadesNombre}"/>
+                        </p:tab>
+                        <p:tab title="Tipo de Sueldos">
+                            <t:tablasTipos id="sueldos" Lista="#{tipoController.tipoS}" 
+                                           NombreTabla="sueldos" 
+                                           zid="#{z.idtipoSueldo}" znombre="#{z.tipoSueldoNombre}"/>
                         </p:tab>
                     </p:tabView>
                 </h:form>
