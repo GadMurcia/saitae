@@ -5,6 +5,7 @@
  */
 package net.delsas.saitae.beans;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,5 +29,12 @@ public class RecursoFacade extends AbstractFacade<Recurso> implements RecursoFac
     public RecursoFacade() {
         super(Recurso.class);
     }
-    
+
+    @Override
+    public List<Recurso> findByTipoRecurso(Integer tipoRecurso) {
+        return em.createNamedQuery("Recurso.findByTipoRecurso")
+                .setParameter("tipoRecurso", tipoRecurso)
+                .getResultList();
+    }
+
 }

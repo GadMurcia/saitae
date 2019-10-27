@@ -23,10 +23,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
-import javax.faces.component.behavior.BehaviorBase;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -40,10 +40,11 @@ import net.delsas.saitae.beans.ContenidoLibroFacadeLocal;
 import net.delsas.saitae.beans.EditorialFacadeLocal;
 import net.delsas.saitae.beans.EditorialLibroFacadeLocal;
 import net.delsas.saitae.beans.EjemplarFacadeLocal;
+import net.delsas.saitae.beans.NotificacionesFacadeLocal;
 import net.delsas.saitae.beans.PaisFacadeLocal;
-import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.beans.RecursoFacadeLocal;
 import net.delsas.saitae.beans.TipoCargoFacadeLocal;
+import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
 import net.delsas.saitae.beans.TipoRecursoFacadeLocal;
 import net.delsas.saitae.beans.TipoReservaFacadeLocal;
 import net.delsas.saitae.beans.TipoReservaRecursoFacadeLocal;
@@ -58,11 +59,11 @@ import net.delsas.saitae.entities.EditorialLibro;
 import net.delsas.saitae.entities.EditorialLibroPK;
 import net.delsas.saitae.entities.Ejemplar;
 import net.delsas.saitae.entities.EjemplarPK;
-import net.delsas.saitae.entities.Notificaciones;
 import net.delsas.saitae.entities.Pais;
 import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.Recurso;
 import net.delsas.saitae.entities.TipoCargo;
+import net.delsas.saitae.entities.TipoPersona;
 import net.delsas.saitae.entities.TipoRecurso;
 import net.delsas.saitae.entities.TipoReserva;
 import net.delsas.saitae.entities.TipoReservaRecurso;
@@ -70,7 +71,6 @@ import net.delsas.saitae.entities.TipoReservaRecursoPK;
 import org.omnifaces.cdi.Push;
 import org.omnifaces.cdi.PushContext;
 import org.primefaces.PrimeFaces;
-import org.primefaces.component.selectmanymenu.SelectManyMenu;
 import org.primefaces.event.FlowEvent;
 import org.primefaces.event.SelectEvent;
 
@@ -88,7 +88,7 @@ public class recursoController implements Serializable {
     private FacesContext context;
     private boolean verTipos, verOtrosPaneles, verBotonGuardarPanel1, verCategorias, verCategoriastabla, editarID, editarTipo;
     @EJB
-    private PersonaFacadeLocal pFL;
+    private TipoPersonaFacadeLocal tpFL;
     //FIn de validación de usuarios
 
 //Recurso
@@ -153,9 +153,14 @@ public class recursoController implements Serializable {
     @EJB
     private ContenidoLibroFacadeLocal contenidoFL;
 
+    //notificaciones
+    @EJB
+    private NotificacionesFacadeLocal notiFL;
+
     @PostConstruct
     public void init() {
         context = FacesContext.getCurrentInstance();
+        usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
         initVariables();
         llenarListas();
         controlUsuarios();
@@ -194,7 +199,7 @@ public class recursoController implements Serializable {
     private void llenado(int tr, boolean verPaneles) {
         TipoRecurso tipor = tiporecursoFL.find(tr);
         Seleccionado.setIdTipoRecurso(tipor);
-        recurso = tipor.getRecursoList();
+        recurso = recursoFL.findByTipoRecurso(tipor.getIdtipoRecurso());
         verTipos = false;
         verBotonGuardarPanel1 = !verPaneles;
         verOtrosPaneles = verPaneles;
@@ -204,7 +209,6 @@ public class recursoController implements Serializable {
 
     public void controlUsuarios() {
         try {
-            usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
             int i = 0;
             List<Integer> tps = new Auxiliar().getTiposPersonas(usuario);
             List<Integer> permitidos = new ArrayList<>();
@@ -330,23 +334,36 @@ public class recursoController implements Serializable {
                     recursoFL.remove(r);
                 }
                 ejemplar();
-                Seleccionado.setContenidoLibroList(contenido);
                 Seleccionado.setTipoReservaRecursoList(trrl);
-                Seleccionado.setAutorLibroList(al);
-                Seleccionado.setEditorialLibroList(ell);
+                if (Seleccionado.getIdTipoRecurso().getIdtipoRecurso() != 3) {
+                    Seleccionado.setPais(null);
+                    Seleccionado.setAutorLibroList(null);
+                    Seleccionado.setCategoria(null);
+                    Seleccionado.setEditorialLibroList(null);
+                } else {
+                    Seleccionado.setEditorialLibroList(ell);
+                    Seleccionado.setContenidoLibroList(contenido);
+                    Seleccionado.setAutorLibroList(al);
+                }
+                Seleccionado.setRecursoComentarios("");
                 recursoFL.edit(Seleccionado);
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+                        "Agregación exitosa", "Creado con Exito!"));
+                mensaje m = new mensaje(0, usuario.getIdpersona(),
+                        Seleccionado.getIdTipoRecurso().getIdtipoRecurso() + "",
+                        new FacesMessage(FacesMessage.SEVERITY_INFO,
+                                "Se ha ingresado un nuevo recurso",
+                                usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
+                                + " ha modificado el inventario."));
+                persistir(m);
                 this.init();
-                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Agregación exitosa", "Creado con Exito!"));
-                notificar(new mensaje(0, usuario.getIdpersona(), Seleccionado.getIdTipoRecurso().getIdtipoRecurso() + "",
-                        new FacesMessage(FacesMessage.SEVERITY_INFO, "Se ha ingresado un nuevo recurso",
-                                usuario.getPersonaNombre() + " " + usuario.getPersonaApellido() + " ha modificado el inventario.")).toString());
             } else {
-                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
                         "Error en la agregación del recurso", "El Código del recurso que está agregando no debe ser 0"));
             }
             PrimeFaces.current().ajax().update(":form:recurso");
         } catch (Exception e) {
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL,
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL,
                     "Error inesperado",
                     e.getMessage() == null ? "El error es desconocido." : e.getMessage()));
         }
@@ -461,7 +478,8 @@ public class recursoController implements Serializable {
                 initVariables();
             }
         } else {
-            this.Seleccionado = Seleccionado;
+            Recurso rr = recursoFL.find(Seleccionado.getIdrecurso());
+            this.Seleccionado = rr == null ? Seleccionado : rr;
             cat = Seleccionado.getCategoria();
             tr = Seleccionado.getIdTipoRecurso();
             tipoCargo = Seleccionado.getTipoCargo();
@@ -469,14 +487,14 @@ public class recursoController implements Serializable {
             contenido.clear();
             contenido.addAll(Seleccionado.getContenidoLibroList());
             ejemplares = Seleccionado.getEjemplarList().size();
-            tipoRecursoSelect(new SelectEvent(new SelectManyMenu(), new BehaviorBase(), Seleccionado.getIdTipoRecurso().getIdtipoRecurso()));
             editarID = editarTipo = false;
         }
     }
 
     public void tipoRecursoSelect(SelectEvent event) {
-        int q = Integer.valueOf(event.getObject().toString());
-        if (q == 3) {
+        TipoRecurso tp = ((TipoRecurso) event.getObject());
+        Seleccionado.setIdTipoRecurso(tp);
+        if (tp == null || tp.getIdtipoRecurso() == 3) {
             verBotonGuardarPanel1 = false;
             verCategorias = true;
             verOtrosPaneles = true;
@@ -485,9 +503,9 @@ public class recursoController implements Serializable {
             verCategorias = false;
             verOtrosPaneles = false;
         }
-        Seleccionado.setIdTipoRecurso(tiporecursoFL.find(q));
-        PrimeFaces.current().ajax().update("form0", "form", "h1", "h2");
-        System.out.println(event.getObject());
+        dialog();
+        PrimeFaces.current().ajax().update("form0", "form", "h1", "h2", "h3");
+        System.out.println(tp == null ? "No Selection" : tp);
     }
 
     public void categoriaSelect(SelectEvent event) {
@@ -632,17 +650,23 @@ public class recursoController implements Serializable {
 
     public void nuevoRecurso() {
         ejemplares = 1;
-        TipoRecurso t = this.Seleccionado.getIdTipoRecurso();
-        Seleccionado = new Recurso(0);
-        this.Seleccionado = new Recurso(0);
-        if (t != null) {
-            this.Seleccionado.setIdTipoRecurso(t);
+        initVariables();
+        llenarListas();
+        controlUsuarios();
+        PrimeFaces.current().ajax().update("h1", "h2", "h3");
+    }
+
+    public void dialog() {
+        Integer tp = Seleccionado.getIdTipoRecurso() != null
+                ? Seleccionado.getIdTipoRecurso().getIdtipoRecurso() : 0;
+        PrimeFaces.current().ajax().update("h1", "h2", "h3");
+        if (tp == 0 || tp == 3) {
+            PrimeFaces.current().executeScript("PF('Drecurso2').hide()");
+            PrimeFaces.current().executeScript("PF('Drecurso').show()");
         } else {
-            init();
+            PrimeFaces.current().executeScript("PF('Drecurso').hide()");
+            PrimeFaces.current().executeScript("PF('Drecurso2').show()");
         }
-        editarID = true;
-        editarTipo = true;
-        PrimeFaces.current().ajax().update("h1", "h2");
     }
 
     public List<Autor> getAutores() {
@@ -717,19 +741,15 @@ public class recursoController implements Serializable {
     public void escuchaRecursoAC() {
         try {
             mensaje mss = new mensaje(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("mss"));
-            int tipoP = mss.getCadenaAccion().equals("1") ? 6 : (mss.getCadenaAccion().endsWith("2") ? 7 : (mss.getCadenaAccion().endsWith("3") ? 5 : 0));
-            System.out.println("Mensaje del pushRecurso recibido: " + mss.toString());
-            Persona remitente = pFL.find(mss.getRemitente());
-            if (usuario.getTipoPersona().equals(remitente.getTipoPersona())
-                    || usuario.getTipoPersona().getIdtipoPersona() == 1
-                    || usuario.getTipoPersona().getIdtipoPersona() == 2
-                    || usuario.getTipoPersona().getIdtipoPersona() == tipoP) {
+            if (usuario.getTipoPersona().equals(mss.getDestinatario())) {
                 PrimeFaces.current().ajax().update(":form:recurso");
+                FacesContext.getCurrentInstance().addMessage(null, mss.getFacesmessage());
             }
         } catch (Exception e) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error inesperado",
-                    e.getMessage() == null ? " La causa del error es desconocida."
-                    : e.getMessage()));
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error inesperado",
+                            e.getMessage() == null ? " La causa del error es desconocida."
+                            : e.getMessage()));
         }
     }
 
@@ -747,6 +767,40 @@ public class recursoController implements Serializable {
 
     public void setEditarTipo(boolean editarTipo) {
         this.editarTipo = editarTipo;
+    }
+
+    private void persistir(mensaje m) {
+        Integer i;
+        try {
+            i = Integer.valueOf(m.getCadenaAccion());
+        } catch (Exception e) {
+            i = 0;
+        }
+        TipoPersona tp = tpFL.find(i == 0 ? 0 : (i == 1 ? 6 : (i == 2 ? 7 : (i == 3 ? 5 : 0))));
+        if (tp != null) {
+            List<Persona> personas = new ArrayList<>();
+            personas.addAll(tp.getPersonaList());
+            tp.getCargoList().forEach((c) -> {
+                c.getMaestoCargoList().forEach((mc) -> {
+                    personas.add(mc.getMaestro().getPersona());
+                });
+            });
+            tp.getDelegacionCargoList().forEach((dc) -> {
+                personas.add(dc.getIdpersona());
+            });
+
+            personas.forEach((p) -> {
+                try {
+                    if (!Objects.equals(p.getIdpersona(), usuario.getIdpersona())) {
+                        m.getNotificacion().setFechaHora(new Date());
+                        m.setDestinatario(p.getIdpersona());
+                        notiFL.create(m.getNotificacion());
+                        notificar(m.toString());
+                    }
+                } catch (Exception e) {
+                }
+            });
+        }
     }
 
 }

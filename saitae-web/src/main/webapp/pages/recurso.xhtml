@@ -63,187 +63,203 @@
                             <p:commandButton value="+" styleClass="ui-priority-primary"
                                              actionListener="#{recursoController.nuevoRecurso()}"
                                              update=":form0:msgs form:recurso h1 h2"
-                                             onclick="PF('Drecurso').show();"
+                                             oncomplete="selectDialog();"
                                              title="Agregar Recurso."/>
                             <p:contextMenu for="recurso">
-                                <p:menuitem value="Modificar" update=":form0:msgs form:recurso h1 h2"
-                                            icon="fa fa-edit" onclick="PF('Drecurso').show()"/>                            
+                                <p:menuitem value="Modificar" update=":form0:msgs form:recurso h1 h2 h3"
+                                            icon="fa fa-edit" oncomplete="selectDialog()"/>                            
                             </p:contextMenu>
                         </div>
                     </div>
-                    <p:remoteCommand name="nuevoRecurso" actionListener="#{recursoController.nuevoRecurso()}"/>
+                    <p:remoteCommand name="nuevoRecurso" 
+                                     actionListener="#{recursoController.nuevoRecurso()}"/>
+                    <p:remoteCommand name="selectDialog" 
+                                     actionListener="#{recursoController.dialog()}"/>
                 </h:form>
-                    <p:dialog id="dialog1" header="Administración de recursos" widgetVar="Drecurso" modal="true" onHide="nuevoRecurso();"
-                              showEffect="fade" hideEffect="fade" resizable="false" style="width: 90%;">
-                        <h:form id="h1">
-                            <p:wizard flowListener="#{recursoController.onFlowProcess}" backLabel="Retroceder" nextLabel="Siguiente"
-                                      step="init">
-                                <p:tab id="init" title="Información Recursos">
-                                    <p:panel header="Información Recursos">
-                                        <h:panelGrid columns="1">
-                                            <h:panelGrid columns="4" cellspacing="10px">
+                <p:dialog id="dialog1" header="Administración de recursos" 
+                          widgetVar="Drecurso" modal="true"
+                          showEffect="fade" hideEffect="fade" resizable="false" 
+                          style="width: 90%;">
+                    <h:form id="h1">
+                        <p:wizard flowListener="#{recursoController.onFlowProcess}" 
+                                  backLabel="Retroceder" nextLabel="Siguiente" step="init">
+                            <p:tab id="init" title="Información Recursos">
+                                <p:panel header="Información Recursos">
+                                    <h:panelGrid columns="1">
+                                        <h:panelGrid columns="4" cellspacing="10px">
 
-                                                <p:outputLabel value="ID" for="idrecurso" />
-                                                <p:inputText id="idrecurso" value="#{recursoController.seleccionado.idrecurso}" 
-                                                             title="Idrecurso" required="true" disabled="#{!recursoController.editarID}"
-                                                             requiredMessage="The Idrecurso field is required."/>
+                                            <p:column rendered="#{!recursoController.verTipos}"/>
+                                            <p:column rendered="#{!recursoController.verTipos}"/>
+                                            <p:outputLabel for="tiporecurso" value="Tipo Recurso" rendered="#{recursoController.verTipos}"/>
+                                            <p:selectOneMenu id="tiporecurso" value="#{recursoController.tr}"
+                                                             rendered="#{recursoController.verTipos}" 
+                                                             disabled="#{!recursoController.editarTipo}"
+                                                             converter="omnifaces.SelectItemsConverter">
+                                                <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
+                                                <f:selectItems var="tr" itemLabel="#{tr.tipoRecursoNombre}" 
+                                                               itemValue="#{tr}" 
+                                                               value="#{recursoController.tiporecursolist}"/>                                                    
+                                                <p:ajax event="itemSelect" listener="#{recursoController.tipoRecursoSelect}"/>
+                                            </p:selectOneMenu>
 
-                                                <p:outputLabel value="Nombre:" for="nombre" />
-                                                <p:inputText id="nombre" value="#{recursoController.seleccionado.nombre}" 
-                                                             title="Nombre" required="true" 
-                                                             requiredMessage="The Nombre field is required."/>
+                                            <p:outputLabel value="ID" for="idrecurso" />
+                                            <p:inputText id="idrecurso" value="#{recursoController.seleccionado.idrecurso}" 
+                                                         title="Idrecurso" required="true" disabled="#{!recursoController.editarID}"
+                                                         requiredMessage="The Idrecurso field is required."/>
 
-                                                <p:outputLabel value="Activo:" for="activo" />
-                                                <p:selectOneMenu id="activo" value="#{recursoController.seleccionado.activo}" 
-                                                                 title="Activo" required="true" 
-                                                                 requiredMessage="Es necesario seleccionar el estado">
-                                                    <f:selectItem itemLabel="Activo" itemValue="true" />
-                                                    <f:selectItem itemLabel="Inactivo" itemValue="false" />
-                                                </p:selectOneMenu>
+                                            <p:outputLabel value="Nombre:" for="nombre" />
+                                            <p:inputText id="nombre" value="#{recursoController.seleccionado.nombre}" 
+                                                         title="Nombre" required="true" 
+                                                         requiredMessage="The Nombre field is required."/>
 
-                                                <p:outputLabel for="categoria" value="Categorias" rendered="#{recursoController.verCategorias}"/>
-                                                <p:selectOneMenu id="categoria" value="#{recursoController.cat.idcategoria}"
-                                                                 rendered="#{recursoController.verCategorias}">
-                                                    <f:selectItem itemLabel="Seleccione" itemValue=""/>
-                                                    <f:selectItems var="c" itemLabel="#{c.categoriaNombre}" 
-                                                                   itemValue="#{c.idcategoria}"  
-                                                                   value="#{recursoController.categorialist}"/>
-                                                    <p:ajax event="itemSelect" listener="#{recursoController.categoriaSelect}"/>
-                                                </p:selectOneMenu>
-                                                <p:outputLabel for="tiporecurso" value="Tipo Recurso" rendered="#{recursoController.verTipos}"/>
-                                                <p:selectOneMenu id="tiporecurso" value="#{recursoController.tr.idtipoRecurso}"
-                                                                 rendered="#{recursoController.verTipos}" disabled="#{!recursoController.editarTipo}">
-                                                    <f:selectItem itemLabel="Seleccione" itemValue=""/>
-                                                    <f:selectItems var="tr" itemLabel="#{tr.tipoRecursoNombre}" 
-                                                                   itemValue="#{tr.idtipoRecurso}" 
-                                                                   value="#{recursoController.tiporecursolist}"/>
-                                                    <p:ajax event="itemSelect" listener="#{recursoController.tipoRecursoSelect}"/>
-                                                </p:selectOneMenu>
-                                                <p:outputLabel for="tipocargo" value="Tipo Cargo" />
-                                                <p:selectOneMenu id="tipocargo" value="#{recursoController.tipoCargo.idtipoCargo}">
-                                                    <f:selectItem itemLabel="Seleccione" itemValue=""/>
-                                                    <f:selectItems var="tc" itemLabel="#{tc.nombre}" itemValue="#{tc.idtipoCargo}" 
-                                                                   value="#{recursoController.tipocargolist}"/>
-                                                    <p:ajax event="itemSelect" listener="#{recursoController.tipoCargoSelect}"/>
-                                                </p:selectOneMenu>
-                                                <p:outputLabel for="pais" value="Pais" rendered="#{recursoController.verCategorias}"/>
-                                                <p:selectOneMenu id="pais" value="#{recursoController.pais.idpais}"
-                                                                 rendered="#{recursoController.verCategorias}">
-                                                    <f:selectItem itemLabel="Seleccione" itemValue=""/>
-                                                    <f:selectItems var="p" itemLabel="#{p.paisNombre}" itemValue="#{p.idpais}" 
-                                                                   value="#{recursoController.paislist}"/>
-                                                    <p:ajax event="itemSelect" listener="#{recursoController.paisSelect}"/>
-                                                </p:selectOneMenu>
+                                            <p:outputLabel value="Activo:" for="activo" />
+                                            <p:selectOneMenu id="activo" value="#{recursoController.seleccionado.activo}" 
+                                                             title="Activo" required="true" 
+                                                             requiredMessage="Es necesario seleccionar el estado">
+                                                <f:selectItem itemLabel="Activo" itemValue="true" />
+                                                <f:selectItem itemLabel="Inactivo" itemValue="false" />
+                                            </p:selectOneMenu>
 
-                                                <p:outputLabel value="Valor:" for="valorUnitario" />
-                                                <p:inputText id="valorUnitario" 
-                                                             value="#{recursoController.seleccionado.valorUnitario}" 
-                                                             title="ValorUnitario" required="true" 
-                                                             requiredMessage="The ValorUnitario field is required."/>
+                                            <p:outputLabel for="categoria" value="Categorias" rendered="#{recursoController.verCategorias}"/>
+                                            <p:selectOneMenu id="categoria" value="#{recursoController.cat}"
+                                                             rendered="#{recursoController.verCategorias}" 
+                                                             converter="omnifaces.SelectItemsConverter">
+                                                <f:selectItem itemLabel="Seleccione" itemValue="#{null}"/>
+                                                <f:selectItems var="c" itemLabel="#{c.categoriaNombre}" 
+                                                               itemValue="#{c}"  
+                                                               value="#{recursoController.categorialist}"/>
+                                                <p:ajax event="itemSelect" listener="#{recursoController.categoriaSelect}"/>
+                                            </p:selectOneMenu>
 
-                                                <p:outputLabel value="Estado" for="estado" />
-                                                <p:selectOneMenu id="estado" value="#{recursoController.seleccionado.estadoFisico}" required="true" style="width:125px">
-                                                    <f:selectItem itemLabel="Seleccione" itemValue="" noSelectionOption="true" />
-                                                    <f:selectItem itemLabel="Bueno" itemValue="B" />
-                                                    <f:selectItem itemLabel="Regular" itemValue="R" />
-                                                </p:selectOneMenu>
-                                                <p:outputLabel value="Tipo Valor" for="tipoValor" />
-                                                <p:selectOneMenu id="tipoValor" value="#{recursoController.seleccionado.tipoValor}" required="true" style="width:125px">
-                                                    <f:selectItem itemLabel="REAL" itemValue="REAL" />
-                                                    <f:selectItem itemLabel="ESTIMADO" itemValue="ESTIMADO" />
-                                                </p:selectOneMenu>
-                                                <p:outputLabel value="Modelo:" for="modelo" />
-                                                <p:inputText id="modelo" value="#{recursoController.seleccionado.modelo}" 
-                                                             title="Modelo" />
 
-                                                <p:outputLabel value="Existencias" for="numeroejemplar" />
-                                                <p:inputText id="numeroejemplar" value="#{recursoController.ejemplares}" 
-                                                             title="ejemplar" />
-                                            </h:panelGrid>
-                                            <h:panelGrid columns="2">
-                                                <h:outputLabel for="multiple" value="Formas de Reserva"/>
-                                                <p:selectCheckboxMenu id="multiple" value="#{recursoController.tiposReservas}" 
-                                                                      label="Cities" multiple="true" filter="true" 
-                                                                      filterMatchMode="startsWith" panelStyle="width:250px" 
-                                                                      required="true" 
-                                                                      requiredMessage="Debe seleccionar al menos un tipo">
-                                                    <f:selectItems value="#{recursoController.listaTipoReserva}" var="trr" 
-                                                                   itemLabel="#{trr.tipoReservaNombre}" 
-                                                                   itemValue="#{trr.idtipoReserva}" />
-                                                </p:selectCheckboxMenu>
-                                            </h:panelGrid>
+                                            <p:outputLabel for="pais" value="Pais" rendered="#{recursoController.verCategorias}"/>
+                                            <p:selectOneMenu id="pais" value="#{recursoController.pais}"
+                                                             rendered="#{recursoController.verCategorias}"
+                                                             converter="omnifaces.SelectItemsConverter">
+                                                <f:selectItem itemLabel="Seleccione" itemValue="#{null}"/>
+                                                <f:selectItems var="p" itemLabel="#{p.paisNombre}" itemValue="#{p}" 
+                                                               value="#{recursoController.paislist}"/>
+                                                <p:ajax event="itemSelect" listener="#{recursoController.paisSelect}"/>
+                                            </p:selectOneMenu>
+
+                                            <p:outputLabel for="tipocargo" value="Tipo Cargo" />
+                                            <p:selectOneMenu id="tipocargo" value="#{recursoController.tipoCargo}"
+                                                             converter="omnifaces.SelectItemsConverter">
+                                                <f:selectItem itemLabel="Seleccione" itemValue=""/>
+                                                <f:selectItems var="tc" itemLabel="#{tc.nombre}" itemValue="#{tc}" 
+                                                               value="#{recursoController.tipocargolist}"/>
+                                                <p:ajax event="itemSelect" listener="#{recursoController.tipoCargoSelect}"/>
+                                            </p:selectOneMenu>
+
+                                            <p:outputLabel value="Valor:" for="valorUnitario" />
+                                            <p:inputText id="valorUnitario" 
+                                                         value="#{recursoController.seleccionado.valorUnitario}" 
+                                                         title="ValorUnitario" required="true" 
+                                                         requiredMessage="The ValorUnitario field is required."/>
+
+                                            <p:outputLabel value="Estado" for="estado" />
+                                            <p:selectOneMenu id="estado" value="#{recursoController.seleccionado.estadoFisico}" required="true" style="width:125px">
+                                                <f:selectItem itemLabel="Seleccione" itemValue="" noSelectionOption="true" />
+                                                <f:selectItem itemLabel="Bueno" itemValue="B" />
+                                                <f:selectItem itemLabel="Regular" itemValue="R" />
+                                            </p:selectOneMenu>
+                                            <p:outputLabel value="Tipo Valor" for="tipoValor" />
+                                            <p:selectOneMenu id="tipoValor" value="#{recursoController.seleccionado.tipoValor}" required="true" style="width:125px">
+                                                <f:selectItem itemLabel="Real" itemValue="REAL" />
+                                                <f:selectItem itemLabel="Estimado" itemValue="ESTIMADO" />
+                                            </p:selectOneMenu>
+                                            <p:outputLabel value="Edición:" for="modelo" />
+                                            <p:inputText id="modelo" value="#{recursoController.seleccionado.modelo}" 
+                                                         title="Modelo" />
+
+                                            <p:outputLabel value="Existencias" for="numeroejemplar" />
+                                            <p:inputText id="numeroejemplar" value="#{recursoController.ejemplares}" 
+                                                         title="ejemplar" />
                                         </h:panelGrid>
-                                        <p:commandButton actionListener="#{recursoController.agregarRecurso()}" 
-                                                         oncomplete="PF('Drecurso').hide()" rendered="#{recursoController.verBotonGuardarPanel1}"
-                                                         value="Agregar al inventario" icon="pi pi-save" update="form:recurso form0:msgs"/>
-                                    </p:panel>
-                                </p:tab>
-                                <p:tab title="Autores y Editoriales" rendered="#{recursoController.verOtrosPaneles}">
-                                    <p:panel header="Información de los autores y Editoriales del libro">
                                         <h:panelGrid columns="2">
-                                            <h:outputLabel for="autor" value="Autores"/>
-                                            <p:selectCheckboxMenu id="autor" value="#{recursoController.autoresXlibro}" 
-                                                                  label="autores" multiple="true" filter="true" 
+                                            <h:outputLabel for="multiple" value="Formas de Reserva"/>
+                                            <p:selectCheckboxMenu id="multiple" value="#{recursoController.tiposReservas}" 
+                                                                  label="Cities" multiple="true" filter="true" 
                                                                   filterMatchMode="startsWith" panelStyle="width:250px" 
                                                                   required="true" 
-                                                                  requiredMessage="Debe seleccionar al menos un autor">
-                                                <f:selectItems value="#{recursoController.autores}" var="a" 
-                                                               itemLabel="#{a.autorNombre}" 
-                                                               itemValue="#{a.idautor}" />
-                                            </p:selectCheckboxMenu>
-
-                                            <h:outputLabel for="editorial" value="Editoriales"/>
-                                            <p:selectCheckboxMenu id="editorial" value="#{recursoController.editorialesXlibro}" 
-                                                                  label="autores" multiple="true" filter="true" 
-                                                                  filterMatchMode="startsWith" panelStyle="width:250px" 
-                                                                  required="true" 
-                                                                  requiredMessage="Debe seleccionar al menos una editorial">
-                                                <f:selectItems value="#{recursoController.editoriales}" var="e" 
-                                                               itemLabel="#{e.editorialNombre}" 
-                                                               itemValue="#{e.ideditorial}" />
+                                                                  requiredMessage="Debe seleccionar al menos un tipo">
+                                                <f:selectItems value="#{recursoController.listaTipoReserva}" var="trr" 
+                                                               itemLabel="#{trr.tipoReservaNombre}" 
+                                                               itemValue="#{trr.idtipoReserva}" />
                                             </p:selectCheckboxMenu>
                                         </h:panelGrid>
-                                    </p:panel>
-                                </p:tab>                                
-                                <p:tab  title="Temario" rendered="#{recursoController.verOtrosPaneles}">
-                                    <p:panel header="Temario">
-                                        <h:panelGrid columns="1" cellspacing="10px">                                    
-                                            <p:commandButton value="+" styleClass="ui-priority-primary" 
-                                                             actionListener="#{recursoController.nuevoContenido()}"
-                                                             update=":form0:msgs h2"
-                                                             onclick="PF('Dcontenido').show();"
-                                                             title="Agregar Contenido."/>
-                                            <p:dataTable id="h1Contenido" value="#{recursoController.contenido}" var="item"
-                                                         rowKey="#{item.contenidoLibroPK}" selection="#{recursoController.cl}"
-                                                         selectionMode="single">
-                                                <p:column>
-                                                    <f:facet name="header">
-                                                        <h:outputText value="ContenidoLibroNombre"/>
-                                                    </f:facet>
-                                                    <h:outputText value="#{item.contenidoLibroPK.contenidoLibroNombre}"/>
-                                                </p:column>
-                                                <p:column>
-                                                    <f:facet name="header">
-                                                        <h:outputText value="ContenidoLibroPagina"/>
-                                                    </f:facet>
-                                                    <h:outputText value="#{item.contenidoLibroPK.contenidoLibroPagina}"/>
-                                                </p:column>                                            
-                                            </p:dataTable>
+                                    </h:panelGrid>
+                                    <p:commandButton actionListener="#{recursoController.agregarRecurso()}" 
+                                                     oncomplete="PF('Drecurso').hide()" rendered="#{recursoController.verBotonGuardarPanel1}"
+                                                     value="Agregar al inventario" icon="pi pi-save" update="form:recurso form0:msgs"/>
+                                </p:panel>
+                            </p:tab>
+                            <p:tab title="Autores y Editoriales" rendered="#{recursoController.verOtrosPaneles}">
+                                <p:panel header="Información de los autores y Editoriales del libro">
+                                    <h:panelGrid columns="2">
+                                        <h:outputLabel for="autor" value="Autores"/>
+                                        <p:selectCheckboxMenu id="autor" value="#{recursoController.autoresXlibro}" 
+                                                              label="autores" multiple="true" filter="true" 
+                                                              filterMatchMode="startsWith" panelStyle="width:250px" 
+                                                              required="true" 
+                                                              requiredMessage="Debe seleccionar al menos un autor">
+                                            <f:selectItems value="#{recursoController.autores}" var="a" 
+                                                           itemLabel="#{a.autorNombre}" 
+                                                           itemValue="#{a.idautor}" />
+                                        </p:selectCheckboxMenu>
 
-                                            <p:commandButton actionListener="#{recursoController.agregarRecurso()}" 
-                                                             oncomplete="PF('Drecurso').hide()"
-                                                             value="Agregar al inventario" icon="pi pi-save" update="form:recurso form0:msgs"/>
-                                            <p:contextMenu for="h1Contenido">
-                                                <p:menuitem value="Modificar" update=":form0:msgs h1Contenido h2"
-                                                            icon="fa fa-edit" onclick="PF('Dcontenido').show()"/>                            
-                                            </p:contextMenu>
-                                        </h:panelGrid>
-                                    </p:panel>
-                                </p:tab>
-                            </p:wizard>
-                        </h:form>
+                                        <h:outputLabel for="editorial" value="Editoriales"/>
+                                        <p:selectCheckboxMenu id="editorial" value="#{recursoController.editorialesXlibro}" 
+                                                              label="autores" multiple="true" filter="true" 
+                                                              filterMatchMode="startsWith" panelStyle="width:250px" 
+                                                              required="true" 
+                                                              requiredMessage="Debe seleccionar al menos una editorial">
+                                            <f:selectItems value="#{recursoController.editoriales}" var="e" 
+                                                           itemLabel="#{e.editorialNombre}" 
+                                                           itemValue="#{e.ideditorial}" />
+                                        </p:selectCheckboxMenu>
+                                    </h:panelGrid>
+                                </p:panel>
+                            </p:tab>                                
+                            <p:tab  title="Temario" rendered="#{recursoController.verOtrosPaneles}">
+                                <p:panel header="Temario">
+                                    <h:panelGrid columns="1" cellspacing="10px">                                    
+                                        <p:commandButton value="+" styleClass="ui-priority-primary" 
+                                                         actionListener="#{recursoController.nuevoContenido()}"
+                                                         update=":form0:msgs h2"
+                                                         onclick="PF('Dcontenido').show();"
+                                                         title="Agregar Contenido."/>
+                                        <p:dataTable id="h1Contenido" value="#{recursoController.contenido}" var="item"
+                                                     rowKey="#{item.contenidoLibroPK}" selection="#{recursoController.cl}"
+                                                     selectionMode="single">
+                                            <p:column>
+                                                <f:facet name="header">
+                                                    <h:outputText value="ContenidoLibroNombre"/>
+                                                </f:facet>
+                                                <h:outputText value="#{item.contenidoLibroPK.contenidoLibroNombre}"/>
+                                            </p:column>
+                                            <p:column>
+                                                <f:facet name="header">
+                                                    <h:outputText value="ContenidoLibroPagina"/>
+                                                </f:facet>
+                                                <h:outputText value="#{item.contenidoLibroPK.contenidoLibroPagina}"/>
+                                            </p:column>                                            
+                                        </p:dataTable>
 
-                    </p:dialog>
+                                        <p:commandButton actionListener="#{recursoController.agregarRecurso()}" 
+                                                         oncomplete="PF('Drecurso').hide()"
+                                                         value="Agregar al inventario" icon="pi pi-save" update="form:recurso form0:msgs"/>
+                                        <p:contextMenu for="h1Contenido">
+                                            <p:menuitem value="Modificar" update=":form0:msgs h1Contenido h2"
+                                                        icon="fa fa-edit" onclick="PF('Dcontenido').show()"/>                            
+                                        </p:contextMenu>
+                                    </h:panelGrid>
+                                </p:panel>
+                            </p:tab>
+                        </p:wizard>
+                    </h:form>
+
+                </p:dialog>
                 <p:dialog header="Administración de contenido" widgetVar="Dcontenido" modal="true" 
                           showEffect="fade" hideEffect="fade">
                     <h:form id="h2">
@@ -260,7 +276,100 @@
                         </h:panelGrid>
                     </h:form>
                 </p:dialog>
+                <p:dialog id="dialog3" header="Administración de recursos" 
+                          widgetVar="Drecurso2" modal="true" onHide="nuevoRecurso();"
+                          showEffect="fade" hideEffect="fade" resizable="false" 
+                          style="width: 90%;">
+                    <h:form id="h3">
+                        <p:tab id="init" title="Información Recursos">
+                            <p:panel header="Información Recursos">
+                                <h:panelGrid columns="1">
+                                    <h:panelGrid columns="4" cellspacing="10px">
+                                        <p:outputLabel for="tiporecurso" value="Tipo Recurso" rendered="#{recursoController.verTipos}"/>
+                                        <p:selectOneMenu id="tiporecurso" value="#{recursoController.tr}"
+                                                         rendered="#{recursoController.verTipos}" 
+                                                         disabled="#{!recursoController.editarTipo}"
+                                                         converter="omnifaces.SelectItemsConverter">
+                                            <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
+                                            <f:selectItems var="tr" itemLabel="#{tr.tipoRecursoNombre}" 
+                                                           itemValue="#{tr}" 
+                                                           value="#{recursoController.tiporecursolist}"/>                                                    
+                                            <p:ajax event="itemSelect" listener="#{recursoController.tipoRecursoSelect}"/>
+                                        </p:selectOneMenu>
 
+                                        <p:outputLabel value="ID" for="idrecurso" />
+                                        <p:inputText id="idrecurso" value="#{recursoController.seleccionado.idrecurso}" 
+                                                     title="Idrecurso" required="true" disabled="#{!recursoController.editarID}"
+                                                     requiredMessage="The Idrecurso field is required."/>
+
+                                        <p:outputLabel value="Nombre:" for="nombre" />
+                                        <p:inputText id="nombre" value="#{recursoController.seleccionado.nombre}" 
+                                                     title="Nombre" required="true" 
+                                                     requiredMessage="The Nombre field is required."/>
+
+                                        <p:outputLabel value="Activo:" for="activo" />
+                                        <p:selectOneMenu id="activo" value="#{recursoController.seleccionado.activo}" 
+                                                         title="Activo" required="true" 
+                                                         requiredMessage="Es necesario seleccionar el estado">
+                                            <f:selectItem itemLabel="Activo" itemValue="true" />
+                                            <f:selectItem itemLabel="Inactivo" itemValue="false" />
+                                        </p:selectOneMenu>
+                                        <p:outputLabel for="tipocargo" value="Tipo Cargo" />
+                                        <p:selectOneMenu id="tipocargo" value="#{recursoController.tipoCargo.idtipoCargo}">
+                                            <f:selectItem itemLabel="Seleccione" itemValue=""/>
+                                            <f:selectItems var="tc" itemLabel="#{tc.nombre}" itemValue="#{tc.idtipoCargo}" 
+                                                           value="#{recursoController.tipocargolist}"/>
+                                            <p:ajax event="itemSelect" listener="#{recursoController.tipoCargoSelect}"/>
+                                        </p:selectOneMenu>
+
+                                        <p:outputLabel value="Valor:" for="valorUnitario" />
+                                        <p:inputText id="valorUnitario" 
+                                                     value="#{recursoController.seleccionado.valorUnitario}" 
+                                                     title="ValorUnitario" required="true" 
+                                                     requiredMessage="The ValorUnitario field is required."/>
+
+                                        <p:outputLabel value="Estado" for="estado" />
+                                        <p:selectOneMenu id="estado" value="#{recursoController.seleccionado.estadoFisico}" required="true" style="width:125px">
+                                            <f:selectItem itemLabel="Seleccione" itemValue="" noSelectionOption="true" />
+                                            <f:selectItem itemLabel="Bueno" itemValue="B" />
+                                            <f:selectItem itemLabel="Regular" itemValue="R" />
+                                        </p:selectOneMenu>
+                                        <p:outputLabel value="Tipo Valor" for="tipoValor" />
+                                        <p:selectOneMenu id="tipoValor" value="#{recursoController.seleccionado.tipoValor}" required="true" style="width:125px">
+                                            <f:selectItem itemLabel="REAL" itemValue="REAL" />
+                                            <f:selectItem itemLabel="ESTIMADO" itemValue="ESTIMADO" />
+                                        </p:selectOneMenu>
+                                        <p:outputLabel value="Modelo:" for="modelo" />
+                                        <p:inputText id="modelo" value="#{recursoController.seleccionado.modelo}" 
+                                                     title="Modelo" />
+
+                                        <p:outputLabel value="Existencias" for="numeroejemplar" />
+                                        <p:inputText id="numeroejemplar" value="#{recursoController.ejemplares}" 
+                                                     title="ejemplar" />
+                                    </h:panelGrid>
+                                    <h:panelGrid columns="2">
+                                        <h:outputLabel for="multiple" value="Formas de Reserva"/>
+                                        <p:selectCheckboxMenu id="multiple" value="#{recursoController.tiposReservas}" 
+                                                              label="Cities" multiple="true" filter="true" 
+                                                              filterMatchMode="startsWith" panelStyle="width:250px" 
+                                                              required="true" 
+                                                              requiredMessage="Debe seleccionar al menos un tipo">
+                                            <f:selectItems value="#{recursoController.listaTipoReserva}" var="trr" 
+                                                           itemLabel="#{trr.tipoReservaNombre}" 
+                                                           itemValue="#{trr.idtipoReserva}" />
+                                        </p:selectCheckboxMenu>
+                                    </h:panelGrid>
+                                </h:panelGrid>
+                                <p:commandButton actionListener="#{recursoController.agregarRecurso()}" 
+                                                 oncomplete="PF('Drecurso2').hide()"
+                                                 value="Agregar al inventario" icon="pi pi-save" 
+                                                 update="form:recurso form0:msgs"/>
+                            </p:panel>
+                        </p:tab>
+
+                    </h:form>
+
+                </p:dialog>
             </ui:define>
         </ui:composition>
     </body>

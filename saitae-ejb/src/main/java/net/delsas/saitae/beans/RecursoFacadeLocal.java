@@ -29,5 +29,13 @@ public interface RecursoFacadeLocal {
     List<Recurso> findRange(int[] range);
 
     int count();
-    
+
+    /**
+     * Devuelve lista de recursos con el tipo de recurso especificado.
+     *
+     * @param tipoRecurso
+     * @return java.util.List net.delsas.saitae.entities.Recurso
+     */
+    public List<Recurso> findByTipoRecurso(Integer tipoRecurso);
+
 }

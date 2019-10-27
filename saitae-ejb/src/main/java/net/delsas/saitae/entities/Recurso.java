@@ -39,7 +39,9 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Recurso.findByEstadoFisico", query = "SELECT r FROM Recurso r WHERE r.estadoFisico = :estadoFisico")
     , @NamedQuery(name = "Recurso.findByTipoValor", query = "SELECT r FROM Recurso r WHERE r.tipoValor = :tipoValor")
     , @NamedQuery(name = "Recurso.findByModelo", query = "SELECT r FROM Recurso r WHERE r.modelo = :modelo")
-    , @NamedQuery(name = "Recurso.findByRecursoComentarios", query = "SELECT r FROM Recurso r WHERE r.recursoComentarios = :recursoComentarios")})
+    , @NamedQuery(name = "Recurso.findByRecursoComentarios", query = "SELECT r FROM Recurso r WHERE r.recursoComentarios = :recursoComentarios")
+    , @NamedQuery(name = "Recurso.findByTipoRecurso", query = "SELECT r FROM Recurso r WHERE r.idTipoRecurso.idtipoRecurso = :tipoRecurso")
+})
 public class Recurso implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -287,5 +289,5 @@ public class Recurso implements Serializable {
     public String toString() {
         return "net.delsas.saitae.entities.Recurso[ idrecurso=" + idrecurso + " ]";
     }
-    
+
 }

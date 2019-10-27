@@ -433,14 +433,14 @@ public class TipoController implements Serializable {
     public void onRowEdit(RowEditEvent event) {
         FacesMessage msg = null;
         try {
-            String titulo = "", mensaje = "", id = event.getComponent().getClientId();
+            String titulo = "", mensaje = "", id = event.getComponent().getId();
             switch (id) {
-                case "form:tw:recurso":
+                case "recurso":
                     tipoRecursoFL.edit((TipoRecurso) event.getObject());
                     titulo = "Tipo de recurso";
                     mensaje = ((TipoRecurso) event.getObject()).getTipoRecursoNombre();
                     break;
-                case "form:tw:tp1":
+                case "tp1":
                     TipoPermiso name = (TipoPermiso) event.getObject();
                     tpfl.edit(name);
                     titulo = "Tipo de Permiso";
@@ -448,95 +448,95 @@ public class TipoController implements Serializable {
                     tipoPersona = new TipoPersona(0);
                     onItemSelect(null);
                     break;
-                case "form:tw:cargo":
+                case "cargo":
                     TipoCargo tc = (TipoCargo) event.getObject();
                     tipoCargoFL.edit(tc);
                     titulo = "Tipo Cargo";
                     mensaje = tc.getNombre();
                     break;
-                case "form:tw:nombramiento":
+                case "nombramiento":
                     tipoNombramientoFL.edit((TipoNombramiento) event.getObject());
                     titulo = "Tipo Nombramiento";
                     mensaje = ((TipoNombramiento) event.getObject()).getTipoNombramientoNombre();
                     break;
-                case "form:tw:zona":
+                case "zona":
                     zfl.edit((Zona) event.getObject());
                     titulo = "Zona";
                     mensaje = ((Zona) event.getObject()).getZonaNombre();
                     break;
-                case "form:tw:reserva":
+                case "reserva":
                     tipoReservaFL.edit((TipoReserva) event.getObject());
                     titulo = "Tipo Reserva";
                     mensaje = ((TipoReserva) event.getObject()).getTipoReservaNombre();
                     break;
-                case "form:tw:tipomateria":
+                case "tipomateria":
                     TipoMateria m = (TipoMateria) event.getObject();
                     tipoMateriaFL.edit(m);
                     titulo = "Tipo de Materia";
                     mensaje = m.getTipoMateriaNombre();
                     break;
-                case "form:tw:materia":
+                case "materia":
                     Materia ma = (Materia) event.getObject();
                     ma.setTipoMateria(tipoMateriaFL.find(ma.getTipoMateria().getIdtipoMateria()));
                     materiaFL.edit(ma);
                     titulo = "Materia";
                     mensaje = ma.getMateriaNombre();
                     break;
-                case "form:tw:aula":
+                case "aula":
                     Aula a = (Aula) event.getObject();
                     a.setZonaAula(zfl.find(a.getZonaAula().getIdzona()));
                     afl.edit(a);
                     titulo = "Aula";
                     mensaje = "Aula N° " + a.getIdaula();
                     break;
-                case "form:tw:autor":
+                case "autor":
                     Autor au = (Autor) event.getObject();
                     autorFL.edit(au);
                     titulo = "Autor";
                     mensaje = au.getAutorNombre();
                     break;
-                case "form:tw:cargo1":
+                case "cargo1":
                     Cargo c = (Cargo) event.getObject();
                     cargoFL.edit(c);
                     titulo = "Cargo";
                     mensaje = c.getCargoNombre();
                     break;
-                case "form:tw:categoria":
+                case "categoria":
                     Categoria ca = (Categoria) event.getObject();
                     categoriaFL.edit(ca);
                     titulo = "Editorial";
                     mensaje = ca.getCategoriaNombre();
                     break;
-                case "form:tw:editorial":
+                case "editorial":
                     Editorial e = (Editorial) event.getObject();
                     editorialFL.edit(e);
                     mensaje = e.getEditorialNombre();
                     break;
-                case "form:tw:horario":
+                case "horario":
                     Horario h = (Horario) event.getObject();
                     horarioFL.edit(h);
                     titulo = "Horario";
                     mensaje = "Horario Agregado";
                     break;
-                case "form:tw:tabla1:financiamiento":
+                case "financiamiento":
                     Financiamiento f = (Financiamiento) event.getObject();
                     financiamientoFL.edit(f);
                     titulo = "Fianciamiento";
                     mensaje = f.getFinanciamientoNombre();
                     break;
-                case "form:tw:especialidades:especialidades":
+                case "especialidades":
                     TipoEspecialidades es = (TipoEspecialidades) event.getObject();
                     tipoeFL.edit(es);
                     titulo = "Tipo De Especialidades";
                     mensaje = es.getTipoEspecialidadesNombre();
                     break;
-                case "form:tw:sueldos:sueldos":
+                case "sueldos:sueldos":
                     TipoSueldos s = (TipoSueldos) event.getObject();
                     tiposFL.edit(s);
                     titulo = "Tipo De Sueldo";
                     mensaje = s.getTipoSueldoNombre();
                     break;
-                case "form:tw:grado":
+                case "grado":
                     Grado g = (Grado) event.getObject();
                     g.setAulaGrado(afl.find(g.getAulaGrado().getIdaula()));
                     g.setGradoMaestroGuia(g.getGradoMaestroGuia() == null
@@ -563,79 +563,79 @@ public class TipoController implements Serializable {
     }
 
     public void onRowCancel(RowEditEvent event) {
-        String mensaje = "", id = event.getComponent().getClientId();
+        String mensaje = "", id = event.getComponent().getId();
         switch (id) {
-            case "form:tw:recurso":
+            case "recurso":
                 TipoRecurso z = ((TipoRecurso) event.getObject());
                 if (z.getTipoRecursoNombre() == null || z.getTipoRecursoNombre().isEmpty()) {
                     recursos.remove(z);
                 }
                 mensaje = z.getTipoRecursoNombre();
                 break;
-            case "form:tw:tp1":
+            case "tp1":
                 TipoPermiso tp1 = (TipoPermiso) event.getObject();
                 if (tp1.getTipoPermisoNombre() == null || tp1.getTipoPermisoNombre().isEmpty()) {
                     all.remove(tp1);
                 }
                 mensaje = tp1.getTipoPermisoNombre();
                 break;
-            case "form:tw:cargo":
+            case "cargo":
                 TipoCargo tc = (TipoCargo) event.getObject();
                 if (tc.getNombre() == null || tc.getNombre().isEmpty()) {
                     cargos.remove(tc);
                 }
                 mensaje = tc.getNombre();
                 break;
-            case "form:tw:persona":
+            case "persona":
                 TipoPersona tp = (TipoPersona) event.getObject();
                 if (tp.getTipoPersonaNombre() == null || tp.getTipoPersonaNombre().isEmpty()) {
                     Personas.remove(tp);
                 }
                 mensaje = tp.getTipoPersonaNombre();
                 break;
-            case "form:tw:zona":
+            case "zona":
                 Zona zon = (Zona) event.getObject();
                 if (zon.getZonaNombre() == null || zon.getZonaNombre().isEmpty()) {
                     zonas.remove(zon);
                 }
                 mensaje = zon.getZonaNombre();
                 break;
-            case "form:tw:reserva":
+            case "reserva":
                 TipoReserva res = (TipoReserva) event.getObject();
                 if (res.getTipoReservaNombre() == null || res.getTipoReservaNombre().isEmpty()) {
                     reservas.remove(res);
                 }
                 mensaje = res.getTipoReservaNombre();
                 break;
-            case "form:tw:tipomateria":
+            case "tipomateria":
                 TipoMateria m = (TipoMateria) event.getObject();
                 if (m.getTipoMateriaNombre() == null || m.getTipoMateriaNombre().isEmpty()) {
                     tipoMaterias.remove(m);
                 }
                 mensaje = m.getTipoMateriaNombre();
                 break;
-            case "form:tw:materia":
+            case "materia":
                 Materia ma = (Materia) event.getObject();
                 if (ma.getMateriaNombre() == null || ma.getMateriaNombre().isEmpty()) {
                     materias.remove(ma);
                 }
                 mensaje = ma.getMateriaNombre();
                 break;
-            case "form:tw:aula":
+            case "aula":
                 Aula a = (Aula) event.getObject();
                 if (a.getZonaAula().getIdzona() == null || a.getZonaAula().getIdzona() == 0) {
                     aulas.remove(aulas.indexOf(a));
                 }
                 mensaje = "Aula N° " + a.getIdaula();
                 break;
-            case "form:tw:autor":
+            case "autor":
                 Autor au = (Autor) event.getObject();
                 if (au.getAutorNombre() == null || au.getAutorNombre().isEmpty()) {
                     autor.remove(au);
                 }
                 mensaje = au.getAutorNombre();
                 break;
-            case "form:tw:cargo1":
+            case "cargo1":
                 Cargo c = (Cargo) event.getObject();
                 if (c.getCargoNombre() == null || c.getCargoNombre().isEmpty()) {
                     cargo.remove(c);
@@ -643,49 +643,49 @@ public class TipoController implements Serializable {
                 mensaje = c.getCargoNombre();
                 break;
 
-            case "form:tw:categoria":
+            case "categoria":
                 Categoria ca = (Categoria) event.getObject();
                 if (ca.getCategoriaNombre() == null || ca.getCategoriaNombre().isEmpty()) {
                     categoria.remove(ca);
                 }
                 mensaje = ca.getCategoriaNombre();
                 break;
-            case "form:tw:editorial":
+            case "editorial":
                 Editorial e = (Editorial) event.getObject();
                 if (e.getEditorialNombre() == null || e.getEditorialNombre().isEmpty()) {
                     editorial.remove(e);
                 }
                 mensaje = e.getEditorialNombre();
                 break;
-            case "form:tw:horario":
+            case "horario":
                 Horario h = (Horario) event.getObject();
                 if (h.getHoraInicio() == null && h.getHoraFin() == null) {
                     horario.remove(h);
                 }
                 mensaje = "Horario Cancelado";
                 break;
-            case "form:tw:tabla1:financiamiento":
+            case "financiamiento":
                 Financiamiento f = (Financiamiento) event.getObject();
                 if (f.getFinanciamientoNombre() == null | f.getFinanciamientoNombre().isEmpty()) {
                     financiamientos.remove(f);
                 }
                 mensaje = "Financiamiento";
                 break;
-            case "form:tw:especialidades:especialidades":
+            case "especialidades":
                 TipoEspecialidades es = (TipoEspecialidades) event.getObject();
                 if (es.getTipoEspecialidadesNombre() == null | es.getTipoEspecialidadesNombre().isEmpty()) {
                     tipoE.remove(es);
                 }
                 mensaje = "Tipo De Especialidades";
                 break;
-            case "form:tw:sueldos:sueldos":
+            case "sueldos":
                 TipoSueldos s = (TipoSueldos) event.getObject();
                 if (s.getTipoSueldoNombre() == null | s.getTipoSueldoNombre().isEmpty()) {
                     tipoS.remove(s);
                 }
                 mensaje = "Tipo De Sueldo";
                 break;
-            case "form:tw:grado":
+            case "grado":
                 Grado g = (Grado) event.getObject();
                 if (g.getGradoPK().getIdgrado() == 0 | g.getGradoPK().getGradoModalidad().isEmpty()
                         | g.getGradoPK().getGradoSeccion().isEmpty() | g.getAulaGrado().getIdaula() == 0) {
