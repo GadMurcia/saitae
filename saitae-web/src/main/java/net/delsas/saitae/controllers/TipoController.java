@@ -552,7 +552,7 @@ public class TipoController implements Serializable {
                     System.out.println(id);
             }
             init();
-            PrimeFaces.current().ajax().update(id);
+            PrimeFaces.current().ajax().update(event.getComponent().getClientId());
             enviarNotificación(titulo + " Editado", mensaje);
             msg = new FacesMessage(titulo + " Editado", mensaje);
         } catch (Exception e) {
