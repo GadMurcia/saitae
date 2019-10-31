@@ -134,7 +134,7 @@ public class administradorController implements Serializable {
 
     public void guardar() {
         try {
-            adm.setPersonaContrasenya(DigestUtils.md5Hex(adm.getIdpersona() + ""));
+            adm.setPersonaContrasenya(DigestUtils.md5Hex(adm.getIdpersona().toString().substring(1)));
             pfl.edit(adm);
             String a = (!adm.getPersonaSexo() ? "El Señor " : "La Señora ") + adm.getPersonaNombre() + " "
                     + adm.getPersonaApellido() + " ha sido asignad" + (!adm.getPersonaSexo() ? "o " : "a ")

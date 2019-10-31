@@ -509,17 +509,17 @@ public class recursoController implements Serializable {
     }
 
     public void categoriaSelect(SelectEvent event) {
-        Seleccionado.setCategoria(categoriaFL.find(Integer.valueOf(event.getObject().toString())));
+        Seleccionado.setCategoria((Categoria) event.getObject());
         System.out.println("Categiría seleccionada: " + event.getObject());
     }
 
     public void paisSelect(SelectEvent event) {
-        Seleccionado.setPais(paisFL.find(Integer.valueOf(event.getObject().toString())));
+        Seleccionado.setPais((Pais) event.getObject());
         System.out.println("Pais seleccionado: " + event.getObject());
     }
 
     public void tipoCargoSelect(SelectEvent event) {
-        Seleccionado.setTipoCargo(tipocargoFL.find(Integer.valueOf(event.getObject().toString())));
+        Seleccionado.setTipoCargo((TipoCargo) event.getObject());
         System.out.println("Tipo Cargo seleccionado: " + event.getObject());
     }
 
