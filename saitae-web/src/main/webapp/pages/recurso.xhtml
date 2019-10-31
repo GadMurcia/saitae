@@ -315,9 +315,10 @@
                                             <f:selectItem itemLabel="Inactivo" itemValue="false" />
                                         </p:selectOneMenu>
                                         <p:outputLabel for="tipocargo" value="Tipo Cargo" />
-                                        <p:selectOneMenu id="tipocargo" value="#{recursoController.tipoCargo.idtipoCargo}">
-                                            <f:selectItem itemLabel="Seleccione" itemValue=""/>
-                                            <f:selectItems var="tc" itemLabel="#{tc.nombre}" itemValue="#{tc.idtipoCargo}" 
+                                        <p:selectOneMenu id="tipocargo" value="#{recursoController.tipoCargo}"
+                                                         converter="omnifaces.SelectItemsConverter">
+                                            <f:selectItem itemLabel="Seleccione" itemValue="#{null}"/>
+                                            <f:selectItems var="tc" itemLabel="#{tc.nombre}" itemValue="#{tc}" 
                                                            value="#{recursoController.tipocargolist}"/>
                                             <p:ajax event="itemSelect" listener="#{recursoController.tipoCargoSelect}"/>
                                         </p:selectOneMenu>
