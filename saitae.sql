@@ -35,7 +35,7 @@ CREATE TABLE `acceso` (
   UNIQUE KEY `idacceso_UNIQUE` (`idacceso`),
   KEY `fk_acceso_1_idx` (`accesoIndice`),
   CONSTRAINT `fk_acceso_1` FOREIGN KEY (`accesoIndice`) REFERENCES `acceso` (`idacceso`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -44,7 +44,7 @@ CREATE TABLE `acceso` (
 
 LOCK TABLES `acceso` WRITE;
 /*!40000 ALTER TABLE `acceso` DISABLE KEYS */;
-INSERT INTO `acceso` VALUES (9,'Configuración',NULL,'#','fa fa-cog'),(10,'Administración',9,'tipopp.intex','pi pi-folder-open'),(11,'Permisos y Licencias',9,'lictp.intex','pi pi-th-large'),(12,'Académica',9,'academico.intex','fa fa-leaf'),(13,'Perfil',NULL,'#','pi pi-user'),(14,'Permisos',NULL,'#','pi pi-eye'),(15,'Solicitar Permiso',14,'permisoE.intex','pi pi-briefcase'),(16,'Personal',NULL,'#','pi pi-users'),(17,'Agregar Maestro',27,'agregacion.intex','pi pi-user-plus'),(18,'Agregar Administrador',16,'agAdm.intex','pi pi-plus'),(19,'Plantel Institucional',35,'plantel.intex','pi pi-table'),(20,'Inventario',23,'inventario.intex','fa fa-barcode'),(21,'Libros',23,'libros.intex','fa fa-book'),(22,'Nuevo Ingreso',36,'inscripcion.intex','pi pi-user'),(23,'Recursos',9,'#','fa fa-yelp'),(24,'Nomina de Alumnos',36,'nominaA.intex','pi pi-user'),(25,'Administración de Recursos',23,'recurso.intex','fa fa-table'),(26,'Lista de Representantes',35,'listaRepresentantes.intex','pi pi-list'),(27,'Maestros',16,'#','fa fa-puzzle-piece'),(28,'Asignación de materias',27,'horario.intex','pi pi-plus'),(29,'Administración de permisos',14,'permiso.intex','fa fa-legal'),(30,'Solicitud de permisos',14,'permisoM.intex','fa fa-ge'),(31,'Administrador de anuncios',9,'anuncios.intex','fa fa-bell'),(32,'Matricula',36,'matricula.intex','fa fa-slideshare'),(33,'Entrega de Útiles',36,'paquetes.intex','fa fa-sliders'),(34,'Contribuciones',36,'contribuciones.intex','fa fa-money'),(35,'Listados',16,'#','fa fa-list-ul'),(36,'Alumnos',16,'#','fa fa-graduation-cap'),(37,'Reservas de Equipo',NULL,'#','fa fa-gamepad');
+INSERT INTO `acceso` VALUES (9,'Configuración',NULL,'#','fa fa-cog'),(10,'Administración',9,'tipopp.intex','pi pi-folder-open'),(11,'Permisos y Licencias',9,'lictp.intex','pi pi-th-large'),(12,'Académica',9,'academico.intex','fa fa-leaf'),(13,'Perfil',NULL,'#','pi pi-user'),(14,'Permisos',NULL,'#','pi pi-eye'),(15,'Solicitar Permiso',14,'permisoE.intex','pi pi-briefcase'),(16,'Personal',NULL,'#','pi pi-users'),(17,'Agregar Maestro',27,'agregacion.intex','pi pi-user-plus'),(18,'Agregar Administrador',16,'agAdm.intex','pi pi-plus'),(19,'Plantel Institucional',35,'plantel.intex','pi pi-table'),(20,'Inventario',23,'inventario.intex','fa fa-barcode'),(21,'Libros',23,'libros.intex','fa fa-book'),(22,'Nuevo Ingreso',36,'inscripcion.intex','pi pi-user'),(23,'Recursos',9,'#','fa fa-yelp'),(24,'Nomina de Alumnos',36,'nominaA.intex','pi pi-user'),(25,'Administración de Recursos',23,'recurso.intex','fa fa-table'),(26,'Lista de Representantes',35,'listaRepresentantes.intex','pi pi-list'),(27,'Maestros',16,'#','fa fa-puzzle-piece'),(28,'Asignación de materias',27,'horario.intex','pi pi-plus'),(29,'Administración de permisos',14,'permiso.intex','fa fa-legal'),(30,'Solicitud de permisos',14,'permisoM.intex','fa fa-ge'),(31,'Administrador de anuncios',9,'anuncios.intex','fa fa-bell'),(32,'Matricula',36,'matricula.intex','fa fa-slideshare'),(33,'Entrega de Útiles',36,'paquetes.intex','fa fa-sliders'),(34,'Contribuciones',36,'contribuciones.intex','fa fa-money'),(35,'Listados',16,'#','fa fa-list-ul'),(36,'Alumnos',16,'#','fa fa-graduation-cap'),(37,'Reservas de Equipo',NULL,'#','fa fa-gamepad'),(38,'Solicitud de Reserva',37,'solicitudR.intex','fa fa-flag'),(39,'Historial de Reservas',37,'solicitudH.intex','fa fa-archive');
 /*!40000 ALTER TABLE `acceso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -72,7 +72,7 @@ CREATE TABLE `accesoTipoPersona` (
 
 LOCK TABLES `accesoTipoPersona` WRITE;
 /*!40000 ALTER TABLE `accesoTipoPersona` DISABLE KEYS */;
-INSERT INTO `accesoTipoPersona` VALUES (9,1,''),(9,2,''),(9,3,''),(9,5,''),(9,7,''),(10,1,''),(10,2,''),(10,6,''),(11,1,''),(11,2,''),(11,3,''),(12,1,''),(12,2,''),(14,1,''),(14,2,''),(14,3,''),(14,4,''),(14,5,''),(14,6,''),(14,7,''),(14,8,''),(14,9,''),(14,12,''),(14,13,''),(14,14,''),(15,8,''),(15,9,''),(16,1,''),(16,2,''),(16,3,''),(16,4,''),(16,12,''),(16,13,''),(17,1,''),(17,2,''),(18,1,''),(18,2,''),(19,1,''),(19,2,''),(19,3,''),(19,13,''),(20,1,''),(20,2,''),(20,5,''),(20,6,''),(20,7,''),(21,1,''),(21,2,''),(21,5,''),(22,1,''),(22,2,''),(22,3,''),(22,13,''),(23,1,''),(23,2,''),(23,5,''),(23,6,''),(23,7,''),(24,1,''),(24,2,''),(24,3,''),(24,4,''),(24,13,''),(25,1,''),(25,2,''),(25,5,''),(25,6,''),(25,7,''),(26,1,''),(26,2,''),(26,3,''),(26,4,''),(26,13,''),(27,1,''),(27,2,''),(28,1,''),(28,2,''),(29,1,''),(29,2,''),(29,3,''),(30,1,''),(30,2,''),(30,3,''),(30,4,''),(30,5,''),(30,6,''),(30,7,''),(30,12,''),(30,13,''),(30,14,''),(31,1,''),(31,2,''),(31,3,''),(31,4,''),(31,5,''),(31,6,''),(31,7,''),(31,13,''),(32,1,''),(32,2,''),(32,13,''),(33,1,''),(33,2,''),(33,12,''),(34,1,''),(34,2,''),(34,12,''),(35,1,''),(35,2,''),(35,3,''),(35,4,''),(35,13,''),(36,1,''),(36,2,''),(36,3,''),(36,4,''),(36,13,''),(37,1,''),(37,2,''),(37,3,''),(37,4,''),(37,5,''),(37,6,''),(37,7,''),(37,8,''),(37,13,''),(37,14,'');
+INSERT INTO `accesoTipoPersona` VALUES (9,1,''),(9,2,''),(9,3,''),(9,5,''),(9,6,''),(9,7,''),(10,1,''),(10,2,''),(11,1,''),(11,2,''),(11,3,''),(12,1,''),(12,2,''),(14,1,''),(14,2,''),(14,3,''),(14,4,''),(14,5,''),(14,6,''),(14,7,''),(14,8,''),(14,9,''),(14,12,''),(14,13,''),(14,14,''),(14,15,''),(15,8,''),(15,9,''),(16,1,''),(16,2,''),(16,3,''),(16,4,''),(16,12,''),(16,13,''),(17,1,''),(17,2,''),(18,1,''),(18,2,''),(19,1,''),(19,2,''),(19,3,''),(19,13,''),(20,1,''),(20,2,''),(20,5,''),(20,6,''),(20,7,''),(21,1,''),(21,2,''),(21,5,''),(22,1,''),(22,2,''),(22,3,''),(22,13,''),(23,1,''),(23,2,''),(23,5,''),(23,6,''),(23,7,''),(24,1,''),(24,2,''),(24,3,''),(24,4,''),(24,13,''),(25,1,''),(25,2,''),(25,5,''),(25,6,''),(25,7,''),(26,1,''),(26,2,''),(26,3,''),(26,4,''),(26,13,''),(27,1,''),(27,2,''),(28,1,''),(28,2,''),(29,1,''),(29,2,''),(29,3,''),(30,1,''),(30,2,''),(30,3,''),(30,4,''),(30,5,''),(30,6,''),(30,7,''),(30,12,''),(30,13,''),(30,14,''),(30,15,''),(31,1,''),(31,2,''),(31,3,''),(31,4,''),(31,5,''),(31,6,''),(31,7,''),(31,13,''),(32,1,''),(32,2,''),(32,13,''),(33,1,''),(33,2,''),(33,12,''),(34,1,''),(34,2,''),(34,12,''),(35,1,''),(35,2,''),(35,3,''),(35,4,''),(35,13,''),(36,1,''),(36,2,''),(36,3,''),(36,4,''),(36,13,''),(37,1,''),(37,2,''),(37,3,''),(37,4,''),(37,5,''),(37,6,''),(37,7,''),(37,8,''),(37,13,''),(37,14,''),(38,1,''),(38,2,''),(38,3,''),(38,4,''),(38,5,''),(38,6,''),(38,7,''),(38,8,''),(39,1,''),(39,2,''),(39,3,''),(39,4,''),(39,5,''),(39,6,''),(39,7,''),(39,8,'');
 /*!40000 ALTER TABLE `accesoTipoPersona` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -185,7 +185,7 @@ CREATE TABLE `autorLibro` (
 
 LOCK TABLES `autorLibro` WRITE;
 /*!40000 ALTER TABLE `autorLibro` DISABLE KEYS */;
-INSERT INTO `autorLibro` VALUES (1,22,''),(1,23,''),(1,555,''),(1,1258965,''),(1,14706554,''),(2,22,'');
+INSERT INTO `autorLibro` VALUES (1,5,''),(3,1,'');
 /*!40000 ALTER TABLE `autorLibro` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -235,7 +235,7 @@ CREATE TABLE `cargo` (
   PRIMARY KEY (`idcargo`),
   KEY `fk_cargo_1_idx` (`cargoTipoPersona`),
   CONSTRAINT `fk_cargo_1` FOREIGN KEY (`cargoTipoPersona`) REFERENCES `tipoPersona` (`idtipoPersona`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -244,7 +244,7 @@ CREATE TABLE `cargo` (
 
 LOCK TABLES `cargo` WRITE;
 /*!40000 ALTER TABLE `cargo` DISABLE KEYS */;
-INSERT INTO `cargo` VALUES (1,'Director',2,''),(2,'Subdirector',3,''),(3,'Coordinador de área bibliográfica',5,''),(4,'Coordinador de área Informática',6,''),(5,'Psicólogo',14,'');
+INSERT INTO `cargo` VALUES (1,'Director',2,''),(2,'Subdirector',3,''),(3,'Coordinador de área bibliográfica',5,''),(4,'Coordinador de área Informática',6,''),(5,'Psicólogo',14,''),(6,'Coordinador de laboratorio de CC.NN',7,NULL);
 /*!40000 ALTER TABLE `cargo` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -363,7 +363,7 @@ CREATE TABLE `contenidoLibro` (
 
 LOCK TABLES `contenidoLibro` WRITE;
 /*!40000 ALTER TABLE `contenidoLibro` DISABLE KEYS */;
-INSERT INTO `contenidoLibro` VALUES (22,'1',1,0,NULL),(22,'2',1,0,NULL),(22,'3',1,0,NULL),(23,'lop',1,0,NULL),(23,'lop',2,0,NULL),(555,'89',1,0,NULL),(14706554,'blavla',0,0,'');
+INSERT INTO `contenidoLibro` VALUES (1,'455454',1,0,NULL),(1,'7878454545',2,0,NULL),(5,'5ĺ+kṕk',3,0,NULL),(5,'nhsdfhsgfdgsl',8,0,NULL);
 /*!40000 ALTER TABLE `contenidoLibro` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -543,7 +543,7 @@ CREATE TABLE `editorialLibro` (
 
 LOCK TABLES `editorialLibro` WRITE;
 /*!40000 ALTER TABLE `editorialLibro` DISABLE KEYS */;
-INSERT INTO `editorialLibro` VALUES (1,22,''),(1,23,''),(1,555,''),(1,1258965,''),(1,14706554,''),(2,22,'');
+INSERT INTO `editorialLibro` VALUES (1,1,''),(1,5,''),(2,5,'');
 /*!40000 ALTER TABLE `editorialLibro` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -570,7 +570,7 @@ CREATE TABLE `ejemplar` (
 
 LOCK TABLES `ejemplar` WRITE;
 /*!40000 ALTER TABLE `ejemplar` DISABLE KEYS */;
-INSERT INTO `ejemplar` VALUES (1,1,2019,''),(1,2,2019,''),(1,3,2019,''),(20,20,2019,''),(20,21,2019,''),(22,22,2019,''),(22,23,2019,''),(22,24,2019,''),(22,25,2019,''),(22,26,2019,''),(23,23,2019,''),(23,24,2019,''),(23,25,2019,''),(23,26,2019,''),(23,27,2019,''),(70,70,2019,''),(70,71,2019,''),(70,72,2019,''),(70,73,2019,''),(70,74,2019,''),(70,75,2019,''),(70,76,2019,''),(555,555,2019,''),(555,556,2019,''),(555,557,2019,''),(555,558,2019,''),(555,559,2019,''),(2212,2212,2019,''),(2212,2213,2019,''),(2212,2214,2019,''),(2212,2215,2019,''),(2212,2216,2019,''),(2212,2217,2019,''),(2212,2218,2019,''),(2212,2219,2019,''),(7030,7030,2019,''),(7030,7031,2019,''),(7030,7032,2019,''),(7030,7033,2019,''),(7030,7034,2019,''),(1258965,1258965,2019,''),(14706554,14706554,2019,''),(14706554,14706555,2019,'');
+INSERT INTO `ejemplar` VALUES (1,1,2019,''),(1,2,2019,''),(2,2,2019,''),(3,3,2019,''),(4,4,2019,''),(5,5,2019,''),(5,6,2019,''),(6,6,2019,''),(6,7,2019,''),(6,8,2019,''),(6,9,2019,''),(6,10,2019,''),(6,11,2019,''),(6,12,2019,''),(6,13,2019,''),(6,14,2019,''),(6,15,2019,'');
 /*!40000 ALTER TABLE `ejemplar` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -895,7 +895,7 @@ CREATE TABLE `maestoCargo` (
 
 LOCK TABLES `maestoCargo` WRITE;
 /*!40000 ALTER TABLE `maestoCargo` DISABLE KEYS */;
-INSERT INTO `maestoCargo` VALUES (1045367080,1,1,1,'2019-10-20',NULL,NULL,NULL),(1045367080,2,1,1,'2019-10-20',NULL,NULL,NULL);
+INSERT INTO `maestoCargo` VALUES (1045367080,6,1,2,'2019-10-20',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `maestoCargo` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1079,7 +1079,7 @@ CREATE TABLE `notificaciones` (
 
 LOCK TABLES `notificaciones` WRITE;
 /*!40000 ALTER TABLE `notificaciones` DISABLE KEYS */;
-INSERT INTO `notificaciones` VALUES ('2019-10-20 21:32:51',1045367080,1045367073,'Relevación de Cargo','Ha sido relevado de su cargo como Subdirector Por Guillermo Delsas','',''),('2019-10-20 21:33:38',1045367080,1045367073,'Asignación de Cargo','Guillermo Delsas le ha asignado el cargo de Subdirector','',''),('2019-10-20 21:34:11',1045367080,1045367073,'Relevación de Cargo','Ha sido relevado de su cargo como Subdirector Por Guillermo Delsas','',''),('2019-10-20 21:34:49',1045367080,1045367073,'Asignación de Cargo','Guillermo Delsas le ha asignado el cargo de Director','',''),('2019-10-20 21:35:30',1045367080,1045367073,'Asignación de Cargo','Guillermo Delsas le ha asignado el cargo de Subdirector','',''),('2019-10-20 21:36:04',1045367080,16018,'Solicitud de permiso nueva','Estudiante1 Nombre Apellido estudiante1 ha solicitado un nuevo permiso.','',''),('2019-10-20 21:36:37',16018,1045367080,'Rechado de permiso','Mestro1 Nombre Apellido Maestro1 ha rechazado su solicitud de permiso ','',''),('2019-10-20 21:37:13',1045367080,16018,'Solicitud de permiso nueva','Estudiante1 Nombre Apellido estudiante1 ha solicitado un nuevo permiso.','',''),('2019-10-20 21:37:31',16018,1045367080,'Aceptación de permiso','Mestro1 Nombre Apellido Maestro1 ha aceptado su solicitud de permiso ','\0',''),('2019-10-20 21:38:07',1045367080,1045367073,'Solicitud de permiso nueva','Guillermo Delsas ha solicitado un nuevo permiso.','',''),('2019-10-20 21:38:22',1045367073,1045367080,'Aceptación de permiso','Mestro1 Nombre Apellido Maestro1 ha aceptado su solicitud de permiso ','',''),('2019-10-20 21:39:07',1045367080,1045367073,'Solicitud de permiso nueva','Guillermo Delsas ha solicitado un nuevo permiso.','\0',''),('2019-10-20 21:39:25',1045367073,1045367080,'Rechado de permiso','Mestro1 Nombre Apellido Maestro1 ha rechazado su solicitud de permiso ','','');
+INSERT INTO `notificaciones` VALUES ('2019-10-20 21:32:51',1045367080,1045367073,'Relevación de Cargo','Ha sido relevado de su cargo como Subdirector Por Guillermo Delsas','',''),('2019-10-20 21:33:38',1045367080,1045367073,'Asignación de Cargo','Guillermo Delsas le ha asignado el cargo de Subdirector','',''),('2019-10-20 21:34:11',1045367080,1045367073,'Relevación de Cargo','Ha sido relevado de su cargo como Subdirector Por Guillermo Delsas','',''),('2019-10-20 21:34:49',1045367080,1045367073,'Asignación de Cargo','Guillermo Delsas le ha asignado el cargo de Director','',''),('2019-10-20 21:35:30',1045367080,1045367073,'Asignación de Cargo','Guillermo Delsas le ha asignado el cargo de Subdirector','',''),('2019-10-20 21:36:04',1045367080,16018,'Solicitud de permiso nueva','Estudiante1 Nombre Apellido estudiante1 ha solicitado un nuevo permiso.','',''),('2019-10-20 21:36:37',16018,1045367080,'Rechado de permiso','Mestro1 Nombre Apellido Maestro1 ha rechazado su solicitud de permiso ','',''),('2019-10-20 21:37:13',1045367080,16018,'Solicitud de permiso nueva','Estudiante1 Nombre Apellido estudiante1 ha solicitado un nuevo permiso.','',''),('2019-10-20 21:37:31',16018,1045367080,'Aceptación de permiso','Mestro1 Nombre Apellido Maestro1 ha aceptado su solicitud de permiso ','\0',''),('2019-10-20 21:38:07',1045367080,1045367073,'Solicitud de permiso nueva','Guillermo Delsas ha solicitado un nuevo permiso.','',''),('2019-10-20 21:38:22',1045367073,1045367080,'Aceptación de permiso','Mestro1 Nombre Apellido Maestro1 ha aceptado su solicitud de permiso ','',''),('2019-10-20 21:39:07',1045367080,1045367073,'Solicitud de permiso nueva','Guillermo Delsas ha solicitado un nuevo permiso.','',''),('2019-10-20 21:39:25',1045367073,1045367080,'Rechado de permiso','Mestro1 Nombre Apellido Maestro1 ha rechazado su solicitud de permiso ','',''),('2019-10-26 13:23:51',1045367080,1045367073,'Relevación de Cargo','Ha sido relevado de su cargo como Director Por Guillermo Delsas','',''),('2019-10-26 14:59:23',1045367080,1045367073,'Se ha ingresado un nuevo recurso','Guillermo Delsas ha modificado el inventario.','',''),('2019-10-26 15:00:49',1045367080,1045367073,'Relevación de Cargo','Ha sido relevado de su cargo como Subdirector Por Guillermo Delsas','',''),('2019-10-26 15:40:15',1045367080,1045367073,'Se ha ingresado un nuevo recurso','Guillermo Delsas ha modificado el inventario.','',''),('2019-10-26 15:58:54',1045367080,1045367080,'Se ha ingresado un nuevo recurso','Mestro1 Nombre Apellido Maestro1 ha modificado el inventario.','',''),('2019-10-26 16:44:54',1045367080,1045367073,'Relevación de Cargo','Ha sido relevado de su cargo como Coordinador de área Informática Por Guillermo Delsas','',''),('2019-10-26 16:52:57',1045367080,1045367073,'Relevación de Cargo','Ha sido relevado de su cargo como Coordinador de área bibliográfica Por Guillermo Delsas','',''),('2019-10-26 16:52:58',1045367080,1045367073,'Asignación de Cargo','Guillermo Delsas le ha asignado el cargo de Coordinador de laboratorio de CC.NN','','');
 /*!40000 ALTER TABLE `notificaciones` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1294,7 +1294,7 @@ CREATE TABLE `recurso` (
 
 LOCK TABLES `recurso` WRITE;
 /*!40000 ALTER TABLE `recurso` DISABLE KEYS */;
-INSERT INTO `recurso` VALUES (1,'Recurso modificado',NULL,1,1,NULL,'',0,'B','ESTIMADO','f',NULL),(20,'978987',NULL,1,1,NULL,'',0,'B','REAL','lpedr',NULL),(22,'ddddd',0,3,1,1,'\0',30.25,'B','REAL','f',NULL),(23,'hñoio',100,3,2,2,'',12.5,'B','ESTIMADO','78',NULL),(70,'7070',NULL,1,2,NULL,'',250,'B','REAL','f',NULL),(555,'yygi',0,3,1,1,'\0',15,'B','REAL','9u',NULL),(2212,'laptop2',600,1,1,1,'',250,'B','ESTIMADO','',NULL),(7030,'7030',NULL,2,2,NULL,'',1.35,'B','ESTIMADO','n/a',NULL),(1258965,'COmputadoras laptop lempita',600,3,1,7,'',350.78,'B','REAL','lpedr',NULL),(14706554,'sjhsuhihihi|',600,1,2,1,'',10,'B','ESTIMADO','wwwww','wwww');
+INSERT INTO `recurso` VALUES (1,'libro 1',100,3,1,68,'',35.12,'B','REAL','1',''),(2,'2232323',NULL,1,1,NULL,'',70,'B','REAL','875',''),(3,'3.46',NULL,1,1,NULL,'',20,'B','REAL','78',''),(4,'46546',NULL,1,2,NULL,'',70,'B','REAL','546',''),(5,'548456641646546',300,3,1,68,'',30.25,'B','REAL','7',''),(6,'654448696464',NULL,2,1,NULL,'',0,'B','ESTIMADO','','');
 /*!40000 ALTER TABLE `recurso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1550,7 +1550,7 @@ CREATE TABLE `tipoPersona` (
   `tipoPersonaNombre` varchar(45) NOT NULL,
   `tipoPersonaComentario` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idtipoPersona`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1559,7 +1559,7 @@ CREATE TABLE `tipoPersona` (
 
 LOCK TABLES `tipoPersona` WRITE;
 /*!40000 ALTER TABLE `tipoPersona` DISABLE KEYS */;
-INSERT INTO `tipoPersona` VALUES (1,'Administrador','fa fa-diamond'),(2,'Director','pi pi-circle-on'),(3,'Subdirector','pi pi-circle-off'),(4,'Maestro','fa fa-street-view'),(5,'Bibliotecario','fa fa-forumbee'),(6,'Administrador CRA','fa fa-transgender-alt'),(7,'Laboratorista','fa fa-android'),(8,'Estudiante','fa fa-child'),(9,'Representante','fa fa-user-secret'),(10,'Madre de familia',''),(11,'Padre de familia',''),(12,'Colector','fa fa-cc-mastercard'),(13,'Secretaria','fa fa-database'),(14,'Pscologo','');
+INSERT INTO `tipoPersona` VALUES (1,'Administrador','fa fa-diamond'),(2,'Director','pi pi-circle-on'),(3,'Subdirector','pi pi-circle-off'),(4,'Maestro','fa fa-street-view'),(5,'Bibliotecario','fa fa-forumbee'),(6,'Administrador CRA','fa fa-transgender-alt'),(7,'Laboratorista','fa fa-android'),(8,'Estudiante','fa fa-child'),(9,'Representante','fa fa-user-secret'),(10,'Madre de familia',''),(11,'Padre de familia',''),(12,'Colector','fa fa-cc-mastercard'),(13,'Secretaria','fa fa-database'),(14,'Psicologo',''),(15,'Ordenanza','');
 /*!40000 ALTER TABLE `tipoPersona` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1637,7 +1637,7 @@ CREATE TABLE `tipoReservaRecurso` (
 
 LOCK TABLES `tipoReservaRecurso` WRITE;
 /*!40000 ALTER TABLE `tipoReservaRecurso` DISABLE KEYS */;
-INSERT INTO `tipoReservaRecurso` VALUES (1,1,''),(1,20,''),(1,22,''),(1,23,''),(1,70,''),(1,2212,''),(1,7030,''),(1,1258965,''),(1,14706554,''),(2,1,''),(2,20,''),(2,23,''),(2,70,''),(2,555,''),(3,1,''),(3,20,''),(3,23,''),(3,70,''),(3,2212,''),(3,1258965,''),(4,20,''),(4,23,''),(4,70,'');
+INSERT INTO `tipoReservaRecurso` VALUES (1,1,''),(1,2,''),(1,3,''),(1,4,''),(1,5,''),(1,6,''),(2,1,''),(2,4,''),(2,5,'');
 /*!40000 ALTER TABLE `tipoReservaRecurso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1736,4 +1736,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-10-21 23:57:23
+-- Dump completed on 2019-10-30 22:04:28
