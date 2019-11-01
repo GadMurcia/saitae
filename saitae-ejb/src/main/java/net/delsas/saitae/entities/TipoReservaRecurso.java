@@ -28,18 +28,21 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "TipoReservaRecurso.findAll", query = "SELECT t FROM TipoReservaRecurso t")
     , @NamedQuery(name = "TipoReservaRecurso.findByTipoReserva", query = "SELECT t FROM TipoReservaRecurso t WHERE t.tipoReservaRecursoPK.tipoReserva = :tipoReserva")
     , @NamedQuery(name = "TipoReservaRecurso.findByTipoRecurso", query = "SELECT t FROM TipoReservaRecurso t WHERE t.tipoReservaRecursoPK.tipoRecurso = :tipoRecurso")
-    , @NamedQuery(name = "TipoReservaRecurso.findByTipoReservaRecursoComentario", query = "SELECT t FROM TipoReservaRecurso t WHERE t.tipoReservaRecursoComentario = :tipoReservaRecursoComentario")})
+    , @NamedQuery(name = "TipoReservaRecurso.findByTipoReservaRecursoComentario", query = "SELECT t FROM TipoReservaRecurso t WHERE t.tipoReservaRecursoComentario = :tipoReservaRecursoComentario")
+    , @NamedQuery(name = "TipoReservaRecurso.findRecursoByTipoRecursoAndTipoReserva", query = "SELECT DISTINCT t.recurso FROM TipoReservaRecurso t WHERE t.recurso.idTipoRecurso.idtipoRecurso = :tipoRecurso AND t.tipoReserva.idtipoReserva = :idTipoReserva")
+})
 public class TipoReservaRecurso implements Serializable {
+
+    @Size(max = 145)
+    @Column(name = "tipoReservaRecursoComentario")
+    private String tipoReservaRecursoComentario;
 
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected TipoReservaRecursoPK tipoReservaRecursoPK;
-    @Size(max = 145)
-    @Column(name = "tipoReservaRecursoComentario")
-    private String tipoReservaRecursoComentario;
     @JoinColumn(name = "tipoReserva", referencedColumnName = "idtipoReserva", insertable = false, updatable = false)
     @ManyToOne(optional = false)
-    private TipoReserva tipoReserva1;
+    private TipoReserva tipoReserva;
     @JoinColumn(name = "tipoRecurso", referencedColumnName = "idrecurso", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Recurso recurso;
@@ -63,20 +66,13 @@ public class TipoReservaRecurso implements Serializable {
         this.tipoReservaRecursoPK = tipoReservaRecursoPK;
     }
 
-    public String getTipoReservaRecursoComentario() {
-        return tipoReservaRecursoComentario;
+
+    public TipoReserva getTipoReserva() {
+        return tipoReserva;
     }
 
-    public void setTipoReservaRecursoComentario(String tipoReservaRecursoComentario) {
-        this.tipoReservaRecursoComentario = tipoReservaRecursoComentario;
-    }
-
-    public TipoReserva getTipoReserva1() {
-        return tipoReserva1;
-    }
-
-    public void setTipoReserva1(TipoReserva tipoReserva1) {
-        this.tipoReserva1 = tipoReserva1;
+    public void setTipoReserva(TipoReserva tipoReserva) {
+        this.tipoReserva = tipoReserva;
     }
 
     public Recurso getRecurso() {
@@ -110,6 +106,14 @@ public class TipoReservaRecurso implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.TipoReservaRecurso[ tipoReservaRecursoPK=" + tipoReservaRecursoPK + " ]";
+    }
+
+    public String getTipoReservaRecursoComentario() {
+        return tipoReservaRecursoComentario;
+    }
+
+    public void setTipoReservaRecursoComentario(String tipoReservaRecursoComentario) {
+        this.tipoReservaRecursoComentario = tipoReservaRecursoComentario;
     }
     
 }

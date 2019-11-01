@@ -38,9 +38,6 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Ejemplar.findByEjemplarComentario", query = "SELECT e FROM Ejemplar e WHERE e.ejemplarComentario = :ejemplarComentario")})
 public class Ejemplar implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected EjemplarPK ejemplarPK;
     @Basic(optional = false)
     @NotNull
     @Column(name = "ejemplarAnioDeIngreso")
@@ -48,6 +45,10 @@ public class Ejemplar implements Serializable {
     @Size(max = 145)
     @Column(name = "ejemplarComentario")
     private String ejemplarComentario;
+
+    private static final long serialVersionUID = 1L;
+    @EmbeddedId
+    protected EjemplarPK ejemplarPK;
     @JoinColumn(name = "idRecurso", referencedColumnName = "idrecurso", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Recurso recurso;
@@ -78,21 +79,6 @@ public class Ejemplar implements Serializable {
         this.ejemplarPK = ejemplarPK;
     }
 
-    public int getEjemplarAnioDeIngreso() {
-        return ejemplarAnioDeIngreso;
-    }
-
-    public void setEjemplarAnioDeIngreso(int ejemplarAnioDeIngreso) {
-        this.ejemplarAnioDeIngreso = ejemplarAnioDeIngreso;
-    }
-
-    public String getEjemplarComentario() {
-        return ejemplarComentario;
-    }
-
-    public void setEjemplarComentario(String ejemplarComentario) {
-        this.ejemplarComentario = ejemplarComentario;
-    }
 
     public Recurso getRecurso() {
         return recurso;
@@ -134,6 +120,22 @@ public class Ejemplar implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.Ejemplar[ ejemplarPK=" + ejemplarPK + " ]";
+    }
+
+    public int getEjemplarAnioDeIngreso() {
+        return ejemplarAnioDeIngreso;
+    }
+
+    public void setEjemplarAnioDeIngreso(int ejemplarAnioDeIngreso) {
+        this.ejemplarAnioDeIngreso = ejemplarAnioDeIngreso;
+    }
+
+    public String getEjemplarComentario() {
+        return ejemplarComentario;
+    }
+
+    public void setEjemplarComentario(String ejemplarComentario) {
+        this.ejemplarComentario = ejemplarComentario;
     }
     
 }

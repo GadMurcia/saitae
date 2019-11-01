@@ -20,32 +20,24 @@ public class ReservaDetallePK implements Serializable {
 
     @Basic(optional = false)
     @NotNull
-    @Column(name = "idreserva")
-    private int idreserva;
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "idRecurso")
     private int idRecurso;
     @Basic(optional = false)
     @NotNull
     @Column(name = "ejemplarCorrelativo")
     private int ejemplarCorrelativo;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "idReserva")
+    private int idReserva;
 
     public ReservaDetallePK() {
     }
 
-    public ReservaDetallePK(int idreserva, int idRecurso, int ejemplarCorrelativo) {
-        this.idreserva = idreserva;
+    public ReservaDetallePK(int idRecurso, int ejemplarCorrelativo, int idReserva) {
         this.idRecurso = idRecurso;
         this.ejemplarCorrelativo = ejemplarCorrelativo;
-    }
-
-    public int getIdreserva() {
-        return idreserva;
-    }
-
-    public void setIdreserva(int idreserva) {
-        this.idreserva = idreserva;
+        this.idReserva = idReserva;
     }
 
     public int getIdRecurso() {
@@ -64,12 +56,20 @@ public class ReservaDetallePK implements Serializable {
         this.ejemplarCorrelativo = ejemplarCorrelativo;
     }
 
+    public int getIdReserva() {
+        return idReserva;
+    }
+
+    public void setIdReserva(int idReserva) {
+        this.idReserva = idReserva;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (int) idreserva;
         hash += (int) idRecurso;
         hash += (int) ejemplarCorrelativo;
+        hash += (int) idReserva;
         return hash;
     }
 
@@ -80,13 +80,13 @@ public class ReservaDetallePK implements Serializable {
             return false;
         }
         ReservaDetallePK other = (ReservaDetallePK) object;
-        if (this.idreserva != other.idreserva) {
-            return false;
-        }
         if (this.idRecurso != other.idRecurso) {
             return false;
         }
         if (this.ejemplarCorrelativo != other.ejemplarCorrelativo) {
+            return false;
+        }
+        if (this.idReserva != other.idReserva) {
             return false;
         }
         return true;
@@ -94,7 +94,7 @@ public class ReservaDetallePK implements Serializable {
 
     @Override
     public String toString() {
-        return "net.delsas.saitae.entities.ReservaDetallePK[ idreserva=" + idreserva + ", idRecurso=" + idRecurso + ", ejemplarCorrelativo=" + ejemplarCorrelativo + " ]";
+        return "net.delsas.saitae.entities.ReservaDetallePK[ idRecurso=" + idRecurso + ", ejemplarCorrelativo=" + ejemplarCorrelativo + ", idReserva=" + idReserva + " ]";
     }
     
 }

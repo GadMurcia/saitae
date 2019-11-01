@@ -38,15 +38,18 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "MestroHorarioMaterias.findByMestroHorarioMateriasComentarios", query = "SELECT m FROM MestroHorarioMaterias m WHERE m.mestroHorarioMateriasComentarios = :mestroHorarioMateriasComentarios")
     , @NamedQuery(name = "MestroHorarioMaterias.findByHorarioAndGrado", query = "SELECT m FROM MestroHorarioMaterias m WHERE m.horario = :horario AND m.grado.gradoPK = :gradoPK AND m.diasEstudio = :dia")
     , @NamedQuery(name = "MestroHorarioMaterias.findByHorarioAndMaestro", query = "SELECT m FROM MestroHorarioMaterias m WHERE m.horario = :horario AND m.maestro = :maestro AND m.diasEstudio = :dia")
+    , @NamedQuery(name = "MestroHorarioMaterias.findMaestrosBygrado", query = "SELECT DISTINCT m.maestro FROM MestroHorarioMaterias m WHERE m.grado.gradoPK = :gradoPK")
+    , @NamedQuery(name = "MestroHorarioMaterias.findMateriasBygradoPkAndMaestroId", query = "SELECT DISTINCT m.materia FROM MestroHorarioMaterias m WHERE m.grado.gradoPK = :gradoPK AND m.maestro.idmaestro = :idMaestro")
 })
 public class MestroHorarioMaterias implements Serializable {
+
+    @Size(max = 145)
+    @Column(name = "mestroHorarioMateriasComentarios")
+    private String mestroHorarioMateriasComentarios;
 
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected MestroHorarioMateriasPK mestroHorarioMateriasPK;
-    @Size(max = 145)
-    @Column(name = "mestroHorarioMateriasComentarios")
-    private String mestroHorarioMateriasComentarios;
     @JoinColumn(name = "idMaestro", referencedColumnName = "idmaestro", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Maestro maestro;
@@ -84,14 +87,6 @@ public class MestroHorarioMaterias implements Serializable {
 
     public void setMestroHorarioMateriasPK(MestroHorarioMateriasPK mestroHorarioMateriasPK) {
         this.mestroHorarioMateriasPK = mestroHorarioMateriasPK;
-    }
-
-    public String getMestroHorarioMateriasComentarios() {
-        return mestroHorarioMateriasComentarios;
-    }
-
-    public void setMestroHorarioMateriasComentarios(String mestroHorarioMateriasComentarios) {
-        this.mestroHorarioMateriasComentarios = mestroHorarioMateriasComentarios;
     }
 
     public Maestro getMaestro() {
@@ -158,5 +153,13 @@ public class MestroHorarioMaterias implements Serializable {
     public String toString() {
         return "net.delsas.saitae.entities.MestroHorarioMaterias[ mestroHorarioMateriasPK=" + mestroHorarioMateriasPK + " ]";
     }
-    
+
+    public String getMestroHorarioMateriasComentarios() {
+        return mestroHorarioMateriasComentarios;
+    }
+
+    public void setMestroHorarioMateriasComentarios(String mestroHorarioMateriasComentarios) {
+        this.mestroHorarioMateriasComentarios = mestroHorarioMateriasComentarios;
+    }
+
 }

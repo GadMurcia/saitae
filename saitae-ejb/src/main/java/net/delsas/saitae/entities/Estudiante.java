@@ -55,12 +55,6 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Estudiante.findByEstudianteComentario", query = "SELECT e FROM Estudiante e WHERE e.estudianteComentario = :estudianteComentario")})
 public class Estudiante implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "idestudiante")
-    private Integer idestudiante;
     @Basic(optional = false)
     @NotNull
     @Column(name = "estudiantePartidaNac")
@@ -72,18 +66,9 @@ public class Estudiante implements Serializable {
     @Size(max = 100)
     @Column(name = "estudianteRiesgoVulnerabilidad")
     private String estudianteRiesgoVulnerabilidad;
-    @Column(name = "estudianteMedioTransporte")
-    private Integer estudianteMedioTransporte;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(name = "estudianteDistanciaAlCentro")
-    private BigDecimal estudianteDistanciaAlCentro;
-    @Column(name = "estudianteTrabaja")
-    private Boolean estudianteTrabaja;
     @Size(max = 45)
     @Column(name = "estudianteDependenciaEconomica")
     private String estudianteDependenciaEconomica;
-    @Column(name = "estudianteParvularia")
-    private Boolean estudianteParvularia;
     @Size(max = 100)
     @Column(name = "estudianteEnfermedades")
     private String estudianteEnfermedades;
@@ -111,11 +96,27 @@ public class Estudiante implements Serializable {
     @Size(max = 45)
     @Column(name = "estudianteNoPartida")
     private String estudianteNoPartida;
-    @Column(name = "estudianteRepresentanteFamiliar")
-    private Boolean estudianteRepresentanteFamiliar;
     @Size(max = 145)
     @Column(name = "estudianteComentario")
     private String estudianteComentario;
+
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "idestudiante")
+    private Integer idestudiante;
+    @Column(name = "estudianteMedioTransporte")
+    private Integer estudianteMedioTransporte;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "estudianteDistanciaAlCentro")
+    private BigDecimal estudianteDistanciaAlCentro;
+    @Column(name = "estudianteTrabaja")
+    private Boolean estudianteTrabaja;
+    @Column(name = "estudianteParvularia")
+    private Boolean estudianteParvularia;
+    @Column(name = "estudianteRepresentanteFamiliar")
+    private Boolean estudianteRepresentanteFamiliar;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "estudiante")
     private List<Contribuciones> contribucionesList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "estudiante")
@@ -168,29 +169,6 @@ public class Estudiante implements Serializable {
         this.idestudiante = idestudiante;
     }
 
-    public boolean getEstudiantePartidaNac() {
-        return estudiantePartidaNac;
-    }
-
-    public void setEstudiantePartidaNac(boolean estudiantePartidaNac) {
-        this.estudiantePartidaNac = estudiantePartidaNac;
-    }
-
-    public int getEstudianteTipoCalle() {
-        return estudianteTipoCalle;
-    }
-
-    public void setEstudianteTipoCalle(int estudianteTipoCalle) {
-        this.estudianteTipoCalle = estudianteTipoCalle;
-    }
-
-    public String getEstudianteRiesgoVulnerabilidad() {
-        return estudianteRiesgoVulnerabilidad;
-    }
-
-    public void setEstudianteRiesgoVulnerabilidad(String estudianteRiesgoVulnerabilidad) {
-        this.estudianteRiesgoVulnerabilidad = estudianteRiesgoVulnerabilidad;
-    }
 
     public Integer getEstudianteMedioTransporte() {
         return estudianteMedioTransporte;
@@ -216,13 +194,6 @@ public class Estudiante implements Serializable {
         this.estudianteTrabaja = estudianteTrabaja;
     }
 
-    public String getEstudianteDependenciaEconomica() {
-        return estudianteDependenciaEconomica;
-    }
-
-    public void setEstudianteDependenciaEconomica(String estudianteDependenciaEconomica) {
-        this.estudianteDependenciaEconomica = estudianteDependenciaEconomica;
-    }
 
     public Boolean getEstudianteParvularia() {
         return estudianteParvularia;
@@ -232,69 +203,6 @@ public class Estudiante implements Serializable {
         this.estudianteParvularia = estudianteParvularia;
     }
 
-    public String getEstudianteEnfermedades() {
-        return estudianteEnfermedades;
-    }
-
-    public void setEstudianteEnfermedades(String estudianteEnfermedades) {
-        this.estudianteEnfermedades = estudianteEnfermedades;
-    }
-
-    public String getEstudianteMedicamentos() {
-        return estudianteMedicamentos;
-    }
-
-    public void setEstudianteMedicamentos(String estudianteMedicamentos) {
-        this.estudianteMedicamentos = estudianteMedicamentos;
-    }
-
-    public String getEstudianteParentescoRepresentante() {
-        return estudianteParentescoRepresentante;
-    }
-
-    public void setEstudianteParentescoRepresentante(String estudianteParentescoRepresentante) {
-        this.estudianteParentescoRepresentante = estudianteParentescoRepresentante;
-    }
-
-    public boolean getEstudianteEsEstudiante() {
-        return estudianteEsEstudiante;
-    }
-
-    public void setEstudianteEsEstudiante(boolean estudianteEsEstudiante) {
-        this.estudianteEsEstudiante = estudianteEsEstudiante;
-    }
-
-    public String getEstudianteEscolaridad() {
-        return estudianteEscolaridad;
-    }
-
-    public void setEstudianteEscolaridad(String estudianteEscolaridad) {
-        this.estudianteEscolaridad = estudianteEscolaridad;
-    }
-
-    public String getEstudianteFormaTrabajo() {
-        return estudianteFormaTrabajo;
-    }
-
-    public void setEstudianteFormaTrabajo(String estudianteFormaTrabajo) {
-        this.estudianteFormaTrabajo = estudianteFormaTrabajo;
-    }
-
-    public String getEstudianteCentroProcedencia() {
-        return estudianteCentroProcedencia;
-    }
-
-    public void setEstudianteCentroProcedencia(String estudianteCentroProcedencia) {
-        this.estudianteCentroProcedencia = estudianteCentroProcedencia;
-    }
-
-    public String getEstudianteNoPartida() {
-        return estudianteNoPartida;
-    }
-
-    public void setEstudianteNoPartida(String estudianteNoPartida) {
-        this.estudianteNoPartida = estudianteNoPartida;
-    }
 
     public Boolean getEstudianteRepresentanteFamiliar() {
         return estudianteRepresentanteFamiliar;
@@ -304,13 +212,6 @@ public class Estudiante implements Serializable {
         this.estudianteRepresentanteFamiliar = estudianteRepresentanteFamiliar;
     }
 
-    public String getEstudianteComentario() {
-        return estudianteComentario;
-    }
-
-    public void setEstudianteComentario(String estudianteComentario) {
-        this.estudianteComentario = estudianteComentario;
-    }
 
     @XmlTransient
     public List<Contribuciones> getContribucionesList() {
@@ -437,6 +338,110 @@ public class Estudiante implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.Estudiante[ idestudiante=" + idestudiante + " ]";
+    }
+
+    public boolean getEstudiantePartidaNac() {
+        return estudiantePartidaNac;
+    }
+
+    public void setEstudiantePartidaNac(boolean estudiantePartidaNac) {
+        this.estudiantePartidaNac = estudiantePartidaNac;
+    }
+
+    public int getEstudianteTipoCalle() {
+        return estudianteTipoCalle;
+    }
+
+    public void setEstudianteTipoCalle(int estudianteTipoCalle) {
+        this.estudianteTipoCalle = estudianteTipoCalle;
+    }
+
+    public String getEstudianteRiesgoVulnerabilidad() {
+        return estudianteRiesgoVulnerabilidad;
+    }
+
+    public void setEstudianteRiesgoVulnerabilidad(String estudianteRiesgoVulnerabilidad) {
+        this.estudianteRiesgoVulnerabilidad = estudianteRiesgoVulnerabilidad;
+    }
+
+    public String getEstudianteDependenciaEconomica() {
+        return estudianteDependenciaEconomica;
+    }
+
+    public void setEstudianteDependenciaEconomica(String estudianteDependenciaEconomica) {
+        this.estudianteDependenciaEconomica = estudianteDependenciaEconomica;
+    }
+
+    public String getEstudianteEnfermedades() {
+        return estudianteEnfermedades;
+    }
+
+    public void setEstudianteEnfermedades(String estudianteEnfermedades) {
+        this.estudianteEnfermedades = estudianteEnfermedades;
+    }
+
+    public String getEstudianteMedicamentos() {
+        return estudianteMedicamentos;
+    }
+
+    public void setEstudianteMedicamentos(String estudianteMedicamentos) {
+        this.estudianteMedicamentos = estudianteMedicamentos;
+    }
+
+    public String getEstudianteParentescoRepresentante() {
+        return estudianteParentescoRepresentante;
+    }
+
+    public void setEstudianteParentescoRepresentante(String estudianteParentescoRepresentante) {
+        this.estudianteParentescoRepresentante = estudianteParentescoRepresentante;
+    }
+
+    public boolean getEstudianteEsEstudiante() {
+        return estudianteEsEstudiante;
+    }
+
+    public void setEstudianteEsEstudiante(boolean estudianteEsEstudiante) {
+        this.estudianteEsEstudiante = estudianteEsEstudiante;
+    }
+
+    public String getEstudianteEscolaridad() {
+        return estudianteEscolaridad;
+    }
+
+    public void setEstudianteEscolaridad(String estudianteEscolaridad) {
+        this.estudianteEscolaridad = estudianteEscolaridad;
+    }
+
+    public String getEstudianteFormaTrabajo() {
+        return estudianteFormaTrabajo;
+    }
+
+    public void setEstudianteFormaTrabajo(String estudianteFormaTrabajo) {
+        this.estudianteFormaTrabajo = estudianteFormaTrabajo;
+    }
+
+    public String getEstudianteCentroProcedencia() {
+        return estudianteCentroProcedencia;
+    }
+
+    public void setEstudianteCentroProcedencia(String estudianteCentroProcedencia) {
+        this.estudianteCentroProcedencia = estudianteCentroProcedencia;
+    }
+
+    public String getEstudianteNoPartida() {
+        return estudianteNoPartida;
+    }
+
+    public void setEstudianteNoPartida(String estudianteNoPartida) {
+        this.estudianteNoPartida = estudianteNoPartida;
+    }
+
+    public String getEstudianteComentario() {
+        return estudianteComentario;
+    }
+
+    public void setEstudianteComentario(String estudianteComentario) {
+        this.estudianteComentario = estudianteComentario;
     }
     
 }

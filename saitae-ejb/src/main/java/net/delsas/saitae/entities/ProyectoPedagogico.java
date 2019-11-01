@@ -50,19 +50,13 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "ProyectoPedagogico.findByProyectoPedagogicoComentario", query = "SELECT p FROM ProyectoPedagogico p WHERE p.proyectoPedagogicoComentario = :proyectoPedagogicoComentario")})
 public class ProyectoPedagogico implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "idproyectoPedagogico")
-    private Integer idproyectoPedagogico;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 100)
     @Column(name = "nombreProyecto")
     private String nombreProyecto;
     @Basic(optional = false)
-    @NotNull
+    @NotNull()
     @Size(min = 1, max = 100)
     @Column(name = "beneficiarios")
     private String beneficiarios;
@@ -73,7 +67,7 @@ public class ProyectoPedagogico implements Serializable {
     private String duracion;
     @Basic(optional = false)
     @NotNull
-    @Lob
+    @Lob()
     @Size(min = 1, max = 16777215)
     @Column(name = "diagnostico")
     private String diagnostico;
@@ -132,6 +126,12 @@ public class ProyectoPedagogico implements Serializable {
     @Size(min = 1, max = 140)
     @Column(name = "proyectoPedagogicoComentario")
     private String proyectoPedagogicoComentario;
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "idproyectoPedagogico")
+    private Integer idproyectoPedagogico;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "proyectoPedagogico")
     private List<ReservaXpedagogia> reservaXpedagogiaList;
 
@@ -167,6 +167,35 @@ public class ProyectoPedagogico implements Serializable {
 
     public void setIdproyectoPedagogico(Integer idproyectoPedagogico) {
         this.idproyectoPedagogico = idproyectoPedagogico;
+    }
+    @XmlTransient
+    public List<ReservaXpedagogia> getReservaXpedagogiaList() {
+        return reservaXpedagogiaList;
+    }
+    public void setReservaXpedagogiaList(List<ReservaXpedagogia> reservaXpedagogiaList) {
+        this.reservaXpedagogiaList = reservaXpedagogiaList;
+    }
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (idproyectoPedagogico != null ? idproyectoPedagogico.hashCode() : 0);
+        return hash;
+    }
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof ProyectoPedagogico)) {
+            return false;
+        }
+        ProyectoPedagogico other = (ProyectoPedagogico) object;
+        if ((this.idproyectoPedagogico == null && other.idproyectoPedagogico != null) || (this.idproyectoPedagogico != null && !this.idproyectoPedagogico.equals(other.idproyectoPedagogico))) {
+            return false;
+        }
+        return true;
+    }
+    @Override
+    public String toString() {
+        return "net.delsas.saitae.entities.ProyectoPedagogico[ idproyectoPedagogico=" + idproyectoPedagogico + " ]";
     }
 
     public String getNombreProyecto() {
@@ -287,40 +316,6 @@ public class ProyectoPedagogico implements Serializable {
 
     public void setProyectoPedagogicoComentario(String proyectoPedagogicoComentario) {
         this.proyectoPedagogicoComentario = proyectoPedagogicoComentario;
-    }
-
-    @XmlTransient
-    public List<ReservaXpedagogia> getReservaXpedagogiaList() {
-        return reservaXpedagogiaList;
-    }
-
-    public void setReservaXpedagogiaList(List<ReservaXpedagogia> reservaXpedagogiaList) {
-        this.reservaXpedagogiaList = reservaXpedagogiaList;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idproyectoPedagogico != null ? idproyectoPedagogico.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ProyectoPedagogico)) {
-            return false;
-        }
-        ProyectoPedagogico other = (ProyectoPedagogico) object;
-        if ((this.idproyectoPedagogico == null && other.idproyectoPedagogico != null) || (this.idproyectoPedagogico != null && !this.idproyectoPedagogico.equals(other.idproyectoPedagogico))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "net.delsas.saitae.entities.ProyectoPedagogico[ idproyectoPedagogico=" + idproyectoPedagogico + " ]";
     }
     
 }

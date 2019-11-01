@@ -37,12 +37,6 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "TipoNombramiento.findByTipoNombramientoCoemntario", query = "SELECT t FROM TipoNombramiento t WHERE t.tipoNombramientoCoemntario = :tipoNombramientoCoemntario")})
 public class TipoNombramiento implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "idtipoNombramiento")
-    private Integer idtipoNombramiento;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 60)
@@ -51,6 +45,13 @@ public class TipoNombramiento implements Serializable {
     @Size(max = 145)
     @Column(name = "tipoNombramientoCoemntario")
     private String tipoNombramientoCoemntario;
+
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "idtipoNombramiento")
+    private Integer idtipoNombramiento;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoNombramiento")
     private List<MaestoCargo> maestoCargoList;
 
@@ -74,21 +75,6 @@ public class TipoNombramiento implements Serializable {
         this.idtipoNombramiento = idtipoNombramiento;
     }
 
-    public String getTipoNombramientoNombre() {
-        return tipoNombramientoNombre;
-    }
-
-    public void setTipoNombramientoNombre(String tipoNombramientoNombre) {
-        this.tipoNombramientoNombre = tipoNombramientoNombre;
-    }
-
-    public String getTipoNombramientoCoemntario() {
-        return tipoNombramientoCoemntario;
-    }
-
-    public void setTipoNombramientoCoemntario(String tipoNombramientoCoemntario) {
-        this.tipoNombramientoCoemntario = tipoNombramientoCoemntario;
-    }
 
     @XmlTransient
     public List<MaestoCargo> getMaestoCargoList() {
@@ -122,6 +108,22 @@ public class TipoNombramiento implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.TipoNombramiento[ idtipoNombramiento=" + idtipoNombramiento + " ]";
+    }
+
+    public String getTipoNombramientoNombre() {
+        return tipoNombramientoNombre;
+    }
+
+    public void setTipoNombramientoNombre(String tipoNombramientoNombre) {
+        this.tipoNombramientoNombre = tipoNombramientoNombre;
+    }
+
+    public String getTipoNombramientoCoemntario() {
+        return tipoNombramientoCoemntario;
+    }
+
+    public void setTipoNombramientoCoemntario(String tipoNombramientoCoemntario) {
+        this.tipoNombramientoCoemntario = tipoNombramientoCoemntario;
     }
     
 }

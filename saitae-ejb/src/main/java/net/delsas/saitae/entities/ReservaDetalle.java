@@ -27,10 +27,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "ReservaDetalle.findAll", query = "SELECT r FROM ReservaDetalle r")
-    , @NamedQuery(name = "ReservaDetalle.findByIdreserva", query = "SELECT r FROM ReservaDetalle r WHERE r.reservaDetallePK.idreserva = :idreserva")
     , @NamedQuery(name = "ReservaDetalle.findByIdRecurso", query = "SELECT r FROM ReservaDetalle r WHERE r.reservaDetallePK.idRecurso = :idRecurso")
     , @NamedQuery(name = "ReservaDetalle.findByEjemplarCorrelativo", query = "SELECT r FROM ReservaDetalle r WHERE r.reservaDetallePK.ejemplarCorrelativo = :ejemplarCorrelativo")
-    , @NamedQuery(name = "ReservaDetalle.findByReservaDetalleComentario", query = "SELECT r FROM ReservaDetalle r WHERE r.reservaDetalleComentario = :reservaDetalleComentario")})
+    , @NamedQuery(name = "ReservaDetalle.findByReservaDetalleComentario", query = "SELECT r FROM ReservaDetalle r WHERE r.reservaDetalleComentario = :reservaDetalleComentario")
+    , @NamedQuery(name = "ReservaDetalle.findByIdReserva", query = "SELECT r FROM ReservaDetalle r WHERE r.reservaDetallePK.idReserva = :idReserva")})
 public class ReservaDetalle implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -39,7 +39,7 @@ public class ReservaDetalle implements Serializable {
     @Size(max = 145)
     @Column(name = "reservaDetalleComentario")
     private String reservaDetalleComentario;
-    @JoinColumn(name = "idreserva", referencedColumnName = "idreserva", insertable = false, updatable = false)
+    @JoinColumn(name = "idReserva", referencedColumnName = "idreserva", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Reserva reserva;
     @JoinColumns({
@@ -55,8 +55,8 @@ public class ReservaDetalle implements Serializable {
         this.reservaDetallePK = reservaDetallePK;
     }
 
-    public ReservaDetalle(int idreserva, int idRecurso, int ejemplarCorrelativo) {
-        this.reservaDetallePK = new ReservaDetallePK(idreserva, idRecurso, ejemplarCorrelativo);
+    public ReservaDetalle(int idRecurso, int ejemplarCorrelativo, int idReserva) {
+        this.reservaDetallePK = new ReservaDetallePK(idRecurso, ejemplarCorrelativo, idReserva);
     }
 
     public ReservaDetallePK getReservaDetallePK() {

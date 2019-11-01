@@ -31,12 +31,13 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "AutorLibro.findByAutorLibrocComentario", query = "SELECT a FROM AutorLibro a WHERE a.autorLibrocComentario = :autorLibrocComentario")})
 public class AutorLibro implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected AutorLibroPK autorLibroPK;
     @Size(max = 145)
     @Column(name = "autorLibrocComentario")
     private String autorLibrocComentario;
+
+    private static final long serialVersionUID = 1L;
+    @EmbeddedId
+    protected AutorLibroPK autorLibroPK;
     @JoinColumn(name = "idautor", referencedColumnName = "idautor", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Autor autor;
@@ -63,13 +64,6 @@ public class AutorLibro implements Serializable {
         this.autorLibroPK = autorLibroPK;
     }
 
-    public String getAutorLibrocComentario() {
-        return autorLibrocComentario;
-    }
-
-    public void setAutorLibrocComentario(String autorLibrocComentario) {
-        this.autorLibrocComentario = autorLibrocComentario;
-    }
 
     public Autor getAutor() {
         return autor;
@@ -110,6 +104,14 @@ public class AutorLibro implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.AutorLibro[ autorLibroPK=" + autorLibroPK + " ]";
+    }
+
+    public String getAutorLibrocComentario() {
+        return autorLibrocComentario;
+    }
+
+    public void setAutorLibrocComentario(String autorLibrocComentario) {
+        this.autorLibrocComentario = autorLibrocComentario;
     }
     
 }

@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -44,21 +45,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 })
 public class Anuncio implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "idanuncio")
-    private Integer idanuncio;
+   
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
     @Column(name = "anuncioTitulo")
     private String anuncioTitulo;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "anuncioFechaFin")
-    @Temporal(TemporalType.DATE)
-    private Date anuncioFechaFin;
     @Basic(optional = false)
     @NotNull
     @Lob
@@ -68,6 +60,17 @@ public class Anuncio implements Serializable {
     @Size(max = 140)
     @Column(name = "anuncioComentario")
     private String anuncioComentario;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "idanuncio")
+    private Integer idanuncio;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "anuncioFechaFin")
+    @Temporal(TemporalType.DATE)
+    private Date anuncioFechaFin;
     @JoinColumn(name = "anuncioAnunciante", referencedColumnName = "idpersona")
     @ManyToOne(optional = false)
     private Persona anuncioAnunciante;
@@ -97,13 +100,6 @@ public class Anuncio implements Serializable {
         this.idanuncio = idanuncio;
     }
 
-    public String getAnuncioTitulo() {
-        return anuncioTitulo;
-    }
-
-    public void setAnuncioTitulo(String anuncioTitulo) {
-        this.anuncioTitulo = anuncioTitulo;
-    }
 
     public Date getAnuncioFechaFin() {
         return anuncioFechaFin;
@@ -113,21 +109,6 @@ public class Anuncio implements Serializable {
         this.anuncioFechaFin = anuncioFechaFin;
     }
 
-    public String getAnuncioTexto() {
-        return anuncioTexto;
-    }
-
-    public void setAnuncioTexto(String anuncioTexto) {
-        this.anuncioTexto = anuncioTexto;
-    }
-
-    public String getAnuncioComentario() {
-        return anuncioComentario;
-    }
-
-    public void setAnuncioComentario(String anuncioComentario) {
-        this.anuncioComentario = anuncioComentario;
-    }
 
     public Persona getAnuncioAnunciante() {
         return anuncioAnunciante;
@@ -168,6 +149,30 @@ public class Anuncio implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.Anuncio[ idanuncio=" + idanuncio + " ]";
+    }
+
+    public String getAnuncioTitulo() {
+        return anuncioTitulo;
+    }
+
+    public void setAnuncioTitulo(String anuncioTitulo) {
+        this.anuncioTitulo = anuncioTitulo;
+    }
+
+    public String getAnuncioTexto() {
+        return anuncioTexto;
+    }
+
+    public void setAnuncioTexto(String anuncioTexto) {
+        this.anuncioTexto = anuncioTexto;
+    }
+
+    public String getAnuncioComentario() {
+        return anuncioComentario;
+    }
+
+    public void setAnuncioComentario(String anuncioComentario) {
+        this.anuncioComentario = anuncioComentario;
     }
 
 }

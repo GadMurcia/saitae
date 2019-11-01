@@ -40,12 +40,6 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Acceso.findByAccesoComentario", query = "SELECT a FROM Acceso a WHERE a.accesoComentario = :accesoComentario")})
 public class Acceso implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "idacceso")
-    private Integer idacceso;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 30)
@@ -59,6 +53,13 @@ public class Acceso implements Serializable {
     @Size(max = 140)
     @Column(name = "accesoComentario")
     private String accesoComentario;
+
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "idacceso")
+    private Integer idacceso;
     @OneToMany(mappedBy = "accesoIndice")
     private List<Acceso> accesoList;
     @JoinColumn(name = "accesoIndice", referencedColumnName = "idacceso")
@@ -88,29 +89,6 @@ public class Acceso implements Serializable {
         this.idacceso = idacceso;
     }
 
-    public String getAccesoNombre() {
-        return accesoNombre;
-    }
-
-    public void setAccesoNombre(String accesoNombre) {
-        this.accesoNombre = accesoNombre;
-    }
-
-    public String getAccesourl() {
-        return accesourl;
-    }
-
-    public void setAccesourl(String accesourl) {
-        this.accesourl = accesourl;
-    }
-
-    public String getAccesoComentario() {
-        return accesoComentario;
-    }
-
-    public void setAccesoComentario(String accesoComentario) {
-        this.accesoComentario = accesoComentario;
-    }
 
     @XmlTransient
     public List<Acceso> getAccesoList() {
@@ -161,6 +139,30 @@ public class Acceso implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.Acceso[ idacceso=" + idacceso + " ]";
+    }
+
+    public String getAccesoNombre() {
+        return accesoNombre;
+    }
+
+    public void setAccesoNombre(String accesoNombre) {
+        this.accesoNombre = accesoNombre;
+    }
+
+    public String getAccesourl() {
+        return accesourl;
+    }
+
+    public void setAccesourl(String accesourl) {
+        this.accesourl = accesourl;
+    }
+
+    public String getAccesoComentario() {
+        return accesoComentario;
+    }
+
+    public void setAccesoComentario(String accesoComentario) {
+        this.accesoComentario = accesoComentario;
     }
     
 }

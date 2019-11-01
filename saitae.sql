@@ -185,7 +185,7 @@ CREATE TABLE `autorLibro` (
 
 LOCK TABLES `autorLibro` WRITE;
 /*!40000 ALTER TABLE `autorLibro` DISABLE KEYS */;
-INSERT INTO `autorLibro` VALUES (1,5,''),(3,1,'');
+INSERT INTO `autorLibro` VALUES (1,5,''),(1,8,''),(2,8,''),(3,1,'');
 /*!40000 ALTER TABLE `autorLibro` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -363,7 +363,7 @@ CREATE TABLE `contenidoLibro` (
 
 LOCK TABLES `contenidoLibro` WRITE;
 /*!40000 ALTER TABLE `contenidoLibro` DISABLE KEYS */;
-INSERT INTO `contenidoLibro` VALUES (1,'455454',1,0,NULL),(1,'7878454545',2,0,NULL),(5,'5ĺ+kṕk',3,0,NULL),(5,'nhsdfhsgfdgsl',8,0,NULL);
+INSERT INTO `contenidoLibro` VALUES (1,'455454',1,0,NULL),(1,'7878454545',2,0,NULL),(5,'5ĺ+kṕk',3,0,NULL),(5,'nhsdfhsgfdgsl',8,0,NULL),(8,'4564654646',2,0,NULL),(8,'6645464654',1,0,NULL),(8,'9789797974',4,0,NULL);
 /*!40000 ALTER TABLE `contenidoLibro` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -543,7 +543,7 @@ CREATE TABLE `editorialLibro` (
 
 LOCK TABLES `editorialLibro` WRITE;
 /*!40000 ALTER TABLE `editorialLibro` DISABLE KEYS */;
-INSERT INTO `editorialLibro` VALUES (1,1,''),(1,5,''),(2,5,'');
+INSERT INTO `editorialLibro` VALUES (1,1,''),(1,5,''),(1,8,''),(2,5,''),(2,8,''),(3,8,'');
 /*!40000 ALTER TABLE `editorialLibro` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -570,7 +570,7 @@ CREATE TABLE `ejemplar` (
 
 LOCK TABLES `ejemplar` WRITE;
 /*!40000 ALTER TABLE `ejemplar` DISABLE KEYS */;
-INSERT INTO `ejemplar` VALUES (1,1,2019,''),(1,2,2019,''),(2,2,2019,''),(3,3,2019,''),(4,4,2019,''),(5,5,2019,''),(5,6,2019,''),(6,6,2019,''),(6,7,2019,''),(6,8,2019,''),(6,9,2019,''),(6,10,2019,''),(6,11,2019,''),(6,12,2019,''),(6,13,2019,''),(6,14,2019,''),(6,15,2019,'');
+INSERT INTO `ejemplar` VALUES (1,1,2019,''),(1,2,2019,''),(2,2,2019,''),(3,3,2019,''),(4,4,2019,''),(5,5,2019,''),(5,6,2019,''),(6,6,2019,''),(6,7,2019,''),(6,8,2019,''),(6,9,2019,''),(6,10,2019,''),(6,11,2019,''),(6,12,2019,''),(6,13,2019,''),(6,14,2019,''),(6,15,2019,''),(7,7,2019,''),(8,8,2019,''),(8,9,2019,'');
 /*!40000 ALTER TABLE `ejemplar` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1047,6 +1047,7 @@ CREATE TABLE `mestroHorarioMaterias` (
 
 LOCK TABLES `mestroHorarioMaterias` WRITE;
 /*!40000 ALTER TABLE `mestroHorarioMaterias` DISABLE KEYS */;
+INSERT INTO `mestroHorarioMaterias` VALUES (1045367080,1,1,1,1,'C','A',2019,NULL),(1045367080,2,2,1,1,'C','A',2019,NULL),(1045367080,3,3,1,1,'C','B',2019,NULL),(1045367080,4,4,1,1,'C','B',2019,NULL);
 /*!40000 ALTER TABLE `mestroHorarioMaterias` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1188,7 +1189,7 @@ CREATE TABLE `persona` (
 
 LOCK TABLES `persona` WRITE;
 /*!40000 ALTER TABLE `persona` DISABLE KEYS */;
-INSERT INTO `persona` VALUES (16018,'Estudiante1 Nombre','Apellido estudiante1','1995-01-17','544554454545455454 545 454 54 54 54 5454','',0,1,'02#01','8d2a5f7d4afa5d0530789d3066945330','',8,'','','',0,'Salvadoreña','','',''),(16022,'6022 nombre','6022 Apellido','1995-10-12','Cas. LA Y Griega, Cantón Chilcuyo, Texistepeque, Santa Ana','5037-0337',0,1,'01#01','da54dd5a0398011cdfa50d559c2c0ef8','',8,'','5454-545454-545-4','\0',0,'Salvadoreña','guillermox020@gmail.com','',''),(1045367070,'Repreentante1 Nombre','Apellido Representante1','1980-10-10','fuhwuo hfohuofhouh owheof ','',0,1,'01#02','ab8a338aa2b1da6d97c11ba6e67be768','',9,'','','\0',1,'Salvadoreña','','',''),(1045367071,'Paden1 Nombre','Apellido Padre1',NULL,'','8878-7878',0,0,' # ','cd9187113425eae93d8116205d03bdde','',11,'\0',NULL,'',0,'Salvadoreña',NULL,'',''),(1045367072,'Madre1 Nombre','Apellido Madre1',NULL,'','4554-4554',0,0,' # ','7845e7b45be70d2391a2b16c2ffb68e3','',10,'\0',NULL,'',0,'Salvadoreña',NULL,'',''),(1045367073,'Guillermo','Delsas',NULL,NULL,NULL,NULL,NULL,NULL,'02951a6cb9595ef475fed783e59c687e','Ingeniero',1,'',NULL,'\0',NULL,NULL,NULL,NULL,NULL),(1045367080,'Mestro1 Nombre','Apellido Maestro1','1969-06-11','Cas. LA Y Griega, Cantón Chilcuyo, Texistepeque, Santa Ana','5037-0337',2256,0,'01#01','6e80cf219e79bc8a8d83ce9a5b757f64','Licenciada en Ciencias jurídicas',4,'','0202-020202-020-0','',0,'Salvadoreña','guillermox020@gmail.com','',''),(1045367081,'04536708-1 repre','04536708-1 apell','1980-05-12','Cas. LA Y Griega, Cantón Chilcuyo, Texistepeque, Santa Ana','7033-7878',0,0,'01#01','ad9f88eb26394a8ad9f46975cf79a133','',9,'','','',1,'Salvadoreña','guillermox020@gmail.com','',''),(1045367082,'04536708-2 padre','04536708-2 apee',NULL,'','2020-2020',0,0,' # ','5f04b909d4b1bca2e6e57dbbf7208c51','',11,'\0',NULL,'',0,'Salvadoreña',NULL,'',''),(1045367083,'04536708-3 madre','04536708-3 apeel',NULL,'','2220-2020',0,0,' # ','a6ba5f99ff9616298b2212c76ea111dc','',10,'\0',NULL,'',0,'Salvadoreña',NULL,'','');
+INSERT INTO `persona` VALUES (16018,'Estudiante1 Nombre','Apellido estudiante1','1995-01-17','544554454545455454 545 454 54 54 54 5454','',0,1,'02#01','8d2a5f7d4afa5d0530789d3066945330','',8,'','','',0,'Salvadoreña','','',''),(16022,'6022 nombre','6022 Apellido','1995-10-12','Cas. LA Y Griega, Cantón Chilcuyo, Texistepeque, Santa Ana','5037-0337',0,1,'01#01','da54dd5a0398011cdfa50d559c2c0ef8','',8,'','5454-545454-545-4','\0',0,'Salvadoreña','guillermox020@gmail.com','',''),(1045367070,'Repreentante1 Nombre','Apellido Representante1','1980-10-10','fuhwuo hfohuofhouh owheof ','',0,1,'01#02','ab8a338aa2b1da6d97c11ba6e67be768','',9,'','','\0',1,'Salvadoreña','','',''),(1045367071,'Paden1 Nombre','Apellido Padre1',NULL,'','8878-7878',0,0,' # ','cd9187113425eae93d8116205d03bdde','',11,'\0',NULL,'',0,'Salvadoreña',NULL,'',''),(1045367072,'Madre1 Nombre','Apellido Madre1',NULL,'','4554-4554',0,0,' # ','7845e7b45be70d2391a2b16c2ffb68e3','',10,'\0',NULL,'',0,'Salvadoreña',NULL,'',''),(1045367073,'Guillermo','Delsas',NULL,NULL,NULL,NULL,NULL,NULL,'02951a6cb9595ef475fed783e59c687e','Ingeniero',1,'',NULL,'\0',NULL,NULL,NULL,NULL,NULL),(1045367080,'Mestro1 Nombre','Apellido Maestro1','1969-06-11','Cas. LA Y Griega, Cantón Chilcuyo, Texistepeque, Santa Ana','5037-0337',2256,0,'01#01','6e80cf219e79bc8a8d83ce9a5b757f64','Licenciada en Ciencias jurídicas',4,'','0202-020202-020-0','',0,'Salvadoreña','guillermox020@gmail.com','',''),(1045367081,'jkkjkjkjkjkjk kjkjkj','jkkjkjkjkj kjkj kjkjk','2019-10-30','5464446546556','4554-5454',0,0,'01#03','ad9f88eb26394a8ad9f46975cf79a133','653846+8985',6,'','2121-212121-212-1','\0',0,'Salvadoreña','45646546464646','',''),(1045367082,'admin','biblios','2019-10-30','75855454','5555-5545',0,0,'02#01','5f04b909d4b1bca2e6e57dbbf7208c51','86{pjuh',5,'','4546-546654-646-5','',0,'Salvadoreña','879466666864','',''),(1045367083,'04536708-3 madre','04536708-3 apeel',NULL,'','2220-2020',0,0,' # ','a6ba5f99ff9616298b2212c76ea111dc','',10,'\0',NULL,'',0,'Salvadoreña',NULL,'','');
 /*!40000 ALTER TABLE `persona` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1294,7 +1295,7 @@ CREATE TABLE `recurso` (
 
 LOCK TABLES `recurso` WRITE;
 /*!40000 ALTER TABLE `recurso` DISABLE KEYS */;
-INSERT INTO `recurso` VALUES (1,'libro 1',100,3,1,68,'',35.12,'B','REAL','1',''),(2,'2232323',NULL,1,1,NULL,'',70,'B','REAL','875',''),(3,'3.46',NULL,1,1,NULL,'',20,'B','REAL','78',''),(4,'46546',NULL,1,2,NULL,'',70,'B','REAL','546',''),(5,'548456641646546',300,3,1,68,'',30.25,'B','REAL','7',''),(6,'654448696464',NULL,2,1,NULL,'',0,'B','ESTIMADO','','');
+INSERT INTO `recurso` VALUES (1,'libro 1',100,3,1,68,'',35.12,'B','REAL','1',''),(2,'2232323',NULL,1,1,NULL,'',70,'B','REAL','875',''),(3,'3.46',NULL,1,1,NULL,'',20,'B','REAL','78',''),(4,'46546',NULL,1,2,NULL,'',70,'B','REAL','546',''),(5,'548456641646546',300,3,1,68,'',30.25,'B','REAL','7',''),(6,'654448696464',NULL,2,1,NULL,'',0,'B','ESTIMADO','',''),(7,'64546465465',NULL,1,1,NULL,'',78,'B','REAL','45',''),(8,'89484654684',300,3,1,29,'',45,'B','REAL','45','');
 /*!40000 ALTER TABLE `recurso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1306,17 +1307,28 @@ DROP TABLE IF EXISTS `reserva`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `reserva` (
-  `idreserva` int(11) NOT NULL,
+  `idreserva` int(11) NOT NULL AUTO_INCREMENT,
   `reservaFecha` datetime NOT NULL,
   `reservaEntrega` datetime NOT NULL,
   `reservaDevolucion` datetime NOT NULL,
   `tipoReserva` int(11) NOT NULL,
   `reservaEstado` enum('S','E','D') NOT NULL,
   `reservaDevuelto` datetime DEFAULT NULL,
+  `docente` int(11) DEFAULT NULL,
+  `maeria` int(11) DEFAULT NULL,
+  `tema` varchar(45) NOT NULL,
+  `objetivoTema` varchar(100) NOT NULL,
+  `TipoPtoyecto` int(11) NOT NULL,
   `reservaComentario` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idreserva`),
   KEY `fk_reserva_1_idx` (`tipoReserva`),
-  CONSTRAINT `fk_reserva_1` FOREIGN KEY (`tipoReserva`) REFERENCES `tipoReserva` (`idtipoReserva`) ON UPDATE CASCADE
+  KEY `fk_reserva_2_idx` (`docente`),
+  KEY `fk_reserva_3_idx` (`maeria`),
+  KEY `fk_reserva_4_idx` (`TipoPtoyecto`),
+  CONSTRAINT `fk_reserva_1` FOREIGN KEY (`tipoReserva`) REFERENCES `tipoReserva` (`idtipoReserva`) ON UPDATE CASCADE,
+  CONSTRAINT `fk_reserva_2` FOREIGN KEY (`docente`) REFERENCES `maestro` (`idmaestro`) ON UPDATE CASCADE,
+  CONSTRAINT `fk_reserva_3` FOREIGN KEY (`maeria`) REFERENCES `materia` (`idmateria`) ON UPDATE CASCADE,
+  CONSTRAINT `fk_reserva_4` FOREIGN KEY (`TipoPtoyecto`) REFERENCES `tipoProyecto` (`idtipoProyecto`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1337,13 +1349,14 @@ DROP TABLE IF EXISTS `reservaDetalle`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `reservaDetalle` (
-  `idreserva` int(11) NOT NULL,
   `idRecurso` int(11) NOT NULL,
   `ejemplarCorrelativo` int(11) NOT NULL,
   `reservaDetalleComentario` varchar(145) DEFAULT NULL,
-  PRIMARY KEY (`idreserva`,`idRecurso`,`ejemplarCorrelativo`),
+  `idReserva` int(11) NOT NULL,
+  PRIMARY KEY (`idRecurso`,`ejemplarCorrelativo`,`idReserva`),
   KEY `fk_reservaDetalle_2_idx` (`idRecurso`,`ejemplarCorrelativo`),
-  CONSTRAINT `fk_reservaDetalle_1` FOREIGN KEY (`idreserva`) REFERENCES `reserva` (`idreserva`) ON UPDATE CASCADE,
+  KEY `fk_reservaDetalle_1_idx` (`idReserva`),
+  CONSTRAINT `fk_reservaDetalle_1` FOREIGN KEY (`idReserva`) REFERENCES `reserva` (`idreserva`) ON UPDATE CASCADE,
   CONSTRAINT `fk_reservaDetalle_2` FOREIGN KEY (`idRecurso`, `ejemplarCorrelativo`) REFERENCES `ejemplar` (`idRecurso`, `ejemplarCorrelativo`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1369,7 +1382,7 @@ CREATE TABLE `reservaXpedagogia` (
   `idReserva` int(11) NOT NULL,
   `reservaXpedagogiaComentario` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idProyectoPedagogico`,`idReserva`),
-  KEY `fk_reservaXpedagogia_2` (`idReserva`),
+  KEY `fk_reservaXpedagogia_2_idx` (`idReserva`),
   CONSTRAINT `fk_reservaXpedagogia_1` FOREIGN KEY (`idProyectoPedagogico`) REFERENCES `proyectoPedagogico` (`idproyectoPedagogico`) ON UPDATE CASCADE,
   CONSTRAINT `fk_reservaXpedagogia_2` FOREIGN KEY (`idReserva`) REFERENCES `reserva` (`idreserva`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -1392,11 +1405,12 @@ DROP TABLE IF EXISTS `solicitudReserva`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `solicitudReserva` (
-  `idReserva` int(11) NOT NULL,
   `idRecurso` int(11) NOT NULL,
   `solicitudReservaComentario` varchar(145) DEFAULT NULL,
-  PRIMARY KEY (`idReserva`,`idRecurso`),
+  `idReserva` int(11) NOT NULL,
+  PRIMARY KEY (`idRecurso`,`idReserva`),
   KEY `fk_solicitudReserva_2_idx` (`idRecurso`),
+  KEY `fk_solicitudReserva_1_idx` (`idReserva`),
   CONSTRAINT `fk_solicitudReserva_1` FOREIGN KEY (`idReserva`) REFERENCES `reserva` (`idreserva`) ON UPDATE CASCADE,
   CONSTRAINT `fk_solicitudReserva_2` FOREIGN KEY (`idRecurso`) REFERENCES `recurso` (`idrecurso`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -1433,7 +1447,7 @@ CREATE TABLE `tipoCargo` (
 
 LOCK TABLES `tipoCargo` WRITE;
 /*!40000 ALTER TABLE `tipoCargo` DISABLE KEYS */;
-INSERT INTO `tipoCargo` VALUES (1,'Fondos Propios',NULL),(2,'Actividades de la institución',NULL),(3,'Donación 1',NULL);
+INSERT INTO `tipoCargo` VALUES (1,'Fondos Propios',NULL),(2,'Actividades de la institución',NULL),(3,'Donación',NULL);
 /*!40000 ALTER TABLE `tipoCargo` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1564,6 +1578,31 @@ INSERT INTO `tipoPersona` VALUES (1,'Administrador','fa fa-diamond'),(2,'Directo
 UNLOCK TABLES;
 
 --
+-- Table structure for table `tipoProyecto`
+--
+
+DROP TABLE IF EXISTS `tipoProyecto`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tipoProyecto` (
+  `idtipoProyecto` int(11) NOT NULL AUTO_INCREMENT,
+  `tipoProyectoNombre` varchar(45) NOT NULL,
+  `tipoProyectoComentario` varchar(140) DEFAULT NULL,
+  PRIMARY KEY (`idtipoProyecto`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tipoProyecto`
+--
+
+LOCK TABLES `tipoProyecto` WRITE;
+/*!40000 ALTER TABLE `tipoProyecto` DISABLE KEYS */;
+INSERT INTO `tipoProyecto` VALUES (1,'Proyecto Planificado',''),(2,'Exposición De Alumnos',''),(3,'Clase De Docente Con Tecnología','');
+/*!40000 ALTER TABLE `tipoProyecto` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `tipoRecurso`
 --
 
@@ -1584,7 +1623,7 @@ CREATE TABLE `tipoRecurso` (
 
 LOCK TABLES `tipoRecurso` WRITE;
 /*!40000 ALTER TABLE `tipoRecurso` DISABLE KEYS */;
-INSERT INTO `tipoRecurso` VALUES (1,'Tecnológico CRA 1',NULL),(2,'Tecnológico Laboratorio de Ciencias Naturales',NULL),(3,'Bibliográfico',NULL);
+INSERT INTO `tipoRecurso` VALUES (1,'Tecnológico CRA',NULL),(2,'Tecnológico Laboratorio de Ciencias Naturales',NULL),(3,'Bibliográfico',NULL);
 /*!40000 ALTER TABLE `tipoRecurso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1609,7 +1648,7 @@ CREATE TABLE `tipoReserva` (
 
 LOCK TABLES `tipoReserva` WRITE;
 /*!40000 ALTER TABLE `tipoReserva` DISABLE KEYS */;
-INSERT INTO `tipoReserva` VALUES (1,'Uso en sala',NULL),(2,'Uso dentro de la institución 1',NULL),(3,'Uso en aula',NULL),(4,'Fuera de la institución',NULL);
+INSERT INTO `tipoReserva` VALUES (1,'Uso en sala',NULL),(2,'Uso dentro de la institución',NULL),(3,'Uso en aula',NULL),(4,'Fuera de la institución',NULL);
 /*!40000 ALTER TABLE `tipoReserva` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1736,4 +1775,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-10-30 22:04:28
+-- Dump completed on 2019-10-31 22:42:23

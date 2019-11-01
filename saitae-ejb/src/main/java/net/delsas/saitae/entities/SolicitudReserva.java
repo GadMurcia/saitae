@@ -26,9 +26,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "SolicitudReserva.findAll", query = "SELECT s FROM SolicitudReserva s")
-    , @NamedQuery(name = "SolicitudReserva.findByIdReserva", query = "SELECT s FROM SolicitudReserva s WHERE s.solicitudReservaPK.idReserva = :idReserva")
     , @NamedQuery(name = "SolicitudReserva.findByIdRecurso", query = "SELECT s FROM SolicitudReserva s WHERE s.solicitudReservaPK.idRecurso = :idRecurso")
-    , @NamedQuery(name = "SolicitudReserva.findBySolicitudReservaComentario", query = "SELECT s FROM SolicitudReserva s WHERE s.solicitudReservaComentario = :solicitudReservaComentario")})
+    , @NamedQuery(name = "SolicitudReserva.findBySolicitudReservaComentario", query = "SELECT s FROM SolicitudReserva s WHERE s.solicitudReservaComentario = :solicitudReservaComentario")
+    , @NamedQuery(name = "SolicitudReserva.findByIdReserva", query = "SELECT s FROM SolicitudReserva s WHERE s.solicitudReservaPK.idReserva = :idReserva")})
 public class SolicitudReserva implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -51,8 +51,8 @@ public class SolicitudReserva implements Serializable {
         this.solicitudReservaPK = solicitudReservaPK;
     }
 
-    public SolicitudReserva(int idReserva, int idRecurso) {
-        this.solicitudReservaPK = new SolicitudReservaPK(idReserva, idRecurso);
+    public SolicitudReserva(int idRecurso, int idReserva) {
+        this.solicitudReservaPK = new SolicitudReservaPK(idRecurso, idReserva);
     }
 
     public SolicitudReservaPK getSolicitudReservaPK() {

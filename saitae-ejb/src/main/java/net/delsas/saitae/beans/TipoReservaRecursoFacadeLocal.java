@@ -7,6 +7,7 @@ package net.delsas.saitae.beans;
 
 import java.util.List;
 import javax.ejb.Local;
+import net.delsas.saitae.entities.Recurso;
 import net.delsas.saitae.entities.TipoReservaRecurso;
 
 /**
@@ -29,5 +30,14 @@ public interface TipoReservaRecursoFacadeLocal {
     List<TipoReservaRecurso> findRange(int[] range);
 
     int count();
-    
+
+    /**
+     * Devuelve una lista de recursos de TipoRecurso y TipoReserva dados
+     *
+     * @param idTipoRecurso
+     * @param idTipoReserva
+     * @return java.util.List net.delsas.saitae.entities.Recurso
+     */
+    public List<Recurso> findRecursoByTipoRecursoAndTipoReserva(Integer idTipoRecurso, Integer idTipoReserva);
+
 }

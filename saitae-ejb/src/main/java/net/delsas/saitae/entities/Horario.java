@@ -39,12 +39,6 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Horario.findByHorarioComentario", query = "SELECT h FROM Horario h WHERE h.horarioComentario = :horarioComentario")})
 public class Horario implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "idhorario")
-    private Integer idhorario;
     @Basic(optional = false)
     @NotNull
     @Column(name = "horaInicio")
@@ -58,6 +52,13 @@ public class Horario implements Serializable {
     @Size(max = 145)
     @Column(name = "horarioComentario")
     private String horarioComentario;
+
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "idhorario")
+    private Integer idhorario;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "horario")
     private List<MestroHorarioMaterias> mestroHorarioMateriasList;
 
@@ -82,29 +83,6 @@ public class Horario implements Serializable {
         this.idhorario = idhorario;
     }
 
-    public Date getHoraInicio() {
-        return horaInicio;
-    }
-
-    public void setHoraInicio(Date horaInicio) {
-        this.horaInicio = horaInicio;
-    }
-
-    public Date getHoraFin() {
-        return horaFin;
-    }
-
-    public void setHoraFin(Date horaFin) {
-        this.horaFin = horaFin;
-    }
-
-    public String getHorarioComentario() {
-        return horarioComentario;
-    }
-
-    public void setHorarioComentario(String horarioComentario) {
-        this.horarioComentario = horarioComentario;
-    }
 
     @XmlTransient
     public List<MestroHorarioMaterias> getMestroHorarioMateriasList() {
@@ -138,6 +116,30 @@ public class Horario implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.Horario[ idhorario=" + idhorario + " ]";
+    }
+
+    public Date getHoraInicio() {
+        return horaInicio;
+    }
+
+    public void setHoraInicio(Date horaInicio) {
+        this.horaInicio = horaInicio;
+    }
+
+    public Date getHoraFin() {
+        return horaFin;
+    }
+
+    public void setHoraFin(Date horaFin) {
+        this.horaFin = horaFin;
+    }
+
+    public String getHorarioComentario() {
+        return horarioComentario;
+    }
+
+    public void setHorarioComentario(String horarioComentario) {
+        this.horarioComentario = horarioComentario;
     }
     
 }

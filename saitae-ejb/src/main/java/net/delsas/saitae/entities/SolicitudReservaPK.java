@@ -20,26 +20,18 @@ public class SolicitudReservaPK implements Serializable {
 
     @Basic(optional = false)
     @NotNull
-    @Column(name = "idReserva")
-    private int idReserva;
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "idRecurso")
     private int idRecurso;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "idReserva")
+    private int idReserva;
 
     public SolicitudReservaPK() {
     }
 
-    public SolicitudReservaPK(int idReserva, int idRecurso) {
-        this.idReserva = idReserva;
+    public SolicitudReservaPK(int idRecurso, int idReserva) {
         this.idRecurso = idRecurso;
-    }
-
-    public int getIdReserva() {
-        return idReserva;
-    }
-
-    public void setIdReserva(int idReserva) {
         this.idReserva = idReserva;
     }
 
@@ -51,11 +43,19 @@ public class SolicitudReservaPK implements Serializable {
         this.idRecurso = idRecurso;
     }
 
+    public int getIdReserva() {
+        return idReserva;
+    }
+
+    public void setIdReserva(int idReserva) {
+        this.idReserva = idReserva;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (int) idReserva;
         hash += (int) idRecurso;
+        hash += (int) idReserva;
         return hash;
     }
 
@@ -66,10 +66,10 @@ public class SolicitudReservaPK implements Serializable {
             return false;
         }
         SolicitudReservaPK other = (SolicitudReservaPK) object;
-        if (this.idReserva != other.idReserva) {
+        if (this.idRecurso != other.idRecurso) {
             return false;
         }
-        if (this.idRecurso != other.idRecurso) {
+        if (this.idReserva != other.idReserva) {
             return false;
         }
         return true;
@@ -77,7 +77,7 @@ public class SolicitudReservaPK implements Serializable {
 
     @Override
     public String toString() {
-        return "net.delsas.saitae.entities.SolicitudReservaPK[ idReserva=" + idReserva + ", idRecurso=" + idRecurso + " ]";
+        return "net.delsas.saitae.entities.SolicitudReservaPK[ idRecurso=" + idRecurso + ", idReserva=" + idReserva + " ]";
     }
     
 }

@@ -375,7 +375,7 @@ public class recursoController implements Serializable {
         if (l != null) {
             a = new Integer[l.size()];
             for (int i = 0; i < l.size(); i++) {
-                a[i] = l.get(i).getTipoReserva1().getIdtipoReserva();
+                a[i] = l.get(i).getTipoReserva().getIdtipoReserva();
             }
         } else {
             a = new Integer[0];
@@ -388,7 +388,7 @@ public class recursoController implements Serializable {
         for (int i : a) {
             TipoReservaRecurso trr = new TipoReservaRecurso(new TipoReservaRecursoPK(i, Seleccionado.getIdrecurso()));
             trr.setRecurso(Seleccionado);
-            trr.setTipoReserva1(tipoReservaFL.find(i));
+            trr.setTipoReserva(tipoReservaFL.find(i));
             trr.setTipoReservaRecursoComentario("");
             l.add(trr);
         }

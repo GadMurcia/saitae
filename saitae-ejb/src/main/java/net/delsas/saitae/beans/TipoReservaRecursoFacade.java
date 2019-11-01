@@ -5,9 +5,11 @@
  */
 package net.delsas.saitae.beans;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import net.delsas.saitae.entities.Recurso;
 import net.delsas.saitae.entities.TipoReservaRecurso;
 
 /**
@@ -28,5 +30,13 @@ public class TipoReservaRecursoFacade extends AbstractFacade<TipoReservaRecurso>
     public TipoReservaRecursoFacade() {
         super(TipoReservaRecurso.class);
     }
-    
+
+    @Override
+    public List<Recurso> findRecursoByTipoRecursoAndTipoReserva(Integer idTipoRecurso, Integer idTipoReserva) {
+        return em.createNamedQuery("TipoReservaRecurso.findRecursoByTipoRecursoAndTipoReserva")
+                .setParameter("tipoRecurso", idTipoRecurso)
+                .setParameter("idTipoReserva", idTipoReserva)
+                .getResultList();
+    }
+
 }

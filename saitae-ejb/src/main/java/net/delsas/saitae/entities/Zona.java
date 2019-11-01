@@ -37,12 +37,6 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Zona.findByZonaCoementario", query = "SELECT z FROM Zona z WHERE z.zonaCoementario = :zonaCoementario")})
 public class Zona implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "idzona")
-    private Integer idzona;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
@@ -51,6 +45,13 @@ public class Zona implements Serializable {
     @Size(max = 145)
     @Column(name = "zonaCoementario")
     private String zonaCoementario;
+
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "idzona")
+    private Integer idzona;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "zonaAula")
     private List<Aula> aulaList;
 
@@ -74,21 +75,6 @@ public class Zona implements Serializable {
         this.idzona = idzona;
     }
 
-    public String getZonaNombre() {
-        return zonaNombre;
-    }
-
-    public void setZonaNombre(String zonaNombre) {
-        this.zonaNombre = zonaNombre;
-    }
-
-    public String getZonaCoementario() {
-        return zonaCoementario;
-    }
-
-    public void setZonaCoementario(String zonaCoementario) {
-        this.zonaCoementario = zonaCoementario;
-    }
 
     @XmlTransient
     public List<Aula> getAulaList() {
@@ -122,6 +108,22 @@ public class Zona implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.Zona[ idzona=" + idzona + " ]";
+    }
+
+    public String getZonaNombre() {
+        return zonaNombre;
+    }
+
+    public void setZonaNombre(String zonaNombre) {
+        this.zonaNombre = zonaNombre;
+    }
+
+    public String getZonaCoementario() {
+        return zonaCoementario;
+    }
+
+    public void setZonaCoementario(String zonaCoementario) {
+        this.zonaCoementario = zonaCoementario;
     }
     
 }

@@ -12,6 +12,8 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -41,13 +43,15 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Reserva.findByReservaDevolucion", query = "SELECT r FROM Reserva r WHERE r.reservaDevolucion = :reservaDevolucion")
     , @NamedQuery(name = "Reserva.findByReservaEstado", query = "SELECT r FROM Reserva r WHERE r.reservaEstado = :reservaEstado")
     , @NamedQuery(name = "Reserva.findByReservaDevuelto", query = "SELECT r FROM Reserva r WHERE r.reservaDevuelto = :reservaDevuelto")
+    , @NamedQuery(name = "Reserva.findByTema", query = "SELECT r FROM Reserva r WHERE r.tema = :tema")
+    , @NamedQuery(name = "Reserva.findByObjetivoTema", query = "SELECT r FROM Reserva r WHERE r.objetivoTema = :objetivoTema")
     , @NamedQuery(name = "Reserva.findByReservaComentario", query = "SELECT r FROM Reserva r WHERE r.reservaComentario = :reservaComentario")})
 public class Reserva implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "idreserva")
     private Integer idreserva;
     @Basic(optional = false)
@@ -73,6 +77,16 @@ public class Reserva implements Serializable {
     @Column(name = "reservaDevuelto")
     @Temporal(TemporalType.TIMESTAMP)
     private Date reservaDevuelto;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 45)
+    @Column(name = "tema")
+    private String tema;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 100)
+    @Column(name = "objetivoTema")
+    private String objetivoTema;
     @Size(max = 145)
     @Column(name = "reservaComentario")
     private String reservaComentario;
@@ -83,6 +97,15 @@ public class Reserva implements Serializable {
     @JoinColumn(name = "tipoReserva", referencedColumnName = "idtipoReserva")
     @ManyToOne(optional = false)
     private TipoReserva tipoReserva;
+    @JoinColumn(name = "docente", referencedColumnName = "idmaestro")
+    @ManyToOne
+    private Maestro docente;
+    @JoinColumn(name = "maeria", referencedColumnName = "idmateria")
+    @ManyToOne
+    private Materia maeria;
+    @JoinColumn(name = "TipoPtoyecto", referencedColumnName = "idtipoProyecto")
+    @ManyToOne(optional = false)
+    private TipoProyecto tipoPtoyecto;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "reserva")
     private List<SolicitudReserva> solicitudReservaList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "reserva")
@@ -95,12 +118,14 @@ public class Reserva implements Serializable {
         this.idreserva = idreserva;
     }
 
-    public Reserva(Integer idreserva, Date reservaFecha, Date reservaEntrega, Date reservaDevolucion, String reservaEstado) {
+    public Reserva(Integer idreserva, Date reservaFecha, Date reservaEntrega, Date reservaDevolucion, String reservaEstado, String tema, String objetivoTema) {
         this.idreserva = idreserva;
         this.reservaFecha = reservaFecha;
         this.reservaEntrega = reservaEntrega;
         this.reservaDevolucion = reservaDevolucion;
         this.reservaEstado = reservaEstado;
+        this.tema = tema;
+        this.objetivoTema = objetivoTema;
     }
 
     public Integer getIdreserva() {
@@ -151,6 +176,22 @@ public class Reserva implements Serializable {
         this.reservaDevuelto = reservaDevuelto;
     }
 
+    public String getTema() {
+        return tema;
+    }
+
+    public void setTema(String tema) {
+        this.tema = tema;
+    }
+
+    public String getObjetivoTema() {
+        return objetivoTema;
+    }
+
+    public void setObjetivoTema(String objetivoTema) {
+        this.objetivoTema = objetivoTema;
+    }
+
     public String getReservaComentario() {
         return reservaComentario;
     }
@@ -183,6 +224,30 @@ public class Reserva implements Serializable {
 
     public void setTipoReserva(TipoReserva tipoReserva) {
         this.tipoReserva = tipoReserva;
+    }
+
+    public Maestro getDocente() {
+        return docente;
+    }
+
+    public void setDocente(Maestro docente) {
+        this.docente = docente;
+    }
+
+    public Materia getMaeria() {
+        return maeria;
+    }
+
+    public void setMaeria(Materia maeria) {
+        this.maeria = maeria;
+    }
+
+    public TipoProyecto getTipoProyecto() {
+        return tipoPtoyecto;
+    }
+
+    public void setTipoProyecto(TipoProyecto tipoProyecto) {
+        this.tipoPtoyecto = tipoPtoyecto;
     }
 
     @XmlTransient

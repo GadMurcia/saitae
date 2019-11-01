@@ -38,13 +38,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 })
 public class Notificaciones implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "fechaHora")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaHora;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 140)
@@ -62,6 +55,14 @@ public class Notificaciones implements Serializable {
     @Size(max = 145)
     @Column(name = "notificacionComentario")
     private String notificacionComentario;
+
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "fechaHora")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaHora;
     @JoinColumn(name = "destinatario", referencedColumnName = "idpersona")
     @ManyToOne(optional = false)
     private Persona destinatario;
@@ -94,37 +95,6 @@ public class Notificaciones implements Serializable {
         this.fechaHora = fechaHora;
     }
 
-    public String getNotificacionTitulo() {
-        return notificacionTitulo;
-    }
-
-    public void setNotificacionTitulo(String notificacionTitulo) {
-        this.notificacionTitulo = notificacionTitulo;
-    }
-
-    public String getNotificacionCuerpo() {
-        return notificacionCuerpo;
-    }
-
-    public void setNotificacionCuerpo(String notificacionCuerpo) {
-        this.notificacionCuerpo = notificacionCuerpo;
-    }
-
-    public boolean getVista() {
-        return vista;
-    }
-
-    public void setVista(boolean vista) {
-        this.vista = vista;
-    }
-
-    public String getNotificacionComentario() {
-        return notificacionComentario;
-    }
-
-    public void setNotificacionComentario(String notificacionComentario) {
-        this.notificacionComentario = notificacionComentario;
-    }
 
     public Persona getDestinatario() {
         return destinatario;
@@ -165,6 +135,38 @@ public class Notificaciones implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.Notificaciones[ fechaHora=" + fechaHora + " ]";
+    }
+
+    public String getNotificacionTitulo() {
+        return notificacionTitulo;
+    }
+
+    public void setNotificacionTitulo(String notificacionTitulo) {
+        this.notificacionTitulo = notificacionTitulo;
+    }
+
+    public String getNotificacionCuerpo() {
+        return notificacionCuerpo;
+    }
+
+    public void setNotificacionCuerpo(String notificacionCuerpo) {
+        this.notificacionCuerpo = notificacionCuerpo;
+    }
+
+    public boolean getVista() {
+        return vista;
+    }
+
+    public void setVista(boolean vista) {
+        this.vista = vista;
+    }
+
+    public String getNotificacionComentario() {
+        return notificacionComentario;
+    }
+
+    public void setNotificacionComentario(String notificacionComentario) {
+        this.notificacionComentario = notificacionComentario;
     }
 
 }

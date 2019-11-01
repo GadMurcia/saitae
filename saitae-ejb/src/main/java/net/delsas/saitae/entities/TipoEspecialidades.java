@@ -37,12 +37,6 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "TipoEspecialidades.findByTipoEspecialidadesComentario", query = "SELECT t FROM TipoEspecialidades t WHERE t.tipoEspecialidadesComentario = :tipoEspecialidadesComentario")})
 public class TipoEspecialidades implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "idtipoEspecialidades")
-    private Integer idtipoEspecialidades;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 70)
@@ -51,6 +45,13 @@ public class TipoEspecialidades implements Serializable {
     @Size(max = 145)
     @Column(name = "tipoEspecialidadesComentario")
     private String tipoEspecialidadesComentario;
+
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "idtipoEspecialidades")
+    private Integer idtipoEspecialidades;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "maestroEspecialidad")
     private List<Maestro> maestroList;
 
@@ -74,21 +75,6 @@ public class TipoEspecialidades implements Serializable {
         this.idtipoEspecialidades = idtipoEspecialidades;
     }
 
-    public String getTipoEspecialidadesNombre() {
-        return tipoEspecialidadesNombre;
-    }
-
-    public void setTipoEspecialidadesNombre(String tipoEspecialidadesNombre) {
-        this.tipoEspecialidadesNombre = tipoEspecialidadesNombre;
-    }
-
-    public String getTipoEspecialidadesComentario() {
-        return tipoEspecialidadesComentario;
-    }
-
-    public void setTipoEspecialidadesComentario(String tipoEspecialidadesComentario) {
-        this.tipoEspecialidadesComentario = tipoEspecialidadesComentario;
-    }
 
     @XmlTransient
     public List<Maestro> getMaestroList() {
@@ -122,6 +108,22 @@ public class TipoEspecialidades implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.TipoEspecialidades[ idtipoEspecialidades=" + idtipoEspecialidades + " ]";
+    }
+
+    public String getTipoEspecialidadesNombre() {
+        return tipoEspecialidadesNombre;
+    }
+
+    public void setTipoEspecialidadesNombre(String tipoEspecialidadesNombre) {
+        this.tipoEspecialidadesNombre = tipoEspecialidadesNombre;
+    }
+
+    public String getTipoEspecialidadesComentario() {
+        return tipoEspecialidadesComentario;
+    }
+
+    public void setTipoEspecialidadesComentario(String tipoEspecialidadesComentario) {
+        this.tipoEspecialidadesComentario = tipoEspecialidadesComentario;
     }
     
 }

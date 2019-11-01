@@ -38,12 +38,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 })
 public class DelagacionCargo implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "iddelagacionCargo")
-    private Integer iddelagacionCargo;
     @Basic(optional = false)
     @NotNull
     @Column(name = "fechaInicio")
@@ -57,6 +51,13 @@ public class DelagacionCargo implements Serializable {
     @Size(max = 45)
     @Column(name = "delagacionCargoComentario")
     private String delagacionCargoComentario;
+
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "iddelagacionCargo")
+    private Integer iddelagacionCargo;
     @JoinColumn(name = "idpersona", referencedColumnName = "idpersona")
     @ManyToOne(optional = false)
     private Persona idpersona;
@@ -85,29 +86,6 @@ public class DelagacionCargo implements Serializable {
         this.iddelagacionCargo = iddelagacionCargo;
     }
 
-    public Date getFechaInicio() {
-        return fechaInicio;
-    }
-
-    public void setFechaInicio(Date fechaInicio) {
-        this.fechaInicio = fechaInicio;
-    }
-
-    public Date getFechaFin() {
-        return fechaFin;
-    }
-
-    public void setFechaFin(Date fechaFin) {
-        this.fechaFin = fechaFin;
-    }
-
-    public String getDelagacionCargoComentario() {
-        return delagacionCargoComentario;
-    }
-
-    public void setDelagacionCargoComentario(String delagacionCargoComentario) {
-        this.delagacionCargoComentario = delagacionCargoComentario;
-    }
 
     public Persona getIdpersona() {
         return idpersona;
@@ -148,6 +126,30 @@ public class DelagacionCargo implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.DelagacionCargo[ iddelagacionCargo=" + iddelagacionCargo + " ]";
+    }
+
+    public Date getFechaInicio() {
+        return fechaInicio;
+    }
+
+    public void setFechaInicio(Date fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
+
+    public Date getFechaFin() {
+        return fechaFin;
+    }
+
+    public void setFechaFin(Date fechaFin) {
+        this.fechaFin = fechaFin;
+    }
+
+    public String getDelagacionCargoComentario() {
+        return delagacionCargoComentario;
+    }
+
+    public void setDelagacionCargoComentario(String delagacionCargoComentario) {
+        this.delagacionCargoComentario = delagacionCargoComentario;
     }
 
 }

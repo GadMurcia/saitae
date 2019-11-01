@@ -36,12 +36,6 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "ExpedientePS.findByExpedientePSComentario", query = "SELECT e FROM ExpedientePS e WHERE e.expedientePSComentario = :expedientePSComentario")})
 public class ExpedientePS implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "idEstudiante")
-    private Integer idEstudiante;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 300)
@@ -50,6 +44,13 @@ public class ExpedientePS implements Serializable {
     @Size(max = 140)
     @Column(name = "expedientePSComentario")
     private String expedientePSComentario;
+
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "idEstudiante")
+    private Integer idEstudiante;
     @OneToMany(mappedBy = "consultaExpediente")
     private List<Consulta> consultaList;
     @JoinColumn(name = "idEstudiante", referencedColumnName = "idestudiante", insertable = false, updatable = false)
@@ -76,21 +77,6 @@ public class ExpedientePS implements Serializable {
         this.idEstudiante = idEstudiante;
     }
 
-    public String getExpedientePsPersonasVivien() {
-        return expedientePsPersonasVivien;
-    }
-
-    public void setExpedientePsPersonasVivien(String expedientePsPersonasVivien) {
-        this.expedientePsPersonasVivien = expedientePsPersonasVivien;
-    }
-
-    public String getExpedientePSComentario() {
-        return expedientePSComentario;
-    }
-
-    public void setExpedientePSComentario(String expedientePSComentario) {
-        this.expedientePSComentario = expedientePSComentario;
-    }
 
     @XmlTransient
     public List<Consulta> getConsultaList() {
@@ -132,6 +118,22 @@ public class ExpedientePS implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.ExpedientePS[ idEstudiante=" + idEstudiante + " ]";
+    }
+
+    public String getExpedientePsPersonasVivien() {
+        return expedientePsPersonasVivien;
+    }
+
+    public void setExpedientePsPersonasVivien(String expedientePsPersonasVivien) {
+        this.expedientePsPersonasVivien = expedientePsPersonasVivien;
+    }
+
+    public String getExpedientePSComentario() {
+        return expedientePSComentario;
+    }
+
+    public void setExpedientePSComentario(String expedientePSComentario) {
+        this.expedientePSComentario = expedientePSComentario;
     }
     
 }

@@ -31,12 +31,13 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "EditorialLibro.findByEditorialLibroComentario", query = "SELECT e FROM EditorialLibro e WHERE e.editorialLibroComentario = :editorialLibroComentario")})
 public class EditorialLibro implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected EditorialLibroPK editorialLibroPK;
     @Size(max = 145)
     @Column(name = "editorialLibroComentario")
     private String editorialLibroComentario;
+
+    private static final long serialVersionUID = 1L;
+    @EmbeddedId
+    protected EditorialLibroPK editorialLibroPK;
     @JoinColumn(name = "ideditorial", referencedColumnName = "ideditorial", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Editorial editorial;
@@ -63,13 +64,6 @@ public class EditorialLibro implements Serializable {
         this.editorialLibroPK = editorialLibroPK;
     }
 
-    public String getEditorialLibroComentario() {
-        return editorialLibroComentario;
-    }
-
-    public void setEditorialLibroComentario(String editorialLibroComentario) {
-        this.editorialLibroComentario = editorialLibroComentario;
-    }
 
     public Editorial getEditorial() {
         return editorial;
@@ -110,6 +104,14 @@ public class EditorialLibro implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.EditorialLibro[ editorialLibroPK=" + editorialLibroPK + " ]";
+    }
+
+    public String getEditorialLibroComentario() {
+        return editorialLibroComentario;
+    }
+
+    public void setEditorialLibroComentario(String editorialLibroComentario) {
+        this.editorialLibroComentario = editorialLibroComentario;
     }
     
 }

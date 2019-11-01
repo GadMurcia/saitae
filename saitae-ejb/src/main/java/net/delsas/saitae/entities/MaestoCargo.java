@@ -39,18 +39,19 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "MaestoCargo.findByMaestoCargoComentario", query = "SELECT m FROM MaestoCargo m WHERE m.maestoCargoComentario = :maestoCargoComentario")})
 public class MaestoCargo implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected MaestoCargoPK maestoCargoPK;
-    @Column(name = "fechaDestitucion")
-    @Temporal(TemporalType.DATE)
-    private Date fechaDestitucion;
     @Size(max = 145)
     @Column(name = "razondestitucion")
     private String razondestitucion;
     @Size(max = 145)
     @Column(name = "maestoCargoComentario")
     private String maestoCargoComentario;
+
+    private static final long serialVersionUID = 1L;
+    @EmbeddedId
+    protected MaestoCargoPK maestoCargoPK;
+    @Column(name = "fechaDestitucion")
+    @Temporal(TemporalType.DATE)
+    private Date fechaDestitucion;
     @JoinColumn(name = "idMaesto", referencedColumnName = "idmaestro", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Maestro maestro;
@@ -91,21 +92,6 @@ public class MaestoCargo implements Serializable {
         this.fechaDestitucion = fechaDestitucion;
     }
 
-    public String getRazondestitucion() {
-        return razondestitucion;
-    }
-
-    public void setRazondestitucion(String razondestitucion) {
-        this.razondestitucion = razondestitucion;
-    }
-
-    public String getMaestoCargoComentario() {
-        return maestoCargoComentario;
-    }
-
-    public void setMaestoCargoComentario(String maestoCargoComentario) {
-        this.maestoCargoComentario = maestoCargoComentario;
-    }
 
     public Maestro getMaestro() {
         return maestro;
@@ -162,6 +148,22 @@ public class MaestoCargo implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.MaestoCargo[ maestoCargoPK=" + maestoCargoPK + " ]";
+    }
+
+    public String getRazondestitucion() {
+        return razondestitucion;
+    }
+
+    public void setRazondestitucion(String razondestitucion) {
+        this.razondestitucion = razondestitucion;
+    }
+
+    public String getMaestoCargoComentario() {
+        return maestoCargoComentario;
+    }
+
+    public void setMaestoCargoComentario(String maestoCargoComentario) {
+        this.maestoCargoComentario = maestoCargoComentario;
     }
     
 }

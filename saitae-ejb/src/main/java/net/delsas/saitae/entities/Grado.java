@@ -46,9 +46,6 @@ import javax.xml.bind.annotation.XmlTransient;
 })
 public class Grado implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected GradoPK gradoPK;
     @Basic(optional = false)
     @NotNull
     @Column(name = "gradoActivo")
@@ -56,6 +53,10 @@ public class Grado implements Serializable {
     @Size(max = 145)
     @Column(name = "gradoCoemntario")
     private String gradoCoemntario;
+
+    private static final long serialVersionUID = 1L;
+    @EmbeddedId
+    protected GradoPK gradoPK;
     @JoinColumn(name = "gradoMaestroGuia", referencedColumnName = "idmaestro")
     @ManyToOne
     private Maestro gradoMaestroGuia;
@@ -95,21 +96,6 @@ public class Grado implements Serializable {
         this.gradoPK = gradoPK;
     }
 
-    public boolean getGradoActivo() {
-        return gradoActivo;
-    }
-
-    public void setGradoActivo(boolean gradoActivo) {
-        this.gradoActivo = gradoActivo;
-    }
-
-    public String getGradoCoemntario() {
-        return gradoCoemntario;
-    }
-
-    public void setGradoCoemntario(String gradoCoemntario) {
-        this.gradoCoemntario = gradoCoemntario;
-    }
 
     public Maestro getGradoMaestroGuia() {
         return gradoMaestroGuia;
@@ -185,6 +171,22 @@ public class Grado implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.Grado[ gradoPK=" + gradoPK + " ]";
+    }
+
+    public boolean getGradoActivo() {
+        return gradoActivo;
+    }
+
+    public void setGradoActivo(boolean gradoActivo) {
+        this.gradoActivo = gradoActivo;
+    }
+
+    public String getGradoCoemntario() {
+        return gradoCoemntario;
+    }
+
+    public void setGradoCoemntario(String gradoCoemntario) {
+        this.gradoCoemntario = gradoCoemntario;
     }
     
 }

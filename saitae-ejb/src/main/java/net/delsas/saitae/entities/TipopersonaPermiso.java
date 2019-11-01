@@ -31,12 +31,13 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "TipopersonaPermiso.findByTipopersonaPermisoComentario", query = "SELECT t FROM TipopersonaPermiso t WHERE t.tipopersonaPermisoComentario = :tipopersonaPermisoComentario")})
 public class TipopersonaPermiso implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected TipopersonaPermisoPK tipopersonaPermisoPK;
     @Size(max = 45)
     @Column(name = "tipopersonaPermisoComentario")
     private String tipopersonaPermisoComentario;
+
+    private static final long serialVersionUID = 1L;
+    @EmbeddedId
+    protected TipopersonaPermisoPK tipopersonaPermisoPK;
     @JoinColumn(name = "idtipopersona", referencedColumnName = "idtipoPersona", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private TipoPersona tipoPersona;
@@ -63,13 +64,6 @@ public class TipopersonaPermiso implements Serializable {
         this.tipopersonaPermisoPK = tipopersonaPermisoPK;
     }
 
-    public String getTipopersonaPermisoComentario() {
-        return tipopersonaPermisoComentario;
-    }
-
-    public void setTipopersonaPermisoComentario(String tipopersonaPermisoComentario) {
-        this.tipopersonaPermisoComentario = tipopersonaPermisoComentario;
-    }
 
     public TipoPersona getTipoPersona() {
         return tipoPersona;
@@ -110,6 +104,14 @@ public class TipopersonaPermiso implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.TipopersonaPermiso[ tipopersonaPermisoPK=" + tipopersonaPermisoPK + " ]";
+    }
+
+    public String getTipopersonaPermisoComentario() {
+        return tipopersonaPermisoComentario;
+    }
+
+    public void setTipopersonaPermisoComentario(String tipopersonaPermisoComentario) {
+        this.tipopersonaPermisoComentario = tipopersonaPermisoComentario;
     }
     
 }

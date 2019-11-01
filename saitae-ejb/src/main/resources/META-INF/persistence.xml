@@ -46,17 +46,18 @@
     <class>net.delsas.saitae.entities.ReservaXpedagogia</class>
     <class>net.delsas.saitae.entities.SolicitudReserva</class>
     <class>net.delsas.saitae.entities.TipoCargo</class>
+    <class>net.delsas.saitae.entities.TipoEspecialidades</class>
     <class>net.delsas.saitae.entities.TipoMateria</class>
     <class>net.delsas.saitae.entities.TipoNombramiento</class>
     <class>net.delsas.saitae.entities.TipoPermiso</class>
     <class>net.delsas.saitae.entities.TipoPersona</class>
+    <class>net.delsas.saitae.entities.TipoProyecto</class>
     <class>net.delsas.saitae.entities.TipoRecurso</class>
     <class>net.delsas.saitae.entities.TipoReserva</class>
     <class>net.delsas.saitae.entities.TipoReservaRecurso</class>
+    <class>net.delsas.saitae.entities.TipoSueldos</class>
     <class>net.delsas.saitae.entities.TipopersonaPermiso</class>
     <class>net.delsas.saitae.entities.Zona</class>
-    <class>net.delsas.saitae.entities.TipoEspecialidades</class>
-    <class>net.delsas.saitae.entities.TipoSueldos</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties/>
   </persistence-unit>

@@ -44,22 +44,11 @@ import javax.xml.bind.annotation.XmlTransient;
 })
 public class Recurso implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "idrecurso")
-    private Integer idrecurso;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 100)
     @Column(name = "nombre")
     private String nombre;
-    @Column(name = "activo")
-    private Boolean activo;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(name = "valorUnitario")
-    private Float valorUnitario;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 2)
@@ -76,6 +65,18 @@ public class Recurso implements Serializable {
     @Size(max = 140)
     @Column(name = "recursoComentarios")
     private String recursoComentarios;
+
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "idrecurso")
+    private Integer idrecurso;
+    @Column(name = "activo")
+    private Boolean activo;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "valorUnitario")
+    private Float valorUnitario;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "recurso")
     private List<Ejemplar> ejemplarList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "recurso")
@@ -123,13 +124,6 @@ public class Recurso implements Serializable {
         this.idrecurso = idrecurso;
     }
 
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
 
     public Boolean getActivo() {
         return activo;
@@ -147,37 +141,6 @@ public class Recurso implements Serializable {
         this.valorUnitario = valorUnitario;
     }
 
-    public String getEstadoFisico() {
-        return estadoFisico;
-    }
-
-    public void setEstadoFisico(String estadoFisico) {
-        this.estadoFisico = estadoFisico;
-    }
-
-    public String getTipoValor() {
-        return tipoValor;
-    }
-
-    public void setTipoValor(String tipoValor) {
-        this.tipoValor = tipoValor;
-    }
-
-    public String getModelo() {
-        return modelo;
-    }
-
-    public void setModelo(String modelo) {
-        this.modelo = modelo;
-    }
-
-    public String getRecursoComentarios() {
-        return recursoComentarios;
-    }
-
-    public void setRecursoComentarios(String recursoComentarios) {
-        this.recursoComentarios = recursoComentarios;
-    }
 
     @XmlTransient
     public List<Ejemplar> getEjemplarList() {
@@ -288,6 +251,46 @@ public class Recurso implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.Recurso[ idrecurso=" + idrecurso + " ]";
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getEstadoFisico() {
+        return estadoFisico;
+    }
+
+    public void setEstadoFisico(String estadoFisico) {
+        this.estadoFisico = estadoFisico;
+    }
+
+    public String getTipoValor() {
+        return tipoValor;
+    }
+
+    public void setTipoValor(String tipoValor) {
+        this.tipoValor = tipoValor;
+    }
+
+    public String getModelo() {
+        return modelo;
+    }
+
+    public void setModelo(String modelo) {
+        this.modelo = modelo;
+    }
+
+    public String getRecursoComentarios() {
+        return recursoComentarios;
+    }
+
+    public void setRecursoComentarios(String recursoComentarios) {
+        this.recursoComentarios = recursoComentarios;
     }
 
 }

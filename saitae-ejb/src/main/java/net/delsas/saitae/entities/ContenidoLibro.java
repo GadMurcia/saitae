@@ -35,9 +35,6 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "ContenidoLibro.findByContenidoLibroComentario", query = "SELECT c FROM ContenidoLibro c WHERE c.contenidoLibroComentario = :contenidoLibroComentario")})
 public class ContenidoLibro implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected ContenidoLibroPK contenidoLibroPK;
     @Basic(optional = false)
     @NotNull
     @Column(name = "contenidoLibroIndice")
@@ -45,6 +42,10 @@ public class ContenidoLibro implements Serializable {
     @Size(max = 140)
     @Column(name = "contenidoLibroComentario")
     private String contenidoLibroComentario;
+
+    private static final long serialVersionUID = 1L;
+    @EmbeddedId
+    protected ContenidoLibroPK contenidoLibroPK;
     @JoinColumn(name = "idLibro", referencedColumnName = "idrecurso", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Recurso recurso;
@@ -73,21 +74,6 @@ public class ContenidoLibro implements Serializable {
         this.contenidoLibroPK = contenidoLibroPK;
     }
 
-    public int getContenidoLibroIndice() {
-        return contenidoLibroIndice;
-    }
-
-    public void setContenidoLibroIndice(int contenidoLibroIndice) {
-        this.contenidoLibroIndice = contenidoLibroIndice;
-    }
-
-    public String getContenidoLibroComentario() {
-        return contenidoLibroComentario;
-    }
-
-    public void setContenidoLibroComentario(String contenidoLibroComentario) {
-        this.contenidoLibroComentario = contenidoLibroComentario;
-    }
 
     public Recurso getRecurso() {
         return recurso;
@@ -120,6 +106,22 @@ public class ContenidoLibro implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.ContenidoLibro[ contenidoLibroPK=" + contenidoLibroPK + " ]";
+    }
+
+    public int getContenidoLibroIndice() {
+        return contenidoLibroIndice;
+    }
+
+    public void setContenidoLibroIndice(int contenidoLibroIndice) {
+        this.contenidoLibroIndice = contenidoLibroIndice;
+    }
+
+    public String getContenidoLibroComentario() {
+        return contenidoLibroComentario;
+    }
+
+    public void setContenidoLibroComentario(String contenidoLibroComentario) {
+        this.contenidoLibroComentario = contenidoLibroComentario;
     }
     
 }

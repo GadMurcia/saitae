@@ -33,12 +33,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 })
 public class AccesoTipoPersona implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected AccesoTipoPersonaPK accesoTipoPersonaPK;
     @Size(max = 140)
     @Column(name = "accesoTipoPersonaComentario")
     private String accesoTipoPersonaComentario;
+
+    private static final long serialVersionUID = 1L;
+    @EmbeddedId
+    protected AccesoTipoPersonaPK accesoTipoPersonaPK;
     @JoinColumn(name = "idacceso", referencedColumnName = "idacceso", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Acceso acceso;
@@ -65,13 +66,6 @@ public class AccesoTipoPersona implements Serializable {
         this.accesoTipoPersonaPK = accesoTipoPersonaPK;
     }
 
-    public String getAccesoTipoPersonaComentario() {
-        return accesoTipoPersonaComentario;
-    }
-
-    public void setAccesoTipoPersonaComentario(String accesoTipoPersonaComentario) {
-        this.accesoTipoPersonaComentario = accesoTipoPersonaComentario;
-    }
 
     public Acceso getAcceso() {
         return acceso;
@@ -112,6 +106,14 @@ public class AccesoTipoPersona implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.AccesoTipoPersona[ accesoTipoPersonaPK=" + accesoTipoPersonaPK + " ]";
+    }
+
+    public String getAccesoTipoPersonaComentario() {
+        return accesoTipoPersonaComentario;
+    }
+
+    public void setAccesoTipoPersonaComentario(String accesoTipoPersonaComentario) {
+        this.accesoTipoPersonaComentario = accesoTipoPersonaComentario;
     }
     
 }
