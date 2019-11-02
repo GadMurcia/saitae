@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="./../WEB-INF/template/plantilla1.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
@@ -102,14 +103,61 @@
                                           showTime="true" timeOnly="true" hourFormat="12"/>
 
                             <p:outputLabel value="Responsale del equipo: "/>
-                            <p:outputLabel value="#{reservaSController.reservante}"/>
+                            <p:outputLabel value="#{reservaSController.responsable}"/>
 
                             <p:outputLabel for="us" value="El equipo será usado por: "/>
-                            <p:selectOneRadio id="us" value="" unselectable="true">
+                            <p:selectOneMenu id="us" value="#{reservaSController.usadoPor}" 
+                                             converter="omnifaces.SelectItemsConverter">
+                                <f:selectItem itemLabel="Seleccione" itemValue="0" noSelectionOption="true"/>
                                 <f:selectItem itemLabel="Docente" itemValue="1" />
                                 <f:selectItem itemLabel="Estudiante" itemValue="2" />
                                 <f:selectItem itemLabel="Grupo de estudiantes" itemValue="3" />
-                            </p:selectOneRadio>
+                                <p:ajax event="itemSelect" listener="#{reservaSController.usosSelect}"/>
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                    </p:panel>
+                </p:tab>
+                <p:tab id="alm" rendered="#{reservaSController.alumnos}" >
+                    <p:panel header="Estudiantes en el grupo">
+                        <h:panelGrid columns="1">
+                            <p:dataTable id="alumnos" var="e" value="#{reservaSController.estudiantes}" editable="true" 
+                                         widgetVar="alumnos1" styleClass="tabla"
+                                         emptyMessage="Sin registros aún." style="width: 30%;">
+                                <f:facet name="header">
+                                    Agregue los estudiantes en el grupo
+                                </f:facet>
+
+                                <p:ajax event="rowEdit" listener="#{reservaSController.onRowEdit}"/>
+                                <p:ajax event="rowEditCancel" listener="#{reservaSController.onRowCancel}"/>
+
+                                <p:column headerText="Nombre">
+                                    <h:outputText value="#{e.persona.personaNombre} #{e.persona.personaApellido}"/>
+                                </p:column>
+
+                                <p:column headerText="NIE">
+                                    <p:cellEditor>
+                                        <f:facet name="output">
+                                            <h:outputText value="#{e.idestudiante}" />
+                                        </f:facet>
+                                        <f:facet name="input">
+                                            <p:inputText value="#{e.idestudiante}" 
+                                                         style="width:100%" label="NIE"/>
+                                        </f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                <p:column style="width:35px">
+                                    <p:rowEditor />
+                                </p:column>
+                            </p:dataTable> 
+                            <div class="ui-g">
+                                <div class="ui-g-12">
+                                    <p:commandButton value="+" styleClass="ui-priority-primary" 
+                                                     process="@this"
+                                                     action="#{reservaSController.onAddNew()}" 
+                                                     oncomplete="PF('alumnos1').addRow();"
+                                                     title="Agregar un alumno al grupo."/>
+                                </div>
+                            </div>
                         </h:panelGrid>
                     </p:panel>
                 </p:tab>
