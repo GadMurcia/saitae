@@ -20,6 +20,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -59,7 +60,7 @@ import org.primefaces.event.SelectEvent;
 @Named
 @ViewScoped
 public class reservaSController implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
     @EJB
     private ReservaFacadeLocal resFL;
@@ -98,19 +99,21 @@ public class reservaSController implements Serializable {
     private EstudianteFacadeLocal estFL;
     private List<Estudiante> estudiantes;
     private int usos;
-    
+
     @PostConstruct
     public void init() {
+        usuario = (Persona) FacesContext.getCurrentInstance()
+                .getExternalContext().getSessionMap().get("usuario");
         reserva = new Reserva();
         reserva.setReservaComentario(" ¿¿ ¿¿ ¿¿ ");
+        setResponsable(usuario.getPersonaNombre().split(" ")[0] + " "
+                + usuario.getPersonaApellido().split(" ")[0]);
         recursos = new ArrayList<>();
         tiporList = trFL.findAll();
         cra = false;
         lab = false;
         bib = false;
         alumnos = false;
-        usuario = (Persona) FacesContext.getCurrentInstance()
-                .getExternalContext().getSessionMap().get("usuario");
         tiposReserva = tipoReservaFL.findAll();
         grados = gradoFL.findAll();
         maestros = new ArrayList<>();
@@ -118,9 +121,8 @@ public class reservaSController implements Serializable {
         tProyectos = tProyectoFL.findAll();
         estudiantes = new ArrayList<>();
         usos = 0;
-        setResponsable(usuario.getPersonaNombre().split(" ")[0] + " " + usuario.getPersonaApellido().split(" ")[0]);
     }
-    
+
     public String getGradoNombre(Grado g) {
         if (g == null) {
             return "";
@@ -130,7 +132,7 @@ public class reservaSController implements Serializable {
                 : (id.getGradoModalidad().equals("S") ? "TVC Secretariado" : "General"))
                 + " " + id.getGradoSeccion();
     }
-    
+
     public void tipoRecursoSelect(SelectEvent event) {
         reserva = new Reserva();
         reserva.setReservaComentario(" ¿¿ ¿¿ ¿¿ ");
@@ -148,17 +150,17 @@ public class reservaSController implements Serializable {
         alumnos = false;
         System.out.println(tp == null ? "No Selection" : tp);
     }
-    
+
     public void usosSelect(SelectEvent event) {
         usos = event.getObject() != null ? Integer.valueOf(event.getObject().toString()) : 0;
-        setUsadoPor(usos+"");
+        setUsadoPor(usos + "");
         alumnos = usos == 3;
         if (alumnos) {
             PrimeFaces.current().ajax().update(":form:alm");
         }
         System.out.println(usos == 0 ? "No Selection" : usos);
     }
-    
+
     public void tipoReservaSelect(SelectEvent event) {
         reserva.setTipoReserva((TipoReserva) event.getObject());
         if (tp != null && reserva.getTipoReserva() != null) {
@@ -167,7 +169,7 @@ public class reservaSController implements Serializable {
         }
         System.out.println("" + reserva.getTipoReserva());
     }
-    
+
     public void gradoSelect(SelectEvent event) {
         grado = (Grado) event.getObject();
         if (grado != null) {
@@ -175,7 +177,7 @@ public class reservaSController implements Serializable {
         }
         System.out.println(grado);
     }
-    
+
     public void maestroSelect(SelectEvent event) {
         maestro = (Maestro) event.getObject();
         if (maestro != null && grado != null) {
@@ -183,151 +185,155 @@ public class reservaSController implements Serializable {
         }
         System.out.println(maestro);
     }
-    
+
     public void onAddNew() {
         Estudiante e = new Estudiante(0);
         e.setPersona(new Persona(0, " ", " ", false));
         estudiantes.add(e);
     }
-    
+
     public void onRowEdit(RowEditEvent event) {
         Estudiante e = (Estudiante) event.getObject();
-        e = estFL.find(e.getIdestudiante());
+        e.setPersona(new Persona(0));
+        new Auxiliar().setDui("" + e.getIdestudiante(), e.getPersona());
+        e = estFL.find(e.getPersona().getIdpersona());
         if (e != null) {
             estudiantes.add(e);
+        } else {
+            onRowCancel(event);
         }
         limpia();
-        PrimeFaces.current().ajax().update(event.getComponent().getClientId());
+        System.out.println(event.getComponent().getClientId());
+        PrimeFaces.current().ajax().update(":form:alumnos");
     }
-    
+
     public void onRowCancel(RowEditEvent event) {
-        Estudiante e = (Estudiante) event.getObject();
-        Persona p = new Persona(0);
-        new Auxiliar().setDui("" + e.getIdestudiante(), p);
-        e = estFL.find(p.getIdpersona());
-        if (e != null) {
-            estudiantes.remove(e);
+        if (event.getObject() != null) {
+            estudiantes.remove(estudiantes.indexOf(event.getObject()));
         }
-        limpia();
-        PrimeFaces.current().ajax().update(event.getComponent().getClientId());
+        this.limpia();
+        System.out.println(event.getComponent().getClientId());
+        PrimeFaces.current().ajax().update(":form:alumnos");
     }
-    
+
     void limpia() {
         try {
-            for (Estudiante e : estudiantes) {
-                if (e.getPersona().getIdpersona() == 0) {
-                    estudiantes.remove(e);
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
-                            "Estudiante no encontrado",
-                            "El estudiante con NIE " + e.getIdestudiante() + " No fue encontrado, por lo que se retira de la lista."));
-                    PrimeFaces.current().ajax().update(":form0:msgs");
-                }
-            }
+            estudiantes.stream().filter((e) -> (e.getPersona().getIdpersona() == 0)).map((e) -> {
+                estudiantes.remove(e);
+                return e;
+            }).map((e) -> {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
+                        "Estudiante no encontrado",
+                        "El estudiante con NIE " + e.getIdestudiante() + " No fue encontrado, por lo que se retira de la lista."));
+                return e;
+            }).forEachOrdered((_item) -> {
+                PrimeFaces.current().ajax().update(":form0:msgs");
+            });
         } catch (Exception e) {
-            
+
         }
     }
-    
+
     public List<SolicitudReserva> getSolicitud() {
         return Collections.unmodifiableList(solicitud);
     }
-    
+
     public void setSolicitud(List<SolicitudReserva> solicitud) {
         this.solicitud = solicitud;
     }
-    
+
     public List<Recurso> getRecursos() {
         return Collections.unmodifiableList(recursos);
     }
-    
+
     public void setRecursos(List<Recurso> recursos) {
         this.recursos = recursos;
     }
-    
+
     public List<TipoReserva> getTiposReserva() {
         return Collections.unmodifiableList(tiposReserva);
     }
-    
+
     public void setTiposReserva(List<TipoReserva> tr) {
         tiposReserva = tr;
     }
-    
+
     public List<Grado> getGrados() {
         return Collections.unmodifiableList(grados);
     }
-    
+
     public Grado getGrado() {
         return grado;
     }
-    
+
     public void setGrado(Grado grado) {
         this.grado = grado;
     }
-    
+
     public Maestro getMaestro() {
         return maestro;
     }
-    
+
     public void setMaestro(Maestro maestro) {
         this.maestro = maestro;
     }
-    
+
     public List<Maestro> getMaestros() {
         return Collections.unmodifiableList(maestros);
     }
-    
+
     public List<Materia> getMaterias() {
         return Collections.unmodifiableList(materias);
     }
-    
+
     public List<TipoProyecto> getTProyectos() {
         return Collections.unmodifiableList(tProyectos);
     }
-    
+
     public boolean isAlumnos() {
         return alumnos;
     }
-    
+
     public List<Estudiante> getEstudiantes() {
-        return estudiantes;
+        return Collections.unmodifiableList(estudiantes);
     }
-    
+
     public void setEstudiantes(List<Estudiante> estudiantes) {
         this.estudiantes = estudiantes;
     }
-    
+
     public List<TipoRecurso> getTiporList() {
         return Collections.unmodifiableList(tiporList);
     }
-    
+
     public Reserva getReserva() {
         return reserva;
     }
-    
+
     public void setReserva(Reserva reserva) {
         this.reserva = reserva;
     }
-    
+
     public boolean isCra() {
         return cra;
     }
-    
+
     public boolean isLab() {
         return lab;
     }
-    
+
     public boolean isBib() {
         return bib;
     }
-    
+
     public TipoRecurso getTp() {
         return tp;
     }
-    
+
     public void setTp(TipoRecurso tp) {
         this.tp = tp;
     }
-    
+
     public void setReservaDetalle(List<Recurso> recs) {
         recs.stream().map((r) -> {
             SolicitudReserva s = new SolicitudReserva(0, r.getIdrecurso());
@@ -337,7 +343,7 @@ public class reservaSController implements Serializable {
             solicitud.add(s);
         });
     }
-    
+
     public List<Recurso> getReservaDetalle() {
         List<Recurso> r = new ArrayList<>();
         if (solicitud == null) {
@@ -348,52 +354,56 @@ public class reservaSController implements Serializable {
         });
         return r;
     }
-    
+
     public int getUsos() {
         return usos;
     }
-    
+
     public void setUsos(int usos) {
         this.usos = usos;
     }
-    
+
     public void setResponsable(String resp) {
         String c[] = reserva.getReservaComentario().split("¿¿");
         String rr = "";
-        for (String g : c) {
-            if (g.equals(c[0])) {
+        for (int y = 0; y < c.length; y++) {
+            if (y == 0) {
                 rr += resp;
             } else {
-                rr += "¿¿" + g;
+                rr += "¿¿" + c[y];
             }
-            
+
         }
         reserva.setReservaComentario(rr);
         System.out.println(rr);
     }
-    
+
     public String getResponsable() {
         return reserva.getReservaComentario().split("¿¿")[0];
     }
-    
+
     public void setUsadoPor(String usadoPor) {
         String c[] = reserva.getReservaComentario().split("¿¿");
         String rr = "";
-        for (String g : c) {
-            if (g.equals(c[0])) {
-                rr += g;
-            } else if (g.equals(c[1])) {
-                rr += usadoPor;
-            } else {
-                rr += "¿¿" + g;
+        for (int y = 0; y < c.length; y++) {
+            switch (y) {
+                case 0:
+                    rr += c[0];
+                    break;
+                case 1:
+                    rr += "¿¿" + usadoPor;
+                    break;
+                default:
+                    rr += "¿¿" + c[y];
+                    break;
             }
-            System.out.println(rr);
         }
         reserva.setReservaComentario(rr);
+        System.out.println(rr);
     }
-    
+
     public String getUsadoPor() {
         return reserva.getReservaComentario().split("¿¿")[1];
     }
-    
+
 }
