@@ -28,19 +28,21 @@
                             <h:panelGrid columns="2">
                                 <p:outputLabel for="us" value="El equipo será usado por: "/>
                                 <p:selectOneMenu id="us" value="#{reservaSController.usadoPor}" 
-                                                 converter="omnifaces.SelectItemsConverter">
+                                                 converter="omnifaces.SelectItemsConverter"
+                                                 required="true" immediate="true">
                                     <f:selectItem itemLabel="Seleccione" itemValue="0" noSelectionOption="true"/>
                                     <f:selectItem itemLabel="Docente" itemValue="1" />
                                     <f:selectItem itemLabel="Estudiante" itemValue="2" />
                                     <f:selectItem itemLabel="Grupo de estudiantes" itemValue="3" />
                                     <p:ajax event="itemSelect" listener="#{reservaSController.usosSelect}"
-                                            update=":form"/>
+                                            update=":form:b :form:alumnos"/>
                                 </p:selectOneMenu>
 
 
                                 <p:outputLabel for="tre" value="Dónde será usado el equipo? "/>
                                 <p:selectOneMenu id="tre" value="#{reservaSController.reserva.tipoReserva}" 
-                                                 converter="omnifaces.SelectItemsConverter">
+                                                 converter="omnifaces.SelectItemsConverter"
+                                                 required="true" immediate="true">
                                     <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
                                     <f:selectItems value="#{reservaSController.tiposReserva}" var="tir"
                                                    itemValue="#{tir}" itemLabel="#{tir.tipoReservaNombre}"/>
@@ -50,7 +52,8 @@
 
                                 <p:outputLabel for="gr" value="Grado "/>
                                 <p:selectOneMenu id="gr" value="#{reservaSController.grado}" 
-                                                 converter="omnifaces.SelectItemsConverter">
+                                                 converter="omnifaces.SelectItemsConverter"
+                                                 required="true" immediate="true">
                                     <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
                                     <f:selectItems value="#{reservaSController.grados}" var="gr"
                                                    itemLabel="#{reservaSController.getGradoNombre(gr)}" itemValue="#{gr}"/>
@@ -60,7 +63,8 @@
 
                                 <p:outputLabel for="doc" value="Docente: "/>
                                 <p:selectOneMenu id="doc" value="#{reservaSController.reserva.docente}" 
-                                                 converter="omnifaces.SelectItemsConverter">
+                                                 converter="omnifaces.SelectItemsConverter"
+                                                 required="true" immediate="true">
                                     <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
                                     <f:selectItems value="#{reservaSController.maestros}" var="doc"
                                                    itemLabel="#{doc.persona.personaNombre.split(' ')[0]} 
@@ -71,21 +75,25 @@
 
                                 <p:outputLabel for="asi" value="Asignatura"/>
                                 <p:selectOneMenu id="asi" value="#{reservaSController.reserva.maeria}" 
-                                                 converter="omnifaces.SelectItemsConverter">
+                                                 converter="omnifaces.SelectItemsConverter"
+                                                 required="true" immediate="true">
                                     <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
                                     <f:selectItems value="#{reservaSController.materias}" var="mt"
                                                    itemLabel="#{mt.materiaNombre}" itemValue="#{mt}"/>
                                 </p:selectOneMenu>
 
                                 <p:outputLabel for="tem" value="Tema: "/>
-                                <p:inputText id="tem" value="#{reservaSController.reserva.tema}"/>
+                                <p:inputText id="tem" value="#{reservaSController.reserva.tema}" required="true"
+                                             immediate="true"/>
 
                                 <p:outputLabel for="obj" value="Objetivo del tema: "/>
-                                <p:inputTextarea id="obj" value="#{reservaSController.reserva.objetivoTema}"/>
+                                <p:inputTextarea id="obj" value="#{reservaSController.reserva.objetivoTema}"
+                                                 immediate="true"/>
 
                                 <p:outputLabel for="tpr" value="Tipo de proyecto: "/>
                                 <p:selectOneMenu id="tpr" value="#{reservaSController.reserva.tipoProyecto}" 
-                                                 converter="omnifaces.SelectItemsConverter">
+                                                 converter="omnifaces.SelectItemsConverter"
+                                                 required="true" immediate="true">
                                     <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
                                     <f:selectItems value="#{reservaSController.TProyectos}" var="tP"
                                                    itemLabel="#{tP.tipoProyectoNombre}" itemValue="#{tP}"/>
@@ -95,7 +103,7 @@
                                 <p:selectCheckboxMenu id="rec" value="#{reservaSController.reservaDetalle}" 
                                                       label="recursos" multiple="true" filter="true" 
                                                       filterMatchMode="startsWith" panelStyle="width:250px" 
-                                                      required="true" 
+                                                      required="true" immediate="true"
                                                       requiredMessage="Debe seleccionar al menos un tipo"
                                                       converter="omnifaces.SelectItemsConverter">
                                     <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
@@ -104,19 +112,22 @@
                                 </p:selectCheckboxMenu>
 
                                 <p:outputLabel for="fec" value="fecha en la que hará uso del equipo"/>
-                                <p:datePicker id="fec" monthNavigator="true" 
-                                              pattern="EEEEE dd-MMMMM-yyyy" locale="es"/>
+                                <p:datePicker id="fec" monthNavigator="true" maxlength="30" immediate="true"
+                                              value="#{reservaSController.reserva.reservaEntrega}"
+                                              pattern="EEEEE dd/MMM/yyyy" locale="es" required="true"/>
 
                                 <p:outputLabel for="hi" value="Hora de inicio del uso"/>
                                 <p:datePicker id="hi" locale="es" value="#{reservaSController.reserva.reservaEntrega}"
-                                              showTime="true" timeOnly="true" hourFormat="12"/>
+                                              showTime="true" timeOnly="true" hourFormat="12" required="true"
+                                              immediate="true"/>
 
                                 <p:outputLabel for="hf" value="Hora de fin del uso"/>
                                 <p:datePicker id="hf" locale="es" value="#{reservaSController.reserva.reservaDevolucion}"
-                                              showTime="true" timeOnly="true" hourFormat="12"/>
+                                              showTime="true" timeOnly="true" hourFormat="12" required="true"
+                                              immediate="true"/>
 
                                 <p:outputLabel value="Responsale del equipo: "/>
-                                <p:outputLabel value="#{reservaSController.responsable}"/>
+                                <p:outputLabel value="#{reservaSController.responsable}" />
                             </h:panelGrid>
 
                             <p:dataTable id="alumnos" var="e" value="#{reservaSController.estudiantes}" 
@@ -132,7 +143,7 @@
                                 <p:column headerText="NIE">
                                     <p:cellEditor>
                                         <f:facet name="output">
-                                            <h:outputText value="#{e.idestudiante}" />
+                                            <h:outputText value="#{e.idestudiante.toString().substring(1)}" />
                                         </f:facet>
                                         <f:facet name="input">
                                             <p:inputText value="#{e.idestudiante}" 
@@ -151,13 +162,21 @@
                             </p:dataTable> 
                             <div class="ui-g">
                                 <div class="ui-g-12">
-                                    <p:commandButton value="+" styleClass="ui-priority-primary" 
+                                    <p:commandButton id="b" value="+" styleClass="ui-priority-primary" 
                                                      process="@this"
                                                      action="#{reservaSController.onAddNew()}" 
                                                      title="Agregar un alumno al grupo."
                                                      update="alumnos" rendered="#{reservaSController.alumnos}"/>
                                 </div>
                             </div>
+                            <h:panelGrid columns="3">
+                                <p:column/>
+                                <p:commandButton value="Solicitar" styleClass="ui-priority-primary" 
+                                                 process="@this"
+                                                 actionListener="#{reservaSController.guardar()}" 
+                                                 title="Realizar la solicitud de reserva."/>
+                                <p:column/>
+                            </h:panelGrid>
                         </h:panelGrid>
                     </p:panel>
                 </p:tab>
@@ -226,52 +245,6 @@
                 <p:tab id="bib" rendered="#{reservaSController.bib}" >
                     <p:panel header="Reserva de recursoso de la biblioteca">
                         biblioteca
-                    </p:panel>
-                </p:tab>                
-                <p:tab id="alm" rendered="#{reservaSController.alumnos}" >
-                    <p:panel header="Estudiantes en el grupo">
-                   <!--     <h:panelGrid columns="1">
-                            <p:dataTable id="alumnos" var="e" value="#{reservaSController.estudiantes}" 
-                                         editable="true" widgetVar="alumnos1" styleClass="tabla"
-                                         emptyMessage="Sin registros aún.">
-                                <f:facet name="header">
-                                    Agregue los estudiantes en el grupo
-                                </f:facet>
-
-                                <p:ajax event="rowEdit" listener="#{reservaSController.onRowEdit}"/>
-                                <p:ajax event="rowEditCancel" listener="#{reservaSController.onRowCancel}"/>
-
-                                <p:column headerText="NIE">
-                                    <p:cellEditor>
-                                        <f:facet name="output">
-                                            <h:outputText value="#{e.idestudiante}" />
-                                        </f:facet>
-                                        <f:facet name="input">
-                                            <p:inputText value="#{e.idestudiante}" 
-                                                         style="width:100%" label="NIE"/>
-                                        </f:facet>
-                                    </p:cellEditor>
-                                </p:column>
-
-                                <p:column headerText="Nombre">
-                                    <h:outputText value="#{e.persona.personaNombre} #{e.persona.personaApellido}"/>
-                                </p:column>
-
-                                <p:column style="width:35px">
-                                    <p:rowEditor />
-                                </p:column>
-                            </p:dataTable> 
-                            <div class="ui-g">
-                                <div class="ui-g-12">
-                                    <p:commandButton value="+" styleClass="ui-priority-primary" 
-                                                     process="@this"
-                                                     action="#{reservaSController.onAddNew()}" 
-                                                     title="Agregar un alumno al grupo."
-                                                     update="alumnos"/>
-                                </div>
-                            </div>
-                        </h:panelGrid>
-                   -->
                     </p:panel>
                 </p:tab>
             </h:panelGrid>

@@ -19,8 +19,8 @@ package net.delsas.saitae.controllers;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -99,15 +99,14 @@ public class reservaSController implements Serializable {
     private EstudianteFacadeLocal estFL;
     private List<Estudiante> estudiantes;
     private int usos;
+    
+    
 
     @PostConstruct
     public void init() {
         usuario = (Persona) FacesContext.getCurrentInstance()
                 .getExternalContext().getSessionMap().get("usuario");
-        reserva = new Reserva();
-        reserva.setReservaComentario(" ¿¿ ¿¿ ¿¿ ");
-        setResponsable(usuario.getPersonaNombre().split(" ")[0] + " "
-                + usuario.getPersonaApellido().split(" ")[0]);
+        newReserva();
         recursos = new ArrayList<>();
         tiporList = trFL.findAll();
         cra = false;
@@ -133,9 +132,21 @@ public class reservaSController implements Serializable {
                 + " " + id.getGradoSeccion();
     }
 
-    public void tipoRecursoSelect(SelectEvent event) {
-        reserva = new Reserva();
+    public void newReserva() {
+        reserva = new Reserva(0);
+        reserva.setReservaFecha(new Date());
+        reserva.setObjetivoTema(" ");
+        reserva.setTema(" ");
+        reserva.setReservaEntrega(new Date());
+        reserva.setReservaDevolucion(new Date());
+        reserva.setPersonasReservaList(new ArrayList<>());
         reserva.setReservaComentario(" ¿¿ ¿¿ ¿¿ ");
+        setResponsable(usuario.getPersonaNombre().split(" ")[0] + " "
+                + usuario.getPersonaApellido().split(" ")[0]);
+    }
+
+    public void tipoRecursoSelect(SelectEvent event) {
+        newReserva();
         estudiantes.clear();
         tp = ((TipoRecurso) event.getObject());
         if (tp != null) {
@@ -155,9 +166,6 @@ public class reservaSController implements Serializable {
         usos = event.getObject() != null ? Integer.valueOf(event.getObject().toString()) : 0;
         setUsadoPor(usos + "");
         alumnos = usos == 3;
-        if (alumnos) {
-            PrimeFaces.current().ajax().update(":form:alm");
-        }
         System.out.println(usos == 0 ? "No Selection" : usos);
     }
 
@@ -232,6 +240,10 @@ public class reservaSController implements Serializable {
         } catch (Exception e) {
 
         }
+    }
+
+    public void guardar() {
+        System.out.println(reserva);
     }
 
     public List<SolicitudReserva> getSolicitud() {
@@ -311,6 +323,7 @@ public class reservaSController implements Serializable {
     }
 
     public void setReserva(Reserva reserva) {
+
         this.reserva = reserva;
     }
 
