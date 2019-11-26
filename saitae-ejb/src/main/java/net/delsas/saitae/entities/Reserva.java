@@ -247,7 +247,7 @@ public class Reserva implements Serializable {
     }
 
     public void setTipoProyecto(TipoProyecto tipoProyecto) {
-        this.tipoPtoyecto = tipoPtoyecto;
+        this.tipoPtoyecto = tipoProyecto;
     }
 
     @XmlTransient

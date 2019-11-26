@@ -22,8 +22,7 @@
                                 update=":form"/>
                     </p:selectOneMenu>    
                 </h:panelGrid>
-                <p:tab id="cra" rendered="#{reservaSController.cra}" >
-                    <p:panel header="Reserva de recursoso del CRA">
+                    <p:panel header="Reserva de recursoso del CRA" rendered="#{reservaSController.cra}" >
                         <h:panelGrid columns="1">
                             <h:panelGrid columns="2">
                                 <p:outputLabel for="us" value="El equipo será usado por: "/>
@@ -35,7 +34,7 @@
                                     <f:selectItem itemLabel="Estudiante" itemValue="2" />
                                     <f:selectItem itemLabel="Grupo de estudiantes" itemValue="3" />
                                     <p:ajax event="itemSelect" listener="#{reservaSController.usosSelect}"
-                                            update=":form:b :form:alumnos"/>
+                                            update=":form"/>
                                 </p:selectOneMenu>
 
 
@@ -80,51 +79,62 @@
                                     <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
                                     <f:selectItems value="#{reservaSController.materias}" var="mt"
                                                    itemLabel="#{mt.materiaNombre}" itemValue="#{mt}"/>
+                                    <p:ajax event="itemSelect" listener="#{reservaSController.materiaSelect}"/>
                                 </p:selectOneMenu>
 
                                 <p:outputLabel for="tem" value="Tema: "/>
-                                <p:inputText id="tem" value="#{reservaSController.reserva.tema}" required="true"
-                                             immediate="true"/>
+                                <p:inputText id="tem" value="#{reservaSController.tema}" required="true"/>
 
                                 <p:outputLabel for="obj" value="Objetivo del tema: "/>
-                                <p:inputTextarea id="obj" value="#{reservaSController.reserva.objetivoTema}"
-                                                 immediate="true"/>
+                                <p:inputTextarea id="obj" value="#{reservaSController.objetivo}"/>
 
                                 <p:outputLabel for="tpr" value="Tipo de proyecto: "/>
                                 <p:selectOneMenu id="tpr" value="#{reservaSController.reserva.tipoProyecto}" 
                                                  converter="omnifaces.SelectItemsConverter"
-                                                 required="true" immediate="true">
+                                                 required="true">
                                     <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
                                     <f:selectItems value="#{reservaSController.TProyectos}" var="tP"
                                                    itemLabel="#{tP.tipoProyectoNombre}" itemValue="#{tP}"/>
+                                    <p:ajax event="itemSelect" listener="#{reservaSController.tipoProyectoSelect}"/>
                                 </p:selectOneMenu>
 
                                 <h:outputLabel for="rec" value="Recursos que solicita"/>
                                 <p:selectCheckboxMenu id="rec" value="#{reservaSController.reservaDetalle}" 
                                                       label="recursos" multiple="true" filter="true" 
                                                       filterMatchMode="startsWith" panelStyle="width:250px" 
-                                                      required="true" immediate="true"
-                                                      requiredMessage="Debe seleccionar al menos un tipo"
-                                                      converter="omnifaces.SelectItemsConverter">
+                                                      required="true" requiredMessage="Debe seleccionar al menos un tipo"
+                                                      converter="omnifaces.SelectItemsConverter"
+                                                      showHeader="false">
                                     <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
                                     <f:selectItems value="#{reservaSController.recursos}" var="r"
                                                    itemLabel="#{r.nombre}" itemValue="#{r}"/>
+                                    <p:ajax event="change" listener="#{reservaSController.horasSelect}"/>
                                 </p:selectCheckboxMenu>
 
                                 <p:outputLabel for="fec" value="fecha en la que hará uso del equipo"/>
-                                <p:datePicker id="fec" monthNavigator="true" maxlength="30" immediate="true"
-                                              value="#{reservaSController.reserva.reservaEntrega}"
-                                              pattern="EEEEE dd/MMM/yyyy" locale="es" required="true"/>
+                                <p:datePicker id="fec" value="#{reservaSController.reserva.reservaEntrega}" 
+                                              hourFormat="12" immediate="true" locale="es"
+                                              monthNavigator="true"
+                                              showIcon="true" size="30" placeholder="Seleccione la fecha"
+                                              showTime="true" showButtonBar="true"/>
 
                                 <p:outputLabel for="hi" value="Hora de inicio del uso"/>
-                                <p:datePicker id="hi" locale="es" value="#{reservaSController.reserva.reservaEntrega}"
-                                              showTime="true" timeOnly="true" hourFormat="12" required="true"
-                                              immediate="true"/>
+                                <p:datePicker id="hi" value="#{reservaSController.hi}"
+                                              monthNavigator="true" maxlength="50" locale="es"
+                                              showTime="true" hourFormat="12" timeOnly="true"
+                                              showIcon="true" required="true" pattern="hh:mm a">
+                                    <p:ajax event="dateSelect" listener="#{reservaSController.fechaSelect}"/>
+                                    <p:ajax event="change" listener="#{reservaSController.horasSelect}"/>
+                                </p:datePicker>
 
                                 <p:outputLabel for="hf" value="Hora de fin del uso"/>
-                                <p:datePicker id="hf" locale="es" value="#{reservaSController.reserva.reservaDevolucion}"
-                                              showTime="true" timeOnly="true" hourFormat="12" required="true"
-                                              immediate="true"/>
+                                <p:datePicker id="hf" value="#{reservaSController.hf}"
+                                              monthNavigator="true" maxlength="50" locale="es"
+                                              showTime="true" hourFormat="12" timeOnly="true"
+                                              showIcon="true" required="true" pattern="hh:mm a">
+                                    <p:ajax event="dateSelect" listener="#{reservaSController.fechaSelect}"/>
+                                    <p:ajax event="change" listener="#{reservaSController.horasSelect}"/>
+                                </p:datePicker>
 
                                 <p:outputLabel value="Responsale del equipo: "/>
                                 <p:outputLabel value="#{reservaSController.responsable}" />
@@ -171,15 +181,13 @@
                             </div>
                             <h:panelGrid columns="3">
                                 <p:column/>
-                                <p:commandButton value="Solicitar" styleClass="ui-priority-primary" 
-                                                 process="@this"
-                                                 actionListener="#{reservaSController.guardar()}" 
-                                                 title="Realizar la solicitud de reserva."/>
+                                <p:commandButton id="summit" value="Solicitar" process="@this"
+                                                 action="#{reservaSController.guardar()}" 
+                                                 update=":form"/>
                                 <p:column/>
                             </h:panelGrid>
                         </h:panelGrid>
                     </p:panel>
-                </p:tab>
                 <p:tab id="lab" rendered="#{reservaSController.lab}" >
                     <p:panel header="Reserva de recursoso del laboratorio de ciencias naturales">
                         <h:panelGrid columns="1">
@@ -196,7 +204,7 @@
                                 <p:outputLabel for="fecu" value="Fecha de uso: "/>
                                 <p:datePicker id="fecu" value="#{reservaSController.reserva.reservaEntrega}" 
                                               hourFormat="12" immediate="true" locale="es"
-                                              monthNavigator="true" pattern="EEEEE dd/MMMMM/yyyy"
+                                              monthNavigator="true"
                                               showIcon="true" size="30" placeholder="Seleccione la fecha"
                                               showTime="true" showButtonBar="true"/>
                             </h:panelGrid>

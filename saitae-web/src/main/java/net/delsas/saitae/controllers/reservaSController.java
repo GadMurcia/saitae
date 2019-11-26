@@ -25,6 +25,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import net.delsas.saitae.ax.Auxiliar;
@@ -50,6 +51,7 @@ import net.delsas.saitae.entities.TipoProyecto;
 import net.delsas.saitae.entities.TipoRecurso;
 import net.delsas.saitae.entities.TipoReserva;
 import org.primefaces.PrimeFaces;
+import org.primefaces.component.selectcheckboxmenu.SelectCheckboxMenu;
 import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.SelectEvent;
 
@@ -99,8 +101,12 @@ public class reservaSController implements Serializable {
     private EstudianteFacadeLocal estFL;
     private List<Estudiante> estudiantes;
     private int usos;
-    
-    
+
+    private Date fecha;
+    private Date hi;
+    private Date hf;
+    private String tema;
+    private String objetivo;
 
     @PostConstruct
     public void init() {
@@ -120,6 +126,10 @@ public class reservaSController implements Serializable {
         tProyectos = tProyectoFL.findAll();
         estudiantes = new ArrayList<>();
         usos = 0;
+        tema = " ";
+        objetivo = " ";
+        fecha = new Date();
+        solicitud = new ArrayList<>();
     }
 
     public String getGradoNombre(Grado g) {
@@ -137,8 +147,6 @@ public class reservaSController implements Serializable {
         reserva.setReservaFecha(new Date());
         reserva.setObjetivoTema(" ");
         reserva.setTema(" ");
-        reserva.setReservaEntrega(new Date());
-        reserva.setReservaDevolucion(new Date());
         reserva.setPersonasReservaList(new ArrayList<>());
         reserva.setReservaComentario(" ¿¿ ¿¿ ¿¿ ");
         setResponsable(usuario.getPersonaNombre().split(" ")[0] + " "
@@ -194,6 +202,30 @@ public class reservaSController implements Serializable {
         System.out.println(maestro);
     }
 
+    public void materiaSelect(SelectEvent event) {
+        Materia m = (Materia) event.getObject();
+        reserva.setMaeria(m);
+        System.out.println(m == null ? "no selection" : m.getMateriaNombre());
+    }
+
+    public void tipoProyectoSelect(SelectEvent event) {
+        TipoProyecto p = (TipoProyecto) event.getObject();
+        reserva.setTipoProyecto(p);
+        System.out.println(p == null ? "no selection" : p.getTipoProyectoNombre());
+    }
+
+    public void fechaSelect(SelectEvent event) {
+        fecha = (Date) event.getObject();
+        System.out.println(event.getObject());
+    }
+
+    public void horasSelect(AjaxBehaviorEvent event) {
+        SelectCheckboxMenu men = (SelectCheckboxMenu) event.getSource();
+        Object o = men.getValue();
+        System.out.println(o);
+        System.out.println(event.getSource());
+    }
+
     public void onAddNew() {
         Estudiante e = new Estudiante(0);
         e.setPersona(new Persona(0, " ", " ", false));
@@ -207,12 +239,11 @@ public class reservaSController implements Serializable {
         e = estFL.find(e.getPersona().getIdpersona());
         if (e != null) {
             estudiantes.add(e);
+            limpia();
         } else {
             onRowCancel(event);
         }
-        limpia();
         System.out.println(event.getComponent().getClientId());
-        PrimeFaces.current().ajax().update(":form:alumnos");
     }
 
     public void onRowCancel(RowEditEvent event) {
@@ -221,22 +252,16 @@ public class reservaSController implements Serializable {
         }
         this.limpia();
         System.out.println(event.getComponent().getClientId());
-        PrimeFaces.current().ajax().update(":form:alumnos");
     }
 
     void limpia() {
         try {
-            estudiantes.stream().filter((e) -> (e.getPersona().getIdpersona() == 0)).map((e) -> {
-                estudiantes.remove(e);
-                return e;
-            }).map((e) -> {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
-                        "Estudiante no encontrado",
-                        "El estudiante con NIE " + e.getIdestudiante() + " No fue encontrado, por lo que se retira de la lista."));
-                return e;
-            }).forEachOrdered((_item) -> {
-                PrimeFaces.current().ajax().update(":form0:msgs");
-            });
+            for (Estudiante e : estudiantes) {
+                if (!e.getEstudianteEsEstudiante()) {
+                    estudiantes.remove(e);
+                }
+            }
+            PrimeFaces.current().ajax().update("form:alumnos");
         } catch (Exception e) {
 
         }
@@ -244,6 +269,7 @@ public class reservaSController implements Serializable {
 
     public void guardar() {
         System.out.println(reserva);
+        init();
     }
 
     public List<SolicitudReserva> getSolicitud() {
@@ -323,7 +349,6 @@ public class reservaSController implements Serializable {
     }
 
     public void setReserva(Reserva reserva) {
-
         this.reserva = reserva;
     }
 
@@ -417,6 +442,46 @@ public class reservaSController implements Serializable {
 
     public String getUsadoPor() {
         return reserva.getReservaComentario().split("¿¿")[1];
+    }
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
+
+    public Date getHi() {
+        return hi;
+    }
+
+    public void setHi(Date hi) {
+        this.hi = hi;
+    }
+
+    public Date getHf() {
+        return hf;
+    }
+
+    public void setHf(Date hf) {
+        this.hf = hf;
+    }
+
+    public String getTema() {
+        return tema;
+    }
+
+    public void setTema(String tema) {
+        this.tema = tema;
+    }
+
+    public String getObjetivo() {
+        return objetivo;
+    }
+
+    public void setObjetivo(String objetivo) {
+        this.objetivo = objetivo;
     }
 
 }
