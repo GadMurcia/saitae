@@ -108,15 +108,13 @@
                                     <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
                                     <f:selectItems value="#{reservaSController.recursos}" var="r"
                                                    itemLabel="#{r.nombre}" itemValue="#{r}"/>
-                                    <p:ajax event="change" listener="#{reservaSController.horasSelect}"/>
                                 </p:selectCheckboxMenu>
 
                                 <p:outputLabel for="fec" value="fecha en la que hará uso del equipo"/>
                                 <p:datePicker id="fec" value="#{reservaSController.reserva.reservaEntrega}" 
                                               hourFormat="12" immediate="true" locale="es"
-                                              monthNavigator="true"
-                                              showIcon="true" size="30" placeholder="Seleccione la fecha"
-                                              showTime="true" showButtonBar="true"/>
+                                              monthNavigator="true" showIcon="true" size="30" 
+                                              placeholder="Seleccione la fecha" showButtonBar="true"/>
 
                                 <p:outputLabel for="hi" value="Hora de inicio del uso"/>
                                 <p:datePicker id="hi" value="#{reservaSController.hi}"
