@@ -17,39 +17,53 @@
 package net.delsas.saitae.controllers;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 import net.delsas.saitae.ax.Auxiliar;
+import net.delsas.saitae.ax.mensaje;
 import net.delsas.saitae.beans.EstudianteFacadeLocal;
 import net.delsas.saitae.beans.GradoFacadeLocal;
 import net.delsas.saitae.beans.MestroHorarioMateriasFacadeLocal;
+import net.delsas.saitae.beans.NotificacionesFacadeLocal;
 import net.delsas.saitae.beans.RecursoFacadeLocal;
 import net.delsas.saitae.beans.ReservaFacadeLocal;
+import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
 import net.delsas.saitae.beans.TipoProyectoFacadeLocal;
 import net.delsas.saitae.beans.TipoRecursoFacadeLocal;
 import net.delsas.saitae.beans.TipoReservaFacadeLocal;
 import net.delsas.saitae.beans.TipoReservaRecursoFacadeLocal;
+import net.delsas.saitae.entities.Cargo;
+import net.delsas.saitae.entities.DelagacionCargo;
 import net.delsas.saitae.entities.Estudiante;
 import net.delsas.saitae.entities.Grado;
 import net.delsas.saitae.entities.GradoPK;
+import net.delsas.saitae.entities.MaestoCargo;
 import net.delsas.saitae.entities.Maestro;
 import net.delsas.saitae.entities.Materia;
 import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.Recurso;
 import net.delsas.saitae.entities.Reserva;
 import net.delsas.saitae.entities.SolicitudReserva;
+import net.delsas.saitae.entities.TipoPersona;
 import net.delsas.saitae.entities.TipoProyecto;
 import net.delsas.saitae.entities.TipoRecurso;
 import net.delsas.saitae.entities.TipoReserva;
+import org.omnifaces.cdi.Push;
+import org.omnifaces.cdi.PushContext;
 import org.primefaces.PrimeFaces;
 import org.primefaces.component.selectcheckboxmenu.SelectCheckboxMenu;
 import org.primefaces.event.RowEditEvent;
@@ -101,6 +115,10 @@ public class reservaSController implements Serializable {
     private EstudianteFacadeLocal estFL;
     private List<Estudiante> estudiantes;
     private int usos;
+    @EJB
+    private TipoPersonaFacadeLocal tpFL;
+    @EJB
+    private NotificacionesFacadeLocal notiFL;
 
     private Date fecha;
     private Date hi;
@@ -126,10 +144,13 @@ public class reservaSController implements Serializable {
         tProyectos = tProyectoFL.findAll();
         estudiantes = new ArrayList<>();
         usos = 0;
-        tema = " ";
-        objetivo = " ";
+        tema = "";
+        objetivo = "";
+        tp = null;
         fecha = new Date();
         solicitud = new ArrayList<>();
+        grado = null;
+        hi = hf = null;
     }
 
     public String getGradoNombre(Grado g) {
@@ -214,8 +235,25 @@ public class reservaSController implements Serializable {
         System.out.println(p == null ? "no selection" : p.getTipoProyectoNombre());
     }
 
+    public void onBlur(AjaxBehaviorEvent event) {
+        System.out.println(event.getComponent().getId());
+        System.out.println(event);
+    }
+
     public void fechaSelect(SelectEvent event) {
-        fecha = (Date) event.getObject();
+        switch (event.getComponent().getId()) {
+            case "fec":
+                fecha = (Date) event.getObject();
+                break;
+            case "hi":
+                hi = (Date) event.getObject();
+                break;
+            case "hf":
+                hf = (Date) event.getObject();
+                break;
+            default:
+        }
+
         System.out.println(event.getObject());
     }
 
@@ -269,7 +307,58 @@ public class reservaSController implements Serializable {
 
     public void guardar() {
         System.out.println(reserva);
-        init();
+        try {
+            reserva.setReservaEntrega(new SimpleDateFormat("dd/MM/yyyy HH:mm a")
+                    .parse(new SimpleDateFormat("dd/MM/yyyy").format(fecha) + " "
+                            + new SimpleDateFormat("HH:mm a").format(hi)));
+        } catch (ParseException ex) {
+            reserva.setReservaEntrega(hi);
+        }
+        try {
+            reserva.setReservaDevolucion(new SimpleDateFormat("dd/MM/yyyy HH:mm a")
+                    .parse(new SimpleDateFormat("dd/MM/yyyy").format(fecha) + " "
+                            + new SimpleDateFormat("HH:mm a").format(hf)));
+        } catch (ParseException ex) {
+            reserva.setReservaDevolucion(hf);
+        }
+        reserva.setTema(tema);
+        reserva.setObjetivoTema(objetivo);
+        reserva.setReservaEstado("S");
+        if (reserva.getReservaEntrega().after(reserva.getReservaFecha())
+                && reserva.getReservaDevolucion().after(reserva.getReservaEntrega())) {
+            reserva.setIdreserva(null);
+            resFL.create(reserva);
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Solicitud exitosa",
+                            "Su solicitud de recursos de " + tp.getTipoRecursoNombre()
+                            + " ha sido guardada con éxito. Resivirá una notificación "
+                            + "cuando sea aprobada por el encargado de área correspondiente."));
+            int id = tp.getIdtipoRecurso();
+            id = id == 1 ? 6 : (id == 2 ? 7 : (id == 3 ? 5 : 0));
+            TipoPersona ps = tpFL.find(id);
+            ArrayList<Persona> personas = new ArrayList<>();
+            personas.addAll(ps.getPersonaList());
+            ps.getDelegacionCargoList().forEach((dl) -> {
+                personas.add(dl.getIdpersona());
+            });
+            ps.getCargoList().forEach((c) -> {
+                c.getMaestoCargoList().forEach((mc) -> {
+                    personas.add(mc.getMaestro().getPersona());
+                });
+            });
+            mensaje x= new mensaje(0, usuario.getPersonaNombre()+" "+usuario.getPersonaApellido()
+                    +" ha solicitado recursos", "Nueva solicitud de recursos", FacesMessage.SEVERITY_INFO
+                    , usuario.getIdpersona(), " ");
+            persistirNotificación(x, personas);
+            init();
+            PrimeFaces.current().ajax().update(":form", ":form0");
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error en las fechas",
+                            "Asegúrese de haber seleccionado fechas válidas y que las fechas "
+                            + "de inicio del uso y del final no sea anterior a la fecha actual."));
+            PrimeFaces.current().ajax().update(":form0");
+        }
     }
 
     public List<SolicitudReserva> getSolicitud() {
@@ -373,6 +462,7 @@ public class reservaSController implements Serializable {
     }
 
     public void setReservaDetalle(List<Recurso> recs) {
+        solicitud.clear();
         recs.stream().map((r) -> {
             SolicitudReserva s = new SolicitudReserva(0, r.getIdrecurso());
             s.setRecurso(r);
@@ -482,6 +572,27 @@ public class reservaSController implements Serializable {
 
     public void setObjetivo(String objetivo) {
         this.objetivo = objetivo;
+    }
+
+    private void persistirNotificación(mensaje x, ArrayList<Persona> ps) {
+        ps.forEach((p) -> {
+            try {
+                x.setDestinatario(p.getIdpersona());
+                x.getNotificacion().setFechaHora(new Date());
+                sendMessage(x.toString());
+                notiFL.create(x.getNotificacion());
+                System.out.println("notificación enviada "+x.getNotificacion().getFechaHora());
+            } catch (Exception e) {
+            }
+        });
+    }
+
+    @Inject
+    @Push
+    private PushContext notificacion;
+
+    public void sendMessage(String message) {
+        notificacion.send(message);
     }
 
 }
