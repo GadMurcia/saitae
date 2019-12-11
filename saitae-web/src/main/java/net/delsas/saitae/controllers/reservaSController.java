@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -68,6 +69,7 @@ import org.primefaces.PrimeFaces;
 import org.primefaces.component.selectcheckboxmenu.SelectCheckboxMenu;
 import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.SelectEvent;
+import org.primefaces.model.DualListModel;
 
 /**
  *
@@ -119,6 +121,7 @@ public class reservaSController implements Serializable {
     private TipoPersonaFacadeLocal tpFL;
     @EJB
     private NotificacionesFacadeLocal notiFL;
+    private HashMap<Integer, Recurso> art;
 
     private Date fecha;
     private Date hi;
@@ -151,6 +154,7 @@ public class reservaSController implements Serializable {
         solicitud = new ArrayList<>();
         grado = null;
         hi = hf = null;
+        art=new HashMap<>();
     }
 
     public String getGradoNombre(Grado g) {
