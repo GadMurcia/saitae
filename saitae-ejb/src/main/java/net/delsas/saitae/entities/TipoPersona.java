@@ -37,6 +37,12 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "TipoPersona.findByTipoPersonaComentario", query = "SELECT t FROM TipoPersona t WHERE t.tipoPersonaComentario = :tipoPersonaComentario")})
 public class TipoPersona implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "idtipoPersona")
+    private Integer idtipoPersona;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
@@ -45,13 +51,6 @@ public class TipoPersona implements Serializable {
     @Size(max = 145)
     @Column(name = "tipoPersonaComentario")
     private String tipoPersonaComentario;
-
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "idtipoPersona")
-    private Integer idtipoPersona;
     @OneToMany(mappedBy = "anuncioTipoPersona")
     private List<Anuncio> anuncioList;
     @OneToMany(mappedBy = "cargoTipoPersona")
@@ -87,6 +86,21 @@ public class TipoPersona implements Serializable {
         this.idtipoPersona = idtipoPersona;
     }
 
+    public String getTipoPersonaNombre() {
+        return tipoPersonaNombre;
+    }
+
+    public void setTipoPersonaNombre(String tipoPersonaNombre) {
+        this.tipoPersonaNombre = tipoPersonaNombre;
+    }
+
+    public String getTipoPersonaComentario() {
+        return tipoPersonaComentario;
+    }
+
+    public void setTipoPersonaComentario(String tipoPersonaComentario) {
+        this.tipoPersonaComentario = tipoPersonaComentario;
+    }
 
     @XmlTransient
     public List<Anuncio> getAnuncioList() {
@@ -116,12 +130,12 @@ public class TipoPersona implements Serializable {
     }
 
     @XmlTransient
-    public List<DelagacionCargo> getDelegacionCargoList() {
+    public List<DelagacionCargo> getDelagacionCargoList() {
         return delagacionCargoList;
     }
 
-    public void setDelegacionCargoList(List<DelagacionCargo> delegacionCargoList) {
-        this.delagacionCargoList = delegacionCargoList;
+    public void setDelagacionCargoList(List<DelagacionCargo> delagacionCargoList) {
+        this.delagacionCargoList = delagacionCargoList;
     }
 
     @XmlTransient
@@ -174,22 +188,6 @@ public class TipoPersona implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.TipoPersona[ idtipoPersona=" + idtipoPersona + " ]";
-    }
-
-    public String getTipoPersonaNombre() {
-        return tipoPersonaNombre;
-    }
-
-    public void setTipoPersonaNombre(String tipoPersonaNombre) {
-        this.tipoPersonaNombre = tipoPersonaNombre;
-    }
-
-    public String getTipoPersonaComentario() {
-        return tipoPersonaComentario;
-    }
-
-    public void setTipoPersonaComentario(String tipoPersonaComentario) {
-        this.tipoPersonaComentario = tipoPersonaComentario;
     }
     
 }

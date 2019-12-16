@@ -38,6 +38,12 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Documentos.findByDocumentosComentario", query = "SELECT d FROM Documentos d WHERE d.documentosComentario = :documentosComentario")})
 public class Documentos implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "iddocumentos")
+    private Integer iddocumentos;
     @Lob
     @Column(name = "estudianteDocPartida")
     private byte[] estudianteDocPartida;
@@ -71,12 +77,6 @@ public class Documentos implements Serializable {
     @Size(max = 140)
     @Column(name = "documentosComentario")
     private String documentosComentario;
-    private static final long serialVersionUID = 1L;
-    @Id
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "iddocumentos")
-    private Integer iddocumentos;
     @JoinColumn(name = "iddocumentos", referencedColumnName = "idestudiante", insertable = false, updatable = false)
     @OneToOne(optional = false)
     private Estudiante estudiante;
@@ -94,34 +94,6 @@ public class Documentos implements Serializable {
 
     public void setIddocumentos(Integer iddocumentos) {
         this.iddocumentos = iddocumentos;
-    }
-    public Estudiante getEstudiante() {
-        return estudiante;
-    }
-    public void setEstudiante(Estudiante estudiante) {
-        this.estudiante = estudiante;
-    }
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (iddocumentos != null ? iddocumentos.hashCode() : 0);
-        return hash;
-    }
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Documentos)) {
-            return false;
-        }
-        Documentos other = (Documentos) object;
-        if ((this.iddocumentos == null && other.iddocumentos != null) || (this.iddocumentos != null && !this.iddocumentos.equals(other.iddocumentos))) {
-            return false;
-        }
-        return true;
-    }
-    @Override
-    public String toString() {
-        return "net.delsas.saitae.entities.Documentos[ iddocumentos=" + iddocumentos + " ]";
     }
 
     public byte[] getEstudianteDocPartida() {
@@ -210,6 +182,39 @@ public class Documentos implements Serializable {
 
     public void setDocumentosComentario(String documentosComentario) {
         this.documentosComentario = documentosComentario;
+    }
+
+    public Estudiante getEstudiante() {
+        return estudiante;
+    }
+
+    public void setEstudiante(Estudiante estudiante) {
+        this.estudiante = estudiante;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (iddocumentos != null ? iddocumentos.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Documentos)) {
+            return false;
+        }
+        Documentos other = (Documentos) object;
+        if ((this.iddocumentos == null && other.iddocumentos != null) || (this.iddocumentos != null && !this.iddocumentos.equals(other.iddocumentos))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "net.delsas.saitae.entities.Documentos[ iddocumentos=" + iddocumentos + " ]";
     }
     
 }

@@ -39,6 +39,12 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Cargo.findByCargoComentario", query = "SELECT c FROM Cargo c WHERE c.cargoComentario = :cargoComentario")})
 public class Cargo implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "idcargo")
+    private Integer idcargo;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
@@ -47,13 +53,6 @@ public class Cargo implements Serializable {
     @Size(max = 145)
     @Column(name = "cargoComentario")
     private String cargoComentario;
-
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "idcargo")
-    private Integer idcargo;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cargo")
     private List<MaestoCargo> maestoCargoList;
     @JoinColumn(name = "cargoTipoPersona", referencedColumnName = "idtipoPersona")
@@ -80,6 +79,21 @@ public class Cargo implements Serializable {
         this.idcargo = idcargo;
     }
 
+    public String getCargoNombre() {
+        return cargoNombre;
+    }
+
+    public void setCargoNombre(String cargoNombre) {
+        this.cargoNombre = cargoNombre;
+    }
+
+    public String getCargoComentario() {
+        return cargoComentario;
+    }
+
+    public void setCargoComentario(String cargoComentario) {
+        this.cargoComentario = cargoComentario;
+    }
 
     @XmlTransient
     public List<MaestoCargo> getMaestoCargoList() {
@@ -121,22 +135,6 @@ public class Cargo implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.Cargo[ idcargo=" + idcargo + " ]";
-    }
-
-    public String getCargoNombre() {
-        return cargoNombre;
-    }
-
-    public void setCargoNombre(String cargoNombre) {
-        this.cargoNombre = cargoNombre;
-    }
-
-    public String getCargoComentario() {
-        return cargoComentario;
-    }
-
-    public void setCargoComentario(String cargoComentario) {
-        this.cargoComentario = cargoComentario;
     }
     
 }

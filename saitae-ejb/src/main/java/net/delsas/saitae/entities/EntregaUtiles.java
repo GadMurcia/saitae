@@ -36,6 +36,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "EntregaUtiles.findByComentario", query = "SELECT e FROM EntregaUtiles e WHERE e.comentario = :comentario")})
 public class EntregaUtiles implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+    @EmbeddedId
+    protected EntregaUtilesPK entregaUtilesPK;
     @Basic(optional = false)
     @NotNull
     @Column(name = "zapatos")
@@ -51,10 +54,6 @@ public class EntregaUtiles implements Serializable {
     @Size(max = 100)
     @Column(name = "comentario")
     private String comentario;
-
-    private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected EntregaUtilesPK entregaUtilesPK;
     @JoinColumn(name = "idEstudiante", referencedColumnName = "idestudiante", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Estudiante estudiante;
@@ -91,6 +90,37 @@ public class EntregaUtiles implements Serializable {
         this.entregaUtilesPK = entregaUtilesPK;
     }
 
+    public boolean getZapatos() {
+        return zapatos;
+    }
+
+    public void setZapatos(boolean zapatos) {
+        this.zapatos = zapatos;
+    }
+
+    public boolean getUniforme() {
+        return uniforme;
+    }
+
+    public void setUniforme(boolean uniforme) {
+        this.uniforme = uniforme;
+    }
+
+    public boolean getUtiles() {
+        return utiles;
+    }
+
+    public void setUtiles(boolean utiles) {
+        this.utiles = utiles;
+    }
+
+    public String getComentario() {
+        return comentario;
+    }
+
+    public void setComentario(String comentario) {
+        this.comentario = comentario;
+    }
 
     public Estudiante getEstudiante() {
         return estudiante;
@@ -130,49 +160,15 @@ public class EntregaUtiles implements Serializable {
             return false;
         }
         EntregaUtiles other = (EntregaUtiles) object;
-        return !((other == null && (this.uniforme || this.utiles || this.zapatos))
-                || (this.entregaUtilesPK == null && other.entregaUtilesPK != null)
-                || (this.entregaUtilesPK != null && !this.entregaUtilesPK.equals(other.entregaUtilesPK))
-                || (this.uniforme == !other.uniforme)
-                || (this.zapatos == !other.zapatos)
-                || (this.utiles == !other.utiles));
+        if ((this.entregaUtilesPK == null && other.entregaUtilesPK != null) || (this.entregaUtilesPK != null && !this.entregaUtilesPK.equals(other.entregaUtilesPK))) {
+            return false;
         }
+        return true;
+    }
 
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.EntregaUtiles[ entregaUtilesPK=" + entregaUtilesPK + " ]";
-    }
-
-    public boolean getZapatos() {
-        return zapatos;
-    }
-
-    public void setZapatos(boolean zapatos) {
-        this.zapatos = zapatos;
-    }
-
-    public boolean getUniforme() {
-        return uniforme;
-    }
-
-    public void setUniforme(boolean uniforme) {
-        this.uniforme = uniforme;
-    }
-
-    public boolean getUtiles() {
-        return utiles;
-    }
-
-    public void setUtiles(boolean utiles) {
-        this.utiles = utiles;
-    }
-
-    public String getComentario() {
-        return comentario;
-    }
-
-    public void setComentario(String comentario) {
-        this.comentario = comentario;
     }
     
 }

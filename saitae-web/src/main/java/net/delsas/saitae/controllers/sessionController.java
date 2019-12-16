@@ -254,7 +254,7 @@ public class sessionController implements Serializable {
                     if (n1.size() < 4) {
                         notificaciones.addAll(n1);
                     } else {
-                        for (int y = 0; y < 4; y++) {
+                        for (int y = 0; y < 5; y++) {
                             notificaciones.add(n1.get(y));
                         }
                     }

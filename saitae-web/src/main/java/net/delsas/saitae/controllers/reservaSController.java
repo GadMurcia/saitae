@@ -22,10 +22,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -40,22 +38,23 @@ import net.delsas.saitae.beans.EstudianteFacadeLocal;
 import net.delsas.saitae.beans.GradoFacadeLocal;
 import net.delsas.saitae.beans.MestroHorarioMateriasFacadeLocal;
 import net.delsas.saitae.beans.NotificacionesFacadeLocal;
+import net.delsas.saitae.beans.PersonasReservaFacadeLocal;
 import net.delsas.saitae.beans.RecursoFacadeLocal;
 import net.delsas.saitae.beans.ReservaFacadeLocal;
+import net.delsas.saitae.beans.SolicitudReservaFacadeLocal;
 import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
 import net.delsas.saitae.beans.TipoProyectoFacadeLocal;
 import net.delsas.saitae.beans.TipoRecursoFacadeLocal;
 import net.delsas.saitae.beans.TipoReservaFacadeLocal;
 import net.delsas.saitae.beans.TipoReservaRecursoFacadeLocal;
-import net.delsas.saitae.entities.Cargo;
-import net.delsas.saitae.entities.DelagacionCargo;
 import net.delsas.saitae.entities.Estudiante;
 import net.delsas.saitae.entities.Grado;
 import net.delsas.saitae.entities.GradoPK;
-import net.delsas.saitae.entities.MaestoCargo;
 import net.delsas.saitae.entities.Maestro;
 import net.delsas.saitae.entities.Materia;
+import net.delsas.saitae.entities.Notificaciones;
 import net.delsas.saitae.entities.Persona;
+import net.delsas.saitae.entities.PersonasReserva;
 import net.delsas.saitae.entities.Recurso;
 import net.delsas.saitae.entities.Reserva;
 import net.delsas.saitae.entities.SolicitudReserva;
@@ -69,7 +68,6 @@ import org.primefaces.PrimeFaces;
 import org.primefaces.component.selectcheckboxmenu.SelectCheckboxMenu;
 import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.SelectEvent;
-import org.primefaces.model.DualListModel;
 
 /**
  *
@@ -84,45 +82,50 @@ public class reservaSController implements Serializable {
     private ReservaFacadeLocal resFL;
     @EJB
     private TipoRecursoFacadeLocal trFL;
-    private List<TipoRecurso> tiporList;
-    private Reserva reserva;
-    private List<SolicitudReserva> solicitud;
-    private List<Recurso> recursos;
     @EJB
     private RecursoFacadeLocal recursoFL;
     @EJB
     private TipoReservaFacadeLocal tipoReservaFL;
-    private List<TipoReserva> tiposReserva;
-    private boolean cra;
-    private boolean lab;
-    private boolean bib;
-    private boolean alumnos;
-    private TipoRecurso tp;
-    private Persona usuario;
     @EJB
     private GradoFacadeLocal gradoFL;
-    private List<Grado> grados;
-    private Grado grado;
-    private List<Maestro> maestros;
     @EJB
     private MestroHorarioMateriasFacadeLocal mhmFL;
-    private List<Materia> materias;
-    private Maestro maestro;
     @EJB
     private TipoProyectoFacadeLocal tProyectoFL;
-    private List<TipoProyecto> tProyectos;
     @EJB
     private TipoReservaRecursoFacadeLocal trrFL;
     @EJB
     private EstudianteFacadeLocal estFL;
-    private List<Estudiante> estudiantes;
-    private int usos;
     @EJB
     private TipoPersonaFacadeLocal tpFL;
     @EJB
     private NotificacionesFacadeLocal notiFL;
-    private HashMap<Integer, Recurso> art;
+    @EJB
+    private PersonasReservaFacadeLocal prFL;
+    @EJB
+    private SolicitudReservaFacadeLocal srFL;
 
+    private List<TipoRecurso> tiporList;
+    private List<SolicitudReserva> solicitud;
+    private List<Recurso> recursos;
+    private List<TipoReserva> tiposReserva;
+    private List<Maestro> maestros;
+    private List<Materia> materias;
+    private List<TipoProyecto> tProyectos;
+    private List<Estudiante> estudiantes;
+    private List<Grado> grados;
+
+    private TipoRecurso tp;
+    private Persona usuario;
+    private Grado grado;
+    private Maestro maestro;
+    private Reserva reserva;
+
+    private int usos;
+    private boolean cra;
+    private boolean lab;
+    private boolean bib;
+    private boolean alumnos;
     private Date fecha;
     private Date hi;
     private Date hf;
@@ -154,7 +157,6 @@ public class reservaSController implements Serializable {
         solicitud = new ArrayList<>();
         grado = null;
         hi = hf = null;
-        art=new HashMap<>();
     }
 
     public String getGradoNombre(Grado g) {
@@ -235,7 +237,7 @@ public class reservaSController implements Serializable {
 
     public void tipoProyectoSelect(SelectEvent event) {
         TipoProyecto p = (TipoProyecto) event.getObject();
-        reserva.setTipoProyecto(p);
+        reserva.setTipoPtoyecto(p);
         System.out.println(p == null ? "no selection" : p.getTipoProyectoNombre());
     }
 
@@ -298,11 +300,9 @@ public class reservaSController implements Serializable {
 
     void limpia() {
         try {
-            for (Estudiante e : estudiantes) {
-                if (!e.getEstudianteEsEstudiante()) {
-                    estudiantes.remove(e);
-                }
-            }
+            estudiantes.stream().filter((e) -> (!e.getEstudianteEsEstudiante())).forEachOrdered((e) -> {
+                estudiantes.remove(e);
+            });
             PrimeFaces.current().ajax().update("form:alumnos");
         } catch (Exception e) {
 
@@ -329,20 +329,73 @@ public class reservaSController implements Serializable {
         reserva.setObjetivoTema(objetivo);
         reserva.setReservaEstado("S");
         if (reserva.getReservaEntrega().after(reserva.getReservaFecha())
-                && reserva.getReservaDevolucion().after(reserva.getReservaEntrega())) {
+                && reserva.getReservaDevolucion().after(reserva.getReservaEntrega())
+                && !getUsadoPor().equals("0")) {
+            mensaje x;
             reserva.setIdreserva(null);
             resFL.create(reserva);
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Solicitud exitosa",
-                            "Su solicitud de recursos de " + tp.getTipoRecursoNombre()
-                            + " ha sido guardada con éxito. Resivirá una notificación "
+            reserva = resFL.getReservaByFechaHora(reserva.getReservaFecha());
+            List<PersonasReserva> pr = new ArrayList<>();
+            if (!getUsadoPor().equals("3")) {
+                PersonasReserva e = new PersonasReserva(reserva.getIdreserva(), usuario.getIdpersona());
+                e.setPersona(usuario);
+                e.setReserva(reserva);
+                e.setPersonasReservaComentario("");
+                pr.add(e);
+            } else {
+                if (usuario.getTipoPersona().getIdtipoPersona() == 8
+                        && !estudiantes.contains(usuario.getEstudiante())) {
+                    estudiantes.add(usuario.getEstudiante());
+                }
+                estudiantes.stream().map((es) -> {
+                    PersonasReserva e = new PersonasReserva(reserva.getIdreserva(), es.getIdestudiante());
+                    e.setPersona(es.getPersona());
+                    return e;
+                }).map((e) -> {
+                    e.setReserva(reserva);
+                    return e;
+                }).map((e) -> {
+                    e.setPersonasReservaComentario("");
+                    return e;
+                }).forEachOrdered((e) -> {
+                    pr.add(e);
+                });
+            }
+            List<Persona> solicitantes = new ArrayList<>();
+            pr.stream().map((prs) -> {
+                prFL.create(prs);
+                return prs;
+            }).forEachOrdered((prs) -> {
+                solicitantes.add(prs.getPersona());
+            });
+            x = new mensaje(0, usuario.getIdpersona(), " ",
+                    new FacesMessage(FacesMessage.SEVERITY_INFO,
+                            "Solicitud exitosa", "Su solicitud de recursos de "
+                            + tp.getTipoRecursoNombre()
+                            + " ha sido guardada con éxito. Recibirá una notificación "
                             + "cuando sea aprobada por el encargado de área correspondiente."));
+            persistirNotificación(x, solicitantes);
+            solicitud.stream().map((s) -> {
+                s.setReserva(reserva);
+                return s;
+            }).map((s) -> {
+                s.setSolicitudReservaComentario("");
+                return s;
+            }).map((s) -> {
+                s.getSolicitudReservaPK().setIdReserva(reserva.getIdreserva());
+                return s;
+            }).map((s) -> {
+                s.getSolicitudReservaPK().setIdRecurso(s.getRecurso().getIdrecurso());
+                return s;
+            }).forEachOrdered((s) -> {
+                srFL.create(s);
+            });
             int id = tp.getIdtipoRecurso();
             id = id == 1 ? 6 : (id == 2 ? 7 : (id == 3 ? 5 : 0));
             TipoPersona ps = tpFL.find(id);
-            ArrayList<Persona> personas = new ArrayList<>();
+            List<Persona> personas = new ArrayList<>();
             personas.addAll(ps.getPersonaList());
-            ps.getDelegacionCargoList().forEach((dl) -> {
+            ps.getDelagacionCargoList().forEach((dl) -> {
                 personas.add(dl.getIdpersona());
             });
             ps.getCargoList().forEach((c) -> {
@@ -350,12 +403,13 @@ public class reservaSController implements Serializable {
                     personas.add(mc.getMaestro().getPersona());
                 });
             });
-            mensaje x= new mensaje(0, usuario.getPersonaNombre()+" "+usuario.getPersonaApellido()
-                    +" ha solicitado recursos", "Nueva solicitud de recursos", FacesMessage.SEVERITY_INFO
-                    , usuario.getIdpersona(), " ");
+            x = new mensaje(0, usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
+                    + " ha solicitado recursos", "Nueva solicitud de recursos",
+                    FacesMessage.SEVERITY_INFO,
+                    usuario.getIdpersona(), " ");
             persistirNotificación(x, personas);
             init();
-            PrimeFaces.current().ajax().update(":form", ":form0");
+            PrimeFaces.current().ajax().update(":form0", ":form");
         } else {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error en las fechas",
@@ -578,17 +632,24 @@ public class reservaSController implements Serializable {
         this.objetivo = objetivo;
     }
 
-    private void persistirNotificación(mensaje x, ArrayList<Persona> ps) {
+    private void persistirNotificación(mensaje x, List<Persona> ps) {
         ps.forEach((p) -> {
-            try {
-                x.setDestinatario(p.getIdpersona());
-                x.getNotificacion().setFechaHora(new Date());
-                sendMessage(x.toString());
-                notiFL.create(x.getNotificacion());
-                System.out.println("notificación enviada "+x.getNotificacion().getFechaHora());
-            } catch (Exception e) {
-            }
+            persistirNotificación(x, p);
         });
+    }
+
+    private void persistirNotificación(mensaje x, Persona ps) {
+        try {
+            x.setDestinatario(ps.getIdpersona());
+            Notificaciones n = x.getNotificacion();
+            n.setDestinatario(ps);
+            n.setRemitente(usuario);
+            n.setFechaHora(new Date());
+            sendMessage(x.toString());
+            notiFL.create(n);
+            System.out.println("notificación enviada " + x.getNotificacion().getFechaHora());
+        } catch (Exception e) {
+        }
     }
 
     @Inject

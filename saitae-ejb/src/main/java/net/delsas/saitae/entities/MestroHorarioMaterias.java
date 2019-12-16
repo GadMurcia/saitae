@@ -43,13 +43,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 })
 public class MestroHorarioMaterias implements Serializable {
 
-    @Size(max = 145)
-    @Column(name = "mestroHorarioMateriasComentarios")
-    private String mestroHorarioMateriasComentarios;
-
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected MestroHorarioMateriasPK mestroHorarioMateriasPK;
+    @Size(max = 145)
+    @Column(name = "mestroHorarioMateriasComentarios")
+    private String mestroHorarioMateriasComentarios;
     @JoinColumn(name = "idMaestro", referencedColumnName = "idmaestro", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Maestro maestro;
@@ -87,6 +86,14 @@ public class MestroHorarioMaterias implements Serializable {
 
     public void setMestroHorarioMateriasPK(MestroHorarioMateriasPK mestroHorarioMateriasPK) {
         this.mestroHorarioMateriasPK = mestroHorarioMateriasPK;
+    }
+
+    public String getMestroHorarioMateriasComentarios() {
+        return mestroHorarioMateriasComentarios;
+    }
+
+    public void setMestroHorarioMateriasComentarios(String mestroHorarioMateriasComentarios) {
+        this.mestroHorarioMateriasComentarios = mestroHorarioMateriasComentarios;
     }
 
     public Maestro getMaestro() {
@@ -153,13 +160,5 @@ public class MestroHorarioMaterias implements Serializable {
     public String toString() {
         return "net.delsas.saitae.entities.MestroHorarioMaterias[ mestroHorarioMateriasPK=" + mestroHorarioMateriasPK + " ]";
     }
-
-    public String getMestroHorarioMateriasComentarios() {
-        return mestroHorarioMateriasComentarios;
-    }
-
-    public void setMestroHorarioMateriasComentarios(String mestroHorarioMateriasComentarios) {
-        this.mestroHorarioMateriasComentarios = mestroHorarioMateriasComentarios;
-    }
-
+    
 }

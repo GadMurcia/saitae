@@ -37,16 +37,15 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Aula.findByAulaComentario", query = "SELECT a FROM Aula a WHERE a.aulaComentario = :aulaComentario")})
 public class Aula implements Serializable {
 
-    @Size(max = 145)
-    @Column(name = "aulaComentario")
-    private String aulaComentario;
-
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "idaula")
     private Integer idaula;
+    @Size(max = 145)
+    @Column(name = "aulaComentario")
+    private String aulaComentario;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "aulaGrado")
     private List<Grado> gradoList;
     @JoinColumn(name = "zonaAula", referencedColumnName = "idzona")
@@ -68,6 +67,13 @@ public class Aula implements Serializable {
         this.idaula = idaula;
     }
 
+    public String getAulaComentario() {
+        return aulaComentario;
+    }
+
+    public void setAulaComentario(String aulaComentario) {
+        this.aulaComentario = aulaComentario;
+    }
 
     @XmlTransient
     public List<Grado> getGradoList() {
@@ -109,14 +115,6 @@ public class Aula implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.Aula[ idaula=" + idaula + " ]";
-    }
-
-    public String getAulaComentario() {
-        return aulaComentario;
-    }
-
-    public void setAulaComentario(String aulaComentario) {
-        this.aulaComentario = aulaComentario;
     }
     
 }

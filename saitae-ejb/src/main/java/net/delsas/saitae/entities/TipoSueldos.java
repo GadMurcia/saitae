@@ -37,6 +37,12 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "TipoSueldos.findByTipoSueldosComentario", query = "SELECT t FROM TipoSueldos t WHERE t.tipoSueldosComentario = :tipoSueldosComentario")})
 public class TipoSueldos implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "idtipoSueldo")
+    private Integer idtipoSueldo;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
@@ -45,13 +51,6 @@ public class TipoSueldos implements Serializable {
     @Size(max = 145)
     @Column(name = "tipoSueldosComentario")
     private String tipoSueldosComentario;
-
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "idtipoSueldo")
-    private Integer idtipoSueldo;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "maestroTipoSalario")
     private List<Maestro> maestroList;
 
@@ -75,6 +74,21 @@ public class TipoSueldos implements Serializable {
         this.idtipoSueldo = idtipoSueldo;
     }
 
+    public String getTipoSueldoNombre() {
+        return tipoSueldoNombre;
+    }
+
+    public void setTipoSueldoNombre(String tipoSueldoNombre) {
+        this.tipoSueldoNombre = tipoSueldoNombre;
+    }
+
+    public String getTipoSueldosComentario() {
+        return tipoSueldosComentario;
+    }
+
+    public void setTipoSueldosComentario(String tipoSueldosComentario) {
+        this.tipoSueldosComentario = tipoSueldosComentario;
+    }
 
     @XmlTransient
     public List<Maestro> getMaestroList() {
@@ -108,22 +122,6 @@ public class TipoSueldos implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.TipoSueldos[ idtipoSueldo=" + idtipoSueldo + " ]";
-    }
-
-    public String getTipoSueldoNombre() {
-        return tipoSueldoNombre;
-    }
-
-    public void setTipoSueldoNombre(String tipoSueldoNombre) {
-        this.tipoSueldoNombre = tipoSueldoNombre;
-    }
-
-    public String getTipoSueldosComentario() {
-        return tipoSueldosComentario;
-    }
-
-    public void setTipoSueldosComentario(String tipoSueldosComentario) {
-        this.tipoSueldosComentario = tipoSueldosComentario;
     }
     
 }

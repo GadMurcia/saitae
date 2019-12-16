@@ -5,6 +5,7 @@
  */
 package net.delsas.saitae.beans;
 
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Local;
 import net.delsas.saitae.entities.Reserva;
@@ -27,6 +28,13 @@ public interface ReservaFacadeLocal {
     List<Reserva> findAll();
 
     List<Reserva> findRange(int[] range);
+    
+    /**
+     * Busca y devuelve un objeto Reserva que cincide con la fecha hora proporcionada
+     * @param feha_hora
+     * @return java.util.List net.delsas.saitae.entities.Reserva
+     */
+    public Reserva getReservaByFechaHora(Date feha_hora);
 
     int count();
     

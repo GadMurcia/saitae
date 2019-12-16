@@ -43,6 +43,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 })
 public class Permisos implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+    @EmbeddedId
+    protected PermisosPK permisosPK;
     @Basic(optional = false)
     @NotNull
     @Column(name = "permisoFechafin")
@@ -61,10 +64,6 @@ public class Permisos implements Serializable {
     @Size(max = 250)
     @Column(name = "permisosComentario")
     private String permisosComentario;
-
-    private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected PermisosPK permisosPK;
     @JoinColumn(name = "ipPersona", referencedColumnName = "idpersona", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Persona persona;
@@ -104,6 +103,37 @@ public class Permisos implements Serializable {
         this.permisosPK = permisosPK;
     }
 
+    public Date getPermisoFechafin() {
+        return permisoFechafin;
+    }
+
+    public void setPermisoFechafin(Date permisoFechafin) {
+        this.permisoFechafin = permisoFechafin;
+    }
+
+    public String getPermisosMotivo() {
+        return permisosMotivo;
+    }
+
+    public void setPermisosMotivo(String permisosMotivo) {
+        this.permisosMotivo = permisosMotivo;
+    }
+
+    public String getPermisosEstado() {
+        return permisosEstado;
+    }
+
+    public void setPermisosEstado(String permisosEstado) {
+        this.permisosEstado = permisosEstado;
+    }
+
+    public String getPermisosComentario() {
+        return permisosComentario;
+    }
+
+    public void setPermisosComentario(String permisosComentario) {
+        this.permisosComentario = permisosComentario;
+    }
 
     public Persona getPersona() {
         return persona;
@@ -160,38 +190,6 @@ public class Permisos implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.Permisos[ permisosPK=" + permisosPK + " ]";
-    }
-
-    public Date getPermisoFechafin() {
-        return permisoFechafin;
-    }
-
-    public void setPermisoFechafin(Date permisoFechafin) {
-        this.permisoFechafin = permisoFechafin;
-    }
-
-    public String getPermisosMotivo() {
-        return permisosMotivo;
-    }
-
-    public void setPermisosMotivo(String permisosMotivo) {
-        this.permisosMotivo = permisosMotivo;
-    }
-
-    public String getPermisosEstado() {
-        return permisosEstado;
-    }
-
-    public void setPermisosEstado(String permisosEstado) {
-        this.permisosEstado = permisosEstado;
-    }
-
-    public String getPermisosComentario() {
-        return permisosComentario;
-    }
-
-    public void setPermisosComentario(String permisosComentario) {
-        this.permisosComentario = permisosComentario;
     }
     
 }

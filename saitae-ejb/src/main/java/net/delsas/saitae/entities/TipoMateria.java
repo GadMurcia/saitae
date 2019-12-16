@@ -37,6 +37,12 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "TipoMateria.findByTipoMateriaComentario", query = "SELECT t FROM TipoMateria t WHERE t.tipoMateriaComentario = :tipoMateriaComentario")})
 public class TipoMateria implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "idtipoMateria")
+    private Integer idtipoMateria;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
@@ -45,13 +51,6 @@ public class TipoMateria implements Serializable {
     @Size(max = 145)
     @Column(name = "tipoMateriaComentario")
     private String tipoMateriaComentario;
-
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "idtipoMateria")
-    private Integer idtipoMateria;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoMateria")
     private List<Materia> materiaList;
 
@@ -75,6 +74,21 @@ public class TipoMateria implements Serializable {
         this.idtipoMateria = idtipoMateria;
     }
 
+    public String getTipoMateriaNombre() {
+        return tipoMateriaNombre;
+    }
+
+    public void setTipoMateriaNombre(String tipoMateriaNombre) {
+        this.tipoMateriaNombre = tipoMateriaNombre;
+    }
+
+    public String getTipoMateriaComentario() {
+        return tipoMateriaComentario;
+    }
+
+    public void setTipoMateriaComentario(String tipoMateriaComentario) {
+        this.tipoMateriaComentario = tipoMateriaComentario;
+    }
 
     @XmlTransient
     public List<Materia> getMateriaList() {
@@ -108,22 +122,6 @@ public class TipoMateria implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.TipoMateria[ idtipoMateria=" + idtipoMateria + " ]";
-    }
-
-    public String getTipoMateriaNombre() {
-        return tipoMateriaNombre;
-    }
-
-    public void setTipoMateriaNombre(String tipoMateriaNombre) {
-        this.tipoMateriaNombre = tipoMateriaNombre;
-    }
-
-    public String getTipoMateriaComentario() {
-        return tipoMateriaComentario;
-    }
-
-    public void setTipoMateriaComentario(String tipoMateriaComentario) {
-        this.tipoMateriaComentario = tipoMateriaComentario;
     }
     
 }

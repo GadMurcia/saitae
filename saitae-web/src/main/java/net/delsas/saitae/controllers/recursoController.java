@@ -375,7 +375,7 @@ public class recursoController implements Serializable {
         if (l != null) {
             a = new Integer[l.size()];
             for (int i = 0; i < l.size(); i++) {
-                a[i] = l.get(i).getTipoReserva().getIdtipoReserva();
+                a[i] = l.get(i).getTipoReserva1().getIdtipoReserva();
             }
         } else {
             a = new Integer[0];
@@ -388,7 +388,7 @@ public class recursoController implements Serializable {
         for (int i : a) {
             TipoReservaRecurso trr = new TipoReservaRecurso(new TipoReservaRecursoPK(i, Seleccionado.getIdrecurso()));
             trr.setRecurso(Seleccionado);
-            trr.setTipoReserva(tipoReservaFL.find(i));
+            trr.setTipoReserva1(tipoReservaFL.find(i));
             trr.setTipoReservaRecursoComentario("");
             l.add(trr);
         }
@@ -773,7 +773,7 @@ public class recursoController implements Serializable {
         Integer i;
         try {
             i = Integer.valueOf(m.getCadenaAccion());
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             i = 0;
         }
         TipoPersona tp = tpFL.find(i == 0 ? 0 : (i == 1 ? 6 : (i == 2 ? 7 : (i == 3 ? 5 : 0))));
@@ -785,7 +785,7 @@ public class recursoController implements Serializable {
                     personas.add(mc.getMaestro().getPersona());
                 });
             });
-            tp.getDelegacionCargoList().forEach((dc) -> {
+            tp.getDelagacionCargoList().forEach((dc) -> {
                 personas.add(dc.getIdpersona());
             });
 

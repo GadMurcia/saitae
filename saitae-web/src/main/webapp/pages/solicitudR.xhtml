@@ -94,7 +94,7 @@
                             </p:inputTextarea>
 
                             <p:outputLabel for="tpr" value="Tipo de proyecto: "/>
-                            <p:selectOneMenu id="tpr" value="#{reservaSController.reserva.tipoProyecto}" 
+                            <p:selectOneMenu id="tpr" value="#{reservaSController.reserva.tipoPtoyecto}" 
                                              converter="omnifaces.SelectItemsConverter"
                                              required="true">
                                 <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
@@ -186,8 +186,7 @@
                         <h:panelGrid columns="3">
                             <p:column/>
                             <p:commandButton id="summit" value="Solicitar" process="@this"
-                                             action="#{reservaSController.guardar()}" 
-                                             update=":form"/>
+                                             action="#{reservaSController.guardar()}"/>
                             <p:column/>
                         </h:panelGrid>
                     </h:panelGrid>

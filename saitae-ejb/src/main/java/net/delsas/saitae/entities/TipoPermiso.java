@@ -38,6 +38,12 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "TipoPermiso.findByTipoPermisoComentarios", query = "SELECT t FROM TipoPermiso t WHERE t.tipoPermisoComentarios = :tipoPermisoComentarios")})
 public class TipoPermiso implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "idtipoPermiso")
+    private Integer idtipoPermiso;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
@@ -50,13 +56,6 @@ public class TipoPermiso implements Serializable {
     @Size(max = 250)
     @Column(name = "tipoPermisoComentarios")
     private String tipoPermisoComentarios;
-
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "idtipoPermiso")
-    private Integer idtipoPermiso;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoPermiso")
     private List<TipopersonaPermiso> tipopersonaPermisoList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoPermiso1")
@@ -83,6 +82,29 @@ public class TipoPermiso implements Serializable {
         this.idtipoPermiso = idtipoPermiso;
     }
 
+    public String getTipoPermisoNombre() {
+        return tipoPermisoNombre;
+    }
+
+    public void setTipoPermisoNombre(String tipoPermisoNombre) {
+        this.tipoPermisoNombre = tipoPermisoNombre;
+    }
+
+    public int getTipoPermisoDiasMes() {
+        return tipoPermisoDiasMes;
+    }
+
+    public void setTipoPermisoDiasMes(int tipoPermisoDiasMes) {
+        this.tipoPermisoDiasMes = tipoPermisoDiasMes;
+    }
+
+    public String getTipoPermisoComentarios() {
+        return tipoPermisoComentarios;
+    }
+
+    public void setTipoPermisoComentarios(String tipoPermisoComentarios) {
+        this.tipoPermisoComentarios = tipoPermisoComentarios;
+    }
 
     @XmlTransient
     public List<TipopersonaPermiso> getTipopersonaPermisoList() {
@@ -125,30 +147,6 @@ public class TipoPermiso implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.TipoPermiso[ idtipoPermiso=" + idtipoPermiso + " ]";
-    }
-
-    public String getTipoPermisoNombre() {
-        return tipoPermisoNombre;
-    }
-
-    public void setTipoPermisoNombre(String tipoPermisoNombre) {
-        this.tipoPermisoNombre = tipoPermisoNombre;
-    }
-
-    public int getTipoPermisoDiasMes() {
-        return tipoPermisoDiasMes;
-    }
-
-    public void setTipoPermisoDiasMes(int tipoPermisoDiasMes) {
-        this.tipoPermisoDiasMes = tipoPermisoDiasMes;
-    }
-
-    public String getTipoPermisoComentarios() {
-        return tipoPermisoComentarios;
-    }
-
-    public void setTipoPermisoComentarios(String tipoPermisoComentarios) {
-        this.tipoPermisoComentarios = tipoPermisoComentarios;
     }
     
 }

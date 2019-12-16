@@ -153,7 +153,7 @@ public class permisoEstController implements Serializable {
                     sendMessage(x.toString());
                     persistirNotificación(x);
                 }
-                for (DelagacionCargo dl : tp.getDelegacionCargoList()) {
+                for (DelagacionCargo dl : tp.getDelagacionCargoList()) {
                     x.setDestinatario(dl.getIdpersona().getIdpersona());
                     sendMessage(x.toString());
                     persistirNotificación(x);

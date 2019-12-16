@@ -55,6 +55,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "GradoEvaluacion.findByEvaluacionGradoComentario", query = "SELECT g FROM GradoEvaluacion g WHERE g.evaluacionGradoComentario = :evaluacionGradoComentario")})
 public class GradoEvaluacion implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+    @EmbeddedId
+    protected GradoEvaluacionPK gradoEvaluacionPK;
     @Basic(optional = false)
     @NotNull
     @Column(name = "fechaEvaluacion")
@@ -116,9 +119,6 @@ public class GradoEvaluacion implements Serializable {
     @Size(max = 145)
     @Column(name = "evaluacionGradoComentario")
     private String evaluacionGradoComentario;
-    private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected GradoEvaluacionPK gradoEvaluacionPK;
     @JoinColumns({
         @JoinColumn(name = "idGrado", referencedColumnName = "idgrado", insertable = false, updatable = false)
         , @JoinColumn(name = "gradoSeccion", referencedColumnName = "gradoSeccion", insertable = false, updatable = false)
@@ -163,40 +163,6 @@ public class GradoEvaluacion implements Serializable {
 
     public void setGradoEvaluacionPK(GradoEvaluacionPK gradoEvaluacionPK) {
         this.gradoEvaluacionPK = gradoEvaluacionPK;
-    }
-    public Grado getGrado() {
-        return grado;
-    }
-    public void setGrado(Grado grado) {
-        this.grado = grado;
-    }
-    public Persona getEvaluador() {
-        return evaluador;
-    }
-    public void setEvaluador(Persona evaluador) {
-        this.evaluador = evaluador;
-    }
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (gradoEvaluacionPK != null ? gradoEvaluacionPK.hashCode() : 0);
-        return hash;
-    }
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof GradoEvaluacion)) {
-            return false;
-        }
-        GradoEvaluacion other = (GradoEvaluacion) object;
-        if ((this.gradoEvaluacionPK == null && other.gradoEvaluacionPK != null) || (this.gradoEvaluacionPK != null && !this.gradoEvaluacionPK.equals(other.gradoEvaluacionPK))) {
-            return false;
-        }
-        return true;
-    }
-    @Override
-    public String toString() {
-        return "net.delsas.saitae.entities.GradoEvaluacion[ gradoEvaluacionPK=" + gradoEvaluacionPK + " ]";
     }
 
     public Date getFechaEvaluacion() {
@@ -325,6 +291,47 @@ public class GradoEvaluacion implements Serializable {
 
     public void setEvaluacionGradoComentario(String evaluacionGradoComentario) {
         this.evaluacionGradoComentario = evaluacionGradoComentario;
+    }
+
+    public Grado getGrado() {
+        return grado;
+    }
+
+    public void setGrado(Grado grado) {
+        this.grado = grado;
+    }
+
+    public Persona getEvaluador() {
+        return evaluador;
+    }
+
+    public void setEvaluador(Persona evaluador) {
+        this.evaluador = evaluador;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (gradoEvaluacionPK != null ? gradoEvaluacionPK.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof GradoEvaluacion)) {
+            return false;
+        }
+        GradoEvaluacion other = (GradoEvaluacion) object;
+        if ((this.gradoEvaluacionPK == null && other.gradoEvaluacionPK != null) || (this.gradoEvaluacionPK != null && !this.gradoEvaluacionPK.equals(other.gradoEvaluacionPK))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "net.delsas.saitae.entities.GradoEvaluacion[ gradoEvaluacionPK=" + gradoEvaluacionPK + " ]";
     }
     
 }

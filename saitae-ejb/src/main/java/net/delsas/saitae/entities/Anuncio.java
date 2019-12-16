@@ -7,9 +7,9 @@ package net.delsas.saitae.entities;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -45,7 +45,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 })
 public class Anuncio implements Serializable {
 
-   
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "idanuncio")
+    private Integer idanuncio;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
@@ -60,12 +65,6 @@ public class Anuncio implements Serializable {
     @Size(max = 140)
     @Column(name = "anuncioComentario")
     private String anuncioComentario;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "idanuncio")
-    private Integer idanuncio;
     @Basic(optional = false)
     @NotNull
     @Column(name = "anuncioFechaFin")
@@ -81,7 +80,7 @@ public class Anuncio implements Serializable {
     public Anuncio() {
     }
 
-    public Anuncio(Integer idanuncio) {
+    public Anuncio(Integer idanuncio, String anuncioTitulo, String anuncioTexto, Date anuncioFechaFin) {
         this.idanuncio = idanuncio;
     }
 
@@ -98,57 +97,6 @@ public class Anuncio implements Serializable {
 
     public void setIdanuncio(Integer idanuncio) {
         this.idanuncio = idanuncio;
-    }
-
-
-    public Date getAnuncioFechaFin() {
-        return anuncioFechaFin;
-    }
-
-    public void setAnuncioFechaFin(Date anuncioFechaFin) {
-        this.anuncioFechaFin = anuncioFechaFin;
-    }
-
-
-    public Persona getAnuncioAnunciante() {
-        return anuncioAnunciante;
-    }
-
-    public void setAnuncioAnunciante(Persona anuncioAnunciante) {
-        this.anuncioAnunciante = anuncioAnunciante;
-    }
-
-    public TipoPersona getAnuncioTipoPersona() {
-        return anuncioTipoPersona;
-    }
-
-    public void setAnuncioTipoPersona(TipoPersona anuncioTipoPersona) {
-        this.anuncioTipoPersona = anuncioTipoPersona;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idanuncio != null ? idanuncio.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Anuncio)) {
-            return false;
-        }
-        Anuncio other = (Anuncio) object;
-        if ((this.idanuncio == null && other.idanuncio != null) || (this.idanuncio != null && !this.idanuncio.equals(other.idanuncio))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "net.delsas.saitae.entities.Anuncio[ idanuncio=" + idanuncio + " ]";
     }
 
     public String getAnuncioTitulo() {
@@ -175,4 +123,71 @@ public class Anuncio implements Serializable {
         this.anuncioComentario = anuncioComentario;
     }
 
-}
+    public Date getAnuncioFechaFin() {
+        return anuncioFechaFin;
+    }
+
+    public void setAnuncioFechaFin(Date anuncioFechaFin) {
+        this.anuncioFechaFin = anuncioFechaFin;
+    }
+
+    public Persona getAnuncioAnunciante() {
+        return anuncioAnunciante;
+    }
+
+    public void setAnuncioAnunciante(Persona anuncioAnunciante) {
+        this.anuncioAnunciante = anuncioAnunciante;
+    }
+
+    public TipoPersona getAnuncioTipoPersona() {
+        return anuncioTipoPersona;
+    }
+
+    public void setAnuncioTipoPersona(TipoPersona anuncioTipoPersona) {
+        this.anuncioTipoPersona = anuncioTipoPersona;
+    }
+
+    @Override
+    public int hashCode() {
+        return idanuncio.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Anuncio other = (Anuncio) obj;
+        if (!Objects.equals(this.anuncioTitulo, other.anuncioTitulo)) {
+            return false;
+        }
+        if (!Objects.equals(this.anuncioTexto, other.anuncioTexto)) {
+            return false;
+        }
+        if (!Objects.equals(this.anuncioComentario, other.anuncioComentario)) {
+            return false;
+        }
+        if (!Objects.equals(this.idanuncio, other.idanuncio)) {
+            return false;
+        }
+        if (!Objects.equals(this.anuncioFechaFin, other.anuncioFechaFin)) {
+            return false;
+        }
+        if (!Objects.equals(this.anuncioAnunciante, other.anuncioAnunciante)) {
+            return false;
+        }
+        return Objects.equals(this.anuncioTipoPersona, other.anuncioTipoPersona);
+    }
+
+    @Override
+    public String toString() {
+        return "Anuncio{" + "idanuncio=" + idanuncio + ", anuncioTitulo=" + anuncioTitulo + ", anuncioTexto=" + anuncioTexto + ", anuncioComentario=" + anuncioComentario + ", anuncioFechaFin=" + anuncioFechaFin + ", anuncioAnunciante=" + anuncioAnunciante + ", anuncioTipoPersona=" + anuncioTipoPersona + '}';
+    }
+
+   }

@@ -49,6 +49,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "EvaluacionMaestro.findByGradoModalidad", query = "SELECT e FROM EvaluacionMaestro e WHERE e.evaluacionMaestroPK.gradoModalidad = :gradoModalidad")})
 public class EvaluacionMaestro implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+    @EmbeddedId
+    protected EvaluacionMaestroPK evaluacionMaestroPK;
     @Basic(optional = false)
     @NotNull
     @Column(name = "materia")
@@ -88,13 +91,13 @@ public class EvaluacionMaestro implements Serializable {
     private int evaluador;
     @Basic(optional = false)
     @NotNull
-    @Lob()
+    @Lob
     @Size(min = 1, max = 2147483647)
     @Column(name = "faceIniciacion")
     private String faceIniciacion;
     @Basic(optional = false)
     @NotNull
-    @Lob()
+    @Lob
     @Size(min = 1, max = 2147483647)
     @Column(name = "faceDesarrollo")
     private String faceDesarrollo;
@@ -119,9 +122,6 @@ public class EvaluacionMaestro implements Serializable {
     @Size(max = 145)
     @Column(name = "evaluacionMaestroComentario")
     private String evaluacionMaestroComentario;
-    private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected EvaluacionMaestroPK evaluacionMaestroPK;
     @JoinColumn(name = "idMaestro", referencedColumnName = "idmaestro", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Maestro maestro;
@@ -166,40 +166,6 @@ public class EvaluacionMaestro implements Serializable {
 
     public void setEvaluacionMaestroPK(EvaluacionMaestroPK evaluacionMaestroPK) {
         this.evaluacionMaestroPK = evaluacionMaestroPK;
-    }
-    public Maestro getMaestro() {
-        return maestro;
-    }
-    public void setMaestro(Maestro maestro) {
-        this.maestro = maestro;
-    }
-    public Grado getGrado() {
-        return grado;
-    }
-    public void setGrado(Grado grado) {
-        this.grado = grado;
-    }
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (evaluacionMaestroPK != null ? evaluacionMaestroPK.hashCode() : 0);
-        return hash;
-    }
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof EvaluacionMaestro)) {
-            return false;
-        }
-        EvaluacionMaestro other = (EvaluacionMaestro) object;
-        if ((this.evaluacionMaestroPK == null && other.evaluacionMaestroPK != null) || (this.evaluacionMaestroPK != null && !this.evaluacionMaestroPK.equals(other.evaluacionMaestroPK))) {
-            return false;
-        }
-        return true;
-    }
-    @Override
-    public String toString() {
-        return "net.delsas.saitae.entities.EvaluacionMaestro[ evaluacionMaestroPK=" + evaluacionMaestroPK + " ]";
     }
 
     public int getMateria() {
@@ -320,6 +286,47 @@ public class EvaluacionMaestro implements Serializable {
 
     public void setEvaluacionMaestroComentario(String evaluacionMaestroComentario) {
         this.evaluacionMaestroComentario = evaluacionMaestroComentario;
+    }
+
+    public Maestro getMaestro() {
+        return maestro;
+    }
+
+    public void setMaestro(Maestro maestro) {
+        this.maestro = maestro;
+    }
+
+    public Grado getGrado() {
+        return grado;
+    }
+
+    public void setGrado(Grado grado) {
+        this.grado = grado;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (evaluacionMaestroPK != null ? evaluacionMaestroPK.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof EvaluacionMaestro)) {
+            return false;
+        }
+        EvaluacionMaestro other = (EvaluacionMaestro) object;
+        if ((this.evaluacionMaestroPK == null && other.evaluacionMaestroPK != null) || (this.evaluacionMaestroPK != null && !this.evaluacionMaestroPK.equals(other.evaluacionMaestroPK))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "net.delsas.saitae.entities.EvaluacionMaestro[ evaluacionMaestroPK=" + evaluacionMaestroPK + " ]";
     }
     
 }

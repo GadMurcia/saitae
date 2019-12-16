@@ -27,7 +27,7 @@ import net.delsas.saitae.entities.Persona;
  *
  * @author delsas
  */
-public class mensaje implements Serializable{
+public class mensaje implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -40,15 +40,17 @@ public class mensaje implements Serializable{
     private FacesMessage facesmessage;
     private Notificaciones notificacion;
 
-    public mensaje(int destinatario, String cuerpoMensaje, String tituloMensaje, Severity severidad, int remitente, String cadenaAccion) {
+    public mensaje(int destinatario, String cuerpoMensaje, String tituloMensaje,
+            Severity severidad, int remitente, String cadenaAccion) {
         this.destinatario = destinatario;
         this.cuerpoMensaje = cuerpoMensaje;
         this.tituloMensaje = tituloMensaje;
-        this. severidad= severidad;
+        this.severidad = severidad;
         this.remitente = remitente;
         this.cadenaAccion = cadenaAccion;
         this.facesmessage = new FacesMessage(severidad, tituloMensaje, cuerpoMensaje);
-        this.notificacion = new Notificaciones(new Date(), tituloMensaje, cuerpoMensaje, false, "", new Persona(destinatario), new Persona(remitente));
+        this.notificacion = new Notificaciones(new Date(), tituloMensaje, cuerpoMensaje,
+                false, " ", new Persona(destinatario), new Persona(remitente));
     }
 
     public mensaje(int destinatario, int remitente, String cadenaAccion, FacesMessage facesmessage) {
@@ -58,11 +60,12 @@ public class mensaje implements Serializable{
         this.facesmessage = facesmessage;
         this.cuerpoMensaje = facesmessage.getDetail();
         this.tituloMensaje = facesmessage.getSummary();
-        this. severidad= facesmessage.getSeverity();
-        this.notificacion = new Notificaciones(new Date(), tituloMensaje, cuerpoMensaje, false, "", new Persona(destinatario), new Persona(remitente));
+        this.severidad = facesmessage.getSeverity();
+        this.notificacion = new Notificaciones(new Date(), facesmessage.getDetail(),
+                facesmessage.getSummary(), false, " ", new Persona(destinatario), new Persona(remitente));
     }
 
-    public mensaje(String mensajePush) throws Exception{
+    public mensaje(String mensajePush) throws Exception {
         String[] msj = mensajePush.split("::");
         if (msj.length == 6) {
             this.destinatario = Integer.valueOf(msj[0]);
@@ -72,13 +75,15 @@ public class mensaje implements Serializable{
             this.remitente = Integer.valueOf(msj[4]);
             this.cadenaAccion = msj[5];
             this.facesmessage = new FacesMessage(severidad, tituloMensaje, cuerpoMensaje);
-            this.notificacion = new Notificaciones(new Date(), tituloMensaje, cuerpoMensaje, false, "", new Persona(destinatario), new Persona(remitente));
+            this.notificacion = new Notificaciones(new Date(), tituloMensaje, cuerpoMensaje, 
+                    false, "", new Persona(destinatario), new Persona(remitente));
         } else {
             throw new Exception("La cadena ingresada no tiene el formato indicado para la conversión.");
         }
-    }   
+    }
 
-    public mensaje() {}
+    public mensaje() {
+    }
 
     public int getDestinatario() {
         return destinatario;
@@ -131,29 +136,29 @@ public class mensaje implements Serializable{
     }
 
     private int getSeverityOrdinal(Severity severity) {
-        if(FacesMessage.SEVERITY_ERROR==severity){
-                return FacesMessage.SEVERITY_ERROR.getOrdinal();
-        }else if(FacesMessage.SEVERITY_FATAL==severity){
-         return FacesMessage.SEVERITY_FATAL.getOrdinal();
-        }else if(FacesMessage.SEVERITY_INFO==severity){
+        if (FacesMessage.SEVERITY_ERROR == severity) {
+            return FacesMessage.SEVERITY_ERROR.getOrdinal();
+        } else if (FacesMessage.SEVERITY_FATAL == severity) {
+            return FacesMessage.SEVERITY_FATAL.getOrdinal();
+        } else if (FacesMessage.SEVERITY_INFO == severity) {
             return FacesMessage.SEVERITY_INFO.getOrdinal();
-        }else if(FacesMessage.SEVERITY_WARN==severity){
+        } else if (FacesMessage.SEVERITY_WARN == severity) {
             return FacesMessage.SEVERITY_WARN.getOrdinal();
-        }else{
+        } else {
             return FacesMessage.SEVERITY_ERROR.getOrdinal();
         }
     }
-    
-    private Severity setSeverityFromOrdinal(int o){
-        if(FacesMessage.SEVERITY_ERROR.getOrdinal()==o){
-                return FacesMessage.SEVERITY_ERROR;
-        }else if(FacesMessage.SEVERITY_FATAL.getOrdinal()==o){
-         return FacesMessage.SEVERITY_FATAL;
-        }else if(FacesMessage.SEVERITY_INFO.getOrdinal()==o){
+
+    private Severity setSeverityFromOrdinal(int o) {
+        if (FacesMessage.SEVERITY_ERROR.getOrdinal() == o) {
+            return FacesMessage.SEVERITY_ERROR;
+        } else if (FacesMessage.SEVERITY_FATAL.getOrdinal() == o) {
+            return FacesMessage.SEVERITY_FATAL;
+        } else if (FacesMessage.SEVERITY_INFO.getOrdinal() == o) {
             return FacesMessage.SEVERITY_INFO;
-        }else if(FacesMessage.SEVERITY_WARN.getOrdinal()==o){
+        } else if (FacesMessage.SEVERITY_WARN.getOrdinal() == o) {
             return FacesMessage.SEVERITY_WARN;
-        }else{
+        } else {
             return FacesMessage.SEVERITY_ERROR;
         }
     }
@@ -183,7 +188,7 @@ public class mensaje implements Serializable{
         this.cadenaAccion = " ";
         this.cuerpoMensaje = notificacion.getNotificacionCuerpo();
         this.tituloMensaje = notificacion.getNotificacionTitulo();
-        this. severidad= FacesMessage.SEVERITY_INFO;
+        this.severidad = FacesMessage.SEVERITY_INFO;
         this.facesmessage = new FacesMessage(severidad, tituloMensaje, cuerpoMensaje);
     }
 

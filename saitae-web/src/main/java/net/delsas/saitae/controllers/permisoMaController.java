@@ -135,7 +135,7 @@ public class permisoMaController implements Serializable {
                 }).forEachOrdered((_item) -> {
                     persistirNotificación(x);
                 });
-                tp.getDelegacionCargoList().stream().map((dl) -> {
+                tp.getDelagacionCargoList().stream().map((dl) -> {
                     x.setDestinatario(dl.getIdpersona().getIdpersona());
                     return dl;
                 }).map((_item) -> {

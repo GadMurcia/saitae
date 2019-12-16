@@ -39,6 +39,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "CitaPsicologia.findByComentarios", query = "SELECT c FROM CitaPsicologia c WHERE c.comentarios = :comentarios")})
 public class CitaPsicologia implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+    @EmbeddedId
+    protected CitaPsicologiaPK citaPsicologiaPK;
     @Basic(optional = false)
     @NotNull
     @Column(name = "fechaSolicitud")
@@ -47,10 +50,6 @@ public class CitaPsicologia implements Serializable {
     @Size(max = 140)
     @Column(name = "comentarios")
     private String comentarios;
-
-    private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected CitaPsicologiaPK citaPsicologiaPK;
     @JoinColumn(name = "estudiante", referencedColumnName = "idestudiante", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Estudiante estudiante1;
@@ -81,6 +80,21 @@ public class CitaPsicologia implements Serializable {
         this.citaPsicologiaPK = citaPsicologiaPK;
     }
 
+    public Date getFechaSolicitud() {
+        return fechaSolicitud;
+    }
+
+    public void setFechaSolicitud(Date fechaSolicitud) {
+        this.fechaSolicitud = fechaSolicitud;
+    }
+
+    public String getComentarios() {
+        return comentarios;
+    }
+
+    public void setComentarios(String comentarios) {
+        this.comentarios = comentarios;
+    }
 
     public Estudiante getEstudiante1() {
         return estudiante1;
@@ -121,22 +135,6 @@ public class CitaPsicologia implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.CitaPsicologia[ citaPsicologiaPK=" + citaPsicologiaPK + " ]";
-    }
-
-    public Date getFechaSolicitud() {
-        return fechaSolicitud;
-    }
-
-    public void setFechaSolicitud(Date fechaSolicitud) {
-        this.fechaSolicitud = fechaSolicitud;
-    }
-
-    public String getComentarios() {
-        return comentarios;
-    }
-
-    public void setComentarios(String comentarios) {
-        this.comentarios = comentarios;
     }
     
 }

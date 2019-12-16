@@ -63,12 +63,18 @@ import javax.xml.bind.annotation.XmlTransient;
 })
 public class Maestro implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "idmaestro")
+    private Integer idmaestro;
     @Basic(optional = false)
     @NotNull
     @Column(name = "maestroNip")
     private int maestroNip;
     @Basic(optional = false)
-    @NotNull()
+    @NotNull
     @Column(name = "maestroNup")
     private int maestroNup;
     @Basic(optional = false)
@@ -115,6 +121,9 @@ public class Maestro implements Serializable {
     @Column(name = "maestroFechaInstitucion")
     @Temporal(TemporalType.DATE)
     private Date maestroFechaInstitucion;
+    @Column(name = "maestroFechaProximoAsenso")
+    @Temporal(TemporalType.DATE)
+    private Date maestroFechaProximoAsenso;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 2)
@@ -126,7 +135,7 @@ public class Maestro implements Serializable {
     @Column(name = "maestroTiempoCategoria")
     private String maestroTiempoCategoria;
     @Basic(optional = false)
-    @NotNull()
+    @NotNull
     @Column(name = "maestroSinEscalafon")
     private boolean maestroSinEscalafon;
     @Basic(optional = false)
@@ -152,17 +161,6 @@ public class Maestro implements Serializable {
     @Size(max = 45)
     @Column(name = "maestroComentario")
     private String maestroComentario;
-    @OneToMany(mappedBy = "docente")
-    private List<Reserva> reservaList;
-    private static final long serialVersionUID = 1L;
-    @Id
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "idmaestro")
-    private Integer idmaestro;
-    @Column(name = "maestroFechaProximoAsenso")
-    @Temporal(TemporalType.DATE)
-    private Date maestroFechaProximoAsenso;
     @OneToMany(mappedBy = "gradoMaestroGuia")
     private List<Grado> gradoList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "maestro")
@@ -173,6 +171,8 @@ public class Maestro implements Serializable {
     private List<Capacitaciones> capacitacionesList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "maestro")
     private List<EvaluacionMaestro> evaluacionMaestroList;
+    @OneToMany(mappedBy = "docente")
+    private List<Reserva> reservaList;
     @JoinColumn(name = "idmaestro", referencedColumnName = "idpersona", insertable = false, updatable = false)
     @OneToOne(optional = false)
     private Persona persona;
@@ -220,107 +220,6 @@ public class Maestro implements Serializable {
 
     public void setIdmaestro(Integer idmaestro) {
         this.idmaestro = idmaestro;
-    }
-
-
-    public Date getMaestroFechaProximoAsenso() {
-        return maestroFechaProximoAsenso;
-    }
-
-    public void setMaestroFechaProximoAsenso(Date maestroFechaProximoAsenso) {
-        this.maestroFechaProximoAsenso = maestroFechaProximoAsenso;
-    }
-
-
-    public Persona getPersona() {
-        return persona;
-    }
-
-    public void setPersona(Persona persona) {
-        this.persona = persona;
-    }
-
-    public TipoSueldos getMaestroTipoSalario() {
-        return maestroTipoSalario;
-    }
-
-    public void setMaestroTipoSalario(TipoSueldos maestroTipoSalario) {
-        this.maestroTipoSalario = maestroTipoSalario;
-    }
-
-    public TipoEspecialidades getMaestroEspecialidad() {
-        return maestroEspecialidad;
-    }
-
-    public void setMaestroEspecialidad(TipoEspecialidades maestroEspecialidad) {
-        this.maestroEspecialidad = maestroEspecialidad;
-    }
-
-    @XmlTransient
-    public List<Capacitaciones> getCapacitacionesList() {
-        return capacitacionesList;
-    }
-
-    public void setCapacitacionesList(List<Capacitaciones> capacitacionesList) {
-        this.capacitacionesList = capacitacionesList;
-    }
-
-    @XmlTransient
-    public List<EvaluacionMaestro> getEvaluacionMaestroList() {
-        return evaluacionMaestroList;
-    }
-
-    public void setEvaluacionMaestroList(List<EvaluacionMaestro> evaluacionMaestroList) {
-        this.evaluacionMaestroList = evaluacionMaestroList;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idmaestro != null ? idmaestro.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Maestro)) {
-            return false;
-        }
-        Maestro other = (Maestro) object;
-        if ((this.idmaestro == null && other.idmaestro != null) || (this.idmaestro != null && !this.idmaestro.equals(other.idmaestro))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "net.delsas.saitae.entities.Maestro[ idmaestro=" + idmaestro + " ]";
-    }
-
-    public List<Grado> getGradoList() {
-        return gradoList;
-    }
-
-    public void setGradoList(List<Grado> gradoList) {
-        this.gradoList = gradoList;
-    }
-
-    public List<MestroHorarioMaterias> getMestroHorarioMateriasList() {
-        return mestroHorarioMateriasList;
-    }
-
-    public void setMestroHorarioMateriasList(List<MestroHorarioMaterias> mestroHorarioMateriasList) {
-        this.mestroHorarioMateriasList = mestroHorarioMateriasList;
-    }
-
-    public List<MaestoCargo> getMaestoCargoList() {
-        return maestoCargoList;
-    }
-
-    public void setMaestoCargoList(List<MaestoCargo> maestoCargoList) {
-        this.maestoCargoList = maestoCargoList;
     }
 
     public int getMaestroNip() {
@@ -419,6 +318,14 @@ public class Maestro implements Serializable {
         this.maestroFechaInstitucion = maestroFechaInstitucion;
     }
 
+    public Date getMaestroFechaProximoAsenso() {
+        return maestroFechaProximoAsenso;
+    }
+
+    public void setMaestroFechaProximoAsenso(Date maestroFechaProximoAsenso) {
+        this.maestroFechaProximoAsenso = maestroFechaProximoAsenso;
+    }
+
     public String getMaestroTurno() {
         return maestroTurno;
     }
@@ -492,12 +399,106 @@ public class Maestro implements Serializable {
     }
 
     @XmlTransient
+    public List<Grado> getGradoList() {
+        return gradoList;
+    }
+
+    public void setGradoList(List<Grado> gradoList) {
+        this.gradoList = gradoList;
+    }
+
+    @XmlTransient
+    public List<MestroHorarioMaterias> getMestroHorarioMateriasList() {
+        return mestroHorarioMateriasList;
+    }
+
+    public void setMestroHorarioMateriasList(List<MestroHorarioMaterias> mestroHorarioMateriasList) {
+        this.mestroHorarioMateriasList = mestroHorarioMateriasList;
+    }
+
+    @XmlTransient
+    public List<MaestoCargo> getMaestoCargoList() {
+        return maestoCargoList;
+    }
+
+    public void setMaestoCargoList(List<MaestoCargo> maestoCargoList) {
+        this.maestoCargoList = maestoCargoList;
+    }
+
+    @XmlTransient
+    public List<Capacitaciones> getCapacitacionesList() {
+        return capacitacionesList;
+    }
+
+    public void setCapacitacionesList(List<Capacitaciones> capacitacionesList) {
+        this.capacitacionesList = capacitacionesList;
+    }
+
+    @XmlTransient
+    public List<EvaluacionMaestro> getEvaluacionMaestroList() {
+        return evaluacionMaestroList;
+    }
+
+    public void setEvaluacionMaestroList(List<EvaluacionMaestro> evaluacionMaestroList) {
+        this.evaluacionMaestroList = evaluacionMaestroList;
+    }
+
+    @XmlTransient
     public List<Reserva> getReservaList() {
         return reservaList;
     }
 
     public void setReservaList(List<Reserva> reservaList) {
         this.reservaList = reservaList;
+    }
+
+    public Persona getPersona() {
+        return persona;
+    }
+
+    public void setPersona(Persona persona) {
+        this.persona = persona;
+    }
+
+    public TipoSueldos getMaestroTipoSalario() {
+        return maestroTipoSalario;
+    }
+
+    public void setMaestroTipoSalario(TipoSueldos maestroTipoSalario) {
+        this.maestroTipoSalario = maestroTipoSalario;
+    }
+
+    public TipoEspecialidades getMaestroEspecialidad() {
+        return maestroEspecialidad;
+    }
+
+    public void setMaestroEspecialidad(TipoEspecialidades maestroEspecialidad) {
+        this.maestroEspecialidad = maestroEspecialidad;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (idmaestro != null ? idmaestro.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Maestro)) {
+            return false;
+        }
+        Maestro other = (Maestro) object;
+        if ((this.idmaestro == null && other.idmaestro != null) || (this.idmaestro != null && !this.idmaestro.equals(other.idmaestro))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "net.delsas.saitae.entities.Maestro[ idmaestro=" + idmaestro + " ]";
     }
     
 }

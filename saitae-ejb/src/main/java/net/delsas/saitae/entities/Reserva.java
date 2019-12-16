@@ -77,14 +77,10 @@ public class Reserva implements Serializable {
     @Column(name = "reservaDevuelto")
     @Temporal(TemporalType.TIMESTAMP)
     private Date reservaDevuelto;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 45)
+    @Size(max = 45)
     @Column(name = "tema")
     private String tema;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 100)
+    @Size(max = 100)
     @Column(name = "objetivoTema")
     private String objetivoTema;
     @Size(max = 145)
@@ -104,7 +100,7 @@ public class Reserva implements Serializable {
     @ManyToOne
     private Materia maeria;
     @JoinColumn(name = "TipoPtoyecto", referencedColumnName = "idtipoProyecto")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private TipoProyecto tipoPtoyecto;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "reserva")
     private List<SolicitudReserva> solicitudReservaList;
@@ -118,14 +114,12 @@ public class Reserva implements Serializable {
         this.idreserva = idreserva;
     }
 
-    public Reserva(Integer idreserva, Date reservaFecha, Date reservaEntrega, Date reservaDevolucion, String reservaEstado, String tema, String objetivoTema) {
+    public Reserva(Integer idreserva, Date reservaFecha, Date reservaEntrega, Date reservaDevolucion, String reservaEstado) {
         this.idreserva = idreserva;
         this.reservaFecha = reservaFecha;
         this.reservaEntrega = reservaEntrega;
         this.reservaDevolucion = reservaDevolucion;
         this.reservaEstado = reservaEstado;
-        this.tema = tema;
-        this.objetivoTema = objetivoTema;
     }
 
     public Integer getIdreserva() {
@@ -242,12 +236,12 @@ public class Reserva implements Serializable {
         this.maeria = maeria;
     }
 
-    public TipoProyecto getTipoProyecto() {
+    public TipoProyecto getTipoPtoyecto() {
         return tipoPtoyecto;
     }
 
-    public void setTipoProyecto(TipoProyecto tipoProyecto) {
-        this.tipoPtoyecto = tipoProyecto;
+    public void setTipoPtoyecto(TipoProyecto tipoPtoyecto) {
+        this.tipoPtoyecto = tipoPtoyecto;
     }
 
     @XmlTransient

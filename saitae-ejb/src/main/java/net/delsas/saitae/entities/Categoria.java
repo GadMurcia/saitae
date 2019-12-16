@@ -34,6 +34,12 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Categoria.findByCategoriaComentario", query = "SELECT c FROM Categoria c WHERE c.categoriaComentario = :categoriaComentario")})
 public class Categoria implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "idcategoria")
+    private Integer idcategoria;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
@@ -42,13 +48,6 @@ public class Categoria implements Serializable {
     @Size(max = 45)
     @Column(name = "categoriaComentario")
     private String categoriaComentario;
-
-    private static final long serialVersionUID = 1L;
-    @Id
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "idcategoria")
-    private Integer idcategoria;
     @OneToMany(mappedBy = "categoria")
     private List<Recurso> recursoList;
 
@@ -72,6 +71,21 @@ public class Categoria implements Serializable {
         this.idcategoria = idcategoria;
     }
 
+    public String getCategoriaNombre() {
+        return categoriaNombre;
+    }
+
+    public void setCategoriaNombre(String categoriaNombre) {
+        this.categoriaNombre = categoriaNombre;
+    }
+
+    public String getCategoriaComentario() {
+        return categoriaComentario;
+    }
+
+    public void setCategoriaComentario(String categoriaComentario) {
+        this.categoriaComentario = categoriaComentario;
+    }
 
     @XmlTransient
     public List<Recurso> getRecursoList() {
@@ -105,22 +119,6 @@ public class Categoria implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.Categoria[ idcategoria=" + idcategoria + " ]";
-    }
-
-    public String getCategoriaNombre() {
-        return categoriaNombre;
-    }
-
-    public void setCategoriaNombre(String categoriaNombre) {
-        this.categoriaNombre = categoriaNombre;
-    }
-
-    public String getCategoriaComentario() {
-        return categoriaComentario;
-    }
-
-    public void setCategoriaComentario(String categoriaComentario) {
-        this.categoriaComentario = categoriaComentario;
     }
     
 }

@@ -37,6 +37,12 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "TipoCargo.findByTipoCargoComentario", query = "SELECT t FROM TipoCargo t WHERE t.tipoCargoComentario = :tipoCargoComentario")})
 public class TipoCargo implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "idtipoCargo")
+    private Integer idtipoCargo;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 100)
@@ -45,13 +51,6 @@ public class TipoCargo implements Serializable {
     @Size(max = 145)
     @Column(name = "tipoCargoComentario")
     private String tipoCargoComentario;
-
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "idtipoCargo")
-    private Integer idtipoCargo;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoCargo")
     private List<Recurso> recursoList;
 
@@ -75,6 +74,21 @@ public class TipoCargo implements Serializable {
         this.idtipoCargo = idtipoCargo;
     }
 
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getTipoCargoComentario() {
+        return tipoCargoComentario;
+    }
+
+    public void setTipoCargoComentario(String tipoCargoComentario) {
+        this.tipoCargoComentario = tipoCargoComentario;
+    }
 
     @XmlTransient
     public List<Recurso> getRecursoList() {
@@ -108,22 +122,6 @@ public class TipoCargo implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.TipoCargo[ idtipoCargo=" + idtipoCargo + " ]";
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getTipoCargoComentario() {
-        return tipoCargoComentario;
-    }
-
-    public void setTipoCargoComentario(String tipoCargoComentario) {
-        this.tipoCargoComentario = tipoCargoComentario;
     }
     
 }

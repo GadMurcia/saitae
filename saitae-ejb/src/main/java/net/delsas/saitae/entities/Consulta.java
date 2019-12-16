@@ -3,6 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package net.delsas.saitae.entities;
 
 import java.io.Serializable;
@@ -47,6 +48,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Consulta.findByConsultaCoemntario", query = "SELECT c FROM Consulta c WHERE c.consultaCoemntario = :consultaCoemntario")})
 public class Consulta implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+    @EmbeddedId
+    protected ConsultaPK consultaPK;
     @Basic(optional = false)
     @NotNull
     @Column(name = "idPsicologo")
@@ -86,9 +90,6 @@ public class Consulta implements Serializable {
     @Size(max = 45)
     @Column(name = "consultaCoemntario")
     private String consultaCoemntario;
-    private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected ConsultaPK consultaPK;
     @JoinColumns({
         @JoinColumn(name = "idestudiante", referencedColumnName = "estudiante", insertable = false, updatable = false)
         , @JoinColumn(name = "fechaHoraConsulta", referencedColumnName = "fechaSolicitada", insertable = false, updatable = false)})
@@ -121,40 +122,6 @@ public class Consulta implements Serializable {
 
     public void setConsultaPK(ConsultaPK consultaPK) {
         this.consultaPK = consultaPK;
-    }
-    public CitaPsicologia getCitaPsicologia() {
-        return citaPsicologia;
-    }
-    public void setCitaPsicologia(CitaPsicologia citaPsicologia) {
-        this.citaPsicologia = citaPsicologia;
-    }
-    public ExpedientePS getConsultaExpediente() {
-        return consultaExpediente;
-    }
-    public void setConsultaExpediente(ExpedientePS consultaExpediente) {
-        this.consultaExpediente = consultaExpediente;
-    }
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (consultaPK != null ? consultaPK.hashCode() : 0);
-        return hash;
-    }
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Consulta)) {
-            return false;
-        }
-        Consulta other = (Consulta) object;
-        if ((this.consultaPK == null && other.consultaPK != null) || (this.consultaPK != null && !this.consultaPK.equals(other.consultaPK))) {
-            return false;
-        }
-        return true;
-    }
-    @Override
-    public String toString() {
-        return "net.delsas.saitae.entities.Consulta[ consultaPK=" + consultaPK + " ]";
     }
 
     public int getIdPsicologo() {
@@ -252,5 +219,46 @@ public class Consulta implements Serializable {
     public void setConsultaCoemntario(String consultaCoemntario) {
         this.consultaCoemntario = consultaCoemntario;
     }
-    
+
+    public CitaPsicologia getCitaPsicologia() {
+        return citaPsicologia;
+    }
+
+    public void setCitaPsicologia(CitaPsicologia citaPsicologia) {
+        this.citaPsicologia = citaPsicologia;
+    }
+
+    public ExpedientePS getConsultaExpediente() {
+        return consultaExpediente;
+    }
+
+    public void setConsultaExpediente(ExpedientePS consultaExpediente) {
+        this.consultaExpediente = consultaExpediente;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (consultaPK != null ? consultaPK.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Consulta)) {
+            return false;
+        }
+        Consulta other = (Consulta) object;
+        if ((this.consultaPK == null && other.consultaPK != null) || (this.consultaPK != null && !this.consultaPK.equals(other.consultaPK))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "net.delsas.saitae.entities.Consulta[ consultaPK=" + consultaPK + " ]";
+    }
+
 }

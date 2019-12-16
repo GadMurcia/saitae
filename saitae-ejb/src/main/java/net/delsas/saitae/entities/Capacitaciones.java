@@ -40,6 +40,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Capacitaciones.findByCapacitacionComentario", query = "SELECT c FROM Capacitaciones c WHERE c.capacitacionComentario = :capacitacionComentario")})
 public class Capacitaciones implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+    @EmbeddedId
+    protected CapacitacionesPK capacitacionesPK;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
@@ -72,9 +75,6 @@ public class Capacitaciones implements Serializable {
     @Size(max = 145)
     @Column(name = "capacitacionComentario")
     private String capacitacionComentario;
-    private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected CapacitacionesPK capacitacionesPK;
     @JoinColumn(name = "idMaestro", referencedColumnName = "idmaestro", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Maestro maestro;
@@ -106,40 +106,6 @@ public class Capacitaciones implements Serializable {
 
     public void setCapacitacionesPK(CapacitacionesPK capacitacionesPK) {
         this.capacitacionesPK = capacitacionesPK;
-    }
-
-
-    public Maestro getMaestro() {
-        return maestro;
-    }
-
-    public void setMaestro(Maestro maestro) {
-        this.maestro = maestro;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (capacitacionesPK != null ? capacitacionesPK.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Capacitaciones)) {
-            return false;
-        }
-        Capacitaciones other = (Capacitaciones) object;
-        if ((this.capacitacionesPK == null && other.capacitacionesPK != null) || (this.capacitacionesPK != null && !this.capacitacionesPK.equals(other.capacitacionesPK))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "net.delsas.saitae.entities.Capacitaciones[ capacitacionesPK=" + capacitacionesPK + " ]";
     }
 
     public String getCapacitacionCategoria() {
@@ -196,6 +162,39 @@ public class Capacitaciones implements Serializable {
 
     public void setCapacitacionComentario(String capacitacionComentario) {
         this.capacitacionComentario = capacitacionComentario;
+    }
+
+    public Maestro getMaestro() {
+        return maestro;
+    }
+
+    public void setMaestro(Maestro maestro) {
+        this.maestro = maestro;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (capacitacionesPK != null ? capacitacionesPK.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Capacitaciones)) {
+            return false;
+        }
+        Capacitaciones other = (Capacitaciones) object;
+        if ((this.capacitacionesPK == null && other.capacitacionesPK != null) || (this.capacitacionesPK != null && !this.capacitacionesPK.equals(other.capacitacionesPK))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "net.delsas.saitae.entities.Capacitaciones[ capacitacionesPK=" + capacitacionesPK + " ]";
     }
     
 }

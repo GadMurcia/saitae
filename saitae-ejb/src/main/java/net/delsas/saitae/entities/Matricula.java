@@ -38,6 +38,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 })
 public class Matricula implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+    @EmbeddedId
+    protected MatriculaPK matriculaPK;
     @Basic(optional = false)
     @NotNull
     @Column(name = "matriculaRepite")
@@ -45,10 +48,6 @@ public class Matricula implements Serializable {
     @Size(max = 140)
     @Column(name = "matriculaComentario")
     private String matriculaComentario;
-
-    private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected MatriculaPK matriculaPK;
     @JoinColumn(name = "idmatricula", referencedColumnName = "idestudiante", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Estudiante estudiante;
@@ -84,6 +83,21 @@ public class Matricula implements Serializable {
         this.matriculaPK = matriculaPK;
     }
 
+    public boolean getMatriculaRepite() {
+        return matriculaRepite;
+    }
+
+    public void setMatriculaRepite(boolean matriculaRepite) {
+        this.matriculaRepite = matriculaRepite;
+    }
+
+    public String getMatriculaComentario() {
+        return matriculaComentario;
+    }
+
+    public void setMatriculaComentario(String matriculaComentario) {
+        this.matriculaComentario = matriculaComentario;
+    }
 
     public Estudiante getEstudiante() {
         return estudiante;
@@ -124,22 +138,6 @@ public class Matricula implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.Matricula[ matriculaPK=" + matriculaPK + " ]";
-    }
-
-    public boolean getMatriculaRepite() {
-        return matriculaRepite;
-    }
-
-    public void setMatriculaRepite(boolean matriculaRepite) {
-        this.matriculaRepite = matriculaRepite;
-    }
-
-    public String getMatriculaComentario() {
-        return matriculaComentario;
-    }
-
-    public void setMatriculaComentario(String matriculaComentario) {
-        this.matriculaComentario = matriculaComentario;
     }
     
 }

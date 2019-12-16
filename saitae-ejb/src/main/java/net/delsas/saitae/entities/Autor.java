@@ -37,6 +37,12 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Autor.findByAutorComentario", query = "SELECT a FROM Autor a WHERE a.autorComentario = :autorComentario")})
 public class Autor implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "idautor")
+    private Integer idautor;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 30)
@@ -45,13 +51,6 @@ public class Autor implements Serializable {
     @Size(max = 140)
     @Column(name = "autorComentario")
     private String autorComentario;
-
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "idautor")
-    private Integer idautor;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "autor")
     private List<AutorLibro> autorLibroList;
 
@@ -75,6 +74,21 @@ public class Autor implements Serializable {
         this.idautor = idautor;
     }
 
+    public String getAutorNombre() {
+        return autorNombre;
+    }
+
+    public void setAutorNombre(String autorNombre) {
+        this.autorNombre = autorNombre;
+    }
+
+    public String getAutorComentario() {
+        return autorComentario;
+    }
+
+    public void setAutorComentario(String autorComentario) {
+        this.autorComentario = autorComentario;
+    }
 
     @XmlTransient
     public List<AutorLibro> getAutorLibroList() {
@@ -108,22 +122,6 @@ public class Autor implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.Autor[ idautor=" + idautor + " ]";
-    }
-
-    public String getAutorNombre() {
-        return autorNombre;
-    }
-
-    public void setAutorNombre(String autorNombre) {
-        this.autorNombre = autorNombre;
-    }
-
-    public String getAutorComentario() {
-        return autorComentario;
-    }
-
-    public void setAutorComentario(String autorComentario) {
-        this.autorComentario = autorComentario;
     }
     
 }

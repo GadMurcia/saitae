@@ -25,9 +25,9 @@ DROP TABLE IF EXISTS `acceso`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `acceso` (
-  `idacceso` int(11) NOT NULL AUTO_INCREMENT,
+  `idacceso` int(30) NOT NULL AUTO_INCREMENT,
   `accesoNombre` varchar(30) NOT NULL,
-  `accesoIndice` int(11) DEFAULT '0',
+  `accesoIndice` int(30) DEFAULT '0',
   `accesourl` varchar(100) NOT NULL,
   `accesoComentario` varchar(140) DEFAULT NULL,
   PRIMARY KEY (`idacceso`),
@@ -56,8 +56,8 @@ DROP TABLE IF EXISTS `accesoTipoPersona`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `accesoTipoPersona` (
-  `idacceso` int(11) NOT NULL,
-  `idTipoPersona` int(11) NOT NULL,
+  `idacceso` int(30) NOT NULL,
+  `idTipoPersona` int(30) NOT NULL,
   `accesoTipoPersonaComentario` varchar(140) DEFAULT NULL,
   PRIMARY KEY (`idacceso`,`idTipoPersona`),
   KEY `fk_accesoTipoPersona_2_idx` (`idTipoPersona`),
@@ -84,19 +84,19 @@ DROP TABLE IF EXISTS `anuncio`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `anuncio` (
-  `idanuncio` int(11) NOT NULL AUTO_INCREMENT,
+  `idanuncio` int(30) NOT NULL AUTO_INCREMENT,
   `anuncioTitulo` varchar(45) NOT NULL,
   `anuncioFechaFin` date NOT NULL,
   `anuncioTexto` text NOT NULL,
-  `anuncioAnunciante` int(11) NOT NULL,
-  `anuncioTipoPersona` int(11) DEFAULT '0',
+  `anuncioAnunciante` int(30) NOT NULL,
+  `anuncioTipoPersona` int(30) DEFAULT '0',
   `anuncioComentario` varchar(140) DEFAULT NULL,
-  PRIMARY KEY (`idanuncio`,`anuncioFechaFin`),
+  PRIMARY KEY (`idanuncio`),
   KEY `fk_anuncio_1_idx` (`anuncioAnunciante`),
   KEY `fk_anuncio_2_idx` (`anuncioTipoPersona`),
   CONSTRAINT `fk_anuncio_1` FOREIGN KEY (`anuncioAnunciante`) REFERENCES `persona` (`idpersona`) ON UPDATE CASCADE,
   CONSTRAINT `fk_anuncio_2` FOREIGN KEY (`anuncioTipoPersona`) REFERENCES `tipoPersona` (`idtipoPersona`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -105,7 +105,7 @@ CREATE TABLE `anuncio` (
 
 LOCK TABLES `anuncio` WRITE;
 /*!40000 ALTER TABLE `anuncio` DISABLE KEYS */;
-INSERT INTO `anuncio` VALUES (2,'Home','2019-10-20','Raw denim you probably haven\'t heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.',1045367073,NULL,''),(3,'Profile','2019-10-20','Food truck fixie locavore, accusamus mcsweeney\'s marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit.',1045367073,8,''),(4,'qwwqwq','2019-10-20','wqwq\r\nwq\r\nqw\r\nqw\r\nqw\r\n\r\nwq',1045367073,NULL,NULL),(5,'SUSPENCIÓN DE CLASES','2019-10-14','Se suspenderán las clases el próximo Viernes 11 de Octubre. \r\nClases normales al regresar el LUNES 14. \r\n',1045367073,NULL,NULL),(6,'iglliglgiguligilggilgl','2019-10-20','lvlvl lil igl igligligl gl gligligli ilglig ligli gl ili glig ilglgy',1045367073,3,NULL),(7,'anuncio ara todos','2019-10-14','oñasdchodashoñ hcñhc ñhc dh hcd hch ñcd ccoñ oc ocas hñ hñcao ñhoas ñsdchsodgvgvsduñ ñcdsagño asd gcñovsguñvoagcva ñsdcgañso cgñoasgñocgañscgñasocasdcñvgsñoasdñgcñosc gvaoñsgcñ osagdcñsodgcñosagdcvoasñvga',1045367073,NULL,NULL),(8,'ioyoyooñy','2019-10-20','ouyñouyobviyfiijklljhjhj  hl hg s ñc ñsdcv ñvfdv fñ vdf vfd vdf ñvfd ñvfwpv pv pvfe vfe vephhpf vh k vvjh vfwe ippwvfe ih{pv ihvf ihvwe iwep {ve hhfvuoeu yeyuyeutyu ew ywewyeye yey g8 y49tu u ovfh ñvhjvsdh vh ñsdhñ dvhdls',1045367073,8,NULL),(9,'Hola a todos','2019-10-22','hola k hace',1045367073,NULL,NULL);
+INSERT INTO `anuncio` VALUES (2,'Home','2019-10-20','Raw denim you probably haven\'t heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.',1045367073,NULL,''),(3,'Profile','2019-10-20','Food truck fixie locavore, accusamus mcsweeney\'s marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit.',1045367073,8,''),(4,'qwwqwq','2019-10-20','wqwq\r\nwq\r\nqw\r\nqw\r\nqw\r\n\r\nwq',1045367073,NULL,NULL),(5,'SUSPENCIÓN DE CLASES','2019-10-14','Se suspenderán las clases el próximo Viernes 11 de Octubre. \r\nClases normales al regresar el LUNES 14. \r\n',1045367073,NULL,NULL),(6,'iglliglgiguligilggilgl','2019-10-20','lvlvl lil igl igligligl gl gligligli ilglig ligli gl ili glig ilglgy',1045367073,3,NULL),(7,'anuncio ara todos','2019-10-14','oñasdchodashoñ hcñhc ñhc dh hcd hch ñcd ccoñ oc ocas hñ hñcao ñhoas ñsdchsodgvgvsduñ ñcdsagño asd gcñovsguñvoagcva ñsdcgañso cgñoasgñocgañscgñasocasdcñvgsñoasdñgcñosc gvaoñsgcñ osagdcñsodgcñosagdcvoasñvga',1045367073,NULL,NULL),(8,'ioyoyooñy','2019-10-20','ouyñouyobviyfiijklljhjhj  hl hg s ñc ñsdcv ñvfdv fñ vdf vfd vdf ñvfd ñvfwpv pv pvfe vfe vephhpf vh k vvjh vfwe ippwvfe ih{pv ihvf ihvwe iwep {ve hhfvuoeu yeyuyeutyu ew ywewyeye yey g8 y49tu u ovfh ñvhjvsdh vh ñsdhñ dvhdls',1045367073,8,NULL),(9,'Hola a todos','2019-10-22','hola k hace',1045367073,NULL,NULL),(10,'gfkgkgkgkj','2019-12-07','gkjgkgkjgkjgkjgkk',1045367073,NULL,NULL),(11,'trtrt','2019-12-07','hfjfjfjfjhfhjf',1045367073,NULL,NULL),(12,'juytttyjtjtjt','2019-12-08','jtyjgtjyjtjytj',1045367073,8,NULL);
 /*!40000 ALTER TABLE `anuncio` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -117,8 +117,8 @@ DROP TABLE IF EXISTS `aula`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `aula` (
-  `idaula` int(11) NOT NULL AUTO_INCREMENT,
-  `zonaAula` int(11) NOT NULL,
+  `idaula` int(30) NOT NULL AUTO_INCREMENT,
+  `zonaAula` int(30) NOT NULL,
   `aulaComentario` varchar(145) DEFAULT NULL COMMENT 'Contiene la lista de las aulas del instituto',
   PRIMARY KEY (`idaula`),
   KEY `fk_aula_1_idx` (`zonaAula`),
@@ -144,7 +144,7 @@ DROP TABLE IF EXISTS `autor`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `autor` (
-  `idautor` int(11) NOT NULL AUTO_INCREMENT,
+  `idautor` int(30) NOT NULL AUTO_INCREMENT,
   `autorNombre` varchar(30) NOT NULL,
   `autorComentario` varchar(140) DEFAULT NULL,
   PRIMARY KEY (`idautor`)
@@ -169,8 +169,8 @@ DROP TABLE IF EXISTS `autorLibro`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `autorLibro` (
-  `idautor` int(11) NOT NULL,
-  `idLibro` int(11) NOT NULL,
+  `idautor` int(30) NOT NULL,
+  `idLibro` int(30) NOT NULL,
   `autorLibrocComentario` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idautor`,`idLibro`),
   KEY `fk_autorLibro_2_idx` (`idLibro`),
@@ -197,7 +197,7 @@ DROP TABLE IF EXISTS `capacitaciones`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `capacitaciones` (
-  `idMaestro` int(11) NOT NULL,
+  `idMaestro` int(30) NOT NULL,
   `fechaCapacitaciones` date NOT NULL,
   `capacitacionCategoria` varchar(50) NOT NULL,
   `capacitacionArea` varchar(50) NOT NULL,
@@ -228,9 +228,9 @@ DROP TABLE IF EXISTS `cargo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `cargo` (
-  `idcargo` int(11) NOT NULL AUTO_INCREMENT,
+  `idcargo` int(30) NOT NULL AUTO_INCREMENT,
   `cargoNombre` varchar(50) NOT NULL COMMENT 'Lista de los cargos que el personal docente puede desempeñar.',
-  `cargoTipoPersona` int(11) DEFAULT NULL,
+  `cargoTipoPersona` int(30) DEFAULT NULL,
   `cargoComentario` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idcargo`),
   KEY `fk_cargo_1_idx` (`cargoTipoPersona`),
@@ -256,7 +256,7 @@ DROP TABLE IF EXISTS `categoria`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `categoria` (
-  `idcategoria` int(11) NOT NULL,
+  `idcategoria` int(30) NOT NULL,
   `categoriaNombre` varchar(50) NOT NULL,
   `categoriaComentario` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`idcategoria`)
@@ -281,7 +281,7 @@ DROP TABLE IF EXISTS `citaPsicologia`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `citaPsicologia` (
-  `estudiante` int(11) NOT NULL,
+  `estudiante` int(30) NOT NULL,
   `fechaSolicitada` datetime NOT NULL,
   `fechaSolicitud` datetime NOT NULL,
   `comentarios` varchar(140) DEFAULT NULL,
@@ -308,9 +308,9 @@ DROP TABLE IF EXISTS `consulta`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `consulta` (
-  `idestudiante` int(11) NOT NULL,
+  `idestudiante` int(30) NOT NULL,
   `fechaHoraConsulta` datetime NOT NULL,
-  `idPsicologo` int(11) NOT NULL,
+  `idPsicologo` int(30) NOT NULL,
   `consultaRemitidoPor` varchar(45) DEFAULT NULL,
   `consultaMotivo` varchar(80) NOT NULL,
   `consultaAntecedentePersonal` varchar(140) DEFAULT NULL,
@@ -321,7 +321,7 @@ CREATE TABLE `consulta` (
   `consultaDiagnostico` varchar(150) DEFAULT NULL,
   `consultaEvaluacionPsicologica` varchar(250) DEFAULT NULL,
   `consultaRemitir` varchar(100) DEFAULT NULL,
-  `consultaExpediente` int(11) DEFAULT NULL,
+  `consultaExpediente` int(30) DEFAULT NULL,
   `consultaCoemntario` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`idestudiante`,`fechaHoraConsulta`),
   KEY `fk_consulta_2_idx` (`consultaExpediente`),
@@ -347,10 +347,10 @@ DROP TABLE IF EXISTS `contenidoLibro`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `contenidoLibro` (
-  `idLibro` int(11) NOT NULL,
+  `idLibro` int(30) NOT NULL,
   `contenidoLibroNombre` varchar(145) NOT NULL,
-  `contenidoLibroPagina` int(11) NOT NULL,
-  `contenidoLibroIndice` int(11) NOT NULL,
+  `contenidoLibroPagina` int(30) NOT NULL,
+  `contenidoLibroIndice` int(30) NOT NULL,
   `contenidoLibroComentario` varchar(140) DEFAULT NULL,
   PRIMARY KEY (`idLibro`,`contenidoLibroNombre`,`contenidoLibroPagina`),
   CONSTRAINT `fk_contenidoLibro_1` FOREIGN KEY (`idLibro`) REFERENCES `recurso` (`idrecurso`) ON UPDATE CASCADE
@@ -375,7 +375,7 @@ DROP TABLE IF EXISTS `contribuciones`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `contribuciones` (
-  `idEstudiante` int(11) NOT NULL,
+  `idEstudiante` int(30) NOT NULL,
   `año` int(4) NOT NULL,
   `enero` date DEFAULT NULL,
   `febrero` date DEFAULT NULL,
@@ -399,7 +399,7 @@ CREATE TABLE `contribuciones` (
 
 LOCK TABLES `contribuciones` WRITE;
 /*!40000 ALTER TABLE `contribuciones` DISABLE KEYS */;
-INSERT INTO `contribuciones` VALUES (16018,2019,'2019-10-12',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `contribuciones` VALUES (1123456,2019,'2019-12-07','2019-12-07','2019-12-07','2019-12-07','2019-12-07',NULL,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `contribuciones` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -411,9 +411,9 @@ DROP TABLE IF EXISTS `delagacionCargo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `delagacionCargo` (
-  `iddelagacionCargo` int(11) NOT NULL,
-  `idTipoPersona` int(11) NOT NULL,
-  `idpersona` int(11) NOT NULL,
+  `iddelagacionCargo` int(30) NOT NULL,
+  `idTipoPersona` int(30) NOT NULL,
+  `idpersona` int(30) NOT NULL,
   `fechaInicio` date NOT NULL,
   `fechaFin` date NOT NULL,
   `delagacionCargoComentario` varchar(45) DEFAULT NULL,
@@ -442,7 +442,7 @@ DROP TABLE IF EXISTS `diasEstudio`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `diasEstudio` (
-  `idDias` int(11) NOT NULL AUTO_INCREMENT,
+  `idDias` int(30) NOT NULL AUTO_INCREMENT,
   `diasEstudioNombre` varchar(45) NOT NULL,
   `diasEstudioComentario` varchar(140) DEFAULT NULL,
   PRIMARY KEY (`idDias`)
@@ -467,7 +467,7 @@ DROP TABLE IF EXISTS `documentos`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `documentos` (
-  `iddocumentos` int(11) NOT NULL,
+  `iddocumentos` int(30) NOT NULL,
   `estudianteDocPartida` longblob,
   `estudianteDocCertificado` longblob,
   `estudianteDocConducta` longblob,
@@ -490,7 +490,7 @@ CREATE TABLE `documentos` (
 
 LOCK TABLES `documentos` WRITE;
 /*!40000 ALTER TABLE `documentos` DISABLE KEYS */;
-INSERT INTO `documentos` VALUES (16018,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(16022,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `documentos` VALUES (16018,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(16022,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(1123456,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `documentos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -502,7 +502,7 @@ DROP TABLE IF EXISTS `editorial`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `editorial` (
-  `ideditorial` int(11) NOT NULL AUTO_INCREMENT,
+  `ideditorial` int(30) NOT NULL AUTO_INCREMENT,
   `editorialNombre` varchar(50) NOT NULL,
   `editorialComentarios` varchar(140) DEFAULT NULL,
   PRIMARY KEY (`ideditorial`)
@@ -527,8 +527,8 @@ DROP TABLE IF EXISTS `editorialLibro`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `editorialLibro` (
-  `ideditorial` int(11) NOT NULL,
-  `idLibro` int(11) NOT NULL,
+  `ideditorial` int(30) NOT NULL,
+  `idLibro` int(30) NOT NULL,
   `editorialLibroComentario` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`ideditorial`,`idLibro`),
   KEY `fk_editorialLibro_2_idx` (`idLibro`),
@@ -555,8 +555,8 @@ DROP TABLE IF EXISTS `ejemplar`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `ejemplar` (
-  `idRecurso` int(11) NOT NULL,
-  `ejemplarCorrelativo` int(11) NOT NULL,
+  `idRecurso` int(30) NOT NULL,
+  `ejemplarCorrelativo` int(30) NOT NULL,
   `ejemplarAnioDeIngreso` int(4) NOT NULL,
   `ejemplarComentario` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idRecurso`,`ejemplarCorrelativo`),
@@ -582,10 +582,10 @@ DROP TABLE IF EXISTS `entregaUtiles`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `entregaUtiles` (
-  `idEstudiante` int(11) NOT NULL,
+  `idEstudiante` int(30) NOT NULL,
   `año` int(4) NOT NULL,
-  `idEntregante` int(11) NOT NULL,
-  `idRepresentante` int(11) NOT NULL,
+  `idEntregante` int(30) NOT NULL,
+  `idRepresentante` int(30) NOT NULL,
   `zapatos` bit(1) NOT NULL,
   `uniforme` bit(1) NOT NULL,
   `utiles` bit(1) NOT NULL,
@@ -605,7 +605,7 @@ CREATE TABLE `entregaUtiles` (
 
 LOCK TABLES `entregaUtiles` WRITE;
 /*!40000 ALTER TABLE `entregaUtiles` DISABLE KEYS */;
-INSERT INTO `entregaUtiles` VALUES (16018,2019,1045367073,1045367070,'\0','\0','',NULL);
+INSERT INTO `entregaUtiles` VALUES (16018,2019,1045367073,1045367070,'\0','','',NULL),(1123456,2019,1045367073,1798789789,'','','',NULL);
 /*!40000 ALTER TABLE `entregaUtiles` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -617,7 +617,7 @@ DROP TABLE IF EXISTS `estudiante`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `estudiante` (
-  `idestudiante` int(11) NOT NULL,
+  `idestudiante` int(30) NOT NULL,
   `estudiantePartidaNac` bit(1) NOT NULL DEFAULT b'0',
   `estudianteTipoCalle` int(1) NOT NULL,
   `estudianteRiesgoVulnerabilidad` varchar(100) DEFAULT NULL,
@@ -635,9 +635,9 @@ CREATE TABLE `estudiante` (
   `estudianteCentroProcedencia` varchar(45) DEFAULT NULL,
   `estudianteNoPartida` varchar(45) DEFAULT NULL,
   `estudianteRepresentanteFamiliar` bit(1) DEFAULT b'0',
-  `estudianteRepresentante` int(11) DEFAULT NULL,
-  `estudiantePadre` int(11) DEFAULT NULL,
-  `estudianteMadre` int(11) DEFAULT NULL,
+  `estudianteRepresentante` int(30) DEFAULT NULL,
+  `estudiantePadre` int(30) DEFAULT NULL,
+  `estudianteMadre` int(30) DEFAULT NULL,
   `estudianteComentario` varchar(145) DEFAULT NULL COMMENT 'Detalle de la información de los estudiantes y sus representates.',
   PRIMARY KEY (`idestudiante`),
   KEY `fk_estudiante1_2_idx` (`estudiantePadre`),
@@ -656,7 +656,7 @@ CREATE TABLE `estudiante` (
 
 LOCK TABLES `estudiante` WRITE;
 /*!40000 ALTER TABLE `estudiante` DISABLE KEYS */;
-INSERT INTO `estudiante` VALUES (16018,'',0,'',0,1.00,'\0','Padre#Madre#Abuelo/a#Hermano/a¿ ','\0','','','Padre','','Noveno Grado','','centro de procedencia del estudiante uno','','',1045367070,1045367071,1045367072,''),(16022,'',1,'',1,1.00,'\0','Padre#Madre#Abuelo/a#Hermano/a¿ ','\0','','','aaaaaaa','','Noveno Grado','','centro','','',1045367081,1045367082,1045367083,''),(1045367070,'',1,'',NULL,NULL,'\0',NULL,NULL,NULL,NULL,'Padre','\0','bachillerato','bla bla',NULL,'','',NULL,NULL,NULL,''),(1045367081,'',0,'',NULL,NULL,'\0',NULL,NULL,NULL,NULL,'aaaaaaa','\0','aa','aaaaaaaaa',NULL,'','',NULL,NULL,NULL,'');
+INSERT INTO `estudiante` VALUES (16018,'',0,'',0,1.00,'\0','Padre#Madre#Abuelo/a#Hermano/a¿ ','\0','','','Padre','','Noveno Grado','','centro de procedencia del estudiante uno','','',1045367070,1045367071,1045367072,''),(16022,'',1,'',1,1.00,'\0','Padre#Madre#Abuelo/a#Hermano/a¿ ','\0','','','aaaaaaa','','Noveno Grado','','centro','','',1045367081,1045367082,1045367083,''),(1123456,'',0,'',0,4.00,'\0','Padre#Madre¿ ','','','','padre','','Noveno Grado','','CE SAMAFI','','',1798789789,1987897987,1222222222,''),(1045367070,'',1,'',NULL,NULL,'\0',NULL,NULL,NULL,NULL,'Padre','\0','bachillerato','bla bla',NULL,'','',NULL,NULL,NULL,''),(1045367081,'',0,'',NULL,NULL,'\0',NULL,NULL,NULL,NULL,'aaaaaaa','\0','aa','aaaaaaaaa',NULL,'','',NULL,NULL,NULL,''),(1798789789,'',0,'',NULL,NULL,'\0',NULL,NULL,NULL,NULL,'padre','\0','septimo','aks',NULL,'','',NULL,NULL,NULL,'');
 /*!40000 ALTER TABLE `estudiante` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -668,19 +668,19 @@ DROP TABLE IF EXISTS `evaluacionMaestro`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `evaluacionMaestro` (
-  `idMaestro` int(11) NOT NULL,
+  `idMaestro` int(30) NOT NULL,
   `fechaHora` datetime NOT NULL,
-  `grado` int(11) NOT NULL,
+  `grado` int(30) NOT NULL,
   `seccion` enum('A','B','C') NOT NULL,
   `año` int(4) NOT NULL,
-  `materia` int(11) NOT NULL,
+  `materia` int(30) NOT NULL,
   `turno` enum('M','v') NOT NULL,
-  `Estudiantes` int(11) NOT NULL,
+  `Estudiantes` int(30) NOT NULL,
   `horaInicio` time NOT NULL,
   `horaFin` time NOT NULL,
   `unidad` varchar(45) NOT NULL,
   `objetivo` varchar(80) NOT NULL,
-  `evaluador` int(11) NOT NULL,
+  `evaluador` int(30) NOT NULL,
   `faceIniciacion` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
   `faceDesarrollo` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
   `FaceCulminación` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
@@ -714,7 +714,7 @@ DROP TABLE IF EXISTS `expedientePS`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `expedientePS` (
-  `idEstudiante` int(11) NOT NULL,
+  `idEstudiante` int(30) NOT NULL,
   `ExpedientePsPersonasVivien` varchar(300) NOT NULL,
   `expedientePSComentario` varchar(140) DEFAULT NULL,
   PRIMARY KEY (`idEstudiante`),
@@ -740,7 +740,7 @@ DROP TABLE IF EXISTS `financiamiento`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `financiamiento` (
-  `idfinanciamiento` int(11) NOT NULL AUTO_INCREMENT,
+  `idfinanciamiento` int(30) NOT NULL AUTO_INCREMENT,
   `financiamientoNombre` varchar(45) NOT NULL,
   `financiamientoComentario` varchar(145) DEFAULT NULL COMMENT 'Lista de las formas en las que se fiancea el pago de los cargos de los docentes.',
   PRIMARY KEY (`idfinanciamiento`)
@@ -765,13 +765,13 @@ DROP TABLE IF EXISTS `grado`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `grado` (
-  `idgrado` int(11) NOT NULL,
+  `idgrado` int(30) NOT NULL,
   `gradoModalidad` enum('C','S','G') NOT NULL,
   `gradoSeccion` enum('A','B','C') NOT NULL,
   `gradoAño` int(4) NOT NULL,
-  `aulaGrado` int(11) NOT NULL,
+  `aulaGrado` int(30) NOT NULL,
   `gradoActivo` bit(1) NOT NULL,
-  `gradoMaestroGuia` int(11) DEFAULT NULL,
+  `gradoMaestroGuia` int(30) DEFAULT NULL,
   `gradoCoemntario` varchar(145) DEFAULT NULL COMMENT 'Historico de los grados y secciones junto a los maestros que han sido sus maestros guías.',
   PRIMARY KEY (`idgrado`,`gradoSeccion`,`gradoAño`,`gradoModalidad`),
   KEY `fk_grado_1` (`gradoMaestroGuia`),
@@ -787,7 +787,7 @@ CREATE TABLE `grado` (
 
 LOCK TABLES `grado` WRITE;
 /*!40000 ALTER TABLE `grado` DISABLE KEYS */;
-INSERT INTO `grado` VALUES (1,'C','A',2019,1,'',NULL,NULL),(1,'C','B',2019,2,'',NULL,NULL);
+INSERT INTO `grado` VALUES (1,'C','A',2019,1,'',NULL,NULL),(1,'C','A',2020,1,'',NULL,NULL),(1,'C','B',2019,2,'',NULL,NULL);
 /*!40000 ALTER TABLE `grado` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -799,12 +799,12 @@ DROP TABLE IF EXISTS `gradoEvaluacion`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `gradoEvaluacion` (
-  `idGrado` int(11) NOT NULL,
+  `idGrado` int(30) NOT NULL,
   `gradoSeccion` enum('A','B','C') NOT NULL,
   `gradoAño` int(4) NOT NULL,
   `gradoModalidad` enum('C','S','G') NOT NULL,
   `fechaEvaluacion` date NOT NULL COMMENT 'histórico de evaluaciones a cada grado del instituto.',
-  `evaluador` int(11) NOT NULL,
+  `evaluador` int(30) NOT NULL,
   `organizadorLimpieza` bit(1) NOT NULL,
   `organizadorClase` bit(1) NOT NULL,
   `normas` bit(1) NOT NULL,
@@ -844,7 +844,7 @@ DROP TABLE IF EXISTS `horario`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `horario` (
-  `idhorario` int(11) NOT NULL,
+  `idhorario` int(30) NOT NULL,
   `horaInicio` time NOT NULL,
   `horaFin` time NOT NULL,
   `horarioComentario` varchar(145) DEFAULT NULL COMMENT 'Listado de las horas en las que se dan clases durate la semana',
@@ -870,10 +870,10 @@ DROP TABLE IF EXISTS `maestoCargo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `maestoCargo` (
-  `idMaesto` int(11) NOT NULL,
-  `idCargo` int(11) NOT NULL,
-  `idNombramiento` int(11) NOT NULL,
-  `idFinanciamiento` int(11) NOT NULL,
+  `idMaesto` int(30) NOT NULL,
+  `idCargo` int(30) NOT NULL,
+  `idNombramiento` int(30) NOT NULL,
+  `idFinanciamiento` int(30) NOT NULL,
   `fechaNombramiento` date NOT NULL,
   `fechaDestitucion` date DEFAULT NULL,
   `razondestitucion` varchar(145) DEFAULT NULL,
@@ -895,7 +895,7 @@ CREATE TABLE `maestoCargo` (
 
 LOCK TABLES `maestoCargo` WRITE;
 /*!40000 ALTER TABLE `maestoCargo` DISABLE KEYS */;
-INSERT INTO `maestoCargo` VALUES (1045367080,6,1,2,'2019-10-20',NULL,NULL,NULL);
+INSERT INTO `maestoCargo` VALUES (1045367080,2,1,1,'2019-12-07',NULL,NULL,NULL),(1045367080,4,1,2,'2019-10-20',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `maestoCargo` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -907,27 +907,27 @@ DROP TABLE IF EXISTS `maestro`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `maestro` (
-  `idmaestro` int(11) NOT NULL,
-  `maestroNip` int(11) NOT NULL,
-  `maestroNup` int(11) NOT NULL,
-  `maestroCodigo` int(11) NOT NULL,
-  `maestroPartidas` int(11) NOT NULL,
-  `maestroSubnumeros` int(11) NOT NULL,
-  `maestroNivel` int(11) NOT NULL,
-  `maestroCategoria` int(11) NOT NULL,
+  `idmaestro` int(30) NOT NULL,
+  `maestroNip` int(30) NOT NULL,
+  `maestroNup` int(30) NOT NULL,
+  `maestroCodigo` int(30) NOT NULL,
+  `maestroPartidas` int(30) NOT NULL,
+  `maestroSubnumeros` int(30) NOT NULL,
+  `maestroNivel` int(30) NOT NULL,
+  `maestroCategoria` int(30) NOT NULL,
   `maestroAfp` varchar(45) NOT NULL,
-  `maestroBienestar` int(11) NOT NULL,
+  `maestroBienestar` int(30) NOT NULL,
   `maestrocolTelefonoResidencia` varchar(9) NOT NULL,
-  `maestroEspecialidad` int(11) NOT NULL,
+  `maestroEspecialidad` int(30) NOT NULL,
   `maestroFechaMagisterio` date NOT NULL,
   `maestroFechaInstitucion` date NOT NULL,
   `maestroFechaProximoAsenso` date DEFAULT NULL,
   `maestroTurno` enum('M','V','T') NOT NULL,
   `maestroTiempoCategoria` varchar(10) NOT NULL,
   `maestroSinEscalafon` bit(1) NOT NULL DEFAULT b'1',
-  `maestroTipoSalario` int(11) NOT NULL,
+  `maestroTipoSalario` int(30) NOT NULL,
   `maestroUtilidadTecnologica` bit(1) NOT NULL DEFAULT b'1',
-  `maestroHorasUsoTecnologia` int(11) NOT NULL DEFAULT '0',
+  `maestroHorasUsoTecnologia` int(30) NOT NULL DEFAULT '0',
   `maestroUsoVideoconferencias` bit(1) NOT NULL DEFAULT b'0',
   `maestroRecursosWeb` bit(1) NOT NULL DEFAULT b'1',
   `maestroCapacitacionesVirtuales` bit(1) NOT NULL DEFAULT b'1',
@@ -959,9 +959,9 @@ DROP TABLE IF EXISTS `materia`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `materia` (
-  `idmateria` int(11) NOT NULL AUTO_INCREMENT,
+  `idmateria` int(30) NOT NULL AUTO_INCREMENT,
   `materiaNombre` varchar(60) NOT NULL,
-  `tipoMateria` int(11) NOT NULL COMMENT 'Listado de las materias que se imparten en la institucion.',
+  `tipoMateria` int(30) NOT NULL COMMENT 'Listado de las materias que se imparten en la institucion.',
   `materiaComentario` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idmateria`),
   KEY `fk_materia_1_idx` (`tipoMateria`),
@@ -975,7 +975,7 @@ CREATE TABLE `materia` (
 
 LOCK TABLES `materia` WRITE;
 /*!40000 ALTER TABLE `materia` DISABLE KEYS */;
-INSERT INTO `materia` VALUES (1,'Matemática',1,'20b057'),(2,'Lenguaje',1,'7184e3'),(3,'Inglés',1,'c73625'),(4,'Informática',1,'cf9dcf'),(5,'Estudios Sociales',1,'9fc7a3'),(6,'Educación Físiaca',1,''),(7,'Ciencias Naturales',1,''),(8,'Moral, Urbanidad y Cívica',1,''),(9,'Orientación Para La Vida',2,''),(10,'Seminario',2,''),(11,'Curso de Habilidad Laboral',2,''),(12,'Tecnología I',3,''),(13,'Tecnología II',3,''),(14,'Tecnología III',3,''),(15,'Práctica Profesional I',3,''),(16,'Práctica Profesional II',3,''),(17,'Práctica Profesional III',3,''),(18,'Laboratorio de Creatividad I',3,''),(19,'Laboratorio de Creatividad II',3,''),(20,'Laboratorio de Creatividad III',3,''),(21,'Contaduría',4,''),(22,'General',4,'d9b2d9');
+INSERT INTO `materia` VALUES (1,'Matemática',1,'20b057'),(2,'Lenguaje',1,'7184e3'),(3,'Inglés',1,'0d3b21'),(4,'Informática',1,'cf9dcf'),(5,'Estudios Sociales',1,'9fc7a3'),(6,'Educación Físiaca',1,''),(7,'Ciencias Naturales',1,''),(8,'Moral, Urbanidad y Cívica',1,''),(9,'Orientación Para La Vida',2,''),(10,'Seminario',2,''),(11,'Curso de Habilidad Laboral',2,''),(12,'Tecnología I',3,''),(13,'Tecnología II',3,''),(14,'Tecnología III',3,''),(15,'Práctica Profesional I',3,''),(16,'Práctica Profesional II',3,''),(17,'Práctica Profesional III',3,''),(18,'Laboratorio de Creatividad I',3,''),(19,'Laboratorio de Creatividad II',3,''),(20,'Laboratorio de Creatividad III',3,''),(21,'Contaduría',4,''),(22,'General',4,'d9b2d9');
 /*!40000 ALTER TABLE `materia` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -987,9 +987,9 @@ DROP TABLE IF EXISTS `matricula`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `matricula` (
-  `idmatricula` int(11) NOT NULL,
+  `idmatricula` int(30) NOT NULL,
   `matriculaAnyo` int(4) NOT NULL,
-  `matriculaNivel` int(11) NOT NULL,
+  `matriculaNivel` int(30) NOT NULL,
   `gradoModalidad` enum('C','S','G') NOT NULL,
   `matriculaSeccion` enum('A','B','C') NOT NULL DEFAULT 'A',
   `matriculaRepite` bit(1) NOT NULL,
@@ -1007,7 +1007,7 @@ CREATE TABLE `matricula` (
 
 LOCK TABLES `matricula` WRITE;
 /*!40000 ALTER TABLE `matricula` DISABLE KEYS */;
-INSERT INTO `matricula` VALUES (16018,2019,1,'C','A','\0','R'),(16022,2019,1,'C','A','\0','N');
+INSERT INTO `matricula` VALUES (16018,2019,1,'C','B','\0','R'),(16022,2019,1,'C','A','\0','R'),(1123456,2020,1,'C','A','\0','R');
 /*!40000 ALTER TABLE `matricula` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1019,11 +1019,11 @@ DROP TABLE IF EXISTS `mestroHorarioMaterias`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `mestroHorarioMaterias` (
-  `idMaestro` int(11) NOT NULL,
-  `idMateria` int(11) NOT NULL COMMENT 'Detalle de las materias y horarios que cada docente imparte en la institución.',
-  `idHorario` int(11) NOT NULL,
-  `diaSemana` int(11) NOT NULL,
-  `idGrado` int(11) NOT NULL,
+  `idMaestro` int(30) NOT NULL,
+  `idMateria` int(30) NOT NULL COMMENT 'Detalle de las materias y horarios que cada docente imparte en la institución.',
+  `idHorario` int(30) NOT NULL,
+  `diaSemana` int(30) NOT NULL,
+  `idGrado` int(30) NOT NULL,
   `gradoModalidad` enum('C','S','G') NOT NULL,
   `seccionGrado` enum('A','B','C') NOT NULL,
   `añoGrado` int(4) NOT NULL,
@@ -1047,7 +1047,7 @@ CREATE TABLE `mestroHorarioMaterias` (
 
 LOCK TABLES `mestroHorarioMaterias` WRITE;
 /*!40000 ALTER TABLE `mestroHorarioMaterias` DISABLE KEYS */;
-INSERT INTO `mestroHorarioMaterias` VALUES (1045367080,1,1,1,1,'C','A',2019,NULL),(1045367080,2,2,1,1,'C','A',2019,NULL),(1045367080,3,3,1,1,'C','B',2019,NULL),(1045367080,4,4,1,1,'C','B',2019,NULL);
+INSERT INTO `mestroHorarioMaterias` VALUES (1045367080,1,1,1,1,'C','A',2019,NULL),(1045367080,2,1,2,1,'C','A',2019,NULL),(1045367080,2,2,1,1,'C','A',2019,NULL),(1045367080,3,3,1,1,'C','B',2019,NULL),(1045367080,4,4,1,1,'C','B',2019,NULL);
 /*!40000 ALTER TABLE `mestroHorarioMaterias` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1060,8 +1060,8 @@ DROP TABLE IF EXISTS `notificaciones`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `notificaciones` (
   `fechaHora` datetime NOT NULL,
-  `destinatario` int(11) NOT NULL,
-  `remitente` int(11) NOT NULL,
+  `destinatario` int(30) NOT NULL,
+  `remitente` int(30) NOT NULL,
   `notificacionTitulo` varchar(140) NOT NULL,
   `notificacionCuerpo` varchar(140) NOT NULL,
   `vista` bit(1) NOT NULL,
@@ -1080,7 +1080,7 @@ CREATE TABLE `notificaciones` (
 
 LOCK TABLES `notificaciones` WRITE;
 /*!40000 ALTER TABLE `notificaciones` DISABLE KEYS */;
-INSERT INTO `notificaciones` VALUES ('2019-10-20 21:32:51',1045367080,1045367073,'Relevación de Cargo','Ha sido relevado de su cargo como Subdirector Por Guillermo Delsas','',''),('2019-10-20 21:33:38',1045367080,1045367073,'Asignación de Cargo','Guillermo Delsas le ha asignado el cargo de Subdirector','',''),('2019-10-20 21:34:11',1045367080,1045367073,'Relevación de Cargo','Ha sido relevado de su cargo como Subdirector Por Guillermo Delsas','',''),('2019-10-20 21:34:49',1045367080,1045367073,'Asignación de Cargo','Guillermo Delsas le ha asignado el cargo de Director','',''),('2019-10-20 21:35:30',1045367080,1045367073,'Asignación de Cargo','Guillermo Delsas le ha asignado el cargo de Subdirector','',''),('2019-10-20 21:36:04',1045367080,16018,'Solicitud de permiso nueva','Estudiante1 Nombre Apellido estudiante1 ha solicitado un nuevo permiso.','',''),('2019-10-20 21:36:37',16018,1045367080,'Rechado de permiso','Mestro1 Nombre Apellido Maestro1 ha rechazado su solicitud de permiso ','',''),('2019-10-20 21:37:13',1045367080,16018,'Solicitud de permiso nueva','Estudiante1 Nombre Apellido estudiante1 ha solicitado un nuevo permiso.','',''),('2019-10-20 21:37:31',16018,1045367080,'Aceptación de permiso','Mestro1 Nombre Apellido Maestro1 ha aceptado su solicitud de permiso ','\0',''),('2019-10-20 21:38:07',1045367080,1045367073,'Solicitud de permiso nueva','Guillermo Delsas ha solicitado un nuevo permiso.','',''),('2019-10-20 21:38:22',1045367073,1045367080,'Aceptación de permiso','Mestro1 Nombre Apellido Maestro1 ha aceptado su solicitud de permiso ','',''),('2019-10-20 21:39:07',1045367080,1045367073,'Solicitud de permiso nueva','Guillermo Delsas ha solicitado un nuevo permiso.','',''),('2019-10-20 21:39:25',1045367073,1045367080,'Rechado de permiso','Mestro1 Nombre Apellido Maestro1 ha rechazado su solicitud de permiso ','',''),('2019-10-26 13:23:51',1045367080,1045367073,'Relevación de Cargo','Ha sido relevado de su cargo como Director Por Guillermo Delsas','',''),('2019-10-26 14:59:23',1045367080,1045367073,'Se ha ingresado un nuevo recurso','Guillermo Delsas ha modificado el inventario.','',''),('2019-10-26 15:00:49',1045367080,1045367073,'Relevación de Cargo','Ha sido relevado de su cargo como Subdirector Por Guillermo Delsas','',''),('2019-10-26 15:40:15',1045367080,1045367073,'Se ha ingresado un nuevo recurso','Guillermo Delsas ha modificado el inventario.','',''),('2019-10-26 15:58:54',1045367080,1045367080,'Se ha ingresado un nuevo recurso','Mestro1 Nombre Apellido Maestro1 ha modificado el inventario.','',''),('2019-10-26 16:44:54',1045367080,1045367073,'Relevación de Cargo','Ha sido relevado de su cargo como Coordinador de área Informática Por Guillermo Delsas','',''),('2019-10-26 16:52:57',1045367080,1045367073,'Relevación de Cargo','Ha sido relevado de su cargo como Coordinador de área bibliográfica Por Guillermo Delsas','',''),('2019-10-26 16:52:58',1045367080,1045367073,'Asignación de Cargo','Guillermo Delsas le ha asignado el cargo de Coordinador de laboratorio de CC.NN','',''),('2019-12-06 18:52:17',1045367081,1045367073,'Nueva solicitud de recursos','Guillermo Delsas ha solicitado recursos','',''),('2019-12-06 19:03:41',1045367081,1045367081,'Nueva solicitud de recursos','jkkjkjkjkjkjk kjkjkj jkkjkjkjkj kjkj kjkjk ha solicitado recursos','','');
+INSERT INTO `notificaciones` VALUES ('2019-12-11 23:30:40',1045367080,1045367080,'Nueva solicitud de recursos','Mestro1 Nombre Apellido Maestro1 ha solicitado recursos','',''),('2019-12-11 23:39:39',1045367080,1045367080,'Nueva solicitud de recursos','Mestro1 Nombre Apellido Maestro1 ha solicitado recursos','',' '),('2019-12-11 23:44:29',1045367080,1045367080,'Nueva solicitud de recursos','Mestro1 Nombre Apellido Maestro1 ha solicitado recursos','',' '),('2019-12-11 23:49:31',1045367080,1045367080,'Nueva solicitud de recursos','Mestro1 Nombre Apellido Maestro1 ha solicitado recursos','',''),('2019-12-11 23:55:35',1045367080,1045367080,'Nueva solicitud de recursos','Mestro1 Nombre Apellido Maestro1 ha solicitado recursos','',''),('2019-12-16 12:49:25',1045367080,1045367080,'Nueva solicitud de recursos','Mestro1 Nombre Apellido Maestro1 ha solicitado recursos','',''),('2019-12-16 12:56:53',1045367080,1045367080,'Nueva solicitud de recursos','Mestro1 Nombre Apellido Maestro1 ha solicitado recursos','',''),('2019-12-16 13:12:02',1045367080,16018,'Nueva solicitud de recursos','Estudiante1 Nombre Apellido estudiante1 ha solicitado recursos','\0','');
 /*!40000 ALTER TABLE `notificaciones` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1092,7 +1092,7 @@ DROP TABLE IF EXISTS `pais`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `pais` (
-  `idpais` int(11) NOT NULL,
+  `idpais` int(30) NOT NULL,
   `paisNombre` varchar(50) NOT NULL,
   `paisComentarios` varchar(140) DEFAULT NULL,
   PRIMARY KEY (`idpais`)
@@ -1117,15 +1117,15 @@ DROP TABLE IF EXISTS `permisos`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `permisos` (
-  `ipPersona` int(11) NOT NULL,
+  `ipPersona` int(30) NOT NULL,
   `permisoFechaSolicitud` date NOT NULL,
-  `tipoPermiso` int(11) NOT NULL,
+  `tipoPermiso` int(30) NOT NULL,
   `permisoFechaInicio` date NOT NULL,
   `permisoFechafin` date NOT NULL,
-  `tipoPersona` int(11) NOT NULL,
+  `tipoPersona` int(30) NOT NULL,
   `permisosMotivo` varchar(250) NOT NULL,
   `permisosEstado` enum('1','2','0') NOT NULL DEFAULT '0',
-  `permisosSolicitante` int(11) NOT NULL,
+  `permisosSolicitante` int(30) NOT NULL,
   `permisosComentario` varchar(250) DEFAULT NULL,
   PRIMARY KEY (`ipPersona`,`permisoFechaSolicitud`,`tipoPermiso`,`permisoFechaInicio`),
   KEY `fk_permisos_2_idx` (`ipPersona`),
@@ -1145,7 +1145,7 @@ CREATE TABLE `permisos` (
 
 LOCK TABLES `permisos` WRITE;
 /*!40000 ALTER TABLE `permisos` DISABLE KEYS */;
-INSERT INTO `permisos` VALUES (16018,'2019-10-14',4,'2019-10-14','2019-10-14',8,'4984884884','1',1045367080,'8788787-8¿¿88787887888 88 8 87 87¿¿87877888 87 87 8778 78 8 ¿¿ '),(16018,'2019-10-20',4,'2019-10-20','2019-10-20',8,'4112242225','2',16018,'0¿¿ ¿¿ ¿¿no aplica '),(16018,'2019-10-20',5,'2019-10-20','2019-10-20',8,'456464645','1',16018,'0¿¿ ¿¿ ¿¿ '),(16022,'2019-10-14',4,'2019-10-14','2019-10-14',8,'77777777','1',1045367080,'8787888-8¿¿8787887878¿¿78788887878778¿¿ '),(1045367073,'2019-10-20',1,'2019-10-20','2019-10-20',1,' ','1',1045367073,'1¿¿1¿¿ ¿¿ '),(1045367073,'2019-10-20',1,'2019-10-22','2019-10-22',1,' ','2',1045367073,'1¿¿1¿¿ ¿¿no aplica '),(1045367073,'2019-11-18',1,'2019-11-18','2019-11-18',1,' ','0',1045367073,'0¿¿1¿¿ ¿¿ ');
+INSERT INTO `permisos` VALUES (16018,'2019-10-14',4,'2019-10-14','2019-10-14',8,'4984884884','1',1045367080,'8788787-8¿¿88787887888 88 8 87 87¿¿87877888 87 87 8778 78 8 ¿¿ '),(16018,'2019-10-20',4,'2019-10-20','2019-10-20',8,'4112242225','2',16018,'0¿¿ ¿¿ ¿¿no aplica '),(16018,'2019-10-20',5,'2019-10-20','2019-10-20',8,'456464645','1',16018,'0¿¿ ¿¿ ¿¿ '),(16018,'2019-12-07',4,'2019-12-07','2019-12-07',8,'srh<hsheasahedeh','2',16018,'0¿¿ ¿¿ ¿¿ jgdjdjddjjgdjhh'),(16018,'2019-12-07',5,'2019-12-07','2019-12-07',8,'jhkjhk','1',16018,'0¿¿ ¿¿ ¿¿ '),(16018,'2019-12-07',5,'2019-12-10','2019-12-18',8,'hfgh','2',16018,'0¿¿ ¿¿ ¿¿uyuttuuttu '),(16018,'2019-12-07',6,'2019-12-07','2019-12-09',8,'dsljds','1',16018,'0¿¿ ¿¿ ¿¿ '),(16018,'2019-12-07',6,'2019-12-08','2019-12-08',8,'lifiñuguigliguiguigigugfi','1',1045367080,'8688686-6¿¿kfjhlfljhfjkghf jhff jkfjhfkjhf¿¿jyffkyfjky¿¿ '),(16018,'2019-12-07',7,'2019-12-07','2019-12-07',8,'ALGO','1',16018,'0¿¿ ¿¿ ¿¿ '),(16022,'2019-10-14',4,'2019-10-14','2019-10-14',8,'77777777','1',1045367080,'8787888-8¿¿8787887878¿¿78788887878778¿¿ '),(1045367073,'2019-10-20',1,'2019-10-20','2019-10-20',1,' ','1',1045367073,'1¿¿1¿¿ ¿¿ '),(1045367073,'2019-10-20',1,'2019-10-22','2019-10-22',1,' ','2',1045367073,'1¿¿1¿¿ ¿¿no aplica '),(1045367073,'2019-11-18',1,'2019-11-18','2019-11-18',1,' ','1',1045367073,'0¿¿1¿¿ ¿¿ '),(1045367080,'2019-12-07',1,'2019-12-07','2019-12-07',4,' ','1',1045367080,'1¿¿0¿¿ ¿¿ '),(1045367080,'2019-12-07',1,'2019-12-08','2019-12-08',4,' ','2',1045367080,'0¿¿0¿¿ ¿¿no ');
 /*!40000 ALTER TABLE `permisos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1157,7 +1157,7 @@ DROP TABLE IF EXISTS `persona`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `persona` (
-  `idpersona` int(11) NOT NULL,
+  `idpersona` int(30) NOT NULL,
   `PersonaNombre` varchar(45) NOT NULL,
   `personaApellido` varchar(45) NOT NULL,
   `personaNacimiento` date DEFAULT NULL,
@@ -1168,7 +1168,7 @@ CREATE TABLE `persona` (
   `personaLugarNac` varchar(100) DEFAULT NULL,
   `personaContrasenya` varchar(60) DEFAULT NULL,
   `personaOCupacion` varchar(50) DEFAULT NULL,
-  `tipoPersona` int(11) DEFAULT NULL,
+  `tipoPersona` int(30) DEFAULT NULL,
   `personaActivo` bit(1) NOT NULL DEFAULT b'0',
   `personaNit` varchar(20) DEFAULT NULL,
   `personaSexo` bit(1) DEFAULT b'0',
@@ -1189,7 +1189,7 @@ CREATE TABLE `persona` (
 
 LOCK TABLES `persona` WRITE;
 /*!40000 ALTER TABLE `persona` DISABLE KEYS */;
-INSERT INTO `persona` VALUES (16018,'Estudiante1 Nombre','Apellido estudiante1','1995-01-17','544554454545455454 545 454 54 54 54 5454','',0,1,'02#01','8d2a5f7d4afa5d0530789d3066945330','',8,'','','',0,'Salvadoreña','','',''),(16022,'6022 nombre','6022 Apellido','1995-10-12','Cas. LA Y Griega, Cantón Chilcuyo, Texistepeque, Santa Ana','5037-0337',0,1,'01#01','da54dd5a0398011cdfa50d559c2c0ef8','',8,'','5454-545454-545-4','\0',0,'Salvadoreña','guillermox020@gmail.com','',''),(1045367070,'Repreentante1 Nombre','Apellido Representante1','1980-10-10','fuhwuo hfohuofhouh owheof ','',0,1,'01#02','ab8a338aa2b1da6d97c11ba6e67be768','',9,'','','\0',1,'Salvadoreña','','',''),(1045367071,'Paden1 Nombre','Apellido Padre1',NULL,'','8878-7878',0,0,' # ','cd9187113425eae93d8116205d03bdde','',11,'\0',NULL,'',0,'Salvadoreña',NULL,'',''),(1045367072,'Madre1 Nombre','Apellido Madre1',NULL,'','4554-4554',0,0,' # ','7845e7b45be70d2391a2b16c2ffb68e3','',10,'\0',NULL,'',0,'Salvadoreña',NULL,'',''),(1045367073,'Guillermo','Delsas',NULL,NULL,NULL,NULL,NULL,NULL,'02951a6cb9595ef475fed783e59c687e','Ingeniero',1,'',NULL,'\0',NULL,NULL,NULL,NULL,NULL),(1045367080,'Mestro1 Nombre','Apellido Maestro1','1969-06-11','Cas. LA Y Griega, Cantón Chilcuyo, Texistepeque, Santa Ana','5037-0337',2256,0,'01#01','6e80cf219e79bc8a8d83ce9a5b757f64','Licenciada en Ciencias jurídicas',4,'','0202-020202-020-0','',0,'Salvadoreña','guillermox020@gmail.com','',''),(1045367081,'jkkjkjkjkjkjk kjkjkj','jkkjkjkjkj kjkj kjkjk','2019-10-30','5464446546556','4554-5454',0,0,'01#03','ad9f88eb26394a8ad9f46975cf79a133','653846+8985',6,'','2121-212121-212-1','\0',0,'Salvadoreña','45646546464646','',''),(1045367082,'admin','biblios','2019-10-30','75855454','5555-5545',0,0,'02#01','5f04b909d4b1bca2e6e57dbbf7208c51','86{pjuh',5,'','4546-546654-646-5','',0,'Salvadoreña','879466666864','',''),(1045367083,'04536708-3 madre','04536708-3 apeel',NULL,'','2220-2020',0,0,' # ','a6ba5f99ff9616298b2212c76ea111dc','',10,'\0',NULL,'',0,'Salvadoreña',NULL,'','');
+INSERT INTO `persona` VALUES (16018,'Estudiante1 Nombre','Apellido estudiante1','1995-01-17','544554454545455454 545 454 54 54 54 5454','',0,1,'02#01','8d2a5f7d4afa5d0530789d3066945330','',8,'','','',0,'Salvadoreña','','',''),(16022,'6022 nombre','6022 Apellido','1995-10-12','Cas. LA Y Griega, Cantón Chilcuyo, Texistepeque, Santa Ana','5037-0337',0,1,'01#01','da54dd5a0398011cdfa50d559c2c0ef8','',8,'','5454-545454-545-4','\0',0,'Salvadoreña','guillermox020@gmail.com','',''),(1123456,'Gabriela','Menendez','2019-12-10','afd','9878-9797',0,1,'05#05','e10adc3949ba59abbe56e057f20f883e','',8,'','9798-789789-789-7','',0,'Salvadoreña','gajsljs','',''),(1045367070,'Repreentante1 Nombre','Apellido Representante1','1980-10-10','fuhwuo hfohuofhouh owheof ','',0,1,'01#02','ab8a338aa2b1da6d97c11ba6e67be768','',9,'','','\0',1,'Salvadoreña','','',''),(1045367071,'Paden1 Nombre','Apellido Padre1',NULL,'','8878-7878',0,0,' # ','cd9187113425eae93d8116205d03bdde','',11,'\0',NULL,'',0,'Salvadoreña',NULL,'',''),(1045367072,'Madre1 Nombre','Apellido Madre1',NULL,'','4554-4554',0,0,' # ','7845e7b45be70d2391a2b16c2ffb68e3','',10,'\0',NULL,'',0,'Salvadoreña',NULL,'',''),(1045367073,'Guillermo','Delsas',NULL,NULL,NULL,NULL,NULL,NULL,'02951a6cb9595ef475fed783e59c687e','Ingeniero',1,'',NULL,'\0',NULL,NULL,NULL,NULL,NULL),(1045367080,'Mestro1 Nombre','Apellido Maestro1','1969-06-11','Cas. LA Y Griega, Cantón Chilcuyo, Texistepeque, Santa Ana','5037-0337',2256,0,'01#01','6e80cf219e79bc8a8d83ce9a5b757f64','Licenciada en Ciencias jurídicas',4,'','0202-020202-020-0','',0,'Salvadoreña','guillermox020@gmail.com','',''),(1045367081,'jkkjkjkjkjkjk kjkjkj','jkkjkjkjkj kjkj kjkjk','2019-10-30','5464446546556','4554-5454',0,1,'01#03','ad9f88eb26394a8ad9f46975cf79a133','653846+8985',2,'','2121-212121-212-1','\0',0,'Salvadoreña','45646546464646','',''),(1045367082,'admin','biblios','2019-10-30','75855454','5555-5545',0,0,'02#01','5f04b909d4b1bca2e6e57dbbf7208c51','86{pjuh',7,'','4546-546654-646-5','',0,'Salvadoreña','879466666864','',''),(1045367083,'04536708-3 madre','04536708-3 apeel',NULL,'','2220-2020',0,0,' # ','a6ba5f99ff9616298b2212c76ea111dc','',10,'\0',NULL,'',0,'Salvadoreña',NULL,'',''),(1222222222,'asdfsd','afffds',NULL,'','7676-7676',0,0,' # ','0d777e9e30b918e9034ab610712c90cf','',10,'\0',NULL,'',0,'Salvadoreña',NULL,'',''),(1798789789,'Galksjdlk','sajdlksj','2019-12-12','asd','7878-7878',0,0,'01#02','27f84649a1d0cf1474c93a871a08a78b','',9,'','7987-987897-889-7','\0',1,'Salvadoreña','ahdsds','',''),(1987897987,'jfadslkj','jshjsjshjs',NULL,'','7777-7777',0,0,' # ','c2a2c1eb0e1b31b75e2d13892dc91221','',11,'\0',NULL,'',0,'Salvadoreña',NULL,'','');
 /*!40000 ALTER TABLE `persona` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1201,8 +1201,8 @@ DROP TABLE IF EXISTS `personasReserva`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `personasReserva` (
-  `idReserva` int(11) NOT NULL,
-  `idpersona` int(11) NOT NULL,
+  `idReserva` int(30) NOT NULL,
+  `idpersona` int(30) NOT NULL,
   `personasReservaComentario` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idReserva`,`idpersona`),
   KEY `fk_personasReserva_1_idx` (`idpersona`),
@@ -1217,6 +1217,7 @@ CREATE TABLE `personasReserva` (
 
 LOCK TABLES `personasReserva` WRITE;
 /*!40000 ALTER TABLE `personasReserva` DISABLE KEYS */;
+INSERT INTO `personasReserva` VALUES (9,1045367073,''),(10,16018,''),(10,1123456,''),(11,1123456,''),(12,1123456,''),(13,16018,''),(14,1045367080,''),(15,1045367080,''),(16,1045367080,''),(17,1045367080,''),(18,1045367080,''),(19,1045367080,''),(20,1045367080,''),(21,1045367080,''),(22,16018,'');
 /*!40000 ALTER TABLE `personasReserva` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1228,7 +1229,7 @@ DROP TABLE IF EXISTS `proyectoPedagogico`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `proyectoPedagogico` (
-  `idproyectoPedagogico` int(11) NOT NULL AUTO_INCREMENT,
+  `idproyectoPedagogico` int(30) NOT NULL AUTO_INCREMENT,
   `nombreProyecto` varchar(100) NOT NULL,
   `beneficiarios` varchar(100) NOT NULL,
   `duracion` varchar(5) NOT NULL,
@@ -1265,12 +1266,12 @@ DROP TABLE IF EXISTS `recurso`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `recurso` (
-  `idrecurso` int(11) NOT NULL,
+  `idrecurso` int(30) NOT NULL,
   `nombre` varchar(100) NOT NULL,
-  `categoria` int(11) DEFAULT NULL,
-  `idTipoRecurso` int(11) NOT NULL,
-  `tipoCargo` int(11) NOT NULL,
-  `pais` int(11) DEFAULT NULL,
+  `categoria` int(30) DEFAULT NULL,
+  `idTipoRecurso` int(30) NOT NULL,
+  `tipoCargo` int(30) NOT NULL,
+  `pais` int(30) DEFAULT NULL,
   `activo` bit(1) DEFAULT NULL,
   `valorUnitario` float DEFAULT NULL,
   `estadoFisico` enum('R','B') NOT NULL,
@@ -1307,18 +1308,18 @@ DROP TABLE IF EXISTS `reserva`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `reserva` (
-  `idreserva` int(11) NOT NULL AUTO_INCREMENT,
+  `idreserva` int(30) NOT NULL AUTO_INCREMENT,
   `reservaFecha` datetime NOT NULL,
   `reservaEntrega` datetime NOT NULL,
   `reservaDevolucion` datetime NOT NULL,
-  `tipoReserva` int(11) NOT NULL,
+  `tipoReserva` int(30) NOT NULL,
   `reservaEstado` enum('S','E','D') NOT NULL,
   `reservaDevuelto` datetime DEFAULT NULL,
-  `docente` int(11) DEFAULT NULL,
-  `maeria` int(11) DEFAULT NULL,
+  `docente` int(30) DEFAULT NULL,
+  `maeria` int(30) DEFAULT NULL,
   `tema` varchar(45) DEFAULT NULL,
   `objetivoTema` varchar(100) DEFAULT NULL,
-  `TipoPtoyecto` int(11) DEFAULT NULL,
+  `TipoPtoyecto` int(30) DEFAULT NULL,
   `reservaComentario` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idreserva`),
   KEY `fk_reserva_1_idx` (`tipoReserva`),
@@ -1329,7 +1330,7 @@ CREATE TABLE `reserva` (
   CONSTRAINT `fk_reserva_2` FOREIGN KEY (`docente`) REFERENCES `maestro` (`idmaestro`) ON UPDATE CASCADE,
   CONSTRAINT `fk_reserva_3` FOREIGN KEY (`maeria`) REFERENCES `materia` (`idmateria`) ON UPDATE CASCADE,
   CONSTRAINT `fk_reserva_4` FOREIGN KEY (`TipoPtoyecto`) REFERENCES `tipoProyecto` (`idtipoProyecto`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1338,7 +1339,7 @@ CREATE TABLE `reserva` (
 
 LOCK TABLES `reserva` WRITE;
 /*!40000 ALTER TABLE `reserva` DISABLE KEYS */;
-INSERT INTO `reserva` VALUES (1,'2019-12-06 13:48:53','2019-12-06 13:49:00','2019-12-06 13:50:00',1,'S',NULL,1045367080,1,'iibiiiibibib ig igigg g i gg ',' gigiogoig go ig  ig ioigoi og gg ogo ogo oigoi goigoi ogfgigpigpigu  ofog i',2,'Guillermo Delsas¿¿2¿¿ ¿¿ '),(2,'2019-12-06 18:02:24','2019-12-06 18:04:00','2019-12-06 18:05:00',1,'S',NULL,1045367080,2,'78878787878787878','455554544545456456546546',2,'Guillermo Delsas¿¿2¿¿ ¿¿ '),(3,'2019-12-06 18:07:09','2019-12-06 18:08:00','2019-12-06 18:09:00',1,'S',NULL,1045367080,2,'45646546465','465465465465465',2,'Guillermo Delsas¿¿2¿¿ ¿¿ '),(4,'2019-12-06 18:10:54','2019-12-06 18:13:00','2019-12-06 18:24:00',1,'S',NULL,1045367080,3,'xxxxxxxxxxxx','xzzzzzzzzzzzzzzzz',2,'Guillermo Delsas¿¿3¿¿ ¿¿ '),(5,'2019-12-06 18:46:00','2019-12-06 18:49:00','2019-12-06 18:55:00',1,'S',NULL,1045367080,3,'dgfnfhdhn','dfhndnhgfndgdfd',2,'Guillermo Delsas¿¿2¿¿ ¿¿ '),(6,'2019-12-06 19:02:10','2019-12-06 19:03:00','2019-12-06 19:04:00',1,'S',NULL,1045367080,1,'ppojpjopjpojppjpj','pj{pj kj ggñgkgng   gjk gñ  kg fyil{ h hig io ',2,'jkkjkjkjkjkjk jkkjkjkjkj¿¿1¿¿ ¿¿ ');
+INSERT INTO `reserva` VALUES (9,'2019-12-11 22:41:51','2019-12-11 22:42:00','2019-12-11 22:49:00',1,'S',NULL,1045367080,1,'tema','objetivo del tema',2,'Guillermo Delsas¿¿2¿¿ ¿¿ '),(10,'2019-12-11 22:51:45','2019-12-11 22:52:00','2019-12-11 22:59:00',1,'S',NULL,1045367080,1,'78775','26787277 7 7 77  64644 24 49 ',2,'Guillermo Delsas¿¿3¿¿ ¿¿ '),(11,'2019-12-11 22:56:07','2019-12-11 22:57:00','2019-12-11 22:59:00',1,'S',NULL,1045367080,1,'47557','75555858',2,'Gabriela Menendez¿¿2¿¿ ¿¿ '),(12,'2019-12-11 23:00:29','2019-12-11 23:01:00','2019-12-11 23:03:00',1,'S',NULL,1045367080,3,'387368','638686386',2,'Gabriela Menendez¿¿1¿¿ ¿¿ '),(13,'2019-12-11 23:10:57','2019-12-11 23:12:00','2019-12-11 23:16:00',1,'S',NULL,1045367080,1,'878787878787878787878','8778787878787',2,'Estudiante1 Apellido¿¿2¿¿ ¿¿ '),(14,'2019-12-11 23:18:42','2019-12-11 23:19:00','2019-12-11 23:23:00',1,'S',NULL,1045367080,1,'7877979797','8979879798797979 7987 9798 798 79 7897 9',2,'Mestro1 Apellido¿¿2¿¿ ¿¿ '),(15,'2019-12-11 23:26:13','2019-12-11 23:28:00','2019-12-11 23:32:00',1,'S',NULL,1045367080,1,'877878787','878787878787878787',1,'Mestro1 Apellido¿¿1¿¿ ¿¿ '),(16,'2019-12-11 23:38:07','2019-12-11 23:39:00','2019-12-11 23:40:00',1,'S',NULL,1045367080,1,'lkj','sghsfdfnhsdgn',2,'Mestro1 Apellido¿¿2¿¿ ¿¿ '),(17,'2019-12-11 23:43:21','2019-12-11 23:44:00','2019-12-11 23:46:00',1,'S',NULL,1045367080,1,'kjg,j,gk,gjk,kjg,g','65616165616',2,'Mestro1 Apellido¿¿1¿¿ ¿¿ '),(18,'2019-12-11 23:48:22','2019-12-11 23:49:00','2019-12-11 23:50:00',1,'S',NULL,1045367080,1,'csdfgsdgsdf','gsdfgsdgsdfgsdfg',1,'Mestro1 Apellido¿¿1¿¿ ¿¿ '),(19,'2019-12-11 23:52:38','2019-12-11 23:53:00','2019-12-11 23:54:00',1,'S',NULL,1045367080,1,'hy','ehnterjer',2,'Mestro1 Apellido¿¿1¿¿ ¿¿ '),(20,'2019-12-16 12:46:33','2019-12-16 12:47:00','2019-12-16 12:50:00',1,'S',NULL,1045367080,2,'tema','objetivo',1,'Mestro1 Apellido¿¿1¿¿ ¿¿ '),(21,'2019-12-16 12:50:38','2019-12-16 12:51:00','2019-12-16 12:52:00',1,'S',NULL,1045367080,3,'7878787878787','87987464646468664684684648',2,'Mestro1 Apellido¿¿1¿¿ ¿¿ '),(22,'2019-12-16 13:09:22','2019-12-16 13:10:00','2019-12-16 13:11:00',1,'S',NULL,1045367080,2,'8787877878877878','4694864654646546',2,'Estudiante1 Apellido¿¿2¿¿ ¿¿ ');
 /*!40000 ALTER TABLE `reserva` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1350,10 +1351,10 @@ DROP TABLE IF EXISTS `reservaDetalle`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `reservaDetalle` (
-  `idRecurso` int(11) NOT NULL,
-  `ejemplarCorrelativo` int(11) NOT NULL,
+  `idRecurso` int(30) NOT NULL,
+  `ejemplarCorrelativo` int(30) NOT NULL,
   `reservaDetalleComentario` varchar(145) DEFAULT NULL,
-  `idReserva` int(11) NOT NULL,
+  `idReserva` int(30) NOT NULL,
   PRIMARY KEY (`idRecurso`,`ejemplarCorrelativo`,`idReserva`),
   KEY `fk_reservaDetalle_2_idx` (`idRecurso`,`ejemplarCorrelativo`),
   KEY `fk_reservaDetalle_1_idx` (`idReserva`),
@@ -1379,8 +1380,8 @@ DROP TABLE IF EXISTS `reservaXpedagogia`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `reservaXpedagogia` (
-  `idProyectoPedagogico` int(11) NOT NULL,
-  `idReserva` int(11) NOT NULL,
+  `idProyectoPedagogico` int(30) NOT NULL,
+  `idReserva` int(30) NOT NULL,
   `reservaXpedagogiaComentario` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idProyectoPedagogico`,`idReserva`),
   KEY `fk_reservaXpedagogia_2_idx` (`idReserva`),
@@ -1406,9 +1407,9 @@ DROP TABLE IF EXISTS `solicitudReserva`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `solicitudReserva` (
-  `idRecurso` int(11) NOT NULL,
+  `idRecurso` int(30) NOT NULL,
+  `idReserva` int(30) NOT NULL,
   `solicitudReservaComentario` varchar(145) DEFAULT NULL,
-  `idReserva` int(11) NOT NULL,
   PRIMARY KEY (`idRecurso`,`idReserva`),
   KEY `fk_solicitudReserva_2_idx` (`idRecurso`),
   KEY `fk_solicitudReserva_1_idx` (`idReserva`),
@@ -1423,6 +1424,7 @@ CREATE TABLE `solicitudReserva` (
 
 LOCK TABLES `solicitudReserva` WRITE;
 /*!40000 ALTER TABLE `solicitudReserva` DISABLE KEYS */;
+INSERT INTO `solicitudReserva` VALUES (2,9,''),(2,10,''),(2,11,''),(2,12,''),(2,13,''),(2,14,''),(2,15,''),(2,16,''),(2,17,''),(2,18,''),(2,19,''),(2,20,''),(2,21,''),(2,22,''),(3,9,''),(3,10,''),(3,11,''),(3,12,''),(3,13,''),(3,14,''),(3,15,''),(3,16,''),(3,17,''),(3,18,''),(3,20,''),(3,21,''),(3,22,''),(4,9,''),(4,10,''),(4,11,''),(4,12,''),(4,13,''),(4,14,''),(4,15,''),(4,16,''),(4,17,''),(4,18,''),(4,19,''),(4,20,''),(4,22,'');
 /*!40000 ALTER TABLE `solicitudReserva` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1434,7 +1436,7 @@ DROP TABLE IF EXISTS `tipoCargo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tipoCargo` (
-  `idtipoCargo` int(11) NOT NULL AUTO_INCREMENT,
+  `idtipoCargo` int(30) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(100) NOT NULL,
   `tipoCargoComentario` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idtipoCargo`),
@@ -1460,7 +1462,7 @@ DROP TABLE IF EXISTS `tipoEspecialidades`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tipoEspecialidades` (
-  `idtipoEspecialidades` int(11) NOT NULL AUTO_INCREMENT,
+  `idtipoEspecialidades` int(30) NOT NULL AUTO_INCREMENT,
   `tipoEspecialidadesNombre` varchar(70) NOT NULL,
   `tipoEspecialidadesComentario` varchar(145) DEFAULT '',
   PRIMARY KEY (`idtipoEspecialidades`)
@@ -1485,7 +1487,7 @@ DROP TABLE IF EXISTS `tipoMateria`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tipoMateria` (
-  `idtipoMateria` int(11) NOT NULL AUTO_INCREMENT,
+  `idtipoMateria` int(30) NOT NULL AUTO_INCREMENT,
   `tipoMateriaNombre` varchar(50) NOT NULL COMMENT 'Listado de los tipos de materias que se imparten en la institución.',
   `tipoMateriaComentario` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idtipoMateria`)
@@ -1510,7 +1512,7 @@ DROP TABLE IF EXISTS `tipoNombramiento`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tipoNombramiento` (
-  `idtipoNombramiento` int(11) NOT NULL AUTO_INCREMENT,
+  `idtipoNombramiento` int(30) NOT NULL AUTO_INCREMENT,
   `tipoNombramientoNombre` varchar(60) NOT NULL COMMENT 'Listado de las formas en las que se uede nombrar el cargo de un docente dentro de la institución.',
   `tipoNombramientoCoemntario` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idtipoNombramiento`)
@@ -1535,7 +1537,7 @@ DROP TABLE IF EXISTS `tipoPermiso`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tipoPermiso` (
-  `idtipoPermiso` int(11) NOT NULL AUTO_INCREMENT,
+  `idtipoPermiso` int(30) NOT NULL AUTO_INCREMENT,
   `tipoPermisoNombre` varchar(45) NOT NULL,
   `tipoPermisoDiasMes` int(2) NOT NULL,
   `tipoPermisoComentarios` varchar(250) DEFAULT NULL,
@@ -1561,7 +1563,7 @@ DROP TABLE IF EXISTS `tipoPersona`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tipoPersona` (
-  `idtipoPersona` int(11) NOT NULL AUTO_INCREMENT,
+  `idtipoPersona` int(30) NOT NULL AUTO_INCREMENT,
   `tipoPersonaNombre` varchar(45) NOT NULL,
   `tipoPersonaComentario` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idtipoPersona`)
@@ -1586,7 +1588,7 @@ DROP TABLE IF EXISTS `tipoProyecto`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tipoProyecto` (
-  `idtipoProyecto` int(11) NOT NULL AUTO_INCREMENT,
+  `idtipoProyecto` int(30) NOT NULL AUTO_INCREMENT,
   `tipoProyectoNombre` varchar(45) NOT NULL,
   `tipoProyectoComentario` varchar(140) DEFAULT NULL,
   PRIMARY KEY (`idtipoProyecto`)
@@ -1611,7 +1613,7 @@ DROP TABLE IF EXISTS `tipoRecurso`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tipoRecurso` (
-  `idtipoRecurso` int(11) NOT NULL AUTO_INCREMENT,
+  `idtipoRecurso` int(30) NOT NULL AUTO_INCREMENT,
   `tipoRecursoNombre` varchar(50) NOT NULL,
   `tipoRecursoComentario` varchar(140) DEFAULT NULL,
   PRIMARY KEY (`idtipoRecurso`)
@@ -1636,7 +1638,7 @@ DROP TABLE IF EXISTS `tipoReserva`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tipoReserva` (
-  `idtipoReserva` int(11) NOT NULL AUTO_INCREMENT,
+  `idtipoReserva` int(30) NOT NULL AUTO_INCREMENT,
   `tipoReservaNombre` varchar(30) NOT NULL,
   `tipoReservaComentario` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`idtipoReserva`)
@@ -1661,8 +1663,8 @@ DROP TABLE IF EXISTS `tipoReservaRecurso`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tipoReservaRecurso` (
-  `tipoReserva` int(11) NOT NULL,
-  `tipoRecurso` int(11) NOT NULL,
+  `tipoReserva` int(30) NOT NULL,
+  `tipoRecurso` int(30) NOT NULL,
   `tipoReservaRecursoComentario` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`tipoReserva`,`tipoRecurso`),
   KEY `fk_tipoReservaRecurso_2_idx` (`tipoRecurso`),
@@ -1689,7 +1691,7 @@ DROP TABLE IF EXISTS `tipoSueldos`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tipoSueldos` (
-  `idtipoSueldo` int(11) NOT NULL AUTO_INCREMENT,
+  `idtipoSueldo` int(30) NOT NULL AUTO_INCREMENT,
   `tipoSueldoNombre` varchar(50) NOT NULL,
   `tipoSueldosComentario` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idtipoSueldo`)
@@ -1714,8 +1716,8 @@ DROP TABLE IF EXISTS `tipopersonaPermiso`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tipopersonaPermiso` (
-  `idtipopersona` int(11) NOT NULL,
-  `idtipoPermiso` int(11) NOT NULL,
+  `idtipopersona` int(30) NOT NULL,
+  `idtipoPermiso` int(30) NOT NULL,
   `tipopersonaPermisoComentario` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`idtipopersona`,`idtipoPermiso`),
   KEY `fk_tipopersonaPermiso_2_idx` (`idtipoPermiso`),
@@ -1742,7 +1744,7 @@ DROP TABLE IF EXISTS `zona`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `zona` (
-  `idzona` int(11) NOT NULL AUTO_INCREMENT COMMENT 'La Identificación de la zona geográfica (1°, 2° y 3°) en la que está dividido el instituto.',
+  `idzona` int(30) NOT NULL AUTO_INCREMENT COMMENT 'La Identificación de la zona geográfica (1°, 2° y 3°) en la que está dividido el instituto.',
   `zonaNombre` varchar(45) NOT NULL,
   `zonaCoementario` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idzona`)
@@ -1776,4 +1778,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-12-07 12:01:19
+-- Dump completed on 2019-12-16 15:51:28

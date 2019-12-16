@@ -37,6 +37,12 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Financiamiento.findByFinanciamientoComentario", query = "SELECT f FROM Financiamiento f WHERE f.financiamientoComentario = :financiamientoComentario")})
 public class Financiamiento implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "idfinanciamiento")
+    private Integer idfinanciamiento;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
@@ -45,13 +51,6 @@ public class Financiamiento implements Serializable {
     @Size(max = 145)
     @Column(name = "financiamientoComentario")
     private String financiamientoComentario;
-
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "idfinanciamiento")
-    private Integer idfinanciamiento;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "financiamiento")
     private List<MaestoCargo> maestoCargoList;
 
@@ -75,6 +74,21 @@ public class Financiamiento implements Serializable {
         this.idfinanciamiento = idfinanciamiento;
     }
 
+    public String getFinanciamientoNombre() {
+        return financiamientoNombre;
+    }
+
+    public void setFinanciamientoNombre(String financiamientoNombre) {
+        this.financiamientoNombre = financiamientoNombre;
+    }
+
+    public String getFinanciamientoComentario() {
+        return financiamientoComentario;
+    }
+
+    public void setFinanciamientoComentario(String financiamientoComentario) {
+        this.financiamientoComentario = financiamientoComentario;
+    }
 
     @XmlTransient
     public List<MaestoCargo> getMaestoCargoList() {
@@ -108,22 +122,6 @@ public class Financiamiento implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.Financiamiento[ idfinanciamiento=" + idfinanciamiento + " ]";
-    }
-
-    public String getFinanciamientoNombre() {
-        return financiamientoNombre;
-    }
-
-    public void setFinanciamientoNombre(String financiamientoNombre) {
-        this.financiamientoNombre = financiamientoNombre;
-    }
-
-    public String getFinanciamientoComentario() {
-        return financiamientoComentario;
-    }
-
-    public void setFinanciamientoComentario(String financiamientoComentario) {
-        this.financiamientoComentario = financiamientoComentario;
     }
     
 }

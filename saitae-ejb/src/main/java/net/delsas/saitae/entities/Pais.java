@@ -34,6 +34,12 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Pais.findByPaisComentarios", query = "SELECT p FROM Pais p WHERE p.paisComentarios = :paisComentarios")})
 public class Pais implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "idpais")
+    private Integer idpais;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
@@ -42,13 +48,6 @@ public class Pais implements Serializable {
     @Size(max = 140)
     @Column(name = "paisComentarios")
     private String paisComentarios;
-
-    private static final long serialVersionUID = 1L;
-    @Id
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "idpais")
-    private Integer idpais;
     @OneToMany(mappedBy = "pais")
     private List<Recurso> recursoList;
 
@@ -72,6 +71,21 @@ public class Pais implements Serializable {
         this.idpais = idpais;
     }
 
+    public String getPaisNombre() {
+        return paisNombre;
+    }
+
+    public void setPaisNombre(String paisNombre) {
+        this.paisNombre = paisNombre;
+    }
+
+    public String getPaisComentarios() {
+        return paisComentarios;
+    }
+
+    public void setPaisComentarios(String paisComentarios) {
+        this.paisComentarios = paisComentarios;
+    }
 
     @XmlTransient
     public List<Recurso> getRecursoList() {
@@ -105,22 +119,6 @@ public class Pais implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.Pais[ idpais=" + idpais + " ]";
-    }
-
-    public String getPaisNombre() {
-        return paisNombre;
-    }
-
-    public void setPaisNombre(String paisNombre) {
-        this.paisNombre = paisNombre;
-    }
-
-    public String getPaisComentarios() {
-        return paisComentarios;
-    }
-
-    public void setPaisComentarios(String paisComentarios) {
-        this.paisComentarios = paisComentarios;
     }
     
 }

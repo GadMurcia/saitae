@@ -57,7 +57,7 @@ public class MestroHorarioMateriasPK implements Serializable {
     public MestroHorarioMateriasPK() {
     }
 
-    public MestroHorarioMateriasPK(int idMaestro, int idMateria, int idHorario, int diaSemana, int idGrado, String seccionGrado, String gradoModalidad, int añoGrado) {
+    public MestroHorarioMateriasPK(int idMaestro, int idMateria, int idHorario, int diaSemana, int idGrado, String gradoModalidad, String seccionGrado, int añoGrado) {
         this.idMaestro = idMaestro;
         this.idMateria = idMateria;
         this.idHorario = idHorario;
@@ -162,16 +162,16 @@ public class MestroHorarioMateriasPK implements Serializable {
         if (this.idHorario != other.idHorario) {
             return false;
         }
-        if (this.diaSemana  != other.diaSemana) {
+        if (this.diaSemana != other.diaSemana) {
             return false;
         }
         if (this.idGrado != other.idGrado) {
             return false;
         }
-        if ((this.seccionGrado == null && other.seccionGrado != null) || (this.seccionGrado != null && !this.seccionGrado.equals(other.seccionGrado))) {
+        if ((this.gradoModalidad == null && other.gradoModalidad != null) || (this.gradoModalidad != null && !this.gradoModalidad.equals(other.gradoModalidad))) {
             return false;
         }
-        if ((this.gradoModalidad == null && other.gradoModalidad != null) || (this.gradoModalidad != null && !this.gradoModalidad.equals(other.gradoModalidad))) {
+        if ((this.seccionGrado == null && other.seccionGrado != null) || (this.seccionGrado != null && !this.seccionGrado.equals(other.seccionGrado))) {
             return false;
         }
         if (this.añoGrado != other.añoGrado) {
@@ -182,7 +182,7 @@ public class MestroHorarioMateriasPK implements Serializable {
 
     @Override
     public String toString() {
-        return "net.delsas.saitae.entities.MestroHorarioMateriasPK[ idMaestro=" + idMaestro + ", idMateria=" + idMateria + ", idHorario=" + idHorario + ", diaSemana=" + diaSemana + ", idGrado=" + idGrado + ", seccionGrado=" + seccionGrado + ", gradoModalidad=" + gradoModalidad + ", a\u00f1oGrado=" + añoGrado + " ]";
+        return "net.delsas.saitae.entities.MestroHorarioMateriasPK[ idMaestro=" + idMaestro + ", idMateria=" + idMateria + ", idHorario=" + idHorario + ", diaSemana=" + diaSemana + ", idGrado=" + idGrado + ", gradoModalidad=" + gradoModalidad + ", seccionGrado=" + seccionGrado + ", a\u00f1oGrado=" + añoGrado + " ]";
     }
     
 }

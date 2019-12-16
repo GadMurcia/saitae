@@ -37,6 +37,12 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Editorial.findByEditorialComentarios", query = "SELECT e FROM Editorial e WHERE e.editorialComentarios = :editorialComentarios")})
 public class Editorial implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "ideditorial")
+    private Integer ideditorial;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
@@ -45,13 +51,6 @@ public class Editorial implements Serializable {
     @Size(max = 140)
     @Column(name = "editorialComentarios")
     private String editorialComentarios;
-
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "ideditorial")
-    private Integer ideditorial;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "editorial")
     private List<EditorialLibro> editorialLibroList;
 
@@ -75,6 +74,21 @@ public class Editorial implements Serializable {
         this.ideditorial = ideditorial;
     }
 
+    public String getEditorialNombre() {
+        return editorialNombre;
+    }
+
+    public void setEditorialNombre(String editorialNombre) {
+        this.editorialNombre = editorialNombre;
+    }
+
+    public String getEditorialComentarios() {
+        return editorialComentarios;
+    }
+
+    public void setEditorialComentarios(String editorialComentarios) {
+        this.editorialComentarios = editorialComentarios;
+    }
 
     @XmlTransient
     public List<EditorialLibro> getEditorialLibroList() {
@@ -108,22 +122,6 @@ public class Editorial implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.Editorial[ ideditorial=" + ideditorial + " ]";
-    }
-
-    public String getEditorialNombre() {
-        return editorialNombre;
-    }
-
-    public void setEditorialNombre(String editorialNombre) {
-        this.editorialNombre = editorialNombre;
-    }
-
-    public String getEditorialComentarios() {
-        return editorialComentarios;
-    }
-
-    public void setEditorialComentarios(String editorialComentarios) {
-        this.editorialComentarios = editorialComentarios;
     }
     
 }

@@ -39,6 +39,12 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Materia.findByMateriaComentario", query = "SELECT m FROM Materia m WHERE m.materiaComentario = :materiaComentario")})
 public class Materia implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "idmateria")
+    private Integer idmateria;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 60)
@@ -47,17 +53,10 @@ public class Materia implements Serializable {
     @Size(max = 145)
     @Column(name = "materiaComentario")
     private String materiaComentario;
-    @OneToMany(mappedBy = "maeria")
-    private List<Reserva> reservaList;
-
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "idmateria")
-    private Integer idmateria;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "materia")
     private List<MestroHorarioMaterias> mestroHorarioMateriasList;
+    @OneToMany(mappedBy = "maeria")
+    private List<Reserva> reservaList;
     @JoinColumn(name = "tipoMateria", referencedColumnName = "idtipoMateria")
     @ManyToOne(optional = false)
     private TipoMateria tipoMateria;
@@ -82,6 +81,21 @@ public class Materia implements Serializable {
         this.idmateria = idmateria;
     }
 
+    public String getMateriaNombre() {
+        return materiaNombre;
+    }
+
+    public void setMateriaNombre(String materiaNombre) {
+        this.materiaNombre = materiaNombre;
+    }
+
+    public String getMateriaComentario() {
+        return materiaComentario;
+    }
+
+    public void setMateriaComentario(String materiaComentario) {
+        this.materiaComentario = materiaComentario;
+    }
 
     @XmlTransient
     public List<MestroHorarioMaterias> getMestroHorarioMateriasList() {
@@ -90,6 +104,15 @@ public class Materia implements Serializable {
 
     public void setMestroHorarioMateriasList(List<MestroHorarioMaterias> mestroHorarioMateriasList) {
         this.mestroHorarioMateriasList = mestroHorarioMateriasList;
+    }
+
+    @XmlTransient
+    public List<Reserva> getReservaList() {
+        return reservaList;
+    }
+
+    public void setReservaList(List<Reserva> reservaList) {
+        this.reservaList = reservaList;
     }
 
     public TipoMateria getTipoMateria() {
@@ -123,31 +146,6 @@ public class Materia implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.Materia[ idmateria=" + idmateria + " ]";
-    }
-
-    public String getMateriaNombre() {
-        return materiaNombre;
-    }
-
-    public void setMateriaNombre(String materiaNombre) {
-        this.materiaNombre = materiaNombre;
-    }
-
-    public String getMateriaComentario() {
-        return materiaComentario;
-    }
-
-    public void setMateriaComentario(String materiaComentario) {
-        this.materiaComentario = materiaComentario;
-    }
-
-    @XmlTransient
-    public List<Reserva> getReservaList() {
-        return reservaList;
-    }
-
-    public void setReservaList(List<Reserva> reservaList) {
-        this.reservaList = reservaList;
     }
     
 }

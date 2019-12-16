@@ -37,6 +37,12 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "TipoReserva.findByTipoReservaComentario", query = "SELECT t FROM TipoReserva t WHERE t.tipoReservaComentario = :tipoReservaComentario")})
 public class TipoReserva implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "idtipoReserva")
+    private Integer idtipoReserva;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 30)
@@ -45,14 +51,7 @@ public class TipoReserva implements Serializable {
     @Size(max = 100)
     @Column(name = "tipoReservaComentario")
     private String tipoReservaComentario;
-
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "idtipoReserva")
-    private Integer idtipoReserva;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoReserva")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoReserva1")
     private List<TipoReservaRecurso> tipoReservaRecursoList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoReserva")
     private List<Reserva> reservaList;
@@ -77,6 +76,21 @@ public class TipoReserva implements Serializable {
         this.idtipoReserva = idtipoReserva;
     }
 
+    public String getTipoReservaNombre() {
+        return tipoReservaNombre;
+    }
+
+    public void setTipoReservaNombre(String tipoReservaNombre) {
+        this.tipoReservaNombre = tipoReservaNombre;
+    }
+
+    public String getTipoReservaComentario() {
+        return tipoReservaComentario;
+    }
+
+    public void setTipoReservaComentario(String tipoReservaComentario) {
+        this.tipoReservaComentario = tipoReservaComentario;
+    }
 
     @XmlTransient
     public List<TipoReservaRecurso> getTipoReservaRecursoList() {
@@ -119,22 +133,6 @@ public class TipoReserva implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.TipoReserva[ idtipoReserva=" + idtipoReserva + " ]";
-    }
-
-    public String getTipoReservaNombre() {
-        return tipoReservaNombre;
-    }
-
-    public void setTipoReservaNombre(String tipoReservaNombre) {
-        this.tipoReservaNombre = tipoReservaNombre;
-    }
-
-    public String getTipoReservaComentario() {
-        return tipoReservaComentario;
-    }
-
-    public void setTipoReservaComentario(String tipoReservaComentario) {
-        this.tipoReservaComentario = tipoReservaComentario;
     }
     
 }

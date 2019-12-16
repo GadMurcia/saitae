@@ -37,6 +37,12 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "DiasEstudio.findByDiasEstudioComentario", query = "SELECT d FROM DiasEstudio d WHERE d.diasEstudioComentario = :diasEstudioComentario")})
 public class DiasEstudio implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "idDias")
+    private Integer idDias;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
@@ -45,13 +51,6 @@ public class DiasEstudio implements Serializable {
     @Size(max = 140)
     @Column(name = "diasEstudioComentario")
     private String diasEstudioComentario;
-
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "idDias")
-    private Integer idDias;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "diasEstudio")
     private List<MestroHorarioMaterias> mestroHorarioMateriasList;
 
@@ -75,6 +74,21 @@ public class DiasEstudio implements Serializable {
         this.idDias = idDias;
     }
 
+    public String getDiasEstudioNombre() {
+        return diasEstudioNombre;
+    }
+
+    public void setDiasEstudioNombre(String diasEstudioNombre) {
+        this.diasEstudioNombre = diasEstudioNombre;
+    }
+
+    public String getDiasEstudioComentario() {
+        return diasEstudioComentario;
+    }
+
+    public void setDiasEstudioComentario(String diasEstudioComentario) {
+        this.diasEstudioComentario = diasEstudioComentario;
+    }
 
     @XmlTransient
     public List<MestroHorarioMaterias> getMestroHorarioMateriasList() {
@@ -108,22 +122,6 @@ public class DiasEstudio implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.DiasEstudio[ idDias=" + idDias + " ]";
-    }
-
-    public String getDiasEstudioNombre() {
-        return diasEstudioNombre;
-    }
-
-    public void setDiasEstudioNombre(String diasEstudioNombre) {
-        this.diasEstudioNombre = diasEstudioNombre;
-    }
-
-    public String getDiasEstudioComentario() {
-        return diasEstudioComentario;
-    }
-
-    public void setDiasEstudioComentario(String diasEstudioComentario) {
-        this.diasEstudioComentario = diasEstudioComentario;
     }
     
 }
