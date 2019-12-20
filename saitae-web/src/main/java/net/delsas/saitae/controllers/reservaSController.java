@@ -175,7 +175,7 @@ public class reservaSController implements Serializable {
         reserva.setObjetivoTema(" ");
         reserva.setTema(" ");
         reserva.setPersonasReservaList(new ArrayList<>());
-        reserva.setReservaComentario(" ¿¿ ¿¿ ¿¿ ");
+        reserva.setReservaComentario("0¿¿0¿¿0¿¿0");
         setResponsable(usuario.getPersonaNombre().split(" ")[0] + " "
                 + usuario.getPersonaApellido().split(" ")[0]);
     }
@@ -188,6 +188,12 @@ public class reservaSController implements Serializable {
             cra = tp.getIdtipoRecurso() == 1;
             lab = tp.getIdtipoRecurso() == 2;
             bib = tp.getIdtipoRecurso() == 3;
+            if (lab) {
+                reserva.setTipoReserva(tipoReservaFL.find(1));
+                recursos = trrFL.findRecursoByTipoRecursoAndTipoReserva(tp.getIdtipoRecurso(),
+                        reserva.getTipoReserva().getIdtipoReserva());
+                setUsadoPor("3");
+            }
         } else {
             cra = false;
             lab = false;
@@ -270,31 +276,94 @@ public class reservaSController implements Serializable {
         System.out.println(event.getSource());
     }
 
-    public void onAddNew() {
-        Estudiante e = new Estudiante(0);
-        e.setPersona(new Persona(0, " ", " ", false));
-        estudiantes.add(e);
+    public void onAddNew(String id) {
+        switch (id) {
+            case "es":
+                Estudiante e = new Estudiante(0);
+                e.setPersona(new Persona(0, " ", " ", false));
+                estudiantes.add(e);
+                break;
+            case "art":
+                SolicitudReserva s = new SolicitudReserva();
+                s.setSolicitudReservaComentario("0");
+                solicitud.add(s);
+                break;
+            default:
+                System.out.println("def");
+        }
+
     }
 
     public void onRowEdit(RowEditEvent event) {
-        Estudiante e = (Estudiante) event.getObject();
-        e.setPersona(new Persona(0));
-        new Auxiliar().setDui("" + e.getIdestudiante(), e.getPersona());
-        e = estFL.find(e.getPersona().getIdpersona());
-        if (e != null) {
-            estudiantes.add(e);
-            limpia();
-        } else {
-            onRowCancel(event);
+        switch (event.getComponent().getId()) {
+            case "alumnos":
+            case "alumnosl":
+                Estudiante e = (Estudiante) event.getObject();
+                e.setPersona(new Persona(0));
+                new Auxiliar().setDui("" + e.getIdestudiante(), e.getPersona());
+                e = estFL.find(e.getPersona().getIdpersona());
+                if (e != null) {
+                    estudiantes.add(e);
+                    limpia();
+                } else {
+                    onRowCancel(event);
+                }
+                break;
+            case "art":
+                SolicitudReserva s = (SolicitudReserva) event.getObject();
+                int cant;
+                try {
+                    cant = Integer.valueOf(s.getSolicitudReservaComentario());
+                } catch (NumberFormatException ex) {
+                    cant = -1;
+                }
+                if (cant <= 0 || s.getRecurso() == null) {
+                    FacesContext.getCurrentInstance().addMessage(null,
+                            new FacesMessage(FacesMessage.SEVERITY_ERROR, "No se entendió la orden",
+                                    "Debe seleccionar un recurso y escribir una cantidad válida (superior a cero '0')"));
+                    PrimeFaces.current().ajax().update(":form0:msgs");
+                    onRowCancel(event);
+                } else {
+                    solicitud.forEach((sr) -> {
+                        int a = solicitud.indexOf(s), b = solicitud.indexOf(sr);
+                        if (a != b && s.getRecurso() == sr.getRecurso()) {
+                            FacesContext.getCurrentInstance().addMessage(null,
+                                    new FacesMessage(FacesMessage.SEVERITY_WARN, "Recurso repetido",
+                                            "Ya ha agregado este recurso a la lisa de solicitud por lo que "
+                                            + "no se agregará de nuevo. Modifique ése."));
+                            PrimeFaces.current().ajax().update(":form0:msgs");
+                            onRowCancel(event);
+                        }
+                    });
+                }
+                PrimeFaces.current().ajax().update(event.getComponent().getClientId());
+                break;
+            default:
+                System.out.println("def");
         }
         System.out.println(event.getComponent().getClientId());
+
     }
 
     public void onRowCancel(RowEditEvent event) {
-        if (event.getObject() != null) {
-            estudiantes.remove(estudiantes.indexOf(event.getObject()));
+        switch (event.getComponent().getId()) {
+            case "alumnos":
+            case "alumnosl":
+                if (event.getObject() != null) {
+                    estudiantes.remove(estudiantes.indexOf(event.getObject()));
+                }
+                this.limpia();
+                break;
+            case "art":
+                SolicitudReserva s = (SolicitudReserva) event.getObject();
+                Recurso r = s.getRecurso();
+                solicitud.remove(s);
+                PrimeFaces.current().ajax().update(event.getComponent().getClientId());
+                break;
+            default:
+                System.out.println("def");
         }
-        this.limpia();
+
         System.out.println(event.getComponent().getClientId());
     }
 
@@ -375,21 +444,19 @@ public class reservaSController implements Serializable {
                             + " ha sido guardada con éxito. Recibirá una notificación "
                             + "cuando sea aprobada por el encargado de área correspondiente."));
             persistirNotificación(x, solicitantes);
-            solicitud.stream().map((s) -> {
+            for (SolicitudReserva s : solicitud) {
                 s.setReserva(reserva);
-                return s;
-            }).map((s) -> {
                 s.setSolicitudReservaComentario("");
-                return s;
-            }).map((s) -> {
                 s.getSolicitudReservaPK().setIdReserva(reserva.getIdreserva());
-                return s;
-            }).map((s) -> {
                 s.getSolicitudReservaPK().setIdRecurso(s.getRecurso().getIdrecurso());
-                return s;
-            }).forEachOrdered((s) -> {
-                srFL.create(s);
-            });
+                try {
+                    srFL.create(s);
+                } catch (Exception ex) {
+                    System.out.println(s);
+                    System.out.println("==============================================");
+                    System.out.println(ex);
+                }
+            }
             int id = tp.getIdtipoRecurso();
             id = id == 1 ? 6 : (id == 2 ? 7 : (id == 3 ? 5 : 0));
             TipoPersona ps = tpFL.find(id);
@@ -550,42 +617,33 @@ public class reservaSController implements Serializable {
     }
 
     public void setResponsable(String resp) {
-        String c[] = reserva.getReservaComentario().split("¿¿");
-        String rr = "";
-        for (int y = 0; y < c.length; y++) {
-            if (y == 0) {
-                rr += resp;
-            } else {
-                rr += "¿¿" + c[y];
-            }
-
-        }
-        reserva.setReservaComentario(rr);
-        System.out.println(rr);
+        setCom(0, resp);
     }
 
     public String getResponsable() {
         return reserva.getReservaComentario().split("¿¿")[0];
     }
 
-    public void setUsadoPor(String usadoPor) {
+    public int getNumeroPractica() {
+        return Integer.valueOf(reserva.getReservaComentario().split("¿¿")[2]);
+    }
+
+    public void setNumeroPractica(int n) {
+        setCom(2, n + "");
+    }
+
+    public void setCom(int ind, String v) {
         String c[] = reserva.getReservaComentario().split("¿¿");
         String rr = "";
         for (int y = 0; y < c.length; y++) {
-            switch (y) {
-                case 0:
-                    rr += c[0];
-                    break;
-                case 1:
-                    rr += "¿¿" + usadoPor;
-                    break;
-                default:
-                    rr += "¿¿" + c[y];
-                    break;
-            }
+            rr += (y > 0 ? "¿¿" : "") + (y == ind ? v : c[y]);
         }
         reserva.setReservaComentario(rr);
-        System.out.println(rr);
+        System.out.println("Se guardó " + ind + " en el indice " + ind + ". Cadena total: " + rr);
+    }
+
+    public void setUsadoPor(String usadoPor) {
+        setCom(1, usadoPor);
     }
 
     public String getUsadoPor() {

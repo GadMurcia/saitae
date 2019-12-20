@@ -7,6 +7,7 @@ package net.delsas.saitae.entities;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -273,16 +274,69 @@ public class Recurso implements Serializable {
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Recurso)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        Recurso other = (Recurso) object;
-        if ((this.idrecurso == null && other.idrecurso != null) || (this.idrecurso != null && !this.idrecurso.equals(other.idrecurso))) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
-        return true;
+        final Recurso other = (Recurso) obj;
+        if (!Objects.equals(this.nombre, other.nombre)) {
+            return false;
+        }
+        if (!Objects.equals(this.estadoFisico, other.estadoFisico)) {
+            return false;
+        }
+        if (!Objects.equals(this.tipoValor, other.tipoValor)) {
+            return false;
+        }
+        if (!Objects.equals(this.modelo, other.modelo)) {
+            return false;
+        }
+        if (!Objects.equals(this.recursoComentarios, other.recursoComentarios)) {
+            return false;
+        }
+        if (!Objects.equals(this.idrecurso, other.idrecurso)) {
+            return false;
+        }
+        if (!Objects.equals(this.activo, other.activo)) {
+            return false;
+        }
+        if (!Objects.equals(this.valorUnitario, other.valorUnitario)) {
+            return false;
+        }
+        if (!Objects.equals(this.ejemplarList, other.ejemplarList)) {
+            return false;
+        }
+        if (!Objects.equals(this.contenidoLibroList, other.contenidoLibroList)) {
+            return false;
+        }
+        if (!Objects.equals(this.tipoReservaRecursoList, other.tipoReservaRecursoList)) {
+            return false;
+        }
+        if (!Objects.equals(this.editorialLibroList, other.editorialLibroList)) {
+            return false;
+        }
+        if (!Objects.equals(this.autorLibroList, other.autorLibroList)) {
+            return false;
+        }
+        if (!Objects.equals(this.idTipoRecurso, other.idTipoRecurso)) {
+            return false;
+        }
+        if (!Objects.equals(this.tipoCargo, other.tipoCargo)) {
+            return false;
+        }
+        if (!Objects.equals(this.pais, other.pais)) {
+            return false;
+        }
+        if (!Objects.equals(this.categoria, other.categoria)) {
+            return false;
+        }
+        return Objects.equals(this.solicitudReservaList, other.solicitudReservaList);
     }
 
     @Override

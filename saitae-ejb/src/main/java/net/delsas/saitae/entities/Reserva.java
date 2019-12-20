@@ -8,6 +8,7 @@ package net.delsas.saitae.entities;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -270,13 +271,66 @@ public class Reserva implements Serializable {
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Reserva)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        Reserva other = (Reserva) object;
-        if ((this.idreserva == null && other.idreserva != null) || (this.idreserva != null && !this.idreserva.equals(other.idreserva))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Reserva other = (Reserva) obj;
+        if (!Objects.equals(this.reservaEstado, other.reservaEstado)) {
+            return false;
+        }
+        if (!Objects.equals(this.tema, other.tema)) {
+            return false;
+        }
+        if (!Objects.equals(this.objetivoTema, other.objetivoTema)) {
+            return false;
+        }
+        if (!Objects.equals(this.reservaComentario, other.reservaComentario)) {
+            return false;
+        }
+        if (!Objects.equals(this.idreserva, other.idreserva)) {
+            return false;
+        }
+        if (!Objects.equals(this.reservaFecha, other.reservaFecha)) {
+            return false;
+        }
+        if (!Objects.equals(this.reservaEntrega, other.reservaEntrega)) {
+            return false;
+        }
+        if (!Objects.equals(this.reservaDevolucion, other.reservaDevolucion)) {
+            return false;
+        }
+        if (!Objects.equals(this.reservaDevuelto, other.reservaDevuelto)) {
+            return false;
+        }
+        if (!Objects.equals(this.reservaDetalleList, other.reservaDetalleList)) {
+            return false;
+        }
+        if (!Objects.equals(this.reservaXpedagogiaList, other.reservaXpedagogiaList)) {
+            return false;
+        }
+        if (!Objects.equals(this.tipoReserva, other.tipoReserva)) {
+            return false;
+        }
+        if (!Objects.equals(this.docente, other.docente)) {
+            return false;
+        }
+        if (!Objects.equals(this.maeria, other.maeria)) {
+            return false;
+        }
+        if (!Objects.equals(this.tipoPtoyecto, other.tipoPtoyecto)) {
+            return false;
+        }
+        if (!Objects.equals(this.solicitudReservaList, other.solicitudReservaList)) {
+            return false;
+        }
+        if (!Objects.equals(this.personasReservaList, other.personasReservaList)) {
             return false;
         }
         return true;

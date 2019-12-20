@@ -6,6 +6,7 @@
 package net.delsas.saitae.entities;
 
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -95,16 +96,27 @@ public class SolicitudReserva implements Serializable {
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof SolicitudReserva)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        SolicitudReserva other = (SolicitudReserva) object;
-        if ((this.solicitudReservaPK == null && other.solicitudReservaPK != null) || (this.solicitudReservaPK != null && !this.solicitudReservaPK.equals(other.solicitudReservaPK))) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
-        return true;
+        final SolicitudReserva other = (SolicitudReserva) obj;
+        if (!Objects.equals(this.solicitudReservaComentario, other.solicitudReservaComentario)) {
+            return false;
+        }
+        if (!Objects.equals(this.solicitudReservaPK, other.solicitudReservaPK)) {
+            return false;
+        }
+        if (!Objects.equals(this.reserva, other.reserva)) {
+            return false;
+        }
+        return Objects.equals(this.recurso, other.recurso);
     }
 
     @Override

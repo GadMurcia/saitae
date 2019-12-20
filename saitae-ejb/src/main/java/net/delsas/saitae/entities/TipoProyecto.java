@@ -7,6 +7,7 @@ package net.delsas.saitae.entities;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -106,13 +107,27 @@ public class TipoProyecto implements Serializable {
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof TipoProyecto)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        TipoProyecto other = (TipoProyecto) object;
-        if ((this.idtipoProyecto == null && other.idtipoProyecto != null) || (this.idtipoProyecto != null && !this.idtipoProyecto.equals(other.idtipoProyecto))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final TipoProyecto other = (TipoProyecto) obj;
+        if (!Objects.equals(this.tipoProyectoNombre, other.tipoProyectoNombre)) {
+            return false;
+        }
+        if (!Objects.equals(this.tipoProyectoComentario, other.tipoProyectoComentario)) {
+            return false;
+        }
+        if (!Objects.equals(this.idtipoProyecto, other.idtipoProyecto)) {
+            return false;
+        }
+        if (!Objects.equals(this.reservaList, other.reservaList)) {
             return false;
         }
         return true;
