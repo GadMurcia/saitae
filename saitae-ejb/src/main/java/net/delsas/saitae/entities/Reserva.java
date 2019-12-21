@@ -81,7 +81,7 @@ public class Reserva implements Serializable {
     @Size(max = 45)
     @Column(name = "tema")
     private String tema;
-    @Size(max = 100)
+    @Size(max = 300)
     @Column(name = "objetivoTema")
     private String objetivoTema;
     @Size(max = 145)

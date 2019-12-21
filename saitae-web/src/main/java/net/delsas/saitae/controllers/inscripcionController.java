@@ -203,9 +203,9 @@ public class inscripcionController implements Serializable {
         return items;
     }
 
-    public int getAño() {
+    public Integer getAño() {
         Date r = new Date();
-        int y;
+        Integer y;
         try {
             y = r.before(new SimpleDateFormat("dd-MM-yyyy").parse("24-11-"
                     + new SimpleDateFormat("yyyy").format(r)))
@@ -368,7 +368,7 @@ public class inscripcionController implements Serializable {
         String d[] = estP.getEstudiante().getEstudianteDependenciaEconomica().split("¿");
         String ot = d.length > 1 ? d[1] : " ";
         String de = "";
-        for (int i = 0; i < dep.length; i++) {
+        for (Integer i = 0; i < dep.length; i++) {
             if (i > 0) {
                 de += "#";
             }
@@ -405,7 +405,7 @@ public class inscripcionController implements Serializable {
         estP.getEstudiante().setEstudianteDependenciaEconomica(dt + "¿" + otrDependencia);
     }
 
-    public ByteArrayInputStream getFile(int id) {
+    public ByteArrayInputStream getFile(Integer id) {
         byte[] img = id == 1 ? doc.getEstudianteDocPartida()
                 : (id == 2 ? doc.getEstudianteDocCertificado()
                         : (id == 3 ? doc.getEstudianteDocConducta()

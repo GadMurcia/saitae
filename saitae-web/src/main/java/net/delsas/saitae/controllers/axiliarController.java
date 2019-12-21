@@ -39,7 +39,7 @@ public class axiliarController implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private static Persona p = new Persona(0);
-    private int tipo;
+    private Integer tipo;
     @EJB
     private PersonaFacadeLocal pfl;
 
@@ -62,7 +62,7 @@ public class axiliarController implements Serializable {
         return results;
     }
 
-    public void setTipo(int t) {
+    public void setTipo(Integer t) {
         tipo = t;
     }
 

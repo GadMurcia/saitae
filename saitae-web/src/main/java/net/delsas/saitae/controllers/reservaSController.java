@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -58,6 +59,7 @@ import net.delsas.saitae.entities.PersonasReserva;
 import net.delsas.saitae.entities.Recurso;
 import net.delsas.saitae.entities.Reserva;
 import net.delsas.saitae.entities.SolicitudReserva;
+import net.delsas.saitae.entities.SolicitudReservaPK;
 import net.delsas.saitae.entities.TipoPersona;
 import net.delsas.saitae.entities.TipoProyecto;
 import net.delsas.saitae.entities.TipoRecurso;
@@ -121,7 +123,7 @@ public class reservaSController implements Serializable {
     private Maestro maestro;
     private Reserva reserva;
 
-    private int usos;
+    private Integer usos;
     private boolean cra;
     private boolean lab;
     private boolean bib;
@@ -311,7 +313,7 @@ public class reservaSController implements Serializable {
                 break;
             case "art":
                 SolicitudReserva s = (SolicitudReserva) event.getObject();
-                int cant;
+                Integer cant;
                 try {
                     cant = Integer.valueOf(s.getSolicitudReservaComentario());
                 } catch (NumberFormatException ex) {
@@ -325,8 +327,8 @@ public class reservaSController implements Serializable {
                     onRowCancel(event);
                 } else {
                     solicitud.forEach((sr) -> {
-                        int a = solicitud.indexOf(s), b = solicitud.indexOf(sr);
-                        if (a != b && s.getRecurso() == sr.getRecurso()) {
+                        Integer a = solicitud.indexOf(s), b = solicitud.indexOf(sr);
+                        if (!Objects.equals(a, b) && s.getRecurso() == sr.getRecurso()) {
                             FacesContext.getCurrentInstance().addMessage(null,
                                     new FacesMessage(FacesMessage.SEVERITY_WARN, "Recurso repetido",
                                             "Ya ha agregado este recurso a la lisa de solicitud por lo que "
@@ -403,7 +405,6 @@ public class reservaSController implements Serializable {
             mensaje x;
             reserva.setIdreserva(null);
             resFL.create(reserva);
-            reserva = resFL.getReservaByFechaHora(reserva.getReservaFecha());
             List<PersonasReserva> pr = new ArrayList<>();
             if (!getUsadoPor().equals("3")) {
                 PersonasReserva e = new PersonasReserva(reserva.getIdreserva(), usuario.getIdpersona());
@@ -444,11 +445,17 @@ public class reservaSController implements Serializable {
                             + " ha sido guardada con éxito. Recibirá una notificación "
                             + "cuando sea aprobada por el encargado de área correspondiente."));
             persistirNotificación(x, solicitantes);
-            for (SolicitudReserva s : solicitud) {
+            solicitud.stream().map((s) -> {
                 s.setReserva(reserva);
+                return s;
+            }).map((s) -> {
                 s.setSolicitudReservaComentario("");
-                s.getSolicitudReservaPK().setIdReserva(reserva.getIdreserva());
-                s.getSolicitudReservaPK().setIdRecurso(s.getRecurso().getIdrecurso());
+                return s;
+            }).map((s) -> {
+                s.setSolicitudReservaPK(
+                        new SolicitudReservaPK(s.getRecurso().getIdrecurso(), reserva.getIdreserva()));
+                return s;
+            }).forEachOrdered((s) -> {
                 try {
                     srFL.create(s);
                 } catch (Exception ex) {
@@ -456,8 +463,8 @@ public class reservaSController implements Serializable {
                     System.out.println("==============================================");
                     System.out.println(ex);
                 }
-            }
-            int id = tp.getIdtipoRecurso();
+            });
+            Integer id = tp.getIdtipoRecurso();
             id = id == 1 ? 6 : (id == 2 ? 7 : (id == 3 ? 5 : 0));
             TipoPersona ps = tpFL.find(id);
             List<Persona> personas = new ArrayList<>();
@@ -476,13 +483,13 @@ public class reservaSController implements Serializable {
                     usuario.getIdpersona(), " ");
             persistirNotificación(x, personas);
             init();
-            PrimeFaces.current().ajax().update(":form0", ":form");
+            PrimeFaces.current().ajax().update(":form0:msgs", ":form");
         } else {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error en las fechas",
                             "Asegúrese de haber seleccionado fechas válidas y que las fechas "
                             + "de inicio del uso y del final no sea anterior a la fecha actual."));
-            PrimeFaces.current().ajax().update(":form0");
+            PrimeFaces.current().ajax().update(":form0:msgs");
         }
     }
 
@@ -608,11 +615,11 @@ public class reservaSController implements Serializable {
         return r;
     }
 
-    public int getUsos() {
+    public Integer getUsos() {
         return usos;
     }
 
-    public void setUsos(int usos) {
+    public void setUsos(Integer usos) {
         this.usos = usos;
     }
 
@@ -624,18 +631,18 @@ public class reservaSController implements Serializable {
         return reserva.getReservaComentario().split("¿¿")[0];
     }
 
-    public int getNumeroPractica() {
+    public Integer getNumeroPractica() {
         return Integer.valueOf(reserva.getReservaComentario().split("¿¿")[2]);
     }
 
-    public void setNumeroPractica(int n) {
+    public void setNumeroPractica(Integer n) {
         setCom(2, n + "");
     }
 
-    public void setCom(int ind, String v) {
+    public void setCom(Integer ind, String v) {
         String c[] = reserva.getReservaComentario().split("¿¿");
         String rr = "";
-        for (int y = 0; y < c.length; y++) {
+        for (Integer y = 0; y < c.length; y++) {
             rr += (y > 0 ? "¿¿" : "") + (y == ind ? v : c[y]);
         }
         reserva.setReservaComentario(rr);
@@ -697,16 +704,18 @@ public class reservaSController implements Serializable {
     }
 
     private void persistirNotificación(mensaje x, Persona ps) {
+        x.setDestinatario(ps.getIdpersona());
+        x.setDestinatario(ps.getIdpersona());
+        x.setRemitente(usuario.getIdpersona());
+        Notificaciones n = x.getNotificacion();
+        n.setFechaHora(new Date());
+        sendMessage(x.toString());
         try {
-            x.setDestinatario(ps.getIdpersona());
-            Notificaciones n = x.getNotificacion();
-            n.setDestinatario(ps);
-            n.setRemitente(usuario);
-            n.setFechaHora(new Date());
-            sendMessage(x.toString());
+            System.out.println("caracteres en el cuerpo: "+n.getNotificacionCuerpo().split("").length);
             notiFL.create(n);
             System.out.println("notificación enviada " + x.getNotificacion().getFechaHora());
         } catch (Exception e) {
+            System.out.println(e);
         }
     }
 

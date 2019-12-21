@@ -288,7 +288,7 @@
                                                  update="art"/>
                             </div>
                         </div>
-                        
+
                         <p:dataTable id="alumnosl" var="el" value="#{reservaSController.estudiantes}" 
                                      editable="true" widgetVar="alumnos1" styleClass="tabla"
                                      emptyMessage="Aún no ha agregado los nombres de los estudiantes del grupo.">
@@ -329,16 +329,15 @@
                                                  update="alumnosl"/>
                             </div>
                         </div>
-                        
+
                         <p:commandButton id="summitLab" value="Solicitar" process="@this"
                                          action="#{reservaSController.guardar()}"/>
                     </h:panelGrid>
                 </p:panel>
-                <p:tab id="bib" rendered="#{reservaSController.bib}" >
-                    <p:panel header="Reserva de recursoso de la biblioteca">
-                        biblioteca
-                    </p:panel>
-                </p:tab>
+                <p:panel header="Reserva de recursoso de la biblioteca" 
+                         rendered="#{reservaSController.bib}">
+                    biblioteca
+                </p:panel>
             </h:panelGrid>
         </h:form>            
         <h:outputScript library="js" name="locales.js"/>

@@ -304,7 +304,7 @@ public class TipoController implements Serializable {
         }
     }
 
-    private int editarDia = 0;
+    private Integer editarDia = 0;
 
     public void editarDias() {
         editarDia = diasSelected.getIdDias();
@@ -1040,7 +1040,7 @@ public class TipoController implements Serializable {
         tipopp.send(message);
     }
 
-    public int getAño() {
+    public Integer getAño() {
         return Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date()));
     }
 

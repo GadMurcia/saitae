@@ -215,7 +215,7 @@ public class Auxiliar implements Serializable {
         SelectItem u = new SelectItem(" ", "Seleccione");
         u.setNoSelectionOption(true);
         items.add(u);
-        int i = 1;
+        Integer i = 1;
         switch (getDepartamento(p)) {
             case "01":
                 for (String h : new String[]{"Ahuachapán", "Apaneca", "Atiquizaya", "Concepción de Ataco", "El Refugio",
@@ -356,7 +356,7 @@ public class Auxiliar implements Serializable {
         items.add(u);
         switch (p == null ? " " : p.getPersonaNacionalidad()) {
             case "Salvadoreña":
-                int t = 1;
+                Integer t = 1;
                 for (String f : new String[]{"Ahuachapán", "Santa Ana", "Sonsonate", "Chalatenango",
                     "Cuscatlán", "San Salvador", "La Libertad", "San Vicente", "Cabañas", "La Paz",
                     "Usulután", "San Miguel", "Morazán", "La Unión"}) {
@@ -428,7 +428,7 @@ public class Auxiliar implements Serializable {
     public String getDui(Persona p) {
         String i = "";
         String[] h = p.getIdpersona().toString().split("");
-        for (int g = 1; g < h.length; g++) {
+        for (Integer g = 1; g < h.length; g++) {
             if (g == h.length - 1) {
                 i += "-";
             }
@@ -445,7 +445,7 @@ public class Auxiliar implements Serializable {
         this.user = user;
     }
 
-    private Date getEdad(int menos) {
+    private Date getEdad(Integer menos) {
         String g = new SimpleDateFormat("dd-mm").format(new Date()) + (Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date())) - menos);
         Date d;
         try {
@@ -479,7 +479,7 @@ public class Auxiliar implements Serializable {
             permitidos.add(tp.getIdtipoPersona());
         });
         boolean r = false;
-        for (int i : tps) {
+        for (Integer i : tps) {
             if (permitidos.contains(i)) {
                 r = true;
             }

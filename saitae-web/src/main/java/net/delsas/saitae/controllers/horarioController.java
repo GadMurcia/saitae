@@ -268,7 +268,7 @@ public class horarioController implements Serializable {
         this.materias = materias;
     }
 
-    public int getAño() {
+    public Integer getAño() {
         return Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date()));
     }
 

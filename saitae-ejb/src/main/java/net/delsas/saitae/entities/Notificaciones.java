@@ -52,7 +52,7 @@ public class Notificaciones implements Serializable {
     private String notificacionTitulo;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 140)
+    @Size(min = 1, max = 300)
     @Column(name = "notificacionCuerpo")
     private String notificacionCuerpo;
     @Basic(optional = false)

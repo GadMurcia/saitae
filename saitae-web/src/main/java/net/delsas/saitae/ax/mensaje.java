@@ -31,17 +31,17 @@ public class mensaje implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private int destinatario;
+    private Integer destinatario;
     private String cuerpoMensaje;
     private String tituloMensaje;
     private Severity severidad;
-    private int remitente;
+    private Integer remitente;
     private String cadenaAccion;
     private FacesMessage facesmessage;
     private Notificaciones notificacion;
 
-    public mensaje(int destinatario, String cuerpoMensaje, String tituloMensaje,
-            Severity severidad, int remitente, String cadenaAccion) {
+    public mensaje(Integer destinatario, String cuerpoMensaje, String tituloMensaje,
+            Severity severidad, Integer remitente, String cadenaAccion) {
         this.destinatario = destinatario;
         this.cuerpoMensaje = cuerpoMensaje;
         this.tituloMensaje = tituloMensaje;
@@ -53,7 +53,7 @@ public class mensaje implements Serializable {
                 false, " ", new Persona(destinatario), new Persona(remitente));
     }
 
-    public mensaje(int destinatario, int remitente, String cadenaAccion, FacesMessage facesmessage) {
+    public mensaje(Integer destinatario, Integer remitente, String cadenaAccion, FacesMessage facesmessage) {
         this.destinatario = destinatario;
         this.remitente = remitente;
         this.cadenaAccion = cadenaAccion;
@@ -61,8 +61,8 @@ public class mensaje implements Serializable {
         this.cuerpoMensaje = facesmessage.getDetail();
         this.tituloMensaje = facesmessage.getSummary();
         this.severidad = facesmessage.getSeverity();
-        this.notificacion = new Notificaciones(new Date(), facesmessage.getDetail(),
-                facesmessage.getSummary(), false, " ", new Persona(destinatario), new Persona(remitente));
+        this.notificacion = new Notificaciones(new Date(), facesmessage.getSummary(),
+                facesmessage.getDetail(), false, " ", new Persona(destinatario), new Persona(remitente));
     }
 
     public mensaje(String mensajePush) throws Exception {
@@ -75,7 +75,7 @@ public class mensaje implements Serializable {
             this.remitente = Integer.valueOf(msj[4]);
             this.cadenaAccion = msj[5];
             this.facesmessage = new FacesMessage(severidad, tituloMensaje, cuerpoMensaje);
-            this.notificacion = new Notificaciones(new Date(), tituloMensaje, cuerpoMensaje, 
+            this.notificacion = new Notificaciones(new Date(), tituloMensaje, cuerpoMensaje,
                     false, "", new Persona(destinatario), new Persona(remitente));
         } else {
             throw new Exception("La cadena ingresada no tiene el formato indicado para la conversión.");
@@ -85,11 +85,11 @@ public class mensaje implements Serializable {
     public mensaje() {
     }
 
-    public int getDestinatario() {
+    public Integer getDestinatario() {
         return destinatario;
     }
 
-    public void setDestinatario(int destinatario) {
+    public void setDestinatario(Integer destinatario) {
         this.destinatario = destinatario;
         this.notificacion.setDestinatario(new Persona(destinatario));
     }
@@ -118,11 +118,11 @@ public class mensaje implements Serializable {
         this.severidad = severidad;
     }
 
-    public int getRemitente() {
+    public Integer getRemitente() {
         return remitente;
     }
 
-    public void setRemitente(int remitente) {
+    public void setRemitente(Integer remitente) {
         this.remitente = remitente;
         this.notificacion.setRemitente(new Persona(remitente));
     }
@@ -135,7 +135,7 @@ public class mensaje implements Serializable {
         this.cadenaAccion = cadenaAccion;
     }
 
-    private int getSeverityOrdinal(Severity severity) {
+    private Integer getSeverityOrdinal(Severity severity) {
         if (FacesMessage.SEVERITY_ERROR == severity) {
             return FacesMessage.SEVERITY_ERROR.getOrdinal();
         } else if (FacesMessage.SEVERITY_FATAL == severity) {
@@ -149,7 +149,7 @@ public class mensaje implements Serializable {
         }
     }
 
-    private Severity setSeverityFromOrdinal(int o) {
+    private Severity setSeverityFromOrdinal(Integer o) {
         if (FacesMessage.SEVERITY_ERROR.getOrdinal() == o) {
             return FacesMessage.SEVERITY_ERROR;
         } else if (FacesMessage.SEVERITY_FATAL.getOrdinal() == o) {

@@ -79,7 +79,7 @@ public class AnuncioController implements Serializable {
                 tiposPersonas.remove(tipoPersonaFL.find(11));
                 activos = anuncioFL.getAnunciosActivos();
                 inactivos = anuncioFL.getAnunciosInactivos();
-                int tp = usuario.getTipoPersona().getIdtipoPersona();
+                Integer tp = usuario.getTipoPersona().getIdtipoPersona();
                 individual = (tp == 1 || tp == 2) ? activos
                         : anuncioFL.getAnunciosActivosParaUnTipo(usuario.getTipoPersona());
                 individual = individual == null ? new ArrayList<>() : individual;

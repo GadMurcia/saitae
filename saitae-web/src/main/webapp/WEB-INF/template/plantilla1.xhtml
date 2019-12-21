@@ -38,7 +38,7 @@
                 <h:form id="noti">
                     <h1>Área de Notificaciones</h1>
                     <p:remoteCommand name="notificar" actionListener="#{sessionController.escucha()}" 
-                                     update=":form0 :noti:not"/>
+                                     update=":form0:msgs :noti"/>
                     <ui:repeat id="not" value="#{sessionController.notificaciones}" var="n">
                         <p:panel header="#{n.notificacionTitulo}" toggleable="true" 
                                  toggleSpeed="500" collapsed="#{n.vista}" 
@@ -61,25 +61,25 @@
         </div>
         <div id="bottom">
             <ui:insert name="bottom">
-                <!--<footer id="footer" class="top-space">
-                    <div class="footer2">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-md-6 widget">
-                                    <div class="widget-body">
-                                        <p class="text-right">
-                                            Copyright &copy; 2020-2025, C.E. INTEX. Designed by 
-                                            <a href="https://www.facebook.com/gad.murcia" rel="designer">Guillermo Delsas</a> 
-                                            and
-                                            <a href="https://www.facebook.com/nathmenendez" rel="designer">Gabriela Menéndez</a> 
-                                        </p>
-                                    </div>
-                                </div>
-
-                            </div> <! - - /row of widgets - - >
-                        </div>
-                    </div>
-                </footer>-->
+                <!-- <footer id="footer" class="top-space">
+                     <div class="footer2">
+                         <div class="container">
+                             <div class="row">
+                                 <div class="col-md-6 widget">
+                                     <div class="widget-body">
+                                         <p class="text-right">
+                                             Copyright &copy; Universidad De El Salvador. Designed by 
+                                             <a href="https://www.facebook.com/gad.murcia" rel="designer">Guillermo Delsas</a> 
+                                             and
+                                             <a href="https://www.facebook.com/nathmenendez" rel="designer">Gabriela Menéndez</a> 
+                                         </p>
+                                     </div>
+                                 </div>
+ 
+                             </div> <! - - /row of widgets - - >
+                         </div>
+                     </div>
+                 </footer>-->
             </ui:insert>
         </div>
     </h:body>

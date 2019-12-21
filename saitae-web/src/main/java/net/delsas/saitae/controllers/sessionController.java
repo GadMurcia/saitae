@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -103,7 +104,7 @@ public class sessionController implements Serializable {
                 if (not != null) {
                     Collections.sort(not, (Notificaciones o1, Notificaciones o2) -> o2.getFechaHora().hashCode() - o1.getFechaHora().hashCode());
                     if (not.size() > 5) {
-                        for (int y = 0; y < 5; y++) {
+                        for (Integer y = 0; y < 5; y++) {
                             if (y < not.size()) {
                                 notificaciones.add(not.get(y));
                             }
@@ -214,23 +215,22 @@ public class sessionController implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
     
-    public int getUsNie() {
+    public Integer getUsNie() {
         return Integer.valueOf(us.getIdpersona().toString().subSequence(1, us.getIdpersona().toString().split("").length - 1).toString());
     }
     
-    public void setUsNie(int nie) {
+    public void setUsNie(Integer nie) {
         us.setIdpersona(Integer.valueOf("1" + nie));
     }
     
-    public int getAño() {
+    public Integer getAño() {
         return Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date()));
     }
     
     public void escucha() {
         try {
             mensaje m = new mensaje(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("mss"));
-            int tp = Integer.valueOf(m.getCadenaAccion().contains("tp¿¿") ? m.getCadenaAccion().split("¿¿")[1] : "0");
-            if (m.getDestinatario() == us.getIdpersona() || tp == us.getTipoPersona().getIdtipoPersona()) {
+            if (Objects.equals(m.getDestinatario(), us.getIdpersona())) {
                 if (!notificaciones.contains(m.getNotificacion())) {
                     List<Notificaciones> n1 = new ArrayList<>();
                     n1.add(m.getNotificacion());
@@ -251,16 +251,16 @@ public class sessionController implements Serializable {
                     });
                     Collections.sort(n1, (Notificaciones o1, Notificaciones o2) -> o2.getFechaHora().hashCode() - o1.getFechaHora().hashCode());
                     notificaciones.clear();
-                    if (n1.size() < 4) {
+                    if (n1.size() < 5) {
                         notificaciones.addAll(n1);
                     } else {
-                        for (int y = 0; y < 5; y++) {
+                        for (Integer y = 0; y < 5; y++) {
                             notificaciones.add(n1.get(y));
                         }
                     }
                     verNoti = true;
                     FacesContext.getCurrentInstance().addMessage(null, m.getFacesmessage());
-                    PrimeFaces.current().ajax().update("noti");
+                    PrimeFaces.current().ajax().update(":noti");
                 }
             }
         } catch (Exception ex) {

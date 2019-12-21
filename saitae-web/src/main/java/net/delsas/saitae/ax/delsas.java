@@ -18,7 +18,7 @@ public class delsas {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        int g=6018;
+        Integer g=6018;
         String a=DigestUtils.md5Hex(g+"");
         System.out.println("contrseña sin encriptar: "+g);
         System.out.println("contraseña encriptada: "+a);

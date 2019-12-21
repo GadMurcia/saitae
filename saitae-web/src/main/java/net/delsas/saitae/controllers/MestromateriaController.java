@@ -104,7 +104,7 @@ public class MestromateriaController implements Serializable {
         listmhm = mhmFL.findAll();
         listmaestro = maestroFL.findAll();
         Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
+        Integer year = cal.get(Calendar.YEAR);
         listgrado = gradoFL.getPorAñoYActivo(year);
         listmateria = materiaFL.findAll();
         listhorario = horarioFL.findAll();

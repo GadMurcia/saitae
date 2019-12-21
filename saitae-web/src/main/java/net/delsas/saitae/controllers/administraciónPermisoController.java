@@ -234,7 +234,7 @@ public class administraciónPermisoController implements Serializable {
         }
     }
 
-    public void guardar(int w) {
+    public void guardar(Integer w) {
         solicitados.remove(solc);
         solc.setPermisosEstado(w + "");
         permisosFL.edit(solc);
@@ -256,7 +256,7 @@ public class administraciónPermisoController implements Serializable {
         }
     }
 
-    public String getGrado(int id) {
+    public String getGrado(Integer id) {
         Matricula mat = matriculaFL.find(new MatriculaPK(id, getAño()));
         if (mat != null) {
             GradoPK gr = mat.getGrado().getGradoPK();

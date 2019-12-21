@@ -67,7 +67,7 @@ public class loginController implements Serializable {
     public void login() {
         String q[] = user.split("-");
         String u = 1 + (q.length > 0 ? q[0] : "0") + (q.length > 1 ? q[1] : "");
-        int w;
+        Integer w;
         try {
             w = Integer.valueOf(u);
         } catch (NumberFormatException e) {
@@ -101,7 +101,7 @@ public class loginController implements Serializable {
         }
     }
 
-    public int getYear() {
+    public Integer getYear() {
         return Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date()));
     }
 
