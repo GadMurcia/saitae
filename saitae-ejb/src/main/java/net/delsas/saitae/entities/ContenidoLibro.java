@@ -32,7 +32,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "ContenidoLibro.findByContenidoLibroNombre", query = "SELECT c FROM ContenidoLibro c WHERE c.contenidoLibroPK.contenidoLibroNombre = :contenidoLibroNombre")
     , @NamedQuery(name = "ContenidoLibro.findByContenidoLibroPagina", query = "SELECT c FROM ContenidoLibro c WHERE c.contenidoLibroPK.contenidoLibroPagina = :contenidoLibroPagina")
     , @NamedQuery(name = "ContenidoLibro.findByContenidoLibroIndice", query = "SELECT c FROM ContenidoLibro c WHERE c.contenidoLibroIndice = :contenidoLibroIndice")
-    , @NamedQuery(name = "ContenidoLibro.findByContenidoLibroComentario", query = "SELECT c FROM ContenidoLibro c WHERE c.contenidoLibroComentario = :contenidoLibroComentario")})
+    , @NamedQuery(name = "ContenidoLibro.findByContenidoLibroComentario", query = "SELECT c FROM ContenidoLibro c WHERE c.contenidoLibroComentario = :contenidoLibroComentario")
+    , @NamedQuery(name = "ContenidoLibro.findLikeContenidoLibroNombre", query = "SELECT DISTINCT c.recurso FROM ContenidoLibro c WHERE c.contenidoLibroPK.contenidoLibroNombre LIKE CONCAT(:contenidoLibroNombre, '%')")
+})
 public class ContenidoLibro implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -121,5 +123,5 @@ public class ContenidoLibro implements Serializable {
     public String toString() {
         return "net.delsas.saitae.entities.ContenidoLibro[ contenidoLibroPK=" + contenidoLibroPK + " ]";
     }
-    
+
 }

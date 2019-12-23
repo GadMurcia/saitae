@@ -42,6 +42,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Recurso.findByModelo", query = "SELECT r FROM Recurso r WHERE r.modelo = :modelo")
     , @NamedQuery(name = "Recurso.findByRecursoComentarios", query = "SELECT r FROM Recurso r WHERE r.recursoComentarios = :recursoComentarios")
     , @NamedQuery(name = "Recurso.findByTipoRecurso", query = "SELECT r FROM Recurso r WHERE r.idTipoRecurso.idtipoRecurso = :tipoRecurso")
+    , @NamedQuery(name = "Recurso.findLikeNombre", query = "SELECT DISTINCT r FROM Recurso r WHERE r.idTipoRecurso.idtipoRecurso = :tipoRecurso AND r.nombre LIKE CONCAT(:nombre, '%')")
 })
 public class Recurso implements Serializable {
 
@@ -343,5 +344,5 @@ public class Recurso implements Serializable {
     public String toString() {
         return "net.delsas.saitae.entities.Recurso[ idrecurso=" + idrecurso + " ]";
     }
-    
+
 }

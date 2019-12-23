@@ -216,7 +216,9 @@
                             <p:datePicker id="fecl" value="#{reservaSController.reserva.reservaEntrega}" 
                                           locale="es" pattern="EEE dd/MMM/yyyy"
                                           monthNavigator="true" showIcon="true" size="30" 
-                                          placeholder="Seleccione la fecha"/>
+                                          placeholder="Seleccione la fecha">
+                                <p:ajax event="change" listener="#{reservaSController.horasSelect}"/>
+                            </p:datePicker>
 
                             <p:outputLabel for="hil" value="Hora de inicio del uso"/>
                             <p:datePicker id="hil" value="#{reservaSController.hi}"
@@ -336,7 +338,139 @@
                 </p:panel>
                 <p:panel header="Reserva de recursoso de la biblioteca" 
                          rendered="#{reservaSController.bib}">
-                    biblioteca
+                    <h:panelGrid columns="2">
+                        <p:outputLabel for="tres" value="Tipo de reserva: "/>
+                        <p:selectOneMenu id="tres" value="#{reservaSController.reserva.tipoReserva}" 
+                                         converter="omnifaces.SelectItemsConverter"
+                                         required="true" immediate="true" autoWidth="false"
+                                         style="width: 190px;">
+                            <f:selectItem itemLabel="Seleccione" itemValue="#{null}" 
+                                          noSelectionOption="true"/>
+                            <f:selectItems value="#{reservaSController.tiposReserva}" var="r"
+                                           itemValue="#{r}" itemLabel="#{r.tipoReservaNombre}"/>
+                            <p:ajax event="itemSelect" listener="#{reservaSController.onItemSelect}"
+                                    update="pp libros event"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel for="feci" value="Fecha en la que usará el libro: "/>
+                        <p:datePicker id="feci" value="#{reservaSController.fecha}" 
+                                      locale="es" pattern="EEE dd/MMM/yyyy"
+                                      monthNavigator="true" showIcon="true" size="30" 
+                                      placeholder="Seleccione la fecha">
+                            <p:ajax event="dateSelect" listener="#{reservaSController.onBlur}"/>
+                            <p:ajax event="change" listener="#{reservaSController.onBlur}"/>
+                        </p:datePicker>
+
+                        <p:outputLabel for="hii" value="Hora de uso: "/>
+                        <p:datePicker id="hii" value="#{reservaSController.hi}"
+                                      monthNavigator="true" maxlength="50" locale="es"
+                                      showTime="true" hourFormat="12" timeOnly="true"
+                                      showIcon="true" required="true" pattern="hh:mm a">
+                            <p:ajax event="dateSelect" listener="#{reservaSController.fechaSelect}"/>
+                            <p:ajax event="change" listener="#{reservaSController.horasSelect}"/>
+                        </p:datePicker>
+
+                        <p:outputLabel for="fecf" value="Fecha en la que devolverá el libro: "/>
+                        <p:datePicker id="fecf" value="#{reservaSController.fechaf}" 
+                                      locale="es" pattern="EEE dd/MMM/yyyy"
+                                      monthNavigator="true" showIcon="true" size="30" 
+                                      placeholder="Seleccione la fecha">
+                            <p:ajax event="dateSelect" listener="#{reservaSController.onBlur}"/>
+                            <p:ajax event="change" listener="#{reservaSController.onBlur}"/>
+                        </p:datePicker>
+
+                        <p:outputLabel for="hff" value="Hora de devolución: "/>
+                        <p:datePicker id="hff" value="#{reservaSController.hf}"
+                                      monthNavigator="true" maxlength="50" locale="es"
+                                      showTime="true" hourFormat="12" timeOnly="true"
+                                      showIcon="true" required="true" pattern="hh:mm a">
+                            <p:ajax event="dateSelect" listener="#{reservaSController.fechaSelect}"/>
+                            <p:ajax event="change" listener="#{reservaSController.horasSelect}"/>
+                        </p:datePicker>
+
+                        <p:column/>
+                        <p:column/>
+
+                        <p:outputLabel value="Parámetro de búsqueda:" for="event" />
+                        <p:autoComplete id="event" value="#{reservaSController.busqueda}" 
+                                        completeMethod="#{reservaSController.completeText}"
+                                        style="width: 190px;" inputStyle="width: 190px;">
+                            <p:ajax event="itemSelect" listener="#{reservaSController.onItemSelect}" 
+                                    update="pp event" />
+                        </p:autoComplete>
+
+                        <p:column/>
+                        <h:panelGrid columns="3">
+                            <h:outputLabel value="Buscar por: " />
+                            <p:selectOneButton value="#{reservaSController.parametro}">
+                                <f:selectItem itemLabel="Título" itemValue="1" />
+                                <f:selectItem itemLabel="Autor" itemValue="2" />
+                                <f:selectItem itemLabel="Tema" itemValue="3" />
+                                <p:ajax event="change" listener="#{reservaSController.onBlur}"
+                                        update="pp"/>
+                            </p:selectOneButton>
+                        </h:panelGrid>
+
+                        <p:column/>
+                        <p:panel id="pp" header="Ficha del libro seleccionado" style="width: 75%">
+                            <h:panelGrid columns="2">
+                                <p:outputLabel for="cod" value="Código: "/>
+                                <h:outputText id="cod" 
+                                              value="#{reservaSController.libroSeleccionado.idrecurso}"/>
+
+                                <p:outputLabel for="tit" value="Título: "/>
+                                <h:outputText id="tit" 
+                                              value="#{reservaSController.libroSeleccionado.nombre}"/>
+
+                                <p:outputLabel for="au" value="Autores: "/>
+                                <h:outputText id="au" 
+                                              value="#{reservaSController.getAutoresLibros(reservaSController.libroSeleccionado)}"/>
+
+                                <p:outputLabel for="ed" value="Editoriales: "/>
+                                <h:outputText id="ed" 
+                                              value="#{reservaSController.getEditorialesLibro(reservaSController.libroSeleccionado)}"/>
+
+                                <p:outputLabel for="trese" value="Tipos de reserva: "/>
+                                <h:outputText id="trese" 
+                                              value="#{reservaSController.getTiposReservaLibro(reservaSController.libroSeleccionado)}"/>
+
+                                <p:column/>
+                                <p:commandButton id="aglista" value="Agregar a la lista" process="@this"
+                                                 action="#{reservaSController.agregarLibroLista()}"
+                                                 rendered="#{reservaSController.mst}"
+                                                 update="pp libros" widgetVar="btag"/>
+                            </h:panelGrid>
+                        </p:panel>
+
+                        <p:column/>
+                        <p:dataTable id="libros" var="l" style="width: 75%" editable="true"
+                                     value="#{reservaSController.solicitud}" selectionMode="single" 
+                                     selection="#{reservaSController.srtabla}" rowKey="#{l.recurso.idrecurso}">        
+                            <p:ajax event="rowSelect" listener="#{reservaSController.onRowSelect}" 
+                                    update="form:pp"/>
+                            <p:ajax event="rowUnselect" listener="#{reservaSController.onRowUnselect}" 
+                                    update="form:pp" />
+                            <p:ajax event="rowEditCancel" listener="#{reservaSController.onRowCancel}"
+                                    update=":form:libros"/>
+
+                            <f:facet name="header">
+                                Libros en la lista de reserva
+                            </f:facet>
+                            <p:column headerText="Código del libro">
+                                #{l.recurso.idrecurso}
+                            </p:column>
+
+                            <p:column headerText="Nombre del libro">
+                                #{l.recurso.nombre}
+                            </p:column>
+
+                            <p:column style="width:35px">
+                                <p:rowEditor />
+                            </p:column>
+                        </p:dataTable>
+                    </h:panelGrid>
+                    <p:commandButton id="summitbib" value="Solicitar" process="@this"
+                                     action="#{reservaSController.guardar()}"/>
                 </p:panel>
             </h:panelGrid>
         </h:form>            

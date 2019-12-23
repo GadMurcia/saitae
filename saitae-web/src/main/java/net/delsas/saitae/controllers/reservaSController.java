@@ -22,7 +22,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import javax.annotation.PostConstruct;
@@ -35,6 +34,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import net.delsas.saitae.ax.Auxiliar;
 import net.delsas.saitae.ax.mensaje;
+import net.delsas.saitae.beans.ContenidoLibroFacadeLocal;
 import net.delsas.saitae.beans.EstudianteFacadeLocal;
 import net.delsas.saitae.beans.GradoFacadeLocal;
 import net.delsas.saitae.beans.MestroHorarioMateriasFacadeLocal;
@@ -48,6 +48,8 @@ import net.delsas.saitae.beans.TipoProyectoFacadeLocal;
 import net.delsas.saitae.beans.TipoRecursoFacadeLocal;
 import net.delsas.saitae.beans.TipoReservaFacadeLocal;
 import net.delsas.saitae.beans.TipoReservaRecursoFacadeLocal;
+import net.delsas.saitae.entities.AutorLibro;
+import net.delsas.saitae.entities.EditorialLibro;
 import net.delsas.saitae.entities.Estudiante;
 import net.delsas.saitae.entities.Grado;
 import net.delsas.saitae.entities.GradoPK;
@@ -64,12 +66,14 @@ import net.delsas.saitae.entities.TipoPersona;
 import net.delsas.saitae.entities.TipoProyecto;
 import net.delsas.saitae.entities.TipoRecurso;
 import net.delsas.saitae.entities.TipoReserva;
+import net.delsas.saitae.entities.TipoReservaRecurso;
 import org.omnifaces.cdi.Push;
 import org.omnifaces.cdi.PushContext;
 import org.primefaces.PrimeFaces;
 import org.primefaces.component.selectcheckboxmenu.SelectCheckboxMenu;
 import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.SelectEvent;
+import org.primefaces.event.UnselectEvent;
 
 /**
  *
@@ -106,6 +110,9 @@ public class reservaSController implements Serializable {
     private PersonasReservaFacadeLocal prFL;
     @EJB
     private SolicitudReservaFacadeLocal srFL;
+    @Inject
+    @Push
+    private PushContext notificacion;
 
     private List<TipoRecurso> tiporList;
     private List<SolicitudReserva> solicitud;
@@ -134,6 +141,18 @@ public class reservaSController implements Serializable {
     private String tema;
     private String objetivo;
 
+    //para busquedas de libros
+    private boolean xTitulo;
+    private boolean xAutor;
+    private boolean xContenido;
+    private Date fechaf;
+    private String busqueda;
+    private SolicitudReserva srtabla;
+    private Recurso libroSeleccionado;
+    private boolean mst;
+    @EJB
+    private ContenidoLibroFacadeLocal contenidoFL;
+
     @PostConstruct
     public void init() {
         usuario = (Persona) FacesContext.getCurrentInstance()
@@ -155,10 +174,15 @@ public class reservaSController implements Serializable {
         tema = "";
         objetivo = "";
         tp = null;
-        fecha = new Date();
         solicitud = new ArrayList<>();
         grado = null;
-        hi = hf = null;
+        fecha = fechaf = hi = hf = null;
+        xAutor = xContenido = false;
+        xTitulo = true;
+        libroSeleccionado = new Recurso();
+        busqueda = "";
+        srtabla = new SolicitudReserva();
+        mst = false;
     }
 
     public String getGradoNombre(Grado g) {
@@ -183,8 +207,7 @@ public class reservaSController implements Serializable {
     }
 
     public void tipoRecursoSelect(SelectEvent event) {
-        newReserva();
-        estudiantes.clear();
+        init();
         tp = ((TipoRecurso) event.getObject());
         if (tp != null) {
             cra = tp.getIdtipoRecurso() == 1;
@@ -195,6 +218,8 @@ public class reservaSController implements Serializable {
                 recursos = trrFL.findRecursoByTipoRecursoAndTipoReserva(tp.getIdtipoRecurso(),
                         reserva.getTipoReserva().getIdtipoReserva());
                 setUsadoPor("3");
+            } else if (bib) {
+                setUsadoPor(usuario.getTipoPersona().getIdtipoPersona() == 8 ? "2" : "1");
             }
         } else {
             cra = false;
@@ -362,6 +387,10 @@ public class reservaSController implements Serializable {
                 solicitud.remove(s);
                 PrimeFaces.current().ajax().update(event.getComponent().getClientId());
                 break;
+            case "libros":
+                srtabla = (SolicitudReserva) event.getObject();
+                eliminarDeLista();
+                break;
             default:
                 System.out.println("def");
         }
@@ -391,7 +420,7 @@ public class reservaSController implements Serializable {
         }
         try {
             reserva.setReservaDevolucion(new SimpleDateFormat("dd/MM/yyyy HH:mm a")
-                    .parse(new SimpleDateFormat("dd/MM/yyyy").format(fecha) + " "
+                    .parse(new SimpleDateFormat("dd/MM/yyyy").format(bib ? fechaf : fecha) + " "
                             + new SimpleDateFormat("HH:mm a").format(hf)));
         } catch (ParseException ex) {
             reserva.setReservaDevolucion(hf);
@@ -643,7 +672,7 @@ public class reservaSController implements Serializable {
         String c[] = reserva.getReservaComentario().split("¿¿");
         String rr = "";
         for (Integer y = 0; y < c.length; y++) {
-            rr += (y > 0 ? "¿¿" : "") + (y == ind ? v : c[y]);
+            rr += (y > 0 ? "¿¿" : "") + (Objects.equals(y, ind) ? v : c[y]);
         }
         reserva.setReservaComentario(rr);
         System.out.println("Se guardó " + ind + " en el indice " + ind + ". Cadena total: " + rr);
@@ -697,10 +726,208 @@ public class reservaSController implements Serializable {
         this.objetivo = objetivo;
     }
 
+    public boolean getXTitulo() {
+        return xTitulo;
+    }
+
+    public void setxTitulo(boolean xTitulo) {
+        this.xTitulo = xTitulo;
+    }
+
+    public boolean getXAutor() {
+        return xAutor;
+    }
+
+    public void setxAutor(boolean xAutor) {
+        this.xAutor = xAutor;
+    }
+
+    public boolean getXContenido() {
+        return xContenido;
+    }
+
+    public void setxContenido(boolean xContenido) {
+        this.xContenido = xContenido;
+    }
+
+    public List<String> completeText(String query) {
+        List<String> results = new ArrayList<>();
+        List<Recurso> l = xAutor ? contenidoFL.findLibroByAutorNombre(query)
+                : (xContenido ? contenidoFL.findLibroByContenidoNombre(query)
+                        : (xTitulo ? contenidoFL.findRecursoBynombre(query) : new ArrayList<>()));
+        l.forEach((r) -> {
+            String a = getAutoresLibros(r);
+            String t = getTiposReservaLibro(r);
+            results.add(r.getIdrecurso() + "   " + r.getNombre()
+                    + "    Autor" + (a.split(", ").length > 1 ? "es: " : ": ") + a
+                    + "    Tipos de reserva: " + t);
+        });
+        return results;
+    }
+
+    public void onItemSelect(SelectEvent event) {
+        if (event.getComponent().getId().equals("tres")) {
+            System.out.println("eliminando los recursos que no concuerden");
+            reserva.setTipoReserva((TipoReserva) event.getObject());
+            List<SolicitudReserva> listaEliminar = new ArrayList<>();
+            int d = solicitud.size();
+            solicitud.stream().filter((sr) -> (!getMismoTR(sr.getRecurso()))).forEachOrdered((sr) -> {
+                listaEliminar.add(sr);
+            });
+            listaEliminar.forEach((sr) -> {
+                solicitud.remove(sr);
+            });
+            if (solicitud.size() < d) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_WARN, "Cambio del tipo de reserva",
+                                "Se eliminaron de la lista a reservar los libros que "
+                                + "no concuerdan con el tipo de reserva seleccionado."));
+                PrimeFaces.current().ajax().update(":form0:msgs");
+            }
+        } else {
+            String[] x = event.getObject().toString().split("   ");
+            System.out.println("Libro seleccionado " + x[0]);
+            Integer id = Integer.valueOf(x[0]);
+            libroSeleccionado = recursoFL.find(id);
+            mst = getMismoTR(libroSeleccionado);
+            busqueda = "";
+            System.out.println("Seleccionado con éxito.");
+        }
+    }
+
+    public void sendMessage(String message) {
+        notificacion.send(message);
+    }
+
+    public String getBusqueda() {
+        return busqueda;
+    }
+
+    public void setBusqueda(String busqueda) {
+        this.busqueda = busqueda;
+    }
+
+    public Recurso getLibroSeleccionado() {
+        return libroSeleccionado;
+    }
+
+    public void setLibroSeleccionado(Recurso libroSeleccionado) {
+        this.libroSeleccionado = libroSeleccionado;
+    }
+
+    public int getParametro() {
+        return (xTitulo ? 1 : (xAutor ? 2 : (xContenido ? 3 : 0)));
+    }
+
+    public void setParametro(int p) {
+        xTitulo = p == 1;
+        xAutor = p == 2;
+        xContenido = p == 3;
+    }
+
+    public Date getFechaf() {
+        return fechaf;
+    }
+
+    public void setFechaf(Date fechaf) {
+        this.fechaf = fechaf;
+    }
+
     private void persistirNotificación(mensaje x, List<Persona> ps) {
         ps.forEach((p) -> {
             persistirNotificación(x, p);
         });
+    }
+
+    public String getAutoresLibros(Recurso r) {
+        String a = "";
+        List<AutorLibro> all = r.getAutorLibroList() == null ? new ArrayList<>() : r.getAutorLibroList();
+        for (AutorLibro al : all) {
+            a += (a.split("").length > 1 ? ", " : "") + al.getAutor().getAutorNombre();
+        }
+        return a;
+    }
+
+    public String getTiposReservaLibro(Recurso r) {
+        String t = "";
+        List<TipoReservaRecurso> trsrl = r.getTipoReservaRecursoList() == null ? new ArrayList<>() : r.getTipoReservaRecursoList();
+        for (TipoReservaRecurso trsr : trsrl) {
+            t += (t.split("").length > 1 ? ", " : "") + trsr.getTipoReserva1().getTipoReservaNombre();
+        }
+        return t;
+    }
+
+    public String getEditorialesLibro(Recurso r) {
+        String e = "";
+        List<EditorialLibro> ell = r.getEditorialLibroList() == null ? new ArrayList<>() : r.getEditorialLibroList();
+        for (EditorialLibro el : ell) {
+            e += (e.split("").length > 1 ? ", " : "") + el.getEditorial().getEditorialNombre();
+        }
+        return e;
+    }
+
+    public boolean getMismoTR(Recurso r) {
+        List<Integer> trl = new ArrayList<>();
+        if (r.getTipoReservaRecursoList() != null) {
+            r.getTipoReservaRecursoList().forEach((trr) -> {
+                trl.add(trr.getTipoReserva1().getIdtipoReserva());
+            });
+        }
+        if (reserva.getTipoReserva() == null) {
+            return false;
+        } else {
+            return trl.contains(reserva.getTipoReserva().getIdtipoReserva());
+        }
+    }
+
+    public void agregarLibroLista() {
+        SolicitudReserva s = new SolicitudReserva();
+        s.setRecurso(libroSeleccionado);
+        s.setReserva(reserva);
+        s.setSolicitudReservaComentario("1");
+        if (!solicitud.contains(s)) {
+            solicitud.add(s);
+            libroSeleccionado = new Recurso();
+            mst = false;
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia",
+                            "El libro " + s.getRecurso().getNombre() + " ya está en la lista, "
+                            + "por lo que no se procede a su agregación."));
+            PrimeFaces.current().ajax().update(":form0:msgs");
+        }
+
+    }
+
+    public SolicitudReserva getSrtabla() {
+        return srtabla;
+    }
+
+    public void setSrtabla(SolicitudReserva srtabla) {
+        this.srtabla = srtabla;
+    }
+
+    public void onRowSelect(SelectEvent event) {
+        SolicitudReserva sl = (SolicitudReserva) event.getObject();
+        if (sl != null) {
+            libroSeleccionado = sl.getRecurso();
+            mst = false;
+        }
+    }
+
+    public void onRowUnselect(UnselectEvent event) {
+        libroSeleccionado = new Recurso();
+        mst = false;
+    }
+
+    public void eliminarDeLista() {
+        libroSeleccionado = new Recurso();
+        mst = false;
+        if (srtabla != null && solicitud.contains(srtabla)) {
+            solicitud.remove(srtabla);
+        }
+        srtabla = new SolicitudReserva();
+        PrimeFaces.current().ajax().update(":form:libros");
     }
 
     private void persistirNotificación(mensaje x, Persona ps) {
@@ -711,7 +938,7 @@ public class reservaSController implements Serializable {
         n.setFechaHora(new Date());
         sendMessage(x.toString());
         try {
-            System.out.println("caracteres en el cuerpo: "+n.getNotificacionCuerpo().split("").length);
+            System.out.println("caracteres en el cuerpo: " + n.getNotificacionCuerpo().split("").length);
             notiFL.create(n);
             System.out.println("notificación enviada " + x.getNotificacion().getFechaHora());
         } catch (Exception e) {
@@ -719,12 +946,7 @@ public class reservaSController implements Serializable {
         }
     }
 
-    @Inject
-    @Push
-    private PushContext notificacion;
-
-    public void sendMessage(String message) {
-        notificacion.send(message);
+    public boolean getMst() {
+        return mst;
     }
-
 }
