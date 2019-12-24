@@ -6,6 +6,7 @@
 package net.delsas.saitae.beans;
 
 import java.util.Date;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -29,12 +30,18 @@ public class ReservaFacade extends AbstractFacade<Reserva> implements ReservaFac
     public ReservaFacade() {
         super(Reserva.class);
     }
-    
+
     @Override
-    public Reserva getReservaByFechaHora(Date feha_hora){
+    public Reserva getReservaByFechaHora(Date feha_hora) {
         return (Reserva) em.createNamedQuery("Reserva.findByReservaFecha")
                 .setParameter("reservaFecha", feha_hora)
                 .getSingleResult();
     }
-    
+
+    @Override
+    public List<Reserva> getReservaByEstado(String estado) {
+        return em.createNamedQuery("Reserva.findByReservaEstado")
+                .setParameter("reservaEstado", estado)
+                .getResultList();
+    }
 }

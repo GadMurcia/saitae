@@ -38,4 +38,11 @@ public interface ReservaFacadeLocal {
 
     int count();
     
+    /**
+     * Devuelve una lista de objetos reserva cuyo estado concuerde con la cadena proporcionada.
+     * @param estado
+     * @return java.util.List net.delsas.saitae.entities.Reserva
+     */
+    public List<Reserva> getReservaByEstado(String estado);
+    
 }

@@ -11,166 +11,127 @@
     <ui:define name="content">
         <h:form id="form">
             <h:panelGrid columns="1">
-                <h:panelGrid columns="2">
-                    <p:outputLabel for="us" value="El equipo será usado por: "/>
-                    <p:selectOneMenu id="us" value="#{reservaSController.usadoPor}" 
-                                     converter="omnifaces.SelectItemsConverter"
-                                     required="true" immediate="true">
-                        <f:selectItem itemLabel="Seleccione" itemValue="0" noSelectionOption="true"/>
-                        <f:selectItem itemLabel="Docente" itemValue="1" />
-                        <f:selectItem itemLabel="Estudiante" itemValue="2" />
-                        <f:selectItem itemLabel="Grupo de estudiantes" itemValue="3" />
-                        <p:ajax event="itemSelect" listener="#{reservaSController.usosSelect}"
-                                update=":form"/>
-                    </p:selectOneMenu>
+                <h1 style="margin: 0 auto;">Administración de permisos de estudiantes</h1>
+                <p:accordionPanel dynamic="true">
+                    <p:tab title="Solicitudes de Recursos pendientes">
+                        <p:dataTable id="solicitados" value="#{adminReservas.solicitados}" var="s"
+                                     paginator="true" rows="10" selection="#{adminReservas.selected}" 
+                                     selectionMode="single" rowKey="#{s.idreserva}" 
+                                     emptyMessage="Sin registros aún." paginatorAlwaysVisible="false">
+                            <!-- <p:ajax event="rowSelect" listener="# {administraciónPermisoController.onRowSelect}" 
+                                     update="sol" oncomplete="PF('Dsol').show();"/>-->
+                            <p:column headerText="Fecha de solicitud" filterBy="#{s.reservaFecha}">
+                                <p:outputLabel value="#{s.reservaFecha}"/>
+                            </p:column>
 
+                            <p:column headerText="Fecha de uso" filterBy="#{s.reservaEntrega}">
+                                <p:outputLabel value="#{s.reservaEntrega}"/>
+                            </p:column>
 
-                    <p:outputLabel for="tre" value="Dónde será usado el equipo? "/>
-                    <p:selectOneMenu id="tre" value="#{reservaSController.reserva.tipoReserva}" 
-                                     converter="omnifaces.SelectItemsConverter"
-                                     required="true" immediate="true">
-                        <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
-                        <f:selectItems value="#{reservaSController.tiposReserva}" var="tir"
-                                       itemValue="#{tir}" itemLabel="#{tir.tipoReservaNombre}"/>
-                        <p:ajax event="itemSelect" listener="#{reservaSController.tipoReservaSelect}"
-                                update="rec"/>
-                    </p:selectOneMenu>
+                            <p:column headerText="Fecha de devolución" filterBy="#{s.reservaDevolucion}">
+                                <p:outputLabel value="#{s.reservaDevolucion}"/>
+                            </p:column>
 
-                    <p:outputLabel for="gr" value="Grado "/>
-                    <p:selectOneMenu id="gr" value="#{reservaSController.grado}" 
-                                     converter="omnifaces.SelectItemsConverter"
-                                     required="true" immediate="true">
-                        <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
-                        <f:selectItems value="#{reservaSController.grados}" var="gr"
-                                       itemLabel="#{reservaSController.getGradoNombre(gr)}" itemValue="#{gr}"/>
-                        <p:ajax event="itemSelect" listener="#{reservaSController.gradoSelect}"
-                                update="doc asi"/>
-                    </p:selectOneMenu>
+                            <p:column headerText="Tipo de reserva" filterBy="#{s.tipoReserva.tipoReservaNombre}">
+                                <p:outputLabel value="#{s.tipoReserva.tipoReservaNombre}"/>
+                            </p:column>
 
-                    <p:outputLabel for="doc" value="Docente: "/>
-                    <p:selectOneMenu id="doc" value="#{reservaSController.reserva.docente}" 
-                                     converter="omnifaces.SelectItemsConverter"
-                                     required="true" immediate="true">
-                        <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
-                        <f:selectItems value="#{reservaSController.maestros}" var="doc"
-                                       itemLabel="#{doc.persona.personaNombre.split(' ')[0]} 
-                                       #{doc.persona.personaApellido.split(' ')[0]}" itemValue="#{doc}"/>
-                        <p:ajax event="itemSelect" listener="#{reservaSController.maestroSelect}"
-                                update="asi"/>
-                    </p:selectOneMenu>
+                            <p:column headerText="Responsable del equipo" filterBy="#{s.reservaComentario}">
+                                <p:outputLabel value="#{s.reservaComentario}"/>
+                            </p:column>
+                        </p:dataTable>
+                    </p:tab>
+                    <p:tab title="Recursos Entregados">
+                        <h:panelGrid columns="2" cellpadding="10">
+                            <p:dataTable id="entregados" value="#{adminReservas.entregados}" var="s"
+                                     paginator="true" rows="10" selection="#{adminReservas.selected}" 
+                                     selectionMode="single" rowKey="#{s.idreserva}" 
+                                     emptyMessage="Sin registros aún." paginatorAlwaysVisible="false">
+                            <!-- <p:ajax event="rowSelect" listener="# {administraciónPermisoController.onRowSelect}" 
+                                     update="sol" oncomplete="PF('Dsol').show();"/>-->
+                            <p:column headerText="Fecha de solicitud" filterBy="#{s.reservaFecha}">
+                                <p:outputLabel value="#{s.reservaFecha}"/>
+                            </p:column>
 
-                    <p:outputLabel for="asi" value="Asignatura"/>
-                    <p:selectOneMenu id="asi" value="#{reservaSController.reserva.maeria}" 
-                                     converter="omnifaces.SelectItemsConverter"
-                                     required="true" immediate="true">
-                        <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
-                        <f:selectItems value="#{reservaSController.materias}" var="mt"
-                                       itemLabel="#{mt.materiaNombre}" itemValue="#{mt}"/>
-                        <p:ajax event="itemSelect" listener="#{reservaSController.materiaSelect}"/>
-                    </p:selectOneMenu>
+                            <p:column headerText="Fecha de uso" filterBy="#{s.reservaEntrega}">
+                                <p:outputLabel value="#{s.reservaEntrega}"/>
+                            </p:column>
 
-                    <p:outputLabel for="tem" value="Tema: "/>
-                    <p:inputText id="tem" value="#{reservaSController.tema}" required="true"/>
+                            <p:column headerText="Fecha de devolución" filterBy="#{s.reservaDevolucion}">
+                                <p:outputLabel value="#{s.reservaDevolucion}"/>
+                            </p:column>
 
-                    <p:outputLabel for="obj" value="Objetivo del tema: "/>
-                    <p:inputTextarea id="obj" value="#{reservaSController.objetivo}" required="true"/>
+                            <p:column headerText="Tipo de reserva" filterBy="#{s.tipoReserva.tipoReservaNombre}">
+                                <p:outputLabel value="#{s.tipoReserva.tipoReservaNombre}"/>
+                            </p:column>
 
-                    <p:outputLabel for="tpr" value="Tipo de proyecto: "/>
-                    <p:selectOneMenu id="tpr" value="#{reservaSController.reserva.tipoProyecto}" 
-                                     converter="omnifaces.SelectItemsConverter"
-                                     required="true">
-                        <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
-                        <f:selectItems value="#{reservaSController.TProyectos}" var="tP"
-                                       itemLabel="#{tP.tipoProyectoNombre}" itemValue="#{tP}"/>
-                        <p:ajax event="itemSelect" listener="#{reservaSController.tipoProyectoSelect}"/>
-                    </p:selectOneMenu>
+                            <p:column headerText="Responsable del equipo" filterBy="#{s.reservaComentario}">
+                                <p:outputLabel value="#{s.reservaComentario}"/>
+                            </p:column>
+                        </p:dataTable>
+                        </h:panelGrid>
+                    </p:tab>
+                    <p:tab title="Recursos Devueltos">
+                        <h:panelGrid columns="2" cellpadding="10">
+                            <p:dataTable id="devueltos" value="#{adminReservas.devueltos}" var="s"
+                                     paginator="true" rows="10" selection="#{adminReservas.selected}" 
+                                     selectionMode="single" rowKey="#{s.idreserva}" 
+                                     emptyMessage="Sin registros aún." paginatorAlwaysVisible="false">
+                            <!-- <p:ajax event="rowSelect" listener="# {administraciónPermisoController.onRowSelect}" 
+                                     update="sol" oncomplete="PF('Dsol').show();"/>-->
+                            <p:column headerText="Fecha de solicitud" filterBy="#{s.reservaFecha}">
+                                <p:outputLabel value="#{s.reservaFecha}"/>
+                            </p:column>
 
-                    <h:outputLabel for="rec" value="Recursos que solicita"/>
-                    <p:selectCheckboxMenu id="rec" value="#{reservaSController.reservaDetalle}" 
-                                          label="recursos" multiple="true" filter="true" 
-                                          filterMatchMode="startsWith" panelStyle="width:250px" 
-                                          required="true" requiredMessage="Debe seleccionar al menos un tipo"
-                                          converter="omnifaces.SelectItemsConverter"
-                                          showHeader="false">
-                        <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
-                        <f:selectItems value="#{reservaSController.recursos}" var="r"
-                                       itemLabel="#{r.nombre}" itemValue="#{r}"/>
-                    </p:selectCheckboxMenu>
+                            <p:column headerText="Fecha de uso" filterBy="#{s.reservaEntrega}">
+                                <p:outputLabel value="#{s.reservaEntrega}"/>
+                            </p:column>
 
-                    <p:outputLabel for="fec" value="fecha en la que hará uso del equipo"/>
-                    <p:datePicker id="fec" value="#{reservaSController.reserva.reservaEntrega}" 
-                                  hourFormat="12" immediate="true" locale="es"
-                                  monthNavigator="true" showIcon="true" size="30" 
-                                  placeholder="Seleccione la fecha" showButtonBar="true"/>
+                            <p:column headerText="Fecha de devolución" filterBy="#{s.reservaDevolucion}">
+                                <p:outputLabel value="#{s.reservaDevolucion}"/>
+                            </p:column>
 
-                    <p:outputLabel for="hi" value="Hora de inicio del uso"/>
-                    <p:datePicker id="hi" value="#{reservaSController.hi}"
-                                  monthNavigator="true" maxlength="50" locale="es"
-                                  showTime="true" hourFormat="12" timeOnly="true"
-                                  showIcon="true" required="true" pattern="hh:mm a">
-                        <p:ajax event="dateSelect" listener="#{reservaSController.fechaSelect}"/>
-                        <p:ajax event="change" listener="#{reservaSController.horasSelect}"/>
-                    </p:datePicker>
+                            <p:column headerText="Tipo de reserva" filterBy="#{s.tipoReserva.tipoReservaNombre}">
+                                <p:outputLabel value="#{s.tipoReserva.tipoReservaNombre}"/>
+                            </p:column>
 
-                    <p:outputLabel for="hf" value="Hora de fin del uso"/>
-                    <p:datePicker id="hf" value="#{reservaSController.hf}"
-                                  monthNavigator="true" maxlength="50" locale="es"
-                                  showTime="true" hourFormat="12" timeOnly="true"
-                                  showIcon="true" required="true" pattern="hh:mm a">
-                        <p:ajax event="dateSelect" listener="#{reservaSController.fechaSelect}"/>
-                        <p:ajax event="change" listener="#{reservaSController.horasSelect}"/>
-                    </p:datePicker>
+                            <p:column headerText="Responsable del equipo" filterBy="#{s.reservaComentario}">
+                                <p:outputLabel value="#{s.reservaComentario}"/>
+                            </p:column>
+                        </p:dataTable>
+                        </h:panelGrid>
+                    </p:tab>
+                    <p:tab title="Solicitudes de recursos Rechazadas">
+                        <h:panelGrid columns="2">
+                            <p:dataTable id="rechazados" value="#{adminReservas.rechazados}" var="s"
+                                     paginator="true" rows="10" selection="#{adminReservas.selected}" 
+                                     selectionMode="single" rowKey="#{s.idreserva}" 
+                                     emptyMessage="Sin registros aún." paginatorAlwaysVisible="false">
+                            <!-- <p:ajax event="rowSelect" listener="# {administraciónPermisoController.onRowSelect}" 
+                                     update="sol" oncomplete="PF('Dsol').show();"/>-->
+                            <p:column headerText="Fecha de solicitud" filterBy="#{s.reservaFecha}">
+                                <p:outputLabel value="#{s.reservaFecha}"/>
+                            </p:column>
 
-                    <p:outputLabel value="Responsale del equipo: "/>
-                    <p:outputLabel value="#{reservaSController.responsable}" />
-                </h:panelGrid>
+                            <p:column headerText="Fecha de uso" filterBy="#{s.reservaEntrega}">
+                                <p:outputLabel value="#{s.reservaEntrega}"/>
+                            </p:column>
 
-                <p:dataTable id="alumnos" var="e" value="#{reservaSController.estudiantes}" 
-                             editable="true" widgetVar="alumnos1" styleClass="tabla"
-                             emptyMessage="Sin registros aún." rendered="#{reservaSController.alumnos}">
-                    <f:facet name="header">
-                        Agregue los estudiantes en el grupo
-                    </f:facet>
+                            <p:column headerText="Fecha de devolución" filterBy="#{s.reservaDevolucion}">
+                                <p:outputLabel value="#{s.reservaDevolucion}"/>
+                            </p:column>
 
-                    <p:ajax event="rowEdit" listener="#{reservaSController.onRowEdit}"/>
-                    <p:ajax event="rowEditCancel" listener="#{reservaSController.onRowCancel}"/>
+                            <p:column headerText="Tipo de reserva" filterBy="#{s.tipoReserva.tipoReservaNombre}">
+                                <p:outputLabel value="#{s.tipoReserva.tipoReservaNombre}"/>
+                            </p:column>
 
-                    <p:column headerText="NIE">
-                        <p:cellEditor>
-                            <f:facet name="output">
-                                <h:outputText value="#{e.idestudiante.toString().substring(1)}" />
-                            </f:facet>
-                            <f:facet name="input">
-                                <p:inputText value="#{e.idestudiante}" 
-                                             style="width:100%" label="NIE"/>
-                            </f:facet>
-                        </p:cellEditor>
-                    </p:column>
-
-                    <p:column headerText="Nombre">
-                        <h:outputText value="#{e.persona.personaNombre} #{e.persona.personaApellido}"/>
-                    </p:column>
-
-                    <p:column style="width:35px">
-                        <p:rowEditor />
-                    </p:column>
-                </p:dataTable> 
-                <div class="ui-g">
-                    <div class="ui-g-12">
-                        <p:commandButton id="b" value="+" styleClass="ui-priority-primary" 
-                                         process="@this"
-                                         action="#{reservaSController.onAddNew()}" 
-                                         title="Agregar un alumno al grupo."
-                                         update="alumnos" rendered="#{reservaSController.alumnos}"/>
-                    </div>
-                </div>
-                <h:panelGrid columns="3">
-                    <p:column/>
-                    <p:commandButton id="summit" value="Solicitar" process="@this"
-                                     action="#{reservaSController.guardar()}" 
-                                     update=":form"/>
-                    <p:column/>
-                </h:panelGrid>
+                            <p:column headerText="Responsable del equipo" filterBy="#{s.reservaComentario}">
+                                <p:outputLabel value="#{s.reservaComentario}"/>
+                            </p:column>
+                        </p:dataTable>
+                        </h:panelGrid>
+                    </p:tab>
+                </p:accordionPanel>
             </h:panelGrid>
         </h:form>
     </ui:define>

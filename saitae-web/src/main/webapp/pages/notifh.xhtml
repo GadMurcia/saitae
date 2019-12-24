@@ -42,7 +42,8 @@
                 <p:dataTable var="n" value="#{notifhController.notificaciones}" 
                              widgetVar="not1"
                              emptyMessage="Ninguna notificación aún." 
-                             filteredValue="#{notifhController.notifFilradas}">
+                             filteredValue="#{notifhController.notifFilradas}"
+                             rows="10" paginator="true" paginatorAlwaysVisible="false">
 
                     <p:column filterBy="#{n.fecha}" 
                               headerText="Fecha/Hora" 
