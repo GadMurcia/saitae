@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../WEB-INF/template/plantilla1.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:define name="right" rendered="false"></ui:define>
+    <ui:define name="content">
+        <h:form id="form">
+            <style type="text/css">
+                .ui-datatable {
+                    margin-bottom: 25px
+                }
+
+                .ui-datatable .ui-datatable-header {
+                    text-align: right !important;
+                }
+
+                .ui-button-text-only .ui-button-text {
+                    padding: 0.3em 0.4em;
+                }
+
+                .ui-selectcheckboxmenu-panel .ui-selectcheckboxmenu-header .ui-chkbox {
+                    visibility: hidden;
+                }
+
+                .ui-filter-column .ui-column-customfilter .custom-filter {
+                    width: 100%;
+                    box-sizing: border-box;
+                }
+
+                .year-spinner input {
+                    width: 100%;
+                    box-sizing: border-box;
+                }
+            </style>
+            <h:panelGrid columns="1">
+                <h1>Historial de notificaciones</h1>
+
+                <p:dataTable var="n" value="#{notifhController.notificaciones}" 
+                             widgetVar="not1"
+                             emptyMessage="Ninguna notificación aún." 
+                             filteredValue="#{notifhController.notifFilradas}">
+
+                    <p:column filterBy="#{n.fecha}" 
+                              headerText="Fecha/Hora" 
+                              filterMatchMode="contains">
+                        <h:outputText value="#{n.fecha}"/>
+                    </p:column>
+
+                    <p:column filterBy="#{n.remitente}" 
+                              headerText="Remitente" 
+                              filterMatchMode="contains">
+                        <h:outputText value="#{n.remitente}" />
+                    </p:column>
+
+                    <p:column headerText="Título de la notificación">
+                        <h:outputText value="#{n.titulo}" />
+                    </p:column>
+
+                    <p:column headerText="Cuerpo de notificación">
+                        <h:outputText value="#{n.texo}"/>
+                    </p:column>
+                </p:dataTable>
+            </h:panelGrid>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

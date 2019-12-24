@@ -330,9 +330,21 @@ public class reservaSController implements Serializable {
                 new Auxiliar().setDui("" + e.getIdestudiante(), e.getPersona());
                 e = estFL.find(e.getPersona().getIdpersona());
                 if (e != null) {
-                    estudiantes.add(e);
-                    limpia();
+                    if (estudiantes.contains(e)) {
+                        FacesContext.getCurrentInstance().addMessage(":not:msgs",
+                                new FacesMessage(FacesMessage.SEVERITY_WARN, "Estudiante ya está en la lista",
+                                        "Posiblemente ha ingresado erróneamente el NIE del estudiante. Ingréselo de nuevo."));
+                        PrimeFaces.current().ajax().update(":not:msgs");
+                        onRowCancel(event);
+                    } else {
+                        estudiantes.add(e);
+                        limpia();
+                    }
                 } else {
+                    FacesContext.getCurrentInstance().addMessage(":not:msgs",
+                            new FacesMessage(FacesMessage.SEVERITY_ERROR, "Estudiante no encontrado",
+                                    "Posiblemente ha ingresado erróneamente el NIE del estudiante. Ingréselo de nuevo."));
+                    PrimeFaces.current().ajax().update(":not:msgs");
                     onRowCancel(event);
                 }
                 break;
@@ -411,6 +423,7 @@ public class reservaSController implements Serializable {
 
     public void guardar() {
         System.out.println(reserva);
+        reserva.setReservaFecha(new Date());
         try {
             reserva.setReservaEntrega(new SimpleDateFormat("dd/MM/yyyy HH:mm a")
                     .parse(new SimpleDateFormat("dd/MM/yyyy").format(fecha) + " "
@@ -428,9 +441,10 @@ public class reservaSController implements Serializable {
         reserva.setTema(tema);
         reserva.setObjetivoTema(objetivo);
         reserva.setReservaEstado("S");
+        boolean lleno = getUsadoPor().equals("3") ? estudiantes.size() > 0 : true;
         if (reserva.getReservaEntrega().after(reserva.getReservaFecha())
                 && reserva.getReservaDevolucion().after(reserva.getReservaEntrega())
-                && !getUsadoPor().equals("0")) {
+                && !getUsadoPor().equals("0") && solicitud.size() > 0 && lleno) {
             mensaje x;
             reserva.setIdreserva(null);
             resFL.create(reserva);
@@ -511,14 +525,23 @@ public class reservaSController implements Serializable {
                     FacesMessage.SEVERITY_INFO,
                     usuario.getIdpersona(), " ");
             persistirNotificación(x, personas);
+            if (!solicitantes.contains(usuario)) {
+                FacesContext.getCurrentInstance().addMessage(":not:msgs",
+                        new FacesMessage(FacesMessage.SEVERITY_INFO, "Solicitud exitosa",
+                                "La solicitud se ha registrado con éxito. Las notificaciones "
+                                + "se han enviado a los estudiantes que usted ha indicado."));
+                PrimeFaces.current().ajax().update(":not:msgs");
+            }
             init();
-            PrimeFaces.current().ajax().update(":form0:msgs", ":form");
+            PrimeFaces.current().ajax().update(":form");
         } else {
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error en las fechas",
-                            "Asegúrese de haber seleccionado fechas válidas y que las fechas "
+            String cuerpo = (solicitud.size() == 0 ? "Asegúrese de haber solicitado recursos."
+                    : (lleno ? "Asegúrese de haber llenado la tabla con los estudiantes que está en el grupo"
+                            : "Asegúrese de haber seleccionado fechas válidas y que las fechas "
                             + "de inicio del uso y del final no sea anterior a la fecha actual."));
-            PrimeFaces.current().ajax().update(":form0:msgs");
+            FacesContext.getCurrentInstance().addMessage(":not:msgs",
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error en la reserva", cuerpo));
+            PrimeFaces.current().ajax().update(":not:msgs");
         }
     }
 
@@ -834,9 +857,9 @@ public class reservaSController implements Serializable {
     }
 
     private void persistirNotificación(mensaje x, List<Persona> ps) {
-        ps.forEach((p) -> {
+        for (Persona p : ps) {
             persistirNotificación(x, p);
-        });
+        }
     }
 
     public String getAutoresLibros(Recurso r) {
@@ -932,17 +955,20 @@ public class reservaSController implements Serializable {
 
     private void persistirNotificación(mensaje x, Persona ps) {
         x.setDestinatario(ps.getIdpersona());
-        x.setDestinatario(ps.getIdpersona());
         x.setRemitente(usuario.getIdpersona());
-        Notificaciones n = x.getNotificacion();
-        n.setFechaHora(new Date());
+        x.getNotificacion().setFechaHora(new Date());
         sendMessage(x.toString());
         try {
-            System.out.println("caracteres en el cuerpo: " + n.getNotificacionCuerpo().split("").length);
-            notiFL.create(n);
+            System.out.println("caracteres en el cuerpo: " + x.getNotificacion().getNotificacionCuerpo().split("").length);
+            System.out.println(new SimpleDateFormat("EEEEE dd/MMM/yyyy HH:mm a").format(x.getNotificacion().getFechaHora()));
+            notiFL.create(x.getNotificacion());
             System.out.println("notificación enviada " + x.getNotificacion().getFechaHora());
         } catch (Exception e) {
-            System.out.println(e);
+            try {
+                notiFL.edit(x.getNotificacion());
+            } catch (Exception ex) {
+                System.out.println("doble error:\n" + e + "\n" + ex);
+            }
         }
     }
 

@@ -7,9 +7,12 @@ package net.delsas.saitae.entities;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -38,10 +41,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 })
 public class Notificaciones implements Serializable {
 
-    private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
+    @Column(name = "idnotificacion")
+    private Integer idnotificacion;
+    @Basic(optional = false)
+    @NotNull()
     @Column(name = "fechaHora")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaHora;
@@ -62,6 +68,7 @@ public class Notificaciones implements Serializable {
     @Size(max = 145)
     @Column(name = "notificacionComentario")
     private String notificacionComentario;
+    private static final long serialVersionUID = 1L;
     @JoinColumn(name = "destinatario", referencedColumnName = "idpersona")
     @ManyToOne(optional = false)
     private Persona destinatario;
@@ -91,6 +98,44 @@ public class Notificaciones implements Serializable {
         this.destinatario = destinatario;
         this.remitente = remitente;
         this.notificacionComentario = notificacionComentario;
+    }
+
+
+    public Persona getDestinatario() {
+        return destinatario;
+    }
+
+    public void setDestinatario(Persona destinatario) {
+        this.destinatario = destinatario;
+    }
+
+    public Persona getRemitente() {
+        return remitente;
+    }
+
+    public void setRemitente(Persona remitente) {
+        this.remitente = remitente;
+    }
+
+    
+    public Notificaciones(Integer idnotificación) {
+        this.idnotificacion = idnotificación;
+    }
+
+    public Notificaciones(Integer idnotificación, Date fechaHora, String notificacionTitulo, String notificacionCuerpo, boolean vista) {
+        this.idnotificacion = idnotificación;
+        this.fechaHora = fechaHora;
+        this.notificacionTitulo = notificacionTitulo;
+        this.notificacionCuerpo = notificacionCuerpo;
+        this.vista = vista;
+    }
+
+    public Integer getIdnotificación() {
+        return idnotificacion;
+    }
+
+    public void setIdnotificación(Integer idnotificación) {
+        this.idnotificacion = idnotificación;
     }
 
     public Date getFechaHora() {
@@ -133,45 +178,59 @@ public class Notificaciones implements Serializable {
         this.notificacionComentario = notificacionComentario;
     }
 
-    public Persona getDestinatario() {
-        return destinatario;
-    }
-
-    public void setDestinatario(Persona destinatario) {
-        this.destinatario = destinatario;
-    }
-
-    public Persona getRemitente() {
-        return remitente;
-    }
-
-    public void setRemitente(Persona remitente) {
-        this.remitente = remitente;
-    }
-
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (fechaHora != null ? fechaHora.hashCode() : 0);
+        int hash = 3;
+        hash = 71 * hash + Objects.hashCode(this.idnotificacion);
+        hash = 71 * hash + Objects.hashCode(this.fechaHora);
+        hash = 71 * hash + Objects.hashCode(this.notificacionTitulo);
+        hash = 71 * hash + Objects.hashCode(this.notificacionCuerpo);
+        hash = 71 * hash + (this.vista ? 1 : 0);
+        hash = 71 * hash + Objects.hashCode(this.notificacionComentario);
+        hash = 71 * hash + Objects.hashCode(this.destinatario);
+        hash = 71 * hash + Objects.hashCode(this.remitente);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Notificaciones)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        Notificaciones other = (Notificaciones) object;
-        if ((this.fechaHora == null && other.fechaHora != null) || (this.fechaHora != null && !this.fechaHora.equals(other.fechaHora))) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
-        return true;
+        final Notificaciones other = (Notificaciones) obj;
+        if (this.vista != other.vista) {
+            return false;
+        }
+        if (!Objects.equals(this.notificacionTitulo, other.notificacionTitulo)) {
+            return false;
+        }
+        if (!Objects.equals(this.notificacionCuerpo, other.notificacionCuerpo)) {
+            return false;
+        }
+        if (!Objects.equals(this.notificacionComentario, other.notificacionComentario)) {
+            return false;
+        }
+        if (!Objects.equals(this.idnotificacion, other.idnotificacion)) {
+            return false;
+        }
+        if (!Objects.equals(this.fechaHora, other.fechaHora)) {
+            return false;
+        }
+        if (!Objects.equals(this.destinatario, other.destinatario)) {
+            return false;
+        }
+        return Objects.equals(this.remitente, other.remitente);
     }
 
     @Override
     public String toString() {
-        return "net.delsas.saitae.entities.Notificaciones[ fechaHora=" + fechaHora + " ]";
+        return "Notificaciones{" + "idnotificacion=" + idnotificacion + ", fechaHora=" + fechaHora + ", notificacionTitulo=" + notificacionTitulo + ", notificacionCuerpo=" + notificacionCuerpo + ", vista=" + vista + ", notificacionComentario=" + notificacionComentario + ", destinatario=" + destinatario + ", remitente=" + remitente + '}';
     }
 
 }

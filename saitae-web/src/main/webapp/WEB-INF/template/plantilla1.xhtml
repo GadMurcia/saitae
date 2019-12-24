@@ -30,8 +30,13 @@
         <div id="right">
             <ui:insert name="right">                
                 <script>
-                    function socketListener(message, channel, event) {
+                    function socketListener(message) {
                         notificar([{name: 'mss', value: message}]);
+                    }
+                    
+                    function notif(id){
+                        alert(id);
+                        notf({name:'notf', value: id}});
                     }
                 </script>                
                 <o:socket channel="notificacion" onmessage="socketListener"/>
@@ -43,6 +48,8 @@
                         <p:panel header="#{n.notificacionTitulo}" toggleable="true" 
                                  toggleSpeed="500" collapsed="#{n.vista}" 
                                  style="margin-bottom:20px">
+                            <p:ajax event="toggle" listener="#{sessionController.onToggle}"/>
+                            <p:outputLabel id="idnot" value="#{n.idnotificación}" rendered="false"/>
                             <h:panelGrid columns="1" >
                                 <h:outputText value="#{n.notificacionCuerpo}" />
                             </h:panelGrid>

@@ -35,7 +35,10 @@ import net.delsas.saitae.entities.DelagacionCargo;
 import net.delsas.saitae.entities.Notificaciones;
 import net.delsas.saitae.entities.Persona;
 import org.primefaces.PrimeFaces;
+import org.primefaces.component.outputlabel.OutputLabel;
+import org.primefaces.component.panel.Panel;
 import org.primefaces.event.ToggleEvent;
+import org.primefaces.model.Visibility;
 import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultMenuModel;
 import org.primefaces.model.menu.DefaultSubMenu;
@@ -48,9 +51,9 @@ import org.primefaces.model.menu.MenuElement;
 @Named
 @ViewScoped
 public class sessionController implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     private DefaultMenuModel mm;
     private Persona us;
     @EJB
@@ -71,12 +74,13 @@ public class sessionController implements Serializable {
     private NotificacionesFacadeLocal notiFL;
     private List<Notificaciones> notificaciones;
     private boolean verNoti;
-    
+    String id;
+
     @PostConstruct
     public void init() {
         verNoti = false;
     }
-    
+
     public void log() {
         FacesContext context = FacesContext.getCurrentInstance();
         try {
@@ -95,24 +99,10 @@ public class sessionController implements Serializable {
                     us.getMaestro().setMaestoCargoList(mcFL.getMaestroCargoByIdMaestro(us.getIdpersona()));
                 }
                 us.setDelagacionCargoList(dcFL.getDelegacionCargoByIdPersona(us.getIdpersona()));
-                us.setNotificacionesDestinatarioList(notiFL.getNotificacionesByIdDestinatario(us.getIdpersona()));
                 us.setTipoPersona(tipopFL.find(us.getTipoPersona().getIdtipoPersona()));
                 context.getExternalContext().getSessionMap().remove("usuario");
                 context.getExternalContext().getSessionMap().put("usuario", us);
-                List<Notificaciones> not = us.getNotificacionesDestinatarioList();
-                notificaciones.clear();
-                if (not != null) {
-                    Collections.sort(not, (Notificaciones o1, Notificaciones o2) -> o2.getFechaHora().hashCode() - o1.getFechaHora().hashCode());
-                    if (not.size() > 5) {
-                        for (Integer y = 0; y < 5; y++) {
-                            if (y < not.size()) {
-                                notificaciones.add(not.get(y));
-                            }
-                        }
-                    } else {
-                        notificaciones.addAll(not);
-                    }
-                }
+                ordenarNotificaciones();
                 if (!((boolean) context.getExternalContext().getSessionMap().get("primerInicio"))) {
                     if (ms != null) {
                         context.addMessage("growl", ms);
@@ -126,27 +116,45 @@ public class sessionController implements Serializable {
                 }
                 this.menu();
             }
-        } catch (Exception ex) {
+        } catch (IOException ex) {
             context.addMessage("growl", new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error Inesperado", ex.getMessage()));
         }
     }
-    
+
     public Persona getUs() {
         return us;
     }
-    
+
+    private void ordenarNotificaciones() {
+        us.setNotificacionesDestinatarioList(notiFL.getNotificacionesByIdDestinatario(us.getIdpersona()));
+        List<Notificaciones> not = us.getNotificacionesDestinatarioList();
+        if (not != null) {
+            notificaciones.clear();
+            Collections.sort(not, (Notificaciones o1, Notificaciones o2) -> o2.getFechaHora().hashCode() - o1.getFechaHora().hashCode());
+            if (not.size() > 5) {
+                for (Integer y = 0; y < 5; y++) {
+                    if (y < not.size()) {
+                        notificaciones.add(not.get(y));
+                    }
+                }
+            } else {
+                notificaciones.addAll(not);
+            }
+        }
+    }
+
     public void setUs(Persona us) {
         this.us = us;
     }
-    
+
     public DefaultMenuModel getMm() {
         return mm;
     }
-    
+
     public void setMm(DefaultMenuModel mm) {
         this.mm = mm;
     }
-    
+
     public void menu() {
         mm = new DefaultMenuModel();
         DefaultMenuItem mi;
@@ -185,7 +193,7 @@ public class sessionController implements Serializable {
         s.addElement(mi);
         mm.addElement(s);
     }
-    
+
     private MenuElement menu3(Acceso a, List<Acceso> ac) {
         DefaultSubMenu s = new DefaultSubMenu(a.getAccesoNombre(), a.getAccesoComentario());
         a.getAccesoList().stream().filter((b) -> (ac.contains(b))).forEachOrdered((b) -> {
@@ -197,7 +205,7 @@ public class sessionController implements Serializable {
         });
         return s;
     }
-    
+
     public void cerrarSesion() {
         ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
         context.getSessionMap().remove("usuario");
@@ -208,76 +216,72 @@ public class sessionController implements Serializable {
             Logger.getLogger(sessionController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public void onToggle(ToggleEvent event) {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
-                event.getComponent().getId() + " toggled", "Status:" + event.getVisibility().name());
-        FacesContext.getCurrentInstance().addMessage(null, message);
+        Integer i;
+        Panel p = (Panel) event.getSource();
+        p.getChildren().stream().filter((c) -> (c.getId().equals("idnot"))).map((c) -> (OutputLabel) c).forEachOrdered((o) -> {
+            id = o.getValue().toString();
+        });
+        if (id != null) {
+            try {
+                i = Integer.valueOf(id);
+            } catch (NumberFormatException e) {
+                i = 0;
+            }
+            Notificaciones n = notiFL.find(i);
+            if (n != null) {
+                n.setVista(event.getVisibility() == Visibility.HIDDEN);
+                notiFL.edit(n);
+            }
+        }
     }
-    
+
     public Integer getUsNie() {
         return Integer.valueOf(us.getIdpersona().toString().subSequence(1, us.getIdpersona().toString().split("").length - 1).toString());
     }
-    
+
     public void setUsNie(Integer nie) {
         us.setIdpersona(Integer.valueOf("1" + nie));
     }
-    
+
     public Integer getAño() {
         return Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date()));
     }
-    
+
     public void escucha() {
         try {
             mensaje m = new mensaje(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("mss"));
             if (Objects.equals(m.getDestinatario(), us.getIdpersona())) {
-                if (!notificaciones.contains(m.getNotificacion())) {
-                    List<Notificaciones> n1 = new ArrayList<>();
-                    n1.add(m.getNotificacion());
-                    notificaciones.forEach((Notificaciones not) -> {
-                        try {
-                            not.setVista(true);
-                            notiFL.edit(not);
-                        } catch (Exception e) {
-                            System.out.println(e.getMessage() != null ? e.getMessage()
-                                    : "Error al actualizar las notificaciones");
-                        }
-                    });
-                    notificaciones.stream().map((nn) -> {
-                        nn.setVista(true);
-                        return nn;
-                    }).forEachOrdered((nn) -> {
-                        n1.add(nn);
-                    });
-                    Collections.sort(n1, (Notificaciones o1, Notificaciones o2) -> o2.getFechaHora().hashCode() - o1.getFechaHora().hashCode());
-                    notificaciones.clear();
-                    if (n1.size() < 5) {
-                        notificaciones.addAll(n1);
-                    } else {
-                        for (Integer y = 0; y < 5; y++) {
-                            notificaciones.add(n1.get(y));
-                        }
+                ordenarNotificaciones();
+                for (int y = 1; y < notificaciones.size(); y++) {
+                    notificaciones.get(y).setVista(true);
+                    try {
+                        notiFL.edit(notificaciones.get(y));
+                    } catch (Exception e) {
+                        System.out.println("error el leer la notificación");
                     }
-                    verNoti = true;
-                    FacesContext.getCurrentInstance().addMessage(null, m.getFacesmessage());
-                    PrimeFaces.current().ajax().update(":noti");
                 }
+                verNoti = true;
+                FacesContext.getCurrentInstance().addMessage(null, m.getFacesmessage());
+                PrimeFaces.current().ajax().update(":noti");
             }
         } catch (Exception ex) {
             Logger.getLogger(sessionController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public String getDetalle_Fecha(Date e) {
         String x[] = new SimpleDateFormat("EEEEE dd-MMMMM-yyyy hh:mm:ss a").format(e).split("-");
         return x[0] + " de " + x[1] + " de " + x[2];
     }
-    
+
     public boolean isVerNoti() {
         return verNoti;
     }
-    
+
     public List<Notificaciones> getNotificaciones() {
         return Collections.unmodifiableList(notificaciones);
     }
+
 }
