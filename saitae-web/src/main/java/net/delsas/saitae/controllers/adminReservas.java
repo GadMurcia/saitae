@@ -37,7 +37,7 @@ public class adminReservas implements Serializable {
     private static final long serialVersionUID = 1L;
     @EJB
     private ReservaFacadeLocal resFL;
-    private List<Reserva> solicitados, entregados, devueltos, rechazados;
+    private List<Reserva> solicitados, entregados, devueltos, rechazados, cancelados, aceptados;
     private Reserva selected;
 
     @PostConstruct
@@ -46,6 +46,8 @@ public class adminReservas implements Serializable {
         entregados = resFL.getReservaByEstado("E");
         devueltos = resFL.getReservaByEstado("D");
         rechazados = resFL.getReservaByEstado("R");
+        cancelados = resFL.getReservaByEstado("C");
+        aceptados = resFL.getReservaByEstado("A");
     }
 
     public List<Reserva> getSolicitados() {
@@ -86,6 +88,22 @@ public class adminReservas implements Serializable {
 
     public void setSelected(Reserva selected) {
         this.selected = selected;
+    }
+
+    public List<Reserva> getCancelados() {
+        return Collections.unmodifiableList(cancelados);
+    }
+
+    public void setCancelados(List<Reserva> cancelados) {
+        this.cancelados = cancelados;
+    }
+
+    public List<Reserva> getAceptados() {
+        return Collections.unmodifiableList(aceptados);
+    }
+
+    public void setAceptados(List<Reserva> aceptados) {
+        this.aceptados = aceptados;
     }
 
 }

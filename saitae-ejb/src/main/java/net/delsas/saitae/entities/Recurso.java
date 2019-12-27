@@ -310,21 +310,6 @@ public class Recurso implements Serializable {
         if (!Objects.equals(this.valorUnitario, other.valorUnitario)) {
             return false;
         }
-        if (!Objects.equals(this.ejemplarList, other.ejemplarList)) {
-            return false;
-        }
-        if (!Objects.equals(this.contenidoLibroList, other.contenidoLibroList)) {
-            return false;
-        }
-        if (!Objects.equals(this.tipoReservaRecursoList, other.tipoReservaRecursoList)) {
-            return false;
-        }
-        if (!Objects.equals(this.editorialLibroList, other.editorialLibroList)) {
-            return false;
-        }
-        if (!Objects.equals(this.autorLibroList, other.autorLibroList)) {
-            return false;
-        }
         if (!Objects.equals(this.idTipoRecurso, other.idTipoRecurso)) {
             return false;
         }
@@ -337,7 +322,7 @@ public class Recurso implements Serializable {
         if (!Objects.equals(this.categoria, other.categoria)) {
             return false;
         }
-        return Objects.equals(this.solicitudReservaList, other.solicitudReservaList);
+        return true;
     }
 
     @Override

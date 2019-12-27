@@ -309,12 +309,6 @@ public class Reserva implements Serializable {
         if (!Objects.equals(this.reservaDevuelto, other.reservaDevuelto)) {
             return false;
         }
-        if (!Objects.equals(this.reservaDetalleList, other.reservaDetalleList)) {
-            return false;
-        }
-        if (!Objects.equals(this.reservaXpedagogiaList, other.reservaXpedagogiaList)) {
-            return false;
-        }
         if (!Objects.equals(this.tipoReserva, other.tipoReserva)) {
             return false;
         }
@@ -325,12 +319,6 @@ public class Reserva implements Serializable {
             return false;
         }
         if (!Objects.equals(this.tipoPtoyecto, other.tipoPtoyecto)) {
-            return false;
-        }
-        if (!Objects.equals(this.solicitudReservaList, other.solicitudReservaList)) {
-            return false;
-        }
-        if (!Objects.equals(this.personasReservaList, other.personasReservaList)) {
             return false;
         }
         return true;

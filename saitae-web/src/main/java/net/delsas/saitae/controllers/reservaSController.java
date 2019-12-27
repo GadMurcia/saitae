@@ -320,7 +320,7 @@ public class reservaSController implements Serializable {
         }
 
     }
-
+boolean existe;
     public void onRowEdit(RowEditEvent event) {
         switch (event.getComponent().getId()) {
             case "alumnos":
@@ -363,6 +363,7 @@ public class reservaSController implements Serializable {
                     PrimeFaces.current().ajax().update(":form0:msgs");
                     onRowCancel(event);
                 } else {
+                    existe=false;
                     solicitud.forEach((sr) -> {
                         Integer a = solicitud.indexOf(s), b = solicitud.indexOf(sr);
                         if (!Objects.equals(a, b) && s.getRecurso() == sr.getRecurso()) {
@@ -371,9 +372,12 @@ public class reservaSController implements Serializable {
                                             "Ya ha agregado este recurso a la lisa de solicitud por lo que "
                                             + "no se agregará de nuevo. Modifique ése."));
                             PrimeFaces.current().ajax().update(":form0:msgs");
-                            onRowCancel(event);
+                            existe=true;
                         }
                     });
+                    if(existe){
+                        onRowCancel(event);
+                    }
                 }
                 PrimeFaces.current().ajax().update(event.getComponent().getClientId());
                 break;
@@ -423,7 +427,6 @@ public class reservaSController implements Serializable {
 
     public void guardar() {
         System.out.println(reserva);
-        reserva.setReservaFecha(new Date());
         try {
             reserva.setReservaEntrega(new SimpleDateFormat("dd/MM/yyyy HH:mm a")
                     .parse(new SimpleDateFormat("dd/MM/yyyy").format(fecha) + " "
@@ -441,7 +444,7 @@ public class reservaSController implements Serializable {
         reserva.setTema(tema);
         reserva.setObjetivoTema(objetivo);
         reserva.setReservaEstado("S");
-        boolean lleno = getUsadoPor().equals("3") ? estudiantes.size() > 0 : true;
+        boolean lleno = getUsadoPor().equals("3") ? !estudiantes.isEmpty() : true;
         if (reserva.getReservaEntrega().after(reserva.getReservaFecha())
                 && reserva.getReservaDevolucion().after(reserva.getReservaEntrega())
                 && !getUsadoPor().equals("0") && solicitud.size() > 0 && lleno) {
@@ -535,8 +538,8 @@ public class reservaSController implements Serializable {
             init();
             PrimeFaces.current().ajax().update(":form");
         } else {
-            String cuerpo = (solicitud.size() == 0 ? "Asegúrese de haber solicitado recursos."
-                    : (lleno ? "Asegúrese de haber llenado la tabla con los estudiantes que está en el grupo"
+            String cuerpo = (solicitud.isEmpty() ? "Asegúrese de haber solicitado recursos."
+                    : (!lleno ? "Asegúrese de haber llenado la tabla con los estudiantes que está en el grupo"
                             : "Asegúrese de haber seleccionado fechas válidas y que las fechas "
                             + "de inicio del uso y del final no sea anterior a la fecha actual."));
             FacesContext.getCurrentInstance().addMessage(":not:msgs",

@@ -41,6 +41,34 @@
                             </p:column>
                         </p:dataTable>
                     </p:tab>
+                    <p:tab title="Solicitudes de Recursos aceptadas">
+                        <p:dataTable id="aceptados" value="#{adminReservas.aceptados}" var="s"
+                                     paginator="true" rows="10" selection="#{adminReservas.selected}" 
+                                     selectionMode="single" rowKey="#{s.idreserva}" 
+                                     emptyMessage="Sin registros aún." paginatorAlwaysVisible="false">
+                            <!-- <p:ajax event="rowSelect" listener="# {administraciónPermisoController.onRowSelect}" 
+                                     update="sol" oncomplete="PF('Dsol').show();"/>-->
+                            <p:column headerText="Fecha de solicitud" filterBy="#{s.reservaFecha}">
+                                <p:outputLabel value="#{s.reservaFecha}"/>
+                            </p:column>
+
+                            <p:column headerText="Fecha de uso" filterBy="#{s.reservaEntrega}">
+                                <p:outputLabel value="#{s.reservaEntrega}"/>
+                            </p:column>
+
+                            <p:column headerText="Fecha de devolución" filterBy="#{s.reservaDevolucion}">
+                                <p:outputLabel value="#{s.reservaDevolucion}"/>
+                            </p:column>
+
+                            <p:column headerText="Tipo de reserva" filterBy="#{s.tipoReserva.tipoReservaNombre}">
+                                <p:outputLabel value="#{s.tipoReserva.tipoReservaNombre}"/>
+                            </p:column>
+
+                            <p:column headerText="Responsable del equipo" filterBy="#{s.reservaComentario}">
+                                <p:outputLabel value="#{s.reservaComentario}"/>
+                            </p:column>
+                        </p:dataTable>
+                    </p:tab>
                     <p:tab title="Recursos Entregados">
                         <h:panelGrid columns="2" cellpadding="10">
                             <p:dataTable id="entregados" value="#{adminReservas.entregados}" var="s"
@@ -130,6 +158,34 @@
                             </p:column>
                         </p:dataTable>
                         </h:panelGrid>
+                    </p:tab>
+                    <p:tab title="Solicitudes de Recursos canceladas">
+                        <p:dataTable id="cancelados" value="#{adminReservas.cancelados}" var="s"
+                                     paginator="true" rows="10" selection="#{adminReservas.selected}" 
+                                     selectionMode="single" rowKey="#{s.idreserva}" 
+                                     emptyMessage="Sin registros aún." paginatorAlwaysVisible="false">
+                            <!-- <p:ajax event="rowSelect" listener="# {administraciónPermisoController.onRowSelect}" 
+                                     update="sol" oncomplete="PF('Dsol').show();"/>-->
+                            <p:column headerText="Fecha de solicitud" filterBy="#{s.reservaFecha}">
+                                <p:outputLabel value="#{s.reservaFecha}"/>
+                            </p:column>
+
+                            <p:column headerText="Fecha de uso" filterBy="#{s.reservaEntrega}">
+                                <p:outputLabel value="#{s.reservaEntrega}"/>
+                            </p:column>
+
+                            <p:column headerText="Fecha de devolución" filterBy="#{s.reservaDevolucion}">
+                                <p:outputLabel value="#{s.reservaDevolucion}"/>
+                            </p:column>
+
+                            <p:column headerText="Tipo de reserva" filterBy="#{s.tipoReserva.tipoReservaNombre}">
+                                <p:outputLabel value="#{s.tipoReserva.tipoReservaNombre}"/>
+                            </p:column>
+
+                            <p:column headerText="Responsable del equipo" filterBy="#{s.reservaComentario}">
+                                <p:outputLabel value="#{s.reservaComentario}"/>
+                            </p:column>
+                        </p:dataTable>
                     </p:tab>
                 </p:accordionPanel>
             </h:panelGrid>
