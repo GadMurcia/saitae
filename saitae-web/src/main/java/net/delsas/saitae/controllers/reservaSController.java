@@ -29,6 +29,7 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
+import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -49,13 +50,13 @@ import net.delsas.saitae.beans.TipoRecursoFacadeLocal;
 import net.delsas.saitae.beans.TipoReservaFacadeLocal;
 import net.delsas.saitae.beans.TipoReservaRecursoFacadeLocal;
 import net.delsas.saitae.entities.AutorLibro;
+import net.delsas.saitae.entities.ContenidoLibro;
 import net.delsas.saitae.entities.EditorialLibro;
 import net.delsas.saitae.entities.Estudiante;
 import net.delsas.saitae.entities.Grado;
 import net.delsas.saitae.entities.GradoPK;
 import net.delsas.saitae.entities.Maestro;
 import net.delsas.saitae.entities.Materia;
-import net.delsas.saitae.entities.Notificaciones;
 import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.PersonasReserva;
 import net.delsas.saitae.entities.Recurso;
@@ -123,6 +124,7 @@ public class reservaSController implements Serializable {
     private List<TipoProyecto> tProyectos;
     private List<Estudiante> estudiantes;
     private List<Grado> grados;
+    private List<SelectItem> usadoPorList;
 
     private TipoRecurso tp;
     private Persona usuario;
@@ -183,6 +185,56 @@ public class reservaSController implements Serializable {
         busqueda = "";
         srtabla = new SolicitudReserva();
         mst = false;
+        usadoPorList = new ArrayList<>();
+        SelectItem x1 = new SelectItem("1", "Docente");
+        SelectItem x2 = new SelectItem("4", "Personal (No académico)");
+        usadoPorList.add(x1);
+        usadoPorList.add(new SelectItem("2", "Estudiante"));
+        usadoPorList.add(new SelectItem("3", "Grupo de estudiantes"));
+        usadoPorList.add(x2);
+        if (!usuario.getTipoPersona().getIdtipoPersona().equals(1)) {
+            tProyectos.remove(0);
+            if (!usuario.getTipoPersona().getIdtipoPersona().equals(8)) {
+                tiporList.remove(1);
+                tProyectos.remove(0);
+                if (usuario.getTipoPersona().getIdtipoPersona().equals(4)) {
+                    grados = new ArrayList<>();
+                    usuario.getMaestro().getMestroHorarioMateriasList().stream()
+                            .filter((mhm) -> (mhm.getGrado().getGradoPK()
+                            .getGradoAño() == getAño())).forEachOrdered((mhm) -> {
+                        grados.add(mhm.getGrado());
+                    });
+                }
+            } else {
+                grados = new ArrayList<>();
+                usuario.getEstudiante().getMatriculaList().stream()
+                        .filter((m) -> (m.getGrado().getGradoPK().getGradoAño() == getAño()))
+                        .forEachOrdered((m) -> {
+                            grados.add(m.getGrado());
+                        });
+                tProyectos.remove(1);
+                usadoPorList.remove(x1);
+                usadoPorList.remove(x2);
+            }
+        }
+    }
+
+    private Integer getAño() {
+        return Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date()));
+    }
+
+    public boolean getUsoenAula() {
+        TipoReserva tres = reserva.getTipoReserva();
+        boolean dif = false;
+        if (tres != null) {
+            dif = tres.getIdtipoReserva().equals(3);
+        }
+        if (!dif) {
+            reserva.setDocente(null);
+            reserva.setMaeria(null);
+            grado = null;
+        }
+        return dif;
     }
 
     public String getGradoNombre(Grado g) {
@@ -219,7 +271,13 @@ public class reservaSController implements Serializable {
                         reserva.getTipoReserva().getIdtipoReserva());
                 setUsadoPor("3");
             } else if (bib) {
-                setUsadoPor(usuario.getTipoPersona().getIdtipoPersona() == 8 ? "2" : "1");
+                setUsadoPor(usuario.getTipoPersona().getIdtipoPersona() == 8 ? "2"
+                        : (usuario.getTipoPersona().getIdtipoPersona() == 4 ? "1" : "4"));
+                tiposReserva = tipoReservaFL.findAll();
+            } else if (cra) {
+                if (usuario.getTipoPersona().getIdtipoPersona().equals(8)) {
+                    tiposReserva.remove(3);
+                }
             }
         } else {
             cra = false;
@@ -239,9 +297,27 @@ public class reservaSController implements Serializable {
 
     public void tipoReservaSelect(SelectEvent event) {
         reserva.setTipoReserva((TipoReserva) event.getObject());
+        recursos.clear();
         if (tp != null && reserva.getTipoReserva() != null) {
             recursos = trrFL.findRecursoByTipoRecursoAndTipoReserva(tp.getIdtipoRecurso(),
                     reserva.getTipoReserva().getIdtipoReserva());
+        }
+        List<Recurso> recAEliminar = new ArrayList<>();
+        List<Recurso> recAConservar = getReservaDetalle();
+        recAConservar.stream().filter((r) -> (!recursos.contains(r))).forEachOrdered((r) -> {
+            recAEliminar.add(r);
+        });
+        recAEliminar.forEach((r) -> {
+            recAConservar.remove(r);
+        });
+        setReservaDetalle(recAConservar);
+        if (recAEliminar.size() > 0) {
+            FacesContext.getCurrentInstance().addMessage(":form0:msgs",
+                    new FacesMessage(FacesMessage.SEVERITY_INFO,
+                            "Eliminación de los recursos de la lista",
+                            "Se han eliminado los recursos que no tienen permitido el "
+                            + reserva.getTipoReserva().getTipoReservaNombre() + "."));
+            PrimeFaces.current().ajax().update(":form", ":form0:msgs");
         }
         System.out.println("" + reserva.getTipoReserva());
     }
@@ -320,7 +396,8 @@ public class reservaSController implements Serializable {
         }
 
     }
-boolean existe;
+    boolean existe;
+
     public void onRowEdit(RowEditEvent event) {
         switch (event.getComponent().getId()) {
             case "alumnos":
@@ -363,7 +440,7 @@ boolean existe;
                     PrimeFaces.current().ajax().update(":form0:msgs");
                     onRowCancel(event);
                 } else {
-                    existe=false;
+                    existe = false;
                     solicitud.forEach((sr) -> {
                         Integer a = solicitud.indexOf(s), b = solicitud.indexOf(sr);
                         if (!Objects.equals(a, b) && s.getRecurso() == sr.getRecurso()) {
@@ -372,10 +449,10 @@ boolean existe;
                                             "Ya ha agregado este recurso a la lisa de solicitud por lo que "
                                             + "no se agregará de nuevo. Modifique ése."));
                             PrimeFaces.current().ajax().update(":form0:msgs");
-                            existe=true;
+                            existe = true;
                         }
                     });
-                    if(existe){
+                    if (existe) {
                         onRowCancel(event);
                     }
                 }
@@ -536,7 +613,7 @@ boolean existe;
                 PrimeFaces.current().ajax().update(":not:msgs");
             }
             init();
-            PrimeFaces.current().ajax().update(":form");
+            PrimeFaces.current().ajax().update(":form", ":noti");
         } else {
             String cuerpo = (solicitud.isEmpty() ? "Asegúrese de haber solicitado recursos."
                     : (!lleno ? "Asegúrese de haber llenado la tabla con los estudiantes que está en el grupo"
@@ -778,16 +855,29 @@ boolean existe;
 
     public List<String> completeText(String query) {
         List<String> results = new ArrayList<>();
-        List<Recurso> l = xAutor ? contenidoFL.findLibroByAutorNombre(query)
-                : (xContenido ? contenidoFL.findLibroByContenidoNombre(query)
-                        : (xTitulo ? contenidoFL.findRecursoBynombre(query) : new ArrayList<>()));
-        l.forEach((r) -> {
-            String a = getAutoresLibros(r);
-            String t = getTiposReservaLibro(r);
-            results.add(r.getIdrecurso() + "   " + r.getNombre()
-                    + "    Autor" + (a.split(", ").length > 1 ? "es: " : ": ") + a
-                    + "    Tipos de reserva: " + t);
-        });
+        if (xTitulo) {
+            List<Recurso> l = contenidoFL.findRecursoBynombre(query);
+            l.forEach((r) -> {
+                String a = getAutoresLibros(r);
+                results.add(r.getNombre()
+                        + "    Autor" + (a.split(", ").length > 1 ? "es: " : ": ") + a
+                        + "    Código: " + r.getIdrecurso());
+            });
+        } else if (xAutor) {
+            List<AutorLibro> l = contenidoFL.findLibroByAutorNombre(query);
+            l.forEach((r) -> {
+                results.add(r.getAutor().getAutorNombre()
+                        + "    Libro: " + r.getRecurso().getNombre()
+                        + "    Código: " + r.getRecurso().getIdrecurso());
+            });
+        } else if (xContenido) {
+            List<ContenidoLibro> l = contenidoFL.findLibroByContenidoNombre(query);
+            l.forEach((r) -> {
+                results.add(r.getContenidoLibroPK().getContenidoLibroNombre()
+                        + "    Libro: " + r.getRecurso().getNombre()
+                        + "    Código: " + r.getRecurso().getIdrecurso());
+            });
+        }
         return results;
     }
 
@@ -812,8 +902,8 @@ boolean existe;
             }
         } else {
             String[] x = event.getObject().toString().split("   ");
-            System.out.println("Libro seleccionado " + x[0]);
-            Integer id = Integer.valueOf(x[0]);
+            System.out.println("Libro seleccionado " + x[2]);
+            Integer id = Integer.valueOf(x[2].split(": ")[1]);
             libroSeleccionado = recursoFL.find(id);
             mst = getMismoTR(libroSeleccionado);
             busqueda = "";
@@ -977,5 +1067,13 @@ boolean existe;
 
     public boolean getMst() {
         return mst;
+    }
+
+    public List<SelectItem> getUsadoPorList() {
+        return Collections.unmodifiableList(usadoPorList);
+    }
+
+    public void setUsadoPorList(List<SelectItem> usadoPorList) {
+        this.usadoPorList = usadoPorList;
     }
 }

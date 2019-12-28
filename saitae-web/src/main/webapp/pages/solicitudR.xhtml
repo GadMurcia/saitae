@@ -33,13 +33,10 @@
                                              converter="omnifaces.SelectItemsConverter"
                                              required="true" immediate="true">
                                 <f:selectItem itemLabel="Seleccione" itemValue="0" noSelectionOption="true"/>
-                                <f:selectItem itemLabel="Docente" itemValue="1" />
-                                <f:selectItem itemLabel="Estudiante" itemValue="2" />
-                                <f:selectItem itemLabel="Grupo de estudiantes" itemValue="3" />
+                                <f:selectItems value="#{reservaSController.usadoPorList}"/>
                                 <p:ajax event="itemSelect" listener="#{reservaSController.usosSelect}"
                                         update=":form"/>
                             </p:selectOneMenu>
-
 
                             <p:outputLabel for="tre" value="Dónde será usado el equipo? "/>
                             <p:selectOneMenu id="tre" value="#{reservaSController.reserva.tipoReserva}" 
@@ -49,13 +46,13 @@
                                 <f:selectItems value="#{reservaSController.tiposReserva}" var="tir"
                                                itemValue="#{tir}" itemLabel="#{tir.tipoReservaNombre}"/>
                                 <p:ajax event="itemSelect" listener="#{reservaSController.tipoReservaSelect}"
-                                        update="rec"/>
+                                        update="form"/>
                             </p:selectOneMenu>
 
-                            <p:outputLabel for="gr" value="Grado "/>
+                            <p:outputLabel for="gr" value="Grado " rendered="#{reservaSController.usoenAula}"/>
                             <p:selectOneMenu id="gr" value="#{reservaSController.grado}" 
                                              converter="omnifaces.SelectItemsConverter"
-                                             required="true" immediate="true">
+                                             required="true" immediate="true" rendered="#{reservaSController.usoenAula}">
                                 <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
                                 <f:selectItems value="#{reservaSController.grados}" var="gr"
                                                itemLabel="#{reservaSController.getGradoNombre(gr)}" itemValue="#{gr}"/>
@@ -63,10 +60,10 @@
                                         update="doc asi"/>
                             </p:selectOneMenu>
 
-                            <p:outputLabel for="doc" value="Docente: "/>
+                            <p:outputLabel for="doc" value="Docente: " rendered="#{reservaSController.usoenAula}"/>
                             <p:selectOneMenu id="doc" value="#{reservaSController.reserva.docente}" 
                                              converter="omnifaces.SelectItemsConverter"
-                                             required="true" immediate="true">
+                                             required="true" immediate="true" rendered="#{reservaSController.usoenAula}">
                                 <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
                                 <f:selectItems value="#{reservaSController.maestros}" var="doc"
                                                itemLabel="#{doc.persona.personaNombre.split(' ')[0]} 
@@ -75,22 +72,22 @@
                                         update="asi"/>
                             </p:selectOneMenu>
 
-                            <p:outputLabel for="asi" value="Asignatura"/>
+                            <p:outputLabel for="asi" value="Asignatura" rendered="#{reservaSController.usoenAula}"/>
                             <p:selectOneMenu id="asi" value="#{reservaSController.reserva.maeria}" 
                                              converter="omnifaces.SelectItemsConverter"
-                                             required="true" immediate="true">
+                                             required="true" immediate="true" rendered="#{reservaSController.usoenAula}">
                                 <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
                                 <f:selectItems value="#{reservaSController.materias}" var="mt"
                                                itemLabel="#{mt.materiaNombre}" itemValue="#{mt}"/>
                                 <p:ajax event="itemSelect" listener="#{reservaSController.materiaSelect}"/>
                             </p:selectOneMenu>
 
-                            <p:outputLabel for="tem" value="Tema: "/>
+                            <p:outputLabel for="tem" value="Tema/Razón de uso: "/>
                             <p:inputText id="tem" value="#{reservaSController.tema}" required="true">
                                 <p:ajax listener="#{reservaSController.onBlur}"/>
                             </p:inputText>
 
-                            <p:outputLabel for="obj" value="Objetivo del tema: "/>
+                            <p:outputLabel for="obj" value="Objetivo a alcanzar: "/>
                             <p:inputTextarea id="obj" value="#{reservaSController.objetivo}" 
                                              placeholder="Objetivo del tema" >
                                 <p:ajax event="blur" listener="#{reservaSController.onBlur}"/>

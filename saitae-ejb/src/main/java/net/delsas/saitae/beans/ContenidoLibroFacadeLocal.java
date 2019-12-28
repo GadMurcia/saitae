@@ -7,6 +7,7 @@ package net.delsas.saitae.beans;
 
 import java.util.List;
 import javax.ejb.Local;
+import net.delsas.saitae.entities.AutorLibro;
 import net.delsas.saitae.entities.ContenidoLibro;
 import net.delsas.saitae.entities.Recurso;
 
@@ -34,9 +35,9 @@ public interface ContenidoLibroFacadeLocal {
     /**
      * Busca los libros cuyos nombres de contenido inicien por la cadena dada
      * @param contenido
-     * @return java.util.List net.delsas.saitae.entities.Recurso
+     * @return java.util.List net.delsas.saitae.entities.ContenidoLibro
      */
-    public List<Recurso> findLibroByContenidoNombre(String contenido);
+    public List<ContenidoLibro> findLibroByContenidoNombre(String contenido);
     
     /**
      * Busca los libros cuyos nombres inicien por la cadena dada
@@ -48,8 +49,8 @@ public interface ContenidoLibroFacadeLocal {
     /**
      * Busca los libros cuyos nombres de autores inicien por la cadena dada
      * @param autorNombre
-     * @return java.util.List net.delsas.saitae.entities.Recurso
+     * @return java.util.List net.delsas.saitae.entities.AutorLibro
      */
-    public List<Recurso> findLibroByAutorNombre(String autorNombre);
+    public List<AutorLibro> findLibroByAutorNombre(String autorNombre);
 
 }

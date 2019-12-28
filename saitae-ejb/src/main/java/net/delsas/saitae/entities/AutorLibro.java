@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "AutorLibro.findByIdautor", query = "SELECT a FROM AutorLibro a WHERE a.autorLibroPK.idautor = :idautor")
     , @NamedQuery(name = "AutorLibro.findByIdLibro", query = "SELECT a FROM AutorLibro a WHERE a.autorLibroPK.idLibro = :idLibro")
     , @NamedQuery(name = "AutorLibro.findByAutorLibrocComentario", query = "SELECT a FROM AutorLibro a WHERE a.autorLibrocComentario = :autorLibrocComentario")
-    , @NamedQuery(name = "AutorLibro.findLikeAutorNomre", query = "SELECT DISTINCT a.recurso FROM AutorLibro a WHERE a.autor.autorNombre LIKE CONCAT(:autorNombre, '%')")
+    , @NamedQuery(name = "AutorLibro.findLikeAutorNomre", query = "SELECT DISTINCT a FROM AutorLibro a WHERE a.autor.autorNombre LIKE CONCAT(:autorNombre, '%')")
 })
 public class AutorLibro implements Serializable {
 
