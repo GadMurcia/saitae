@@ -41,7 +41,7 @@
                 </script>                
                 <o:socket channel="notificacion" onmessage="socketListener"/>
                 <h:form id="noti">
-                    <h1>Área de Notificaciones</h1>
+                    <h1 align="center">Área de Notificaciones</h1>
                     <p:remoteCommand name="notificar" actionListener="#{sessionController.escucha()}" 
                                      update=":form0:msgs :noti"/>
                     <ui:repeat id="not" value="#{sessionController.notificaciones}" var="n">

@@ -113,6 +113,10 @@
     </error-page>
     <error-page>
         <exception-type>javax.faces.application.ViewExpiredException</exception-type>
-        <location>/</location>
+        <location>/index.intex</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/index.intex</location>
     </error-page>
 </web-app>
