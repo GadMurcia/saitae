@@ -7,6 +7,7 @@ package net.delsas.saitae.entities;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -196,7 +197,7 @@ public class Contribuciones implements Serializable {
 
     public void setEstudiante(Estudiante estudiante) {
         this.estudiante = estudiante;
-    }
+    }   
 
     @Override
     public int hashCode() {
@@ -206,17 +207,57 @@ public class Contribuciones implements Serializable {
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Contribuciones)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        Contribuciones other = (Contribuciones) object;
-        if ((this.contribucionesPK == null && other.contribucionesPK != null) || (this.contribucionesPK != null && !this.contribucionesPK.equals(other.contribucionesPK))) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
-        return true;
+        final Contribuciones other = (Contribuciones) obj;
+        if (!Objects.equals(this.contribucionesPK, other.contribucionesPK)) {
+            return false;
+        }
+        if (!Objects.equals(this.enero, other.enero)) {
+            return false;
+        }
+        if (!Objects.equals(this.febrero, other.febrero)) {
+            return false;
+        }
+        if (!Objects.equals(this.marzo, other.marzo)) {
+            return false;
+        }
+        if (!Objects.equals(this.abril, other.abril)) {
+            return false;
+        }
+        if (!Objects.equals(this.mayo, other.mayo)) {
+            return false;
+        }
+        if (!Objects.equals(this.junio, other.junio)) {
+            return false;
+        }
+        if (!Objects.equals(this.julio, other.julio)) {
+            return false;
+        }
+        if (!Objects.equals(this.agosto, other.agosto)) {
+            return false;
+        }
+        if (!Objects.equals(this.septiembre, other.septiembre)) {
+            return false;
+        }
+        if (!Objects.equals(this.octubre, other.octubre)) {
+            return false;
+        }
+        if (!Objects.equals(this.comentario, other.comentario)) {
+            return false;
+        }
+        return Objects.equals(this.estudiante, other.estudiante);
     }
+
+    
 
     @Override
     public String toString() {

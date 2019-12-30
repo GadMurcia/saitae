@@ -46,7 +46,9 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Reserva.findByReservaDevuelto", query = "SELECT r FROM Reserva r WHERE r.reservaDevuelto = :reservaDevuelto")
     , @NamedQuery(name = "Reserva.findByTema", query = "SELECT r FROM Reserva r WHERE r.tema = :tema")
     , @NamedQuery(name = "Reserva.findByObjetivoTema", query = "SELECT r FROM Reserva r WHERE r.objetivoTema = :objetivoTema")
-    , @NamedQuery(name = "Reserva.findByReservaComentario", query = "SELECT r FROM Reserva r WHERE r.reservaComentario = :reservaComentario")})
+    , @NamedQuery(name = "Reserva.findByReservaComentario", query = "SELECT r FROM Reserva r WHERE r.reservaComentario = :reservaComentario")
+    , @NamedQuery(name = "Reserva.findByEstadoAndIdTipoRecurso", query = "SELECT r FROM Reserva r WHERE r.reservaEstado = :estado AND :idTipoRecurso IN (SELECT  s.recurso.idTipoRecurso.idtipoRecurso FROM SolicitudReserva s WHERE s.reserva.idreserva = r.idreserva)")
+})
 public class Reserva implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -372,5 +374,5 @@ public class Reserva implements Serializable {
     public void setRecibe(Persona recibe) {
         this.recibe = recibe;
     }
-    
+
 }

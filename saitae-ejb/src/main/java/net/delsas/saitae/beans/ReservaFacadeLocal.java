@@ -44,5 +44,13 @@ public interface ReservaFacadeLocal {
      * @return java.util.List net.delsas.saitae.entities.Reserva
      */
     public List<Reserva> getReservaByEstado(String estado);
+
+    /**
+     * retorna una lista de reservas que concuerden con el estado y el id del tipo de recurso proporcionados
+     * @param estado
+     * @param idTipoRecurso
+     * @return java.util.List net.delsas.saitae.entities.Reserva
+     */
+    public List<Reserva> findByEstadoAndIdTipoRecurso(String estado, Integer idTipoRecurso);
     
 }

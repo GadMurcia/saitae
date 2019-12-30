@@ -253,7 +253,7 @@ public class reservaSController implements Serializable {
         reserva.setObjetivoTema(" ");
         reserva.setTema(" ");
         reserva.setPersonasReservaList(new ArrayList<>());
-        reserva.setReservaComentario("0¿¿0¿¿0¿¿ ¿¿0");
+        reserva.setReservaComentario("0¿¿0¿¿0¿¿¿¿0");
         setResponsable(usuario.getPersonaNombre().split(" ")[0] + " "
                 + usuario.getPersonaApellido().split(" ")[0]);
     }

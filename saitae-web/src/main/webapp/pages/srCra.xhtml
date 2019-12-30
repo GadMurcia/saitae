@@ -52,6 +52,10 @@
                                      emptyMessage="Sin registros aún." paginatorAlwaysVisible="false">
                             <p:ajax event="rowSelect" listener="#{adminReservas.onRowSelect}" 
                                     update=":d1" oncomplete="PF('Dreserva').show();"/>
+                            <p:column headerText="Tipo de recurso" rendered="#{adminReservas.admin}"
+                                      filterBy="#{adminReservas.getTipoRecurso(s)}">
+                                <p:outputLabel value="#{adminReservas.getTipoRecurso(s)}"/>
+                            </p:column>
                             <p:column headerText="Fecha de solicitud" filterMatchMode="contains" filterBy="#{adminReservas.getFechaString(s.reservaFecha)}">
                                 <p:outputLabel value="#{adminReservas.getFechaString(s.reservaFecha)}"/>
                             </p:column>
@@ -77,6 +81,10 @@
                                          emptyMessage="Sin registros aún." paginatorAlwaysVisible="false">
                                 <p:ajax event="rowSelect" listener="#{adminReservas.onRowSelect}" 
                                         update=":d1" oncomplete="PF('Dreserva').show();"/>
+                                <p:column headerText="Tipo de recurso" rendered="#{adminReservas.admin}"
+                                          filterBy="#{adminReservas.getTipoRecurso(s)}">
+                                    <p:outputLabel value="#{adminReservas.getTipoRecurso(s)}"/>
+                                </p:column>
                                 <p:column headerText="Fecha de solicitud" filterMatchMode="contains" filterBy="#{adminReservas.getFechaString(s.reservaFecha)}">
                                     <p:outputLabel value="#{adminReservas.getFechaString(s.reservaFecha)}"/>
                                 </p:column>
@@ -103,6 +111,10 @@
                                          emptyMessage="Sin registros aún." paginatorAlwaysVisible="false">
                                 <p:ajax event="rowSelect" listener="#{adminReservas.onRowSelect}" 
                                         update=":d1" oncomplete="PF('Dreserva').show();"/>
+                                <p:column headerText="Tipo de recurso" rendered="#{adminReservas.admin}"
+                                          filterBy="#{adminReservas.getTipoRecurso(s)}">
+                                    <p:outputLabel value="#{adminReservas.getTipoRecurso(s)}"/>
+                                </p:column>
                                 <p:column headerText="Fecha de solicitud" filterMatchMode="contains" filterBy="#{adminReservas.getFechaString(s.reservaFecha)}">
                                     <p:outputLabel value="#{adminReservas.getFechaString(s.reservaFecha)}"/>
                                 </p:column>
@@ -129,6 +141,10 @@
                                          emptyMessage="Sin registros aún." paginatorAlwaysVisible="false">
                                 <p:ajax event="rowSelect" listener="#{adminReservas.onRowSelect}" 
                                         update=":d1" oncomplete="PF('Dreserva').show();"/>
+                                <p:column headerText="Tipo de recurso" rendered="#{adminReservas.admin}"
+                                          filterBy="#{adminReservas.getTipoRecurso(s)}">
+                                    <p:outputLabel value="#{adminReservas.getTipoRecurso(s)}"/>
+                                </p:column>
                                 <p:column headerText="Fecha de solicitud" filterMatchMode="contains" filterBy="#{adminReservas.getFechaString(s.reservaFecha)}">
                                     <p:outputLabel value="#{adminReservas.getFechaString(s.reservaFecha)}"/>
                                 </p:column>
@@ -154,6 +170,10 @@
                                      emptyMessage="Sin registros aún." paginatorAlwaysVisible="false">
                             <p:ajax event="rowSelect" listener="#{adminReservas.onRowSelect}" 
                                     update=":d1" oncomplete="PF('Dreserva').show();"/>
+                            <p:column headerText="Tipo de recurso" rendered="#{adminReservas.admin}"
+                                      filterBy="#{adminReservas.getTipoRecurso(s)}">
+                                <p:outputLabel value="#{adminReservas.getTipoRecurso(s)}"/>
+                            </p:column>
                             <p:column headerText="Fecha de solicitud" filterMatchMode="contains" filterBy="#{adminReservas.getFechaString(s.reservaFecha)}">
                                 <p:outputLabel value="#{adminReservas.getFechaString(s.reservaFecha)}"/>
                             </p:column>
@@ -242,7 +262,8 @@
                     </p:panel>
                     <p:panel header="Detalle del equipo #{adminReservas.textoReserva}o"
                              toggleable="true">
-                        <h:panelGrid columns="2" cellspacing="10">
+                        <h:panelGrid columns="2" cellspacing="10" 
+                                     rendered="#{!adminReservas.verEquipoDetalle}">
                             <h:outputText value="Cantidad"/>
                             <h:outputText value="Recurso"/>
 
@@ -253,6 +274,23 @@
                             </ui:repeat>
 
                             <ui:repeat var="s" value="#{adminReservas.solicitudReservaDetalle}">
+                                <h:panelGrid columns="1" cellspacing="10">
+                                    <h:outputText value="#{s.recurso.nombre}"/>  
+                                </h:panelGrid>
+                            </ui:repeat>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" cellspacing="10" 
+                                     rendered="#{adminReservas.verEquipoDetalle}">
+                            <h:outputText value="Correlativo"/>
+                            <h:outputText value="Nombre de recurso"/>
+
+                            <ui:repeat var="s" value="#{adminReservas.reservaDetalle}">
+                                <h:panelGrid columns="1" cellspacing="10">
+                                    <h:outputText value="#{s.ejemplarPK.ejemplarCorrelativo}"/>
+                                </h:panelGrid>
+                            </ui:repeat>
+
+                            <ui:repeat var="s" value="#{adminReservas.reservaDetalle}">
                                 <h:panelGrid columns="1" cellspacing="10">
                                     <h:outputText value="#{s.recurso.nombre}"/>  
                                 </h:panelGrid>
@@ -294,11 +332,33 @@
                   header="Aceptación de la solicitud de reserva de equipo.">
             <h:form id="d3">
                 <h:panelGrid columns="1">
+                    <h:outputText value="Confirme la aceptación de la solicitud de recursos del laboratorio de ciencias naturales"
+                                  rendered="#{adminReservas.eslaboratorio}"/>
+                    <h:outputText value="A continuación, asigne qué equipos entregará al solicitante"
+                                  rendered="#{!adminReservas.eslaboratorio}"/>
+                    <h:panelGrid columns="2" cellspacing="10" 
+                                 rendered="#{adminReservas.eslaboratorio}">
+                        <h:outputText value="Cantidad"/>
+                        <h:outputText value="Recurso"/>
+
+                        <ui:repeat var="s" value="#{adminReservas.solicitudReservaDetalle}">
+                            <h:panelGrid columns="1" cellspacing="10">
+                                <h:outputText value="#{s.solicitudReservaComentario}"/>
+                            </h:panelGrid>
+                        </ui:repeat>
+
+                        <ui:repeat var="s" value="#{adminReservas.solicitudReservaDetalle}">
+                            <h:panelGrid columns="1" cellspacing="10">
+                                <h:outputText value="#{s.recurso.nombre}"/>  
+                            </h:panelGrid>
+                        </ui:repeat>
+                    </h:panelGrid>
                     <p:dataTable id="detalleR" var="e" 
                                  value="#{adminReservas.reservaDetalle}" editable="true" 
                                  widgetVar="e1" styleClass="tabla" selectionMode="single"
                                  selection="#{adminReservas.ejemplar}" rowKey="#{e.ejemplarPK}"
-                                 emptyMessage="Sin registros aún.">
+                                 emptyMessage="Sin registros aún."
+                                 rendered="#{!adminReservas.eslaboratorio}">
                         <f:facet name="header">
                             Asignación de recursos para la solicitud de equipo.
                         </f:facet>
@@ -334,7 +394,7 @@
                         </p:column>
                     </p:dataTable>
                     <p:commandButton value="Aceptar" actionListener="#{adminReservas.aceptar()}"
-                                      update="d3 d1 form"/>                    -->
+                                     update="d3 d1 form"/>
                 </h:panelGrid>
             </h:form>
         </p:dialog>

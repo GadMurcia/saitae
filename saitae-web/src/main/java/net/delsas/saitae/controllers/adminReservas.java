@@ -40,6 +40,8 @@ import net.delsas.saitae.beans.PersonasReservaFacadeLocal;
 import net.delsas.saitae.beans.ReservaDetalleFacadeLocal;
 import net.delsas.saitae.beans.ReservaFacadeLocal;
 import net.delsas.saitae.beans.SolicitudReservaFacadeLocal;
+import net.delsas.saitae.beans.TipoRecursoFacadeLocal;
+import net.delsas.saitae.beans.TipoReservaFacadeLocal;
 import net.delsas.saitae.entities.Ejemplar;
 import net.delsas.saitae.entities.Grado;
 import net.delsas.saitae.entities.GradoPK;
@@ -49,6 +51,8 @@ import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.Reserva;
 import net.delsas.saitae.entities.ReservaDetalle;
 import net.delsas.saitae.entities.SolicitudReserva;
+import net.delsas.saitae.entities.TipoRecurso;
+import net.delsas.saitae.entities.TipoReserva;
 import org.omnifaces.cdi.Push;
 import org.omnifaces.cdi.PushContext;
 import org.primefaces.PrimeFaces;
@@ -66,6 +70,8 @@ public class adminReservas implements Serializable {
     private static final long serialVersionUID = 1L;
     @EJB
     private ReservaFacadeLocal resFL;
+    @EJB
+    private TipoRecursoFacadeLocal trFL;
     @EJB
     private PersonasReservaFacadeLocal prFL;
     @EJB
@@ -119,6 +125,13 @@ public class adminReservas implements Serializable {
                 Logger.getLogger(paquetesController.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
+
+            solicitados = tipos.contains(1) || tipos.contains(2) ? resFL.getReservaByEstado("S") : resFL.findByEstadoAndIdTipoRecurso("S", (tipos.contains(5) ? 3 : (tipos.contains(6) ? 1 : (tipos.contains(7) ? 2 : 0))));
+            aceptados = tipos.contains(1) || tipos.contains(2) ? resFL.getReservaByEstado("A") : resFL.findByEstadoAndIdTipoRecurso("A", (tipos.contains(5) ? 3 : (tipos.contains(6) ? 1 : (tipos.contains(7) ? 2 : 0))));
+            entregados = tipos.contains(1) || tipos.contains(2) ? resFL.getReservaByEstado("E") : resFL.findByEstadoAndIdTipoRecurso("E", (tipos.contains(5) ? 3 : (tipos.contains(6) ? 1 : (tipos.contains(7) ? 2 : 0))));
+            devueltos = tipos.contains(1) || tipos.contains(2) ? resFL.getReservaByEstado("D") : resFL.findByEstadoAndIdTipoRecurso("D", (tipos.contains(5) ? 3 : (tipos.contains(6) ? 1 : (tipos.contains(7) ? 2 : 0))));
+            rechazados = tipos.contains(1) || tipos.contains(2) ? resFL.getReservaByEstado("R") : resFL.findByEstadoAndIdTipoRecurso("R", (tipos.contains(5) ? 3 : (tipos.contains(6) ? 1 : (tipos.contains(7) ? 2 : 0))));
+            cancelados = tipos.contains(1) || tipos.contains(2) ? resFL.getReservaByEstado("C") : resFL.findByEstadoAndIdTipoRecurso("C", (tipos.contains(5) ? 3 : (tipos.contains(6) ? 1 : (tipos.contains(7) ? 2 : 0))));
             completeList();
             textoReserva = "";
             u = new String[]{"Docente", "Estudiante", "Grupo de estudiantes", "Personal (No académico)"};
@@ -127,12 +140,6 @@ public class adminReservas implements Serializable {
     }
 
     private void completeList() {
-        solicitados = resFL.getReservaByEstado("S");
-        entregados = resFL.getReservaByEstado("E");
-        devueltos = resFL.getReservaByEstado("D");
-        rechazados = resFL.getReservaByEstado("R");
-        cancelados = resFL.getReservaByEstado("C");
-        aceptados = resFL.getReservaByEstado("A");
         solicitados.stream().map((s) -> {
             s.setSolicitudReservaList(srFL.findByIdReserva(s.getIdreserva()));
             return s;
@@ -463,6 +470,19 @@ public class adminReservas implements Serializable {
                 : "");
     }
 
+    public boolean getEslaboratorio() {
+        TipoRecurso tr = trFL.find(2);
+        if (tr == null || selected == null) {
+            return false;
+        }
+        return getTipoRecurso(selected).equals(tr.getTipoRecursoNombre());
+    }
+
+    public boolean getVerEquipoDetalle() {
+        boolean m = (selected == null ? false : (!selected.getReservaEstado().equals("S") && !selected.getReservaEstado().equals("R") && !selected.getReservaEstado().equals("C") && !getEslaboratorio()));
+        return m;
+    }
+
     public void rechazar() {
         System.out.println(getRazonRechazo());
         if (selected != null) {
@@ -484,7 +504,7 @@ public class adminReservas implements Serializable {
             solicitados.remove(selected);
             aceptados.remove(selected);
             rechazados.add(selected);
-            if (e1.equals("A")) {
+            if (e1.equals("A") && selected.getReservaDetalleList() != null) {
                 selected.getReservaDetalleList().forEach((rd) -> {
                     rdFL.remove(rd);
                 });
@@ -498,31 +518,35 @@ public class adminReservas implements Serializable {
 
     public void aceptar() {
         boolean lleno = true;
-        for (Ejemplar ej : r) {
-            if (ej.getEjemplarPK().getEjemplarCorrelativo() < 1) {
-                lleno = false;
+        if (!getEslaboratorio()) {
+            for (Ejemplar ej : r) {
+                if (ej.getEjemplarPK().getEjemplarCorrelativo() < 1) {
+                    lleno = false;
+                }
             }
         }
-        System.out.println(selected == null ? "" : selected);
         if (selected != null && lleno) {
             selected.setReservaEstado("A");
             resFL.edit(selected);
-            r.stream().map((ej) -> {
-                ReservaDetalle rd = new ReservaDetalle(ej.getEjemplarPK().getIdRecurso(),
-                        ej.getEjemplarPK().getEjemplarCorrelativo(),
-                        selected.getIdreserva());
-                rd.setEjemplar(ej);
-                return rd;
-            }).map((rd) -> {
-                rd.setReserva(selected);
-                return rd;
-            }).map((rd) -> {
-                rd.setReservaDetalleComentario("");
-                return rd;
-            }).forEachOrdered((rd) -> {
-                rdFL.edit(rd);
-            });
-            Reserva res = rdFL.findReservaByIdReserva(selected.getIdreserva());
+            Reserva res = null;
+            if (!getEslaboratorio()) {
+                r.stream().map((ej) -> {
+                    ReservaDetalle rd = new ReservaDetalle(ej.getEjemplarPK().getIdRecurso(),
+                            ej.getEjemplarPK().getEjemplarCorrelativo(),
+                            selected.getIdreserva());
+                    rd.setEjemplar(ej);
+                    return rd;
+                }).map((rd) -> {
+                    rd.setReserva(selected);
+                    return rd;
+                }).map((rd) -> {
+                    rd.setReservaDetalleComentario("");
+                    return rd;
+                }).forEachOrdered((rd) -> {
+                    rdFL.edit(rd);
+                });
+                res = rdFL.findReservaByIdReserva(selected.getIdreserva());
+            }
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Aceptación Exitosa",
                             "La asignación de recursos para la solicitud de reserva de equipo se ha llevado a cabo con éxito."
@@ -575,7 +599,7 @@ public class adminReservas implements Serializable {
 
         }
     }
-    
+
     public void recibir() {
         if (selected != null) {
             selected.setReservaEstado("D");
