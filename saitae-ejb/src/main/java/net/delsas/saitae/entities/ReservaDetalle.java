@@ -30,7 +30,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "ReservaDetalle.findByIdRecurso", query = "SELECT r FROM ReservaDetalle r WHERE r.reservaDetallePK.idRecurso = :idRecurso")
     , @NamedQuery(name = "ReservaDetalle.findByEjemplarCorrelativo", query = "SELECT r FROM ReservaDetalle r WHERE r.reservaDetallePK.ejemplarCorrelativo = :ejemplarCorrelativo")
     , @NamedQuery(name = "ReservaDetalle.findByReservaDetalleComentario", query = "SELECT r FROM ReservaDetalle r WHERE r.reservaDetalleComentario = :reservaDetalleComentario")
-    , @NamedQuery(name = "ReservaDetalle.findByIdReserva", query = "SELECT r FROM ReservaDetalle r WHERE r.reservaDetallePK.idReserva = :idReserva")})
+    , @NamedQuery(name = "ReservaDetalle.findByIdReserva", query = "SELECT r FROM ReservaDetalle r WHERE r.reservaDetallePK.idReserva = :idReserva")
+    , @NamedQuery(name = "ReservaDetalle.findReservaByIdReserva", query = "SELECT DISTINCT r.reserva FROM ReservaDetalle r WHERE r.reservaDetallePK.idReserva = :idReserva")
+})
 public class ReservaDetalle implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -115,5 +117,5 @@ public class ReservaDetalle implements Serializable {
     public String toString() {
         return "net.delsas.saitae.entities.ReservaDetalle[ reservaDetallePK=" + reservaDetallePK + " ]";
     }
-    
+
 }

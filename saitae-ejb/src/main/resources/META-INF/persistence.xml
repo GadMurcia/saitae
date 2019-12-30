@@ -20,7 +20,6 @@
     <class>net.delsas.saitae.entities.Documentos</class>
     <class>net.delsas.saitae.entities.Editorial</class>
     <class>net.delsas.saitae.entities.EditorialLibro</class>
-    <class>net.delsas.saitae.entities.Ejemplar</class>
     <class>net.delsas.saitae.entities.EntregaUtiles</class>
     <class>net.delsas.saitae.entities.Estudiante</class>
     <class>net.delsas.saitae.entities.EvaluacionMaestro</class>
@@ -58,6 +57,7 @@
     <class>net.delsas.saitae.entities.TipoSueldos</class>
     <class>net.delsas.saitae.entities.TipopersonaPermiso</class>
     <class>net.delsas.saitae.entities.Zona</class>
+    <class>net.delsas.saitae.entities.Ejemplar</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties/>
   </persistence-unit>

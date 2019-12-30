@@ -35,7 +35,9 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Ejemplar.findByIdRecurso", query = "SELECT e FROM Ejemplar e WHERE e.ejemplarPK.idRecurso = :idRecurso")
     , @NamedQuery(name = "Ejemplar.findByEjemplarCorrelativo", query = "SELECT e FROM Ejemplar e WHERE e.ejemplarPK.ejemplarCorrelativo = :ejemplarCorrelativo")
     , @NamedQuery(name = "Ejemplar.findByEjemplarAnioDeIngreso", query = "SELECT e FROM Ejemplar e WHERE e.ejemplarAnioDeIngreso = :ejemplarAnioDeIngreso")
-    , @NamedQuery(name = "Ejemplar.findByEjemplarComentario", query = "SELECT e FROM Ejemplar e WHERE e.ejemplarComentario = :ejemplarComentario")})
+    , @NamedQuery(name = "Ejemplar.findByEjemplarComentario", query = "SELECT e FROM Ejemplar e WHERE e.ejemplarComentario = :ejemplarComentario")
+    , @NamedQuery(name = "Ejemplar.findCorrelativoByIdRecurso", query = "SELECT e.ejemplarPK.ejemplarCorrelativo FROM Ejemplar e WHERE e.ejemplarPK.idRecurso = :idRecurso")
+})
 public class Ejemplar implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -135,5 +137,5 @@ public class Ejemplar implements Serializable {
     public String toString() {
         return "net.delsas.saitae.entities.Ejemplar[ ejemplarPK=" + ejemplarPK + " ]";
     }
-    
+
 }

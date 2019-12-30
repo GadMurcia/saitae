@@ -30,4 +30,11 @@ public interface SolicitudReservaFacadeLocal {
 
     int count();
     
+    /**
+     * Retorna una lista de los recursos solicitados para la reserva con id dado.
+     * @param id
+     * @return java.util.List net.delsas.saitae.entities.SolictudReserva
+     */
+    public List<SolicitudReserva> findByIdReserva(Integer id);
+    
 }

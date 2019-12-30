@@ -253,7 +253,7 @@ public class reservaSController implements Serializable {
         reserva.setObjetivoTema(" ");
         reserva.setTema(" ");
         reserva.setPersonasReservaList(new ArrayList<>());
-        reserva.setReservaComentario("0¿¿0¿¿0¿¿0");
+        reserva.setReservaComentario("0¿¿0¿¿0¿¿ ¿¿0");
         setResponsable(usuario.getPersonaNombre().split(" ")[0] + " "
                 + usuario.getPersonaApellido().split(" ")[0]);
     }
@@ -382,13 +382,13 @@ public class reservaSController implements Serializable {
     public void onAddNew(String id) {
         switch (id) {
             case "es":
-                Estudiante e = new Estudiante(0);
-                e.setPersona(new Persona(0, " ", " ", false));
+                Estudiante e = new Estudiante();
+                e.setPersona(new Persona());
                 estudiantes.add(e);
                 break;
             case "art":
                 SolicitudReserva s = new SolicitudReserva();
-                s.setSolicitudReservaComentario("0");
+                s.setSolicitudReservaComentario("1");
                 solicitud.add(s);
                 break;
             default:
@@ -403,8 +403,10 @@ public class reservaSController implements Serializable {
             case "alumnos":
             case "alumnosl":
                 Estudiante e = (Estudiante) event.getObject();
-                e.setPersona(new Persona(0));
-                new Auxiliar().setDui("" + e.getIdestudiante(), e.getPersona());
+                if (e.getPersona().getPersonaNombre() == null) {
+                    e.setPersona(new Persona(0));
+                    new Auxiliar().setDui("" + e.getIdestudiante(), e.getPersona());
+                }
                 e = estFL.find(e.getPersona().getIdpersona());
                 if (e != null) {
                     if (estudiantes.contains(e)) {
@@ -504,124 +506,132 @@ public class reservaSController implements Serializable {
 
     public void guardar() {
         System.out.println(reserva);
-        try {
-            reserva.setReservaEntrega(new SimpleDateFormat("dd/MM/yyyy HH:mm a")
-                    .parse(new SimpleDateFormat("dd/MM/yyyy").format(fecha) + " "
-                            + new SimpleDateFormat("HH:mm a").format(hi)));
-        } catch (ParseException ex) {
-            reserva.setReservaEntrega(hi);
-        }
-        try {
-            reserva.setReservaDevolucion(new SimpleDateFormat("dd/MM/yyyy HH:mm a")
-                    .parse(new SimpleDateFormat("dd/MM/yyyy").format(bib ? fechaf : fecha) + " "
-                            + new SimpleDateFormat("HH:mm a").format(hf)));
-        } catch (ParseException ex) {
-            reserva.setReservaDevolucion(hf);
-        }
-        reserva.setTema(tema);
-        reserva.setObjetivoTema(objetivo);
-        reserva.setReservaEstado("S");
-        boolean lleno = getUsadoPor().equals("3") ? !estudiantes.isEmpty() : true;
-        if (reserva.getReservaEntrega().after(reserva.getReservaFecha())
-                && reserva.getReservaDevolucion().after(reserva.getReservaEntrega())
-                && !getUsadoPor().equals("0") && solicitud.size() > 0 && lleno) {
-            mensaje x;
-            reserva.setIdreserva(null);
-            resFL.create(reserva);
-            List<PersonasReserva> pr = new ArrayList<>();
-            if (!getUsadoPor().equals("3")) {
-                PersonasReserva e = new PersonasReserva(reserva.getIdreserva(), usuario.getIdpersona());
-                e.setPersona(usuario);
-                e.setReserva(reserva);
-                e.setPersonasReservaComentario("");
-                pr.add(e);
-            } else {
-                if (usuario.getTipoPersona().getIdtipoPersona() == 8
-                        && !estudiantes.contains(usuario.getEstudiante())) {
-                    estudiantes.add(usuario.getEstudiante());
-                }
-                estudiantes.stream().map((es) -> {
-                    PersonasReserva e = new PersonasReserva(reserva.getIdreserva(), es.getIdestudiante());
-                    e.setPersona(es.getPersona());
-                    return e;
-                }).map((e) -> {
-                    e.setReserva(reserva);
-                    return e;
-                }).map((e) -> {
-                    e.setPersonasReservaComentario("");
-                    return e;
-                }).forEachOrdered((e) -> {
-                    pr.add(e);
-                });
+        if (fecha == null || (bib ? fechaf : fecha) == null || hi == null || hf == null) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_WARN, "Error en la reserva",
+                            "Al parecer, no ha seleccionado bien las fechas."
+                            + " Por favos, revise e intente de nuevo."));
+            PrimeFaces.current().ajax().update(":not:msgs");
+        } else {
+            try {
+                reserva.setReservaEntrega(new SimpleDateFormat("dd/MM/yyyy HH:mm a")
+                        .parse(new SimpleDateFormat("dd/MM/yyyy").format(fecha) + " "
+                                + new SimpleDateFormat("HH:mm a").format(hi)));
+            } catch (ParseException ex) {
+                reserva.setReservaEntrega(hi);
             }
-            List<Persona> solicitantes = new ArrayList<>();
-            pr.stream().map((prs) -> {
-                prFL.create(prs);
-                return prs;
-            }).forEachOrdered((prs) -> {
-                solicitantes.add(prs.getPersona());
-            });
-            x = new mensaje(0, usuario.getIdpersona(), " ",
-                    new FacesMessage(FacesMessage.SEVERITY_INFO,
-                            "Solicitud exitosa", "Su solicitud de recursos de "
-                            + tp.getTipoRecursoNombre()
-                            + " ha sido guardada con éxito. Recibirá una notificación "
-                            + "cuando sea aprobada por el encargado de área correspondiente."));
-            persistirNotificación(x, solicitantes);
-            solicitud.stream().map((s) -> {
-                s.setReserva(reserva);
-                return s;
-            }).map((s) -> {
-                s.setSolicitudReservaComentario("");
-                return s;
-            }).map((s) -> {
-                s.setSolicitudReservaPK(
-                        new SolicitudReservaPK(s.getRecurso().getIdrecurso(), reserva.getIdreserva()));
-                return s;
-            }).forEachOrdered((s) -> {
-                try {
-                    srFL.create(s);
-                } catch (Exception ex) {
-                    System.out.println(s);
-                    System.out.println("==============================================");
-                    System.out.println(ex);
+            try {
+                reserva.setReservaDevolucion(new SimpleDateFormat("dd/MM/yyyy HH:mm a")
+                        .parse(new SimpleDateFormat("dd/MM/yyyy").format(bib ? fechaf : fecha) + " "
+                                + new SimpleDateFormat("HH:mm a").format(hf)));
+            } catch (ParseException ex) {
+                reserva.setReservaDevolucion(hf);
+            }
+            reserva.setTema(tema);
+            reserva.setObjetivoTema(objetivo);
+            reserva.setReservaEstado("S");
+            boolean lleno = getUsadoPor().equals("3") ? !estudiantes.isEmpty() : true;
+            if (reserva.getReservaEntrega().after(reserva.getReservaFecha())
+                    && reserva.getReservaDevolucion().after(reserva.getReservaEntrega())
+                    && !getUsadoPor().equals("0") && solicitud.size() > 0 && lleno) {
+                mensaje x;
+                reserva.setIdreserva(null);
+                resFL.create(reserva);
+                List<PersonasReserva> pr = new ArrayList<>();
+                if (!getUsadoPor().equals("3")) {
+                    PersonasReserva e = new PersonasReserva(reserva.getIdreserva(), usuario.getIdpersona());
+                    e.setPersona(usuario);
+                    e.setReserva(reserva);
+                    e.setPersonasReservaComentario("");
+                    pr.add(e);
+                } else {
+                    if (usuario.getTipoPersona().getIdtipoPersona() == 8
+                            && !estudiantes.contains(usuario.getEstudiante())) {
+                        estudiantes.add(usuario.getEstudiante());
+                    }
+                    estudiantes.stream().map((es) -> {
+                        PersonasReserva e = new PersonasReserva(reserva.getIdreserva(), es.getIdestudiante());
+                        e.setPersona(es.getPersona());
+                        return e;
+                    }).map((e) -> {
+                        e.setReserva(reserva);
+                        return e;
+                    }).map((e) -> {
+                        e.setPersonasReservaComentario("");
+                        return e;
+                    }).forEachOrdered((e) -> {
+                        pr.add(e);
+                    });
                 }
-            });
-            Integer id = tp.getIdtipoRecurso();
-            id = id == 1 ? 6 : (id == 2 ? 7 : (id == 3 ? 5 : 0));
-            TipoPersona ps = tpFL.find(id);
-            List<Persona> personas = new ArrayList<>();
-            personas.addAll(ps.getPersonaList());
-            ps.getDelagacionCargoList().forEach((dl) -> {
-                personas.add(dl.getIdpersona());
-            });
-            ps.getCargoList().forEach((c) -> {
-                c.getMaestoCargoList().forEach((mc) -> {
-                    personas.add(mc.getMaestro().getPersona());
+                List<Persona> solicitantes = new ArrayList<>();
+                pr.stream().map((prs) -> {
+                    prFL.create(prs);
+                    return prs;
+                }).forEachOrdered((prs) -> {
+                    solicitantes.add(prs.getPersona());
                 });
-            });
-            x = new mensaje(0, usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
-                    + " ha solicitado recursos", "Nueva solicitud de recursos",
-                    FacesMessage.SEVERITY_INFO,
-                    usuario.getIdpersona(), " ");
-            persistirNotificación(x, personas);
-            if (!solicitantes.contains(usuario)) {
+                x = new mensaje(0, usuario.getIdpersona(), " ",
+                        new FacesMessage(FacesMessage.SEVERITY_INFO,
+                                "Solicitud exitosa", "Su solicitud de recursos de "
+                                + tp.getTipoRecursoNombre()
+                                + " ha sido guardada con éxito. Recibirá una notificación "
+                                + "cuando sea aprobada por el encargado de área correspondiente."));
+                persistirNotificación(x, solicitantes);
+                solicitud.stream().map((s) -> {
+                    s.setReserva(reserva);
+                    return s;
+                }).map((s) -> {
+                    s.setSolicitudReservaComentario(
+                            s.getSolicitudReservaComentario() == null ? "1"
+                            : s.getSolicitudReservaComentario());
+                    return s;
+                }).map((s) -> {
+                    s.setSolicitudReservaPK(
+                            new SolicitudReservaPK(s.getRecurso().getIdrecurso(), reserva.getIdreserva()));
+                    return s;
+                }).forEachOrdered((s) -> {
+                    try {
+                        srFL.create(s);
+                    } catch (Exception ex) {
+                        System.out.println("Error en guardar la solicitud de reserva");
+                    }
+                });
+                Integer id = tp.getIdtipoRecurso();
+                id = id == 1 ? 6 : (id == 2 ? 7 : (id == 3 ? 5 : 0));
+                TipoPersona ps = tpFL.find(id);
+                List<Persona> personas = new ArrayList<>();
+                personas.addAll(ps.getPersonaList());
+                ps.getDelagacionCargoList().forEach((dl) -> {
+                    personas.add(dl.getIdpersona());
+                });
+                ps.getCargoList().forEach((c) -> {
+                    c.getMaestoCargoList().forEach((mc) -> {
+                        personas.add(mc.getMaestro().getPersona());
+                    });
+                });
+                x = new mensaje(0, usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
+                        + " ha solicitado recursos", "Nueva solicitud de recursos",
+                        FacesMessage.SEVERITY_INFO,
+                        usuario.getIdpersona(), " ");
+                persistirNotificación(x, personas);
+                if (!solicitantes.contains(usuario)) {
+                    FacesContext.getCurrentInstance().addMessage(":not:msgs",
+                            new FacesMessage(FacesMessage.SEVERITY_INFO, "Solicitud exitosa",
+                                    "La solicitud se ha registrado con éxito. Las notificaciones "
+                                    + "se han enviado a los estudiantes que usted ha indicado."));
+                    PrimeFaces.current().ajax().update(":not:msgs");
+                }
+                init();
+                PrimeFaces.current().ajax().update(":form", ":noti");
+            } else {
+                String cuerpo = (solicitud.isEmpty() ? "Asegúrese de haber solicitado recursos."
+                        : (!lleno ? "Asegúrese de haber llenado la tabla con los estudiantes que está en el grupo"
+                                : "Asegúrese de haber seleccionado fechas válidas y que las fechas "
+                                + "de inicio del uso y del final no sea anterior a la fecha actual."));
                 FacesContext.getCurrentInstance().addMessage(":not:msgs",
-                        new FacesMessage(FacesMessage.SEVERITY_INFO, "Solicitud exitosa",
-                                "La solicitud se ha registrado con éxito. Las notificaciones "
-                                + "se han enviado a los estudiantes que usted ha indicado."));
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error en la reserva", cuerpo));
                 PrimeFaces.current().ajax().update(":not:msgs");
             }
-            init();
-            PrimeFaces.current().ajax().update(":form", ":noti");
-        } else {
-            String cuerpo = (solicitud.isEmpty() ? "Asegúrese de haber solicitado recursos."
-                    : (!lleno ? "Asegúrese de haber llenado la tabla con los estudiantes que está en el grupo"
-                            : "Asegúrese de haber seleccionado fechas válidas y que las fechas "
-                            + "de inicio del uso y del final no sea anterior a la fecha actual."));
-            FacesContext.getCurrentInstance().addMessage(":not:msgs",
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error en la reserva", cuerpo));
-            PrimeFaces.current().ajax().update(":not:msgs");
         }
     }
 

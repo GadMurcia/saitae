@@ -84,9 +84,15 @@ public class Reserva implements Serializable {
     @Size(max = 300)
     @Column(name = "objetivoTema")
     private String objetivoTema;
-    @Size(max = 145)
+    @Size(max = 300)
     @Column(name = "reservaComentario")
     private String reservaComentario;
+    @Size(max = 250)
+    @Column(name = "observacionDevolucion")
+    private String observacionDevolucion;
+    @Size(max = 250)
+    @Column(name = "observacionEntrega")
+    private String observacionEntrega;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "reserva")
     private List<ReservaDetalle> reservaDetalleList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "reserva")
@@ -103,6 +109,12 @@ public class Reserva implements Serializable {
     @JoinColumn(name = "TipoPtoyecto", referencedColumnName = "idtipoProyecto")
     @ManyToOne
     private TipoProyecto tipoPtoyecto;
+    @JoinColumn(name = "entregante", referencedColumnName = "idpersona")
+    @ManyToOne
+    private Persona entregante;
+    @JoinColumn(name = "recibe", referencedColumnName = "idpersona")
+    @ManyToOne
+    private Persona recibe;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "reserva")
     private List<SolicitudReserva> solicitudReservaList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "reserva")
@@ -327,6 +339,38 @@ public class Reserva implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.Reserva[ idreserva=" + idreserva + " ]";
+    }
+
+    public String getObservacionDevolucion() {
+        return observacionDevolucion;
+    }
+
+    public void setObservacionDevolucion(String observacionDevolucion) {
+        this.observacionDevolucion = observacionDevolucion;
+    }
+
+    public String getObservacionEntrega() {
+        return observacionEntrega;
+    }
+
+    public void setObservacionEntrega(String observacionEntrega) {
+        this.observacionEntrega = observacionEntrega;
+    }
+
+    public Persona getEntregante() {
+        return entregante;
+    }
+
+    public void setEntregante(Persona entregante) {
+        this.entregante = entregante;
+    }
+
+    public Persona getRecibe() {
+        return recibe;
+    }
+
+    public void setRecibe(Persona recibe) {
+        this.recibe = recibe;
     }
     
 }

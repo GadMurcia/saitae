@@ -16,6 +16,7 @@
  */
 package net.delsas.saitae.controllers;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -23,22 +24,35 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
+import net.delsas.saitae.ax.mensaje;
+import net.delsas.saitae.beans.EjemplarFacadeLocal;
+import net.delsas.saitae.beans.NotificacionesFacadeLocal;
+import net.delsas.saitae.beans.PersonasReservaFacadeLocal;
+import net.delsas.saitae.beans.ReservaDetalleFacadeLocal;
 import net.delsas.saitae.beans.ReservaFacadeLocal;
+import net.delsas.saitae.beans.SolicitudReservaFacadeLocal;
 import net.delsas.saitae.entities.Ejemplar;
 import net.delsas.saitae.entities.Grado;
 import net.delsas.saitae.entities.GradoPK;
 import net.delsas.saitae.entities.Maestro;
 import net.delsas.saitae.entities.Matricula;
 import net.delsas.saitae.entities.Persona;
-import net.delsas.saitae.entities.Recurso;
 import net.delsas.saitae.entities.Reserva;
 import net.delsas.saitae.entities.ReservaDetalle;
 import net.delsas.saitae.entities.SolicitudReserva;
+import org.omnifaces.cdi.Push;
+import org.omnifaces.cdi.PushContext;
+import org.primefaces.PrimeFaces;
+import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -52,13 +66,30 @@ public class adminReservas implements Serializable {
     private static final long serialVersionUID = 1L;
     @EJB
     private ReservaFacadeLocal resFL;
+    @EJB
+    private PersonasReservaFacadeLocal prFL;
+    @EJB
+    private SolicitudReservaFacadeLocal srFL;
+    @Inject
+    @Push
+    private PushContext notificacion;
+    @EJB
+    private NotificacionesFacadeLocal notiFL;
+    @EJB
+    private EjemplarFacadeLocal ejFL;
+    @EJB
+    private ReservaDetalleFacadeLocal rdFL;
+
     private List<Reserva> solicitados, entregados, devueltos, rechazados, cancelados, aceptados;
     private List<Integer> tipos;
+    private List<Ejemplar> r;
+    private List<Integer> correlativos;
     private Reserva selected;
     private String textoReserva;
     private String[] u;
     private boolean rechazo;
     private Persona usuario;
+    private Ejemplar ejemplar;
 
     @PostConstruct
     public void init() {
@@ -74,15 +105,70 @@ public class adminReservas implements Serializable {
                 tipos.add(mc.getCargo().getCargoTipoPersona().getIdtipoPersona());
             });
         }
+        boolean tr = (tipos.contains(1) || tipos.contains(2) || tipos.contains(5) || tipos.contains(6) || tipos.contains(7));
+        if (!tr) {
+            solicitados = entregados = devueltos = rechazados = cancelados = aceptados = new ArrayList<>();
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.getExternalContext().getSessionMap().put("mensaje",
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL,
+                            "Acceso denegado",
+                            "Usted no tiene los privilegios suficientes para acceder a esa funcionalidad."));
+            try {
+                context.getExternalContext().redirect("./../");
+            } catch (IOException ex) {
+                Logger.getLogger(paquetesController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            completeList();
+            textoReserva = "";
+            u = new String[]{"Docente", "Estudiante", "Grupo de estudiantes", "Personal (No académico)"};
+            rechazo = false;
+        }
+    }
+
+    private void completeList() {
         solicitados = resFL.getReservaByEstado("S");
         entregados = resFL.getReservaByEstado("E");
         devueltos = resFL.getReservaByEstado("D");
         rechazados = resFL.getReservaByEstado("R");
         cancelados = resFL.getReservaByEstado("C");
         aceptados = resFL.getReservaByEstado("A");
-        textoReserva = "";
-        u = new String[]{"Docente", "Estudiante", "Grupo de estudiantes", "Personal (No académico)"};
-        rechazo = false;
+        solicitados.stream().map((s) -> {
+            s.setSolicitudReservaList(srFL.findByIdReserva(s.getIdreserva()));
+            return s;
+        }).forEachOrdered((s) -> {
+            s.setPersonasReservaList(prFL.findByIdReserva(s.getIdreserva()));
+        });
+        entregados.stream().map((s) -> {
+            s.setSolicitudReservaList(srFL.findByIdReserva(s.getIdreserva()));
+            return s;
+        }).forEachOrdered((s) -> {
+            s.setPersonasReservaList(prFL.findByIdReserva(s.getIdreserva()));
+        });
+        devueltos.stream().map((s) -> {
+            s.setSolicitudReservaList(srFL.findByIdReserva(s.getIdreserva()));
+            return s;
+        }).forEachOrdered((s) -> {
+            s.setPersonasReservaList(prFL.findByIdReserva(s.getIdreserva()));
+        });
+        rechazados.stream().map((s) -> {
+            s.setSolicitudReservaList(srFL.findByIdReserva(s.getIdreserva()));
+            return s;
+        }).forEachOrdered((s) -> {
+            s.setPersonasReservaList(prFL.findByIdReserva(s.getIdreserva()));
+        });
+        cancelados.stream().map((s) -> {
+            s.setSolicitudReservaList(srFL.findByIdReserva(s.getIdreserva()));
+            return s;
+        }).forEachOrdered((s) -> {
+            s.setPersonasReservaList(prFL.findByIdReserva(s.getIdreserva()));
+        });
+        aceptados.stream().map((s) -> {
+            s.setSolicitudReservaList(srFL.findByIdReserva(s.getIdreserva()));
+            return s;
+        }).forEachOrdered((s) -> {
+            s.setPersonasReservaList(prFL.findByIdReserva(s.getIdreserva()));
+        });
     }
 
     public List<Reserva> getSolicitados() {
@@ -151,6 +237,7 @@ public class adminReservas implements Serializable {
     public void onRowSelect(SelectEvent event) {
         String id = event.getComponent().getId();
         selected = (Reserva) event.getObject();
+        procesoDetalle();
         rechazo = false;
         switch (id) {
             case "solicitados":
@@ -184,30 +271,45 @@ public class adminReservas implements Serializable {
         this.textoReserva = textoReserva;
     }
 
-    public void setReservaDetalle(List<Ejemplar> e) {
-        selected.setReservaDetalleList(new ArrayList<>());
-        e.stream().map((r) -> {
-            ReservaDetalle s = new ReservaDetalle(r.getEjemplarPK().getIdRecurso(),
-                    r.getEjemplarPK().getEjemplarCorrelativo(),
-                    selected.getIdreserva());
-            s.setEjemplar(r);
-            s.setReserva(selected);
-            s.setReservaDetalleComentario("");
-            return s;
-        }).forEachOrdered((s) -> {
-            selected.getReservaDetalleList().add(s);
-        });
+    public void setReservaDetalle(List<Ejemplar> ejs) {
+        r = ejs != null ? ejs : new ArrayList<>();
     }
 
     public List<Ejemplar> getReservaDetalle() {
-        List<Ejemplar> r = new ArrayList<>();
-        List<ReservaDetalle> rds = selected.getReservaDetalleList();
-        if (rds != null) {
-            rds.forEach((rd) -> {
-                r.add(rd.getEjemplar());
-            });
+        return Collections.unmodifiableList(r != null ? r : new ArrayList<>());
+    }
+
+    public void procesoDetalle() {
+        r = new ArrayList<>();
+        if (selected != null) {
+            String e = selected.getReservaEstado();
+            if (e.equals("S")) {
+                List<SolicitudReserva> sol = getSolicitudReservaDetalle();
+                sol.forEach((sr) -> {
+                    int y;
+                    try {
+                        y = Integer.valueOf(sr.getSolicitudReservaComentario());
+                    } catch (NumberFormatException ex) {
+                        y = 0;
+                    }
+                    for (int x = 0; x < y; x++) {
+                        Ejemplar ej = new Ejemplar(sr.getRecurso().getIdrecurso(), 0);
+                        ej.setRecurso(sr.getRecurso());
+                        ej.setEjemplarComentario(sr.getSolicitudReservaComentario());
+                        r.add(ej);
+                    }
+                });
+            } else {
+                List<ReservaDetalle> rds = selected.getReservaDetalleList() != null
+                        ? selected.getReservaDetalleList()
+                        : new ArrayList<>();
+                if (rds != null) {
+                    rds.forEach((rd) -> {
+                        r.add(rd.getEjemplar());
+                    });
+                }
+            }
         }
-        return r;
     }
 
     public List<SolicitudReserva> getSolicitudReservaDetalle() {
@@ -359,6 +461,232 @@ public class adminReservas implements Serializable {
         return r == null ? "" : (!r.getSolicitudReservaList().isEmpty()
                 ? r.getSolicitudReservaList().get(0).getRecurso().getIdTipoRecurso().getTipoRecursoNombre()
                 : "");
+    }
+
+    public void rechazar() {
+        System.out.println(getRazonRechazo());
+        if (selected != null) {
+            String e1 = selected.getReservaEstado();
+            selected.setReservaEstado("R");
+            resFL.edit(selected);
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Rechazo exitoso",
+                            "El rechazo de la solicitud de reserva de equipo se ha llevado a cabo con éxito."
+                            + "Se notificarán a las personas solicitantes del rechazo."));
+            mensaje x = new mensaje(0, usuario.getIdpersona(), " ",
+                    new FacesMessage(FacesMessage.SEVERITY_WARN, "Rechazo de reserva",
+                            "Su solicitud de reserva de equipo con fecha "
+                            + (new SimpleDateFormat("dd/MM/yyyy").format(selected.getReservaFecha()))
+                            + " a las " + (new SimpleDateFormat("hh:mm a").format(selected.getReservaFecha()))
+                            + " ha sido rechazada por " + usuario.getPersonaNombre().split(" ")[0] + " "
+                            + usuario.getPersonaApellido().split(" ")[0] + ". La razón del rechazo es: " + getRazonRechazo() + "."));
+            notificar(selected, x);
+            solicitados.remove(selected);
+            aceptados.remove(selected);
+            rechazados.add(selected);
+            if (e1.equals("A")) {
+                selected.getReservaDetalleList().forEach((rd) -> {
+                    rdFL.remove(rd);
+                });
+            }
+            selected = null;
+            PrimeFaces.current().executeScript("PF('Dreserva1').hide();"
+                    + "PF('Dreserva').hide();");
+            PrimeFaces.current().ajax().update(":form0:msgs", "noti", ":form", "d1", "d2");
+        }
+    }
+
+    public void aceptar() {
+        boolean lleno = true;
+        for (Ejemplar ej : r) {
+            if (ej.getEjemplarPK().getEjemplarCorrelativo() < 1) {
+                lleno = false;
+            }
+        }
+        System.out.println(selected == null ? "" : selected);
+        if (selected != null && lleno) {
+            selected.setReservaEstado("A");
+            resFL.edit(selected);
+            r.stream().map((ej) -> {
+                ReservaDetalle rd = new ReservaDetalle(ej.getEjemplarPK().getIdRecurso(),
+                        ej.getEjemplarPK().getEjemplarCorrelativo(),
+                        selected.getIdreserva());
+                rd.setEjemplar(ej);
+                return rd;
+            }).map((rd) -> {
+                rd.setReserva(selected);
+                return rd;
+            }).map((rd) -> {
+                rd.setReservaDetalleComentario("");
+                return rd;
+            }).forEachOrdered((rd) -> {
+                rdFL.edit(rd);
+            });
+            Reserva res = rdFL.findReservaByIdReserva(selected.getIdreserva());
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Aceptación Exitosa",
+                            "La asignación de recursos para la solicitud de reserva de equipo se ha llevado a cabo con éxito."
+                            + "Se notificarán a las personas solicitantes de la aceptación de su solicitud."));
+            mensaje x = new mensaje(0, usuario.getIdpersona(), " ",
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Aceptación de reserva",
+                            "Su solicitud de reserva de equipo con fecha "
+                            + (new SimpleDateFormat("dd/MM/yyyy").format(selected.getReservaFecha()))
+                            + " a las " + (new SimpleDateFormat("hh:mm a").format(selected.getReservaFecha()))
+                            + " ha sido aceptada por " + usuario.getPersonaNombre().split(" ")[0] + " "
+                            + usuario.getPersonaApellido().split(" ")[0]
+                            + "."));
+            notificar(selected, x);
+            solicitados.remove(selected);
+            aceptados.add(res != null ? res : selected);
+            selected = null;
+            PrimeFaces.current().executeScript("PF('Dreserva').hide();"
+                    + "PF('Dreserva2').hide();");
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al aceptar la solicitud",
+                            "Ningún correlativo puede ser cero (0). Corrija e intete de nuevo."));
+        }
+        PrimeFaces.current().ajax().update(":form0:msgs", "noti", ":form", "d1", "d3");
+    }
+
+    public void entregar() {
+        if (selected != null) {
+            selected.setReservaEstado("E");
+            selected.setEntregante(usuario);
+            resFL.edit(selected);
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Entrega exitosa",
+                            "La entrega de los recursos solicitados se ha llevado a cabo con éxito."
+                            + "Se notificarán a las personas solicitantes."));
+            mensaje x = new mensaje(0, usuario.getIdpersona(), " ",
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Entrega de equipo reservado",
+                            "Los recursos que solicitó el día "
+                            + (new SimpleDateFormat("dd/MM/yyyy").format(selected.getReservaFecha()))
+                            + " a las " + (new SimpleDateFormat("hh:mm a").format(selected.getReservaFecha()))
+                            + " han sido entregados en este momento por " + usuario.getPersonaNombre().split(" ")[0] + " "
+                            + usuario.getPersonaApellido().split(" ")[0]));
+            notificar(selected, x);
+            aceptados.remove(selected);
+            entregados.add(selected);
+            selected = null;
+            PrimeFaces.current().executeScript("PF('Dreserva3').hide();"
+                    + "PF('Dreserva').hide();");
+            PrimeFaces.current().ajax().update(":form0:msgs", "noti", ":form", "d1", "d4");
+
+        }
+    }
+    
+    public void recibir() {
+        if (selected != null) {
+            selected.setReservaEstado("D");
+            selected.setRecibe(usuario);
+            resFL.edit(selected);
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Devolución exitosa",
+                            "La devolución de los recursos solicitados se ha llevado a cabo con éxito."
+                            + "Se notificarán a las personas solicitantes."));
+            mensaje x = new mensaje(0, usuario.getIdpersona(), " ",
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Devolución de equipo reservado",
+                            "Los recursos que solicitó el día "
+                            + (new SimpleDateFormat("dd/MM/yyyy").format(selected.getReservaFecha()))
+                            + " a las " + (new SimpleDateFormat("hh:mm a").format(selected.getReservaFecha()))
+                            + " han sido recibidos en este momento por " + usuario.getPersonaNombre().split(" ")[0] + " "
+                            + usuario.getPersonaApellido().split(" ")[0]));
+            notificar(selected, x);
+            entregados.remove(selected);
+            devueltos.add(selected);
+            selected = null;
+            PrimeFaces.current().executeScript("PF('Dreserva4').hide();"
+                    + "PF('Dreserva').hide();");
+            PrimeFaces.current().ajax().update(":form0:msgs", "noti", ":form", "d1", "d5");
+
+        }
+    }
+
+    public boolean getVerRechazo() {
+        return (selected == null ? false
+                : (selected.getReservaEstado().equals("S")
+                || selected.getReservaEstado().equals("A")));
+    }
+
+    public boolean getVerEntregar() {
+        return (selected == null ? false
+                : (selected.getReservaEstado().equals("A")));
+    }
+
+    public boolean getVerAceptar() {
+        return (selected == null ? false
+                : (selected.getReservaEstado().equals("S")));
+    }
+
+    public boolean getVerRecibir() {
+        return (selected == null ? false
+                : (selected.getReservaEstado().equals("E")));
+    }
+
+    public boolean getVertema() {
+        String x = selected != null ? selected.getTema() : "";
+        return !(x.isEmpty() || x.equals(" "));
+    }
+
+    public boolean getVerObjetivo() {
+        String x = selected != null ? selected.getObjetivoTema() : "";
+        return !(x.isEmpty() || x.equals(" "));
+    }
+
+    public void sendMessage(String message) {
+        notificacion.send(message);
+    }
+
+    public List<Integer> getCorrelativos(Ejemplar e) {
+        List<Integer> co = ejFL.findCorrelativosByIdRecurso(
+                e == null ? 0 : e.getRecurso().getIdrecurso());
+        co = co == null ? new ArrayList<>() : co;
+        return co;
+    }
+
+    public void onRowEdit(RowEditEvent event) {
+        System.out.println(event.getObject());
+    }
+
+    public void onRowCancel(RowEditEvent event) {
+        System.out.println(event.getObject());
+        Ejemplar ej = (Ejemplar) event.getObject();
+        r.remove(ej);
+        ejemplar = null;
+    }
+
+    public void onDetalleRowSelect(SelectEvent event) {
+        ejemplar = (Ejemplar) event.getObject();
+        System.out.println(ejemplar);
+    }
+
+    public void onItemSelect(SelectEvent event) {
+        System.out.println(event.getObject());
+        int co = (int) event.getObject();
+        int o = r.indexOf(ejemplar);
+        r.get(o).getEjemplarPK().setEjemplarCorrelativo(co);
+    }
+
+    public Ejemplar getEjemplar() {
+        return ejemplar;
+    }
+
+    public void setEjemplar(Ejemplar ejemplar) {
+        this.ejemplar = ejemplar;
+    }
+
+    private void notificar(Reserva s, mensaje x) {
+        x.getNotificacion().setFechaHora(new Date());
+        s.getPersonasReservaList().stream().map((pr) -> {
+            x.setDestinatario(pr.getPersona().getIdpersona());
+            return pr;
+        }).map((pr) -> {
+            notiFL.create(x.getNotificacion());
+            return pr;
+        }).forEachOrdered((pr) -> {
+            sendMessage(x.toString());
+        });
     }
 
 }

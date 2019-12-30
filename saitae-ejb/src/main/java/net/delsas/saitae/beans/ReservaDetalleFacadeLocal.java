@@ -7,6 +7,7 @@ package net.delsas.saitae.beans;
 
 import java.util.List;
 import javax.ejb.Local;
+import net.delsas.saitae.entities.Reserva;
 import net.delsas.saitae.entities.ReservaDetalle;
 
 /**
@@ -29,5 +30,12 @@ public interface ReservaDetalleFacadeLocal {
     List<ReservaDetalle> findRange(int[] range);
 
     int count();
+    
+    /**
+     * retorna un objeto reserva identificado por el id proporcionado.
+     * @param id
+     * @return net.delsas.saitae.Reserva
+     */
+    public Reserva findReservaByIdReserva(Integer id);
     
 }

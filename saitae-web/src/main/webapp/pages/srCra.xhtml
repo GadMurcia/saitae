@@ -12,7 +12,7 @@
         <h:form id="form">
             <h:panelGrid columns="1">
                 <h1 align="center">Administración de solicitudes de reservas de equipo</h1>
-                <p:accordionPanel dynamic="true">
+                <p:accordionPanel dynamic="true" style="width: 100%;">
                     <p:tab title="Solicitudes de Recursos pendientes">
                         <p:dataTable id="solicitados" value="#{adminReservas.solicitados}" var="s"
                                      paginator="true" rows="5" selection="#{adminReservas.selected}" 
@@ -201,11 +201,15 @@
                             <h:outputText value="#{adminReservas.selected.maeria.materiaNombre}"
                                           rendered="#{adminReservas.selected.maeria != null}"/>
 
-                            <p:outputLabel value="Tema o razón de uso: "/>
-                            <h:outputText value="#{adminReservas.selected.tema}"/>
+                            <p:outputLabel value="Tema o razón de uso: "
+                                           rendered="#{adminReservas.vertema}"/>
+                            <h:outputText value="#{adminReservas.selected.tema}"
+                                          rendered="#{adminReservas.vertema}"/>
 
-                            <p:outputLabel value="Objetivo a alcanzar: "/>
-                            <h:outputText value="#{adminReservas.selected.objetivoTema}"/>
+                            <p:outputLabel value="Objetivo a alcanzar: "
+                                           rendered="#{adminReservas.verObjetivo}"/>
+                            <h:outputText value="#{adminReservas.selected.objetivoTema}"
+                                          rendered="#{adminReservas.verObjetivo}"/>
 
                             <p:outputLabel value="Tipo de proyecto: " 
                                            rendered="#{adminReservas.selected.tipoPtoyecto!=null}"/>
@@ -232,28 +236,140 @@
                                              rendered="#{adminReservas.usadoPor == 3}"/>
 
                             <p:outputLabel value="Razón de rechazo: " rendered="#{adminReservas.rechazo}"/>
-                            <h:outputText value="#{adminReservas.razonRechazo}" rendered="#{adminReservas.rechazo}"/>
+                            <p:inputTextarea value="#{adminReservas.razonRechazo}" 
+                                             rendered="#{adminReservas.rechazo}" disabled="true"/>
                         </h:panelGrid>
                     </p:panel>
-                    <p:panel header="Detalle del equipo #{adminReservas.textoReserva}o">
-                        <h:panelGrid columns="2" cellspacing="5">
+                    <p:panel header="Detalle del equipo #{adminReservas.textoReserva}o"
+                             toggleable="true">
+                        <h:panelGrid columns="2" cellspacing="10">
                             <h:outputText value="Cantidad"/>
                             <h:outputText value="Recurso"/>
 
                             <ui:repeat var="s" value="#{adminReservas.solicitudReservaDetalle}">
-                                <h:panelGrid columns="2" cellspacing="5">
+                                <h:panelGrid columns="1" cellspacing="10">
                                     <h:outputText value="#{s.solicitudReservaComentario}"/>
+                                </h:panelGrid>
+                            </ui:repeat>
+
+                            <ui:repeat var="s" value="#{adminReservas.solicitudReservaDetalle}">
+                                <h:panelGrid columns="1" cellspacing="10">
                                     <h:outputText value="#{s.recurso.nombre}"/>  
                                 </h:panelGrid>
                             </ui:repeat>
                         </h:panelGrid>
                     </p:panel>
+                    <h:panelGrid columns="5">
+                        <p:commandButton value="Rechazar" onclick="PF('Dreserva1').show();"
+                                         update="d2" rendered="#{adminReservas.verRechazo}"/>
+                        <p:commandButton value="Aceptar" rendered="#{adminReservas.verAceptar}"
+                                         onclick="PF('Dreserva2').show();" update="d3"/>
+                        <p:commandButton value="Entregar" rendered="#{adminReservas.verEntregar}"
+                                         onclick="PF('Dreserva3').show();" update="d4"/>
+                        <p:commandButton value="Recibir" rendered="#{adminReservas.verRecibir}"
+                                         onclick="PF('Dreserva4').show();" update="d5"/>
+                    </h:panelGrid>
                 </h:panelGrid>
             </h:form>
         </p:dialog>
-        <p:dialog id="dialog1" widgetVar="Dreserva1" modal="true" >
+        <p:dialog id="dialog1" widgetVar="Dreserva1" modal="true" 
+                  header="Rechazo de la solicitud de reserva">
             <h:form id="d2">
+                <h:panelGrid columns="2">
+                    <p:column/>
+                    <p:outputLabel value="Está a punto de rechazar una solicitud de reserva de equipo"/>
 
+                    <p:outputLabel for="rh" value="Razón de rechazo: "/>
+                    <p:inputTextarea id="rh" value="#{adminReservas.razonRechazo}" autoResize="true"
+                                     cols="50" rows="5" required="true"/>
+
+
+                    <p:column/>
+                    <p:commandButton value="Rechazar" actionListener="#{adminReservas.rechazar()}"
+                                     update="d2 d1 form"/>                    
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+        <p:dialog id="dialog2" widgetVar="Dreserva2" modal="true" width="50%"
+                  header="Aceptación de la solicitud de reserva de equipo.">
+            <h:form id="d3">
+                <h:panelGrid columns="1">
+                    <p:dataTable id="detalleR" var="e" 
+                                 value="#{adminReservas.reservaDetalle}" editable="true" 
+                                 widgetVar="e1" styleClass="tabla" selectionMode="single"
+                                 selection="#{adminReservas.ejemplar}" rowKey="#{e.ejemplarPK}"
+                                 emptyMessage="Sin registros aún.">
+                        <f:facet name="header">
+                            Asignación de recursos para la solicitud de equipo.
+                        </f:facet>
+                        <p:ajax event="rowEdit" listener="#{adminReservas.onRowEdit}" 
+                                update="detalleR" />
+                        <p:ajax event="rowEditCancel" listener="#{adminReservas.onRowCancel}" 
+                                update="detalleR" />
+                        <p:ajax event="rowSelect" listener="#{adminReservas.onDetalleRowSelect}"/>
+                        <p:column headerText="Nombre">
+                            <p:outputLabel value="#{e.recurso.nombre}"/>
+                        </p:column>
+
+                        <p:column headerText="Correlativo">
+                            <p:cellEditor>
+                                <f:facet name="output">
+                                    <p:outputLabel value="#{e.ejemplarPK.ejemplarCorrelativo}" />
+                                </f:facet>
+                                <f:facet name="input">
+                                    <p:selectOneMenu id="ejs" value="#{e.ejemplarPK.ejemplarCorrelativo}" 
+                                                     converter="omnifaces.SelectItemsConverter">
+                                        <f:selectItem itemLabel="Seleccione" itemValue="#{0}" 
+                                                      noSelectionOption="true"/>
+                                        <f:selectItems var="ejs" itemLabel="#{ejs}" 
+                                                       itemValue="#{ejs}" 
+                                                       value="#{adminReservas.getCorrelativos(e)}"/>                                                    
+                                        <p:ajax event="itemSelect" listener="#{adminReservas.onItemSelect}"/>
+                                    </p:selectOneMenu>
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        <p:column style="width:35px">
+                            <p:rowEditor />
+                        </p:column>
+                    </p:dataTable>
+                    <p:commandButton value="Aceptar" actionListener="#{adminReservas.aceptar()}"
+                                      update="d3 d1 form"/>                    -->
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+        <p:dialog id="dialog3" widgetVar="Dreserva3" modal="true" 
+                  header="Entrega del quipo reservado">
+            <h:form id="d4">
+                <h:panelGrid columns="2">
+                    <p:column/>
+                    <p:outputLabel value="Está a punto de entregar el equipo reservado"/>
+
+                    <p:outputLabel for="rh" value="Observaciones previas: "/>
+                    <p:inputTextarea id="rh" value="#{adminReservas.selected.observacionEntrega}" 
+                                     autoResize="true"
+                                     cols="50" rows="5"/>
+                    <p:column/>
+                    <p:commandButton value="entregar" actionListener="#{adminReservas.entregar()}"
+                                     update="d4 d1 form"/>                    
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>        
+        <p:dialog id="dialog4" widgetVar="Dreserva4" modal="true" 
+                  header="Recepción del quipo reservado">
+            <h:form id="d5">
+                <h:panelGrid columns="2">
+                    <p:column/>
+                    <p:outputLabel value="Está recibiendo el equipo luego de usarse"/>
+
+                    <p:outputLabel for="rh" value="Observaciones finales: "/>
+                    <p:inputTextarea id="rh" value="#{adminReservas.selected.observacionDevolucion}" 
+                                     autoResize="true"
+                                     cols="50" rows="5"/>
+                    <p:column/>
+                    <p:commandButton value="recibir" actionListener="#{adminReservas.recibir()}"
+                                     update="d5 d1 form"/>                    
+                </h:panelGrid>
             </h:form>
         </p:dialog>
     </ui:define>

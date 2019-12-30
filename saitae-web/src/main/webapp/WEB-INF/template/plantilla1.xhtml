@@ -33,17 +33,11 @@
                     function socketListener(message) {
                         notificar([{name: 'mss', value: message}]);
                     }
-                    
-                    function notif(id){
-                        alert(id);
-                        notf({name:'notf', value: id}});
-                    }
                 </script>                
                 <o:socket channel="notificacion" onmessage="socketListener"/>
                 <h:form id="noti">
                     <h1 align="center">Área de Notificaciones</h1>
-                    <p:remoteCommand name="notificar" actionListener="#{sessionController.escucha()}" 
-                                     update=":form0:msgs :noti"/>
+                    <p:remoteCommand name="notificar" actionListener="#{sessionController.escucha()}"/>
                     <ui:repeat id="not" value="#{sessionController.notificaciones}" var="n">
                         <p:panel header="#{n.notificacionTitulo}" toggleable="true" 
                                  toggleSpeed="500" collapsed="#{n.vista}" 

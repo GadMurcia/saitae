@@ -5,6 +5,7 @@
  */
 package net.delsas.saitae.beans;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -27,6 +28,13 @@ public class EjemplarFacade extends AbstractFacade<Ejemplar> implements Ejemplar
 
     public EjemplarFacade() {
         super(Ejemplar.class);
+    }
+    
+    @Override
+    public List<Integer> findCorrelativosByIdRecurso(int idRecurso){
+        return em.createNamedQuery("Ejemplar.findCorrelativoByIdRecurso")
+                .setParameter("idRecurso", idRecurso)
+                .getResultList();
     }
     
 }

@@ -29,5 +29,12 @@ public interface PersonasReservaFacadeLocal {
     List<PersonasReserva> findRange(int[] range);
 
     int count();
+
+    /**
+     * Retorna una lista de las personas involucradas en la reserva de equipo.
+     * @param id
+     * @return java.util.List net.delsas.saitae.entities.PersonasReserva
+     */
+    public List<PersonasReserva> findByIdReserva(Integer id);
     
 }

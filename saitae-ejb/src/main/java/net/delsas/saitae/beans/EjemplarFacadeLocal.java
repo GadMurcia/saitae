@@ -30,4 +30,11 @@ public interface EjemplarFacadeLocal {
 
     int count();
     
+    /**
+     * Retorna la lista de correlativos de ejemplares para el recurso identificado por el id dado.
+     * @param idRecurso
+     * @return java.util.List java.lang.Integer
+     */
+    public List<Integer> findCorrelativosByIdRecurso(int idRecurso);
+    
 }

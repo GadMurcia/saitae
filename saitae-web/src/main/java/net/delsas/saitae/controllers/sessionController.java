@@ -254,17 +254,9 @@ public class sessionController implements Serializable {
             mensaje m = new mensaje(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("mss"));
             if (Objects.equals(m.getDestinatario(), us.getIdpersona())) {
                 ordenarNotificaciones();
-                for (int y = 1; y < notificaciones.size(); y++) {
-                    notificaciones.get(y).setVista(true);
-                    try {
-                        notiFL.edit(notificaciones.get(y));
-                    } catch (Exception e) {
-                        System.out.println("error el leer la notificación");
-                    }
-                }
                 verNoti = true;
                 FacesContext.getCurrentInstance().addMessage(null, m.getFacesmessage());
-                PrimeFaces.current().ajax().update(":noti");
+                PrimeFaces.current().ajax().update(":noti", ":form0:msgs");
             }
         } catch (Exception ex) {
             Logger.getLogger(sessionController.class.getName()).log(Level.SEVERE, null, ex);
