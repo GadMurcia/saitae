@@ -52,4 +52,11 @@ public class ReservaFacade extends AbstractFacade<Reserva> implements ReservaFac
                 .setParameter("idTipoRecurso", idTipoRecurso)
                 .getResultList();
     }
+
+    @Override
+    public List<Reserva> getReservaByIdUsuario(Integer idpersona) {
+        return em.createNamedQuery("PersonasReserva.findReservaByIdpersona")
+                .setParameter("idPersona", idpersona)
+                .getResultList();
+    }
 }

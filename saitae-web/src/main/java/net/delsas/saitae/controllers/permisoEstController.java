@@ -146,7 +146,7 @@ public class permisoEstController implements Serializable {
                         + (new SimpleDateFormat("dd/MM/yyyy").format(p.getPermisoFechafin())));
                 mensaje x = new mensaje(0, usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
                         + " ha solicitado un nuevo permiso.",
-                        "Solicitud de permiso nueva", FacesMessage.SEVERITY_INFO, id, "tp¿¿3");
+                        "Solicitud de permiso nueva", FacesMessage.SEVERITY_INFO, id, "permiso<form");
                 TipoPersona tp = tipoPersonaFL.find(3);
                 for (Persona t : tp.getPersonaList()) {
                     x.setDestinatario(t.getIdpersona());

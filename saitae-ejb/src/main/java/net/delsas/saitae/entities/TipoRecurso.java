@@ -7,6 +7,7 @@ package net.delsas.saitae.entities;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -53,6 +54,8 @@ public class TipoRecurso implements Serializable {
     private String tipoRecursoComentario;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTipoRecurso")
     private List<Recurso> recursoList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoRecurso")
+    private List<Reserva> reservaList;
 
     public TipoRecurso() {
     }
@@ -97,31 +100,49 @@ public class TipoRecurso implements Serializable {
 
     public void setRecursoList(List<Recurso> recursoList) {
         this.recursoList = recursoList;
+    }    
+
+    @XmlTransient
+    public List<Reserva> getReservaList() {
+        return reservaList;
+    }
+
+    public void setReservaList(List<Reserva> reservaList) {
+        this.reservaList = reservaList;
     }
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (idtipoRecurso != null ? idtipoRecurso.hashCode() : 0);
+        int hash = 7;
+        hash = 89 * hash + Objects.hashCode(this.idtipoRecurso);
+        hash = 89 * hash + Objects.hashCode(this.tipoRecursoNombre);
+        hash = 89 * hash + Objects.hashCode(this.tipoRecursoComentario);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof TipoRecurso)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        TipoRecurso other = (TipoRecurso) object;
-        if ((this.idtipoRecurso == null && other.idtipoRecurso != null) || (this.idtipoRecurso != null && !this.idtipoRecurso.equals(other.idtipoRecurso))) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
-        return true;
+        final TipoRecurso other = (TipoRecurso) obj;
+        if (!Objects.equals(this.tipoRecursoNombre, other.tipoRecursoNombre)) {
+            return false;
+        }
+        if (!Objects.equals(this.tipoRecursoComentario, other.tipoRecursoComentario)) {
+            return false;
+        }
+        return Objects.equals(this.idtipoRecurso, other.idtipoRecurso);
     }
 
     @Override
     public String toString() {
-        return "net.delsas.saitae.entities.TipoRecurso[ idtipoRecurso=" + idtipoRecurso + " ]";
+        return "TipoRecurso{" + "idtipoRecurso=" + idtipoRecurso + ", tipoRecursoNombre=" + tipoRecursoNombre + ", tipoRecursoComentario=" + tipoRecursoComentario + ", recursoList=" + recursoList + ", reservaList=" + reservaList + '}';
     }
-    
 }

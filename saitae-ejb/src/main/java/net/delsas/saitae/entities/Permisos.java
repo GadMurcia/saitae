@@ -52,7 +52,6 @@ public class Permisos implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date permisoFechafin;
     @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 250)
     @Column(name = "permisosMotivo")
     private String permisosMotivo;

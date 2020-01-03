@@ -105,12 +105,15 @@ public class Reserva implements Serializable {
     @JoinColumn(name = "docente", referencedColumnName = "idmaestro")
     @ManyToOne
     private Maestro docente;
+    @JoinColumn(name = "tipoRecurso", referencedColumnName = "idtipoRecurso")
+    @ManyToOne
+    private TipoRecurso tipoRecurso;
     @JoinColumn(name = "maeria", referencedColumnName = "idmateria")
     @ManyToOne
     private Materia maeria;
-    @JoinColumn(name = "TipoPtoyecto", referencedColumnName = "idtipoProyecto")
+    @JoinColumn(name = "TipoProyecto", referencedColumnName = "idtipoProyecto")
     @ManyToOne
-    private TipoProyecto tipoPtoyecto;
+    private TipoProyecto tipoProyecto;
     @JoinColumn(name = "entregante", referencedColumnName = "idpersona")
     @ManyToOne
     private Persona entregante;
@@ -251,12 +254,12 @@ public class Reserva implements Serializable {
         this.maeria = maeria;
     }
 
-    public TipoProyecto getTipoPtoyecto() {
-        return tipoPtoyecto;
+    public TipoProyecto getTipoProyecto() {
+        return tipoProyecto;
     }
 
-    public void setTipoPtoyecto(TipoProyecto tipoPtoyecto) {
-        this.tipoPtoyecto = tipoPtoyecto;
+    public void setTipoProyecto(TipoProyecto tipoProyecto) {
+        this.tipoProyecto = tipoProyecto;
     }
 
     @XmlTransient
@@ -275,72 +278,6 @@ public class Reserva implements Serializable {
 
     public void setPersonasReservaList(List<PersonasReserva> personasReservaList) {
         this.personasReservaList = personasReservaList;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idreserva != null ? idreserva.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Reserva other = (Reserva) obj;
-        if (!Objects.equals(this.reservaEstado, other.reservaEstado)) {
-            return false;
-        }
-        if (!Objects.equals(this.tema, other.tema)) {
-            return false;
-        }
-        if (!Objects.equals(this.objetivoTema, other.objetivoTema)) {
-            return false;
-        }
-        if (!Objects.equals(this.reservaComentario, other.reservaComentario)) {
-            return false;
-        }
-        if (!Objects.equals(this.idreserva, other.idreserva)) {
-            return false;
-        }
-        if (!Objects.equals(this.reservaFecha, other.reservaFecha)) {
-            return false;
-        }
-        if (!Objects.equals(this.reservaEntrega, other.reservaEntrega)) {
-            return false;
-        }
-        if (!Objects.equals(this.reservaDevolucion, other.reservaDevolucion)) {
-            return false;
-        }
-        if (!Objects.equals(this.reservaDevuelto, other.reservaDevuelto)) {
-            return false;
-        }
-        if (!Objects.equals(this.tipoReserva, other.tipoReserva)) {
-            return false;
-        }
-        if (!Objects.equals(this.docente, other.docente)) {
-            return false;
-        }
-        if (!Objects.equals(this.maeria, other.maeria)) {
-            return false;
-        }
-        if (!Objects.equals(this.tipoPtoyecto, other.tipoPtoyecto)) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "net.delsas.saitae.entities.Reserva[ idreserva=" + idreserva + " ]";
     }
 
     public String getObservacionDevolucion() {
@@ -373,6 +310,117 @@ public class Reserva implements Serializable {
 
     public void setRecibe(Persona recibe) {
         this.recibe = recibe;
+    }
+
+    public TipoRecurso getTipoRecurso() {
+        return tipoRecurso;
+    }
+
+    public void setTipoRecurso(TipoRecurso tipoRecurso) {
+        this.tipoRecurso = tipoRecurso;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 37 * hash + Objects.hashCode(this.idreserva);
+        hash = 37 * hash + Objects.hashCode(this.reservaFecha);
+        hash = 37 * hash + Objects.hashCode(this.reservaEntrega);
+        hash = 37 * hash + Objects.hashCode(this.reservaDevolucion);
+        hash = 37 * hash + Objects.hashCode(this.reservaEstado);
+        hash = 37 * hash + Objects.hashCode(this.reservaDevuelto);
+        hash = 37 * hash + Objects.hashCode(this.tema);
+        hash = 37 * hash + Objects.hashCode(this.objetivoTema);
+        hash = 37 * hash + Objects.hashCode(this.reservaComentario);
+        hash = 37 * hash + Objects.hashCode(this.observacionDevolucion);
+        hash = 37 * hash + Objects.hashCode(this.observacionEntrega);
+        hash = 37 * hash + Objects.hashCode(this.tipoReserva);
+        hash = 37 * hash + Objects.hashCode(this.docente);
+        hash = 37 * hash + Objects.hashCode(this.tipoRecurso);
+        hash = 37 * hash + Objects.hashCode(this.maeria);
+        hash = 37 * hash + Objects.hashCode(this.tipoProyecto);
+        hash = 37 * hash + Objects.hashCode(this.entregante);
+        hash = 37 * hash + Objects.hashCode(this.recibe);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Reserva other = (Reserva) obj;
+        if (!Objects.equals(this.reservaEstado, other.reservaEstado)) {
+            return false;
+        }
+        if (!Objects.equals(this.tema, other.tema)) {
+            return false;
+        }
+        if (!Objects.equals(this.objetivoTema, other.objetivoTema)) {
+            return false;
+        }
+        if (!Objects.equals(this.reservaComentario, other.reservaComentario)) {
+            return false;
+        }
+        if (!Objects.equals(this.observacionDevolucion, other.observacionDevolucion)) {
+            return false;
+        }
+        if (!Objects.equals(this.observacionEntrega, other.observacionEntrega)) {
+            return false;
+        }
+        if (!Objects.equals(this.idreserva, other.idreserva)) {
+            return false;
+        }
+        if (!Objects.equals(this.reservaFecha, other.reservaFecha)) {
+            return false;
+        }
+        if (!Objects.equals(this.reservaEntrega, other.reservaEntrega)) {
+            return false;
+        }
+        if (!Objects.equals(this.reservaDevolucion, other.reservaDevolucion)) {
+            return false;
+        }
+        if (!Objects.equals(this.reservaDevuelto, other.reservaDevuelto)) {
+            return false;
+        }
+        if (!Objects.equals(this.tipoReserva, other.tipoReserva)) {
+            return false;
+        }
+        if (!Objects.equals(this.docente, other.docente)) {
+            return false;
+        }
+        if (!Objects.equals(this.tipoRecurso, other.tipoRecurso)) {
+            return false;
+        }
+        if (!Objects.equals(this.maeria, other.maeria)) {
+            return false;
+        }
+        if (!Objects.equals(this.tipoProyecto, other.tipoProyecto)) {
+            return false;
+        }
+        if (!Objects.equals(this.entregante, other.entregante)) {
+            return false;
+        }
+        return Objects.equals(this.recibe, other.recibe);
+    }
+
+    @Override
+    public String toString() {
+        return "Reserva{" + "idreserva=" + idreserva + ", reservaFecha=" + reservaFecha
+                + ", reservaEntrega=" + reservaEntrega + ", reservaDevolucion=" + reservaDevolucion
+                + ", reservaEstado=" + reservaEstado + ", reservaDevuelto=" + reservaDevuelto
+                + ", tema=" + tema + ", objetivoTema=" + objetivoTema + ", reservaComentario="
+                + reservaComentario + ", observacionDevolucion=" + observacionDevolucion
+                + ", observacionEntrega=" + observacionEntrega + ", tipoReserva=" + tipoReserva
+                + ", docente=" + docente + ", tipoRecurso=" + tipoRecurso + ", maeria=" + maeria
+                + ", tipoProyecto=" + tipoProyecto + ", entregante=" + entregante + ", recibe="
+                + recibe + '}';
     }
 
 }

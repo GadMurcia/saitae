@@ -261,6 +261,7 @@ public class reservaSController implements Serializable {
     public void tipoRecursoSelect(SelectEvent event) {
         init();
         tp = ((TipoRecurso) event.getObject());
+        reserva.setTipoRecurso(tp);
         if (tp != null) {
             cra = tp.getIdtipoRecurso() == 1;
             lab = tp.getIdtipoRecurso() == 2;
@@ -346,7 +347,7 @@ public class reservaSController implements Serializable {
 
     public void tipoProyectoSelect(SelectEvent event) {
         TipoProyecto p = (TipoProyecto) event.getObject();
-        reserva.setTipoPtoyecto(p);
+        reserva.setTipoProyecto(p);
         System.out.println(p == null ? "no selection" : p.getTipoProyectoNombre());
     }
 
@@ -570,7 +571,7 @@ public class reservaSController implements Serializable {
                 }).forEachOrdered((prs) -> {
                     solicitantes.add(prs.getPersona());
                 });
-                x = new mensaje(0, usuario.getIdpersona(), " ",
+                x = new mensaje(0, usuario.getIdpersona(), "solicitudH<form",
                         new FacesMessage(FacesMessage.SEVERITY_INFO,
                                 "Solicitud exitosa", "Su solicitud de recursos de "
                                 + tp.getTipoRecursoNombre()
@@ -612,7 +613,7 @@ public class reservaSController implements Serializable {
                 x = new mensaje(0, usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
                         + " ha solicitado recursos", "Nueva solicitud de recursos",
                         FacesMessage.SEVERITY_INFO,
-                        usuario.getIdpersona(), " ");
+                        usuario.getIdpersona(), "srCra<form:ap:solicitados");
                 persistirNotificación(x, personas);
                 if (!solicitantes.contains(usuario)) {
                     FacesContext.getCurrentInstance().addMessage(":not:msgs",
@@ -788,7 +789,6 @@ public class reservaSController implements Serializable {
             rr += (y > 0 ? "¿¿" : "") + (Objects.equals(y, ind) ? v : c[y]);
         }
         reserva.setReservaComentario(rr);
-        System.out.println("Se guardó " + ind + " en el indice " + ind + ". Cadena total: " + rr);
     }
 
     public void setUsadoPor(String usadoPor) {

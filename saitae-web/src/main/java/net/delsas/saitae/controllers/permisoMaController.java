@@ -113,7 +113,7 @@ public class permisoMaController implements Serializable {
             } else {
                 p.getPermisosPK().setTipoPermiso(p.getTipoPermiso1().getIdtipoPermiso());
                 p.setPermisosSolicitante(usuario);
-                p.setPermisosMotivo(" ");
+                p.setPermisosMotivo(null);
                 p.getPermisosPK().setIpPersona(usuario.getIdpersona());
                 p.setPermisosEstado("0");
                 pfl.create(p);

@@ -51,7 +51,7 @@ public class TipoProyecto implements Serializable {
     @Size(max = 140)
     @Column(name = "tipoProyectoComentario")
     private String tipoProyectoComentario;
-    @OneToMany(mappedBy = "tipoPtoyecto")
+    @OneToMany(mappedBy = "tipoProyecto")
     private List<Reserva> reservaList;
 
     public TipoProyecto() {

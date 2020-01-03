@@ -252,6 +252,17 @@ public class sessionController implements Serializable {
     public void escucha() {
         try {
             mensaje m = new mensaje(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("mss"));
+            String[] ac0 = m.getCadenaAccion().split("<<");
+            String np = FacesContext.getCurrentInstance().getExternalContext().getRequestServletPath().split("/")[2];
+            long x = us.getTipoPersona().getIdtipoPersona();
+            for (String ac1 : ac0) {
+                String[] ac = ac1.split("<");
+                String[] acid = ac[1].split(">");
+                if (np.equals((ac[0] + ".intex"))
+                        && (Objects.equals(m.getDestinatario(), us.getIdpersona()) || x == 1 || x == 2)) {
+                    PrimeFaces.current().ajax().update(acid);
+                }
+            }
             if (Objects.equals(m.getDestinatario(), us.getIdpersona())) {
                 ordenarNotificaciones();
                 verNoti = true;

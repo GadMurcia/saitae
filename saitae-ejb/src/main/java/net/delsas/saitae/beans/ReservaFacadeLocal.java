@@ -28,29 +28,44 @@ public interface ReservaFacadeLocal {
     List<Reserva> findAll();
 
     List<Reserva> findRange(int[] range);
-    
+
     /**
-     * Busca y devuelve un objeto Reserva que cincide con la fecha hora proporcionada
+     * Busca y devuelve un objeto Reserva que cincide con la fecha hora
+     * proporcionada
+     *
      * @param feha_hora
      * @return java.util.List net.delsas.saitae.entities.Reserva
      */
     public Reserva getReservaByFechaHora(Date feha_hora);
 
     int count();
-    
+
     /**
-     * Devuelve una lista de objetos reserva cuyo estado concuerde con la cadena proporcionada.
+     * Devuelve una lista de objetos reserva cuyo estado concuerde con la cadena
+     * proporcionada.
+     *
      * @param estado
      * @return java.util.List net.delsas.saitae.entities.Reserva
      */
     public List<Reserva> getReservaByEstado(String estado);
 
     /**
-     * retorna una lista de reservas que concuerden con el estado y el id del tipo de recurso proporcionados
+     * retorna una lista de reservas que concuerden con el estado y el id del
+     * tipo de recurso proporcionados
+     *
      * @param estado
      * @param idTipoRecurso
      * @return java.util.List net.delsas.saitae.entities.Reserva
      */
     public List<Reserva> findByEstadoAndIdTipoRecurso(String estado, Integer idTipoRecurso);
-    
+
+    /**
+     * Genera una lista con las reservas en las que la persona identificada con
+     * el id proporcionado está relacionada.
+     *
+     * @param idpersona
+     * @return java.util.List net.delsas.saitae.entities.Reserva
+     */
+    public List<Reserva> getReservaByIdUsuario(Integer idpersona);
+
 }

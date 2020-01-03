@@ -14,89 +14,101 @@
                 <h:form id="form">  
                     <p:growl id="msgs" showDetail="true" />
 
-                    <h1 style="margin: 0 auto;">Administración de permisos de estudiantes</h1>
+                    <h1 align="center">Administración de permisos de estudiantes</h1>
                     <p:accordionPanel dynamic="true">
                         <p:tab title="Permisos Solicitados">
-                            <p:dataTable id="solicitados" value="#{administraciónPermisoController.solicitados}" var="p"
-                                         paginator="true" rows="10" selection="#{administraciónPermisoController.acep}" 
+                            <p:dataTable id="solicitados" value="#{admPermisoController.solicitados}" var="p"
+                                         paginator="true" rows="7" selection="#{admPermisoController.acep}" 
                                          selectionMode="single" rowKey="#{p.permisosPK}" 
-                                         emptyMessage="Sin registros aún.">
-                                <p:ajax event="rowSelect" listener="#{administraciónPermisoController.onRowSelect}" 
+                                         emptyMessage="Sin nuevos permisos solicitados aún.">
+                                <p:ajax event="rowSelect" listener="#{admPermisoController.onRowSelect}" 
                                         update="sol" oncomplete="PF('Dsol').show();"/>
-                                <p:column headerText="Fecha de solicitud">
-                                    <p:datePicker disabled="true" value="#{p.permisosPK.permisoFechaSolicitud}"
-                                                  locale="es" showTime="true" hourFormat="12" pattern="dd-MM-yyyy"/>
+                                <p:column headerText="Fecha de solicitud" 
+                                           filterMatchMode="contains" 
+                                           filterBy="#{admPermisoController.dateToString(p.permisosPK.permisoFechaSolicit)}">
+                                    #{admPermisoController.dateToString(p.permisosPK.permisoFechaSolicitud)}
                                 </p:column>
 
-                                <p:column headerText="Beneficiario">
-                                    <p:outputLabel value="#{p.persona.personaNombre.split(' ')[0]} 
-                                                   #{p.persona.personaApellido.split(' ')[0]} 
-                                                   (#{p.persona.tipoPersona.tipoPersonaNombre})"/>
+                                <p:column headerText="Beneficiario"
+                                           filterMatchMode="contains" filterBy="#{p.persona.personaNombre.split(' ')[0]} 
+                                          #{p.persona.personaApellido.split(' ')[0]}">
+                                    #{p.persona.personaNombre.split(' ')[0]} 
+                                    #{p.persona.personaApellido.split(' ')[0]} 
+                                    (#{p.persona.tipoPersona.tipoPersonaNombre})
                                 </p:column>
 
                                 <p:column headerText="Periodo del permiso">
-                                    <p:outputLabel value="#{administraciónPermisoController.getFechas(p.permisosPK.permisoFechaInicio, p.permisoFechafin)}"/>
+                                    #{admPermisoController.getFechas(p.permisosPK.permisoFechaInicio, p.permisoFechafin)}
                                 </p:column>
 
                                 <p:column headerText="Tipo de permiso solicitado">
-                                    <p:outputLabel value="#{p.tipoPermiso1.tipoPermisoNombre}"/>
+                                    #{p.tipoPermiso1.tipoPermisoNombre}
                                 </p:column>
                             </p:dataTable>
                         </p:tab>
                         <p:tab title="Permisos Aceptados">
                             <h:panelGrid columns="2" cellpadding="10">
-                                <p:dataTable id="aceptados" value="#{administraciónPermisoController.aceptados}" var="a"
-                                             paginator="true" rows="10" selection="#{administraciónPermisoController.acep}" 
+                                <p:dataTable id="aceptados" value="#{admPermisoController.aceptados}" var="a"
+                                             paginator="true" rows="7" selection="#{admPermisoController.acep}" 
                                              selectionMode="single" rowKey="#{a.permisosPK}" 
                                              emptyMessage="Sin registros aún.">
-                                    <p:ajax event="rowSelect" listener="#{administraciónPermisoController.onRowSelect}" 
+                                    <p:ajax event="rowSelect" listener="#{admPermisoController.onRowSelect}" 
                                             update="ace" oncomplete="PF('Dotro').show();"/>
-                                    <p:column headerText="Fecha de solicitud">
-                                        <p:datePicker disabled="true" value="#{a.permisosPK.permisoFechaSolicitud}"
-                                                      locale="es" showTime="true" hourFormat="12" pattern="dd-MM-yyyy"/>
+                                    
+                                    <p:column headerText="Fecha de solicitud"
+                                               filterMatchMode="contains" 
+                                               filterBy="#{admPermisoController.dateToString(a.permisosPK.permisoFechaSolicitud)}">
+                                        #{admPermisoController.dateToString(a.permisosPK.permisoFechaSolicitud)}
                                     </p:column>
 
-                                    <p:column headerText="Beneficiario">
-                                        <p:outputLabel value="#{a.persona.personaNombre.split(' ')[0]} 
-                                                       #{a.persona.personaApellido.split(' ')[0]} 
-                                                       (#{a.persona.tipoPersona.tipoPersonaNombre})"/>
+                                    <p:column headerText="Beneficiario"
+                                               filterMatchMode="contains" 
+                                               filterBy="#{a.persona.personaNombre.split(' ')[0]} 
+                                              #{a.persona.personaApellido.split(' ')[0]}">
+                                        #{a.persona.personaNombre.split(' ')[0]} 
+                                        #{a.persona.personaApellido.split(' ')[0]} 
+                                        (#{a.persona.tipoPersona.tipoPersonaNombre})
                                     </p:column>
 
                                     <p:column headerText="Periodo del permiso">
-                                        <p:outputLabel value="#{administraciónPermisoController.getFechas(a.permisosPK.permisoFechaInicio, a.permisoFechafin)}"/>
+                                        #{admPermisoController.getFechas(a.permisosPK.permisoFechaInicio, a.permisoFechafin)}
                                     </p:column>
 
                                     <p:column headerText="Tipo de permiso solicitado">
-                                        <p:outputLabel value="#{a.tipoPermiso1.tipoPermisoNombre}"/>
+                                        #{a.tipoPermiso1.tipoPermisoNombre}
                                     </p:column>
                                 </p:dataTable>
                             </h:panelGrid>
                         </p:tab>
                         <p:tab title="Permisos Rechazados">
                             <h:panelGrid columns="2" cellpadding="10">
-                                <p:dataTable id="rachazados" value="#{administraciónPermisoController.rechazados}" var="r"
-                                             paginator="true" rows="10" selection="#{administraciónPermisoController.acep}" 
+                                <p:dataTable id="rachazados" value="#{admPermisoController.rechazados}" var="r"
+                                             paginator="true" rows="7" selection="#{admPermisoController.acep}" 
                                              selectionMode="single" rowKey="#{r.permisosPK}" 
                                              emptyMessage="Sin registros aún.">
-                                    <p:ajax event="rowSelect" listener="#{administraciónPermisoController.onRowSelect}" 
+                                    <p:ajax event="rowSelect" listener="#{admPermisoController.onRowSelect}" 
                                             update="ace" oncomplete="PF('Dotro').show();"/>
-                                    <p:column headerText="Fecha de solicitud">
-                                        <p:datePicker disabled="true" value="#{r.permisosPK.permisoFechaSolicitud}"
-                                                      locale="es" showTime="true" hourFormat="12" pattern="dd-MM-yyyy"/>
+                                    <p:column headerText="Fecha de solicitud"
+                                               filterMatchMode="contains" 
+                                               filterBy="#{admPermisoController.dateToString(r.permisosPK.permisoFechaSolicitud)}">
+                                        #{admPermisoController.dateToString(r.permisosPK.permisoFechaSolicitud)}
                                     </p:column>
 
-                                    <p:column headerText="Beneficiario">
-                                        <p:outputLabel value="#{r.persona.personaNombre.split(' ')[0]} 
-                                                       #{r.persona.personaApellido.split(' ')[0]} 
-                                                       (#{r.persona.tipoPersona.tipoPersonaNombre})"/>
+                                    <p:column headerText="Beneficiario"
+                                               filterMatchMode="contains" 
+                                               filterBy="#{r.persona.personaNombre.split(' ')[0]} 
+                                              #{r.persona.personaApellido.split(' ')[0]}">
+                                        #{r.persona.personaNombre.split(' ')[0]} 
+                                        #{r.persona.personaApellido.split(' ')[0]} 
+                                        (#{r.persona.tipoPersona.tipoPersonaNombre})
                                     </p:column>
 
                                     <p:column headerText="Periodo del permiso">
-                                        <p:outputLabel value="#{administraciónPermisoController.getFechas(r.permisosPK.permisoFechaInicio, r.permisoFechafin)}"/>
+                                        #{admPermisoController.getFechas(r.permisosPK.permisoFechaInicio, r.permisoFechafin)}
                                     </p:column>
 
                                     <p:column headerText="Tipo de permiso solicitado">
-                                        <p:outputLabel value="#{r.tipoPermiso1.tipoPermisoNombre}"/>
+                                        #{r.tipoPermiso1.tipoPermisoNombre}
                                     </p:column>
                                 </p:dataTable>
                             </h:panelGrid>
@@ -105,77 +117,77 @@
                             <h:panelGrid columns="2">
                                 <p:outputLabel for="mod" value="Bachillerato: "/>
                                 <p:selectOneMenu id="mod" immediate="true" required="true" style="width: 400px;"
-                                                 value="#{administraciónPermisoController.gradoPK.gradoModalidad}">
+                                                 value="#{admPermisoController.gradoPK.gradoModalidad}">
                                     <f:selectItem itemValue=" " itemLabel="Seleccione" noSelectionOption="true"/>
-                                    <f:selectItems value="#{administraciónPermisoController.modalidades}" />
+                                    <f:selectItems value="#{admPermisoController.modalidades}" />
                                     <p:ajax update="niv"/>
                                 </p:selectOneMenu>
 
                                 <p:outputLabel for="niv" value="Año: "/>
                                 <p:selectOneMenu id="niv" immediate="true" required="true" style="width: 400px;"
-                                                 value="#{administraciónPermisoController.gradoPK.idgrado}">
+                                                 value="#{admPermisoController.gradoPK.idgrado}">
                                     <f:selectItem itemValue=" " itemLabel="Seleccione" noSelectionOption="true"/>
-                                    <f:selectItems value="#{administraciónPermisoController.niveles}" var="n"
+                                    <f:selectItems value="#{admPermisoController.niveles}" var="n"
                                                    itemValue="#{n}" itemLabel="#{n}"/>
                                     <p:ajax update="sec"/>
                                 </p:selectOneMenu>
 
                                 <p:outputLabel for="sec" value="Sección: "/>
                                 <p:selectOneMenu id="sec" immediate="true" required="true" style="width: 400px;"
-                                                 value="#{administraciónPermisoController.gradoPK.gradoSeccion}">
+                                                 value="#{admPermisoController.gradoPK.gradoSeccion}">
                                     <f:selectItem itemValue=" " itemLabel="Seleccione" noSelectionOption="true"/>
-                                    <f:selectItems value="#{administraciónPermisoController.secciones}" var="s"
+                                    <f:selectItems value="#{admPermisoController.secciones}" var="s"
                                                    itemValue="#{s}" itemLabel="#{s}"/>
                                     <p:ajax update="es"/>
                                 </p:selectOneMenu>
 
                                 <p:outputLabel for="es" value="Estudiante: "/>
                                 <p:selectOneMenu id="es" immediate="true" required="true" style="width: 400px;"
-                                                 value="#{administraciónPermisoController.permiso.persona}"
+                                                 value="#{admPermisoController.permiso.persona}"
                                                  converter="omnifaces.SelectItemsConverter">
                                     <f:selectItem itemValue="null" itemLabel="Seleccione" noSelectionOption="true"/>
-                                    <f:selectItems value="#{administraciónPermisoController.estudiantes}" var="e"
+                                    <f:selectItems value="#{admPermisoController.estudiantes}" var="e"
                                                    itemValue="#{e}" itemLabel="#{e.personaNombre} #{e.personaApellido}"/>
                                     <p:ajax update="summit"/>
                                 </p:selectOneMenu>
 
                                 <p:outputLabel for="tp" value="Tipo de permiso a conceder: "/>
                                 <p:selectOneMenu id="tp" immediate="true" required="true" style="width: 400px;"
-                                                 value="#{administraciónPermisoController.permiso.tipoPermiso1}"
+                                                 value="#{admPermisoController.permiso.tipoPermiso1}"
                                                  converter="omnifaces.SelectItemsConverter">
                                     <f:selectItem itemValue="null" itemLabel="Seleccione" noSelectionOption="true"/>
-                                    <f:selectItems value="#{administraciónPermisoController.tipoPermiso}" var="tpe"
+                                    <f:selectItems value="#{admPermisoController.tipoPermiso}" var="tpe"
                                                    itemValue="#{tpe}" itemLabel="#{tpe.tipoPermisoNombre}"/>
                                 </p:selectOneMenu>
 
                                 <p:outputLabel for="mot" value="Motivo de la solicitud: "/>
-                                <p:inputText id="mot" value="#{administraciónPermisoController.permiso.permisosMotivo}" 
+                                <p:inputText id="mot" value="#{admPermisoController.permiso.permisosMotivo}" 
                                              required="true" style="width: 400px;"/>
 
                                 <p:outputLabel for="mask" value="Fecha de inicio:" />
-                                <p:datePicker id="mask" value="#{administraciónPermisoController.permiso.permisosPK.permisoFechaInicio}"
+                                <p:datePicker id="mask" value="#{admPermisoController.permiso.permisosPK.permisoFechaInicio}"
                                               showIcon="true" required="true" pattern="dd/MM/yyyy"/>
 
                                 <p:outputLabel for="mask1" value="Fecha de finalización: " />
-                                <p:datePicker id="mask1" value="#{administraciónPermisoController.permiso.permisoFechafin}"
+                                <p:datePicker id="mask1" value="#{admPermisoController.permiso.permisoFechafin}"
                                               showIcon="true" required="true" pattern="dd/MM/yyyy" />
 
                                 <p:outputLabel for="dui" value="Dui del solicitante: "/>
-                                <p:inputMask id="dui" value="#{administraciónPermisoController.duiSol}" mask="99999999-9"
+                                <p:inputMask id="dui" value="#{admPermisoController.duiSol}" mask="99999999-9"
                                              required="true" style="width: 400px;"/>
 
                                 <p:outputLabel for="nomb" value="Nombres del solicitante: "/>
-                                <p:inputText id="nomb" value="#{administraciónPermisoController.nombreSol}" 
+                                <p:inputText id="nomb" value="#{admPermisoController.nombreSol}" 
                                              required="true" style="width: 400px;"/>
 
                                 <p:outputLabel for="apel" value="Apellidos del solicitante: "/>
-                                <p:inputText id="apel" value="#{administraciónPermisoController.apellidoSol}" 
+                                <p:inputText id="apel" value="#{admPermisoController.apellidoSol}" 
                                              required="true" style="width: 400px;"/>
 
                                 <p:column/>
                                 <p:commandButton id="summit" value="Conceder" 
-                                                 disabled="#{administraciónPermisoController.permiso.persona==null}"
-                                                 actionListener="#{administraciónPermisoController.concederPermiso()}" 
+                                                 disabled="#{admPermisoController.permiso.persona==null}"
+                                                 actionListener="#{admPermisoController.concederPermiso()}" 
                                                  update=":form"/>
                             </h:panelGrid>
                         </p:tab>
@@ -187,31 +199,33 @@
                     <h:form id="sol">
                         <h:panelGrid columns="2" cellpadding="10" cellspacing="10">
                             <p:outputLabel value="Fecha de solicitud: "/>
-                            <p:outputLabel value="#{administraciónPermisoController
-                                                    .getFecha(administraciónPermisoController.solc.permisosPK.permisoFechaSolicitud)}"/>
+                            <h:outputText value="#{admPermisoController
+                                                    .getFecha(admPermisoController.solc.permisosPK.permisoFechaSolicitud)}"/>
 
                             <p:outputLabel value="Permiso solicitado: "/>
-                            <p:outputLabel value="#{administraciónPermisoController.solc.tipoPermiso1.tipoPermisoNombre}"/>
+                            <h:outputText value="#{admPermisoController.solc.tipoPermiso1.tipoPermisoNombre}"/>
 
-                            <p:outputLabel value="Motivo de solicitud: "/>
-                            <p:outputLabel value="#{administraciónPermisoController.solc.permisosMotivo}"/>
+                            <p:outputLabel value="Motivo de solicitud: " 
+                                           rendered="#{admPermisoController.VerMotivo(admPermisoController.solc)}"/>
+                           <h:outputText value="#{admPermisoController.solc.permisosMotivo}"
+                                           rendered="#{admPermisoController.VerMotivo(admPermisoController.solc)}"/>
 
                             <p:outputLabel value="Beneficiario: "/>
-                            <p:outputLabel value="#{administraciónPermisoController.solc.persona.personaNombre.split(' ')[0]} 
-                                           #{administraciónPermisoController.solc.persona.personaApellido.split(' ')[0]} 
-                                           (#{administraciónPermisoController.solc.persona.tipoPersona.tipoPersonaNombre})"/>
+                            <h:outputText value="#{admPermisoController.solc.persona.personaNombre.split(' ')[0]} 
+                                           #{admPermisoController.solc.persona.personaApellido.split(' ')[0]} 
+                                           (#{admPermisoController.solc.persona.tipoPersona.tipoPersonaNombre})"/>
 
                             <p:outputLabel value="solicitado por: " 
-                                           rendered="#{!administraciónPermisoController.solc.persona.equals(administraciónPermisoController.solc.permisosSolicitante)}"/>
-                            <p:outputLabel value="#{administraciónPermisoController.getSolicitadoPor(administraciónPermisoController.acep)}" 
-                                           rendered="#{!administraciónPermisoController.solc.persona.equals(administraciónPermisoController.solc.permisosSolicitante)}"/>
+                                           rendered="#{!admPermisoController.solc.persona.equals(admPermisoController.solc.permisosSolicitante)}"/>
+                            <h:outputText value="#{admPermisoController.getSolicitadoPor(admPermisoController.acep)}" 
+                                           rendered="#{!admPermisoController.solc.persona.equals(admPermisoController.solc.permisosSolicitante)}"/>
 
                             <p:outputLabel value="Fechas del permiso:"/>
-                            <p:outputLabel value="#{administraciónPermisoController.getFechas(
-                                                    administraciónPermisoController.solc.permisosPK.permisoFechaInicio,
-                                                    administraciónPermisoController.solc.permisoFechafin)}"/>
+                            <h:outputText value="#{admPermisoController.getFechas(
+                                                    admPermisoController.solc.permisosPK.permisoFechaInicio,
+                                                    admPermisoController.solc.permisoFechafin)}"/>
 
-                            <p:commandButton value="Aceptar" actionListener="#{administraciónPermisoController.guardar(1)}"
+                            <p:commandButton value="Aceptar" actionListener="#{admPermisoController.guardar(1)}"
                                              oncomplete="PF('Dsol').hide();" update="form sol :form0:msgs"/>
                             <p:commandButton value="Rechazar" onclick="PF('Drechazo').show();" 
                                              update=":form rech"/>
@@ -224,39 +238,41 @@
                     <h:form id="ace">
                         <h:panelGrid columns="2" cellpadding="10" cellspacing="10">
                             <p:outputLabel value="Fecha de solicitud: "/>
-                            <p:outputLabel value="#{administraciónPermisoController
-                                                    .getFecha(administraciónPermisoController.acep.permisosPK.permisoFechaSolicitud)}"/>
+                            <h:outputText value="#{admPermisoController
+                                                    .getFecha(admPermisoController.acep.permisosPK.permisoFechaSolicitud)}"/>
 
                             <p:outputLabel value="Permiso solicitado: "/>
-                            <p:outputLabel value="#{administraciónPermisoController.acep.tipoPermiso1.tipoPermisoNombre}"/>
+                            <h:outputText value="#{admPermisoController.acep.tipoPermiso1.tipoPermisoNombre}"/>
 
-                            <p:outputLabel value="Motivo de solicitud: "/>
-                            <p:outputLabel value="#{administraciónPermisoController.acep.permisosMotivo}"/>
+                            <p:outputLabel value="Motivo de solicitud: "
+                                           rendered="#{admPermisoController.VerMotivo(admPermisoController.acep)}"/>
+                           <h:outputText value="#{admPermisoController.acep.permisosMotivo}"
+                                         rendered="#{admPermisoController.VerMotivo(admPermisoController.acep)}"/>
 
                             <p:outputLabel value="Beneficiario: "/>
-                            <p:outputLabel value="#{administraciónPermisoController.acep.persona.personaNombre.split(' ')[0]} 
-                                           #{administraciónPermisoController.acep.persona.personaApellido.split(' ')[0]} 
-                                           (#{administraciónPermisoController.acep.persona.tipoPersona.tipoPersonaNombre})"/>
+                            <h:outputText value="#{admPermisoController.acep.persona.personaNombre.split(' ')[0]} 
+                                           #{admPermisoController.acep.persona.personaApellido.split(' ')[0]} 
+                                           (#{admPermisoController.acep.persona.tipoPersona.tipoPersonaNombre})"/>
 
                             <p:outputLabel value="solicitado por: " 
-                                           rendered="#{!administraciónPermisoController.acep.persona.equals(administraciónPermisoController.acep.permisosSolicitante)}"/>
-                            <p:outputLabel value="#{administraciónPermisoController.getSolicitadoPor(administraciónPermisoController.acep)}" 
-                                           rendered="#{!administraciónPermisoController.acep.persona.equals(administraciónPermisoController.acep.permisosSolicitante)}"/>
+                                           rendered="#{!admPermisoController.acep.persona.equals(admPermisoController.acep.permisosSolicitante)}"/>
+                            <h:outputText value="#{admPermisoController.getSolicitadoPor(admPermisoController.acep)}" 
+                                           rendered="#{!admPermisoController.acep.persona.equals(admPermisoController.acep.permisosSolicitante)}"/>
 
                             <p:outputLabel value="Fechas del permiso:"/>
-                            <p:outputLabel value="#{administraciónPermisoController.getFechas(
-                                                    administraciónPermisoController.acep.permisosPK.permisoFechaInicio,
-                                                    administraciónPermisoController.acep.permisoFechafin)}"/>
+                            <h:outputText value="#{admPermisoController.getFechas(
+                                                    admPermisoController.acep.permisosPK.permisoFechaInicio,
+                                                    admPermisoController.acep.permisoFechafin)}"/>
 
                             <p:outputLabel value="Estado del permiso: "/>
-                            <p:outputLabel value="#{administraciónPermisoController.acep.permisosEstado.equals('1')
-                                                    ? 'Aceptado' : (administraciónPermisoController.acep.permisosEstado.equals('2')
+                            <h:outputText value="#{admPermisoController.acep.permisosEstado.equals('1')
+                                                    ? 'Aceptado' : (admPermisoController.acep.permisosEstado.equals('2')
                                                     ? 'Rechazado': '????')}"/>
 
                             <p:outputLabel value="Motivo del rechazo: " 
-                                           rendered="#{administraciónPermisoController.acep.permisosEstado.equals('2')}"/>
-                            <p:outputLabel value="#{administraciónPermisoController.comentarioAcep}"
-                                           rendered="#{administraciónPermisoController.acep.permisosEstado.equals('2')}"/>
+                                           rendered="#{admPermisoController.acep.permisosEstado.equals('2')}"/>
+                            <h:outputText value="#{admPermisoController.comentarioAcep}"
+                                           rendered="#{admPermisoController.acep.permisosEstado.equals('2')}"/>
                         </h:panelGrid>
                     </h:form>
                 </p:dialog>
@@ -265,10 +281,10 @@
                     <h:form id="rech">
                         <h:panelGrid columns="2" cellspacing="5">
                             <p:outputLabel for="rec" value="Especifique la razón por la que rechaza el permiso: "/>
-                            <p:inputText id="rec" value="#{administraciónPermisoController.comentarioSolc}" required="true"/>
-                            
+                            <p:inputText id="rec" value="#{admPermisoController.comentarioSolc}" required="true"/>
+
                             <p:column/>
-                            <p:commandButton value="Rechazar" actionListener="#{administraciónPermisoController.guardar(2)}"
+                            <p:commandButton value="Rechazar" actionListener="#{admPermisoController.guardar(2)}"
                                              oncomplete="PF('Drechazo').hide(); PF('Dsol').hide();" 
                                              update="rech form sol :form0:msgs"/>
                         </h:panelGrid>

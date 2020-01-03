@@ -1,10 +1,170 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="./../WEB-INF/template/plantilla1.xhtml">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../WEB-INF/template/plantilla1.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="content">
-        content
+        <h:form id="form">
+            <h:panelGrid columns="1">
+                <h1 align="center">Historial de solicitudes de Reserva de equipo</h1>
+                <p:dataTable id="hreserva" value="#{historialRController.reservas}" var="r"
+                             paginator="true" rows="7" selection="#{historialRController.selected}" 
+                             selectionMode="single" rowKey="#{r.idreserva}" 
+                             emptyMessage="No ha hecho reservas aún." paginatorAlwaysVisible="false">
+                    <p:ajax event="rowSelect" listener="#{historialRController.onDetalleRowSelect}"
+                            update="d1" oncomplete="PF('Dreserva').show()"/>/>
+                    <p:column headerText="Tipo de recurso" width="30%"
+                              filterBy="#{r.tipoRecurso.tipoRecursoNombre}">
+                        #{r.tipoRecurso.tipoRecursoNombre}
+                    </p:column>
+                    <p:column headerText="Fecha de uso" width="20%"
+                              filterBy="#{historialRController.getFechasToString(r.reservaEntrega)}">
+                        #{historialRController.getFechasToString(r.reservaEntrega)}
+                    </p:column>
+                    <p:column headerText="Estado de la reserva" width="15%"
+                              filterBy="#{historialRController.getEstado(r.reservaEstado)}">
+                        #{historialRController.getEstado(r.reservaEstado)}
+                    </p:column>
+                    <p:column headerText="Reservado por">
+                        #{historialRController.getResponsable(r.reservaComentario)}
+                    </p:column>
+                </p:dataTable>
+            </h:panelGrid>
+        </h:form>
+        <p:dialog id="dialog" widgetVar="Dreserva" modal="true" style="width: 60%;"
+                  showHeader="true" header="Solicitud de reserva">
+            <h:form id="d1">
+                <h1 align="center">Detalle de solicitud de reserva #{historialRController.textoReserva}a</h1>
+                <h:panelGrid columns="1">
+                    <p:panel header="Información de Reserva" toggleable="true">
+                        <h:panelGrid columns="2" cellspacing="5">                            
+                            <p:outputLabel value="Fecha y hora de solicitud: "/>
+                            <h:outputText value="#{historialRController.getFechasToString(historialRController.selected.reservaFecha)}"/>
+
+                            <p:outputLabel value="Fecha y hora de inicio de uso: "/>
+                            <h:outputText value="#{historialRController.getFechasToString(historialRController.selected.reservaEntrega)}"/>
+
+                            <p:outputLabel value="Fecha y hora de fin de uso: "/>
+                            <h:outputText value="#{historialRController.getFechasToString(historialRController.selected.reservaDevolucion)}"/>
+
+                            <p:outputLabel value="Grado: " rendered="#{historialRController.gradoValido}"/>
+                            <h:outputText value="#{historialRController.gradoUso}" rendered="#{historialRController.gradoValido}"/>
+
+                            <p:outputLabel value="Docente: " rendered="#{historialRController.selected.docente != null}"/>
+                            <h:outputText value="#{historialRController.docente}"
+                                          rendered="#{historialRController.selected.docente != null}"/>
+
+                            <p:outputLabel value="Asignatura: " rendered="#{historialRController.selected.maeria != null}"/>
+                            <h:outputText value="#{historialRController.selected.maeria.materiaNombre}"
+                                          rendered="#{historialRController.selected.maeria != null}"/>
+
+                            <p:outputLabel value="Tema o razón de uso: "
+                                           rendered="#{historialRController.vertema}"/>
+                            <h:outputText value="#{historialRController.selected.tema}"
+                                          rendered="#{historialRController.vertema}"/>
+
+                            <p:outputLabel value="Objetivo a alcanzar: "
+                                           rendered="#{historialRController.verObjetivo}"/>
+                            <h:outputText value="#{historialRController.selected.objetivoTema}"
+                                          rendered="#{historialRController.verObjetivo}"/>
+
+                            <p:outputLabel value="Tipo de proyecto: " 
+                                           rendered="#{historialRController.selected.tipoProyecto!=null}"/>
+                            <h:outputText value="#{historialRController.selected.tipoProyecto.tipoProyectoNombre}"
+                                          rendered="#{historialRController.selected.tipoProyecto!=null}"/>                            
+
+                            <p:outputLabel value="Tipo de reserva: "/>
+                            <h:outputText value="#{historialRController.selected.tipoReserva.tipoReservaNombre}"/>
+
+                            <p:outputLabel value="Tipo de recurso: "/>
+                            <h:outputText value="#{historialRController.selected.tipoRecurso.tipoRecursoNombre}"/>
+
+                            <p:outputLabel value="Reservado por: "/>
+                            <h:outputText value="#{historialRController.getResponsable(historialRController.selected.reservaComentario)}"/>
+
+                            <p:outputLabel value="El equipo será usado por: "/>
+                            <h:outputText value="#{historialRController.usos}"/>
+
+                            <p:outputLabel value="Grupo de estudiantes: " 
+                                           rendered="#{historialRController.usadoPor == 3}"/>
+                            <p:inputTextarea value="#{historialRController.personasEnSolicitudTexto}" 
+                                             disabled="true" autoResize="true"
+                                             rendered="#{historialRController.usadoPor == 3}"/>
+
+                            <p:outputLabel value="Razón de rechazo: " rendered="#{historialRController.rechazo}"/>
+                            <p:inputTextarea value="#{historialRController.razonRechazo}" 
+                                             rendered="#{historialRController.rechazo}" disabled="true"/>
+                            
+                            <p:outputLabel value="Razón de cancelación: " 
+                                           rendered="#{historialRController.cancelado}"/>
+                            <p:inputTextarea value="#{historialRController.razonRechazo}" 
+                                             rendered="#{historialRController.cancelado}" 
+                                             disabled="true"/>
+                        </h:panelGrid>
+                    </p:panel>
+                    <p:panel header="Detalle del equipo #{historialRController.textoReserva}o"
+                             toggleable="true">
+                        <h:panelGrid columns="2" cellspacing="10" 
+                                     rendered="#{!historialRController.verEquipoDetalle}">
+                            <h:outputText value="Cantidad"/>
+                            <h:outputText value="Recurso"/>
+
+                            <ui:repeat var="s" value="#{historialRController.solicitudReservaDetalle}">
+                                <h:panelGrid columns="1" cellspacing="10">
+                                    <h:outputText value="#{s.solicitudReservaComentario}"/>
+                                </h:panelGrid>
+                            </ui:repeat>
+
+                            <ui:repeat var="s" value="#{historialRController.solicitudReservaDetalle}">
+                                <h:panelGrid columns="1" cellspacing="10">
+                                    <h:outputText value="#{s.recurso.nombre}"/>  
+                                </h:panelGrid>
+                            </ui:repeat>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" cellspacing="10" 
+                                     rendered="#{historialRController.verEquipoDetalle}">
+                            <h:outputText value="Correlativo"/>
+                            <h:outputText value="Nombre de recurso"/>
+
+                            <ui:repeat var="s" value="#{historialRController.reservaDetalle}">
+                                <h:panelGrid columns="1" cellspacing="10">
+                                    <h:outputText value="#{s.ejemplarPK.ejemplarCorrelativo}"/>
+                                </h:panelGrid>
+                            </ui:repeat>
+
+                            <ui:repeat var="s" value="#{historialRController.reservaDetalle}">
+                                <h:panelGrid columns="1" cellspacing="10">
+                                    <h:outputText value="#{s.recurso.nombre}"/>  
+                                </h:panelGrid>
+                            </ui:repeat>
+                        </h:panelGrid>
+                    </p:panel>
+                    <p:commandButton value="Cancelar" update="d2" oncomplete="PF('Dreserva1').show();"
+                            icon="pi pi-times" rendered="#{historialRController.sePuedeCancelar}"/>
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+        <p:dialog id="dialog1" widgetVar="Dreserva1" modal="true" 
+                  header="Cancelación de la solicitud de reserva">
+            <h:form id="d2">
+                <h:panelGrid columns="2">
+                    <p:column/>
+                    <p:outputLabel value="Está a punto de cancelar una solicitud de reserva de equipo"/>
+
+                    <p:outputLabel for="rh" value="Razón de cancelamiento: "/>
+                    <p:inputTextarea id="rh" value="#{historialRController.razonRechazo}" 
+                                     autoResize="true"
+                                     cols="50" rows="5"/>
+
+                    <p:column/>
+                    <p:commandButton value="cancelar" actionListener="#{historialRController.cancelar()}"
+                                     update="d2 d1 form"/>                    
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
     </ui:define>
 
 </ui:composition>

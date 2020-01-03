@@ -5,6 +5,7 @@
  */
 package net.delsas.saitae.beans;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -35,6 +36,13 @@ public class ReservaDetalleFacade extends AbstractFacade<ReservaDetalle> impleme
         return (Reserva) em.createNamedQuery("ReservaDetalle.findReservaByIdReserva")
                 .setParameter("idReserva", id)
                 .getSingleResult();
+    }
+    
+    @Override
+    public List<ReservaDetalle> findByIdReserva(Integer id){
+        return em.createNamedQuery("ReservaDetalle.findByIdReserva")
+                .setParameter("idReserva", id)
+                .getResultList();
     }
     
 }

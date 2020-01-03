@@ -58,7 +58,7 @@ import org.primefaces.event.SelectEvent;
  */
 @Named
 @ViewScoped
-public class administraciónPermisoController implements Serializable {
+public class admPermisoController implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private List<Permisos> solicitados;
@@ -69,6 +69,7 @@ public class administraciónPermisoController implements Serializable {
     private Permisos solc;
     private GradoPK gradoPK;
     private Persona usuario;
+    private List<Integer> tps;
 
     @EJB
     private PermisosFacadeLocal permisosFL;
@@ -91,7 +92,7 @@ public class administraciónPermisoController implements Serializable {
             permiso.setTipoPersona(tipoPersonaFL.find(8));
             solicitados = rechazados = aceptados = new ArrayList<>();
             usuario = (Persona) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
-            List<Integer> tps = new ArrayList<>();
+            tps = new ArrayList<>();
             if (usuario == null) {
                 redirect();
             } else {
@@ -100,9 +101,9 @@ public class administraciónPermisoController implements Serializable {
                 if (!r) {
                     redirect();
                 } else {
-                    solicitados = (tps.contains(1) || tps.contains(2)) ? permisosFL.getPermisosPorEstado("0") : permisosFL.findByPEPEs("0");
-                    aceptados = (tps.contains(1) || tps.contains(2)) ? permisosFL.getPermisosPorEstado("1") : permisosFL.findByPEPEs("1");
-                    rechazados = (tps.contains(1) || tps.contains(2)) ? permisosFL.getPermisosPorEstado("2") : permisosFL.findByPEPEs("2");
+                    //solicitados = (tps.contains(1) || tps.contains(2)) ? permisosFL.getPermisosPorEstado("0") : permisosFL.findByPEPEs("0");
+                    //aceptados = (tps.contains(1) || tps.contains(2)) ? permisosFL.getPermisosPorEstado("1") : permisosFL.findByPEPEs("1");
+                    //rechazados = (tps.contains(1) || tps.contains(2)) ? permisosFL.getPermisosPorEstado("2") : permisosFL.findByPEPEs("2");
                 }
             }
 
@@ -166,7 +167,7 @@ public class administraciónPermisoController implements Serializable {
     }
 
     public String getFecha(Date a) {
-        return a != null ? new SimpleDateFormat("dd-MM-yyyy").format(a) : "";
+        return a != null ? new SimpleDateFormat("dd/MM/yyyy").format(a) : " ";
     }
 
     public String getFechas(Date i, Date f) {
@@ -248,7 +249,9 @@ public class administraciónPermisoController implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, m);
         mensaje x = new mensaje(solc.getPermisosPK().getIpPersona(), usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
                 + " ha " + (w == 1 ? "aceptado" : "rechazado") + " su solicitud de permiso ",
-                (w == 1 ? "Aceptación" : "Rechado") + " de permiso", FacesMessage.SEVERITY_INFO, usuario.getIdpersona(), " ");
+                (w == 1 ? "Aceptación" : "Rechado") + " de permiso",
+                FacesMessage.SEVERITY_INFO, usuario.getIdpersona(), "permiso<form");
+
         sendMessage(x.toString());
         try {
             notFL.create(x.getNotificacion());
@@ -294,6 +297,7 @@ public class administraciónPermisoController implements Serializable {
     }
 
     public List<Permisos> getSolicitados() {
+        solicitados = (tps.contains(1) || tps.contains(2)) ? permisosFL.getPermisosPorEstado("0") : permisosFL.findByPEPEs("0");
         return Collections.unmodifiableList(solicitados);
     }
 
@@ -302,6 +306,7 @@ public class administraciónPermisoController implements Serializable {
     }
 
     public List<Permisos> getAceptados() {
+        aceptados = (tps.contains(1) || tps.contains(2)) ? permisosFL.getPermisosPorEstado("1") : permisosFL.findByPEPEs("1");
         return Collections.unmodifiableList(aceptados);
     }
 
@@ -310,6 +315,7 @@ public class administraciónPermisoController implements Serializable {
     }
 
     public List<Permisos> getRechazados() {
+        rechazados = (tps.contains(1) || tps.contains(2)) ? permisosFL.getPermisosPorEstado("2") : permisosFL.findByPEPEs("2");
         return Collections.unmodifiableList(rechazados);
     }
 
@@ -411,6 +417,16 @@ public class administraciónPermisoController implements Serializable {
 
     public String getComentario() {
         return permiso.getPermisosComentario().split("¿¿")[3];
+    }
+
+    public boolean VerMotivo(Permisos p) {
+        return p == null ? false
+                : (p.getPermisosMotivo() != null ? p.getPermisosMotivo().split("").length > 1
+                : false);
+    }
+
+    public String dateToString(Date d) {
+        return new SimpleDateFormat("dd/MM/yyy").format(d);
     }
 
     @Inject

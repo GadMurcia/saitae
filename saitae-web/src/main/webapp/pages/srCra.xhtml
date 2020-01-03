@@ -12,7 +12,7 @@
         <h:form id="form">
             <h:panelGrid columns="1">
                 <h1 align="center">Administración de solicitudes de reservas de equipo</h1>
-                <p:accordionPanel dynamic="true" style="width: 100%;">
+                <p:accordionPanel id="ap">
                     <p:tab title="Solicitudes de Recursos pendientes">
                         <p:dataTable id="solicitados" value="#{adminReservas.solicitados}" var="s"
                                      paginator="true" rows="5" selection="#{adminReservas.selected}" 
@@ -22,8 +22,8 @@
                                     update=":d1" oncomplete="PF('Dreserva').show();"/>
 
                             <p:column headerText="Tipo de recurso" rendered="#{adminReservas.admin}"
-                                      filterBy="#{adminReservas.getTipoRecurso(s)}">
-                                <p:outputLabel value="#{adminReservas.getTipoRecurso(s)}"/>
+                                      filterBy="#{s.tipoRecurso.tipoRecursoNombre}">
+                                <p:outputLabel value="#{s.tipoRecurso.tipoRecursoNombre}"/>
                             </p:column>
 
                             <p:column headerText="Fecha de solicitud" filterMatchMode="contains" 
@@ -174,15 +174,18 @@
                                       filterBy="#{adminReservas.getTipoRecurso(s)}">
                                 <p:outputLabel value="#{adminReservas.getTipoRecurso(s)}"/>
                             </p:column>
-                            <p:column headerText="Fecha de solicitud" filterMatchMode="contains" filterBy="#{adminReservas.getFechaString(s.reservaFecha)}">
+                            <p:column headerText="Fecha de solicitud" filterMatchMode="contains" 
+                                      filterBy="#{adminReservas.getFechaString(s.reservaFecha)}">
                                 <p:outputLabel value="#{adminReservas.getFechaString(s.reservaFecha)}"/>
                             </p:column>
 
-                            <p:column headerText="Fecha de uso" filterMatchMode="contains" filterBy="#{adminReservas.getFechaString(s.reservaEntrega)}">
+                            <p:column headerText="Fecha de uso" filterMatchMode="contains" 
+                                      filterBy="#{adminReservas.getFechaString(s.reservaEntrega)}">
                                 <p:outputLabel value="#{adminReservas.getFechaString(s.reservaEntrega)}"/>
                             </p:column>
 
-                            <p:column headerText="Fecha de devolución" filterMatchMode="contains" filterBy="#{adminReservas.getFechaString(s.reservaDevolucion)}">
+                            <p:column headerText="Fecha de devolución" filterMatchMode="contains" 
+                                      filterBy="#{adminReservas.getFechaString(s.reservaDevolucion)}">
                                 <p:outputLabel value="#{adminReservas.getFechaString(s.reservaDevolucion)}"/>
                             </p:column>
 
@@ -232,9 +235,9 @@
                                           rendered="#{adminReservas.verObjetivo}"/>
 
                             <p:outputLabel value="Tipo de proyecto: " 
-                                           rendered="#{adminReservas.selected.tipoPtoyecto!=null}"/>
-                            <h:outputText value="#{adminReservas.selected.tipoPtoyecto.tipoProyectoNombre}"
-                                          rendered="#{adminReservas.selected.tipoPtoyecto!=null}"/>                            
+                                           rendered="#{adminReservas.selected.tipoProyecto!=null}"/>
+                            <h:outputText value="#{adminReservas.selected.tipoProyecto.tipoProyectoNombre}"
+                                          rendered="#{adminReservas.selected.tipoProyecto!=null}"/>                            
 
                             <p:outputLabel value="Tipo de reserva: "/>
                             <h:outputText value="#{adminReservas.selected.tipoReserva.tipoReservaNombre}"/>
@@ -258,6 +261,12 @@
                             <p:outputLabel value="Razón de rechazo: " rendered="#{adminReservas.rechazo}"/>
                             <p:inputTextarea value="#{adminReservas.razonRechazo}" 
                                              rendered="#{adminReservas.rechazo}" disabled="true"/>
+                            
+                            <p:outputLabel value="Razón de cancelación: " 
+                                           rendered="#{adminReservas.cancelado}"/>
+                            <p:inputTextarea value="#{adminReservas.razonRechazo}" 
+                                             rendered="#{adminReservas.cancelado}" 
+                                             disabled="true"/>
                         </h:panelGrid>
                     </p:panel>
                     <p:panel header="Detalle del equipo #{adminReservas.textoReserva}o"

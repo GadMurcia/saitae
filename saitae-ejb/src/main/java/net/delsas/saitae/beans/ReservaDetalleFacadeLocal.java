@@ -38,4 +38,11 @@ public interface ReservaDetalleFacadeLocal {
      */
     public Reserva findReservaByIdReserva(Integer id);
     
+    /**
+     * retorna una lista de reservas detalles cuyo id de reserva es el proporcionado
+     * @param id
+     * @return java.util.List net.delsas.saitae.entities.ReservaDetalle
+     */
+    public List<ReservaDetalle> findByIdReserva(Integer id);
+    
 }
