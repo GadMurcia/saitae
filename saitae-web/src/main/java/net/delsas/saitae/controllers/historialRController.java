@@ -33,6 +33,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import net.delsas.saitae.ax.mensaje;
 import net.delsas.saitae.beans.NotificacionesFacadeLocal;
+import net.delsas.saitae.beans.PersonasReservaFacadeLocal;
 import net.delsas.saitae.beans.ReservaDetalleFacadeLocal;
 import net.delsas.saitae.beans.ReservaFacadeLocal;
 import net.delsas.saitae.beans.SolicitudReservaFacadeLocal;
@@ -43,6 +44,7 @@ import net.delsas.saitae.entities.GradoPK;
 import net.delsas.saitae.entities.Maestro;
 import net.delsas.saitae.entities.Matricula;
 import net.delsas.saitae.entities.Persona;
+import net.delsas.saitae.entities.PersonasReserva;
 import net.delsas.saitae.entities.Reserva;
 import net.delsas.saitae.entities.ReservaDetalle;
 import net.delsas.saitae.entities.SolicitudReserva;
@@ -75,6 +77,8 @@ public class historialRController implements Serializable {
     private TipoPersonaFacadeLocal tpFL;
     @EJB
     private SolicitudReservaFacadeLocal srFL;
+    @EJB
+    private PersonasReservaFacadeLocal prFL;
 
     private List<Ejemplar> r;
     private List<Reserva> reservas;
@@ -324,7 +328,9 @@ public class historialRController implements Serializable {
     public List<Persona> getPersonasEnSolicitud() {
         List<Persona> l = new ArrayList<>();
         if (selected != null) {
-            selected.getPersonasReservaList().forEach((pr) -> {
+            List<PersonasReserva> prs = selected.getPersonasReservaList();
+            prs = (prs == null || prs.isEmpty()) ? prFL.findByIdReserva(selected.getIdreserva()) : prs;
+            prs.forEach((pr) -> {
                 l.add(pr.getPersona());
             });
         }

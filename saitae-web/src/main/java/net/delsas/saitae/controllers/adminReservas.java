@@ -47,6 +47,7 @@ import net.delsas.saitae.entities.GradoPK;
 import net.delsas.saitae.entities.Maestro;
 import net.delsas.saitae.entities.Matricula;
 import net.delsas.saitae.entities.Persona;
+import net.delsas.saitae.entities.PersonasReserva;
 import net.delsas.saitae.entities.Reserva;
 import net.delsas.saitae.entities.ReservaDetalle;
 import net.delsas.saitae.entities.SolicitudReserva;
@@ -446,11 +447,13 @@ public class adminReservas implements Serializable {
     public List<Persona> getPersonasEnSolicitud() {
         List<Persona> l = new ArrayList<>();
         if (selected != null) {
-            selected.getPersonasReservaList().forEach((pr) -> {
+            List<PersonasReserva> prs = selected.getPersonasReservaList();
+            prs = (prs == null || prs.isEmpty()) ? prFL.findByIdReserva(selected.getIdreserva()) : prs;
+            prs.forEach((pr) -> {
                 l.add(pr.getPersona());
             });
         }
-        
+
         return l;
     }
     

@@ -35,6 +35,8 @@ import net.delsas.saitae.entities.ProyectoPedagogico;
 import org.omnifaces.cdi.Push;
 import org.omnifaces.cdi.PushContext;
 import org.primefaces.event.FlowEvent;
+import org.primefaces.event.RowEditEvent;
+import org.primefaces.event.SelectEvent;
 
 /**
  *
@@ -130,6 +132,18 @@ public class solicitudPPController implements Serializable {
 
     public void guardar() {
         System.out.println(proyecto);
+    }
+
+    public void onRowEdit(RowEditEvent event) {
+        System.out.println(event.getObject());
+    }
+
+    public void onRowCancel(RowEditEvent event) {
+        System.out.println(event.getObject());
+    }
+
+    public void onDetalleRowSelect(SelectEvent event) {
+        System.out.println(event.getObject());
     }
 
 }
