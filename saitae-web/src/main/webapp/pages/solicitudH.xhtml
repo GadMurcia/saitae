@@ -91,16 +91,16 @@
                             <p:outputLabel value="Grupo de estudiantes: " 
                                            rendered="#{historialRController.usadoPor == 3}"/>
                             <p:inputTextarea value="#{historialRController.personasEnSolicitudTexto}" 
-                                             disabled="true" autoResize="true"
+                                             disabled="true" cols="40"
                                              rendered="#{historialRController.usadoPor == 3}"/>
 
                             <p:outputLabel value="Razón de rechazo: " rendered="#{historialRController.rechazo}"/>
-                            <p:inputTextarea value="#{historialRController.razonRechazo}" 
+                            <p:inputTextarea value="#{historialRController.razonRechazo}" cols="40"
                                              rendered="#{historialRController.rechazo}" disabled="true"/>
                             
                             <p:outputLabel value="Razón de cancelación: " 
                                            rendered="#{historialRController.cancelado}"/>
-                            <p:inputTextarea value="#{historialRController.razonRechazo}" 
+                            <p:inputTextarea value="#{historialRController.razonRechazo}" cols="40"
                                              rendered="#{historialRController.cancelado}" 
                                              disabled="true"/>
                         </h:panelGrid>

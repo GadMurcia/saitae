@@ -255,16 +255,16 @@
                             <p:outputLabel value="Grupo de estudiantes: " 
                                            rendered="#{adminReservas.usadoPor == 3}"/>
                             <p:inputTextarea value="#{adminReservas.personasEnSolicitudTexto}" 
-                                             disabled="true" autoResize="true"
+                                             disabled="true" cols="40"
                                              rendered="#{adminReservas.usadoPor == 3}"/>
 
                             <p:outputLabel value="Razón de rechazo: " rendered="#{adminReservas.rechazo}"/>
-                            <p:inputTextarea value="#{adminReservas.razonRechazo}" 
+                            <p:inputTextarea value="#{adminReservas.razonRechazo}" cols="40"
                                              rendered="#{adminReservas.rechazo}" disabled="true"/>
                             
                             <p:outputLabel value="Razón de cancelación: " 
                                            rendered="#{adminReservas.cancelado}"/>
-                            <p:inputTextarea value="#{adminReservas.razonRechazo}" 
+                            <p:inputTextarea value="#{adminReservas.razonRechazo}" cols="40"
                                              rendered="#{adminReservas.cancelado}" 
                                              disabled="true"/>
                         </h:panelGrid>
@@ -417,7 +417,7 @@
                     <p:outputLabel for="rh" value="Observaciones previas: "/>
                     <p:inputTextarea id="rh" value="#{adminReservas.selected.observacionEntrega}" 
                                      autoResize="true"
-                                     cols="50" rows="5"/>
+                                     cols="40" rows="5"/>
                     <p:column/>
                     <p:commandButton value="entregar" actionListener="#{adminReservas.entregar()}"
                                      update="d4 d1 form"/>                    
@@ -434,7 +434,7 @@
                     <p:outputLabel for="rh" value="Observaciones finales: "/>
                     <p:inputTextarea id="rh" value="#{adminReservas.selected.observacionDevolucion}" 
                                      autoResize="true"
-                                     cols="50" rows="5"/>
+                                     cols="40" rows="5"/>
                     <p:column/>
                     <p:commandButton value="recibir" actionListener="#{adminReservas.recibir()}"
                                      update="d5 d1 form"/>                    
