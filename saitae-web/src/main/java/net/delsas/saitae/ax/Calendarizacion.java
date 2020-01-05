@@ -18,6 +18,9 @@ package net.delsas.saitae.ax;
 
 import java.util.Date;
 import java.util.Objects;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import net.delsas.saitae.entities.Horario;
 
 /**
  *
@@ -26,20 +29,29 @@ import java.util.Objects;
 public class Calendarizacion {
 
     private Integer numero;
+    @Temporal(TemporalType.DATE)
     private Date fecha;
-    private Date horai;
-    private Date horaf;
+    private Horario horai;
+    private Horario horaf;
     private String observacion;
 
     public Calendarizacion() {
     }
 
-    public Calendarizacion(int numero, Date fecha, Date horai, Date horaf, String observacion) {
+    public Calendarizacion(Integer numero, Date fecha, Horario horai, Horario horaf, String observacion) {
         this.numero = numero;
         this.fecha = fecha;
         this.horai = horai;
         this.horaf = horaf;
         this.observacion = observacion;
+    }
+
+    public Calendarizacion(Calendarizacion c) {
+        this.numero = c.getNumero();
+        this.fecha = c.getFecha();
+        this.horai = c.getHorai();
+        this.horaf = c.getHoraf();
+        this.observacion = c.getObservacion();
     }
 
     public Integer getNumero() {
@@ -58,19 +70,19 @@ public class Calendarizacion {
         this.fecha = fecha;
     }
 
-    public Date getHorai() {
+    public Horario getHorai() {
         return horai;
     }
 
-    public void setHorai(Date horai) {
+    public void setHorai(Horario horai) {
         this.horai = horai;
     }
 
-    public Date getHoraf() {
+    public Horario getHoraf() {
         return horaf;
     }
 
-    public void setHoraf(Date horaf) {
+    public void setHoraf(Horario horaf) {
         this.horaf = horaf;
     }
 
@@ -84,12 +96,12 @@ public class Calendarizacion {
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 41 * hash + this.numero;
-        hash = 41 * hash + Objects.hashCode(this.fecha);
-        hash = 41 * hash + Objects.hashCode(this.horai);
-        hash = 41 * hash + Objects.hashCode(this.horaf);
-        hash = 41 * hash + Objects.hashCode(this.observacion);
+        int hash = 3;
+        hash = 37 * hash + Objects.hashCode(this.numero);
+        hash = 37 * hash + Objects.hashCode(this.fecha);
+        hash = 37 * hash + Objects.hashCode(this.horai);
+        hash = 37 * hash + Objects.hashCode(this.horaf);
+        hash = 37 * hash + Objects.hashCode(this.observacion);
         return hash;
     }
 
@@ -105,26 +117,24 @@ public class Calendarizacion {
             return false;
         }
         final Calendarizacion other = (Calendarizacion) obj;
-        if (!Objects.equals(this.numero, other.numero)) {
+        if (!Objects.equals(this.observacion, other.getObservacion())) {
             return false;
         }
-        if (!Objects.equals(this.observacion, other.observacion)) {
+        if (!Objects.equals(this.numero, other.getNumero())) {
             return false;
         }
-        if (!Objects.equals(this.fecha, other.fecha)) {
+        if (!Objects.equals(this.fecha, other.getFecha())) {
             return false;
         }
-        if (!Objects.equals(this.horai, other.horai)) {
+        if (!Objects.equals(this.horai, other.getHorai())) {
             return false;
         }
-        if (!Objects.equals(this.horaf, other.horaf)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.horaf, other.getHoraf());
     }
 
     @Override
     public String toString() {
-        return "calendarizacion{" + "numero=" + numero + ", fecha=" + fecha + ", horai=" + horai + ", horaf=" + horaf + ", observacion=" + observacion + '}';
+        return "Calendarizacion{" + "numero=" + numero + ", fecha=" + fecha + ", horai=" + horai + ", horaf=" + horaf + ", observacion=" + observacion + '}';
     }
+
 }

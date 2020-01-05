@@ -8,6 +8,7 @@ package net.delsas.saitae.entities;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -113,31 +114,44 @@ public class Horario implements Serializable {
 
     public void setMestroHorarioMateriasList(List<MestroHorarioMaterias> mestroHorarioMateriasList) {
         this.mestroHorarioMateriasList = mestroHorarioMateriasList;
-    }
+    }    
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (idhorario != null ? idhorario.hashCode() : 0);
+        int hash = 3;
+        hash = 79 * hash + Objects.hashCode(this.idhorario);
+        hash = 79 * hash + Objects.hashCode(this.horaInicio);
+        hash = 79 * hash + Objects.hashCode(this.horaFin);
+        hash = 79 * hash + Objects.hashCode(this.horarioComentario);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Horario)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        Horario other = (Horario) object;
-        if ((this.idhorario == null && other.idhorario != null) || (this.idhorario != null && !this.idhorario.equals(other.idhorario))) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
-        return true;
+        final Horario other = (Horario) obj;
+        if (!Objects.equals(this.horarioComentario, other.horarioComentario)) {
+            return false;
+        }
+        if (!Objects.equals(this.idhorario, other.idhorario)) {
+            return false;
+        }
+        if (!Objects.equals(this.horaInicio, other.horaInicio)) {
+            return false;
+        }
+        return Objects.equals(this.horaFin, other.horaFin);
     }
 
     @Override
     public String toString() {
-        return "net.delsas.saitae.entities.Horario[ idhorario=" + idhorario + " ]";
+        return "Horario{" + "idhorario=" + idhorario + ", horaInicio=" + horaInicio + ", horaFin=" + horaFin + ", horarioComentario=" + horarioComentario + '}';
     }
-    
 }

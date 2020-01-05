@@ -6,9 +6,8 @@
 package net.delsas.saitae.entities;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Objects;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,12 +16,10 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -39,14 +36,9 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "ProyectoPedagogico.findByDuracion", query = "SELECT p FROM ProyectoPedagogico p WHERE p.duracion = :duracion")
     , @NamedQuery(name = "ProyectoPedagogico.findByObjetivoGeneral", query = "SELECT p FROM ProyectoPedagogico p WHERE p.objetivoGeneral = :objetivoGeneral")
     , @NamedQuery(name = "ProyectoPedagogico.findByObjetivoEspecifico", query = "SELECT p FROM ProyectoPedagogico p WHERE p.objetivoEspecifico = :objetivoEspecifico")
-    , @NamedQuery(name = "ProyectoPedagogico.findByJustificacion", query = "SELECT p FROM ProyectoPedagogico p WHERE p.justificacion = :justificacion")
-    , @NamedQuery(name = "ProyectoPedagogico.findByMetodologia", query = "SELECT p FROM ProyectoPedagogico p WHERE p.metodologia = :metodologia")
-    , @NamedQuery(name = "ProyectoPedagogico.findByActividades", query = "SELECT p FROM ProyectoPedagogico p WHERE p.actividades = :actividades")
     , @NamedQuery(name = "ProyectoPedagogico.findByRecursoHumano", query = "SELECT p FROM ProyectoPedagogico p WHERE p.recursoHumano = :recursoHumano")
     , @NamedQuery(name = "ProyectoPedagogico.findByRecursoMaterial", query = "SELECT p FROM ProyectoPedagogico p WHERE p.recursoMaterial = :recursoMaterial")
     , @NamedQuery(name = "ProyectoPedagogico.findByRecursoFinanciero", query = "SELECT p FROM ProyectoPedagogico p WHERE p.recursoFinanciero = :recursoFinanciero")
-    , @NamedQuery(name = "ProyectoPedagogico.findBySeguimiento", query = "SELECT p FROM ProyectoPedagogico p WHERE p.seguimiento = :seguimiento")
-    , @NamedQuery(name = "ProyectoPedagogico.findByProductoEsperado", query = "SELECT p FROM ProyectoPedagogico p WHERE p.productoEsperado = :productoEsperado")
     , @NamedQuery(name = "ProyectoPedagogico.findByProyectoPedagogicoComentario", query = "SELECT p FROM ProyectoPedagogico p WHERE p.proyectoPedagogicoComentario = :proyectoPedagogicoComentario")})
 public class ProyectoPedagogico implements Serializable {
 
@@ -61,20 +53,14 @@ public class ProyectoPedagogico implements Serializable {
     @Size(min = 1, max = 100)
     @Column(name = "nombreProyecto")
     private String nombreProyecto;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 100)
+    @Size(max = 300)
     @Column(name = "beneficiarios")
     private String beneficiarios;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 5)
+    @Size(max = 30)
     @Column(name = "duracion")
     private String duracion;
-    @Basic(optional = false)
-    @NotNull
     @Lob
-    @Size(min = 1, max = 16777215)
+    @Size(max = 65535)
     @Column(name = "diagnostico")
     private String diagnostico;
     @Basic(optional = false)
@@ -82,58 +68,45 @@ public class ProyectoPedagogico implements Serializable {
     @Size(min = 1, max = 100)
     @Column(name = "objetivoGeneral")
     private String objetivoGeneral;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 100)
+    @Size(max = 100)
     @Column(name = "objetivoEspecifico")
     private String objetivoEspecifico;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 45)
+    @Lob
+    @Size(max = 65535)
     @Column(name = "justificacion")
     private String justificacion;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 45)
+    @Lob
+    @Size(min = 1, max = 65535)
     @Column(name = "metodologia")
     private String metodologia;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 45)
+    @Lob
+    @Size(min = 1, max = 65535)
     @Column(name = "actividades")
     private String actividades;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 100)
+    @Size(max = 300)
     @Column(name = "recursoHumano")
     private String recursoHumano;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 100)
+    @Size(max = 300)
     @Column(name = "recursoMaterial")
     private String recursoMaterial;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 100)
+    @Size(max = 300)
     @Column(name = "recursoFinanciero")
     private String recursoFinanciero;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 45)
+    @Lob
+    @Size(max = 65535)
     @Column(name = "seguimiento")
     private String seguimiento;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 45)
+    @Lob
+    @Size(max = 65535)
     @Column(name = "productoEsperado")
     private String productoEsperado;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 140)
+    @Size(max = 300)
     @Column(name = "proyectoPedagogicoComentario")
     private String proyectoPedagogicoComentario;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "proyectoPedagogico")
-    private List<ReservaXpedagogia> reservaXpedagogiaList;
 
     public ProyectoPedagogico() {
     }
@@ -142,23 +115,12 @@ public class ProyectoPedagogico implements Serializable {
         this.idproyectoPedagogico = idproyectoPedagogico;
     }
 
-    public ProyectoPedagogico(Integer idproyectoPedagogico, String nombreProyecto, String beneficiarios, String duracion, String diagnostico, String objetivoGeneral, String objetivoEspecifico, String justificacion, String metodologia, String actividades, String recursoHumano, String recursoMaterial, String recursoFinanciero, String seguimiento, String productoEsperado, String proyectoPedagogicoComentario) {
+    public ProyectoPedagogico(Integer idproyectoPedagogico, String nombreProyecto, String objetivoGeneral, String metodologia, String actividades) {
         this.idproyectoPedagogico = idproyectoPedagogico;
         this.nombreProyecto = nombreProyecto;
-        this.beneficiarios = beneficiarios;
-        this.duracion = duracion;
-        this.diagnostico = diagnostico;
         this.objetivoGeneral = objetivoGeneral;
-        this.objetivoEspecifico = objetivoEspecifico;
-        this.justificacion = justificacion;
         this.metodologia = metodologia;
         this.actividades = actividades;
-        this.recursoHumano = recursoHumano;
-        this.recursoMaterial = recursoMaterial;
-        this.recursoFinanciero = recursoFinanciero;
-        this.seguimiento = seguimiento;
-        this.productoEsperado = productoEsperado;
-        this.proyectoPedagogicoComentario = proyectoPedagogicoComentario;
     }
 
     public Integer getIdproyectoPedagogico() {
@@ -289,38 +251,90 @@ public class ProyectoPedagogico implements Serializable {
         this.proyectoPedagogicoComentario = proyectoPedagogicoComentario;
     }
 
-    @XmlTransient
-    public List<ReservaXpedagogia> getReservaXpedagogiaList() {
-        return reservaXpedagogiaList;
-    }
-
-    public void setReservaXpedagogiaList(List<ReservaXpedagogia> reservaXpedagogiaList) {
-        this.reservaXpedagogiaList = reservaXpedagogiaList;
-    }
-
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (idproyectoPedagogico != null ? idproyectoPedagogico.hashCode() : 0);
+        int hash = 7;
+        hash = 59 * hash + Objects.hashCode(this.idproyectoPedagogico);
+        hash = 59 * hash + Objects.hashCode(this.nombreProyecto);
+        hash = 59 * hash + Objects.hashCode(this.beneficiarios);
+        hash = 59 * hash + Objects.hashCode(this.duracion);
+        hash = 59 * hash + Objects.hashCode(this.diagnostico);
+        hash = 59 * hash + Objects.hashCode(this.objetivoGeneral);
+        hash = 59 * hash + Objects.hashCode(this.objetivoEspecifico);
+        hash = 59 * hash + Objects.hashCode(this.justificacion);
+        hash = 59 * hash + Objects.hashCode(this.metodologia);
+        hash = 59 * hash + Objects.hashCode(this.actividades);
+        hash = 59 * hash + Objects.hashCode(this.recursoHumano);
+        hash = 59 * hash + Objects.hashCode(this.recursoMaterial);
+        hash = 59 * hash + Objects.hashCode(this.recursoFinanciero);
+        hash = 59 * hash + Objects.hashCode(this.seguimiento);
+        hash = 59 * hash + Objects.hashCode(this.productoEsperado);
+        hash = 59 * hash + Objects.hashCode(this.proyectoPedagogicoComentario);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ProyectoPedagogico)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        ProyectoPedagogico other = (ProyectoPedagogico) object;
-        if ((this.idproyectoPedagogico == null && other.idproyectoPedagogico != null) || (this.idproyectoPedagogico != null && !this.idproyectoPedagogico.equals(other.idproyectoPedagogico))) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
-        return true;
+        final ProyectoPedagogico other = (ProyectoPedagogico) obj;
+        if (!Objects.equals(this.nombreProyecto, other.nombreProyecto)) {
+            return false;
+        }
+        if (!Objects.equals(this.beneficiarios, other.beneficiarios)) {
+            return false;
+        }
+        if (!Objects.equals(this.duracion, other.duracion)) {
+            return false;
+        }
+        if (!Objects.equals(this.diagnostico, other.diagnostico)) {
+            return false;
+        }
+        if (!Objects.equals(this.objetivoGeneral, other.objetivoGeneral)) {
+            return false;
+        }
+        if (!Objects.equals(this.objetivoEspecifico, other.objetivoEspecifico)) {
+            return false;
+        }
+        if (!Objects.equals(this.justificacion, other.justificacion)) {
+            return false;
+        }
+        if (!Objects.equals(this.metodologia, other.metodologia)) {
+            return false;
+        }
+        if (!Objects.equals(this.actividades, other.actividades)) {
+            return false;
+        }
+        if (!Objects.equals(this.recursoHumano, other.recursoHumano)) {
+            return false;
+        }
+        if (!Objects.equals(this.recursoMaterial, other.recursoMaterial)) {
+            return false;
+        }
+        if (!Objects.equals(this.recursoFinanciero, other.recursoFinanciero)) {
+            return false;
+        }
+        if (!Objects.equals(this.seguimiento, other.seguimiento)) {
+            return false;
+        }
+        if (!Objects.equals(this.productoEsperado, other.productoEsperado)) {
+            return false;
+        }
+        if (!Objects.equals(this.proyectoPedagogicoComentario, other.proyectoPedagogicoComentario)) {
+            return false;
+        }
+        return Objects.equals(this.idproyectoPedagogico, other.idproyectoPedagogico);
     }
 
     @Override
     public String toString() {
-        return "net.delsas.saitae.entities.ProyectoPedagogico[ idproyectoPedagogico=" + idproyectoPedagogico + " ]";
+        return "ProyectoPedagogico{" + "idproyectoPedagogico=" + idproyectoPedagogico + ", nombreProyecto=" + nombreProyecto + ", beneficiarios=" + beneficiarios + ", duracion=" + duracion + ", diagnostico=" + diagnostico + ", objetivoGeneral=" + objetivoGeneral + ", objetivoEspecifico=" + objetivoEspecifico + ", justificacion=" + justificacion + ", metodologia=" + metodologia + ", actividades=" + actividades + ", recursoHumano=" + recursoHumano + ", recursoMaterial=" + recursoMaterial + ", recursoFinanciero=" + recursoFinanciero + ", seguimiento=" + seguimiento + ", productoEsperado=" + productoEsperado + ", proyectoPedagogicoComentario=" + proyectoPedagogicoComentario + '}';
     }
-    
 }

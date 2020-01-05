@@ -17,7 +17,8 @@
             </script>                
             <o:socket channel="notificacion" onmessage="socketListener"/>
             <h:form>
-                <p:remoteCommand name="tipopp" actionListener="#{horarioController.escucha()}" update="form f1 form0"/>
+                <p:remoteCommand name="tipopp" actionListener="#{horarioController.escucha()}" 
+                                 update="form f1 form0"/>
             </h:form>
             <p:dialog header="Asignación de Materias" widgetVar="Dhorario" modal="true" 
                       showEffect="fade" hideEffect="fade" resizable="false">                  
@@ -89,7 +90,8 @@
                              rowKey="#{h.mestroHorarioMateriasPK}" selectionMode="single"
                              selection="#{horarioController.selected}"
                              emptyMessage="Sin registros aún.">
-                    <p:ajax event="rowSelect" listener="#{horarioController.onRowSelect}" update=":f1 :form"/>
+                    <p:ajax event="rowSelect" listener="#{horarioController.onRowSelect}" 
+                            update=":f1 :form"/>
                     <f:facet name="header">
                         Horario Institucional
                     </f:facet>

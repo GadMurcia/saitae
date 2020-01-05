@@ -21,24 +21,27 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import net.delsas.saitae.ax.Calendarizacion;
 import net.delsas.saitae.ax.mensaje;
+import net.delsas.saitae.beans.HorarioFacadeLocal;
 import net.delsas.saitae.beans.NotificacionesFacadeLocal;
 import net.delsas.saitae.beans.ProyectoPedagogicoFacadeLocal;
+import net.delsas.saitae.beans.RecursoFacadeLocal;
+import net.delsas.saitae.entities.Horario;
 import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.ProyectoPedagogico;
+import net.delsas.saitae.entities.Recurso;
+import net.delsas.saitae.entities.SolicitudReserva;
 import org.omnifaces.cdi.Push;
 import org.omnifaces.cdi.PushContext;
 import org.primefaces.PrimeFaces;
@@ -62,13 +65,23 @@ public class solicitudPPController implements Serializable {
     private PushContext notificacion;
     @EJB
     private NotificacionesFacadeLocal notiFL;
+    @EJB
+    private HorarioFacadeLocal hrFL;
+    @EJB
+    private RecursoFacadeLocal reFL;
 
     private List<Calendarizacion> calendas;
+    private List<Horario> horarios;
+    private List<Recurso> recDisp;
+    private List<SolicitudReserva> solicitud;
 
     private ProyectoPedagogico proyecto;
     private Persona usuario;
     private Calendarizacion selected;
     private Calendarizacion selected2;
+    private String textoDetalle;
+    private boolean existe;
+    private Integer jornadas;
 
     @PostConstruct
     public void init() {
@@ -76,8 +89,12 @@ public class solicitudPPController implements Serializable {
                 .getExternalContext().getSessionMap().get("usuario");
         proyecto = new ProyectoPedagogico();
         String n = usuario.getPersonaNombre().split(" ")[0] + " " + usuario.getPersonaApellido().split(" ")[0];
-        proyecto.setProyectoPedagogicoComentario(n + "¿¿0¿¿¿¿ ");
+        proyecto.setProyectoPedagogicoComentario(n + "¿¿1¿¿¿¿ ");
         calendas = new ArrayList<>();
+        horarios = hrFL.findAll();
+        solicitud = new ArrayList<>();
+        recDisp = reFL.findByTipoRecurso(1);
+        jornadas = 1;
     }
 
     public String onFlowProcess(FlowEvent event) {
@@ -135,22 +152,15 @@ public class solicitudPPController implements Serializable {
         System.out.println("Se guardó " + ind + " en el indice " + ind + ". Cadena total: " + rr);
     }
 
-    public void setJornadas(int j) {
-        setCom(1, j + "");
-    }
-
-    public int getJornadas() {
-        return Integer.valueOf(proyecto.getProyectoPedagogicoComentario().split("¿¿")[1]);
-    }
-
     public void guardar() {
         System.out.println(proyecto);
     }
 
     public void onRowSelect(SelectEvent event) {
         System.out.println(event.getObject());
-        selected = (Calendarizacion) event.getObject();
-        selected2 = (Calendarizacion) event.getObject();
+        Calendarizacion s = (Calendarizacion) event.getObject();
+        selected = s;
+        selected2 = new Calendarizacion(s);
     }
 
     public List<Calendarizacion> getCalendas() {
@@ -171,6 +181,7 @@ public class solicitudPPController implements Serializable {
 
     public void previusAdd() {
         selected2 = new Calendarizacion();
+        textoDetalle = "Agregación";
     }
 
     private void ordenar() {
@@ -187,14 +198,14 @@ public class solicitudPPController implements Serializable {
         boolean z = c.getFecha() != null && c.getHorai() != null && c.getHoraf() != null;
         if (z) {
             try {
-                c.setHorai(new SimpleDateFormat("dd/MM/yyyy hh:mm a")
-                        .parse(getFecha(c.getFecha()) + " " + getHora(c.getHorai())));
+                c.getHorai().setHoraInicio(new SimpleDateFormat("dd/MM/yyyy hh:mm a")
+                        .parse(getFecha(c.getFecha()) + " " + getHora(c.getHorai().getHoraInicio())));
             } catch (ParseException ex) {
 
             }
             try {
-                c.setHoraf(new SimpleDateFormat("dd/MM/yyyy hh:mm a")
-                        .parse(getFecha(c.getFecha()) + " " + getHora(c.getHoraf())));
+                c.getHoraf().setHoraFin(new SimpleDateFormat("dd/MM/yyyy hh:mm a")
+                        .parse(getFecha(c.getFecha()) + " " + getHora(c.getHoraf().getHoraFin())));
             } catch (ParseException ex) {
 
             }
@@ -202,28 +213,70 @@ public class solicitudPPController implements Serializable {
         return z;
     }
 
-    public void Agregar() {
+    public void agregar() {
+        Date t = new Date();
+        FacesMessage m;
         if (selected2 != null) {
             if (asignarFechas(selected2)) {
-                boolean r = selected2.getHoraf().after(selected2.getHorai());
+                boolean r = !t.after(selected2.getHorai().getHoraInicio()) && selected2.getHoraf().getIdhorario() >= selected2.getHorai().getIdhorario();
                 if (r) {
                     calendas.add(selected2);
-                    selected2 = null;
+                    previusAdd();
                     ordenar();
+                    m = new FacesMessage(FacesMessage.SEVERITY_INFO, "Cambios guardados",
+                            "Éxito en la agregación a la calendarización");
+                } else {
+                    m = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error en las fechas",
+                            "Revise que la fecha-hora de inicio no sea anterior a la actual "
+                            + "y que la fecha-hora final no sea anterior a la inicial.");
                 }
+            } else {
+                m = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error en las fechas",
+                        "No debe dejar vaíos los campos obigatorios marcados por '*'.");
             }
+        } else {
+            m = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro",
+                    "llene el formulario.");
         }
+        FacesContext.getCurrentInstance().addMessage(null, m);
+        PrimeFaces.current().ajax().update("form0:msgs");
     }
 
     public void editar() {
-        if (selected != null && selected2 != null && !selected.equals(selected2)) {
-            if (asignarFechas(selected2)) {
+        Date t = new Date();
+        FacesMessage m;
+        if (asignarFechas(selected2)) {
+            boolean r = !t.after(selected2.getHorai().getHoraInicio()) && selected2.getHoraf().getIdhorario() >= selected2.getHorai().getIdhorario();
+            if (r && !selected.equals(selected2)) {
                 calendas.remove(selected);
                 calendas.add(selected2);
-                selected = selected2 = null;
+                onclose();
                 ordenar();
+                m = new FacesMessage(FacesMessage.SEVERITY_INFO, "Edición exitosa", "Edición Realizada con éxito.");
+                PrimeFaces.current().executeScript("PF('Dpp1').hide();");
+            } else {
+                m = new FacesMessage(FacesMessage.SEVERITY_WARN, "No hay cambios", "No ha hecho cambios que deban guardarse.");
             }
+        } else {
+            m = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Campos vacíos", "Asegúrese de haber llenado todos los campos obligatorios.");
         }
+        FacesContext.getCurrentInstance().addMessage(null, m);
+        PrimeFaces.current().ajax().update("form");
+    }
+
+    public void eliminar() {
+        if (selected != null) {
+            calendas.remove(selected);
+            onclose();
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Eliminación exitosa", "Eliminación Realizada con éxito."));
+            PrimeFaces.current().ajax().update("form");
+            PrimeFaces.current().executeScript("PF('Dpp1').hide();");
+        }
+    }
+
+    public void onclose() {
+        selected = null;
+        selected2 = null;
     }
 
     public Calendarizacion getSelected() {
@@ -240,6 +293,120 @@ public class solicitudPPController implements Serializable {
 
     public void setSelected2(Calendarizacion selected2) {
         this.selected2 = selected2;
+    }
+
+    public String getTextoDetalle() {
+        return textoDetalle;
+    }
+
+    public void setTextoDetalle(String textoDetalle) {
+        this.textoDetalle = textoDetalle;
+    }
+
+    public boolean getEstaEditando() {
+        return textoDetalle == null ? false : textoDetalle.equals("Edición");
+    }
+
+    public List<Horario> getHorarios() {
+        return horarios;
+    }
+
+    public void setHorarios(List<Horario> horarios) {
+        this.horarios = horarios;
+    }
+
+    public String getHoras(Date d) {
+        return d == null ? " " : new SimpleDateFormat("hh:mm a").format(d);
+    }
+
+    public List<Recurso> getRecDisp() {
+        return recDisp;
+    }
+
+    public void setRecDisp(List<Recurso> recDisp) {
+        this.recDisp = recDisp;
+    }
+
+    public List<SolicitudReserva> getSolicitud() {
+        return Collections.unmodifiableList(solicitud);
+    }
+
+    public void setSolicitud(List<SolicitudReserva> solicitud) {
+        this.solicitud = solicitud;
+    }
+
+    public void onRowEdit(RowEditEvent event) {
+        String id = event.getComponent().getClientId();
+        SolicitudReserva s = (SolicitudReserva) event.getObject();
+        Integer cant;
+        try {
+            cant = Integer.valueOf(s.getSolicitudReservaComentario());
+        } catch (NumberFormatException ex) {
+            cant = -1;
+        }
+        if (cant <= 0 || s.getRecurso() == null) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "No se entendió la orden",
+                            "Debe seleccionar un recurso y escribir una cantidad válida (superior a cero '0')"));
+            PrimeFaces.current().ajax().update(":form0:msgs");
+            onRowCancel(event);
+        } else {
+            existe = false;
+            solicitud.forEach((sr) -> {
+                Integer a = solicitud.indexOf(s), b = solicitud.indexOf(sr);
+                if (!Objects.equals(a, b) && s.getRecurso() == sr.getRecurso()) {
+                    FacesContext.getCurrentInstance().addMessage(null,
+                            new FacesMessage(FacesMessage.SEVERITY_WARN, "Recurso repetido",
+                                    "Ya ha agregado este recurso a la lisa de solicitud por lo que "
+                                    + "no se agregará de nuevo. Modifique ése."));
+                    PrimeFaces.current().ajax().update(":form0:msgs");
+                    existe = true;
+                }
+            });
+            if (existe) {
+                onRowCancel(event);
+            }
+        }
+        PrimeFaces.current().ajax().update(id);
+        System.out.println(id);
+
+    }
+
+    public void onRowCancel(RowEditEvent event) {
+        String id = event.getComponent().getClientId();
+        SolicitudReserva s = (SolicitudReserva) event.getObject();
+        Recurso r = s.getRecurso();
+        solicitud.remove(s);
+        PrimeFaces.current().ajax().update(id);
+        System.out.println(id);
+    }
+
+    public void onAddNew() {
+        SolicitudReserva s = new SolicitudReserva();
+        s.setSolicitudReservaComentario("1");
+        solicitud.add(s);
+    }
+
+    public boolean getVariasJornadas() {
+        return jornadas == 2;
+    }
+
+    public Integer getJornadas() {
+        return jornadas;
+    }
+
+    public void setJornadas(Integer jornadas) {
+        if (jornadas != null) {
+            this.jornadas = jornadas;
+        }
+    }
+
+    public void jornadasSelect(SelectEvent event) {
+        jornadas = Integer.valueOf(event.getObject().toString());
+        setCom(1, jornadas + "");
+        if (jornadas == 1) {
+            previusAdd();
+        }
     }
 
 }
