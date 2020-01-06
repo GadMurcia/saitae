@@ -16,6 +16,7 @@
  */
 package net.delsas.saitae.controllers;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -28,6 +29,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -35,13 +37,27 @@ import net.delsas.saitae.ax.Calendarizacion;
 import net.delsas.saitae.ax.mensaje;
 import net.delsas.saitae.beans.HorarioFacadeLocal;
 import net.delsas.saitae.beans.NotificacionesFacadeLocal;
+import net.delsas.saitae.beans.PersonasReservaFacadeLocal;
 import net.delsas.saitae.beans.ProyectoPedagogicoFacadeLocal;
 import net.delsas.saitae.beans.RecursoFacadeLocal;
+import net.delsas.saitae.beans.ReservaFacadeLocal;
+import net.delsas.saitae.beans.ReservaXpedagogiaFacadeLocal;
+import net.delsas.saitae.beans.SolicitudReservaFacadeLocal;
+import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
+import net.delsas.saitae.beans.TipoProyectoFacadeLocal;
+import net.delsas.saitae.beans.TipoRecursoFacadeLocal;
+import net.delsas.saitae.beans.TipoReservaFacadeLocal;
 import net.delsas.saitae.entities.Horario;
 import net.delsas.saitae.entities.Persona;
+import net.delsas.saitae.entities.PersonasReserva;
 import net.delsas.saitae.entities.ProyectoPedagogico;
 import net.delsas.saitae.entities.Recurso;
+import net.delsas.saitae.entities.Reserva;
+import net.delsas.saitae.entities.ReservaXpedagogia;
+import net.delsas.saitae.entities.ReservaXpedagogiaPK;
 import net.delsas.saitae.entities.SolicitudReserva;
+import net.delsas.saitae.entities.SolicitudReservaPK;
+import net.delsas.saitae.entities.TipoPersona;
 import org.omnifaces.cdi.Push;
 import org.omnifaces.cdi.PushContext;
 import org.primefaces.PrimeFaces;
@@ -69,6 +85,22 @@ public class solicitudPPController implements Serializable {
     private HorarioFacadeLocal hrFL;
     @EJB
     private RecursoFacadeLocal reFL;
+    @EJB
+    private TipoRecursoFacadeLocal trFL;
+    @EJB
+    private TipoProyectoFacadeLocal tpFL;
+    @EJB
+    private TipoReservaFacadeLocal trvFL;
+    @EJB
+    private ReservaFacadeLocal resFL;
+    @EJB
+    private SolicitudReservaFacadeLocal srFL;
+    @EJB
+    private ReservaXpedagogiaFacadeLocal rxpFL;
+    @EJB
+    private PersonasReservaFacadeLocal prFL;
+    @EJB
+    private TipoPersonaFacadeLocal tpnFL;
 
     private List<Calendarizacion> calendas;
     private List<Horario> horarios;
@@ -82,19 +114,39 @@ public class solicitudPPController implements Serializable {
     private String textoDetalle;
     private boolean existe;
     private Integer jornadas;
+    private boolean editar;
 
     @PostConstruct
     public void init() {
-        usuario = (Persona) FacesContext.getCurrentInstance()
-                .getExternalContext().getSessionMap().get("usuario");
-        proyecto = new ProyectoPedagogico();
+        usuario = (Persona) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
+        proyecto = (ProyectoPedagogico) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("proyecto");
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("proyecto");
+        proyecto = proyecto == null ? new ProyectoPedagogico() : proyecto;
+        try {
+            editar = (boolean) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("editar");
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("editar");
+        } catch (Exception e) {
+            editar = false;
+        }
+        FacesMessage m = (FacesMessage) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("ms");
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("ms");
         String n = usuario.getPersonaNombre().split(" ")[0] + " " + usuario.getPersonaApellido().split(" ")[0];
-        proyecto.setProyectoPedagogicoComentario(n + "¿¿1¿¿¿¿ ");
         calendas = new ArrayList<>();
         horarios = hrFL.findAll();
         solicitud = new ArrayList<>();
         recDisp = reFL.findByTipoRecurso(1);
-        jornadas = 1;
+        if (proyecto.getIdproyectoPedagogico() != null) {
+            jornadas = Integer.valueOf(proyecto.getProyectoPedagogicoComentario().split("¿¿")[5]);
+            llenar();
+        } else {
+            proyecto.setProyectoPedagogicoComentario(n + "¿¿1¿¿0¿¿¿¿0¿¿1");
+            jornadas = 1;
+        }
+        if (m != null) {
+            FacesContext.getCurrentInstance().addMessage(null, m);
+            //PrimeFaces.current().ajax().update("form:msgs");
+        }
+        previusAdd();
     }
 
     public String onFlowProcess(FlowEvent event) {
@@ -109,6 +161,28 @@ public class solicitudPPController implements Serializable {
 
     public void sendMessage(String message) {
         notificacion.send(message);
+    }
+
+    private void llenar() {
+        List<Reserva> reservas = rxpFL.findReservaByIdProyecto(proyecto.getIdproyectoPedagogico());
+        if (getVariasJornadas()) {
+            reservas.forEach((r) -> {
+                calendas.add(convCalend(r));
+            });
+            ordenar();
+        } else {
+            selected2 = convCalend(reservas.get(0));
+        }
+        solicitud = reservas.get(0).getSolicitudReservaList();
+    }
+
+    private Calendarizacion convCalend(Reserva r) {
+        Calendarizacion c = new Calendarizacion();
+        c.setFecha(r.getReservaEntrega());
+        Horario h = new Horario(0, r.getReservaEntrega(), r.getReservaDevolucion());
+        c.setHorai(h);
+        c.setHoraf(h);
+        return c;
     }
 
     private void persistirNotificación(mensaje x, Persona ps) {
@@ -154,6 +228,169 @@ public class solicitudPPController implements Serializable {
 
     public void guardar() {
         System.out.println(proyecto);
+        boolean va = (getVariasJornadas() && calendas.size() < 1);
+        boolean v1j = !getVariasJornadas() && selected2.isEmpty();
+        List<Reserva> reservas = new ArrayList<>();
+        List<Reserva> nr = new ArrayList<>();
+        List<ReservaXpedagogia> resXped = new ArrayList<>();
+        List<PersonasReserva> prs = new ArrayList<>();
+        List<SolicitudReserva> srs = new ArrayList<>();
+        if (va || solicitud.isEmpty() || v1j) {
+            FacesMessage m = null;
+            if (solicitud.isEmpty()) {
+                m = new FacesMessage(FacesMessage.SEVERITY_WARN, "Solicitud incompleta",
+                        "Debe indicar una serie de recursos del cra a utilizar para que la solicitud"
+                        + " de reserva de equipo para un proyecto pedagógico sea válida. "
+                        + "Revise antes de continuar.");
+            }
+            if (va) {
+                m = new FacesMessage(FacesMessage.SEVERITY_WARN, "Solicitud incompleta",
+                        "Debido a que ha indicado que el proyecto será en varias jornadas, debe indicar al menos"
+                        + " dos jornadas en la calendarización para que la solicitud de recursos del "
+                        + "cra sea válida. Revise antes de continuar.");
+            }
+            if (v1j) {
+                m = new FacesMessage(FacesMessage.SEVERITY_WARN, "Solicitud incompleta",
+                        "No seleccionó apropadamente la fecha y/o las horas en las que "
+                        + "va a realizar su proyecto. Revise antes de continuar.");
+            }
+            FacesContext.getCurrentInstance().addMessage(":form0:msgs", m);
+            PrimeFaces.current().ajax().update(":form0:msgs");
+        } else {
+            try {
+                if (!getVariasJornadas() && !selected2.isEmpty()) {
+                    calendas.add(selected2);
+                }
+                calendas.stream().map((c) -> {
+                    Reserva r = new Reserva();
+                    r.setDocente(usuario.getMaestro());
+                    r.setObjetivoTema(proyecto.getObjetivoGeneral());
+                    r.setReservaFecha(new Date());
+                    r.setReservaEstado("S");
+                    try {
+                        r.setReservaEntrega(new SimpleDateFormat("dd/MM/yyyy hh:mm a")
+                                .parse(getFecha(c.getFecha()) + " " + getHora(c.getHorai().getHoraInicio())));
+                    } catch (ParseException ex) {
+                        r.setReservaEntrega(c.getHorai().getHoraInicio());
+                    }
+                    System.out.println(r.getReservaEntrega());
+                    try {
+                        r.setReservaDevolucion(new SimpleDateFormat("dd/MM/yyyy hh:mm a")
+                                .parse(getFecha(c.getFecha()) + " " + getHora(c.getHoraf().getHoraFin())));
+                    } catch (ParseException ex) {
+                        r.setReservaDevolucion(c.getHoraf().getHoraFin());
+                    }
+                    System.out.println(r.getReservaDevolucion());
+                    return r;
+                }).map((r) -> {
+                    r.setTema(proyecto.getNombreProyecto());
+                    return r;
+                }).map((r) -> {
+                    r.setTipoProyecto(tpFL.find(1));
+                    return r;
+                }).map((r) -> {
+                    r.setTipoRecurso(trFL.find(1));
+                    return r;
+                }).map((r) -> {
+                    r.setTipoReserva(trvFL.find(2));
+                    return r;
+                }).map((r) -> {
+                    r.setReservaComentario(proyecto.getProyectoPedagogicoComentario());
+                    return r;
+                }).forEachOrdered((r) -> {
+                    reservas.add(r);
+                });
+                reservas.stream().map((r) -> {
+                    resFL.create(r);
+                    List<PersonasReserva> prsi = new ArrayList<>();
+                    List<SolicitudReserva> sols = new ArrayList<>();
+                    PersonasReserva pr = new PersonasReserva(r.getIdreserva(), usuario.getIdpersona());
+                    pr.setPersona(usuario);
+                    pr.setReserva(r);
+                    pr.setPersonasReservaComentario("");
+                    prFL.create(pr);
+                    prs.add(pr);
+                    prsi.add(pr);
+                    solicitud.stream().map((sr) -> {
+                        sr.setSolicitudReservaPK(
+                                new SolicitudReservaPK(sr.getRecurso().getIdrecurso(), r.getIdreserva()));
+                        return sr;
+                    }).map((sr) -> {
+                        sr.setReserva(r);
+                        return sr;
+                    }).map((sr) -> {
+                        srFL.create(sr);
+                        return sr;
+                    }).forEachOrdered((sr) -> {
+                        srs.add(sr);
+                        sols.add(sr);
+                    });
+                    r.setSolicitudReservaList(sols);
+                    r.setPersonasReservaList(prsi);
+                    return r;
+                }).forEachOrdered((r) -> {
+                    resFL.edit(r);
+                    nr.add(r);
+                });
+                if (proyecto.getIdproyectoPedagogico() == null) {
+                    ppFL.create(proyecto);
+                } else {
+                    ppFL.edit(proyecto);
+                }
+                reservas.stream().map((r) -> {
+                    ReservaXpedagogia rxp = new ReservaXpedagogia(
+                            new ReservaXpedagogiaPK(proyecto.getIdproyectoPedagogico(), r.getIdreserva()));
+                    rxp.setReserva(r);
+                    return rxp;
+                }).map((rxp) -> {
+                    rxp.setProyectoPedagogico(proyecto);
+                    return rxp;
+                }).map((rxp) -> {
+                    rxp.setReservaXpedagogiaComentario("");
+                    return rxp;
+                }).map((rxp) -> {
+                    rxpFL.create(rxp);
+                    return rxp;
+                }).forEachOrdered((rxp) -> {
+                    resXped.add(rxp);
+                });
+                notificar(6);
+                mensaje x = new mensaje(usuario.getIdpersona(), usuario.getIdpersona(), "srCra<form",
+                        new FacesMessage(FacesMessage.SEVERITY_INFO,
+                                "Solicitud" + (calendas.size() > 1 ? "es" : "") + " realizada"
+                                + (calendas.size() > 1 ? "s" : ""),
+                                "La" + (calendas.size() > 1 ? "s" : "") + " solicitud" + (calendas.size() > 1 ? "es" : "")
+                                + " se ha" + (calendas.size() > 1 ? "n" : "")
+                                + " enviado con éxitos. Recibirá una notificación del encargado del CRA"
+                                + " cuando su proyecto se haya resuelto."));
+                try {
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("solicitudRPP.intex");
+                } catch (IOException e) {
+                    init();
+                    PrimeFaces.current().ajax().update(":form", ":noti");
+                }
+                persistirNotificación(x, usuario);
+            } catch (Exception a) {
+                srs.stream().filter((sr) -> (sr.getSolicitudReservaPK() != null)).forEachOrdered((sr) -> {
+                    srFL.remove(sr);
+                });
+                prs.forEach((pr) -> {
+                    prFL.remove(pr);
+                });
+                resXped.forEach((rxp) -> {
+                    rxpFL.remove(rxp);
+                });
+                if (proyecto.getIdproyectoPedagogico() != null) {
+                    ppFL.remove(proyecto);
+                }
+                reservas.stream().filter((r) -> (r.getIdreserva() != null)).forEachOrdered((r) -> {
+                    resFL.remove(r);
+                });
+                nr.stream().filter((r) -> (r.getIdreserva() != null)).forEachOrdered((r) -> {
+                    resFL.remove(r);
+                });
+            }
+        }
     }
 
     public void onRowSelect(SelectEvent event) {
@@ -308,7 +545,7 @@ public class solicitudPPController implements Serializable {
     }
 
     public List<Horario> getHorarios() {
-        return horarios;
+        return Collections.unmodifiableList(horarios);
     }
 
     public void setHorarios(List<Horario> horarios) {
@@ -320,7 +557,7 @@ public class solicitudPPController implements Serializable {
     }
 
     public List<Recurso> getRecDisp() {
-        return recDisp;
+        return Collections.unmodifiableList(recDisp);
     }
 
     public void setRecDisp(List<Recurso> recDisp) {
@@ -403,10 +640,53 @@ public class solicitudPPController implements Serializable {
 
     public void jornadasSelect(SelectEvent event) {
         jornadas = Integer.valueOf(event.getObject().toString());
-        setCom(1, jornadas + "");
+        setCom(5, jornadas + "");
         if (jornadas == 1) {
             previusAdd();
         }
+
+    }
+
+    public void onBlur(AjaxBehaviorEvent event) {
+        System.out.println(event.getComponent().getId());
+        System.out.println(event);
+        setCom(5, jornadas + "");
+        if (jornadas == 1) {
+            previusAdd();
+        }
+    }
+
+    private void notificar(Integer idTipoPersona) {
+        List<Persona> personas = new ArrayList<>();
+        TipoPersona ps = tpnFL.find(idTipoPersona);
+        mensaje x;
+        if (ps != null) {
+            personas.addAll(ps.getPersonaList());
+            ps.getDelagacionCargoList().forEach((dl) -> {
+                personas.add(dl.getIdpersona());
+            });
+            ps.getCargoList().forEach((c) -> {
+                c.getMaestoCargoList().forEach((mc) -> {
+                    personas.add(mc.getMaestro().getPersona());
+                });
+            });
+            x = new mensaje(0, usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
+                    + " ha solicitado recursos para proyecto pedagógico planificado."
+                    + " Revise la administración de reservas para más detalles.",
+                    "Nueva solicitud de recursos",
+                    FacesMessage.SEVERITY_INFO,
+                    usuario.getIdpersona(), "srCra<form:ap:solicitados");
+            persistirNotificación(x, personas);
+        }
+
+    }
+
+    public boolean getDesactivarVistas() {
+        return editar;
+    }
+
+    public void setDesactivarVistas(boolean desactivarVistas) {
+        this.editar = desactivarVistas;
     }
 
 }

@@ -17,246 +17,270 @@
                     }
                 </style>
                 <h:form id="form">
-                    <h1 align="center">Solicitud de reserva de equipo para proyecto académico planificado</h1>
-                    <p:growl id="msgs" showDetail="true" />
-                    <p:wizard id="wd" flowListener="#{solicitudPPController.onFlowProcess}" 
-                              nextLabel="Siguiente" backLabel="Atrás">
-                        <p:tab id="general" title="Generalidades" >
-                            <p:panel header="Generalidades sobre la solicitud de reservas de equipo CRA.">
-                                <h:panelGrid columns="2" cellpadding="5">
-                                    <p:outputLabel for="tpp" value="Número de Jornadas: "/>
-                                    <p:selectOneMenu id="tpp" value="#{solicitudPPController.jornadas}" 
-                                                     style="width: 100%"
-                                                     converter="omnifaces.SelectItemsConverter">
-                                        <f:selectItem itemLabel="Seleccione" itemValue="0" noSelectionOption="true"/>
-                                        <f:selectItem itemLabel="Una sóla jornada" itemValue="1"/>
-                                        <f:selectItem itemLabel="Varias jornadas" itemValue="2"/>
-                                        <p:ajax event="itemSelect" listener="#{solicitudPPController.jornadasSelect}"
-                                                update=":form"/>
-                                    </p:selectOneMenu> 
+                    <h:panelGrid columns="1">
+                        <h1 align="center">Solicitud de reserva de equipo para proyecto académico planificado</h1>
+                        <p:growl id="msgs" showDetail="true" />
+                        <p:wizard id="wd" flowListener="#{solicitudPPController.onFlowProcess}" 
+                                  nextLabel="Siguiente" backLabel="Atrás">
+                            <p:tab id="general" title="Generalidades" >
+                                <p:panel header="Generalidades sobre la solicitud de reservas de equipo CRA.">
+                                    <h:panelGrid columns="2" cellpadding="5">
+                                        <p:outputLabel for="tpp" value="Número de Jornadas: "/>
+                                        <p:selectOneButton id="tpp" value="#{solicitudPPController.jornadas}"
+                                                           converter="omnifaces.SelectItemsConverter"
+                                                           disabled="#{solicitudPPController.desactivarVistas}">
+                                            <f:selectItem itemLabel="Una sóla jornada" itemValue="1"/>
+                                            <f:selectItem itemLabel="Varias jornadas" itemValue="2"/>
+                                            <p:ajax event="change" listener="#{solicitudPPController.onBlur}"
+                                                    update=":form"/>
+                                        </p:selectOneButton>
 
-                                    <p:outputLabel for="nomp" value="Nombre del proyecto: "/>
-                                    <p:inputText id="nomp" value="#{solicitudPPController.proyecto.nombreProyecto}"
-                                                 required="true" style="width: 100%;"/>
+                                        <p:outputLabel for="nomp" value="Nombre del proyecto: "/>
+                                        <p:inputText id="nomp" value="#{solicitudPPController.proyecto.nombreProyecto}"
+                                                     required="true" style="width: 100%;"
+                                                     disabled="#{solicitudPPController.desactivarVistas}"/>
 
-                                    <p:outputLabel id="d" for="benp" value="Beneficiarios: " rendered="#{solicitudPPController.variasJornadas}"/>
-                                    <p:inputTextarea id="benp" value="#{solicitudPPController.proyecto.beneficiarios}"
-                                                     required="true" cols="60" rows="5"
-                                                     rendered="#{solicitudPPController.variasJornadas}"/>
+                                        <p:outputLabel id="d" for="benp" value="Beneficiarios: " rendered="#{solicitudPPController.variasJornadas}"/>
+                                        <p:inputTextarea id="benp" value="#{solicitudPPController.proyecto.beneficiarios}"
+                                                         required="true" cols="60" rows="5"
+                                                         rendered="#{solicitudPPController.variasJornadas}"
+                                                         disabled="#{solicitudPPController.desactivarVistas}"/>
 
-                                    <p:outputLabel for="resp" value="Responsable: "/>
-                                    <h:outputText id="resp" value="#{solicitudPPController.responsable}"/>
+                                        <p:outputLabel for="resp" value="Responsable: "/>
+                                        <h:outputText id="resp" value="#{solicitudPPController.responsable}"/>
 
-                                    <p:outputLabel for="durp" value="Duración: " rendered="#{!solicitudPPController.variasJornadas}"/>
-                                    <h:panelGrid id="durp" columns="6" rendered="#{!solicitudPPController.variasJornadas}">
-                                        <p:outputLabel id="c" for="fe1j" value="fecha: "/>
-                                        <p:datePicker id="fe1j" value="#{solicitudPPController.selected2.fecha}" 
-                                                      locale="es" required="true" pattern="dd/MM/yyyy"
-                                                      monthNavigator="true" showIcon="true"
-                                                      placeholder="Seleccione la fecha"/>
+                                        <p:outputLabel for="durp" value="Duración: " rendered="#{!solicitudPPController.variasJornadas}"/>
+                                        <h:panelGrid id="durp" columns="6" rendered="#{!solicitudPPController.variasJornadas}">
+                                            <p:outputLabel id="c" for="fe1j" value="fecha: "/>
+                                            <p:datePicker id="fe1j" value="#{solicitudPPController.selected2.fecha}" 
+                                                          locale="es" required="true" pattern="dd/MM/yyyy"
+                                                          monthNavigator="true" showIcon="true"
+                                                          placeholder="Seleccione la fecha"
+                                                          disabled="#{solicitudPPController.desactivarVistas}"/>
 
-                                        <p:outputLabel id="a" for="hi1j" value="Hora de inicio del uso"/>
-                                        <p:selectOneMenu id="hi1j" value="#{solicitudPPController.selected2.horai}" 
-                                                         converter="omnifaces.SelectItemsConverter"
-                                                         required="true" style="width: 190px;">
-                                            <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
-                                            <f:selectItems value="#{solicitudPPController.horarios}" var="h"
-                                                           itemLabel="#{solicitudPPController.getHoras(h.horaInicio)}" 
-                                                           itemValue="#{h}"/>
-                                        </p:selectOneMenu>
+                                            <p:outputLabel id="a" for="hi1j" value="Hora de inicio del uso"/>
+                                            <p:selectOneMenu id="hi1j" value="#{solicitudPPController.selected2.horai}" 
+                                                             converter="omnifaces.SelectItemsConverter"
+                                                             required="true" style="width: 190px;"
+                                                             disabled="#{solicitudPPController.desactivarVistas}">
+                                                <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
+                                                <f:selectItems value="#{solicitudPPController.horarios}" var="h"
+                                                               itemLabel="#{solicitudPPController.getHoras(h.horaInicio)}" 
+                                                               itemValue="#{h}"/>
+                                            </p:selectOneMenu>
 
-                                        <p:outputLabel id="b" for="hf1j" value="Hora de fin del uso"/>
-                                        <p:selectOneMenu id="hf1j" value="#{solicitudPPController.selected2.horaf}" 
-                                                         converter="omnifaces.SelectItemsConverter"
-                                                         required="true" style="width: 190px;">
-                                            <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
-                                            <f:selectItems value="#{solicitudPPController.horarios}" var="h"
-                                                           itemLabel="#{solicitudPPController.getHoras(h.horaFin)}" 
-                                                           itemValue="#{h}"/>
-                                        </p:selectOneMenu>
+                                            <p:outputLabel id="b" for="hf1j" value="Hora de fin del uso"/>
+                                            <p:selectOneMenu id="hf1j" value="#{solicitudPPController.selected2.horaf}" 
+                                                             converter="omnifaces.SelectItemsConverter"
+                                                             required="true" style="width: 190px;"
+                                                             disabled="#{solicitudPPController.desactivarVistas}">
+                                                <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
+                                                <f:selectItems value="#{solicitudPPController.horarios}" var="h"
+                                                               itemLabel="#{solicitudPPController.getHoras(h.horaFin)}" 
+                                                               itemValue="#{h}"/>
+                                            </p:selectOneMenu>
+                                        </h:panelGrid>
                                     </h:panelGrid>
-                                </h:panelGrid>
-                            </p:panel>
-                        </p:tab>
-                        <p:tab id="diagnostico" title="Análisis">
-                            <p:panel header="Análisi del proyecto">
-                                <h:panelGrid columns="2" cellspacing="5">
-                                    <p:outputLabel for="diap" value="Diagnóstico" rendered="#{solicitudPPController.variasJornadas}"/>
-                                    <p:inputTextarea id="diap" value="#{solicitudPPController.proyecto.diagnostico}"
-                                                     required="true" cols="80" rows="5"
-                                                     rendered="#{solicitudPPController.variasJornadas}"/>
+                                </p:panel>
+                            </p:tab>
+                            <p:tab id="diagnostico" title="Análisis">
+                                <p:panel header="Análisi del proyecto">
+                                    <h:panelGrid columns="2" cellspacing="5">
+                                        <p:outputLabel for="diap" value="Diagnóstico" rendered="#{solicitudPPController.variasJornadas}"/>
+                                        <p:inputTextarea id="diap" value="#{solicitudPPController.proyecto.diagnostico}"
+                                                         required="true" cols="80" rows="5"
+                                                         rendered="#{solicitudPPController.variasJornadas}"
+                                                         disabled="#{solicitudPPController.desactivarVistas}"/>
 
-                                    <p:outputLabel for="obgp" value="Objetivo general: "/>
-                                    <p:inputTextarea id="obgp" value="#{solicitudPPController.proyecto.objetivoGeneral}"
-                                                     required="true" cols="80" rows="1"/>
+                                        <p:outputLabel for="obgp" value="Objetivo general: "/>
+                                        <p:inputTextarea id="obgp" value="#{solicitudPPController.proyecto.objetivoGeneral}"
+                                                         required="true" cols="80" rows="1"
+                                                         disabled="#{solicitudPPController.desactivarVistas}"/>
 
-                                    <p:outputLabel for="obep" value="Objetivo específico: "
-                                                   rendered="#{solicitudPPController.variasJornadas}"/>
-                                    <p:inputTextarea id="obep" value="#{solicitudPPController.proyecto.objetivoEspecifico}"
-                                                     required="true" cols="80" rows="1"
-                                                     rendered="#{solicitudPPController.variasJornadas}"/>
+                                        <p:outputLabel for="obep" value="Objetivo específico: "
+                                                       rendered="#{solicitudPPController.variasJornadas}"/>
+                                        <p:inputTextarea id="obep" value="#{solicitudPPController.proyecto.objetivoEspecifico}"
+                                                         required="true" cols="80" rows="1"
+                                                         rendered="#{solicitudPPController.variasJornadas}"
+                                                         disabled="#{solicitudPPController.desactivarVistas}"/>
 
-                                    <p:outputLabel for="jusp" value="Diagnóstico" rendered="#{solicitudPPController.variasJornadas}"/>
-                                    <p:inputTextarea id="jusp" value="#{solicitudPPController.proyecto.justificacion}"
-                                                     required="true" cols="80" rows="5" 
-                                                     rendered="#{solicitudPPController.variasJornadas}"
-                                                     placeholder="Ingrese la justificación del proyecto"
-                                                     requiredMessage="Es necesario que ingrese su justificación antes de continuar"/>
-                                </h:panelGrid>
-                            </p:panel>
-                        </p:tab>
-                        <p:tab id="metodologia" title="Metodología">
-                            <p:panel header="Metodología a implementar en el proyecto">
-                                <h:panelGrid columns="2" cellspacing="5">
-                                    <p:outputLabel for="metp" value="Metodología: "/>
-                                    <p:inputTextarea id="metp" value="#{solicitudPPController.proyecto.metodologia}" 
-                                                     required="true" cols="80" rows="5"/>
+                                        <p:outputLabel for="jusp" value="Diagnóstico" rendered="#{solicitudPPController.variasJornadas}"/>
+                                        <p:inputTextarea id="jusp" value="#{solicitudPPController.proyecto.justificacion}"
+                                                         required="true" cols="80" rows="5" 
+                                                         rendered="#{solicitudPPController.variasJornadas}"
+                                                         placeholder="Ingrese la justificación del proyecto"
+                                                         requiredMessage="Es necesario que ingrese su justificación antes de continuar"
+                                                         disabled="#{solicitudPPController.desactivarVistas}"/>
+                                    </h:panelGrid>
+                                </p:panel>
+                            </p:tab>
+                            <p:tab id="metodologia" title="Metodología">
+                                <p:panel header="Metodología a implementar en el proyecto">
+                                    <h:panelGrid columns="2" cellspacing="5">
+                                        <p:outputLabel for="metp" value="Metodología: "/>
+                                        <p:inputTextarea id="metp" value="#{solicitudPPController.proyecto.metodologia}" 
+                                                         required="true" cols="80" rows="5"
+                                                         disabled="#{solicitudPPController.desactivarVistas}"/>
 
-                                    <p:outputLabel for="actp" value="Actividades: "/>
-                                    <p:inputTextarea id="actp" value="#{solicitudPPController.proyecto.actividades}"
-                                                     required="true" cols="80" rows="5"/>
-                                </h:panelGrid>
-                            </p:panel>
-                        </p:tab>
-                        <p:tab id="calendar" title="Calendarización" rendered="#{solicitudPPController.variasJornadas}">
-                            <p:panel header="Planificación de fechas y horas en las que hará uso del equipo">                                
-                                <p:remoteCommand name="edit" update=":pp1 :form" oncomplete="PF('Dpp1').show();"
-                                                 actionListener="#{solicitudPPController.setTextoDetalle('Edición')}"/>
-                                <h:panelGrid columns="2" cellspacing="5">
-                                    <p:column/>
-                                    <p:dataTable id="fechas" var="f" value="#{solicitudPPController.calendas}" 
-                                                 editable="true" widgetVar="fechas1" selectionMode="single"
-                                                 selection="#{solicitudPPController.selected}" rowKey="#{f.numero}"
-                                                 emptyMessage="Aún no ha agregado las fechas de uso de los recursos.">
-                                        <p:ajax event="rowSelect" listener="#{solicitudPPController.onRowSelect}" 
-                                                oncomplete="edit();"/>
+                                        <p:outputLabel for="actp" value="Actividades: "/>
+                                        <p:inputTextarea id="actp" value="#{solicitudPPController.proyecto.actividades}"
+                                                         required="true" cols="80" rows="5"
+                                                         disabled="#{solicitudPPController.desactivarVistas}"/>
+                                    </h:panelGrid>
+                                </p:panel>
+                            </p:tab>
+                            <p:tab id="calendar" title="Calendarización" rendered="#{solicitudPPController.variasJornadas}">
+                                <p:panel header="Planificación de fechas y horas en las que hará uso del equipo">                                
+                                    <p:remoteCommand name="edit" update=":pp1 :form" oncomplete="PF('Dpp1').show();"
+                                                     actionListener="#{solicitudPPController.setTextoDetalle('Edición')}"/>
+                                    <h:panelGrid columns="2" cellspacing="5">
+                                        <p:column/>
+                                        <p:dataTable id="fechas" var="f" value="#{solicitudPPController.calendas}" 
+                                                     editable="true" widgetVar="fechas1" selectionMode="single"
+                                                     selection="#{solicitudPPController.selected}" rowKey="#{f.numero}"
+                                                     emptyMessage="Aún no ha agregado las fechas de uso de los recursos.">
+                                            <p:ajax event="rowSelect" listener="#{solicitudPPController.onRowSelect}" 
+                                                    oncomplete="edit();" disabled="#{solicitudPPController.desactivarVistas}"/>
 
-                                        <f:facet name="header">
-                                            Calendarización de uso de los recursos
-                                        </f:facet>
+                                            <f:facet name="header">
+                                                Calendarización de uso de los recursos
+                                            </f:facet>
 
-                                        <p:column headerText="N°" width="5%">
-                                            #{f.numero}
-                                        </p:column>
+                                            <p:column headerText="N°" width="5%">
+                                                #{f.numero}
+                                            </p:column>
 
-                                        <p:column headerText="Fecha" width="10%">
-                                            #{solicitudPPController.getFecha(f.fecha)}
-                                        </p:column>
+                                            <p:column headerText="Fecha" width="10%">
+                                                #{solicitudPPController.getFecha(f.fecha)}
+                                            </p:column>
 
-                                        <p:column headerText="Hora inicial" width="10%">
-                                            #{solicitudPPController.getHora(f.horai.horaInicio)}
-                                        </p:column>
+                                            <p:column headerText="Hora inicial" width="10%">
+                                                #{solicitudPPController.getHora(f.horai.horaInicio)}
+                                            </p:column>
 
-                                        <p:column headerText="Hora final" width="0%">
-                                            #{solicitudPPController.getHora(f.horaf.horaFin)}
-                                        </p:column>
+                                            <p:column headerText="Hora final" width="10%">
+                                                #{solicitudPPController.getHora(f.horaf.horaFin)}
+                                            </p:column>
 
-                                        <p:column headerText="Observaciones">
-                                            #{f.observacion}                                            
-                                        </p:column>
-                                    </p:dataTable>
-                                    <p:commandButton value="+" styleClass="ui-priority-primary" 
-                                                     process="@this" oncomplete="PF('Dpp1').show();"
-                                                     action="#{solicitudPPController.previusAdd()}" 
-                                                     title="Agregar una nueva fecha."
-                                                     update="fechas :pp1"/>
-                                </h:panelGrid>
-                            </p:panel>
-                        </p:tab>
-                        <p:tab id="planeacion" title="Planeación de insumos" rendered="#{solicitudPPController.variasJornadas}">
-                            <p:panel header="Planeación de insumos para el proyecto">
-                                <h:panelGrid columns="2" cellspacing="5">            
-                                    <p:outputLabel for="rehp" value="Recursos humanos: "/>
-                                    <p:inputTextarea id="rehp" value="#{solicitudPPController.proyecto.recursoHumano}"
-                                                     required="true" cols="80" rows="5"/>
+                                            <p:column headerText="Observaciones">
+                                                #{f.observacion}                                            
+                                            </p:column>
+                                        </p:dataTable>
+                                        <p:commandButton value="+" styleClass="ui-priority-primary" 
+                                                         process="@this" oncomplete="PF('Dpp1').show();"
+                                                         action="#{solicitudPPController.previusAdd()}" 
+                                                         title="Agregar una nueva fecha."
+                                                         update="fechas :pp1"
+                                                         disabled="#{solicitudPPController.desactivarVistas}"/>
+                                    </h:panelGrid>
+                                </p:panel>
+                            </p:tab>
+                            <p:tab id="planeacion" title="Planeación de insumos" rendered="#{solicitudPPController.variasJornadas}">
+                                <p:panel header="Planeación de insumos para el proyecto">
+                                    <h:panelGrid columns="2" cellspacing="5">            
+                                        <p:outputLabel for="rehp" value="Recursos humanos: "/>
+                                        <p:inputTextarea id="rehp" value="#{solicitudPPController.proyecto.recursoHumano}"
+                                                         required="true" cols="80" rows="5"
+                                                         disabled="#{solicitudPPController.desactivarVistas}"/>
 
-                                    <p:outputLabel for="remp" value="Recursos materiales: "/>
-                                    <p:inputTextarea id="remp" value="#{solicitudPPController.proyecto.recursoMaterial}"
-                                                     required="true" cols="80" rows="5"/>
+                                        <p:outputLabel for="remp" value="Recursos materiales: "/>
+                                        <p:inputTextarea id="remp" value="#{solicitudPPController.proyecto.recursoMaterial}"
+                                                         required="true" cols="80" rows="5"
+                                                         disabled="#{solicitudPPController.desactivarVistas}"/>
 
-                                    <p:outputLabel for="refp" value="Recursos financieros: "/>
-                                    <p:inputTextarea id="refp" value="#{solicitudPPController.proyecto.recursoFinanciero}"
-                                                     required="true" cols="80" rows="5"/>
-                                </h:panelGrid>
-                            </p:panel>
-                        </p:tab>
-                        <p:tab id="recursos" title="Recursos">
-                            <p:panel header="Recursos del CRA a utilizar en cada sesión">
-                                <h:panelGrid columns="1" cellspacing="5">
-                                    <p:dataTable id="art" var="i" value="#{solicitudPPController.solicitud}" 
-                                                 editable="true" widgetVar="inte1" styleClass="tabla"
-                                                 emptyMessage="Aún no ha especificado recursos a reservar.">
-                                        <f:facet name="header">
-                                            Recursos a utilizar
-                                        </f:facet>
+                                        <p:outputLabel for="refp" value="Recursos financieros: "/>
+                                        <p:inputTextarea id="refp" value="#{solicitudPPController.proyecto.recursoFinanciero}"
+                                                         required="true" cols="80" rows="5"
+                                                         disabled="#{solicitudPPController.desactivarVistas}"/>
+                                    </h:panelGrid>
+                                </p:panel>
+                            </p:tab>
+                            <p:tab id="recursos" title="Recursos">
+                                <p:panel header="Recursos del CRA a utilizar en cada sesión">
+                                    <h:panelGrid columns="1" cellspacing="5">
+                                        <p:dataTable id="art" var="i" value="#{solicitudPPController.solicitud}" 
+                                                     editable="true" widgetVar="inte1" styleClass="tabla"
+                                                     emptyMessage="Aún no ha especificado recursos a reservar.">
+                                            <f:facet name="header">
+                                                Recursos a utilizar
+                                            </f:facet>
 
-                                        <p:ajax event="rowEdit" listener="#{solicitudPPController.onRowEdit}"/>
-                                        <p:ajax event="rowEditCancel" listener="#{solicitudPPController.onRowCancel}"/>
+                                            <p:ajax event="rowEdit" listener="#{solicitudPPController.onRowEdit}"
+                                                    disabled="#{solicitudPPController.desactivarVistas}"/>
+                                            <p:ajax event="rowEditCancel" listener="#{solicitudPPController.onRowCancel}"
+                                                    disabled="#{solicitudPPController.desactivarVistas}"/>
 
-                                        <p:column headerText="Cantidad" style="width: 10%;">
-                                            <p:cellEditor>
-                                                <f:facet name="output">
-                                                    <h:outputText value="#{i.solicitudReservaComentario}" />
-                                                </f:facet>
-                                                <f:facet name="input">
-                                                    <p:inputText value="#{i.solicitudReservaComentario}" 
-                                                                 style="width:100%" label="Cantidad"/>
-                                                </f:facet>
-                                            </p:cellEditor>
-                                        </p:column>
+                                            <p:column headerText="Cantidad" style="width: 10%;">
+                                                <p:cellEditor>
+                                                    <f:facet name="output">
+                                                        <h:outputText value="#{i.solicitudReservaComentario}" />
+                                                    </f:facet>
+                                                    <f:facet name="input">
+                                                        <p:inputText value="#{i.solicitudReservaComentario}" 
+                                                                     style="width:100%" label="Cantidad"/>
+                                                    </f:facet>
+                                                </p:cellEditor>
+                                            </p:column>
 
-                                        <p:column headerText="Nombre Recurso">
-                                            <p:cellEditor>
-                                                <f:facet name="output">
-                                                    <h:outputText value="#{i.recurso.nombre}" />
-                                                </f:facet>
-                                                <f:facet name="input">
-                                                    <p:selectOneMenu id="tre" value="#{i.recurso}" widgetVar="100%"
-                                                                     converter="omnifaces.SelectItemsConverter"
-                                                                     required="true" immediate="true">
-                                                        <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
-                                                        <f:selectItems value="#{solicitudPPController.recDisp}" var="r"
-                                                                       itemValue="#{r}" itemLabel="#{r.nombre}"/>
-                                                    </p:selectOneMenu>
-                                                </f:facet>
-                                            </p:cellEditor>
-                                        </p:column>
+                                            <p:column headerText="Nombre Recurso">
+                                                <p:cellEditor>
+                                                    <f:facet name="output">
+                                                        <h:outputText value="#{i.recurso.nombre}" />
+                                                    </f:facet>
+                                                    <f:facet name="input">
+                                                        <p:selectOneMenu id="tre" value="#{i.recurso}" widgetVar="100%"
+                                                                         converter="omnifaces.SelectItemsConverter"
+                                                                         required="true" immediate="true">
+                                                            <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
+                                                            <f:selectItems value="#{solicitudPPController.recDisp}" var="r"
+                                                                           itemValue="#{r}" itemLabel="#{r.nombre}"/>
+                                                        </p:selectOneMenu>
+                                                    </f:facet>
+                                                </p:cellEditor>
+                                            </p:column>
 
-                                        <p:column style="width:35px">
-                                            <p:rowEditor />
-                                        </p:column>
-                                    </p:dataTable> 
+                                            <p:column style="width:35px"
+                                                      rendered="#{!solicitudPPController.desactivarVistas}">
+                                                <p:rowEditor />
+                                            </p:column>
+                                        </p:dataTable> 
 
-                                    <p:commandButton value="+" styleClass="ui-priority-primary" 
-                                                     process="@this"
-                                                     action="#{solicitudPPController.onAddNew()}" 
-                                                     title="Recursos a la lista."
-                                                     update="art"/>
-                                    <p:column/>
-                                    <p:commandButton id="Solicitar2" value="Solicitar" update="form"
-                                                     actionListener="#{solicitudPPController.guardar()}"
-                                                     rendered="#{!solicitudPPController.variasJornadas}"/>
-                                </h:panelGrid>
-                            </p:panel>
-                        </p:tab>
-                        <p:tab id="seguimiento" title="Evaluación" rendered="#{solicitudPPController.variasJornadas}">
-                            <p:panel header="Seguimiento y producto esperado del proyecto">
-                                <h:panelGrid columns="2" cellspacing="5">
-                                    <p:outputLabel for="digp" value="Seguimiento: "/>
-                                    <p:inputTextarea id="digp" value="#{solicitudPPController.proyecto.seguimiento}"
-                                                     required="true" cols="80" rows="5"/>
+                                        <p:commandButton value="+" styleClass="ui-priority-primary" 
+                                                         process="@this"
+                                                         action="#{solicitudPPController.onAddNew()}" 
+                                                         title="Recursos a la lista."
+                                                         update="art"
+                                                         disabled="#{solicitudPPController.desactivarVistas}"/>
+                                        <p:column/>
+                                        <p:commandButton id="Solicitar2" value="Solicitar Reserva de equipo" update="form"
+                                                         actionListener="#{solicitudPPController.guardar()}"
+                                                         rendered="#{!solicitudPPController.variasJornadas}"
+                                                         disabled="#{solicitudPPController.desactivarVistas}"/>
+                                    </h:panelGrid>
+                                </p:panel>
+                            </p:tab>
+                            <p:tab id="seguimiento" title="Evaluación" rendered="#{solicitudPPController.variasJornadas}">
+                                <p:panel header="Seguimiento y producto esperado del proyecto">
+                                    <h:panelGrid columns="2" cellspacing="5">
+                                        <p:outputLabel for="digp" value="Seguimiento: "/>
+                                        <p:inputTextarea id="digp" value="#{solicitudPPController.proyecto.seguimiento}"
+                                                         required="true" cols="80" rows="5"
+                                                         disabled="#{solicitudPPController.desactivarVistas}"/>
 
-                                    <p:outputLabel for="prep" value="Producto: "/>
-                                    <p:inputTextarea id="prep" value="#{solicitudPPController.proyecto.productoEsperado}"
-                                                     required="true" cols="80" rows="5"/>
+                                        <p:outputLabel for="prep" value="Producto: "/>
+                                        <p:inputTextarea id="prep" value="#{solicitudPPController.proyecto.productoEsperado}"
+                                                         required="true" cols="80" rows="5"
+                                                         disabled="#{solicitudPPController.desactivarVistas}"/>
 
-                                    <p:column/>
-                                    <p:commandButton id="Solicitar1" value="Solicitar" update="form"
-                                                     actionListener="#{solicitudPPController.guardar()}"/>
-                                </h:panelGrid>
-                            </p:panel>
-                        </p:tab>
-                    </p:wizard>
+                                        <p:column/>
+                                        <p:commandButton id="Solicitar1" value="Solicitar Reserva de equipo" update="form"
+                                                         actionListener="#{solicitudPPController.guardar()}"
+                                                         disabled="#{solicitudPPController.desactivarVistas}"/>
+                                    </h:panelGrid>
+                                </p:panel>
+                            </p:tab>
+                        </p:wizard>
+                    </h:panelGrid>
                 </h:form>
                 <p:dialog id="dialog1" widgetVar="Dpp1" modal="true">
                     <h:form id="pp1">
@@ -302,15 +326,15 @@
                                 <p:commandButton value="agregar" 
                                                  actionListener="#{solicitudPPController.agregar()}"
                                                  update="pp1 form"
-                                                 rendered="#{!solicitudPPController.estaEditando}"/> 
+                                                 rendered="#{!solicitudPPController.desactivarVistas}"/> 
                                 <p:commandButton value="Editar" 
                                                  actionListener="#{solicitudPPController.editar()}"
                                                  update="pp1 form" 
-                                                 rendered="#{solicitudPPController.estaEditando}"/>
+                                                 rendered="#{solicitudPPController.desactivarVistas}"/>
                                 <p:commandButton value="Eliminar" 
                                                  actionListener="#{solicitudPPController.eliminar()}"
                                                  update="pp1 form" 
-                                                 rendered="#{solicitudPPController.estaEditando}"/>
+                                                 rendered="#{solicitudPPController.desactivarVistas}"/>
                             </h:panelGrid>
                         </h:panelGrid>
                     </h:form>

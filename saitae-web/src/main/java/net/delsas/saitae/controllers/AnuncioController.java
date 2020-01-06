@@ -120,7 +120,7 @@ public class AnuncioController implements Serializable {
                     + anuncio.getAnuncioAnunciante().getPersonaNombre().split(" ")[0]
                     + " " + anuncio.getAnuncioAnunciante().getPersonaApellido().split(" ")[0],
                     "Nuevo anuncio disponible", FacesMessage.SEVERITY_INFO, usuario.getIdpersona(),
-                    "tp¿¿" + (anuncio.getAnuncioTipoPersona() == null ? 0
+                    " ¿¿¿tp¿¿" + (anuncio.getAnuncioTipoPersona() == null ? 0
                     : anuncio.getAnuncioTipoPersona().getIdtipoPersona())).toString());
             this.construct();
         } catch (Exception e) {

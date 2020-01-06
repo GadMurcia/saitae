@@ -28,7 +28,10 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "ReservaXpedagogia.findAll", query = "SELECT r FROM ReservaXpedagogia r")
     , @NamedQuery(name = "ReservaXpedagogia.findByIdProyectoPedagogico", query = "SELECT r FROM ReservaXpedagogia r WHERE r.reservaXpedagogiaPK.idProyectoPedagogico = :idProyectoPedagogico")
     , @NamedQuery(name = "ReservaXpedagogia.findByIdReserva", query = "SELECT r FROM ReservaXpedagogia r WHERE r.reservaXpedagogiaPK.idReserva = :idReserva")
-    , @NamedQuery(name = "ReservaXpedagogia.findByReservaXpedagogiaComentario", query = "SELECT r FROM ReservaXpedagogia r WHERE r.reservaXpedagogiaComentario = :reservaXpedagogiaComentario")})
+    , @NamedQuery(name = "ReservaXpedagogia.findByReservaXpedagogiaComentario", query = "SELECT r FROM ReservaXpedagogia r WHERE r.reservaXpedagogiaComentario = :reservaXpedagogiaComentario")
+    , @NamedQuery(name = "ReservaXpedagogia.findProyectoByIdReserva", query = "SELECT DISTINCT r.proyectoPedagogico FROM ReservaXpedagogia r WHERE r.reservaXpedagogiaPK.idReserva = :idReserva")
+    , @NamedQuery(name = "ReservaXpedagogia.findReservaByIdProyecto", query = "SELECT DISTINCT r.reserva FROM ReservaXpedagogia r WHERE r.reservaXpedagogiaPK.idProyectoPedagogico = :idProyecto")
+})
 public class ReservaXpedagogia implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -111,5 +114,5 @@ public class ReservaXpedagogia implements Serializable {
     public String toString() {
         return "net.delsas.saitae.entities.ReservaXpedagogia[ reservaXpedagogiaPK=" + reservaXpedagogiaPK + " ]";
     }
-    
+
 }

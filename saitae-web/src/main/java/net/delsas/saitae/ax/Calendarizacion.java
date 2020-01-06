@@ -137,4 +137,14 @@ public class Calendarizacion {
         return "Calendarizacion{" + "numero=" + numero + ", fecha=" + fecha + ", horai=" + horai + ", horaf=" + horaf + ", observacion=" + observacion + '}';
     }
 
+    public boolean isEmpty() {
+        if (fecha == null) {
+            return true;
+        }
+        if (horai == null) {
+            return true;
+        }
+        return horaf == null;
+    }
+
 }

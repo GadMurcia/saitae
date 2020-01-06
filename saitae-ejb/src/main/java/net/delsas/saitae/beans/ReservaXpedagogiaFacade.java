@@ -5,9 +5,12 @@
  */
 package net.delsas.saitae.beans;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import net.delsas.saitae.entities.ProyectoPedagogico;
+import net.delsas.saitae.entities.Reserva;
 import net.delsas.saitae.entities.ReservaXpedagogia;
 
 /**
@@ -28,5 +31,19 @@ public class ReservaXpedagogiaFacade extends AbstractFacade<ReservaXpedagogia> i
     public ReservaXpedagogiaFacade() {
         super(ReservaXpedagogia.class);
     }
+
+    @Override
+    public List<ProyectoPedagogico> findProyectoByIdReserva(Integer idReserva) {
+        return em.createNamedQuery("ReservaXpedagogia.findProyectoByIdReserva")
+                .setParameter("idReserva", idReserva)
+                .getResultList();
+    }
     
+    @Override
+    public List<Reserva> findReservaByIdProyecto(Integer idproyecto) {
+        return em.createNamedQuery("ReservaXpedagogia.findReservaByIdProyecto")
+                .setParameter("idProyecto", idproyecto)
+                .getResultList();
+    }
+
 }

@@ -252,15 +252,25 @@ public class sessionController implements Serializable {
     public void escucha() {
         try {
             mensaje m = new mensaje(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("mss"));
-            String[] ac0 = m.getCadenaAccion().split("<<");
+            String[] ac0 = m.getCadenaAccion().split("¿¿¿")[0].split("<<");
+            String[] tp0 = m.getCadenaAccion().split("¿¿¿").length > 1
+                    ? m.getCadenaAccion().split("¿¿¿")[1].split("¿¿") : new String[]{};
+            if (tp0.length > 1) {
+                if (tp0[0].equals("tp")) {
+                    FacesContext.getCurrentInstance().addMessage(":form0:msgs", m.getFacesmessage());
+                    PrimeFaces.current().ajax().update(":noti", ":form0:msgs");
+                }
+            }
             String np = FacesContext.getCurrentInstance().getExternalContext().getRequestServletPath().split("/")[2];
             long x = us.getTipoPersona().getIdtipoPersona();
             for (String ac1 : ac0) {
                 String[] ac = ac1.split("<");
-                String[] acid = ac[1].split(">");
-                if (np.equals((ac[0] + ".intex"))
-                        && (Objects.equals(m.getDestinatario(), us.getIdpersona()) || x == 1 || x == 2)) {
-                    PrimeFaces.current().ajax().update(acid);
+                if (ac.length > 1) {
+                    String[] acid = ac[1].split(">");
+                    if (np.equals((ac[0] + ".intex"))
+                            && (Objects.equals(m.getDestinatario(), us.getIdpersona()) || x == 1 || x == 2)) {
+                        PrimeFaces.current().ajax().update(acid);
+                    }
                 }
             }
             if (Objects.equals(m.getDestinatario(), us.getIdpersona())) {

@@ -21,27 +21,35 @@
                             <p:ajax event="rowSelect" listener="#{adminReservas.onRowSelect}" 
                                     update=":d1" oncomplete="PF('Dreserva').show();"/>
 
-                            <p:column headerText="Tipo de recurso" rendered="#{adminReservas.admin}"
+                            <p:column headerText="Tipo de recurso" 
+                                      rendered="#{adminReservas.admin}"
+                                      filterMatchMode="contains"
                                       filterBy="#{s.tipoRecurso.tipoRecursoNombre}">
-                                <p:outputLabel value="#{s.tipoRecurso.tipoRecursoNombre}"/>
+                                #{s.tipoRecurso.tipoRecursoNombre}
                             </p:column>
 
-                            <p:column headerText="Fecha de solicitud" filterMatchMode="contains" 
+                            <p:column headerText="Fecha de solicitud" 
+                                      filterMatchMode="contains" 
                                       filterBy="#{adminReservas.getFechaString(s.reservaFecha)}">
-                                <p:outputLabel value="#{adminReservas.getFechaString(s.reservaFecha)}"/>
+                                #{adminReservas.getFechaString(s.reservaFecha)}
                             </p:column>
 
-                            <p:column headerText="Fecha de uso" filterMatchMode="contains" filterBy="#{adminReservas.getFechaString(s.reservaEntrega)}">
-                                <p:outputLabel value="#{adminReservas.getFechaString(s.reservaEntrega)}"/>
+                            <p:column headerText="Fecha de uso" 
+                                      filterMatchMode="contains" 
+                                      filterBy="#{adminReservas.getFechaString(s.reservaEntrega)}">
+                                #{adminReservas.getFechaString(s.reservaEntrega)}
                             </p:column>
 
-                            <p:column headerText="Fecha de devolución" filterMatchMode="contains" filterBy="#{adminReservas.getFechaString(s.reservaDevolucion)}">
-                                <p:outputLabel value="#{adminReservas.getFechaString(s.reservaDevolucion)}"/>
+                            <p:column headerText="Fecha de devolución" 
+                                      filterMatchMode="contains" 
+                                      filterBy="#{adminReservas.getFechaString(s.reservaDevolucion)}">
+                                #{adminReservas.getFechaString(s.reservaDevolucion)}
                             </p:column>
 
                             <p:column headerText="Responsable del equipo" 
-                                      filterMatchMode="contains" filterBy="#{adminReservas.getResponsableTabla(s)}">
-                                <p:outputLabel value="#{adminReservas.getResponsableTabla(s)}"/>
+                                      filterMatchMode="contains" 
+                                      filterBy="#{adminReservas.getResponsableTabla(s)}">
+                                #{adminReservas.getResponsableTabla(s)}
                             </p:column>
                         </p:dataTable>
                     </p:tab>
@@ -52,24 +60,35 @@
                                      emptyMessage="Sin registros aún." paginatorAlwaysVisible="false">
                             <p:ajax event="rowSelect" listener="#{adminReservas.onRowSelect}" 
                                     update=":d1" oncomplete="PF('Dreserva').show();"/>
-                            <p:column headerText="Tipo de recurso" rendered="#{adminReservas.admin}"
-                                      filterBy="#{adminReservas.getTipoRecurso(s)}">
-                                <p:outputLabel value="#{adminReservas.getTipoRecurso(s)}"/>
-                            </p:column>
-                            <p:column headerText="Fecha de solicitud" filterMatchMode="contains" filterBy="#{adminReservas.getFechaString(s.reservaFecha)}">
-                                <p:outputLabel value="#{adminReservas.getFechaString(s.reservaFecha)}"/>
-                            </p:column>
-
-                            <p:column headerText="Fecha de uso" filterMatchMode="contains" filterBy="#{adminReservas.getFechaString(s.reservaEntrega)}">
-                                <p:outputLabel value="#{adminReservas.getFechaString(s.reservaEntrega)}"/>
+                            <p:column headerText="Tipo de recurso" 
+                                      rendered="#{adminReservas.admin}"
+                                      filterMatchMode="contains"
+                                      filterBy="#{s.tipoRecurso.tipoRecursoNombre}">
+                                #{s.tipoRecurso.tipoRecursoNombre}
                             </p:column>
 
-                            <p:column headerText="Fecha de devolución" filterMatchMode="contains" filterBy="#{adminReservas.getFechaString(s.reservaDevolucion)}">
-                                <p:outputLabel value="#{adminReservas.getFechaString(s.reservaDevolucion)}"/>
+                            <p:column headerText="Fecha de solicitud" 
+                                      filterMatchMode="contains" 
+                                      filterBy="##{adminReservas.getFechaString(s.reservaFecha)}">
+                                #{adminReservas.getFechaString(s.reservaFecha)}
                             </p:column>
 
-                            <p:column headerText="Responsable del equipo" filterMatchMode="contains" filterBy="#{adminReservas.getResponsableTabla(s)}">
-                                <p:outputLabel value="#{adminReservas.getResponsableTabla(s)}"/>
+                            <p:column headerText="Fecha de uso" 
+                                      filterMatchMode="contains" 
+                                      filterBy="#{adminReservas.getFechaString(s.reservaEntrega)}">
+                                #{adminReservas.getFechaString(s.reservaEntrega)}
+                            </p:column>
+
+                            <p:column headerText="Fecha de devolución" 
+                                      filterMatchMode="contains" 
+                                      filterBy="#{adminReservas.getFechaString(s.reservaDevolucion)}">
+                                #{adminReservas.getFechaString(s.reservaDevolucion)}
+                            </p:column>
+
+                            <p:column headerText="Responsable del equipo" 
+                                      filterMatchMode="contains" 
+                                      filterBy="#{adminReservas.getResponsableTabla(s)}">
+                                #{adminReservas.getResponsableTabla(s)}
                             </p:column>
                         </p:dataTable>
                     </p:tab>
@@ -81,24 +100,35 @@
                                          emptyMessage="Sin registros aún." paginatorAlwaysVisible="false">
                                 <p:ajax event="rowSelect" listener="#{adminReservas.onRowSelect}" 
                                         update=":d1" oncomplete="PF('Dreserva').show();"/>
-                                <p:column headerText="Tipo de recurso" rendered="#{adminReservas.admin}"
-                                          filterBy="#{adminReservas.getTipoRecurso(s)}">
-                                    <p:outputLabel value="#{adminReservas.getTipoRecurso(s)}"/>
-                                </p:column>
-                                <p:column headerText="Fecha de solicitud" filterMatchMode="contains" filterBy="#{adminReservas.getFechaString(s.reservaFecha)}">
-                                    <p:outputLabel value="#{adminReservas.getFechaString(s.reservaFecha)}"/>
-                                </p:column>
-
-                                <p:column headerText="Fecha de uso" filterMatchMode="contains" filterBy="#{adminReservas.getFechaString(s.reservaEntrega)}">
-                                    <p:outputLabel value="#{adminReservas.getFechaString(s.reservaEntrega)}"/>
+                                <p:column headerText="Tipo de recurso" 
+                                          rendered="#{adminReservas.admin}"
+                                          filterMatchMode="contains"
+                                          filterBy="#{s.tipoRecurso.tipoRecursoNombre}">
+                                    #{s.tipoRecurso.tipoRecursoNombre}
                                 </p:column>
 
-                                <p:column headerText="Fecha de devolución" filterMatchMode="contains" filterBy="#{adminReservas.getFechaString(s.reservaDevolucion)}">
-                                    <p:outputLabel value="#{adminReservas.getFechaString(s.reservaDevolucion)}"/>
+                                <p:column headerText="Fecha de solicitud" 
+                                          filterMatchMode="contains" 
+                                          filterBy="##{adminReservas.getFechaString(s.reservaFecha)}">
+                                    #{adminReservas.getFechaString(s.reservaFecha)}
                                 </p:column>
 
-                                <p:column headerText="Responsable del equipo" filterMatchMode="contains" filterBy="#{adminReservas.getResponsableTabla(s)}">
-                                    <p:outputLabel value="#{adminReservas.getResponsableTabla(s)}"/>
+                                <p:column headerText="Fecha de uso" 
+                                          filterMatchMode="contains" 
+                                          filterBy="#{adminReservas.getFechaString(s.reservaEntrega)}">
+                                    #{adminReservas.getFechaString(s.reservaEntrega)}
+                                </p:column>
+
+                                <p:column headerText="Fecha de devolución" 
+                                          filterMatchMode="contains" 
+                                          filterBy="#{adminReservas.getFechaString(s.reservaDevolucion)}">
+                                    #{adminReservas.getFechaString(s.reservaDevolucion)}
+                                </p:column>
+
+                                <p:column headerText="Responsable del equipo" 
+                                          filterMatchMode="contains" 
+                                          filterBy="#{adminReservas.getResponsableTabla(s)}">
+                                    #{adminReservas.getResponsableTabla(s)}
                                 </p:column>
                             </p:dataTable>
                         </h:panelGrid>
@@ -111,24 +141,35 @@
                                          emptyMessage="Sin registros aún." paginatorAlwaysVisible="false">
                                 <p:ajax event="rowSelect" listener="#{adminReservas.onRowSelect}" 
                                         update=":d1" oncomplete="PF('Dreserva').show();"/>
-                                <p:column headerText="Tipo de recurso" rendered="#{adminReservas.admin}"
-                                          filterBy="#{adminReservas.getTipoRecurso(s)}">
-                                    <p:outputLabel value="#{adminReservas.getTipoRecurso(s)}"/>
-                                </p:column>
-                                <p:column headerText="Fecha de solicitud" filterMatchMode="contains" filterBy="#{adminReservas.getFechaString(s.reservaFecha)}">
-                                    <p:outputLabel value="#{adminReservas.getFechaString(s.reservaFecha)}"/>
-                                </p:column>
-
-                                <p:column headerText="Fecha de uso" filterMatchMode="contains" filterBy="#{adminReservas.getFechaString(s.reservaEntrega)}">
-                                    <p:outputLabel value="#{adminReservas.getFechaString(s.reservaEntrega)}"/>
+                                <p:column headerText="Tipo de recurso" 
+                                          rendered="#{adminReservas.admin}"
+                                          filterMatchMode="contains"
+                                          filterBy="#{s.tipoRecurso.tipoRecursoNombre}">
+                                    #{s.tipoRecurso.tipoRecursoNombre}
                                 </p:column>
 
-                                <p:column headerText="Fecha de devolución" filterMatchMode="contains" filterBy="#{adminReservas.getFechaString(s.reservaDevolucion)}">
-                                    <p:outputLabel value="#{adminReservas.getFechaString(s.reservaDevolucion)}"/>
+                                <p:column headerText="Fecha de solicitud" 
+                                          filterMatchMode="contains" 
+                                          filterBy="##{adminReservas.getFechaString(s.reservaFecha)}">
+                                    #{adminReservas.getFechaString(s.reservaFecha)}
                                 </p:column>
 
-                                <p:column headerText="Responsable del equipo" filterMatchMode="contains" filterBy="#{adminReservas.getResponsableTabla(s)}">
-                                    <p:outputLabel value="#{adminReservas.getResponsableTabla(s)}"/>
+                                <p:column headerText="Fecha de uso" 
+                                          filterMatchMode="contains" 
+                                          filterBy="#{adminReservas.getFechaString(s.reservaEntrega)}">
+                                    #{adminReservas.getFechaString(s.reservaEntrega)}
+                                </p:column>
+
+                                <p:column headerText="Fecha de devolución" 
+                                          filterMatchMode="contains" 
+                                          filterBy="#{adminReservas.getFechaString(s.reservaDevolucion)}">
+                                    #{adminReservas.getFechaString(s.reservaDevolucion)}
+                                </p:column>
+
+                                <p:column headerText="Responsable del equipo" 
+                                          filterMatchMode="contains" 
+                                          filterBy="#{adminReservas.getResponsableTabla(s)}">
+                                    #{adminReservas.getResponsableTabla(s)}
                                 </p:column>
                             </p:dataTable>
                         </h:panelGrid>
@@ -141,24 +182,35 @@
                                          emptyMessage="Sin registros aún." paginatorAlwaysVisible="false">
                                 <p:ajax event="rowSelect" listener="#{adminReservas.onRowSelect}" 
                                         update=":d1" oncomplete="PF('Dreserva').show();"/>
-                                <p:column headerText="Tipo de recurso" rendered="#{adminReservas.admin}"
-                                          filterBy="#{adminReservas.getTipoRecurso(s)}">
-                                    <p:outputLabel value="#{adminReservas.getTipoRecurso(s)}"/>
-                                </p:column>
-                                <p:column headerText="Fecha de solicitud" filterMatchMode="contains" filterBy="#{adminReservas.getFechaString(s.reservaFecha)}">
-                                    <p:outputLabel value="#{adminReservas.getFechaString(s.reservaFecha)}"/>
-                                </p:column>
-
-                                <p:column headerText="Fecha de uso" filterMatchMode="contains" filterBy="#{adminReservas.getFechaString(s.reservaEntrega)}">
-                                    <p:outputLabel value="#{adminReservas.getFechaString(s.reservaEntrega)}"/>
+                                <p:column headerText="Tipo de recurso" 
+                                          rendered="#{adminReservas.admin}"
+                                          filterMatchMode="contains"
+                                          filterBy="#{s.tipoRecurso.tipoRecursoNombre}">
+                                    #{s.tipoRecurso.tipoRecursoNombre}
                                 </p:column>
 
-                                <p:column headerText="Fecha de devolución" filterMatchMode="contains" filterBy="#{adminReservas.getFechaString(s.reservaDevolucion)}">
-                                    <p:outputLabel value="#{adminReservas.getFechaString(s.reservaDevolucion)}"/>
+                                <p:column headerText="Fecha de solicitud" 
+                                          filterMatchMode="contains" 
+                                          filterBy="##{adminReservas.getFechaString(s.reservaFecha)}">
+                                    #{adminReservas.getFechaString(s.reservaFecha)}
                                 </p:column>
 
-                                <p:column headerText="Responsable del equipo" filterMatchMode="contains" filterBy="#{adminReservas.getResponsableTabla(s)}">
-                                    <p:outputLabel value="#{adminReservas.getResponsableTabla(s)}"/>
+                                <p:column headerText="Fecha de uso" 
+                                          filterMatchMode="contains" 
+                                          filterBy="#{adminReservas.getFechaString(s.reservaEntrega)}">
+                                    #{adminReservas.getFechaString(s.reservaEntrega)}
+                                </p:column>
+
+                                <p:column headerText="Fecha de devolución" 
+                                          filterMatchMode="contains" 
+                                          filterBy="#{adminReservas.getFechaString(s.reservaDevolucion)}">
+                                    #{adminReservas.getFechaString(s.reservaDevolucion)}
+                                </p:column>
+
+                                <p:column headerText="Responsable del equipo" 
+                                          filterMatchMode="contains" 
+                                          filterBy="#{adminReservas.getResponsableTabla(s)}">
+                                    #{adminReservas.getResponsableTabla(s)}
                                 </p:column>
                             </p:dataTable>
                         </h:panelGrid>
@@ -170,27 +222,35 @@
                                      emptyMessage="Sin registros aún." paginatorAlwaysVisible="false">
                             <p:ajax event="rowSelect" listener="#{adminReservas.onRowSelect}" 
                                     update=":d1" oncomplete="PF('Dreserva').show();"/>
-                            <p:column headerText="Tipo de recurso" rendered="#{adminReservas.admin}"
-                                      filterBy="#{adminReservas.getTipoRecurso(s)}">
-                                <p:outputLabel value="#{adminReservas.getTipoRecurso(s)}"/>
-                            </p:column>
-                            <p:column headerText="Fecha de solicitud" filterMatchMode="contains" 
-                                      filterBy="#{adminReservas.getFechaString(s.reservaFecha)}">
-                                <p:outputLabel value="#{adminReservas.getFechaString(s.reservaFecha)}"/>
+                            <p:column headerText="Tipo de recurso" 
+                                      rendered="#{adminReservas.admin}"
+                                      filterMatchMode="contains"
+                                      filterBy="#{s.tipoRecurso.tipoRecursoNombre}">
+                                #{s.tipoRecurso.tipoRecursoNombre}
                             </p:column>
 
-                            <p:column headerText="Fecha de uso" filterMatchMode="contains" 
+                            <p:column headerText="Fecha de solicitud" 
+                                      filterMatchMode="contains" 
+                                      filterBy="##{adminReservas.getFechaString(s.reservaFecha)}">
+                                #{adminReservas.getFechaString(s.reservaFecha)}
+                            </p:column>
+
+                            <p:column headerText="Fecha de uso" 
+                                      filterMatchMode="contains" 
                                       filterBy="#{adminReservas.getFechaString(s.reservaEntrega)}">
-                                <p:outputLabel value="#{adminReservas.getFechaString(s.reservaEntrega)}"/>
+                                #{adminReservas.getFechaString(s.reservaEntrega)}
                             </p:column>
 
-                            <p:column headerText="Fecha de devolución" filterMatchMode="contains" 
+                            <p:column headerText="Fecha de devolución" 
+                                      filterMatchMode="contains" 
                                       filterBy="#{adminReservas.getFechaString(s.reservaDevolucion)}">
-                                <p:outputLabel value="#{adminReservas.getFechaString(s.reservaDevolucion)}"/>
+                                #{adminReservas.getFechaString(s.reservaDevolucion)}
                             </p:column>
 
-                            <p:column headerText="Responsable del equipo" filterMatchMode="contains" filterBy="#{adminReservas.getResponsableTabla(s)}">
-                                <p:outputLabel value="#{adminReservas.getResponsableTabla(s)}"/>
+                            <p:column headerText="Responsable del equipo" 
+                                      filterMatchMode="contains" 
+                                      filterBy="#{adminReservas.getResponsableTabla(s)}">
+                                #{adminReservas.getResponsableTabla(s)}
                             </p:column>
                         </p:dataTable>
                     </p:tab>
@@ -261,12 +321,16 @@
                             <p:outputLabel value="Razón de rechazo: " rendered="#{adminReservas.rechazo}"/>
                             <p:inputTextarea value="#{adminReservas.razonRechazo}" cols="40"
                                              rendered="#{adminReservas.rechazo}" disabled="true"/>
-                            
+
                             <p:outputLabel value="Razón de cancelación: " 
                                            rendered="#{adminReservas.cancelado}"/>
                             <p:inputTextarea value="#{adminReservas.razonRechazo}" cols="40"
                                              rendered="#{adminReservas.cancelado}" 
                                              disabled="true"/>
+                            <p:column/>
+                            <p:commandButton value="ver info del proyecto" 
+                                             rendered="#{adminReservas.hayProyecto}"
+                                             actionListener="#{adminReservas.verProyecto()}"/>
                         </h:panelGrid>
                     </p:panel>
                     <p:panel header="Detalle del equipo #{adminReservas.textoReserva}o"
