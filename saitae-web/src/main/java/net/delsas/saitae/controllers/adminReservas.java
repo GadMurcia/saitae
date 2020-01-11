@@ -251,6 +251,8 @@ public class adminReservas implements Serializable {
         List<ProyectoPedagogico> re = rxpFL.findProyectoByIdReserva(selected == null ? 0 : selected.getIdreserva());
         if (!re.isEmpty()) {
             proyecto = re.get(0);
+        } else {
+            proyecto = null;
         }
         procesoDetalle();
         rechazo = false;

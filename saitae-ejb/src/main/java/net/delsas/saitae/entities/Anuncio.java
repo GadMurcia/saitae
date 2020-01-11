@@ -149,7 +149,15 @@ public class Anuncio implements Serializable {
 
     @Override
     public int hashCode() {
-        return idanuncio.hashCode();
+        int hash = 7;
+        hash = 31 * hash + Objects.hashCode(this.idanuncio);
+        hash = 31 * hash + Objects.hashCode(this.anuncioTitulo);
+        hash = 31 * hash + Objects.hashCode(this.anuncioTexto);
+        hash = 31 * hash + Objects.hashCode(this.anuncioComentario);
+        hash = 31 * hash + Objects.hashCode(this.anuncioFechaFin);
+        hash = 31 * hash + Objects.hashCode(this.anuncioAnunciante);
+        hash = 31 * hash + Objects.hashCode(this.anuncioTipoPersona);
+        return hash;
     }
 
     @Override

@@ -11,7 +11,7 @@
         <h:form id="form">  
             <p:growl id="msgs" showDetail="true" />
             <h2>Administración de Anuncios del sistema</h2>
-            <p:tabView dynamic="true" cache="true" effect="fold">
+            <p:tabView id="tv" effect="fold">
                 <p:tab title="Crear anuncio">
                     <h:panelGrid columns="2">
                         <p:outputLabel for="tit" value="Título: "/>
@@ -21,6 +21,7 @@
                         <p:outputLabel for="cue" value="Cuerpo del aviso: "/>
                         <p:inputTextarea id="cue" value="#{anuncioController.anuncio.anuncioTexto}"
                                          required="true" style="width: 480px"/>
+
                         <p:outputLabel for="fec" value="Fecha límite de visualización: "/>
                         <p:datePicker id="fec" value="#{anuncioController.anuncio.anuncioFechaFin}"
                                       inputStyle="widht: 480px" yearNavigator="false" monthNavigator="true"
@@ -40,81 +41,119 @@
                                          update="form"/>
                     </h:panelGrid>
                 </p:tab>
-                <p:tab title="Anuncios Activos">
+                <p:tab title="Sus anuncios Activos">
                     <p:dataTable id="act" var="a" value="#{anuncioController.activos}" 
                                  emptyMessage="Sin registros aún." selectionMode="single" 
-                                 selection="#{anuncioController.anuncio}" rowKey="#{a.idanuncio}">
+                                 selection="#{anuncioController.anuncio}" rowKey="#{a.idanuncio}"
+                                 paginator="true" paginatorAlwaysVisible="false" rows="6"
+                                 paginatorPosition="top">
                         <f:facet name="header">
                             Anuncios Activos
                         </f:facet>
                         <p:ajax event="rowSelect" listener="#{anuncioController.onRowSelect}" 
-                                update=":form da" oncomplete="PF('Danuncio').show()"/>
-                        <p:column headerText="Titulo">
-                            <h:outputText value="#{a.anuncioTitulo}"/>
+                                update="da" oncomplete="PF('Danuncio').show()"/>
+                        <p:column headerText="Titulo"                                  
+                                  filterBy="#{a.anuncioTitulo}"
+                                  filterMatchMode="contains">
+                            #{a.anuncioTitulo}
                         </p:column>
 
-                        <p:column headerText="Fecha límite de visualización">
-                            <p:datePicker value="#{a.anuncioFechaFin}" disabled="true"/>
+                        <p:column headerText="Fecha límite de visualización"
+                                  filterMatchMode="contains"
+                                  filterBy="#{anuncioController.getFechasToString(a.anuncioFechaFin)}">
+                            #{anuncioController.getFechasToString(a.anuncioFechaFin)}
                         </p:column>
 
-                        <p:column headerText="Dirigido a">
-                            <p:outputLabel value="#{a.anuncioTipoPersona != null 
-                                                    ? a.anuncioTipoPersona.tipoPersonaNombre : 'Todos'}"/>
+                        <p:column headerText="Dirigido a"
+                                  filterBy="#{anuncioController.getDirigidoA(a)}"
+                                  filterMatchMode="contains">
+                            #{anuncioController.getDirigidoA(a)}
                         </p:column>
                     </p:dataTable> 
                 </p:tab>
-                <p:tab title="Anuncios Inactivos">
+                <p:tab title="Sus anuncios Inactivos">
                     <p:dataTable id="ina" var="i" value="#{anuncioController.inactivos}" 
-                                 emptyMessage="Sin registros aún." selection="#{anuncioController.anuncio}"
-                                 selectionMode="single" rowKey="#{i.idanuncio}">
+                                 emptyMessage="Sin registros aún." 
+                                 selection="#{anuncioController.anuncio}"
+                                 selectionMode="single" rowKey="#{i.idanuncio}"
+                                 paginator="true" paginatorAlwaysVisible="false" rows="6"
+                                 paginatorPosition="top">
                         <f:facet name="header">
-                            Anuncios Activos
+                            Anuncios Inactivos
                         </f:facet>
                         <p:ajax event="rowSelect" listener="#{anuncioController.onRowSelect}" 
-                                update=":form da" oncomplete="PF('Danuncio').show()"/>
-                        <p:column headerText="Titulo">
-                            <h:outputText value="#{i.anuncioTitulo}"/>
+                                update="da" oncomplete="PF('Danuncio').show()"/>
+                        <p:column headerText="Titulo"
+                                  filterBy="#{i.anuncioTitulo}" filterMatchMode="contains">
+                            #{i.anuncioTitulo}
                         </p:column>
 
-                        <p:column headerText="Fecha límite de visualización">
-                            <p:datePicker value="#{i.anuncioFechaFin}" disabled="true"/>
+                        <p:column headerText="Fecha límite de visualización"
+                                  filterMatchMode="contains"
+                                  filterBy="#{anuncioController.getFechasToString(i.anuncioFechaFin)}">
+                            #{anuncioController.getFechasToString(i.anuncioFechaFin)}
                         </p:column>
 
-                        <p:column headerText="Dirigido a">
-                            <p:outputLabel value="#{i.anuncioTipoPersona != null 
-                                                    ? i.anuncioTipoPersona.tipoPersonaNombre : 'Todos'}"/>
+                        <p:column headerText="Dirigido a"
+                                  filterBy="#{anuncioController.getDirigidoA(i)}" 
+                                  filterMatchMode="contains">
+                            #{anuncioController.getDirigidoA(i)}
                         </p:column>
                     </p:dataTable> 
                 </p:tab>
             </p:tabView>
         </h:form>
         <h:outputScript library="js" name="locales.js"/>
-        <p:dialog header="Detalle del anuncio" modal="true" widgetVar="Danuncio" onHide="onHide()">
+        <p:dialog header="Detalle del anuncio" modal="true" height="80%" width="60%"
+                  widgetVar="Danuncio">
             <h:form id="da">
-                <p:panelGrid columns="2">
+                <h:panelGrid columns="2">
                     <p:outputLabel value="Anunciante: "/>
-                    <p:outputLabel value="#{anuncioController.anuncio.anuncioAnunciante.personaNombre.split(' ')[0]} 
-                                               #{anuncioController.anuncio.anuncioAnunciante.personaApellido.split(' ')[0]} 
-                                               (#{anuncioController.anuncio.anuncioAnunciante.tipoPersona.tipoPersonaNombre})"
+                    <p:outputLabel value="#{anuncioController.getAnunciante(anuncioController.anuncio)}"
                                    style="width: 480px"/>
-                    
+
                     <p:outputLabel for="tit" value="Título: "/>
-                    <p:outputLabel id="tit" value="#{anuncioController.anuncio.anuncioTitulo}"
-                                   style="width: 480px"/>
+                    <p:inputText id="tit" value="#{anuncioController.anuncio.anuncioTitulo}"
+                                 disabled="#{!anuncioController.getAnuncioActivo(anuncioController.anuncio)}"
+                                 style="width: 480px"/>
 
                     <p:outputLabel value="Cuerpo del aviso: "/>
                     <p:inputTextarea value="#{anuncioController.anuncio.anuncioTexto}"
-                                     disabled="true" style="width: 480px"/>
+                                     disabled="#{!anuncioController.getAnuncioActivo(anuncioController.anuncio)}"
+                                     style="width: 480px"/>
 
                     <p:outputLabel value="Fecha límite de visualización: "/>
                     <p:datePicker value="#{anuncioController.anuncio.anuncioFechaFin}"
-                                  locale="es" disabled="true"/>
+                                  locale="es" 
+                                  showIcon="#{anuncioController.getAnuncioActivo(anuncioController.anuncio)}"
+                                  disabled="#{!anuncioController.getAnuncioActivo(anuncioController.anuncio)}"/>
 
-                    <p:outputLabel value="Tipo de Persona a la que el anuncio va dirigido: "/>
-                    <p:outputLabel value="#{anuncioController.anuncio.anuncioTipoPersona != null 
-                                            ? anuncioController.anuncio.anuncioTipoPersona.tipoPersonaNombre 
-                                            : 'Todos los usuarios'}"/>
-                </p:panelGrid>
+                    <p:outputLabel for="tip2" value="Tipo de Persona a la que el anuncio va dirigido: "/>
+                    <p:selectOneMenu id="tip2" value="#{anuncioController.anuncio.anuncioTipoPersona}"
+                                     disabled="#{!anuncioController.getAnuncioActivo(anuncioController.anuncio)}"
+                                     converter="omnifaces.SelectItemsConverter"
+                                     style="width: 480px">
+                        <f:selectItem itemValue="#{null}" itemLabel="Todos"/>
+                        <f:selectItems value="#{anuncioController.tiposPersonas}" var="tp"
+                                       itemLabel="#{tp.tipoPersonaNombre}" itemValue="#{tp}"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel for="comen" value="Información Extra: "
+                                   rendered="#{anuncioController.verComentario}"/>
+                    <p:outputLabel id="comen" value="#{anuncioController.anuncio.anuncioComentario}"
+                                   rendered="#{anuncioController.verComentario}"/>
+
+                    <p:column/>
+                    <h:panelGrid columns="2" cellspacing="5">
+                        <p:commandButton value="Modificar"
+                                         actionListener="#{anuncioController.modificar(1)}"
+                                         rendered="#{anuncioController.getAnuncioActivo(anuncioController.anuncio)}"/>
+
+                        <p:commandButton value="Desabilitar" 
+                                         action="#{anuncioController.modificar(2)}"
+                                         rendered="#{anuncioController.getAnuncioActivo(anuncioController.anuncio)}"/>
+                    </h:panelGrid>
+                </h:panelGrid>
                 <p:remoteCommand name="onHide" actionListener="#{anuncioController.onHide()}" update=":form"/>
             </h:form>
         </p:dialog>

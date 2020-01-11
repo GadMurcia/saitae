@@ -36,6 +36,7 @@ import net.delsas.saitae.beans.NotificacionesFacadeLocal;
 import net.delsas.saitae.beans.PersonasReservaFacadeLocal;
 import net.delsas.saitae.beans.ReservaDetalleFacadeLocal;
 import net.delsas.saitae.beans.ReservaFacadeLocal;
+import net.delsas.saitae.beans.ReservaXpedagogiaFacadeLocal;
 import net.delsas.saitae.beans.SolicitudReservaFacadeLocal;
 import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
 import net.delsas.saitae.entities.Ejemplar;
@@ -45,6 +46,7 @@ import net.delsas.saitae.entities.Maestro;
 import net.delsas.saitae.entities.Matricula;
 import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.PersonasReserva;
+import net.delsas.saitae.entities.ProyectoPedagogico;
 import net.delsas.saitae.entities.Reserva;
 import net.delsas.saitae.entities.ReservaDetalle;
 import net.delsas.saitae.entities.SolicitudReserva;
@@ -79,6 +81,8 @@ public class historialRController implements Serializable {
     private SolicitudReservaFacadeLocal srFL;
     @EJB
     private PersonasReservaFacadeLocal prFL;
+    @EJB
+    private ReservaXpedagogiaFacadeLocal rxpFL;
 
     private List<Ejemplar> r;
     private List<Reserva> reservas;
@@ -90,6 +94,7 @@ public class historialRController implements Serializable {
     private Persona usuario;
     private FacesContext context;
     private boolean rechazo;
+    private ProyectoPedagogico proyecto;
 
     @PostConstruct
     public void init() {
@@ -159,6 +164,12 @@ public class historialRController implements Serializable {
 
     public void onDetalleRowSelect(SelectEvent event) {
         selected = (Reserva) event.getObject();
+        List<ProyectoPedagogico> re = rxpFL.findProyectoByIdReserva(selected == null ? 0 : selected.getIdreserva());
+        if (!re.isEmpty()) {
+            proyecto = re.get(0);
+        } else {
+            proyecto = null;
+        }
         procesoDetalle();
         rechazo = false;
         if (selected == null) {
@@ -486,6 +497,26 @@ public class historialRController implements Serializable {
         boolean ra = selected == null ? false : !getRazonRechazo().isEmpty();
         boolean v = selected != null ? selected.getReservaEstado().equals("C") : false;
         return (ra && v);
+    }
+
+    public boolean getHayProyecto() {
+        return proyecto != null;
+    }
+
+    public void verProyecto() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        try {
+            context.getExternalContext().getSessionMap().put("proyecto", proyecto);
+            context.getExternalContext().getSessionMap().put("editar", false);
+            context.getExternalContext().getSessionMap().put("ms",
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Redirección exitosa",
+                            "Éste es el despliegue de la información contenida en el proyecto planificado al"
+                            + "que hacía referencia la solicitud de reserva que usted estaba viedo."
+                            + " Para efectos de integridad de la información, usted no puede editar ningún campo. "
+                            + "visualice la información"));
+            context.getExternalContext().redirect("solicitudRPP.intex");
+        } catch (IOException ex) {
+        }
     }
 
 }

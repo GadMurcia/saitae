@@ -30,11 +30,10 @@
         <div id="right">
             <ui:insert name="right">                
                 <script>
-                    function socketListener(message) {
-                        notificar([{name: 'mss', value: message}]);
-                    }
+                    
                 </script>                
-                <o:socket channel="notificacion" onmessage="socketListener"/>
+                <o:socket channel="notificacion" onmessage="function socketListener(message) {
+                        notificar([{name: 'mss', value: message}]);}"/>
                 <h:form id="noti">
                     <h1 align="center">Área de Notificaciones</h1>
                     <p:remoteCommand name="notificar" actionListener="#{sessionController.escucha()}"/>

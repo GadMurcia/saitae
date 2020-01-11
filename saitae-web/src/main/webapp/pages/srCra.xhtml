@@ -328,7 +328,7 @@
                                              rendered="#{adminReservas.cancelado}" 
                                              disabled="true"/>
                             <p:column/>
-                            <p:commandButton value="ver info del proyecto" 
+                            <p:commandButton value="ver información del proyecto" 
                                              rendered="#{adminReservas.hayProyecto}"
                                              actionListener="#{adminReservas.verProyecto()}"/>
                         </h:panelGrid>
@@ -430,7 +430,8 @@
                                  value="#{adminReservas.reservaDetalle}" editable="true" 
                                  widgetVar="e1" styleClass="tabla" selectionMode="single"
                                  selection="#{adminReservas.ejemplar}" rowKey="#{e.ejemplarPK}"
-                                 emptyMessage="Sin registros aún."
+                                 emptyMessage="Sin registros aún." rows="4"
+                                 paginator="true" paginatorAlwaysVisible="false"
                                  rendered="#{!adminReservas.eslaboratorio}">
                         <f:facet name="header">
                             Asignación de recursos para la solicitud de equipo.

@@ -125,6 +125,7 @@ public class reservaSController implements Serializable {
     private List<Estudiante> estudiantes;
     private List<Grado> grados;
     private List<SelectItem> usadoPorList;
+    private List<Integer> invalidDays;
 
     private TipoRecurso tp;
     private Persona usuario;
@@ -160,6 +161,9 @@ public class reservaSController implements Serializable {
         usuario = (Persona) FacesContext.getCurrentInstance()
                 .getExternalContext().getSessionMap().get("usuario");
         newReserva();
+        invalidDays = new ArrayList<>();
+        invalidDays.add(0);
+        invalidDays.add(6);
         recursos = new ArrayList<>();
         tiporList = trFL.findAll();
         cra = false;
@@ -888,6 +892,9 @@ public class reservaSController implements Serializable {
                         + "    Código: " + r.getRecurso().getIdrecurso());
             });
         }
+        if (results.isEmpty()) {
+            results.add("No se han encontrado resultados.");
+        }
         return results;
     }
 
@@ -911,14 +918,18 @@ public class reservaSController implements Serializable {
                 PrimeFaces.current().ajax().update(":form0:msgs");
             }
         } else {
-            String[] x = event.getObject().toString().split("   ");
-            System.out.println("Libro seleccionado " + x[2]);
-            Integer id = Integer.valueOf(x[2].split(": ")[1]);
-            libroSeleccionado = recursoFL.find(id);
-            mst = getMismoTR(libroSeleccionado);
+            if (!event.getObject().toString().equals("No se han encontrado resultados.")) {
+                String[] x = event.getObject().toString().split("   ");
+                System.out.println("Libro seleccionado " + x[2]);
+                Integer id = Integer.valueOf(x[2].split(": ")[1]);
+                libroSeleccionado = recursoFL.find(id);
+                System.out.println("Seleccionado con éxito.");
+            } else {
+                System.out.println(event.getObject().toString());
+            }
             busqueda = "";
-            System.out.println("Seleccionado con éxito.");
         }
+        mst = getMismoTR(libroSeleccionado);
     }
 
     public void sendMessage(String message) {
@@ -960,9 +971,9 @@ public class reservaSController implements Serializable {
     }
 
     private void persistirNotificación(mensaje x, List<Persona> ps) {
-        for (Persona p : ps) {
+        ps.forEach((p) -> {
             persistirNotificación(x, p);
-        }
+        });
     }
 
     public String getAutoresLibros(Recurso r) {
@@ -1022,7 +1033,6 @@ public class reservaSController implements Serializable {
                             + "por lo que no se procede a su agregación."));
             PrimeFaces.current().ajax().update(":form0:msgs");
         }
-
     }
 
     public SolicitudReserva getSrtabla() {
@@ -1079,11 +1089,23 @@ public class reservaSController implements Serializable {
         return mst;
     }
 
+    public boolean getVerTexto() {
+        return (!mst && libroSeleccionado != null && libroSeleccionado.getIdrecurso() != null);
+    }
+
     public List<SelectItem> getUsadoPorList() {
         return Collections.unmodifiableList(usadoPorList);
     }
 
     public void setUsadoPorList(List<SelectItem> usadoPorList) {
         this.usadoPorList = usadoPorList;
+    }
+
+    public List<Integer> getInvalidDays() {
+        return Collections.unmodifiableList(invalidDays);
+    }
+
+    public void setInvalidDays(List<Integer> invalidDays) {
+        this.invalidDays = invalidDays;
     }
 }

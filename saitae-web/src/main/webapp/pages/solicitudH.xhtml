@@ -103,6 +103,11 @@
                             <p:inputTextarea value="#{historialRController.razonRechazo}" cols="40"
                                              rendered="#{historialRController.cancelado}" 
                                              disabled="true"/>
+                            
+                            <p:column/>
+                            <p:commandButton value="ver información del proyecto" 
+                                             rendered="#{historialRController.hayProyecto}"
+                                             actionListener="#{historialRController.verProyecto()}"/>
                         </h:panelGrid>
                     </p:panel>
                     <p:panel header="Detalle del equipo #{historialRController.textoReserva}o"

@@ -28,12 +28,15 @@
                                         <p:outputLabel for="tpp" value="Número de Jornadas: "/>
                                         <p:selectOneButton id="tpp" value="#{solicitudPPController.jornadas}"
                                                            converter="omnifaces.SelectItemsConverter"
+                                                           rendered="#{!solicitudPPController.desactivarVistas}"
                                                            disabled="#{solicitudPPController.desactivarVistas}">
                                             <f:selectItem itemLabel="Una sóla jornada" itemValue="1"/>
                                             <f:selectItem itemLabel="Varias jornadas" itemValue="2"/>
                                             <p:ajax event="change" listener="#{solicitudPPController.onBlur}"
                                                     update=":form"/>
                                         </p:selectOneButton>
+                                        <h:outputText value="#{solicitudPPController.jornadas == 2 ? 'Varias jornadas' : 'Una sóla jornada'}"
+                                                      rendered="#{solicitudPPController.desactivarVistas}"/>
 
                                         <p:outputLabel for="nomp" value="Nombre del proyecto: "/>
                                         <p:inputText id="nomp" value="#{solicitudPPController.proyecto.nombreProyecto}"
@@ -56,7 +59,8 @@
                                                           locale="es" required="true" pattern="dd/MM/yyyy"
                                                           monthNavigator="true" showIcon="true"
                                                           placeholder="Seleccione la fecha"
-                                                          disabled="#{solicitudPPController.desactivarVistas}"/>
+                                                          disabled="#{solicitudPPController.desactivarVistas}"
+                                                          disabledDays="#{solicitudPPController.disabledDays}"/>
 
                                             <p:outputLabel id="a" for="hi1j" value="Hora de inicio del uso"/>
                                             <p:selectOneMenu id="hi1j" value="#{solicitudPPController.selected2.horai}" 
@@ -295,7 +299,8 @@
                             <p:datePicker id="fpp" value="#{solicitudPPController.selected2.fecha}" 
                                           locale="es" required="true" pattern="dd/MM/yyyy"
                                           monthNavigator="true" showIcon="true"
-                                          placeholder="Seleccione la fecha"/>
+                                          placeholder="Seleccione la fecha"
+                                          disabledDays="#{solicitudPPController.disabledDays}"/>
 
                             <p:outputLabel for="hipp" value="Hora de inicio del uso"/>
                             <p:selectOneMenu id="hipp" value="#{solicitudPPController.selected2.horai}" 
@@ -317,24 +322,20 @@
                                                itemValue="#{h}"/>
                             </p:selectOneMenu>
 
-                            <p:outputLabel for="obpp" value="observaciones: "/>
-                            <p:inputTextarea id="obpp" value="#{solicitudPPController.selected2.observacion}"
-                                             cols="30" rows="3" maxlength="140" />
-
                             <p:column/>
                             <h:panelGrid columns="3">
                                 <p:commandButton value="agregar" 
                                                  actionListener="#{solicitudPPController.agregar()}"
                                                  update="pp1 form"
-                                                 rendered="#{!solicitudPPController.desactivarVistas}"/> 
+                                                 rendered="#{!solicitudPPController.estaEditando}"/> 
                                 <p:commandButton value="Editar" 
                                                  actionListener="#{solicitudPPController.editar()}"
                                                  update="pp1 form" 
-                                                 rendered="#{solicitudPPController.desactivarVistas}"/>
+                                                 rendered="#{solicitudPPController.estaEditando}"/>
                                 <p:commandButton value="Eliminar" 
                                                  actionListener="#{solicitudPPController.eliminar()}"
                                                  update="pp1 form" 
-                                                 rendered="#{solicitudPPController.desactivarVistas}"/>
+                                                 rendered="#{solicitudPPController.estaEditando}"/>
                             </h:panelGrid>
                         </h:panelGrid>
                     </h:form>

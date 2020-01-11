@@ -220,8 +220,9 @@ public class inscripcionController implements Serializable {
     public boolean isTime() {
         try {
             Date d = new Date();
-            Date d1 = new SimpleDateFormat("dd-MM-yyyy").parse("24-11-" + new SimpleDateFormat("yyyy").format(d));
-            return !d.before(d1);
+            Date d1 = new SimpleDateFormat("dd-MM-yyyy").parse("22-11-" + new SimpleDateFormat("yyyy").format(d));
+            Date d2 = new SimpleDateFormat("dd-MM-yyyy").parse("30-01-" + new SimpleDateFormat("yyyy").format(d));
+            return !d.before(d1) || d.before(d2);
         } catch (ParseException ex) {
             System.out.println(ex);
             return false;

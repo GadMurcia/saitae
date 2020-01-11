@@ -16,27 +16,31 @@
  */
 package net.delsas.saitae.controllers;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AjaxBehaviorEvent;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import net.delsas.saitae.ax.mensaje;
 import net.delsas.saitae.beans.AnuncioFacadeLocal;
 import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
 import net.delsas.saitae.entities.Anuncio;
-import net.delsas.saitae.entities.MaestoCargo;
 import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.TipoPersona;
 import org.omnifaces.cdi.Push;
 import org.omnifaces.cdi.PushContext;
+import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -44,7 +48,7 @@ import org.primefaces.event.SelectEvent;
  * @author delsas
  */
 @Named
-@RequestScoped
+@ViewScoped
 public class AnuncioController implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -52,17 +56,19 @@ public class AnuncioController implements Serializable {
     private TipoPersonaFacadeLocal tipoPersonaFL;
     @EJB
     private AnuncioFacadeLocal anuncioFL;
+    @Inject
+    @Push
+    private PushContext notificacion;
+
     private Anuncio anuncio;
     private Persona usuario;
     private List<TipoPersona> tiposPersonas;
     private List<Anuncio> activos;
     private List<Anuncio> inactivos;
-    private List<Anuncio> individual;
 
     @PostConstruct
-    public void construct() {
+    public void init() {
         FacesContext context = FacesContext.getCurrentInstance();
-        individual = new ArrayList<>();
         try {
             usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
             if (usuario == null) {
@@ -71,7 +77,7 @@ public class AnuncioController implements Serializable {
                                 "Falla!", "Esa vista no le está permitida."));
                 context.getExternalContext().redirect("./../");
             } else {
-                anuncio = new Anuncio(0, "", new Date(), "");
+                anuncio = new Anuncio();
                 anuncio.setAnuncioAnunciante(usuario);
                 tiposPersonas = tipoPersonaFL.findAll();
                 tiposPersonas.remove(tipoPersonaFL.find(1));
@@ -80,33 +86,30 @@ public class AnuncioController implements Serializable {
                 activos = anuncioFL.getAnunciosActivos();
                 inactivos = anuncioFL.getAnunciosInactivos();
                 Integer tp = usuario.getTipoPersona().getIdtipoPersona();
-                individual = (tp == 1 || tp == 2) ? activos
-                        : anuncioFL.getAnunciosActivosParaUnTipo(usuario.getTipoPersona());
-                individual = individual == null ? new ArrayList<>() : individual;
                 if (!(tp == 1 || tp == 2)) {
-                    activos.stream().filter((an) -> (an.getAnuncioTipoPersona() == null || an.getAnuncioTipoPersona() == usuario.getTipoPersona())).forEachOrdered((an) -> {
-                        individual.add(an);
+                    List<Anuncio> actNoMios = new ArrayList<>();
+                    List<Anuncio> inaNoMios = new ArrayList<>();
+                    activos.stream().filter((a) -> (a.getAnuncioAnunciante() != usuario)).forEachOrdered((a) -> {
+                        actNoMios.add(a);
                     });
-                }
-                if (usuario.getMaestro() != null) {
-                    List<MaestoCargo> mcl = usuario.getMaestro().getMaestoCargoList();
-                    mcl.forEach((mc) -> {
-                        individual.addAll(anuncioFL.getAnunciosActivosParaUnTipo(mc.getCargo().getCargoTipoPersona()));
+                    inactivos.stream().filter((a) -> (a.getAnuncioAnunciante() != usuario)).forEachOrdered((a) -> {
+                        inaNoMios.add(a);
                     });
+                    activos.removeAll(actNoMios);
+                    inactivos.removeAll(inaNoMios);
                 }
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
 
         }
     }
 
     public void onRowSelect(SelectEvent event) {
-        System.out.println(event.getObject());
-        anuncio = (Anuncio) event.getObject();
+        //anuncio = (Anuncio) event.getObject();
     }
 
     public void onHide() {
-        anuncio = new Anuncio(null, "", new Date(), "");
+        anuncio = new Anuncio();
     }
 
     public void guardar() {
@@ -122,7 +125,7 @@ public class AnuncioController implements Serializable {
                     "Nuevo anuncio disponible", FacesMessage.SEVERITY_INFO, usuario.getIdpersona(),
                     " ¿¿¿tp¿¿" + (anuncio.getAnuncioTipoPersona() == null ? 0
                     : anuncio.getAnuncioTipoPersona().getIdtipoPersona())).toString());
-            this.construct();
+            init();
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "error en guardar anuncio " + e.getMessage()));
@@ -134,7 +137,7 @@ public class AnuncioController implements Serializable {
     }
 
     public void setAnuncio(Anuncio anuncio) {
-        this.anuncio = anuncio;
+        this.anuncio = anuncio != null ? anuncio : this.anuncio;
     }
 
     public List<TipoPersona> getTiposPersonas() {
@@ -149,15 +152,111 @@ public class AnuncioController implements Serializable {
         return Collections.unmodifiableList(inactivos);
     }
 
-    @Inject
-    @Push
-    private PushContext notificacion;
-
     public void sendMessage(String message) {
         notificacion.send(message);
     }
 
-    public List<Anuncio> getIndividual() {
-        return Collections.unmodifiableList(individual);
+    public String getAnunciante(Anuncio a) {
+        return a.getAnuncioAnunciante().getPersonaNombre().split(" ")[0]
+                + " " + a.getAnuncioAnunciante().getPersonaApellido().split(" ")[0]
+                + " (" + a.getAnuncioAnunciante().getTipoPersona().getTipoPersonaNombre() + ")";
+    }
+
+    public String getDirigidoA(Anuncio a) {
+        return a.getAnuncioTipoPersona() == null ? "Todos"
+                : a.getAnuncioTipoPersona().getTipoPersonaNombre();
+    }
+
+    public boolean getAnuncioActivo(Anuncio a) {
+        Date d = new Date();
+        boolean z = (a == null || a.getAnuncioFechaFin() == null)
+                ? false : activos.contains(a);
+        return z;
+    }
+
+    public String getFechasToString(Date d) {
+        return d == null ? "" : new SimpleDateFormat("EEEEE dd/MM/yyyy").format(d);
+    }
+
+    public void modificar(int o) {
+        FacesMessage ms = null;
+        Anuncio an = anuncioFL.find(anuncio.getIdanuncio());
+        String com = "";
+        if (o == 1 && !an.equals(anuncio)) {//modificar
+            com = "Modificado por: "
+                    + usuario.getPersonaNombre() + " " + usuario.getPersonaApellido();
+            ms = new FacesMessage(FacesMessage.SEVERITY_INFO,
+                    "Modificación exitosa",
+                    "El anuncio se ha modificado con éxito y su nueva información información"
+                    + " ya es visible para sus destinatarios.");
+        } else if (o == 2) {//desabilitar
+            com = "Desabilitado por: "
+                    + usuario.getPersonaNombre() + " " + usuario.getPersonaApellido();
+            Date f = new Date();
+            int d = Integer.valueOf(new SimpleDateFormat("dd").format(f));
+            int m = Integer.valueOf(new SimpleDateFormat("MM").format(f));
+            int añ = getAñoActual();
+            añ = (d == 1 && m == 1) ? añ - 1 : añ;
+            m = d == 1 ? (m == 1 ? 12 : m - 1) : m;
+            d = d == 1 ? getMaxDia(m) : d - 1;
+            try {
+                f = new SimpleDateFormat("dd/MM/yyyy").parse(d + "/" + m + "/" + añ);
+            } catch (ParseException ex) {
+            }
+            anuncio.setAnuncioFechaFin(f);
+            ms = new FacesMessage(FacesMessage.SEVERITY_INFO,
+                    "Desabilitación exitosa",
+                    "El anuncio se ha desabilitado y ya no será visible para sus destinatarios");
+        }
+        if (o == 1 && an.equals(anuncio)) {
+            ms = new FacesMessage(FacesMessage.SEVERITY_WARN,
+                    "Sin cambios!",
+                    "No hay cambios en la información del anuncio. No se edita.");
+            FacesContext.getCurrentInstance().addMessage("form0:msgs", ms);
+            PrimeFaces.current().ajax().update("form0:msgs");
+        } else {
+            anuncio.setAnuncioComentario(com);
+            anuncioFL.edit(anuncio);
+            init();
+            FacesContext.getCurrentInstance().addMessage(null, ms);
+            PrimeFaces.current().executeScript("PF('Danuncio').hide()");
+            PrimeFaces.current().ajax().update("form:tv", "da", "form0:msgs");
+        }
+    }
+
+    public boolean getVerComentario() {
+        return (anuncio != null
+                && anuncio.getAnuncioComentario() != null
+                && !anuncio.getAnuncioComentario().isEmpty());
+    }
+
+    public int getMaxDia(int m) {
+        switch (m) {
+            case 1:
+            case 3:
+            case 5:
+            case 7:
+            case 8:
+            case 10:
+            case 12:
+                return 31;
+            case 2:
+                return 28;
+            case 4:
+            case 6:
+            case 9:
+            case 11:
+                return 30;
+            default:
+                return 30;
+        }
+    }
+
+    public int getAñoActual() {
+        return Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date()));
+    }
+
+    public void onBlour(AjaxBehaviorEvent ev) {
+        System.out.println(ev);
     }
 }
