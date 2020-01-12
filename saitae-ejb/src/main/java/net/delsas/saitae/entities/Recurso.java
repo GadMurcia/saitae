@@ -319,10 +319,7 @@ public class Recurso implements Serializable {
         if (!Objects.equals(this.pais, other.pais)) {
             return false;
         }
-        if (!Objects.equals(this.categoria, other.categoria)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.categoria, other.categoria);
     }
 
     @Override

@@ -47,6 +47,10 @@ public class Ejemplar implements Serializable {
     @NotNull
     @Column(name = "ejemplarAnioDeIngreso")
     private int ejemplarAnioDeIngreso;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "ejemplarActivo")
+    private boolean ejemplarActivo;
     @Size(max = 145)
     @Column(name = "ejemplarComentario")
     private String ejemplarComentario;
@@ -61,16 +65,25 @@ public class Ejemplar implements Serializable {
 
     public Ejemplar(EjemplarPK ejemplarPK) {
         this.ejemplarPK = ejemplarPK;
+        this.ejemplarActivo = true;
     }
 
     public Ejemplar(EjemplarPK ejemplarPK, int ejemplarAnioDeIngreso) {
         this.ejemplarPK = ejemplarPK;
         this.ejemplarAnioDeIngreso = ejemplarAnioDeIngreso;
+        this.ejemplarActivo = true;
     }
 
     public Ejemplar(int idRecurso, int ejemplarCorrelativo) {
         this.ejemplarPK = new EjemplarPK(idRecurso, ejemplarCorrelativo);
+        this.ejemplarActivo = true;
     }
+
+    public Ejemplar(EjemplarPK ejemplarPK, int ejemplarAnioDeIngreso, boolean ejemplarActivo) {
+        this.ejemplarPK = ejemplarPK;
+        this.ejemplarAnioDeIngreso = ejemplarAnioDeIngreso;
+        this.ejemplarActivo = ejemplarActivo;
+    }  
 
     public EjemplarPK getEjemplarPK() {
         return ejemplarPK;
@@ -111,6 +124,14 @@ public class Ejemplar implements Serializable {
 
     public void setReservaDetalleList(List<ReservaDetalle> reservaDetalleList) {
         this.reservaDetalleList = reservaDetalleList;
+    }
+
+    public boolean isEjemplarActivo() {
+        return ejemplarActivo;
+    }
+
+    public void setEjemplarActivo(boolean ejemplarActivo) {
+        this.ejemplarActivo = ejemplarActivo;
     }
 
     @Override

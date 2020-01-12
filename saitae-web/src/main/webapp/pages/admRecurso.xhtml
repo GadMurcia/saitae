@@ -1,0 +1,361 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../WEB-INF/template/plantilla1.xhtml">
+
+            <ui:define name="content">
+                <h:form id="form">
+                    <p:dataTable id="recurso" var="r" value="#{admRecursoC.recurso}" rowKey="#{r.idrecurso}"
+                                 widgetVar="recurso1"  emptyMessage="Sin registros aún."
+                                 selection="#{admRecursoC.seleccionado}" 
+                                 selectionMode="single" rows="6" 
+                                 paginator="true" paginatorAlwaysVisible="false" paginatorPosition="top">
+                        <f:facet name="header">
+                            Administración de Recursos.
+                        </f:facet> 
+                        <p:column headerText="Tipo de recurso" 
+                                  rendered="#{admRecursoC.verTipos}"
+                                  filterBy="#{r.idTipoRecurso.tipoRecursoNombre}"
+                                  filterMatchMode="contains">
+                            #{r.idTipoRecurso.tipoRecursoNombre}
+                        </p:column>
+
+                        <p:column headerText="Código" filterBy="#{r.idrecurso}"
+                                  filterMatchMode="contains">
+                            #{r.idrecurso}
+                        </p:column>
+                        <p:column headerText="Nombre" filterBy="#{r.nombre}"
+                                  filterMatchMode="contains">
+                            #{r.nombre}
+                        </p:column>
+                        <p:column headerText="Autor" 
+                                  rendered="#{admRecursoC.verCategoriastabla}"
+                                  filterBy="#{admRecursoC.AutorLibro(r.autorLibroList)}"
+                                  filterMatchMode="contains">
+                            #{admRecursoC.AutorLibro(r.autorLibroList)}
+                        </p:column>
+                        <p:column headerText="Editorial" 
+                                  rendered="#{admRecursoC.verCategoriastabla}"
+                                  filterBy="#{admRecursoC.EditorialLibro(r.editorialLibroList)}"
+                                  filterMatchMode="contains">
+                            #{admRecursoC.EditorialLibro(r.editorialLibroList)}
+                        </p:column>
+                        <p:column headerText="Pais" 
+                                  rendered="#{admRecursoC.verCategoriastabla}"
+                                  filterBy="#{r.pais.paisNombre}"
+                                  filterMatchMode="contains">
+                            #{r.pais.paisNombre}
+                        </p:column>
+                        <p:column headerText="Estado fisico" 
+                                  filterBy="#{admRecursoC.getEstadoFisico(r)}"
+                                  filterMatchMode="contains">
+                            #{admRecursoC.getEstadoFisico(r)}
+                        </p:column>
+                        <p:column headerText="Cantidad ejemplar">
+                            #{r.ejemplarList.size()}
+                        </p:column>
+                        <p:column headerText="Valor unitario">
+                            #{r.valorUnitario}
+                        </p:column>
+                        <p:column headerText="Tipo valor" filterBy="#{r.tipoValor}"
+                                  filterMatchMode="contains">
+                            #{r.tipoValor}
+                        </p:column>
+
+                    </p:dataTable>
+                    <p:commandButton value="+" styleClass="ui-priority-primary"
+                                     actionListener="#{admRecursoC.nuevoRecurso()}"
+                                     update=":form0:msgs form:recurso hn h2"
+                                     oncomplete="PF('DrecursoN').show();"
+                                     title="Agregar Recurso."/>
+                    <p:contextMenu for="recurso">
+                        <p:menuitem value="Modificar" update=":form0:msgs form:recurso hn h2"
+                                    icon="fa fa-edit" oncomplete="PF('DrecursoN').show();"
+                                    resetValues="true"/>                            
+                    </p:contextMenu>
+                </h:form>
+
+                <p:dialog header="Administración de contenido" 
+                          widgetVar="Dcontenido" modal="true" 
+                          showEffect="fade" hideEffect="fade">
+                    <h:form id="h2">
+                        <h:panelGrid columns="2" cellspacing="10px">
+                            <p:outputLabel value="Nombre" for="nombre" />
+                            <p:inputText id="nombre" 
+                                         value="#{admRecursoC.cl.contenidoLibroPK.contenidoLibroNombre}" 
+                                         title="nombre" required="true" 
+                                         requiredMessage="The Idrecurso field is required."/>
+
+                            <p:outputLabel value="Pagina" for="pagina" />
+                            <p:inputText id="pagina" 
+                                         value="#{admRecursoC.cl.contenidoLibroPK.contenidoLibroPagina}" 
+                                         title="Nombre" required="true" 
+                                         requiredMessage="The Nombre field is required."/>
+                            <p:commandButton value="agregar Tema" 
+                                             actionListener="#{admRecursoC.agregarContenido()}"
+                                             update="hn:h1Contenido h2"/>
+                        </h:panelGrid>
+                    </h:form>
+                </p:dialog>
+                <p:dialog id="dialogN" header="Administración de recursos" 
+                          widgetVar="DrecursoN" modal="true"
+                          showEffect="fade" hideEffect="fade" resizable="false" 
+                          style="width: 90%;">
+                    <h:form id="hn">
+                        <p:wizard flowListener="#{admRecursoC.onFlowProcess}" step="init"
+                                  backLabel="Retroceder" nextLabel="Siguiente">
+                            <p:tab id="init" title="Información del recursos">
+                                <p:panel header="Información del recurso">
+                                    <h:panelGrid columns="1">
+                                        <h:panelGrid columns="4" cellspacing="10px">
+
+                                            <p:column rendered="#{!admRecursoC.verTipos}"/>
+                                            <p:column rendered="#{!admRecursoC.verTipos}"/>
+                                            <p:outputLabel for="tiporecurso" value="Tipo Recurso" rendered="#{admRecursoC.verTipos}"/>
+                                            <p:selectOneMenu id="tiporecurso" value="#{admRecursoC.seleccionado.idTipoRecurso}"
+                                                             rendered="#{admRecursoC.verTipos}" 
+                                                             disabled="#{!admRecursoC.editarTipo}"
+                                                             converter="omnifaces.SelectItemsConverter">
+                                                <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
+                                                <f:selectItems var="tr" itemLabel="#{tr.tipoRecursoNombre}" 
+                                                               itemValue="#{tr}" 
+                                                               value="#{admRecursoC.tiposRecursos}"/>                                                    
+                                                <p:ajax event="itemSelect" listener="#{admRecursoC.tipoRecursoSelect}"/>
+                                            </p:selectOneMenu>
+
+                                            <p:outputLabel value="ID" for="idrecurso" />
+                                            <p:inputText id="idrecurso" value="#{admRecursoC.seleccionado.idrecurso}" 
+                                                         title="Idrecurso" required="true" disabled="#{!admRecursoC.editarID}"
+                                                         requiredMessage="The Idrecurso field is required."/>
+
+                                            <p:outputLabel value="Nombre:" for="nombre" />
+                                            <p:inputText id="nombre" value="#{admRecursoC.seleccionado.nombre}" 
+                                                         title="Nombre" required="true" 
+                                                         requiredMessage="The Nombre field is required."/>
+
+                                            <p:outputLabel value="Estado:" for="estado0" />
+                                            <p:selectBooleanButton id="estado0" value="#{admRecursoC.seleccionado.activo}"
+                                                                   required="true" offLabel="Inactivo" onLabel="Activo"/>
+
+                                            <p:outputLabel for="categoria" value="Categorias" rendered="#{admRecursoC.verCategorias}"/>
+                                            <p:selectOneMenu id="categoria" value="#{admRecursoC.seleccionado.categoria}"
+                                                             rendered="#{admRecursoC.verCategorias}" 
+                                                             converter="omnifaces.SelectItemsConverter">
+                                                <f:selectItem itemLabel="Seleccione" itemValue="#{null}"/>
+                                                <f:selectItems var="c" itemLabel="#{c.categoriaNombre}" 
+                                                               itemValue="#{c}"  
+                                                               value="#{admRecursoC.categorias}"/>
+                                                <!-- <p:ajax event="itemSelect" listener="# {admRecursoC.categoriaSelect}"/>-->
+                                            </p:selectOneMenu>
+
+
+                                            <p:outputLabel for="pais" value="Pais" rendered="#{admRecursoC.verCategorias}"/>
+                                            <p:selectOneMenu id="pais" value="#{admRecursoC.seleccionado.pais}"
+                                                             rendered="#{admRecursoC.verCategorias}"
+                                                             converter="omnifaces.SelectItemsConverter">
+                                                <f:selectItem itemLabel="Seleccione" itemValue="#{null}"/>
+                                                <f:selectItems var="p" itemLabel="#{p.paisNombre}" itemValue="#{p}" 
+                                                               value="#{admRecursoC.paises}"/>
+                                                <!--<p:ajax event="itemSelect" listener="# {admRecursoC.paisSelect}"/>-->
+                                            </p:selectOneMenu>
+
+                                            <p:outputLabel for="tipocargo" value="Tipo Cargo" />
+                                            <p:selectOneMenu id="tipocargo" value="#{admRecursoC.seleccionado.tipoCargo}"
+                                                             converter="omnifaces.SelectItemsConverter">
+                                                <f:selectItem itemLabel="Seleccione" itemValue=""/>
+                                                <f:selectItems var="tc" itemLabel="#{tc.nombre}" itemValue="#{tc}" 
+                                                               value="#{admRecursoC.tiposCargos}"/>
+                                                <!--<p:ajax event="itemSelect" listener="# {admRecursoC.tipoCargoSelect}"/>-->
+                                            </p:selectOneMenu>
+
+                                            <p:outputLabel value="Valor:" for="valorUnitario" />
+                                            <p:inputText id="valorUnitario" 
+                                                         value="#{admRecursoC.seleccionado.valorUnitario}" 
+                                                         title="ValorUnitario" required="true" 
+                                                         requiredMessage="The ValorUnitario field is required."/>
+
+                                            <p:outputLabel value="Estado" for="estado" />
+                                            <p:selectOneMenu id="estado" value="#{admRecursoC.seleccionado.estadoFisico}" 
+                                                             required="true" style="width:125px"
+                                                             converter="omnifaces.SelectItemsConverter">
+                                                <f:selectItem itemLabel="Seleccione" itemValue="" noSelectionOption="true" />
+                                                <f:selectItem itemLabel="Bueno" itemValue="B" />
+                                                <f:selectItem itemLabel="Regular" itemValue="R" />
+                                            </p:selectOneMenu>
+
+                                            <p:outputLabel value="Tipo Valor" for="tipoValor" />
+                                            <p:selectOneMenu id="tipoValor" value="#{admRecursoC.seleccionado.tipoValor}" 
+                                                             required="true" style="width:125px"
+                                                             converter="omnifaces.SelectItemsConverter">
+                                                <f:selectItem itemLabel="Real" itemValue="REAL" />
+                                                <f:selectItem itemLabel="Estimado" itemValue="ESTIMADO" />
+                                            </p:selectOneMenu>
+
+                                            <p:outputLabel value="Edición:" for="modelo" />
+                                            <p:inputText id="modelo" value="#{admRecursoC.seleccionado.modelo}" 
+                                                         title="Modelo" />
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="2">
+                                            <h:outputLabel for="multiple" value="Formas de Reserva"/>
+                                            <p:selectCheckboxMenu id="multiple" value="#{admRecursoC.tiposReservasRecurso}" 
+                                                                  label="Tipos de Reserva" multiple="true"
+                                                                  panelStyle="width:250px" 
+                                                                  required="true" converter="omnifaces.SelectItemsConverter"
+                                                                  requiredMessage="Debe seleccionar al menos un tipo">
+                                                <f:selectItems value="#{admRecursoC.tiposReservas}" var="trr" 
+                                                               itemLabel="#{trr.tipoReservaNombre}" 
+                                                               itemValue="#{trr}" />
+                                            </p:selectCheckboxMenu>
+                                        </h:panelGrid>
+                                    </h:panelGrid>
+                                </p:panel>
+                            </p:tab>
+                            <p:tab title="Ejemplares">
+                                <p:panel header="Información de los ejemplares del artículo">
+                                    <h:panelGrid columns="1">
+                                        <p:dataTable id="art" var="e" value="#{admRecursoC.ejemplares}" 
+                                                     rowKey="#{e.ejemplarPK}" editable="true"
+                                                     widgetVar="art1"  emptyMessage="Sin registros aún."
+                                                     selection="#{admRecursoC.ejemplarSeleccionado}" 
+                                                     selectionMode="single" rows="6" 
+                                                     paginator="true" paginatorAlwaysVisible="false" 
+                                                     paginatorPosition="top">
+                                            <f:facet name="header">
+                                                Información de los ejemplares del artículo seleccionado.
+                                            </f:facet>
+                                            <p:ajax event="rowEdit" listener="#{admRecursoC.onRowEdit}"/>
+                                            <p:ajax event="rowEditCancel" listener="#{admRecursoC.onRowCancel}"/>
+                                            <p:column headerText="Correlativo">
+                                                <p:cellEditor>
+                                                    <f:facet name="output">
+                                                        #{e.ejemplarPK.ejemplarCorrelativo}
+                                                    </f:facet>
+                                                    <f:facet name="input">
+                                                        <p:inputText value="#{e.ejemplarPK.ejemplarCorrelativo}" required="true"
+                                                                     style="width:100%" label="Correlativo"/>
+                                                    </f:facet>
+                                                </p:cellEditor>
+                                            </p:column>
+                                            <p:column headerText="Año de ingreso">
+                                                <p:cellEditor>
+                                                    <f:facet name="output">
+                                                        #{e.ejemplarAnioDeIngreso}
+                                                    </f:facet>
+                                                    <f:facet name="input">
+                                                        <p:inputText value="#{e.ejemplarAnioDeIngreso}" required="true"
+                                                                     style="width:100%" label="Año de ingreso"/>
+                                                    </f:facet>
+                                                </p:cellEditor>
+                                            </p:column>
+                                            <p:column headerText="Estado">
+                                                <p:cellEditor>
+                                                    <f:facet name="output">
+                                                        #{e.ejemplarActivo? 'Activo':'Inactivo'}
+                                                    </f:facet>
+                                                    <f:facet name="input">
+                                                        <p:selectBooleanButton offLabel="Inactivo" onLabel="Activo"
+                                                                               label="Estado" value="#{e.ejemplarActivo}"
+                                                                               required="true"/>
+                                                    </f:facet>
+                                                </p:cellEditor>
+                                            </p:column>
+                                            <p:column style="width:35px">
+                                                <p:rowEditor />
+                                            </p:column>
+                                        </p:dataTable>
+                                        <h:panelGrid columns="2" cellspacing="10">
+                                            <p:commandButton value="+" styleClass="ui-priority-primary"
+                                                             actionListener="#{admRecursoC.onAdd()}"
+                                                             update="art"
+                                                             title="Agregar Ejemplar."/>
+
+                                            <p:commandButton actionListener="#{admRecursoC.guardar()}" 
+                                                             oncomplete="PF('DrecursoN').hide()"
+                                                             value="Agregar al inventario" icon="pi pi-save" 
+                                                             update="form:recurso form0:msgs"
+                                                             rendered="#{admRecursoC.verBotonGuardarPanel1}"/>
+                                        </h:panelGrid>
+                                    </h:panelGrid>
+                                </p:panel>
+                            </p:tab>
+                            <p:tab title="Autores y Editoriales" rendered="#{admRecursoC.verOtrosPaneles}">
+                                <p:panel header="Información de los autores y Editoriales del libro">
+                                    <h:panelGrid columns="2">
+                                        <h:outputLabel for="autor" value="Autores"/>
+                                        <p:selectCheckboxMenu id="autor" value="#{admRecursoC.autoresXlibro}" 
+                                                              label="autores" multiple="true" filter="true" 
+                                                              filterMatchMode="startsWith" panelStyle="width:250px" 
+                                                              required="true" converter="omnifaces.SelectItemsConverter"
+                                                              requiredMessage="Debe seleccionar al menos un autor">
+                                            <f:selectItems value="#{admRecursoC.autores}" var="a" 
+                                                           itemLabel="#{a.autorNombre}" 
+                                                           itemValue="#{a.idautor}" />
+                                        </p:selectCheckboxMenu>
+
+                                        <h:outputLabel for="editorial" value="Editoriales"/>
+                                        <p:selectCheckboxMenu id="editorial" value="#{admRecursoC.editorialesXlibro}" 
+                                                              label="autores" multiple="true" filter="true" 
+                                                              filterMatchMode="startsWith" panelStyle="width:250px" 
+                                                              required="true" converter="omnifaces.SelectItemsConverter"
+                                                              requiredMessage="Debe seleccionar al menos una editorial">
+                                            <f:selectItems value="#{admRecursoC.editoriales}" var="e" 
+                                                           itemLabel="#{e.editorialNombre}" 
+                                                           itemValue="#{e.ideditorial}" />
+                                        </p:selectCheckboxMenu>
+                                    </h:panelGrid>
+                                </p:panel>
+                            </p:tab>                                
+                            <p:tab  title="Temario" rendered="#{admRecursoC.verOtrosPaneles}">
+                                <p:panel header="Temario">
+                                    <h:panelGrid columns="1" cellspacing="10px">                                    
+                                        <p:commandButton value="+" styleClass="ui-priority-primary" 
+                                                         actionListener="#{admRecursoC.nuevoContenido()}"
+                                                         update=":form0:msgs h2"
+                                                         onclick="PF('Dcontenido').show();"
+                                                         title="Agregar Contenido."/>
+                                        <p:dataTable id="h1Contenido" value="#{admRecursoC.contenido}" var="item"
+                                                     rowKey="#{item.contenidoLibroPK}" selection="#{admRecursoC.cl}"
+                                                     selectionMode="single" paginator="true" paginatorAlwaysVisible="false"
+                                                     rows="5">
+                                            <p:column>
+                                                <f:facet name="header">
+                                                    <h:outputText value="ContenidoLibroNombre"/>
+                                                </f:facet>
+                                                <h:outputText value="#{item.contenidoLibroPK.contenidoLibroNombre}"/>
+                                            </p:column>
+                                            <p:column>
+                                                <f:facet name="header">
+                                                    <h:outputText value="ContenidoLibroPagina"/>
+                                                </f:facet>
+                                                <h:outputText value="#{item.contenidoLibroPK.contenidoLibroPagina}"/>
+                                            </p:column>                                            
+                                        </p:dataTable>
+
+                                        <p:commandButton actionListener="#{admRecursoC.guardar()}" 
+                                                         oncomplete="PF('DrecursoN').hide()"
+                                                         value="Agregar al inventario" icon="pi pi-save" update="form:recurso form0:msgs"/>
+                                        <p:contextMenu for="h1Contenido">
+                                            <p:menuitem value="Modificar" update=":form0:msgs h1Contenido h2"
+                                                        icon="fa fa-edit" onclick="PF('Dcontenido').show()"/> 
+                                            <p:menuitem value="Eliminar" update="h1Contenido h2"
+                                                        icon="pi pi-times" actionListener="#{admRecursoC.eliminarContenido()}"/> 
+                                        </p:contextMenu>
+                                    </h:panelGrid>
+                                </p:panel>
+                            </p:tab>
+                        </p:wizard>
+                    </h:form>
+                </p:dialog>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

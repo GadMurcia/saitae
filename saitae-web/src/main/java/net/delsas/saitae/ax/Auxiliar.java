@@ -25,14 +25,19 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.faces.model.SelectItem;
+import net.delsas.saitae.beans.NotificacionesFacadeLocal;
+import net.delsas.saitae.entities.AccesoTipoPersona;
+import net.delsas.saitae.entities.Cargo;
+import net.delsas.saitae.entities.DelagacionCargo;
 import net.delsas.saitae.entities.Estudiante;
 import net.delsas.saitae.entities.MaestoCargo;
 import net.delsas.saitae.entities.Maestro;
-import net.delsas.saitae.entities.Matricula;
 import net.delsas.saitae.entities.Persona;
+import net.delsas.saitae.entities.Reserva;
 import net.delsas.saitae.entities.TipoEspecialidades;
 import net.delsas.saitae.entities.TipoPersona;
 import net.delsas.saitae.entities.TipoSueldos;
+import org.omnifaces.cdi.PushContext;
 
 /**
  *
@@ -485,6 +490,50 @@ public class Auxiliar implements Serializable {
             }
         }
         return r;
+    }
+
+    public List<Persona> getPersonasParaNotificar(TipoPersona tp) {
+        List<Persona> ps = new ArrayList<>();
+        if (tp != null) {
+            ps.addAll(tp.getPersonaList());
+            tp.getDelagacionCargoList().stream().filter((dl) -> (!ps.contains(dl.getIdpersona()))).forEachOrdered((dl) -> {
+                ps.add(dl.getIdpersona());
+            });
+            tp.getCargoList().forEach((c) -> {
+                c.getMaestoCargoList().stream().filter((mc) -> (!ps.contains(mc.getMaestro().getPersona()))).forEachOrdered((mc) -> {
+                    ps.add(mc.getMaestro().getPersona());
+                });
+            });
+        }
+        return ps;
+    }
+
+    public void sendMessage(String message, PushContext notificacion) {
+        notificacion.send(message);
+    }
+
+    public void persistirNotificación(mensaje x, List<Persona> ps, NotificacionesFacadeLocal notiFL, PushContext notificacion) {
+        ps.forEach((p) -> {
+            persistirNotificación(x, p, notiFL, notificacion);
+        });
+    }
+    
+    public void persistirNotificación(mensaje x, Persona ps, NotificacionesFacadeLocal notiFL, PushContext notificacion) {
+        x.setDestinatario(ps.getIdpersona());
+        x.getNotificacion().setFechaHora(new Date());
+        sendMessage(x.toString(), notificacion);
+        try {
+            System.out.println("caracteres en el cuerpo: " + x.getNotificacion().getNotificacionCuerpo().split("").length);
+            System.out.println(new SimpleDateFormat("EEEEE dd/MMM/yyyy HH:mm a").format(x.getNotificacion().getFechaHora()));
+            notiFL.create(x.getNotificacion());
+            System.out.println("notificación enviada " + x.getNotificacion().getFechaHora());
+        } catch (Exception e) {
+            try {
+                notiFL.edit(x.getNotificacion());
+            } catch (Exception ex) {
+                System.out.println("doble error:\n" + e + "\n" + ex);
+            }
+        }
     }
 
 }
