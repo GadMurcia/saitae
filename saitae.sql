@@ -347,15 +347,15 @@ DROP TABLE IF EXISTS `contenidoLibro`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `contenidoLibro` (
+  `contenidoLibroIndice` int(30) NOT NULL AUTO_INCREMENT,
   `contenidoLibroPagina` int(30) NOT NULL,
   `contenidoLibroNombre` varchar(145) NOT NULL,
   `idLibro` int(30) NOT NULL,
-  `contenidoLibroIndice` int(30) NOT NULL,
   `contenidoLibroComentario` varchar(140) DEFAULT NULL,
-  PRIMARY KEY (`contenidoLibroPagina`,`contenidoLibroNombre`,`idLibro`),
+  PRIMARY KEY (`contenidoLibroIndice`),
   KEY `fk_contenidoLibro_1_idx` (`idLibro`),
   CONSTRAINT `fk_contenidoLibro_1` FOREIGN KEY (`idLibro`) REFERENCES `recurso` (`idrecurso`) ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=78 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -364,7 +364,7 @@ CREATE TABLE `contenidoLibro` (
 
 LOCK TABLES `contenidoLibro` WRITE;
 /*!40000 ALTER TABLE `contenidoLibro` DISABLE KEYS */;
-INSERT INTO `contenidoLibro` VALUES (1,'El poder del aire',1,0,NULL),(9,'La importancia del ejercicio',1,0,NULL),(17,'Aprende a alimentarte',1,0,NULL),(25,'La riqueza del agua',1,0,NULL),(33,'Recarga fuerzas a través del descanso',1,0,NULL),(41,'Actitud mental positiva',1,0,NULL),(49,'Di no a los vicios',1,0,NULL),(59,'Relaciones humanas efectivas',1,0,NULL),(65,'El poder de la cominucación',1,0,NULL),(73,'Confianza en el Dios Todopoderoso',1,0,NULL),(73,'Confianza en el Dios Todopoderoso.',1,0,NULL);
+INSERT INTO `contenidoLibro` VALUES (68,49,'Di no a los vicios.',1,NULL),(69,1,'El poder del aire',1,NULL),(70,17,'Aprende a alimentarte',1,NULL),(71,65,'El poder de la comunicación.',1,NULL),(72,33,'Recargar Fuerzas a través del descanso',1,NULL),(73,59,'Relaciones humanas efectivas.',1,NULL),(74,25,'La riqueza del agua',1,NULL),(75,9,'La importancia del ejercicio',1,NULL),(76,73,'Confianza en el Dios Todopoderoso.',1,NULL),(77,41,'Actitud mental positiva',1,NULL);
 /*!40000 ALTER TABLE `contenidoLibro` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -572,7 +572,7 @@ CREATE TABLE `ejemplar` (
 
 LOCK TABLES `ejemplar` WRITE;
 /*!40000 ALTER TABLE `ejemplar` DISABLE KEYS */;
-INSERT INTO `ejemplar` VALUES (1,1,2020,'',NULL);
+INSERT INTO `ejemplar` VALUES (1,1,2020,'',NULL),(2,566,2020,'',NULL),(2,2568,2020,'',NULL),(2,5687,2020,'',NULL),(6,236,2020,'',NULL),(6,8955,2020,'',NULL);
 /*!40000 ALTER TABLE `ejemplar` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1074,7 +1074,7 @@ CREATE TABLE `notificaciones` (
   KEY `fk_notificaciones_2_idx` (`remitente`),
   CONSTRAINT `fk_notificaciones_1` FOREIGN KEY (`destinatario`) REFERENCES `persona` (`idpersona`) ON UPDATE CASCADE,
   CONSTRAINT `fk_notificaciones_2` FOREIGN KEY (`remitente`) REFERENCES `persona` (`idpersona`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=336 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=373 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1083,7 +1083,7 @@ CREATE TABLE `notificaciones` (
 
 LOCK TABLES `notificaciones` WRITE;
 /*!40000 ALTER TABLE `notificaciones` DISABLE KEYS */;
-INSERT INTO `notificaciones` VALUES (325,'2020-01-12 00:24:46',1045367082,1045367073,'Nuevo recurso agregado','Guillermo Delsas Ha agregado un nuevo recurso: ID: 1, NOMBRE: 10 pasos para una mejor calidad de vida','\0',' '),(326,'2020-01-12 00:50:25',1045367082,1045367073,'Edición de recurso','Guillermo Delsas Ha editado la información del recurso: ID: 1, NOMBRE: 10 pasos para una mejor calidad de vida','\0',' '),(327,'2020-01-12 01:02:27',1045367082,1045367073,'Edición de recurso','Guillermo Delsas Ha editado la información del recurso: ID: 1, NOMBRE: 10 pasos para una mejor calidad de vida','\0',' '),(328,'2020-01-12 01:03:09',1045367082,1045367073,'Edición de recurso','Guillermo Delsas Ha editado la información del recurso: ID: 1, NOMBRE: 10 pasos para una mejor calidad de vida','\0',' '),(329,'2020-01-12 01:03:39',1045367082,1045367073,'Edición de recurso','Guillermo Delsas Ha editado la información del recurso: ID: 1, NOMBRE: 10 pasos para una mejor calidad de vida','\0',' '),(330,'2020-01-12 01:20:11',1045367082,1045367073,'Edición de recurso','Guillermo Delsas Ha editado la información del recurso: ID: 1, NOMBRE: 10 pasos para una mejor calidad de vida','\0',' '),(331,'2020-01-12 01:23:18',1045367082,1045367073,'Edición de recurso','Guillermo Delsas Ha editado la información del recurso: ID: 1, NOMBRE: 10 pasos para una mejor calidad de vida','\0',' '),(332,'2020-01-12 01:25:04',1045367082,1045367073,'Edición de recurso','Guillermo Delsas Ha editado la información del recurso: ID: 1, NOMBRE: 10 pasos para una mejor calidad de vida','\0',' '),(333,'2020-01-12 01:46:43',1045367082,1045367073,'Edición de recurso','Guillermo Delsas Ha editado la información del recurso: ID: 1, NOMBRE: 10 pasos para una mejor calidad de vida','\0',' '),(334,'2020-01-12 01:50:58',1045367082,1045367073,'Edición de recurso','Guillermo Delsas Ha editado la información del recurso: ID: 1, NOMBRE: 10 pasos para una mejor calidad de vida','\0',' '),(335,'2020-01-12 02:05:13',1045367082,1045367073,'Edición de recurso','Guillermo Delsas Ha editado la información del recurso: ID: 1, NOMBRE: 10 pasos para una mejor calidad de vida','\0',' ');
+INSERT INTO `notificaciones` VALUES (325,'2020-01-12 00:24:46',1045367082,1045367073,'Nuevo recurso agregado','Guillermo Delsas Ha agregado un nuevo recurso: ID: 1, NOMBRE: 10 pasos para una mejor calidad de vida','\0',' '),(326,'2020-01-12 00:50:25',1045367082,1045367073,'Edición de recurso','Guillermo Delsas Ha editado la información del recurso: ID: 1, NOMBRE: 10 pasos para una mejor calidad de vida','\0',' '),(327,'2020-01-12 01:02:27',1045367082,1045367073,'Edición de recurso','Guillermo Delsas Ha editado la información del recurso: ID: 1, NOMBRE: 10 pasos para una mejor calidad de vida','\0',' '),(328,'2020-01-12 01:03:09',1045367082,1045367073,'Edición de recurso','Guillermo Delsas Ha editado la información del recurso: ID: 1, NOMBRE: 10 pasos para una mejor calidad de vida','\0',' '),(329,'2020-01-12 01:03:39',1045367082,1045367073,'Edición de recurso','Guillermo Delsas Ha editado la información del recurso: ID: 1, NOMBRE: 10 pasos para una mejor calidad de vida','\0',' '),(330,'2020-01-12 01:20:11',1045367082,1045367073,'Edición de recurso','Guillermo Delsas Ha editado la información del recurso: ID: 1, NOMBRE: 10 pasos para una mejor calidad de vida','\0',' '),(331,'2020-01-12 01:23:18',1045367082,1045367073,'Edición de recurso','Guillermo Delsas Ha editado la información del recurso: ID: 1, NOMBRE: 10 pasos para una mejor calidad de vida','\0',' '),(332,'2020-01-12 01:25:04',1045367082,1045367073,'Edición de recurso','Guillermo Delsas Ha editado la información del recurso: ID: 1, NOMBRE: 10 pasos para una mejor calidad de vida','\0',' '),(333,'2020-01-12 01:46:43',1045367082,1045367073,'Edición de recurso','Guillermo Delsas Ha editado la información del recurso: ID: 1, NOMBRE: 10 pasos para una mejor calidad de vida','\0',' '),(334,'2020-01-12 01:50:58',1045367082,1045367073,'Edición de recurso','Guillermo Delsas Ha editado la información del recurso: ID: 1, NOMBRE: 10 pasos para una mejor calidad de vida','\0',' '),(335,'2020-01-12 02:05:13',1045367082,1045367073,'Edición de recurso','Guillermo Delsas Ha editado la información del recurso: ID: 1, NOMBRE: 10 pasos para una mejor calidad de vida','\0',' '),(336,'2020-01-12 15:57:55',1045367082,1045367073,'Edición de recurso','Guillermo Delsas Ha editado la información del recurso: ID: 1, NOMBRE: 10 pasos para una mejor calidad de vida','\0',' '),(337,'2020-01-12 16:39:36',1045367082,1045367073,'Edición de recurso','Guillermo Delsas Ha editado la información del recurso: ID: 1, NOMBRE: 10 pasos para una mejor calidad de vida','\0',' '),(338,'2020-01-12 17:08:18',1045367082,1045367073,'Edición de recurso','Guillermo Delsas Ha editado la información del recurso: ID: 1, NOMBRE: 10 pasos para una mejor calidad de vida','\0',' '),(339,'2020-01-12 17:09:40',1045367082,1045367073,'Edición de recurso','Guillermo Delsas Ha editado la información del recurso: ID: 1, NOMBRE: 10 pasos para una mejor calidad de vida','\0',' '),(340,'2020-01-12 17:44:21',1045367082,1045367073,'Edición de recurso','Guillermo Delsas Ha editado la información del recurso: ID: 1, NOMBRE: 10 pasos para una mejor calidad de vida','\0',' '),(341,'2020-01-12 21:23:55',1045367082,1045367073,'Edición de recurso','Guillermo Delsas Ha editado la información del recurso: ID: 1, NOMBRE: 10 pasos para una mejor calidad de vida','\0',' '),(342,'2020-01-12 22:10:41',1045367080,1045367073,'Nuevo recurso agregado','Guillermo Delsas Ha agregado un nuevo recurso: ID: 2, NOMBRE: Cañon multimedia','\0',' '),(343,'2020-01-12 22:11:27',1045367080,1045367073,'Edición de recurso','Guillermo Delsas Ha editado la información del recurso: ID: 2, NOMBRE: Cañon multimedia','\0',' '),(344,'2020-01-12 22:12:13',1045367080,1045367073,'Edición de recurso','Guillermo Delsas Ha editado la información del recurso: ID: 2, NOMBRE: Cañon multimedia','\0',' '),(345,'2020-01-12 22:16:18',1045367080,1045367073,'Edición de recurso','Guillermo Delsas Ha editado la información del recurso: ID: 2, NOMBRE: Cañon multimedia','\0',' '),(346,'2020-01-12 22:20:36',1045367080,1045367073,'Edición de recurso','Guillermo Delsas Ha editado la información del recurso: ID: 2, NOMBRE: Cañon multimedia','\0',' '),(347,'2020-01-12 22:52:55',1045367080,1045367073,'Edición de recurso','Guillermo Delsas Ha editado la información del recurso: ID: 2, NOMBRE: Cañon multimedia','\0',' '),(348,'2020-01-12 22:55:41',1045367080,1045367073,'Edición de recurso','Guillermo Delsas Ha editado la información del recurso: ID: 2, NOMBRE: Cañon multimedia','\0',' '),(349,'2020-01-12 23:04:10',1045367080,1045367073,'Edición de recurso','Guillermo Delsas Ha editado la información del recurso: ID: 2, NOMBRE: Cañon multimedia','\0',' '),(350,'2020-01-12 23:22:05',1045367082,1045367073,'Edición de recurso','Guillermo Delsas Ha editado la información del recurso: ID: 1, NOMBRE: 10 pasos para una mejor calidad de vida','\0',' '),(351,'2020-01-12 23:24:07',1045367082,1045367073,'Edición de recurso','Guillermo Delsas Ha editado la información del recurso: ID: 1, NOMBRE: 10 pasos para una mejor calidad de vida','\0',' '),(352,'2020-01-12 23:25:12',1045367082,1045367073,'Edición de recurso','Guillermo Delsas Ha editado la información del recurso: ID: 1, NOMBRE: 10 pasos para una mejor calidad de vida','\0',' '),(353,'2020-01-12 23:26:25',1045367082,1045367073,'Edición de recurso','Guillermo Delsas Ha editado la información del recurso: ID: 1, NOMBRE: 10 pasos para una mejor calidad de vida','\0',' '),(354,'2020-01-12 23:31:10',1045367082,1045367073,'Edición de recurso','Guillermo Delsas Ha editado la información del recurso: ID: 1, NOMBRE: 10 pasos para una mejor calidad de vida','\0',' '),(355,'2020-01-12 23:41:28',1045367082,1045367073,'Edición de recurso','Guillermo Delsas Ha editado la información del recurso: ID: 1, NOMBRE: 10 pasos para una mejor calidad de vida','\0',' '),(356,'2020-01-13 00:11:36',1045367082,1045367073,'Edición de recurso','Guillermo Delsas Ha editado la información del recurso: ID: 1, NOMBRE: 10 pasos para una mejor calidad de vida','\0',' '),(357,'2020-01-13 00:12:59',1045367082,1045367073,'Edición de recurso','Guillermo Delsas Ha editado la información del recurso: ID: 1, NOMBRE: 10 pasos para una mejor calidad de vida','\0',' '),(358,'2020-01-13 00:14:23',1045367081,1045367073,'Nuevo recurso agregado','Guillermo Delsas Ha agregado un nuevo recurso: ID: 6, NOMBRE: Microscopio','\0',' '),(359,'2020-01-13 00:15:21',1045367073,1045367073,'Solicitud exitosa','Su solicitud de recursos de Tecnológico CRA ha sido guardada con éxito. Recibirá una notificación cuando sea aprobada por el encargado de área correspondiente.','',' '),(360,'2020-01-13 00:15:23',1045367080,1045367073,'Nueva solicitud de recursos','Guillermo Delsas ha solicitado recursos','\0',' '),(361,'2020-01-13 00:16:30',16018,1045367073,'Solicitud exitosa','Su solicitud de recursos de Laboratorio de Ciencias Naturales ha sido guardada con éxito. Recibirá una notificación cuando sea aprobada por el encargado de área correspondiente.','\0',' '),(362,'2020-01-13 00:16:30',16022,1045367073,'Solicitud exitosa','Su solicitud de recursos de Laboratorio de Ciencias Naturales ha sido guardada con éxito. Recibirá una notificación cuando sea aprobada por el encargado de área correspondiente.','\0',' '),(363,'2020-01-13 00:16:30',1045367081,1045367073,'Nueva solicitud de recursos','Guillermo Delsas ha solicitado recursos','\0',' '),(364,'2020-01-13 00:17:06',1045367073,1045367073,'Aceptación de reserva','Su solicitud de reserva de equipo con fecha 13/01/2020 a las 12:14 AM ha sido aceptada por Guillermo Delsas.','',' '),(365,'2020-01-13 00:17:22',16018,1045367073,'Aceptación de reserva','Su solicitud de reserva de equipo con fecha 13/01/2020 a las 12:15 AM ha sido aceptada por Guillermo Delsas.','\0',' '),(366,'2020-01-13 00:17:22',16022,1045367073,'Aceptación de reserva','Su solicitud de reserva de equipo con fecha 13/01/2020 a las 12:15 AM ha sido aceptada por Guillermo Delsas.','\0',' '),(367,'2020-01-13 00:17:31',1045367073,1045367073,'Entrega de equipo reservado','Los recursos que solicitó el día 13/01/2020 a las 12:14 AM han sido entregados en este momento por Guillermo Delsas','',' '),(368,'2020-01-13 00:17:38',16018,1045367073,'Entrega de equipo reservado','Los recursos que solicitó el día 13/01/2020 a las 12:15 AM han sido entregados en este momento por Guillermo Delsas','\0',' '),(369,'2020-01-13 00:17:38',16022,1045367073,'Entrega de equipo reservado','Los recursos que solicitó el día 13/01/2020 a las 12:15 AM han sido entregados en este momento por Guillermo Delsas','\0',' '),(370,'2020-01-13 00:17:45',1045367073,1045367073,'Devolución de equipo reservado','Los recursos que solicitó el día 13/01/2020 a las 12:14 AM han sido recibidos en este momento por Guillermo Delsas','',' '),(371,'2020-01-13 00:17:53',16018,1045367073,'Devolución de equipo reservado','Los recursos que solicitó el día 13/01/2020 a las 12:15 AM han sido recibidos en este momento por Guillermo Delsas','\0',' '),(372,'2020-01-13 00:17:53',16022,1045367073,'Devolución de equipo reservado','Los recursos que solicitó el día 13/01/2020 a las 12:15 AM han sido recibidos en este momento por Guillermo Delsas','\0',' ');
 /*!40000 ALTER TABLE `notificaciones` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1220,6 +1220,7 @@ CREATE TABLE `personasReserva` (
 
 LOCK TABLES `personasReserva` WRITE;
 /*!40000 ALTER TABLE `personasReserva` DISABLE KEYS */;
+INSERT INTO `personasReserva` VALUES (1,1045367073,''),(2,16018,''),(2,16022,'');
 /*!40000 ALTER TABLE `personasReserva` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1248,7 +1249,7 @@ CREATE TABLE `proyectoPedagogico` (
   `productoEsperado` text,
   `proyectoPedagogicoComentario` varchar(300) DEFAULT NULL,
   PRIMARY KEY (`idproyectoPedagogico`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1298,7 +1299,7 @@ CREATE TABLE `recurso` (
 
 LOCK TABLES `recurso` WRITE;
 /*!40000 ALTER TABLE `recurso` DISABLE KEYS */;
-INSERT INTO `recurso` VALUES (1,'10 pasos para una mejor calidad de vida',100,3,1,68,'',10,'B','REAL','1',NULL);
+INSERT INTO `recurso` VALUES (1,'10 pasos para una mejor calidad de vida',100,3,1,68,'',10,'B','REAL','1',NULL),(2,'Cañon multimedia',NULL,1,1,NULL,'',325,'B','ESTIMADO','',NULL),(6,'Microscopio',NULL,2,3,NULL,'',356,'B','ESTIMADO','',NULL);
 /*!40000 ALTER TABLE `recurso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1343,7 +1344,7 @@ CREATE TABLE `reserva` (
   CONSTRAINT `fk_reserva_5` FOREIGN KEY (`entregante`) REFERENCES `persona` (`idpersona`) ON DELETE NO ACTION ON UPDATE CASCADE,
   CONSTRAINT `fk_reserva_6` FOREIGN KEY (`recibe`) REFERENCES `persona` (`idpersona`) ON DELETE NO ACTION ON UPDATE CASCADE,
   CONSTRAINT `fk_reserva_7` FOREIGN KEY (`tipoRecurso`) REFERENCES `tipoRecurso` (`idtipoRecurso`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1352,6 +1353,7 @@ CREATE TABLE `reserva` (
 
 LOCK TABLES `reserva` WRITE;
 /*!40000 ALTER TABLE `reserva` DISABLE KEYS */;
+INSERT INTO `reserva` VALUES (1,'2020-01-13 00:14:36','2020-01-13 00:15:00','2020-01-13 01:14:00',1,1,3,'D',NULL,NULL,NULL,'tema','objetivo','','',1045367073,1045367073,'Guillermo Delsas¿¿4¿¿0¿¿¿¿0'),(2,'2020-01-13 00:15:26','2020-01-13 00:16:00','2020-01-13 02:15:00',2,1,NULL,'D',NULL,NULL,NULL,'tema','obj','','',1045367073,1045367073,'Guillermo Delsas¿¿3¿¿1¿¿¿¿0');
 /*!40000 ALTER TABLE `reserva` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1381,6 +1383,7 @@ CREATE TABLE `reservaDetalle` (
 
 LOCK TABLES `reservaDetalle` WRITE;
 /*!40000 ALTER TABLE `reservaDetalle` DISABLE KEYS */;
+INSERT INTO `reservaDetalle` VALUES (2,2568,'',1);
 /*!40000 ALTER TABLE `reservaDetalle` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1436,6 +1439,7 @@ CREATE TABLE `solicitudReserva` (
 
 LOCK TABLES `solicitudReserva` WRITE;
 /*!40000 ALTER TABLE `solicitudReserva` DISABLE KEYS */;
+INSERT INTO `solicitudReserva` VALUES (2,1,'1'),(6,2,'1');
 /*!40000 ALTER TABLE `solicitudReserva` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1690,7 +1694,7 @@ CREATE TABLE `tipoReservaRecurso` (
 
 LOCK TABLES `tipoReservaRecurso` WRITE;
 /*!40000 ALTER TABLE `tipoReservaRecurso` DISABLE KEYS */;
-INSERT INTO `tipoReservaRecurso` VALUES (1,1,'');
+INSERT INTO `tipoReservaRecurso` VALUES (1,1,''),(1,2,''),(1,6,''),(3,2,'');
 /*!40000 ALTER TABLE `tipoReservaRecurso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1789,4 +1793,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-01-12  2:11:53
+-- Dump completed on 2020-01-13  0:21:46
