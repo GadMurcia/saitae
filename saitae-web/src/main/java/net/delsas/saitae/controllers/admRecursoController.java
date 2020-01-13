@@ -22,7 +22,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -54,7 +53,6 @@ import net.delsas.saitae.entities.AutorLibro;
 import net.delsas.saitae.entities.AutorLibroPK;
 import net.delsas.saitae.entities.Categoria;
 import net.delsas.saitae.entities.ContenidoLibro;
-import net.delsas.saitae.entities.ContenidoLibroPK;
 import net.delsas.saitae.entities.Editorial;
 import net.delsas.saitae.entities.EditorialLibro;
 import net.delsas.saitae.entities.EditorialLibroPK;
@@ -64,7 +62,6 @@ import net.delsas.saitae.entities.Pais;
 import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.Recurso;
 import net.delsas.saitae.entities.TipoCargo;
-import net.delsas.saitae.entities.TipoPersona;
 import net.delsas.saitae.entities.TipoRecurso;
 import net.delsas.saitae.entities.TipoReserva;
 import net.delsas.saitae.entities.TipoReservaRecurso;
@@ -98,7 +95,7 @@ public class admRecursoController implements Serializable {
     private List<TipoRecurso> tiposRecursos;
     @EJB
     private TipoRecursoFacadeLocal tiporecursoFL;
-    private ContenidoLibro cl;
+    private ContenidoLibro cl, clControl;
     private List<ContenidoLibro> contenido;
     private int indiceCl;
     @EJB
@@ -237,20 +234,31 @@ public class admRecursoController implements Serializable {
     }
 
     public void agregarContenido() {
-        if (!cl.getContenidoLibroPK().getContenidoLibroNombre().isEmpty()
-                && cl.getContenidoLibroPK().getContenidoLibroPagina() > 0 && indiceCl == -1) {
-            cl.getContenidoLibroPK().setIdLibro(seleccionado.getIdrecurso());
-            contenido.add(cl);
+        if (!cl.getContenidoLibroNombre().isEmpty()
+                && cl.getContenidoLibroPagina() > 0 && indiceCl == -1) {
+            cl.setIdLibro(seleccionado);
+            System.out.println("agregar " + cl);
+            cl.setContenidoLibroIndice(cl.getContenidoLibroPagina() + (cl.getContenidoLibroPagina() * 7));
+            if (!contenido.contains(cl)) {
+                contenido.add(cl);
+            }
         } else if (indiceCl > -1) {
-            contenido.remove(indiceCl);
-            contenido.add(indiceCl, cl);
+            System.out.println("modificar " + cl);
         }
         nuevoContenido();
+        ordenarContenido();
+        PrimeFaces.current().ajax().update("hn:h1Contenido", "h2");
+    }
 
+    private void ordenarContenido() {
+        Collections.sort(contenido, (ContenidoLibro c1, ContenidoLibro c2) -> {
+            return c1.getContenidoLibroPagina() - c2.getContenidoLibroPagina();
+        });
     }
 
     public void nuevoContenido() {
-        cl = new ContenidoLibro(new ContenidoLibroPK(seleccionado.getIdrecurso(), "", 0));
+        cl = new ContenidoLibro(0, "", seleccionado);
+        clControl = new ContenidoLibro(0, "", seleccionado);
         indiceCl = -1;
     }
 
@@ -264,6 +272,9 @@ public class admRecursoController implements Serializable {
 
     public void setCl(ContenidoLibro cl) {
         indiceCl = contenido.contains(cl) ? contenido.indexOf(cl) : -1;
+        clControl = indiceCl != -1 ? new ContenidoLibro(
+                cl.getContenidoLibroPagina(), cl.getContenidoLibroNombre(), cl.getIdLibro())
+                : new ContenidoLibro();
         this.cl = cl;
     }
 
@@ -382,13 +393,14 @@ public class admRecursoController implements Serializable {
     public void eliminarContenido() {
         if (cl != null) {
             contenido.remove(cl);
+            nuevoContenido();
         }
     }
 
     public void guardar() {
         System.out.println("guardar");
         mensaje x = null;
-        seleccionado.setContenidoLibroList(contenido);
+        seleccionado.setContenidoLibroList(new ArrayList<>());
         seleccionado.setEjemplarList(ejemplares);
         seleccionado.setTipoReservaRecursoList(new ArrayList<>());
         tiposReservasRecurso.stream().map((tr) -> {
@@ -405,21 +417,21 @@ public class admRecursoController implements Serializable {
         Recurso r = recursoFL.find(seleccionado.getIdrecurso());
         if (r != null && !editarID && !editarTipo) {
             //modificación
-            r = recursoFL.find(r.getIdrecurso());
-            for (ContenidoLibro cl0 : seleccionado.getContenidoLibroList()) {
-                if (!r.getContenidoLibroList().contains(cl0)) {
-                    clFL.create(cl0);
-                    System.out.println("agregando a la base:\n" + cl);
-                }
-            }
+            r.getContenidoLibroList().stream().filter((cl1) -> (!seleccionado.getContenidoLibroList().contains(cl1))).forEachOrdered((cl1) -> {
+                System.out.println("contenidoLibro a borrar:\n" + cl1);
+                clFL.remove(cl1);
+            });
+            recursoFL.edit(seleccionado);
+            contenido.stream().map((cl3) -> {
+                cl3.setContenidoLibroIndice(null);
+                return cl3;
+            }).forEachOrdered((cl3) -> {
+                seleccionado.getContenidoLibroList().add(cl3);
+            });
             recursoFL.edit(seleccionado);
             r.getTipoReservaRecursoList().stream().filter((trr) -> (!seleccionado.getTipoReservaRecursoList().contains(trr))).forEachOrdered((trr) -> {
                 System.out.println("TipoReservaLibro a borrar:\n" + trr);
                 trrFL.remove(trr);
-            });
-            r.getContenidoLibroList().stream().filter((cl1) -> (!seleccionado.getContenidoLibroList().contains(cl1))).forEachOrdered((cl1) -> {
-                System.out.println("contenidoLibro a borrar:\n" + cl1);
-                clFL.remove(cl1);
             });
             r.getEjemplarList().stream().filter((e) -> (!seleccionado.getEjemplarList().contains(e))).forEachOrdered((e) -> {
                 System.out.println("Ejemplar a borrar: \n" + e);
@@ -457,9 +469,9 @@ public class admRecursoController implements Serializable {
                             + " y nombre: " + seleccionado.getNombre()
                             + " se ha editado con éxito."));
             init();
-            PrimeFaces.current().ajax().update("form0:msgs", "form");
+            PrimeFaces.current().ajax().update("form0:msgs", "form", "dialogN");
         } else if (r == null) {
-//agregación nueva
+            //agregación nueva
             recursoFL.create(seleccionado);
             x = new mensaje(0, usuario.getIdpersona(), "admRecurso<<:form:recurso",
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Nuevo recurso agregado",
@@ -475,9 +487,9 @@ public class admRecursoController implements Serializable {
                             + " y nombre: " + seleccionado.getNombre()
                             + " se ha guardado con éxito."));
             init();
-            PrimeFaces.current().ajax().update("form0:msgs", "form");
+            PrimeFaces.current().ajax().update("form0:msgs", "form", "dialogN");
         } else {
-//intento de agregación de un id existente
+            //intento de agregación de un id existente
             FacesContext.getCurrentInstance().addMessage("form0:msgs",
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Imposible agregar",
                             "Se ha detectado que el recurso con el id " + seleccionado.getIdrecurso()
@@ -501,9 +513,33 @@ public class admRecursoController implements Serializable {
         return seleccionado;
     }
 
+    public void eliminarEjemplar() {
+        if (ejemplarSeleccionado != null) {
+            ejemplares.remove(ejemplarSeleccionado);
+        }
+        PrimeFaces.current().ajax().update("hn:h1Contenido");
+    }
+
+    public void nuevoEjemplar() {
+        ejemplarSeleccionado = new Ejemplar(new EjemplarPK(seleccionado.getIdrecurso(), 0),
+                getAñoActual(), true);
+        PrimeFaces.current().ajax().update("h3");
+    }
+
+    public void agregarEjemplar() {
+        if (ejemplarSeleccionado != null) {
+            ejemplares.add(ejemplarSeleccionado);
+            PrimeFaces.current().ajax().update("hn:h1Contenido", "h3");
+            nuevoEjemplar();
+        }
+    }
+
     public void setSeleccionado(Recurso seleccionado) {
         this.seleccionado = seleccionado != null ? seleccionado : this.seleccionado;
-        contenido = this.seleccionado.getContenidoLibroList();
+        this.seleccionado.getContenidoLibroList().forEach((c) -> {
+            contenido.add(c);
+        });
+        ordenarContenido();
         tiposReservasRecurso = new ArrayList<>();
         this.seleccionado.getTipoReservaRecursoList().forEach((trr) -> {
             tiposReservasRecurso.add(trr.getTipoReserva1());

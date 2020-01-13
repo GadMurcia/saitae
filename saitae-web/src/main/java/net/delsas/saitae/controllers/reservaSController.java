@@ -887,9 +887,9 @@ public class reservaSController implements Serializable {
         } else if (xContenido) {
             List<ContenidoLibro> l = contenidoFL.findLibroByContenidoNombre(query);
             l.forEach((r) -> {
-                results.add(r.getContenidoLibroPK().getContenidoLibroNombre()
-                        + "    Libro: " + r.getRecurso().getNombre()
-                        + "    Código: " + r.getRecurso().getIdrecurso());
+                results.add(r.getContenidoLibroNombre()
+                        + "    Libro: " + r.getIdLibro().getNombre()
+                        + "    Código: " + r.getIdLibro().getIdrecurso());
             });
         }
         if (results.isEmpty()) {

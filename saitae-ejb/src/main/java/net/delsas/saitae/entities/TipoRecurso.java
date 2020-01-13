@@ -38,12 +38,6 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "TipoRecurso.findByTipoRecursoComentario", query = "SELECT t FROM TipoRecurso t WHERE t.tipoRecursoComentario = :tipoRecursoComentario")})
 public class TipoRecurso implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "idtipoRecurso")
-    private Integer idtipoRecurso;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
@@ -52,6 +46,13 @@ public class TipoRecurso implements Serializable {
     @Size(max = 140)
     @Column(name = "tipoRecursoComentario")
     private String tipoRecursoComentario;
+
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "idtipoRecurso")
+    private Integer idtipoRecurso;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTipoRecurso")
     private List<Recurso> recursoList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoRecurso")
@@ -77,21 +78,6 @@ public class TipoRecurso implements Serializable {
         this.idtipoRecurso = idtipoRecurso;
     }
 
-    public String getTipoRecursoNombre() {
-        return tipoRecursoNombre;
-    }
-
-    public void setTipoRecursoNombre(String tipoRecursoNombre) {
-        this.tipoRecursoNombre = tipoRecursoNombre;
-    }
-
-    public String getTipoRecursoComentario() {
-        return tipoRecursoComentario;
-    }
-
-    public void setTipoRecursoComentario(String tipoRecursoComentario) {
-        this.tipoRecursoComentario = tipoRecursoComentario;
-    }
 
     @XmlTransient
     public List<Recurso> getRecursoList() {
@@ -144,5 +130,21 @@ public class TipoRecurso implements Serializable {
     @Override
     public String toString() {
         return "TipoRecurso{" + "idtipoRecurso=" + idtipoRecurso + ", tipoRecursoNombre=" + tipoRecursoNombre + ", tipoRecursoComentario=" + tipoRecursoComentario + ", recursoList=" + recursoList + ", reservaList=" + reservaList + '}';
+    }
+
+    public String getTipoRecursoNombre() {
+        return tipoRecursoNombre;
+    }
+
+    public void setTipoRecursoNombre(String tipoRecursoNombre) {
+        this.tipoRecursoNombre = tipoRecursoNombre;
+    }
+
+    public String getTipoRecursoComentario() {
+        return tipoRecursoComentario;
+    }
+
+    public void setTipoRecursoComentario(String tipoRecursoComentario) {
+        this.tipoRecursoComentario = tipoRecursoComentario;
     }
 }

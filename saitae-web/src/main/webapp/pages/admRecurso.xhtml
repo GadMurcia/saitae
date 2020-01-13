@@ -89,18 +89,43 @@
                         <h:panelGrid columns="2" cellspacing="10px">
                             <p:outputLabel value="Nombre" for="nombre" />
                             <p:inputText id="nombre" 
-                                         value="#{admRecursoC.cl.contenidoLibroPK.contenidoLibroNombre}" 
+                                         value="#{admRecursoC.cl.contenidoLibroNombre}" 
                                          title="nombre" required="true" 
                                          requiredMessage="The Idrecurso field is required."/>
 
                             <p:outputLabel value="Pagina" for="pagina" />
                             <p:inputText id="pagina" 
-                                         value="#{admRecursoC.cl.contenidoLibroPK.contenidoLibroPagina}" 
+                                         value="#{admRecursoC.cl.contenidoLibroPagina}" 
                                          title="Nombre" required="true" 
                                          requiredMessage="The Nombre field is required."/>
                             <p:commandButton value="agregar Tema" 
-                                             actionListener="#{admRecursoC.agregarContenido()}"
-                                             update="hn:h1Contenido h2"/>
+                                             actionListener="#{admRecursoC.agregarContenido()}"/>
+                        </h:panelGrid>
+                    </h:form>
+                </p:dialog>
+                <p:dialog id="Dejemplar" header="Agregación/Modificación de ejemplares" 
+                          widgetVar="DejemplarN" modal="true"
+                          showEffect="fade" hideEffect="fade" resizable="false" 
+                          style="width: 90%;">
+                    <h:form id="h3">
+                        <h:panelGrid columns="2">
+                            <p:outputLabel value="Correlativo:" 
+                                           for="Correlativo"/>
+                            <p:inputText id="Correlativo" 
+                                         value="#{admRecursoC.ejemplarSeleccionado.ejemplarPK.ejemplarCorrelativo}" 
+                                         title="EjemplarCorrelativo" required="true" 
+                                         requiredMessage="The EjemplarCorrelativo field is required."/>
+                            <p:outputLabel value="Año De Ingreso:" for="AnioDeIngreso"/>
+                            <p:inputText id="AnioDeIngreso" 
+                                         value="#{admRecursoC.ejemplarSeleccionado.ejemplarAnioDeIngreso}" 
+                                         title="EjemplarAnioDeIngreso" required="true" 
+                                         requiredMessage="The EjemplarAnioDeIngreso field is required."/>
+                            <p:outputLabel value="Estado:" for="estadoE"/>
+                            <p:selectBooleanButton id="estadoE" value="#{admRecursoC.ejemplarSeleccionado.ejemplarActivo}"
+                                                   offLabel="Inactivo" onLabel="Activo"/>
+                            <p:column/>
+                            <p:commandButton value="Agregar" update="hn:art"
+                                             actionListener="#{admRecursoC.agregarEjemplar()}"/>
                         </h:panelGrid>
                     </h:form>
                 </p:dialog>
@@ -218,63 +243,41 @@
                                 </p:panel>
                             </p:tab>
                             <p:tab title="Ejemplares">
-                                <p:panel header="Información de los ejemplares del artículo">
+                                <p:panel header="Información de los ejemplares del artículo"
+                                         style="width: 80%;">
                                     <h:panelGrid columns="1">
-                                        <p:dataTable id="art" var="e" value="#{admRecursoC.ejemplares}" 
-                                                     rowKey="#{e.ejemplarPK}" editable="true"
+                                        <p:dataTable id="art" var="e" value="#{admRecursoC.ejemplares}"
                                                      widgetVar="art1"  emptyMessage="Sin registros aún."
                                                      selection="#{admRecursoC.ejemplarSeleccionado}" 
+                                                     rowKey="#{e.ejemplarPK}"
                                                      selectionMode="single" rows="6" 
                                                      paginator="true" paginatorAlwaysVisible="false" 
                                                      paginatorPosition="top">
                                             <f:facet name="header">
                                                 Información de los ejemplares del artículo seleccionado.
                                             </f:facet>
-                                            <p:ajax event="rowEdit" listener="#{admRecursoC.onRowEdit}"/>
-                                            <p:ajax event="rowEditCancel" listener="#{admRecursoC.onRowCancel}"/>
                                             <p:column headerText="Correlativo">
-                                                <p:cellEditor>
-                                                    <f:facet name="output">
-                                                        #{e.ejemplarPK.ejemplarCorrelativo}
-                                                    </f:facet>
-                                                    <f:facet name="input">
-                                                        <p:inputText value="#{e.ejemplarPK.ejemplarCorrelativo}" required="true"
-                                                                     style="width:100%" label="Correlativo"/>
-                                                    </f:facet>
-                                                </p:cellEditor>
+                                                #{e.ejemplarPK.ejemplarCorrelativo}
                                             </p:column>
                                             <p:column headerText="Año de ingreso">
-                                                <p:cellEditor>
-                                                    <f:facet name="output">
-                                                        #{e.ejemplarAnioDeIngreso}
-                                                    </f:facet>
-                                                    <f:facet name="input">
-                                                        <p:inputText value="#{e.ejemplarAnioDeIngreso}" required="true"
-                                                                     style="width:100%" label="Año de ingreso"/>
-                                                    </f:facet>
-                                                </p:cellEditor>
+                                                #{e.ejemplarAnioDeIngreso}
                                             </p:column>
                                             <p:column headerText="Estado">
-                                                <p:cellEditor>
-                                                    <f:facet name="output">
-                                                        #{e.ejemplarActivo? 'Activo':'Inactivo'}
-                                                    </f:facet>
-                                                    <f:facet name="input">
-                                                        <p:selectBooleanButton offLabel="Inactivo" onLabel="Activo"
-                                                                               label="Estado" value="#{e.ejemplarActivo}"
-                                                                               required="true"/>
-                                                    </f:facet>
-                                                </p:cellEditor>
-                                            </p:column>
-                                            <p:column style="width:35px">
-                                                <p:rowEditor />
+                                                #{e.ejemplarActivo? 'Activo':'Inactivo'}
                                             </p:column>
                                         </p:dataTable>
                                         <h:panelGrid columns="2" cellspacing="10">
                                             <p:commandButton value="+" styleClass="ui-priority-primary"
-                                                             actionListener="#{admRecursoC.onAdd()}"
-                                                             update="art"
-                                                             title="Agregar Ejemplar."/>
+                                                             actionListener="#{admRecursoC.nuevoEjemplar()}"
+                                                             update="h3 art"
+                                                             title="Agregar Ejemplar."
+                                                             oncomplete="PF('DejemplarN').show();"/>
+
+                                            <p:contextMenu for="art">
+                                                <p:menuitem value="Eliminar" update="art"
+                                                            icon="pi pi-times" 
+                                                            actionListener="#{admRecursoC.eliminarEjemplar()}"/> 
+                                            </p:contextMenu>
 
                                             <p:commandButton actionListener="#{admRecursoC.guardar()}" 
                                                              oncomplete="PF('DrecursoN').hide()"
@@ -314,36 +317,37 @@
                             </p:tab>                                
                             <p:tab  title="Temario" rendered="#{admRecursoC.verOtrosPaneles}">
                                 <p:panel header="Temario">
-                                    <h:panelGrid columns="1" cellspacing="10px">                                    
+                                    <h:panelGrid columns="1" cellspacing="10px">
+                                        <p:dataTable id="h1Contenido" value="#{admRecursoC.contenido}" var="item"
+                                                     paginator="true" paginatorAlwaysVisible="false"
+                                                     rows="5" selectionMode="single" selection="#{admRecursoC.cl}"
+                                                     rowKey="#{item.contenidoLibroIndice}">
+                                            <p:ajax event="rowEdit" update="h1Contenido"/>
+                                            <p:ajax event="rowEditCancel" update="h1Contenido"/>
+                                            <p:column style="width: 50px;">
+                                                <f:facet name="header">
+                                                    <h:outputText value="Página"/>
+                                                </f:facet>
+                                                <h:outputText value="#{item.contenidoLibroPagina}"/>
+                                            </p:column>  
+                                            <p:column>
+                                                <f:facet name="header">
+                                                    <h:outputText value="Nombre Contenido"/>
+                                                </f:facet>
+                                                <h:outputText value="#{item.contenidoLibroNombre}"/>
+                                            </p:column>                                          
+                                        </p:dataTable>
                                         <p:commandButton value="+" styleClass="ui-priority-primary" 
                                                          actionListener="#{admRecursoC.nuevoContenido()}"
                                                          update=":form0:msgs h2"
                                                          onclick="PF('Dcontenido').show();"
                                                          title="Agregar Contenido."/>
-                                        <p:dataTable id="h1Contenido" value="#{admRecursoC.contenido}" var="item"
-                                                     rowKey="#{item.contenidoLibroPK}" selection="#{admRecursoC.cl}"
-                                                     selectionMode="single" paginator="true" paginatorAlwaysVisible="false"
-                                                     rows="5">
-                                            <p:column>
-                                                <f:facet name="header">
-                                                    <h:outputText value="ContenidoLibroNombre"/>
-                                                </f:facet>
-                                                <h:outputText value="#{item.contenidoLibroPK.contenidoLibroNombre}"/>
-                                            </p:column>
-                                            <p:column>
-                                                <f:facet name="header">
-                                                    <h:outputText value="ContenidoLibroPagina"/>
-                                                </f:facet>
-                                                <h:outputText value="#{item.contenidoLibroPK.contenidoLibroPagina}"/>
-                                            </p:column>                                            
-                                        </p:dataTable>
 
                                         <p:commandButton actionListener="#{admRecursoC.guardar()}" 
                                                          oncomplete="PF('DrecursoN').hide()"
-                                                         value="Agregar al inventario" icon="pi pi-save" update="form:recurso form0:msgs"/>
+                                                         value="Agregar al inventario" icon="pi pi-save" 
+                                                         update="form:recurso form0:msgs"/>
                                         <p:contextMenu for="h1Contenido">
-                                            <p:menuitem value="Modificar" update=":form0:msgs h1Contenido h2"
-                                                        icon="fa fa-edit" onclick="PF('Dcontenido').show()"/> 
                                             <p:menuitem value="Eliminar" update="h1Contenido h2"
                                                         icon="pi pi-times" actionListener="#{admRecursoC.eliminarContenido()}"/> 
                                         </p:contextMenu>
