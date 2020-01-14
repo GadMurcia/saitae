@@ -57,15 +57,12 @@
                                 <p:column style="width:32px">
                                     <p:rowEditor />
                                 </p:column>
-                            </p:dataTable>                    
-                            <div class="ui-g">
-                                <div class="ui-g-12">
-                                    <p:commandButton value="+" styleClass="ui-priority-primary" process="@this" 
-                                                     update=":form:msgs form:tw:pers form:tw:pickList" action="#{tipoController.onAddNew('permiso')}" 
-                                                     oncomplete="PF('tipos').addRow();"
+                            </p:dataTable>
+                                    <p:commandButton value="+" styleClass="ui-priority-primary" 
+                                                     process="@this" 
+                                                     update=":form:msgs form:tw:pers form:tw:pickList tp1" 
+                                                     action="#{tipoController.onAddNew('permiso')}"
                                                      title="Agregar nuevo Tipo de Permiso."/>
-                                </div>
-                            </div>
                         </p:tab>
                         <p:tab title="Tipo Usuario">
                             <p:dataTable id="persona" var="tp" value="#{tipoController.personas}" 

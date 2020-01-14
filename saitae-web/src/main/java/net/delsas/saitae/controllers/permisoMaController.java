@@ -30,6 +30,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import net.delsas.saitae.ax.Auxiliar;
 import net.delsas.saitae.ax.mensaje;
 import net.delsas.saitae.beans.NotificacionesFacadeLocal;
 import net.delsas.saitae.beans.PermisosFacadeLocal;
@@ -45,6 +46,7 @@ import net.delsas.saitae.entities.TipoPersona;
 import net.delsas.saitae.entities.TipopersonaPermiso;
 import org.omnifaces.cdi.Push;
 import org.omnifaces.cdi.PushContext;
+import org.primefaces.PrimeFaces;
 
 /**
  *
@@ -100,7 +102,8 @@ public class permisoMaController implements Serializable {
     public void guardar() {
         FacesMessage ms = null;
         try {
-            if (p.getPermisosPK().getPermisoFechaInicio().before(new SimpleDateFormat("dd/mm/yyyy").parse(new SimpleDateFormat("dd/mm/yyyy").format(new Date())))) {
+            Date actual = new SimpleDateFormat("dd/MM/yyyy").parse(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
+            if (p.getPermisosPK().getPermisoFechaInicio().before(actual)) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
                         "Error en la fecha de inicio del permiso",
                         "No debe seleccionar una fecha para el inicio del periodo del permiso anterior a la actual."));
@@ -111,63 +114,34 @@ public class permisoMaController implements Serializable {
                         "No debe seleccionar una fecha para el final del periodo del permiso anterior a la fecha en la que inicia éste."));
                 p.setPermisoFechafin(p.getPermisosPK().getPermisoFechaInicio());
             } else {
+                mensaje x;
                 p.getPermisosPK().setTipoPermiso(p.getTipoPermiso1().getIdtipoPermiso());
                 p.setPermisosSolicitante(usuario);
                 p.setPermisosMotivo(null);
                 p.getPermisosPK().setIpPersona(usuario.getIdpersona());
                 p.setPermisosEstado("0");
                 pfl.create(p);
-                ms = new FacesMessage(FacesMessage.SEVERITY_INFO, "Solicitud exitosa",
-                        "Su permiso se ha solicitado para entre las fechas: "
-                        + (new SimpleDateFormat("dd/mm/yyyy").format(p.getPermisosPK().getPermisoFechaInicio())) + " y "
-                        + (new SimpleDateFormat("dd/mm/yyyy").format(p.getPermisoFechafin())));
-                mensaje x = new mensaje(0, usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
+                x = new mensaje(usuario.getIdpersona(), usuario.getIdpersona(), " ",
+                        new FacesMessage(FacesMessage.SEVERITY_INFO, "Solicitud exitosa",
+                                "Su permiso se ha solicitado para entre las fechas: "
+                                + (new SimpleDateFormat("dd/MM/yyyy").format(p.getPermisosPK().getPermisoFechaInicio())) + " y "
+                                + (new SimpleDateFormat("dd/MM/yyyy").format(p.getPermisoFechafin()))));
+                new Auxiliar().persistirNotificación(x, usuario, notFL, notificacion);
+                x = new mensaje(0, usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
                         + " ha solicitado un nuevo permiso.",
                         "Solicitud de permiso nueva", FacesMessage.SEVERITY_INFO, usuario.getIdpersona(),
                         "tp¿¿" + (usuario.getTipoPersona().getIdtipoPersona() == 4 ? 3 : 2));
                 TipoPersona tp = tipoPersonaFL.find(usuario.getTipoPersona().getIdtipoPersona() == 4 ? 3 : 2);
-                tp.getPersonaList().stream().map((t) -> {
-                    x.setDestinatario(t.getIdpersona());
-                    return t;
-                }).map((_item) -> {
-                    sendMessage(x.toString());
-                    return _item;
-                }).forEachOrdered((_item) -> {
-                    persistirNotificación(x);
-                });
-                tp.getDelagacionCargoList().stream().map((dl) -> {
-                    x.setDestinatario(dl.getIdpersona().getIdpersona());
-                    return dl;
-                }).map((_item) -> {
-                    sendMessage(x.toString());
-                    return _item;
-                }).forEachOrdered((_item) -> {
-                    persistirNotificación(x);
-                });
-                tp.getCargoList().forEach((g) -> {
-                    g.getMaestoCargoList().stream().map((mg) -> {
-                        x.setDestinatario(mg.getMaestoCargoPK().getIdMaesto());
-                        return mg;
-                    }).map((_item) -> {
-                        sendMessage(x.toString());
-                        return _item;
-                    }).forEachOrdered((_item) -> {
-                        persistirNotificación(x);
-                    });
-                });
-            }
-        } catch (Exception e) {
-            ms = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage());
-            FacesContext.getCurrentInstance().addMessage(null, ms);
-        } finally {
-            try {
-                FacesContext.getCurrentInstance().getExternalContext().redirect("permisoM.intex");
-            } catch (IOException ex) {
+                new Auxiliar().persistirNotificación(x,
+                        new Auxiliar().getPersonasParaNotificar(tp), notFL, notificacion);
                 init();
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
-                        FacesMessage.SEVERITY_FATAL, "Error Desconocido", ex.getMessage() == null ? "Error desconocido al intentar guardar"
-                        : ex.getMessage()));
             }
+            PrimeFaces.current().ajax().update(":form", "form0:msgs");
+        } catch (Exception e) {
+            init();
+            ms = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage());
+            FacesContext.getCurrentInstance().addMessage("form0:msgs", ms);
+            PrimeFaces.current().ajax().update(":form", "form0:msgs");
         }
     }
 

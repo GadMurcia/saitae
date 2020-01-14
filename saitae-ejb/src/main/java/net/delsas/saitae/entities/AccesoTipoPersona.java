@@ -30,6 +30,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "AccesoTipoPersona.findByIdTipoPersona", query = "SELECT a FROM AccesoTipoPersona a WHERE a.accesoTipoPersonaPK.idTipoPersona = :idTipoPersona")
     , @NamedQuery(name = "AccesoTipoPersona.findByAccesoTipoPersonaComentario", query = "SELECT a FROM AccesoTipoPersona a WHERE a.accesoTipoPersonaComentario = :accesoTipoPersonaComentario")
     , @NamedQuery(name = "AccesoTipoPersona.findTipoPersonaByAccesoUrl", query = "SELECT a.tipoPersona FROM AccesoTipoPersona a WHERE a.accesoTipoPersonaPK.idacceso = :idacceso")
+    , @NamedQuery(name = "AccesoTipoPersona.findAccesoByIdTipoPersona", query = "SELECT DISTINCT a.acceso FROM AccesoTipoPersona a WHERE a.accesoTipoPersonaPK.idTipoPersona = :idTipoPersona")
 })
 public class AccesoTipoPersona implements Serializable {
 
@@ -113,5 +114,5 @@ public class AccesoTipoPersona implements Serializable {
     public String toString() {
         return "net.delsas.saitae.entities.AccesoTipoPersona[ accesoTipoPersonaPK=" + accesoTipoPersonaPK + " ]";
     }
-    
+
 }

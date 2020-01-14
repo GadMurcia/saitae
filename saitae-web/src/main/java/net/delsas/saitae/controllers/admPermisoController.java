@@ -248,7 +248,8 @@ public class admPermisoController implements Serializable {
                 + (w == 1 ? "aceptado" : (w == 2 ? "rechazado" : "")));
         FacesContext.getCurrentInstance().addMessage(null, m);
         mensaje x = new mensaje(solc.getPermisosPK().getIpPersona(), usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
-                + " ha " + (w == 1 ? "aceptado" : "rechazado") + " su solicitud de permiso ",
+                + " ha " + (w == 1 ? "aceptado" : "rechazado") + " su solicitud de permiso. "
+                + (w == 2 ? "Motivo del rechazo: " + getComentarioSolc() : ""),
                 (w == 1 ? "Aceptación" : "Rechado") + " de permiso",
                 FacesMessage.SEVERITY_INFO, usuario.getIdpersona(), "permiso<form");
 
@@ -399,16 +400,16 @@ public class admPermisoController implements Serializable {
     }
 
     public String getComentarioAcep() {
-        return acep.getPermisosComentario() == null ? " " : acep.getPermisosComentario().split("¿¿")[3];
+        return acep.getPermisosComentario() == null ? "" : acep.getPermisosComentario().split("¿¿")[3];
     }
 
     public void setComentarioSolc(String comentario) {
-        String[] f = solc.getPermisosComentario() != null ? acep.getPermisosComentario().split("¿¿") : new String[]{" ", " ", " ", " "};
+        String[] f = solc.getPermisosComentario() != null ? acep.getPermisosComentario().split("¿¿") : new String[]{"", "", "", ""};
         solc.setPermisosComentario(f[0] + "¿¿" + f[1] + "¿¿" + f[2] + "¿¿" + comentario);
     }
 
     public String getComentarioSolc() {
-        return solc.getPermisosComentario() == null ? " " : acep.getPermisosComentario().split("¿¿")[3];
+        return solc.getPermisosComentario() == null ? "" : solc.getPermisosComentario().split("¿¿")[3];
     }
 
     public void setComentario(String comentario) {

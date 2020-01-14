@@ -6,6 +6,7 @@
 package net.delsas.saitae.entities;
 
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -144,31 +145,62 @@ public class EntregaUtiles implements Serializable {
 
     public void setIdRepresentante(Estudiante idRepresentante) {
         this.idRepresentante = idRepresentante;
-    }
+    }    
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (entregaUtilesPK != null ? entregaUtilesPK.hashCode() : 0);
+        int hash = 7;
+        hash = 67 * hash + Objects.hashCode(this.entregaUtilesPK);
+        hash = 67 * hash + (this.zapatos ? 1 : 0);
+        hash = 67 * hash + (this.uniforme ? 1 : 0);
+        hash = 67 * hash + (this.utiles ? 1 : 0);
+        hash = 67 * hash + Objects.hashCode(this.comentario);
+        hash = 67 * hash + Objects.hashCode(this.estudiante);
+        hash = 67 * hash + Objects.hashCode(this.idEntregante);
+        hash = 67 * hash + Objects.hashCode(this.idRepresentante);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof EntregaUtiles)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        EntregaUtiles other = (EntregaUtiles) object;
-        if ((this.entregaUtilesPK == null && other.entregaUtilesPK != null) || (this.entregaUtilesPK != null && !this.entregaUtilesPK.equals(other.entregaUtilesPK))) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
-        return true;
+        final EntregaUtiles other = (EntregaUtiles) obj;
+        if (this.zapatos != other.zapatos) {
+            return false;
+        }
+        if (this.uniforme != other.uniforme) {
+            return false;
+        }
+        if (this.utiles != other.utiles) {
+            return false;
+        }
+        if (!Objects.equals(this.comentario, other.comentario)) {
+            return false;
+        }
+        if (!Objects.equals(this.entregaUtilesPK, other.entregaUtilesPK)) {
+            return false;
+        }
+        if (!Objects.equals(this.estudiante, other.estudiante)) {
+            return false;
+        }
+        if (!Objects.equals(this.idEntregante, other.idEntregante)) {
+            return false;
+        }
+        return Objects.equals(this.idRepresentante, other.idRepresentante);
     }
 
     @Override
     public String toString() {
-        return "net.delsas.saitae.entities.EntregaUtiles[ entregaUtilesPK=" + entregaUtilesPK + " ]";
+        return "EntregaUtiles{" + "entregaUtilesPK=" + entregaUtilesPK + ", estudiante=" + estudiante + '}';
     }
+    
     
 }

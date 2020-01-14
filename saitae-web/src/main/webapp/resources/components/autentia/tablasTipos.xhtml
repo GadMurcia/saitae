@@ -17,15 +17,19 @@
 
     <!-- IMPLEMENTATION -->
     <cc:implementation>
-        <p:dataTable id="#{cc.attrs.NombreTabla}" var="z" value="#{cc.attrs.Lista}" editable="true" 
-                     widgetVar="#{cc.attrs.NombreTabla}1" styleClass="tabla"
+        <p:dataTable id="#{cc.attrs.NombreTabla}" var="z" 
+                     value="#{cc.attrs.Lista}" editable="true" 
+                     widgetVar="#{cc.attrs.NombreTabla}1" 
+                     styleClass="tabla"
                      emptyMessage="Sin registros aún.">
             <f:facet name="header">
                 Administración de #{cc.attrs.NombreTabla}
             </f:facet>
 
-            <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" update=":form:msgs form:tw:zona" />
-            <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" update=":form:msgs" />
+            <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" 
+                    update=":form:msgs #{cc.attrs.NombreTabla}" />
+            <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" 
+                    update=":form:msgs #{cc.attrs.NombreTabla}" />
 
             <p:column headerText="Id" style="width: 10px">
                 <h:outputText value="#{cc.attrs.zid}"/>
@@ -41,15 +45,10 @@
             <p:column style="width:35px">
                 <p:rowEditor />
             </p:column>
-        </p:dataTable> 
-        <div class="ui-g">
-            <div class="ui-g-12">
-                <p:commandButton value="+" styleClass="ui-priority-primary" 
-                                 process="@this" update=":form0:msgs"
-                                 action="#{tipoController.onAddNew(cc.attrs.NombreTabla)}" 
-                                 oncomplete="PF('#{cc.attrs.NombreTabla}1').addRow();"
-                                 title="Agregar #{cc.attrs.textoAgregar}."/>
-            </div>
-        </div>
+        </p:dataTable>
+        <p:commandButton value="+" styleClass="ui-priority-primary" 
+                         process="@this" update=":form0:msgs #{cc.attrs.NombreTabla}"
+                         action="#{tipoController.onAddNew(cc.attrs.NombreTabla)}"
+                         title="Agregar #{cc.attrs.textoAgregar}."/>
     </cc:implementation>
 </html>

@@ -55,19 +55,15 @@
                                 <p:column style="width:35px">
                                     <p:rowEditor />
                                 </p:column>
-                            </p:dataTable> 
-                            <div class="ui-g">
-                                <div class="ui-g-12">
-                                    <p:commandButton value="+" styleClass="ui-priority-primary" 
-                                                     process="@this" update=":form:msgs"
-                                                     action="#{tipoController.onAddNew('zona')}" 
-                                                     oncomplete="PF('zona1').addRow();"
-                                                     title="Agregar nueva Zona."/>
-                                </div>
-                            </div>
+                            </p:dataTable>
+                            <p:commandButton value="+" styleClass="ui-priority-primary" 
+                                             process="@this" update=":form:msgs zona"
+                                             action="#{tipoController.onAddNew('zona')}"
+                                             title="Agregar nueva Zona."/>
                         </p:tab>
                         <p:tab title="Aulas">
-                            <p:dataTable id="aula" var="a" value="#{tipoController.aulas}" editable="true" 
+                            <p:dataTable id="aula" var="a" value="#{tipoController.aulas}" 
+                                         editable="true" 
                                          widgetVar="aula" >
                                 <f:facet name="header">
                                     Administración de Aulas
@@ -103,14 +99,10 @@
                                     <p:rowEditor />
                                 </p:column>
                             </p:dataTable>
-                            <div class="ui-g">
-                                <div class="ui-g-12">
-                                    <p:commandButton value="Agregar Nuevo" styleClass="ui-priority-primary" 
-                                                     process="@this" update=":form0:msgs"
-                                                     action="#{tipoController.onAddNew('aula')}" 
-                                                     oncomplete="PF('aula').addRow();"/>
-                                </div>
-                            </div>
+                            <p:commandButton value="Agregar Nuevo" 
+                                             styleClass="ui-priority-primary" 
+                                             process="@this" update=":form0:msgs aula"
+                                             action="#{tipoController.onAddNew('aula')}"/>
                         </p:tab>
                         <p:tab title="Tipo Nombramiento">
                             <p:dataTable id="nombramiento" var="nom" value="#{tipoController.nombramientos}" editable="true" 
@@ -137,15 +129,10 @@
                                     <p:rowEditor />
                                 </p:column>
                             </p:dataTable> 
-                            <div class="ui-g">
-                                <div class="ui-g-12">
-                                    <p:commandButton value="+" styleClass="ui-priority-primary" 
-                                                     process="@this" update=":form:msgs"
-                                                     action="#{tipoController.onAddNew('nombramiento')}" 
-                                                     oncomplete="PF('nombra1').addRow();" 
-                                                     title="Agregar nuevo tipo de Nombramiento."/>
-                                </div>
-                            </div>
+                            <p:commandButton value="+" styleClass="ui-priority-primary" 
+                                             process="@this" update=":form:msgs nombramiento"
+                                             action="#{tipoController.onAddNew('nombramiento')}"
+                                             title="Agregar nuevo tipo de Nombramiento."/>
                         </p:tab>
                         <p:tab title="Tipo de Financionamiento">
                             <t:tablasTipos id="tabla1" Lista="#{tipoController.financiamientos}" 
@@ -198,24 +185,20 @@
                                     <p:rowEditor />
                                 </p:column>
                             </p:dataTable>
-                            <div class="ui-g">
-                                <div class="ui-g-12">
-                                    <p:commandButton value="+" styleClass="ui-priority-primary" 
-                                                     process="@this" update=":form0:msgs"
-                                                     action="#{tipoController.onAddNew('cargo1')}" 
-                                                     oncomplete="PF('cargo0').addRow();"
-                                                     title="Agregar nuevo autor."/>
-                                </div>
-                            </div>
+                            <p:commandButton value="+" styleClass="ui-priority-primary" 
+                                             process="@this" update=":form0:msgs cargo1"
+                                             action="#{tipoController.onAddNew('cargo1')}" 
+                                             title="Agregar nuevo autor."/>
                         </p:tab>
                         <p:tab title="Tipo de Especialidades">
                             <t:tablasTipos id="especialidades" Lista="#{tipoController.tipoE}" 
-                                           NombreTabla="especialidades" 
-                                           zid="#{z.idtipoEspecialidades}" znombre="#{z.tipoEspecialidadesNombre}"/>
+                                           NombreTabla="especialidades" textoAgregar=" tipo de especialdades"
+                                           zid="#{z.idtipoEspecialidades}" 
+                                           znombre="#{z.tipoEspecialidadesNombre}"/>
                         </p:tab>
                         <p:tab title="Tipo de Sueldos">
                             <t:tablasTipos id="sueldos" Lista="#{tipoController.tipoS}" 
-                                           NombreTabla="sueldos" 
+                                           NombreTabla="sueldos" textoAgregar=" tipo de sueldos"
                                            zid="#{z.idtipoSueldo}" znombre="#{z.tipoSueldoNombre}"/>
                         </p:tab>
                     </p:tabView>

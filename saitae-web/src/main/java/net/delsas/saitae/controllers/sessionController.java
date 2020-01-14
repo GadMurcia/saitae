@@ -22,7 +22,10 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import net.delsas.saitae.ax.Auxiliar;
 import net.delsas.saitae.ax.mensaje;
+import net.delsas.saitae.beans.AccesoFacadeLocal;
+import net.delsas.saitae.beans.AccesoTipoPersonaFacadeLocal;
 import net.delsas.saitae.beans.DelagacionCargoFacadeLocal;
 import net.delsas.saitae.beans.EstudianteFacadeLocal;
 import net.delsas.saitae.beans.MaestoCargoFacadeLocal;
@@ -34,6 +37,7 @@ import net.delsas.saitae.entities.Acceso;
 import net.delsas.saitae.entities.DelagacionCargo;
 import net.delsas.saitae.entities.Notificaciones;
 import net.delsas.saitae.entities.Persona;
+import net.delsas.saitae.entities.TipoPersona;
 import org.primefaces.PrimeFaces;
 import org.primefaces.component.outputlabel.OutputLabel;
 import org.primefaces.component.panel.Panel;
@@ -68,7 +72,8 @@ public class sessionController implements Serializable {
     private DelagacionCargoFacadeLocal dcFL;
     @EJB
     private TipoPersonaFacadeLocal tipopFL;
-
+    @EJB
+    private AccesoTipoPersonaFacadeLocal atpFL;
     //para notificaciones
     @EJB
     private NotificacionesFacadeLocal notiFL;
@@ -163,21 +168,12 @@ public class sessionController implements Serializable {
         mi.setUrl("perfil.intex");
         mm.addElement(mi);
         List<Acceso> menusDisponibles = new ArrayList<>();
-        us.getTipoPersona().getAccesoTipoPersonaList().stream().filter((atp) -> (!menusDisponibles.contains(atp.getAcceso()))).forEachOrdered((atp) -> {
-            menusDisponibles.add(atp.getAcceso());
-        });
-        us.getDelagacionCargoList().forEach((DelagacionCargo dc) -> {
-            dc.getIdTipoPersona().getAccesoTipoPersonaList().stream().filter((atp) -> (!menusDisponibles.contains(atp.getAcceso()))).forEachOrdered((atp) -> {
-                menusDisponibles.add(atp.getAcceso());
+        List<Integer> tps = new Auxiliar().getTiposPersonas(us);
+        tps.stream().map((i) -> atpFL.findAccesoByIdTipoPersona(i)).forEachOrdered((actps) -> {
+            actps.stream().filter((a) -> (!menusDisponibles.contains(a))).forEachOrdered((a) -> {
+                menusDisponibles.add(a);
             });
         });
-        if (us.getMaestro() != null) {
-            us.getMaestro().getMaestoCargoList().forEach((mc) -> {
-                mc.getCargo().getCargoTipoPersona().getAccesoTipoPersonaList().stream().filter((atp) -> (!menusDisponibles.contains(atp.getAcceso()))).forEachOrdered((atp) -> {
-                    menusDisponibles.add(atp.getAcceso());
-                });
-            });
-        }
         menusDisponibles.stream().filter((a) -> (a.getAccesoIndice() == null)).forEachOrdered((a) -> {
             mm.addElement(menu3(a, menusDisponibles));
         });

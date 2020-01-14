@@ -7,8 +7,8 @@
     <ui:define name="content">
         <h:form id="form1">
             <p:growl id="msgs" showDetail="true" />
-            <h:panelGrid columns="1" cellpadding="2">
-                <h:panelGrid columns="2" cellspacing="5" >
+            <h:panelGrid columns="1">
+                <h:panelGrid columns="2" cellspacing="2" >
                     <p:outputLabel value="Alumno:" for="aut" />
                     <p:autoComplete style="width: 190px" id="aut" 
                                     value="#{contribucionesController.nie}"  
@@ -21,9 +21,9 @@
                 </h:panelGrid>     
                 <h:panelGrid columns="2" cellspacing="10" >
                     <p:outputLabel value="Alumno:"/>
-                    <p:outputLabel id="alumno" value="#{contribucionesController.p.personaNombre} #{contribucionesController.p.personaApellido}" />
+                    <h:outputText id="alumno" value="#{contribucionesController.p.personaNombre} #{contribucionesController.p.personaApellido}" />
                     <p:outputLabel value="Grado:"/>
-                    <p:outputLabel id="grado" value="#{contribucionesController.gradoAlumno}" />
+                    <h:outputText id="grado" value="#{contribucionesController.gradoAlumno}" />
                 </h:panelGrid>
                 <h:panelGrid columns="4" cellspacing="10" >
 

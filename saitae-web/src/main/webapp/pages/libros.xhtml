@@ -54,15 +54,10 @@
                             <p:rowEditor />
                         </p:column>
                     </p:dataTable>
-                    <div class="ui-g">
-                        <div class="ui-g-12">
-                            <p:commandButton value="+" styleClass="ui-priority-primary" 
-                                             process="@this" update=":form0:msgs"
-                                             action="#{tipoController.onAddNew('autor')}" 
-                                             oncomplete="PF('autor1').addRow();"
-                                             title="Agregar nuevo autor."/>
-                        </div>
-                    </div>
+                    <p:commandButton value="+" styleClass="ui-priority-primary" 
+                                     process="@this" update=":form0:msgs autor"
+                                     action="#{tipoController.onAddNew('autor')}" 
+                                     title="Agregar nuevo autor."/>
                 </p:tab>
 
                 <p:tab title="categoria">
@@ -95,15 +90,10 @@
                             <p:rowEditor />
                         </p:column>
                     </p:dataTable>
-                    <div class="ui-g">
-                        <div class="ui-g-12">
-                            <p:commandButton value="+" styleClass="ui-priority-primary" 
-                                             process="@this" update=":form0:msgs"
-                                             action="#{tipoController.onAddNew('categoria')}" 
-                                             oncomplete="PF('categoria0').addRow();"
-                                             title="Agregar nueva categoria."/>
-                        </div>
-                    </div>
+                    <p:commandButton value="+" styleClass="ui-priority-primary" 
+                                     update=":form0:msgs categoria"
+                                     actionListener="#{tipoController.onAddNew('categoria')}" 
+                                     title="Agregar nueva categoria."/>
                 </p:tab>
                 <p:tab title="editorial">
                     <p:dataTable id="editorial" var="e" value="#{tipoController.editorial}" editable="true" 
@@ -131,15 +121,10 @@
                             <p:rowEditor />
                         </p:column>
                     </p:dataTable>
-                    <div class="ui-g">
-                        <div class="ui-g-12">
-                            <p:commandButton value="+" styleClass="ui-priority-primary" 
-                                             process="@this" update=":form0:msgs"
-                                             action="#{tipoController.onAddNew('editorial')}" 
-                                             oncomplete="PF('editorial1').addRow();"
-                                             title="Agregar nueva editorial."/>
-                        </div>
-                    </div>
+                    <p:commandButton value="+" styleClass="ui-priority-primary" 
+                                     process="@this" update=":form0:msgs editorial"
+                                     action="#{tipoController.onAddNew('editorial')}" 
+                                     title="Agregar nueva editorial."/>
                 </p:tab>
             </p:tabView>
         </h:form>

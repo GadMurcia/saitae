@@ -70,24 +70,28 @@
                             </p:autoComplete>
 
                             <p:outputLabel value="Nombres: "/>
-                            <p:outputLabel id="nom" value="#{matriculaController.buscado.personaNombre}"/>
+                            <h:outputText id="nom" value="#{matriculaController.buscado.personaNombre}"/>
 
                             <p:outputLabel value="Apellidos: "/>
-                            <p:outputLabel id="ape" value="#{matriculaController.buscado.personaApellido}"/>
+                            <h:outputText id="ape" value="#{matriculaController.buscado.personaApellido}"/>
                             
                             <p:outputLabel for="console5" value="Modalidad de bachillerato a la que aplica: " />
-                            <p:selectOneMenu id="console5" value="#{matriculaController.seccion.gradoModalidad}"  required="true"
-                                             style="width:190px" title="Seleccione la modalidad de bachillerato" disabled="true">
+                            <p:selectOneMenu id="console5" value="#{matriculaController.seccion.gradoModalidad}"  
+                                             required="true"
+                                             style="width:190px" title="Seleccione la modalidad de bachillerato" 
+                                             disabled="false">
                                 <f:selectItems value="#{matriculaController.modalidades}" />
-                                <p:ajax update="console6 secc"/>
+                                <p:ajax event="change" listener="#{matriculaController.onBlour}" 
+                                        update="console6 secc summit1"/>
                             </p:selectOneMenu>
 
                             <p:outputLabel for="console6" value="Año de bachillerato al que aplica: " />
                             <p:selectOneMenu id="console6" value="#{matriculaController.seccion.idgrado}"  required="true"
-                                             style="width:190px" disabled="true"
+                                             style="width:190px" disabled="false"
                                              requiredMessage="Debe elegir un año de bachillerato.">
                                 <f:selectItems value="#{matriculaController.niveles}"/>
-                                <p:ajax update="secc"/>
+                                <p:ajax event="change" listener="#{matriculaController.onBlour}" 
+                                         update="secc summit1"/>
                             </p:selectOneMenu>
 
                             <p:outputLabel for="secc" value="Sección a la que aplica: " />
@@ -95,7 +99,10 @@
                                              style="width:190px" 
                                              requiredMessage="Debe elegir una sección.">
                                 <f:validateLength minimum="1"/>
+                                <f:selectItem itemValue="" itemLabel="Seleccione" noSelectionOption="true"/>
                                 <f:selectItems value="#{matriculaController.seccionesCambio}"/>
+                                <p:ajax event="change" listener="#{matriculaController.onBlour}" 
+                                         update="summit1"/>
                             </p:selectOneMenu>
                             <p:column/>
                             <p:commandButton id="summit1" value="Guardar cambios" 

@@ -39,4 +39,11 @@ public interface AccesoTipoPersonaFacadeLocal {
      */
     public List<TipoPersona> findTipoPersonaPermitidos(Acceso a);
     
+    /**
+     * Devuelve una lista de accesos para el tipo de personas identificado pir el id proporcionado.
+     * @param idTipoPersona
+     * @return java.util.List net.delsas.saitae.entities.Acceso
+     */
+    public List<Acceso> findAccesoByIdTipoPersona(Integer idTipoPersona);
+    
 }

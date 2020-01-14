@@ -341,7 +341,7 @@ public class TipoController implements Serializable {
             if (editarDia > 0) {
                 diasEstudioFL.remove(diasEstudioFL.find(editarDia));
             }
-            diasEstudioFL.edit(diasSelected);
+            diasEstudioFL.create(diasSelected);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
                     "Agregación exitosa.",
                     "La agregación se llevó a cabo con éxito."));
@@ -358,59 +358,108 @@ public class TipoController implements Serializable {
         // Add one new car to the table:
         switch (id) {
             case "recursos":
-                recursos.add(new TipoRecurso());
+                TipoRecurso tr = new TipoRecurso(0);
+                if (!recursos.contains(tr)) {
+                    recursos.add(tr);
+                }
                 break;
             case "permiso":
-                all.add(new TipoPermiso());
+                TipoPermiso tp = new TipoPermiso(0);
+                if (!all.contains(tp)) {
+                    all.add(tp);
+                }
                 break;
             case "cargo":
-                cargos.add(new TipoCargo());
+                TipoCargo tc = new TipoCargo(0);
+                if (!cargos.contains(tc)) {
+                    cargos.add(tc);
+                }
                 break;
             case "nombramiento":
-                nombramientos.add(new TipoNombramiento());
+                TipoNombramiento tn = new TipoNombramiento(0);
+                if (!nombramientos.contains(tn)) {
+                    nombramientos.add(tn);
+                }
                 break;
             case "zona":
-                zonas.add(new Zona());
+                Zona z = new Zona(0);
+                if (!zonas.contains(z)) {
+                    zonas.add(z);
+                }
                 break;
             case "reserva":
-                reservas.add(new TipoReserva());
+                TipoReserva tre = new TipoReserva(0);
+                if (!reservas.contains(tre)) {
+                    reservas.add(tre);
+                }
                 break;
             case "tipomateria":
-                tipoMaterias.add(new TipoMateria());
+                TipoMateria tm = new TipoMateria(0);
+                if (!tipoMaterias.contains(tm)) {
+                    tipoMaterias.add(tm);
+                }
                 break;
             case "materia":
-                Materia m = new Materia();
+                Materia m = new Materia(0);
                 m.setTipoMateria(new TipoMateria(0));
-                materias.add(m);
+                if (!materias.contains(m)) {
+                    materias.add(m);
+                }
                 break;
             case "aula":
-                Aula a = new Aula();
+                Aula a = new Aula(0);
                 a.setZonaAula(new Zona(0));
-                aulas.add(a);
+                if (!aulas.contains(a)) {
+                    aulas.add(a);
+                }
                 break;
             case "autor":
-                autor.add(new Autor());
+                Autor au = new Autor(0);
+                if (!autor.contains(au)) {
+                    autor.add(au);
+                }
                 break;
             case "cargo1":
-                cargo.add(new Cargo());
+                Cargo c = new Cargo(0);
+                if (!cargo.contains(c)) {
+                    cargo.add(c);
+                }
                 break;
             case "categoria":
-                categoria.add(new Categoria(0));
+                Categoria ca = new Categoria(0);
+                if (!categoria.contains(ca)) {
+                    categoria.add(ca);
+                }
                 break;
             case "editorial":
-                editorial.add(new Editorial());
+                Editorial e = new Editorial(0);
+                if (!editorial.contains(e)) {
+                    editorial.add(e);
+                }
                 break;
             case "horario":
-                horario.add(new Horario(0));
+                Horario h = new Horario(0);
+                if (!horario.contains(h)) {
+                    horario.add(h);
+                }
                 break;
             case "financiamiento":
-                financiamientos.add(new Financiamiento(0));
+                Financiamiento f = new Financiamiento(0);
+                if (!financiamientos.contains(f)) {
+                    financiamientos.add(f);
+                }
                 break;
             case "especialidades":
-                tipoE.add(new TipoEspecialidades(0));
+                TipoEspecialidades te = new TipoEspecialidades(0);
+                if (!tipoE.contains(te)) {
+                    tipoE.add(te);
+                }
                 break;
             case "sueldos":
-                tipoS.add(new TipoSueldos(0));
+                TipoSueldos ts = new TipoSueldos(0);
+                if (!tipoS.contains(ts)) {
+                    tipoS.add(ts);
+                }
                 break;
             case "grado":
                 Grado g = new Grado(new GradoPK(0, "", "",
@@ -418,13 +467,14 @@ public class TipoController implements Serializable {
                 g.setAulaGrado(new Aula(0));
                 g.getAulaGrado().setZonaAula(new Zona(0, ""));
                 g.setGradoMaestroGuia(new Auxiliar().getMaestro().getMaestro());
-                grados.add(g);
+                if (!grados.contains(g)) {
+                    grados.add(g);
+                }
                 break;
             default:
                 System.out.println(id);
 
         }
-
         FacesMessage msg = new FacesMessage("Campos Nuevos agregados.",
                 "Edite los campos para que las modificaciones sean permenentes");
         FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -666,21 +716,21 @@ public class TipoController implements Serializable {
                 break;
             case "financiamiento":
                 Financiamiento f = (Financiamiento) event.getObject();
-                if (f.getFinanciamientoNombre() == null | f.getFinanciamientoNombre().isEmpty()) {
+                if (f.getFinanciamientoNombre() == null || f.getFinanciamientoNombre().isEmpty()) {
                     financiamientos.remove(f);
                 }
                 mensaje = "Financiamiento";
                 break;
             case "especialidades":
                 TipoEspecialidades es = (TipoEspecialidades) event.getObject();
-                if (es.getTipoEspecialidadesNombre() == null | es.getTipoEspecialidadesNombre().isEmpty()) {
+                if (es.getTipoEspecialidadesNombre() == null || es.getTipoEspecialidadesNombre().isEmpty()) {
                     tipoE.remove(es);
                 }
                 mensaje = "Tipo De Especialidades";
                 break;
             case "sueldos":
                 TipoSueldos s = (TipoSueldos) event.getObject();
-                if (s.getTipoSueldoNombre() == null | s.getTipoSueldoNombre().isEmpty()) {
+                if (s.getTipoSueldoNombre() == null || s.getTipoSueldoNombre().isEmpty()) {
                     tipoS.remove(s);
                 }
                 mensaje = "Tipo De Sueldo";
@@ -697,7 +747,7 @@ public class TipoController implements Serializable {
                 System.out.println(id);
         }
         init();
-        PrimeFaces.current().ajax().update(id);
+        PrimeFaces.current().ajax().update(event.getComponent().getClientId());
         FacesMessage msg = new FacesMessage("Edición cancelada", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
@@ -1038,6 +1088,18 @@ public class TipoController implements Serializable {
     public void sendMessage(String message) {
         notificacion.send(message);
         tipopp.send(message);
+    }
+
+    public List<Integer> getAñosGrados(Grado g) {
+        List<Integer> i = new ArrayList<>();
+        Integer a = getAño();
+        if (a > g.getGradoPK().getGradoAño()) {
+            a = g.getGradoPK().getGradoAño();
+        }
+        for (int y = 0; y < 3; y++) {
+            i.add(a + y);
+        }
+        return i;
     }
 
     public Integer getAño() {

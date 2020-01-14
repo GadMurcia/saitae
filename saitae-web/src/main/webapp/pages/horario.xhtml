@@ -88,44 +88,48 @@
                 <p:growl id="growl" showDetail="true" life="15000" globalOnly="true"/>
                 <p:dataTable id="horario" var="h" value="#{horarioController.horario}" 
                              rowKey="#{h.mestroHorarioMateriasPK}" selectionMode="single"
-                             selection="#{horarioController.selected}"
+                             selection="#{horarioController.selected}" rows="6"
+                             paginator="true" paginatorAlwaysVisible="false" paginatorPosition="top"
                              emptyMessage="Sin registros aún.">
                     <p:ajax event="rowSelect" listener="#{horarioController.onRowSelect}" 
-                            update=":f1 :form"/>
+                            update="f1"/>
                     <f:facet name="header">
                         Horario Institucional
                     </f:facet>
-                    <p:column headerText="Día" 
-                              style="text-shadow: 1px 1px 8px white; color: black; width: 80px; background-color: ##{h.materia.materiaComentario}">
+                    <p:column headerText="Día"
+                              filterBy="#{h.diasEstudio.diasEstudioNombre}"
+                              filterMatchMode="contains">
                         #{h.diasEstudio.diasEstudioNombre}
                     </p:column>
-                    <p:column headerText="Hora" 
-                              style="text-shadow: 1px 1px 8px white; color: black; width: 180px; background-color: ##{h.materia.materiaComentario}">
+                    <p:column headerText="Hora" filterMatchMode="contains"
+                              filterBy="#{horarioController.getHora(h.horario.horaInicio)} - #{horarioController.getHora(h.horario.horaFin)}">
                         #{horarioController.getHora(h.horario.horaInicio)} - 
                         #{horarioController.getHora(h.horario.horaFin)}
                     </p:column>
-                    <p:column headerText="Materia" 
-                              style="text-shadow: 1px 1px 8px white; color: black; width: 120px; background-color: ##{h.materia.materiaComentario};">
+                    <p:column headerText="Materia" filterMatchMode="contains"
+                              filterBy="#{h.materia.materiaNombre}">
                         #{h.materia.materiaNombre}
                     </p:column>
-                    <p:column headerText="Grado" 
-                              style="text-shadow: 1px 1px 8px white; color: black; background-color: ##{h.materia.materiaComentario}">
+                    <p:column headerText="Grado" filterMatchMode="contains"
+                              filterBy="#{horarioController.getGrado(h.grado.gradoPK)}">
                         #{horarioController.getGrado(h.grado.gradoPK)}
                     </p:column>
-                    <p:column headerText="Maestro" 
-                              style="text-shadow: 1px 1px 8px white; color: black; background-color: ##{h.materia.materiaComentario}"> 
+                    <p:column headerText="Maestro" filterMatchMode="contains" 
+                              filterBy="#{h.maestro.persona.personaNombre.split(' ')[0]} #{h.maestro.persona.personaApellido.split(' ')[0]}">
                         #{h.maestro.persona.personaNombre.split(" ")[0]} 
                         #{h.maestro.persona.personaApellido.split(" ")[0]}
                     </p:column>
                 </p:dataTable>
-                <p:commandButton title="Agregar nuevo" icon="pi pi-plus-circle" update=":form :f1"
+                <p:commandButton title="Agregar nuevo" icon="pi pi-plus-circle" 
+                                 update=":form :f1"
                                  actionListener="#{horarioController.nuevo()}"
                                  oncomplete="PF('Dhorario').show()"/>
                 <p:contextMenu id="ctxm" for="horario">
-                    <p:menuitem value="Agregar nuevo" icon="pi pi-plus-circle" update=":form :f1"
+                    <p:menuitem value="Agregar nuevo" icon="pi pi-plus-circle" 
+                                update=":form :f1"
                                 actionListener="#{horarioController.nuevo()}"
                                 oncomplete="PF('Dhorario').show()"/>
-                    <p:menuitem value="Editar" update="f1" icon="fa fa-edit"
+                    <p:menuitem value="Editar" icon="fa fa-edit"
                                 actionListener="#{horarioController.editar()}"
                                 oncomplete="PF('Dhorario').show()" />
                     <p:menuitem value="Eliminar" icon="pi pi-minus-circle" 

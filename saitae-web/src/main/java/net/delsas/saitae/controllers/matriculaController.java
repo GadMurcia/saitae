@@ -29,6 +29,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -81,8 +82,8 @@ public class matriculaController implements Serializable {
     public void init() {
         FacesContext context = FacesContext.getCurrentInstance();
         usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
-        List<Integer> tps= new Auxiliar().getTiposPersonas(usuario);
-        boolean r= (tps.contains(1) || tps.contains(2) || tps.contains(13));
+        List<Integer> tps = new Auxiliar().getTiposPersonas(usuario);
+        boolean r = (tps.contains(1) || tps.contains(2) || tps.contains(13));
         if (!r) {
             context.getExternalContext().getSessionMap().put("mensaje", new FacesMessage(FacesMessage.SEVERITY_FATAL,
                     "Falla!", "Esa vista no le está permitida."));
@@ -125,9 +126,8 @@ public class matriculaController implements Serializable {
         matriculaFL.remove(mat);
         mat.setGrado(gradoFL.find(seccion));
         matriculaFL.create(mat);
-        matriculaFL.edit(mat);
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
-                "Cambio de sección exitoso!", "El estudiante" + buscado.getPersonaNombre() + " "
+                "Cambio de sección exitoso!", "El estudiante " + buscado.getPersonaNombre() + " "
                 + buscado.getPersonaApellido() + " ha sido cambiado a la sección "
                 + mat.getGrado().getGradoPK().getGradoSeccion()
                 + " del " + (mat.getGrado().getGradoPK().getIdgrado() == 1 ? " Primero "
@@ -295,8 +295,8 @@ public class matriculaController implements Serializable {
             setBuscado(personaFL.find(getBuscado().getIdpersona()));
             mat = matriculaFL.find(new MatriculaPK(buscado.getIdpersona(), getAño()));
             btnGuardarp2 = mat != null;
-            mat = mat == null ? new Matricula(0, 0) : mat;
-            seccion = mat.getGrado() != null ? mat.getGrado().getGradoPK() : new GradoPK(0, " ", " ", getAño());
+            mat = mat == null ? new Matricula(buscado.getIdpersona(), getAño()) : mat;
+            seccion = mat.getGrado() != null ? mat.getGrado().getGradoPK() : new GradoPK(0, "", "", getAño());
         } catch (Exception o) {
             System.out.println("Error en (new prueba()).onItemSelect: " + o.getMessage());
         }
@@ -393,7 +393,7 @@ public class matriculaController implements Serializable {
     public List<SelectItem> getNiveles() {
         List<SelectItem> it = new ArrayList<>();
         it.add(new SelectItem(" ", "Selecione"));
-        List<Integer> m = gradoFL.getIdPorAñoyModalidad(getAño(), mat.getGrado().getGradoPK().getGradoModalidad());
+        List<Integer> m = gradoFL.getIdPorAñoyModalidad(getAño(), seccion.getGradoModalidad());
         m.forEach((mo) -> {
             it.add(new SelectItem(mo, mo == 1 ? "Primero" : mo == 2 ? "Segundo" : mo == 3 ? "Tercero" : " "));
         });
@@ -402,8 +402,7 @@ public class matriculaController implements Serializable {
 
     public List<SelectItem> getSeccionesCambio() {
         List<SelectItem> it = new ArrayList<>();
-        it.add(new SelectItem(" ", "Selecione"));
-        List<String> m = gradoFL.getSeccionPorAñoModalidadyId(getAño(), mat.getGrado().getGradoPK().getGradoModalidad(), mat.getGrado().getGradoPK().getIdgrado());
+        List<String> m = gradoFL.getSeccionPorAñoModalidadyId(getAño(), seccion.getGradoModalidad(), seccion.getIdgrado());
         m.forEach((mo) -> {
             it.add(new SelectItem(mo, mo));
         });
@@ -424,5 +423,12 @@ public class matriculaController implements Serializable {
 
     public void setSeccion(GradoPK seccion) {
         this.seccion = seccion;
+    }
+
+    public void onBlour(AjaxBehaviorEvent e) {
+        System.out.println(e);
+        btnGuardarp2 = !(seccion.getGradoSeccion().isEmpty() || seccion.getGradoSeccion().equals(" "))
+                && getNiveles().size() > 1
+                && getModalidades().size() > 1;
     }
 }

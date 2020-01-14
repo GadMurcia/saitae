@@ -31,12 +31,19 @@ public class AccesoTipoPersonaFacade extends AbstractFacade<AccesoTipoPersona> i
     public AccesoTipoPersonaFacade() {
         super(AccesoTipoPersona.class);
     }
-    
+
     @Override
-    public List<TipoPersona> findTipoPersonaPermitidos(Acceso a){
+    public List<TipoPersona> findTipoPersonaPermitidos(Acceso a) {
         return em.createNamedQuery("AccesoTipoPersona.findTipoPersonaByAccesoUrl")
                 .setParameter("idacceso", a.getIdacceso())
                 .getResultList();
-}
+    }
     
+    @Override
+    public List<Acceso> findAccesoByIdTipoPersona(Integer idTipoPersona){
+        return em.createNamedQuery("AccesoTipoPersona.findAccesoByIdTipoPersona")
+                .setParameter("idTipoPersona", idTipoPersona)
+                .getResultList();
+    }
+
 }

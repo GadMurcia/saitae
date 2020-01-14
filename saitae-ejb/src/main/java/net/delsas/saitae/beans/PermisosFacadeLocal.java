@@ -44,4 +44,12 @@ public interface PermisosFacadeLocal {
      */
     public List<Permisos> findByPEPEs(String estado);
     
+    /**
+     * Devuelve una lista con los permisos solicitados por la 
+     * persona identificaa por el id proporcionado ordenados de forma ascendente por el estado del permiso.
+     * @param idPersona
+     * @return
+     */
+    public List<Permisos> findByIpPersona(Integer idPersona);
+    
 }
