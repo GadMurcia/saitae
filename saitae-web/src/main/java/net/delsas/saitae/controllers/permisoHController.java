@@ -16,6 +16,7 @@
  */
 package net.delsas.saitae.controllers;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
@@ -23,12 +24,20 @@ import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
+import net.delsas.saitae.ax.Auxiliar;
+import net.delsas.saitae.ax.mensaje;
+import net.delsas.saitae.beans.NotificacionesFacadeLocal;
 import net.delsas.saitae.beans.PermisosFacadeLocal;
 import net.delsas.saitae.entities.Permisos;
 import net.delsas.saitae.entities.Persona;
+import org.omnifaces.cdi.Push;
+import org.omnifaces.cdi.PushContext;
+import org.primefaces.PrimeFaces;
 
 /**
  *
@@ -44,14 +53,19 @@ public class permisoHController implements Serializable {
     private List<Permisos> permisos;
     private Permisos selected;
     private Persona usuario;
+    @EJB
+    private NotificacionesFacadeLocal notiFL;
+    @Inject
+    @Push
+    private PushContext notificacion;
 
     @PostConstruct
     public void init() {
         usuario = (Persona) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
-        permisos = psFL.findByIpPersona(usuario.getIdpersona());
     }
 
     public List<Permisos> getPermisos() {
+        permisos = psFL.findByIpPersona(usuario.getIdpersona());
         return Collections.unmodifiableList(permisos);
     }
 
@@ -75,12 +89,94 @@ public class permisoHController implements Serializable {
         } else {
             return new SimpleDateFormat("dd/MM/yyyy").format(d1) + " - " + new SimpleDateFormat("dd/MM/yyyy").format(d2);
         }
+    }
 
+    public void cancelarPermiso() {
+        if (selected != null) {
+            selected.setPermisosEstado("3");
+            psFL.edit(selected);
+            mensaje x = new mensaje(usuario.getIdpersona(), usuario.getIdpersona(), "permiso<form",
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Cancelación exitosa",
+                            "Ha cancelado la solicitud de permiso con fechas: "
+                            + getFechas(selected.getPermisosPK().getPermisoFechaInicio(), selected.getPermisoFechafin())
+                            + ". La razón del cancelamiento es: " + getRazonRechazo() + "."));
+            new Auxiliar().persistirNotificación(x, usuario, notiFL, notificacion);
+            PrimeFaces.current().ajax().update("form", "d1", "d2", "form0:msgs");
+            PrimeFaces.current().executeScript("PF('Dper1').hide(); PF('Dper2').hide();");
+        }
     }
 
     public String getEstado(String e) {
-        System.out.println(e);
-        return e == null ? "" : (e.equals("0") ? "Solicitado" : (e.equals("1") ? "Aceptado" : (e.equals("2") ? "Rechazado" : "????")));
+        return e == null ? ""
+                : (e.equals("0") ? "Solicitado"
+                : (e.equals("1") ? "Aceptado"
+                : (e.equals("2") ? "Rechazado"
+                : (e.equals("3") ? "Cancelado"
+                : "????"))));
+    }
+
+    public boolean isSolicitado() {
+        return selected == null ? false : selected.getPermisosEstado().equals("0");
+    }
+
+    public boolean getVerMotivo() {
+        return selected == null ? false : selected.getPersona().getTipoPersona().getIdtipoPersona().equals(8);
+    }
+
+    public boolean getEsRechazado() {
+        return selected == null ? false : selected.getPermisosEstado().equals("2");
+    }
+
+    public boolean isCancelado() {
+        return selected == null ? false : selected.getPermisosEstado().equals("3");
+    }
+
+    public boolean isVolverSolicitar() {
+        return (getEsRechazado() || isCancelado());
+    }
+
+    public void setRazonRechazo(String razonRechazo) {
+        String g[] = selected.getPermisosComentario().split("¿¿");
+        selected.setPermisosComentario(g[0] + "¿¿" + g[1] + "¿¿"
+                + (g.length >= 3 ? g[3] : "") + "¿¿" + razonRechazo);
+    }
+
+    public String getRazonRechazo() {
+        return (getEsRechazado() || isCancelado())
+                ? selected.getPermisosComentario().split("¿¿")[3] : "";
+    }
+
+    public boolean getGoceSueldo() {
+        return selected == null ? false : selected.getPermisosComentario().split("¿¿")[0].equals("1");
+    }
+
+    public boolean getLicenciasAnteriores() {
+        return selected == null ? false : selected.getPermisosComentario().split("¿¿")[1].equals("1");
+    }
+
+    public boolean getVerEditar() {
+        String e = selected == null ? "" : selected.getPermisosEstado();
+        return e.equals("0") || e.equals("2")|| e.equals("3");
+    }
+
+    public void verProyecto() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        try {
+            if (selected.getPermisosComentario().split("¿¿").length < 4) {
+                selected.setPermisosComentario(selected.getPermisosComentario() + " ");
+            }
+            context.getExternalContext().getSessionMap().put("permiso", selected);
+            context.getExternalContext().getSessionMap().put("editar", true);
+            context.getExternalContext().getSessionMap().put("ms",
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Redirección exitosa",
+                            "Ésta es la información del permiso "
+                            + "que usted estaba viendo."
+                            + " Modifique la información y vuelva a solicitarlo o "
+                            + "Actualice la página para solicitar uno diferente."));
+            String pagina = getVerMotivo() ? "permisoE" : "permisoM";
+            context.getExternalContext().redirect(pagina + ".intex");
+        } catch (IOException ex) {
+        }
     }
 
 }

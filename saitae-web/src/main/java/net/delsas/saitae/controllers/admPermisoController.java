@@ -38,9 +38,7 @@ import net.delsas.saitae.beans.MatriculaFacadeLocal;
 import net.delsas.saitae.beans.NotificacionesFacadeLocal;
 import net.delsas.saitae.beans.PermisosFacadeLocal;
 import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
-import net.delsas.saitae.entities.DelagacionCargo;
 import net.delsas.saitae.entities.GradoPK;
-import net.delsas.saitae.entities.MaestoCargo;
 import net.delsas.saitae.entities.Matricula;
 import net.delsas.saitae.entities.MatriculaPK;
 import net.delsas.saitae.entities.Permisos;
@@ -64,12 +62,16 @@ public class admPermisoController implements Serializable {
     private List<Permisos> solicitados;
     private List<Permisos> aceptados;
     private List<Permisos> rechazados;
+    private List<Permisos> cancelados;
     private Permisos permiso;
     private Permisos acep;
     private Permisos solc;
     private GradoPK gradoPK;
     private Persona usuario;
     private List<Integer> tps;
+    @Inject
+    @Push
+    private PushContext notificacion;
 
     @EJB
     private PermisosFacadeLocal permisosFL;
@@ -208,7 +210,7 @@ public class admPermisoController implements Serializable {
                             "En la base de datos ya hay un permiso del tipo '" + permiso.getTipoPermiso1().getTipoPermisoNombre() + "' para "
                             + permiso.getPersona().getPersonaNombre().split(" ")[0]
                             + " " + permiso.getPersona().getPersonaApellido().split(" ")[0] + " en el día "
-                            + (new SimpleDateFormat("dd/MM/yyy").format(permiso.getPermisosPK().getPermisoFechaInicio())
+                            + (dateToString(permiso.getPermisosPK().getPermisoFechaInicio())
                             + " por lo que no se procede con la concesión del permiso"));
                     FacesContext.getCurrentInstance().addMessage(null, ms);
                     return;
@@ -216,16 +218,16 @@ public class admPermisoController implements Serializable {
                 permisosFL.create(permiso);
                 ms = new FacesMessage(FacesMessage.SEVERITY_INFO, "Concesión exitosa",
                         "El permiso se ha concedido para entre las fechas: "
-                        + (new SimpleDateFormat("dd/MM/yyyy").format(permiso.getPermisosPK().getPermisoFechaInicio())) + " y "
-                        + (new SimpleDateFormat("dd/MM/yyyy").format(permiso.getPermisoFechafin())));
-                mensaje m = new mensaje(permiso.getPermisosPK().getIpPersona(), usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
-                        + " le ha concedido un nuevo permiso a petición de " + getNombreSol() + " " + getApellidoSol() + ".",
-                        "Nueva concesión de permiso", FacesMessage.SEVERITY_INFO, permiso.getPermisosSolicitante().getIdpersona(), " ");
-                sendMessage(m.toString());
-                try {
-                    notFL.create(m.getNotificacion());
-                } catch (Exception e) {
-                }
+                        + (dateToString(permiso.getPermisosPK().getPermisoFechaInicio())) + " y "
+                        + (dateToString(permiso.getPermisoFechafin())));
+                mensaje m = new mensaje(permiso.getPermisosPK().getIpPersona(),
+                        usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
+                        + " le ha concedido un nuevo permiso a petición de "
+                        + getNombreSol() + " " + getApellidoSol() + ".",
+                        "Nueva concesión de permiso",
+                        FacesMessage.SEVERITY_INFO,
+                        permiso.getPermisosSolicitante().getIdpersona(), "permisoH<form");
+                new Auxiliar().persistirNotificación(m, new Persona(m.getDestinatario()), notFL, notificacion);
                 FacesContext.getCurrentInstance().addMessage(null, ms);
                 init();
             }
@@ -247,17 +249,13 @@ public class admPermisoController implements Serializable {
         FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_INFO, "Cambios gurdados", "el permiso ha sido "
                 + (w == 1 ? "aceptado" : (w == 2 ? "rechazado" : "")));
         FacesContext.getCurrentInstance().addMessage(null, m);
-        mensaje x = new mensaje(solc.getPermisosPK().getIpPersona(), usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
+        mensaje x = new mensaje(solc.getPermisosPK().getIpPersona(),
+                usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
                 + " ha " + (w == 1 ? "aceptado" : "rechazado") + " su solicitud de permiso. "
                 + (w == 2 ? "Motivo del rechazo: " + getComentarioSolc() : ""),
                 (w == 1 ? "Aceptación" : "Rechado") + " de permiso",
-                FacesMessage.SEVERITY_INFO, usuario.getIdpersona(), "permiso<form");
-
-        sendMessage(x.toString());
-        try {
-            notFL.create(x.getNotificacion());
-        } catch (Exception e) {
-        }
+                FacesMessage.SEVERITY_INFO, usuario.getIdpersona(), "permiso<form<<permisoH<form");
+        new Auxiliar().persistirNotificación(x, new Persona(x.getDestinatario()), notFL, notificacion);
     }
 
     public String getGrado(Integer id) {
@@ -298,7 +296,9 @@ public class admPermisoController implements Serializable {
     }
 
     public List<Permisos> getSolicitados() {
-        solicitados = (tps.contains(1) || tps.contains(2)) ? permisosFL.getPermisosPorEstado("0") : permisosFL.findByPEPEs("0");
+        solicitados = (tps.contains(1) || tps.contains(2))
+                ? permisosFL.getPermisosPorEstado("0")
+                : permisosFL.findByPEPEs("0");
         return Collections.unmodifiableList(solicitados);
     }
 
@@ -307,7 +307,9 @@ public class admPermisoController implements Serializable {
     }
 
     public List<Permisos> getAceptados() {
-        aceptados = (tps.contains(1) || tps.contains(2)) ? permisosFL.getPermisosPorEstado("1") : permisosFL.findByPEPEs("1");
+        aceptados = (tps.contains(1) || tps.contains(2))
+                ? permisosFL.getPermisosPorEstado("1")
+                : permisosFL.findByPEPEs("1");
         return Collections.unmodifiableList(aceptados);
     }
 
@@ -316,12 +318,25 @@ public class admPermisoController implements Serializable {
     }
 
     public List<Permisos> getRechazados() {
-        rechazados = (tps.contains(1) || tps.contains(2)) ? permisosFL.getPermisosPorEstado("2") : permisosFL.findByPEPEs("2");
+        rechazados = (tps.contains(1) || tps.contains(2))
+                ? permisosFL.getPermisosPorEstado("2")
+                : permisosFL.findByPEPEs("2");
         return Collections.unmodifiableList(rechazados);
     }
 
     public void setRechazados(List<Permisos> rechazados) {
         this.rechazados = rechazados;
+    }
+
+    public List<Permisos> getCancelados() {
+        cancelados = (tps.contains(1) || tps.contains(2))
+                ? permisosFL.getPermisosPorEstado("3")
+                : permisosFL.findByPEPEs("3");
+        return Collections.unmodifiableList(cancelados);
+    }
+
+    public void setCancelados(List<Permisos> cancelados) {
+        this.cancelados = cancelados;
     }
 
     public Permisos getPermiso() {
@@ -404,12 +419,23 @@ public class admPermisoController implements Serializable {
     }
 
     public void setComentarioSolc(String comentario) {
-        String[] f = solc.getPermisosComentario() != null ? acep.getPermisosComentario().split("¿¿") : new String[]{"", "", "", ""};
-        solc.setPermisosComentario(f[0] + "¿¿" + f[1] + "¿¿" + f[2] + "¿¿" + comentario);
+        String[] f = solc.getPermisosComentario() != null ? acep.getPermisosComentario().split("¿¿") : new String[]{" ", " ", " ", " "};
+        solc.setPermisosComentario(f[0] + "¿¿" + f[1] + "¿¿"
+                + (f.length >= 3 ? f[3] : "") + "¿¿" + comentario);
     }
 
     public String getComentarioSolc() {
-        return solc.getPermisosComentario() == null ? "" : solc.getPermisosComentario().split("¿¿")[3];
+        String g[] = solc.getPermisosComentario() == null
+                ? new String[]{" ", " ", " ", " "}
+                : solc.getPermisosComentario().split("¿¿");
+        String h = "";
+        if (g.length < 4) {
+            solc.setPermisosComentario(g[0] + "¿¿" + g[1] + "¿¿"
+                + (g.length >= 3 ? g[3] : "") + "¿¿ ");
+        } else {
+            h = g[3];
+        }
+        return h;
     }
 
     public void setComentario(String comentario) {
@@ -428,13 +454,5 @@ public class admPermisoController implements Serializable {
 
     public String dateToString(Date d) {
         return new SimpleDateFormat("dd/MM/yyy").format(d);
-    }
-
-    @Inject
-    @Push
-    private PushContext notificacion;
-
-    public void sendMessage(String message) {
-        notificacion.send(message);
     }
 }

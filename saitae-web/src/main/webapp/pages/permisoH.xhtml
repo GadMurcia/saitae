@@ -19,6 +19,8 @@
                                  selectionMode="single" rows="8" 
                                  paginator="true" paginatorAlwaysVisible="false" 
                                  paginatorPosition="top">
+                        <p:ajax event="rowSelect" 
+                                update="d1" oncomplete="PF('Dper1').show()"/>
                         <f:facet name="header">
                             Historial de permisos
                         </f:facet>
@@ -48,6 +50,98 @@
                         </p:column>
                     </p:dataTable>
                 </h:form>
+
+                <p:dialog id="dialog" widgetVar="Dper1" modal="true"
+                          showHeader="true" header="Solicitud de permiso">
+                    <h:form id="d1">
+                        <h:panelGrid columns="2">
+                            <h:outputLabel value="Fecha de Solicitud:" for="FS" />
+                            <h:outputText id="FS" 
+                                          value="#{permisoHController.selected.permisosPK.permisoFechaSolicitud}" 
+                                          title="PermisoFechaSolicitud">
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                            <h:outputLabel value="Fecha de Inicio:" for="FI" />
+                            <h:outputText id="FI" 
+                                          value="#{permisoHController.selected.permisosPK.permisoFechaInicio}" 
+                                          title="PermisoFechaInicio">
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                            </h:outputText>
+
+                            <h:outputLabel value="Fecha de finalizacion:" for="FF" />
+                            <h:outputText id="FF" 
+                                          value="#{permisoHController.selected.permisoFechafin}" 
+                                          title="PermisoFechafin">
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                            </h:outputText>
+
+                            <h:outputLabel value="Tipo de permiso:" for="TP" />
+                            <h:outputText id="TP" 
+                                          value="#{permisoHController.selected.tipoPermiso1.tipoPermisoNombre}" 
+                                          title="Tipo de permiso"/>
+
+                            <h:outputLabel value="Motivo:" for="M" 
+                                           rendered="#{permisoHController.verMotivo}"/>
+                            <h:outputText id="M" 
+                                          rendered="#{permisoHController.verMotivo}"
+                                          value="#{permisoHController.selected.permisosMotivo}" 
+                                          title="PermisosMotivo"/>
+
+                            <p:outputLabel value="Con goce de sueldo:" for="GS" 
+                                           rendered="#{!permisoHController.verMotivo}"/>
+                            <p:selectBooleanButton id="GS" disabled="true"
+                                                   rendered="#{!permisoHController.verMotivo}"
+                                                   value="#{permisoHController.goceSueldo}"
+                                                   offLabel="NO" onLabel="SÍ"/>
+
+                            <p:outputLabel value="Tiene licencias anteriores:" for="LA" 
+                                           rendered="#{!permisoHController.verMotivo}"/>
+                            <p:selectBooleanButton id="LA" disabled="true"
+                                                   rendered="#{!permisoHController.verMotivo}"
+                                                   value="#{permisoHController.licenciasAnteriores}"
+                                                   offLabel="NO" onLabel="SÍ"/>
+
+
+                            <h:outputLabel value="Estado:" for="E" />
+                            <h:outputText id="E" 
+                                          value="#{permisoHController.getEstado(permisoHController.selected.permisosEstado)}" 
+                                          title="PermisosEstado"/>
+
+                            <h:outputLabel value="Razón de rechazo:" for="RC" rendered="#{permisoHController.esRechazado}"/>
+                            <h:outputText id="RC" rendered="#{permisoHController.esRechazado}"
+                                          value="#{permisoHController.razonRechazo}" 
+                                          title="Razón de rechazo" />
+
+                            <p:column/>
+                            <h:panelGrid columns="1">
+                                <p:commandButton value="Cancelar solicitud" update="d2"                                             
+                                                 rendered="#{permisoHController.solicitado}"
+                                                 oncomplete="PF('Dper2').show();"/>
+
+                                <p:commandButton value="#{permisoHController.volverSolicitar? 'Volver a solicitar' : 'Editar información'}" 
+                                                 actionListener="#{permisoHController.verProyecto()}" 
+                                                 rendered="#{permisoHController.verEditar}"/>
+                            </h:panelGrid>
+
+                        </h:panelGrid>
+                    </h:form>
+                </p:dialog>
+
+                <p:dialog id="dialog2" widgetVar="Dper2" modal="true"
+                          showHeader="true" header="Razón de cancelamiento">
+                    <h:form id="d2">
+                        <h:panelGrid columns="2">
+                            <p:outputLabel value="Razón de cancelación"/>
+                            <p:inputTextarea rows="3" cols="20" 
+                                             value="#{permisoHController.razonRechazo}"
+                                             required="true" 
+                                             requiredMessage="Debe indicar una razón por la que desea cancelar este permiso"/>
+                            <p:column/>
+                            <p:commandButton value="Cancelar Solicitud"
+                                             actionListener="#{permisoHController.cancelarPermiso()}"/>
+                        </h:panelGrid>
+                    </h:form>
+                </p:dialog>
             </ui:define>
 
         </ui:composition>

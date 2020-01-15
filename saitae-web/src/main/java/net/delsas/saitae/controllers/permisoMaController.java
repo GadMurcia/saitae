@@ -16,7 +16,6 @@
  */
 package net.delsas.saitae.controllers;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,9 +34,6 @@ import net.delsas.saitae.ax.mensaje;
 import net.delsas.saitae.beans.NotificacionesFacadeLocal;
 import net.delsas.saitae.beans.PermisosFacadeLocal;
 import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
-import net.delsas.saitae.entities.Cargo;
-import net.delsas.saitae.entities.DelagacionCargo;
-import net.delsas.saitae.entities.MaestoCargo;
 import net.delsas.saitae.entities.Permisos;
 import net.delsas.saitae.entities.PermisosPK;
 import net.delsas.saitae.entities.Persona;
@@ -63,13 +59,19 @@ public class permisoMaController implements Serializable {
     private PermisosFacadeLocal pfl;
     @EJB
     private TipoPersonaFacadeLocal tipoPersonaFL;
+    @Inject
+    @Push
+    private PushContext notificacion;
     private List<TipopersonaPermiso> permisos;
     private Persona usuario;
     private Permisos p;
+    private Permisos pcontrol;
+    private boolean editar;
+    FacesMessage ms;
+    private List<Integer> invDays;
 
     @PostConstruct
     public void init() {
-
         try {
             FacesContext context = FacesContext.getCurrentInstance();
             usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
@@ -83,19 +85,43 @@ public class permisoMaController implements Serializable {
                 context.getExternalContext().redirect("./../");
 
             } else {
-                p = new Permisos();
-                p.setTipoPermiso1(new TipoPermiso(0));
-                p.setPermisosPK(new PermisosPK(0, new Date(), 0, new Date()));
-                permisos = usuario.getTipoPersona().getTipopersonaPermisoList();
-                p.setTipoPersona(usuario.getTipoPersona());
-                p.setPersona(usuario);
-                p.setPermisoFechafin(p.getPermisosPK().getPermisoFechaInicio());
-                p.setPermisosSolicitante(usuario);
-                p.setPermisosComentario("0¿¿0¿¿0¿¿0 ");
-
+                initVariables();
+                invDays=new ArrayList<>();
+                invDays.add(0);
+                invDays.add(6);
             }
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
+        }
+    }
+
+    public void initVariables() {
+        permisos = usuario.getTipoPersona().getTipopersonaPermisoList();
+        editar = false;
+        p = (Permisos) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("permiso");
+        if (p == null) {
+            p = new Permisos();
+            p.setTipoPermiso1(new TipoPermiso(0));
+            p.setPermisosPK(new PermisosPK(0, new Date(), 0, new Date()));
+            p.setTipoPersona(usuario.getTipoPersona());
+            p.setPersona(usuario);
+            p.setPermisoFechafin(p.getPermisosPK().getPermisoFechaInicio());
+            p.setPermisosSolicitante(usuario);
+            p.setPermisosComentario("1¿¿1¿¿0¿¿0");
+        } else {
+            PermisosPK pk = p.getPermisosPK();
+            pcontrol = new Permisos(new PermisosPK(pk.getIpPersona(), pk.getPermisoFechaSolicitud(), pk.getTipoPermiso(), pk.getPermisoFechaInicio()));
+            pcontrol.setPermisoFechafin(p.getPermisoFechafin());
+            pcontrol.setTipoPersona(p.getTipoPersona());
+            pcontrol.setPermisosEstado(p.getPermisosEstado());
+            pcontrol.setPermisosSolicitante(p.getPermisosSolicitante());
+            editar = (boolean) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("editar");
+            ms = (FacesMessage) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("ms");
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("permiso");
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("editar");
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("ms");
+            String cc[] = p.getPermisosComentario().split("¿¿");
+            p.setPermisosComentario(cc[0] + "¿¿" + cc[1] + "¿¿" + cc[2] + "¿¿ ");
         }
     }
 
@@ -115,13 +141,22 @@ public class permisoMaController implements Serializable {
                 p.setPermisoFechafin(p.getPermisosPK().getPermisoFechaInicio());
             } else {
                 mensaje x;
-                p.getPermisosPK().setTipoPermiso(p.getTipoPermiso1().getIdtipoPermiso());
-                p.setPermisosSolicitante(usuario);
-                p.setPermisosMotivo(null);
-                p.getPermisosPK().setIpPersona(usuario.getIdpersona());
                 p.setPermisosEstado("0");
-                pfl.create(p);
-                x = new mensaje(usuario.getIdpersona(), usuario.getIdpersona(), " ",
+                if (editar) {
+                    if (pcontrol.getPermisosPK().getPermisoFechaInicio() != p.getPermisosPK().getPermisoFechaInicio()) {
+                        pfl.remove(pcontrol);
+                        pfl.create(p);
+                    } else {
+                        pfl.edit(p);
+                    }
+                } else {
+                    p.getPermisosPK().setTipoPermiso(p.getTipoPermiso1().getIdtipoPermiso());
+                    p.setPermisosSolicitante(usuario);
+                    p.setPermisosMotivo(null);
+                    p.getPermisosPK().setIpPersona(usuario.getIdpersona());
+                    pfl.create(p);
+                }
+                x = new mensaje(usuario.getIdpersona(), usuario.getIdpersona(), "permisoH<form",
                         new FacesMessage(FacesMessage.SEVERITY_INFO, "Solicitud exitosa",
                                 "Su permiso se ha solicitado para entre las fechas: "
                                 + (new SimpleDateFormat("dd/MM/yyyy").format(p.getPermisosPK().getPermisoFechaInicio())) + " y "
@@ -130,11 +165,11 @@ public class permisoMaController implements Serializable {
                 x = new mensaje(0, usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
                         + " ha solicitado un nuevo permiso.",
                         "Solicitud de permiso nueva", FacesMessage.SEVERITY_INFO, usuario.getIdpersona(),
-                        "tp¿¿" + (usuario.getTipoPersona().getIdtipoPersona() == 4 ? 3 : 2));
+                        "permiso<form");
                 TipoPersona tp = tipoPersonaFL.find(usuario.getTipoPersona().getIdtipoPersona() == 4 ? 3 : 2);
                 new Auxiliar().persistirNotificación(x,
                         new Auxiliar().getPersonasParaNotificar(tp), notFL, notificacion);
-                init();
+                initVariables();
             }
             PrimeFaces.current().ajax().update(":form", "form0:msgs");
         } catch (Exception e) {
@@ -142,13 +177,6 @@ public class permisoMaController implements Serializable {
             ms = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage());
             FacesContext.getCurrentInstance().addMessage("form0:msgs", ms);
             PrimeFaces.current().ajax().update(":form", "form0:msgs");
-        }
-    }
-
-    private void persistirNotificación(mensaje x) {
-        try {
-            notFL.create(x.getNotificacion());
-        } catch (Exception e) {
         }
     }
 
@@ -186,14 +214,6 @@ public class permisoMaController implements Serializable {
         this.p = p;
     }
 
-    @Inject
-    @Push
-    private PushContext notificacion;
-
-    public void sendMessage(String message) {
-        notificacion.send(message);
-    }
-
     public boolean getGoceDeSueldo() {
         return p == null ? false : p.getPermisosComentario().split("¿¿")[0].equals("1");
 
@@ -204,11 +224,26 @@ public class permisoMaController implements Serializable {
     }
 
     public void setGoceDeSueldo(boolean goce) {
-        p.setPermisosComentario((goce ? "1" : "0") + "¿¿" + (getLicenciasAnteriores() ? "1" : "0") + "¿¿ ¿¿ ");
+        p.setPermisosComentario((goce ? "1" : "0") + "¿¿" + (getLicenciasAnteriores() ? "1" : "0") + "¿¿¿¿ ");
     }
 
     public void setLicenciasAnteriores(boolean lic) {
-        p.setPermisosComentario((getGoceDeSueldo() ? "1" : "0") + "¿¿" + (lic ? "1" : "0") + "¿¿ ¿¿ ");
+        p.setPermisosComentario((getGoceDeSueldo() ? "1" : "0") + "¿¿" + (lic ? "1" : "0") + "¿¿¿¿");
+    }
+
+    public void postRender() {
+        if (ms != null) {
+            FacesContext.getCurrentInstance().addMessage(null, ms);
+            ms = null;
+        }
+    }
+    
+    public List<Integer> getInvalidDays(){
+        return Collections.unmodifiableList(invDays);
+    }
+    
+    public boolean isEditar() {
+        return editar; 
     }
 
 }

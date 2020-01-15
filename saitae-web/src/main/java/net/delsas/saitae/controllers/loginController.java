@@ -4,14 +4,17 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
+import javax.servlet.http.Cookie;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.entities.Persona;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.primefaces.PrimeFaces;
 
 /**
  *
@@ -103,6 +106,30 @@ public class loginController implements Serializable {
 
     public Integer getYear() {
         return Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date()));
+    }
+    
+    public void redirect() {
+        try {
+            FacesContext contex = FacesContext.getCurrentInstance();
+            contex.getExternalContext().getSessionMap().put("mensaje",
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL,
+                            "Falla!",
+                            "Un error desconocido ha afectado a la aplicación y por eso"
+                            + " ha sido redirigido a esta página."));
+            String pg = "./../";            
+            contex.getExternalContext().redirect(pg);
+            if (contex.getExternalContext().getRequestContextPath().equals("/saitae-web")) {
+                Map<String, Object> map = contex.getExternalContext().getRequestCookieMap();
+                Cookie k=(Cookie) map.get(0);
+                k.setMaxAge(0);
+            }
+        } catch (Exception ex) {
+            FacesContext.getCurrentInstance().addMessage("form:msgs",
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            "Falla!", "Un error desconocido ha afectado a la aplicación y por eso"
+                            + " ha sido redirigido a esta página. Clickee el enlace para continuar"));
+            PrimeFaces.current().ajax().update("form:msgs");
+        }
     }
 
 }

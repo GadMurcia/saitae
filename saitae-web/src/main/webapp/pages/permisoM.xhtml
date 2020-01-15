@@ -10,14 +10,17 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
             <ui:define name="content">
+                <f:event listener="#{permisoMaController.postRender()}" type="preRenderView"/>
                 <h:form id="form">
                      <p:panel style="width: 50%; margin: 0 auto" >
                          <h1 style="text-align: center" >Solicitud de Permisos Y Licencias</h1>
                    
                     <h:panelGrid columns="2" > 
                         <p:outputLabel value="Tipo de permiso a solicitar"/>  
-                        <p:selectOneMenu converter="omnifaces.SelectItemsConverter" required="true" 
-                                         value="#{permisoMaController.p.tipoPermiso1}" style="width: 190px">
+                        <p:selectOneMenu converter="omnifaces.SelectItemsConverter" 
+                                         required="true" disabled="#{permisoMaController.editar}"
+                                         value="#{permisoMaController.p.tipoPermiso1}" 
+                                         style="width: 190px">
 
                             <f:selectItem  itemLabel="Seleccione" itemValue=""/>
                             <f:selectItems value="#{permisoMaController.listaPermisos}" var="pm" itemValue="#{pm}"
@@ -31,14 +34,17 @@
                         <p:outputLabel value="Ha gozado de Licencias anteriormente:"/>
                         <p:selectBooleanButton value="#{permisoMaController.licenciasAnteriores}" 
                                                onLabel="SÍ" offLabel="NO" style="width: 190px"/>
+                        
                         <p:outputLabel for="mask" value="Fecha de inicio:" />
                         <p:datePicker id="mask" value="#{permisoMaController.p.permisosPK.permisoFechaInicio}"
-                                      showIcon="true" required="true" pattern="dd/MM/yyyy"/>
+                                      showIcon="true" required="true" pattern="dd/MM/yyyy" locale="es"
+                                      disabledDays="#{permisoMaController.invalidDays}"/>
 
 
                         <p:outputLabel for="mask1" value="Fecha de finalización: " />
                         <p:datePicker id="mask1" value="#{permisoMaController.p.permisoFechafin}"
-                                      showIcon="true" required="true" pattern="dd/MM/yyyy"/>
+                                      showIcon="true" required="true" pattern="dd/MM/yyyy" locale="es"
+                                      disabledDays="#{permisoMaController.invalidDays}"/>
                         <p:column/>
                         <p:commandButton id="summit" value="Solicitar" 
                                          actionListener="#{permisoMaController.guardar()}" 

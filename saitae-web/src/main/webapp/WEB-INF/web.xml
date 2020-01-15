@@ -106,17 +106,17 @@
     <filter>
         <filter-name>corsonf</filter-name>
         <filter-class>net.delsas.saitae.ax.corsonf</filter-class>
-    </filter>
+    </filter><!--
     <error-page>
         <exception-type>org.jboss.weld.contexts.ContextNotActiveException</exception-type>
-        <location>/index.intex</location>
+        <location>/pages/redirect.intex</location>
     </error-page>
     <error-page>
         <exception-type>javax.faces.application.ViewExpiredException</exception-type>
-        <location>/index.intex</location>
+        <location>/pages/redirect.intex</location>
     </error-page>
     <error-page>
         <error-code>500</error-code>
         <location>/index.intex</location>
-    </error-page>
+    </error-page>-->
 </web-app>

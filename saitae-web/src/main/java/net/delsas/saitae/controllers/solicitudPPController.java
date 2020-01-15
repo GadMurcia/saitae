@@ -116,6 +116,7 @@ public class solicitudPPController implements Serializable {
     private boolean existe;
     private Integer jornadas;
     private boolean editar;
+    private FacesMessage m;
 
     @PostConstruct
     public void init() {
@@ -130,7 +131,7 @@ public class solicitudPPController implements Serializable {
         } catch (Exception e) {
             editar = false;
         }
-        FacesMessage m = (FacesMessage) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("ms");
+        m = (FacesMessage) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("ms");
         String n = usuario.getPersonaNombre().split(" ")[0] + " " + usuario.getPersonaApellido().split(" ")[0];
         calendas = new ArrayList<>();
         horarios = hrFL.findAll();
@@ -143,10 +144,6 @@ public class solicitudPPController implements Serializable {
         } else {
             proyecto.setProyectoPedagogicoComentario(n + "¿¿1¿¿0¿¿¿¿0¿¿1");
             jornadas = 1;
-        }
-        if (m != null) {
-            FacesContext.getCurrentInstance().addMessage(null, m);
-            // PrimeFaces.current().ajax().update("form0:msgs");
         }
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("ms");
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("proyecto");
@@ -714,10 +711,10 @@ public class solicitudPPController implements Serializable {
         System.out.println(event.getComponent().getId());
         System.out.println(event);
         setCom(5, jornadas + "");
-        if (!getVariasJornadas()) {            
+        if (!getVariasJornadas()) {
             previusAdd();
-        }else{
-            if(!selected2.isEmpty() && calendas.isEmpty()){
+        } else {
+            if (!selected2.isEmpty() && calendas.isEmpty()) {
                 calendas.add(selected2);
             }
         }
@@ -762,6 +759,13 @@ public class solicitudPPController implements Serializable {
 
     public void setDisabledDays(List<Integer> disabledDays) {
         this.disabledDays = disabledDays;
+    }
+
+    public void preRender() {
+        if (m != null) {
+            FacesContext.getCurrentInstance().addMessage(null, m);
+            m = null;
+        }
     }
 
 }

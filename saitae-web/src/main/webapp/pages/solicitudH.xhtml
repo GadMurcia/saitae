@@ -15,7 +15,7 @@
                              selectionMode="single" rowKey="#{r.idreserva}" 
                              emptyMessage="No ha hecho reservas aún." paginatorAlwaysVisible="false">
                     <p:ajax event="rowSelect" listener="#{historialRController.onDetalleRowSelect}"
-                            update="d1" oncomplete="PF('Dreserva').show()"/>/>
+                            update="d1" oncomplete="PF('Dreserva').show()"/>
                     <p:column headerText="Tipo de recurso" width="30%"
                               filterBy="#{r.tipoRecurso.tipoRecursoNombre}">
                         #{r.tipoRecurso.tipoRecursoNombre}

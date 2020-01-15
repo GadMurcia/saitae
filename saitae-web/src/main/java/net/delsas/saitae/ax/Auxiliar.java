@@ -523,10 +523,7 @@ public class Auxiliar implements Serializable {
         x.getNotificacion().setFechaHora(new Date());
         sendMessage(x.toString(), notificacion);
         try {
-            System.out.println("caracteres en el cuerpo: " + x.getNotificacion().getNotificacionCuerpo().split("").length);
-            System.out.println(new SimpleDateFormat("EEEEE dd/MMM/yyyy HH:mm a").format(x.getNotificacion().getFechaHora()));
             notiFL.create(x.getNotificacion());
-            System.out.println("notificación enviada " + x.getNotificacion().getFechaHora());
         } catch (Exception e) {
             try {
                 notiFL.edit(x.getNotificacion());

@@ -204,6 +204,14 @@ public class vistasMenuController implements Serializable {
                 accesoTPFL.remove(t);
             });
             tipo.setAccesoTipoPersonaList(access);
+            access.forEach((atp) -> {
+                AccesoTipoPersona a = accesoTPFL.find(atp.getAccesoTipoPersonaPK());
+                if (a == null) {
+                    accesoTPFL.create(atp);
+                } else {
+                    accesoTPFL.edit(atp);
+                }
+            });
             tipoPersonaFL.edit(tipo);
             String m = "Al Tipo de Ususario " + tipo.getTipoPersonaNombre();
             if (model.getTarget().size() > 0) {

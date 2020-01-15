@@ -24,7 +24,6 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import net.delsas.saitae.ax.Auxiliar;
 import net.delsas.saitae.ax.mensaje;
-import net.delsas.saitae.beans.AccesoFacadeLocal;
 import net.delsas.saitae.beans.AccesoTipoPersonaFacadeLocal;
 import net.delsas.saitae.beans.DelagacionCargoFacadeLocal;
 import net.delsas.saitae.beans.EstudianteFacadeLocal;
@@ -34,10 +33,8 @@ import net.delsas.saitae.beans.NotificacionesFacadeLocal;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
 import net.delsas.saitae.entities.Acceso;
-import net.delsas.saitae.entities.DelagacionCargo;
 import net.delsas.saitae.entities.Notificaciones;
 import net.delsas.saitae.entities.Persona;
-import net.delsas.saitae.entities.TipoPersona;
 import org.primefaces.PrimeFaces;
 import org.primefaces.component.outputlabel.OutputLabel;
 import org.primefaces.component.panel.Panel;
@@ -291,6 +288,6 @@ public class sessionController implements Serializable {
 
     public List<Notificaciones> getNotificaciones() {
         return Collections.unmodifiableList(notificaciones);
-    }
+    }    
 
 }

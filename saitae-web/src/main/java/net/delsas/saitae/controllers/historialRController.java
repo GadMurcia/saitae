@@ -511,7 +511,7 @@ public class historialRController implements Serializable {
             context.getExternalContext().getSessionMap().put("ms",
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Redirección exitosa",
                             "Éste es el despliegue de la información contenida en el proyecto planificado al"
-                            + "que hacía referencia la solicitud de reserva que usted estaba viedo."
+                            + "que hacía referencia la solicitud de reserva que usted estaba viendo."
                             + " Para efectos de integridad de la información, usted no puede editar ningún campo. "
                             + "visualice la información"));
             context.getExternalContext().redirect("solicitudRPP.intex");

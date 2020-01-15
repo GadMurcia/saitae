@@ -20,6 +20,7 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -29,16 +30,14 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import net.delsas.saitae.ax.Auxiliar;
 import net.delsas.saitae.ax.mensaje;
 import net.delsas.saitae.beans.MatriculaFacadeLocal;
 import net.delsas.saitae.beans.NotificacionesFacadeLocal;
 import net.delsas.saitae.beans.PermisosFacadeLocal;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
-import net.delsas.saitae.entities.Cargo;
-import net.delsas.saitae.entities.DelagacionCargo;
 import net.delsas.saitae.entities.Estudiante;
-import net.delsas.saitae.entities.MaestoCargo;
 import net.delsas.saitae.entities.Matricula;
 import net.delsas.saitae.entities.MatriculaPK;
 import net.delsas.saitae.entities.Permisos;
@@ -49,6 +48,7 @@ import net.delsas.saitae.entities.TipoPersona;
 import net.delsas.saitae.entities.TipopersonaPermiso;
 import org.omnifaces.cdi.Push;
 import org.omnifaces.cdi.PushContext;
+import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -71,6 +71,9 @@ public class permisoEstController implements Serializable {
     private MatriculaFacadeLocal mfl;
     @EJB
     private NotificacionesFacadeLocal notFL;
+    @Inject
+    @Push
+    private PushContext notificacion;
 
     private Matricula m;
     private List<TipopersonaPermiso> permisos;
@@ -78,6 +81,10 @@ public class permisoEstController implements Serializable {
     private List<Estudiante> e;
     private int id;
     private Permisos p;
+    private Permisos pcontrol;
+    private boolean editar;
+    FacesMessage ms;
+    private List<Integer> invDays;
 
     @PostConstruct
     public void init() {
@@ -90,23 +97,53 @@ public class permisoEstController implements Serializable {
                         "Falla!", "Esa vista no le está permitida."));
                 FacesContext.getCurrentInstance().getExternalContext().redirect("./../");
             } else {
-                p = new Permisos();
-                p.setTipoPermiso1(new TipoPermiso(0));
-                p.setPermisosPK(new PermisosPK(0, new Date(), 0, new Date()));
-                permisos = usuario.getTipoPersona().getTipopersonaPermisoList();
-                p.setTipoPersona(tipoPersonaFL.find(8));
-                p.setPersona(new Persona(0));
-                p.setPermisoFechafin(p.getPermisosPK().getPermisoFechaInicio());
-                p.setPermisosComentario("0¿¿ ¿¿ ¿¿ ");
-                if (usuario.getTipoPersona().getIdtipoPersona() == 8) {
-                    e = new ArrayList<>();
-                    e.add(usuario.getEstudiante());
-                } else {
-                    e = usuario.getEstudiante().getEstudianteList();
-                }
+                initVariables();
+                invDays=new ArrayList<>();
+                invDays.add(0);
+                invDays.add(6);
             }
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
+        }
+    }
+
+    private void initVariables() {
+        permisos = usuario.getTipoPersona().getTipopersonaPermisoList();
+        editar = false;
+        p = (Permisos) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("permiso");
+        if (p == null) {
+            p = new Permisos();
+            p.setTipoPermiso1(new TipoPermiso(0));
+            p.setPermisosPK(new PermisosPK(0, new Date(), 0, new Date()));
+            p.setTipoPersona(tipoPersonaFL.find(8));
+            p.setPersona(new Persona(0));
+            p.setPermisoFechafin(p.getPermisosPK().getPermisoFechaInicio());
+        } else {
+            PermisosPK pk = p.getPermisosPK();
+            pcontrol = new Permisos(new PermisosPK(pk.getIpPersona(), pk.getPermisoFechaSolicitud(), pk.getTipoPermiso(), pk.getPermisoFechaInicio()));
+            pcontrol.setPermisoFechafin(p.getPermisoFechafin());
+            pcontrol.setTipoPersona(p.getTipoPersona());
+            pcontrol.setPermisosEstado(p.getPermisosEstado());
+            pcontrol.setPermisosSolicitante(p.getPermisosSolicitante());
+            editar = (boolean) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("editar");
+            ms = (FacesMessage) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("ms");
+            id = p.getPermisosPK().getIpPersona();
+            for (Matricula mm : p.getPersona().getEstudiante().getMatriculaList()) {
+                if (mm.getMatriculaPK().getMatriculaAnyo() == getAño()) {
+                    m = mm;
+                    break;
+                }
+            }
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("permiso");
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("editar");
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("ms");
+        }
+        p.setPermisosComentario("0¿¿¿¿¿¿ ");
+        if (usuario.getTipoPersona().getIdtipoPersona() == 8) {
+            e = new ArrayList<>();
+            e.add(usuario.getEstudiante());
+        } else {
+            e = usuario.getEstudiante().getEstudianteList();
         }
     }
 
@@ -124,22 +161,30 @@ public class permisoEstController implements Serializable {
                         "No debe seleccionar una fecha para el final del periodo del permiso anterior a la fecha en la que inicia éste."));
                 p.setPermisoFechafin(p.getPermisosPK().getPermisoFechaInicio());
             } else {
-                p.getPermisosPK().setTipoPermiso(p.getTipoPermiso1().getIdtipoPermiso());
                 p.setPermisosSolicitante(usuario);
-                p.setPersona(personaFL.find(id));
-                p.getPermisosPK().setIpPersona(id);
                 p.setPermisosEstado("0");
-                Permisos pp = pfl.find(p.getPermisosPK());
-                if (pp != null) {
-                    ms = new FacesMessage(FacesMessage.SEVERITY_WARN, "Imposible proceder",
-                            "En la base de datos ya hay un permiso del tipo '" + p.getTipoPermiso1().getTipoPermisoNombre()
-                            + "' para usted en el día "
-                            + (new SimpleDateFormat("dd/MM/yyy").format(p.getPermisosPK().getPermisoFechaInicio())
-                            + " por lo que no se procede con la solicitud del permiso"));
-                    FacesContext.getCurrentInstance().addMessage(null, ms);
-                    return;
+                if (editar) {
+                    if (pcontrol.getPermisosPK().getPermisoFechaInicio() != p.getPermisosPK().getPermisoFechaInicio()) {
+                        pfl.remove(pcontrol);
+                        pfl.create(p);
+                    } else {
+                        pfl.edit(p);
+                    }
+                } else {
+                    p.getPermisosPK().setTipoPermiso(p.getTipoPermiso1().getIdtipoPermiso());
+                    p.setPersona(personaFL.find(id));
+                    p.getPermisosPK().setIpPersona(id);
+                    if (pfl.find(p.getPermisosPK()) != null) {
+                        ms = new FacesMessage(FacesMessage.SEVERITY_WARN, "Imposible proceder",
+                                "En la base de datos ya hay un permiso del tipo '" + p.getTipoPermiso1().getTipoPermisoNombre()
+                                + "' para usted en el día "
+                                + (new SimpleDateFormat("dd/MM/yyy").format(p.getPermisosPK().getPermisoFechaInicio())
+                                + " por lo que no se procede con la solicitud del permiso."));
+                        FacesContext.getCurrentInstance().addMessage(null, ms);
+                        return;
+                    }
+                    pfl.create(p);
                 }
-                pfl.create(p);
                 ms = new FacesMessage(FacesMessage.SEVERITY_INFO, "Solicitud exitosa",
                         "Su permiso se ha solicitado para entre las fechas: "
                         + (new SimpleDateFormat("dd/MM/yyyy").format(p.getPermisosPK().getPermisoFechaInicio())) + " y "
@@ -148,30 +193,10 @@ public class permisoEstController implements Serializable {
                         + " ha solicitado un nuevo permiso.",
                         "Solicitud de permiso nueva", FacesMessage.SEVERITY_INFO, id, "permiso<form");
                 TipoPersona tp = tipoPersonaFL.find(3);
-                for (Persona t : tp.getPersonaList()) {
-                    x.setDestinatario(t.getIdpersona());
-                    sendMessage(x.toString());
-                    persistirNotificación(x);
-                }
-                for (DelagacionCargo dl : tp.getDelagacionCargoList()) {
-                    x.setDestinatario(dl.getIdpersona().getIdpersona());
-                    sendMessage(x.toString());
-                    persistirNotificación(x);
-                }
-                for (Cargo c : tp.getCargoList()) {
-                    for (MaestoCargo mc : c.getMaestoCargoList()) {
-                        x.setDestinatario(mc.getMaestro().getIdmaestro());
-                        sendMessage(x.toString());
-                        persistirNotificación(x);
-                    }
-                }
+                new Auxiliar().persistirNotificación(x,
+                        new Auxiliar().getPersonasParaNotificar(tp), notFL, notificacion);
                 FacesContext.getCurrentInstance().addMessage(null, ms);
-                p = new Permisos(new PermisosPK((usuario == null ? 0 : usuario.getIdpersona()), new Date(), 0, new Date()));
-                p.setTipoPersona(tipoPersonaFL.find(8));
-                p.setPersona(new Persona(0));
-                p.setTipoPermiso1(new TipoPermiso(0));
-                p.setPermisoFechafin(p.getPermisosPK().getPermisoFechaInicio());
-                id = 0;
+                initVariables();
             }
         } catch (ParseException sx) {
             ms = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", sx.getMessage());
@@ -179,19 +204,12 @@ public class permisoEstController implements Serializable {
         }
     }
 
-    private void persistirNotificación(mensaje x) {
-        try {
-            notFL.create(x.getNotificacion());
-        } catch (Exception e) {
-        }
-    }
-
     public ArrayList<TipoPermiso> getListaPermisos() {
         ArrayList<TipoPermiso> items = new ArrayList<>();
         if (permisos != null) {
-            for (TipopersonaPermiso t : permisos) {
+            permisos.forEach((t) -> {
                 items.add(t.getTipoPermiso());
-            }
+            });
         }
         return items;
     }
@@ -230,7 +248,7 @@ public class permisoEstController implements Serializable {
     }
 
     public List<Estudiante> getE() {
-        return e;
+        return Collections.unmodifiableList(e);
     }
 
     public void setE(List<Estudiante> e) {
@@ -257,12 +275,26 @@ public class permisoEstController implements Serializable {
         return Integer.valueOf(new SimpleDateFormat("YYYY").format(new Date()));
     }
 
-    @Inject
-    @Push
-    private PushContext notificacion;
-
-    public void sendMessage(String message) {
-        notificacion.send(message);
+    public boolean isEditar() {
+        return editar;
     }
 
+    public void setEditar(boolean editar) {
+        this.editar = editar;
+    }
+
+    public boolean disabled() {
+        return editar || !isSeleccionPermiso();
+    }
+
+    public void postRender() {
+        if (ms != null) {
+            FacesContext.getCurrentInstance().addMessage(null, ms);
+            ms = null;
+        }
+    }
+    
+    public List<Integer> getInvalidDays(){
+        return Collections.unmodifiableList(invDays);
+    }
 }
