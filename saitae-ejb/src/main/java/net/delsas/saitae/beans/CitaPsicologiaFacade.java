@@ -5,6 +5,7 @@
  */
 package net.delsas.saitae.beans;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,5 +29,19 @@ public class CitaPsicologiaFacade extends AbstractFacade<CitaPsicologia> impleme
     public CitaPsicologiaFacade() {
         super(CitaPsicologia.class);
     }
+
+    @Override
+    public List<CitaPsicologia> findByEstudiante(Integer idEstudiante) {
+        return em.createNamedQuery("CitaPsicologia.findByEstudiante")
+                .setParameter("estudiante", idEstudiante)
+                .getResultList();
+    }
     
+    @Override
+    public List<CitaPsicologia> findByEstado(String estado) {
+        return em.createNamedQuery("CitaPsicologia.findByEstado")
+                .setParameter("estado", estado)
+                .getResultList();
+    }
+
 }

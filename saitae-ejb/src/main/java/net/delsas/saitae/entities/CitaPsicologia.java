@@ -7,6 +7,7 @@ package net.delsas.saitae.entities;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -32,11 +33,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "citaPsicologia", catalog = "intex", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "CitaPsicologia.findAll", query = "SELECT c FROM CitaPsicologia c")
-    , @NamedQuery(name = "CitaPsicologia.findByEstudiante", query = "SELECT c FROM CitaPsicologia c WHERE c.citaPsicologiaPK.estudiante = :estudiante")
-    , @NamedQuery(name = "CitaPsicologia.findByFechaSolicitada", query = "SELECT c FROM CitaPsicologia c WHERE c.citaPsicologiaPK.fechaSolicitada = :fechaSolicitada")
-    , @NamedQuery(name = "CitaPsicologia.findByFechaSolicitud", query = "SELECT c FROM CitaPsicologia c WHERE c.fechaSolicitud = :fechaSolicitud")
-    , @NamedQuery(name = "CitaPsicologia.findByComentarios", query = "SELECT c FROM CitaPsicologia c WHERE c.comentarios = :comentarios")})
+    @NamedQuery(name = "CitaPsicologia.findAll", query = "SELECT c FROM CitaPsicologia c"),
+    @NamedQuery(name = "CitaPsicologia.findByEstudiante", query = "SELECT c FROM CitaPsicologia c WHERE c.citaPsicologiaPK.estudiante = :estudiante"),
+    @NamedQuery(name = "CitaPsicologia.findByFechaSolicitada", query = "SELECT c FROM CitaPsicologia c WHERE c.citaPsicologiaPK.fechaSolicitada = :fechaSolicitada"),
+    @NamedQuery(name = "CitaPsicologia.findByFechaSolicitud", query = "SELECT c FROM CitaPsicologia c WHERE c.fechaSolicitud = :fechaSolicitud"),
+    @NamedQuery(name = "CitaPsicologia.findByComentarios", query = "SELECT c FROM CitaPsicologia c WHERE c.comentarios = :comentarios"),
+    @NamedQuery(name = "CitaPsicologia.findByEstado", query = "SELECT c FROM CitaPsicologia c WHERE c.estado = :estado"),
+    @NamedQuery(name = "CitaPsicologia.findByEstadoAndIdEstudiante", query = "SELECT c FROM CitaPsicologia c WHERE c.estado = :estado AND c.citaPsicologiaPK.estudiante = :idEstudiante")
+})
 public class CitaPsicologia implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -47,6 +51,14 @@ public class CitaPsicologia implements Serializable {
     @Column(name = "fechaSolicitud")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaSolicitud;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 2)
+    @Column(name = "estado")
+    private String estado;
+    @Size(max = 145)
+    @Column(name = "motivo")
+    private String motivo;
     @Size(max = 140)
     @Column(name = "comentarios")
     private String comentarios;
@@ -112,29 +124,62 @@ public class CitaPsicologia implements Serializable {
         this.consulta = consulta;
     }
 
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public String getMotivo() {
+        return motivo;
+    }
+
+    public void setMotivo(String motivo) {
+        this.motivo = motivo;
+    }
+
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (citaPsicologiaPK != null ? citaPsicologiaPK.hashCode() : 0);
+        int hash = 7;
+        hash = 37 * hash + Objects.hashCode(this.citaPsicologiaPK);
+        hash = 37 * hash + Objects.hashCode(this.fechaSolicitud);
+        hash = 37 * hash + Objects.hashCode(this.motivo);
+        hash = 37 * hash + Objects.hashCode(this.estado);
+        hash = 37 * hash + Objects.hashCode(this.comentarios);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof CitaPsicologia)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        CitaPsicologia other = (CitaPsicologia) object;
-        if ((this.citaPsicologiaPK == null && other.citaPsicologiaPK != null) || (this.citaPsicologiaPK != null && !this.citaPsicologiaPK.equals(other.citaPsicologiaPK))) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
-        return true;
+        final CitaPsicologia other = (CitaPsicologia) obj;
+        if (!Objects.equals(this.estado, other.estado)) {
+            return false;
+        }
+        if (!Objects.equals(this.motivo, other.motivo)) {
+            return false;
+        }
+        if (!Objects.equals(this.comentarios, other.comentarios)) {
+            return false;
+        }
+        if (!Objects.equals(this.citaPsicologiaPK, other.citaPsicologiaPK)) {
+            return false;
+        }
+        return Objects.equals(this.fechaSolicitud, other.fechaSolicitud);
     }
 
     @Override
     public String toString() {
-        return "net.delsas.saitae.entities.CitaPsicologia[ citaPsicologiaPK=" + citaPsicologiaPK + " ]";
+        return "CitaPsicologia{" + "citaPsicologiaPK=" + citaPsicologiaPK + ", fechaSolicitud=" + fechaSolicitud + ", estado=" + estado + ", motivo=" + motivo + '}';
     }
-    
 }

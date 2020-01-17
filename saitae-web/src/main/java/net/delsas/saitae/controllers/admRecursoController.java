@@ -424,6 +424,7 @@ public class admRecursoController implements Serializable {
             recursoFL.edit(seleccionado);
             contenido.stream().map((cl3) -> {
                 cl3.setContenidoLibroIndice(null);
+                clFL.create(cl3);
                 return cl3;
             }).forEachOrdered((cl3) -> {
                 seleccionado.getContenidoLibroList().add(cl3);
@@ -535,6 +536,7 @@ public class admRecursoController implements Serializable {
     }
 
     public void setSeleccionado(Recurso seleccionado) {
+        contenido.clear();
         this.seleccionado = seleccionado != null ? seleccionado : this.seleccionado;
         this.seleccionado.getContenidoLibroList().forEach((c) -> {
             contenido.add(c);

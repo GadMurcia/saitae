@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../WEB-INF/template/plantilla1.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="content">
+
+        <h:form id="form">
+            <h:panelGrid columns="1">
+                <h1 align="center">Historial de solicitudes de Reserva de equipo</h1>
+                <p:dataTable id="hcitas" value="#{citasPsHController.citas}" var="c"
+                             paginator="true" rows="7" selection="#{citasPsHController.selected}" 
+                             selectionMode="single" rowKey="#{c.citaPsicologiaPK}" 
+                             emptyMessage="No ha hecho citas aún." paginatorAlwaysVisible="false">
+                    <p:ajax event="rowSelect" listener="#{citasPsHController.onDetalleRowSelect}"
+                            update="d1" oncomplete="PF('Dcita').show()"/>
+                    <p:column headerText="Fecha de solicitud" filterMatchMode="contains"
+                              filterBy="#{citasPsHController.getFechaHoraToString(c.fechaSolicitud)}">
+                        #{citasPsHController.getFechaHoraToString(c.fechaSolicitud)}
+                    </p:column>
+                    <p:column headerText="Fecha solicitada para la cita" filterMatchMode="contains"
+                              filterBy="#{citasPsHController.getFechaHoraToString(c.citaPsicologiaPK.fechaSolicitada)}">
+                        #{citasPsHController.getFechaHoraToString(c.citaPsicologiaPK.fechaSolicitada)}
+                    </p:column>
+                    <p:column headerText="Estado de la solicitud" filterMatchMode="contains"
+                              filterBy="#{citasPsHController.getEstado(c.estado)}">
+                        #{citasPsHController.getEstado(c.estado)}
+                    </p:column>
+                </p:dataTable>
+            </h:panelGrid>
+        </h:form>
+        
+        <p:dialog id="dialog" widgetVar="Dcita" modal="true" style="width: 60%;"
+                  showHeader="true" header="Solicitud de cita">
+            <h:form id="d1">
+                <h1 align="center">Detalle de solicitud de cita #{citasPsHController.textoReserva}a</h1>
+                <h:panelGrid columns="2" cellspacing="5">                            
+                    <p:outputLabel value="Fecha y hora de solicitud: "/>
+                    <h:outputText value="#{citasPsHController.getFechaHoraToString(citasPsHController.selected.fechaSolicitud)}"/>
+
+                    <p:outputLabel value="Fecha y hora solicitada para la cita: "/>
+                    <h:outputText value="#{citasPsHController.getFechaHoraToString(citasPsHController.selected.citaPsicologiaPK.fechaSolicitada)}"/>
+
+                    <p:outputLabel value="Razón de solicitud: "/>
+                    <h:outputText value="#{citasPsHController.selected.motivo}"/>
+
+                    <p:outputLabel value="Razón para posponer: " 
+                                   rendered="#{citasPsHController.isEstado('P')}"/>
+                    <p:inputTextarea value="#{citasPsHController.selected.comentarios}" cols="40"
+                                     rendered="#{citasPsHController.isEstado('P')}" disabled="true"/>
+
+                    <p:outputLabel value="Razón de cancelación: " 
+                                   rendered="#{citasPsHController.isEstado('C')}"/>
+                    <p:inputTextarea value="#{citasPsHController.selected.comentarios}" cols="40"
+                                     rendered="#{citasPsHController.isEstado('C')}"
+                                     disabled="true"/>
+
+                    <p:column/>
+                    <h:panelGrid columns="1">
+                        <p:commandButton value="Modificar solicitud" 
+                                         rendered="#{citasPsHController.sePuedeEditar}"
+                                         actionListener="#{citasPsHController.vercita()}"/>
+                        <p:commandButton value="Aceptar propuesta" 
+                                         rendered="#{citasPsHController.sePuedeAceptar}"
+                                         actionListener="#{citasPsHController.aceptar()}"/>
+                        <p:commandButton value="Cancelar solicitud" update="d2" 
+                                         oncomplete="PF('Dcita1').show();"
+                                         icon="pi pi-times" 
+                                         rendered="#{citasPsHController.sePuedeCancelar}"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+        
+        <p:dialog id="dialog1" widgetVar="Dcita1" modal="true" 
+                  header="Cancelación de la solicitud de cita">
+            <h:form id="d2">
+                <h:panelGrid columns="2">
+                    <p:column/>
+                    <p:outputLabel value="Está a punto de cancelar una solicitud de cita"/>
+
+                    <p:outputLabel for="rh" value="Razón del cancelamiento: "/>
+                    <p:inputTextarea id="rh" value="#{citasPsHController.selected.comentarios}" 
+                                     autoResize="true"
+                                     cols="50" rows="5"/>
+                    <p:column/>
+                    <p:commandButton value="cancelar" 
+                                     actionListener="#{citasPsHController.cancelar()}"
+                                     update="d2 d1 form"/>                    
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+
+    </ui:define>
+</ui:composition>

@@ -754,7 +754,7 @@ public class solicitudPPController implements Serializable {
     }
 
     public List<Integer> getDisabledDays() {
-        return disabledDays;
+        return Collections.unmodifiableList(disabledDays);
     }
 
     public void setDisabledDays(List<Integer> disabledDays) {

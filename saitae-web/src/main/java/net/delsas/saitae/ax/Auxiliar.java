@@ -517,7 +517,7 @@ public class Auxiliar implements Serializable {
             persistirNotificación(x, p, notiFL, notificacion);
         });
     }
-    
+
     public void persistirNotificación(mensaje x, Persona ps, NotificacionesFacadeLocal notiFL, PushContext notificacion) {
         x.setDestinatario(ps.getIdpersona());
         x.getNotificacion().setFechaHora(new Date());
@@ -531,6 +531,49 @@ public class Auxiliar implements Serializable {
                 System.out.println("doble error:\n" + e + "\n" + ex);
             }
         }
+    }
+
+    public List<Integer> getDisabledDays() {
+        List<Integer> i = new ArrayList<>();
+        i.add(0);
+        i.add(6);
+        return i;
+    }
+
+    public Date getMinTimeCPs() {
+        Calendar tmp = Calendar.getInstance();
+        tmp.set(Calendar.HOUR_OF_DAY, 8);
+        tmp.set(Calendar.MINUTE, 0);
+        tmp.set(Calendar.SECOND, 0);
+        tmp.set(Calendar.MILLISECOND, 0);
+        return tmp.getTime();
+    }
+
+    public Date getMaxTimeCPs() {
+        Calendar tmp = Calendar.getInstance();
+        tmp.set(Calendar.HOUR_OF_DAY, 12);
+        tmp.set(Calendar.MINUTE, 0);
+        tmp.set(Calendar.SECOND, 0);
+        tmp.set(Calendar.MILLISECOND, 0);
+        return tmp.getTime();
+    }
+
+    public Date getMinTimeReservas() {
+        Calendar tmp = Calendar.getInstance();
+        tmp.set(Calendar.HOUR_OF_DAY, 7);
+        tmp.set(Calendar.MINUTE, 15);
+        tmp.set(Calendar.SECOND, 0);
+        tmp.set(Calendar.MILLISECOND, 0);
+        return tmp.getTime();
+    }
+
+    public Date getMaxTimeReservas() {
+        Calendar tmp = Calendar.getInstance();
+        tmp.set(Calendar.HOUR_OF_DAY, 17);
+        tmp.set(Calendar.MINUTE, 0);
+        tmp.set(Calendar.SECOND, 0);
+        tmp.set(Calendar.MILLISECOND, 0);
+        return tmp.getTime();
     }
 
 }

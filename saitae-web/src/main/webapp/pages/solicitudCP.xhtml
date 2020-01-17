@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../WEB-INF/template/plantilla1.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:define name="content">
+
+        <h:form id="form">
+            <f:event listener="#{solicitudCPController.postRender()}" type="preRenderView"/>
+            <h1 align="center">Solicitud de citas psicológicas</h1>
+            <h:panelGrid columns="3">
+                <p:outputLabel value="Solicitante"/>
+                <h:outputText value="#{solicitudCPController.nombreUs}"/>
+                <p:column/>
+
+                <p:outputLabel for="fec" value="Fecha de la cita:"/>
+                <p:datePicker id="fec" locale="es"
+                              value="#{solicitudCPController.cita.citaPsicologiaPK.fechaSolicitada}" 
+                              monthNavigator="true" showIcon="true" size="20" 
+                              placeholder="Seleccione la fecha" pattern="dd/MM/yyyy"
+                              disabledDays="#{solicitudCPController.invalidDays}"/>
+                <p:message for="fec"/>
+
+                <p:outputLabel for="fec1" value="Hora de la cita:"/>
+                <p:datePicker id="fec1" placeholder="Seleccione la hora de la cita"
+                              value="#{solicitudCPController.cita.fechaSolicitud}"
+                              timeOnly="true" pattern="hh:mm aa" 
+                              showIcon="true" size="20" hourFormat="12"
+                              validatorMessage="La hora debe ser entre las 8:00 AM y las 12:00 PM."/>
+                <p:message for="fec1"/>
+
+                <p:outputLabel value="Motivo de la solicitud: "/>
+                <p:inputTextarea value="#{solicitudCPController.cita.motivo}"
+                                 cols="30" maxlength="145" 
+                                 placeholder="Indique el motivo de la solicitud, si lo desea."/>
+                <p:column/>
+
+                <p:column/>
+                <p:commandButton value="solicitar" update="form" icon="fa fa-space-shuttle"
+                                 actionListener="#{solicitudCPController.guardar()}"/>
+                <p:column/>
+            </h:panelGrid>
+        </h:form>
+
+    </ui:define>
+</ui:composition>

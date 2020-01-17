@@ -23,7 +23,7 @@
         <h:form id="frm" style="width: 400px; height: 90%;" styleClass="centred-form"
                 transient="true">
             <div class="ui-fluid">
-                <p:growl id="growl" showDetail="true"/>
+                <p:growl id="growl" showDetail="true" life="15000"/>
                 <p:focus context="panel"/>
                 <h:panelGrid id="panel" columns="3" summary="Inicio de sesión">
                     <p:column/>
@@ -112,5 +112,7 @@
                 </div>
             </div>
         </div>
+        <br />
+        <h:link outcome="welcomePrimefaces" value="Primefaces welcome page" />
     </h:body>   
 </html>
