@@ -205,6 +205,10 @@ public class sessionController implements Serializable {
         context.invalidateSession();
         try {
             context.redirect("./../");
+            System.out.println("El usuario " + us.getPersonaNombre().split(" ")[0] + " "
+                    + us.getPersonaApellido().split(" ")[0] + " (" + us.getTipoPersona().getTipoPersonaNombre()
+                    + ") ha cerrado sesión el "
+                    + new SimpleDateFormat("EEEEE dd/MMM/yyyy hh:mm a").format(new Date()) + ".");
         } catch (IOException ex) {
             Logger.getLogger(sessionController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -288,6 +292,6 @@ public class sessionController implements Serializable {
 
     public List<Notificaciones> getNotificaciones() {
         return Collections.unmodifiableList(notificaciones);
-    }    
+    }
 
 }

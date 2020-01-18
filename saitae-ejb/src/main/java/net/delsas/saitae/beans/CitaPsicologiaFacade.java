@@ -43,5 +43,10 @@ public class CitaPsicologiaFacade extends AbstractFacade<CitaPsicologia> impleme
                 .setParameter("estado", estado)
                 .getResultList();
     }
+    
+    @Override
+    public List<CitaPsicologia> findConsultados(){
+        return em.createNamedQuery("CitaPsicologia.findConsultados").getResultList();
+    }
 
 }

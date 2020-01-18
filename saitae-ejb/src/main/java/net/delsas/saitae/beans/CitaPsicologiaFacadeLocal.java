@@ -40,11 +40,18 @@ public interface CitaPsicologiaFacadeLocal {
     public List<CitaPsicologia> findByEstudiante(Integer idEstudiante);
 
     /**
-     * devuelve una lista con las citas marcadas con el estado proporcionado.
+     * Devuelve una lista con las citas marcadas con el estado proporcionado.
      *
      * @param estado
      * @return java.util.List net.delsas.saitae.entities.CitaPsicologia
      */
     public List<CitaPsicologia> findByEstado(String estado);
+
+    /**
+     * Devuelve una lista de citas que han sido atendidas en consultas
+     *
+     * @return java.util.List net.delsas.saitae.entities.CitaPsicologia
+     */
+    public List<CitaPsicologia> findConsultados();
 
 }

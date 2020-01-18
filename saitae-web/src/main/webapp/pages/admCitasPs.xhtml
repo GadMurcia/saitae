@@ -1,13 +1,213 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="./../WEB-INF/template/plantilla1.xhtml"
-                xmlns:h="http://xmlns.jcp.org/jsf/html">
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:define name="content">
-        
-        <h:form id="form">
 
+        <h:form id="form">
+            <f:event listener="#{admCPSController.postRender()}" type="preRenderView"/>
+            <h:panelGrid columns="1">
+                <h1 align="center">Administración de solicitudes de reservas de equipo</h1>
+                <p:accordionPanel id="ap">
+                    <p:tab title="Solicitudes de Citas Pendientes">
+                        <p:dataTable id="solicitados" value="#{admCPSController.solicitados}" var="c"
+                                     paginator="true" rows="7" selection="#{admCPSController.selected}" 
+                                     selectionMode="single" rowKey="#{c.citaPsicologiaPK}" 
+                                     emptyMessage="No ha hecho citas aún." paginatorAlwaysVisible="false">
+                            <p:ajax event="rowSelect" listener="#{admCPSController.onDetalleRowSelect}"
+                                    update="d1" oncomplete="PF('Dcita').show()"/>
+                            <p:column headerText="Fecha de solicitud" filterMatchMode="contains"
+                                      filterBy="#{admCPSController.getFechaHoraToString(c.fechaSolicitud)}">
+                                #{admCPSController.getFechaHoraToString(c.fechaSolicitud)}
+                            </p:column>
+                            <p:column headerText="Fecha solicitada para la cita" filterMatchMode="contains"
+                                      filterBy="#{admCPSController.getFechaHoraToString(c.citaPsicologiaPK.fechaSolicitada)}">
+                                #{admCPSController.getFechaHoraToString(c.citaPsicologiaPK.fechaSolicitada)}
+                            </p:column>
+                            <p:column headerText="Estado de la solicitud" filterMatchMode="contains"
+                                      filterBy="#{admCPSController.getEstado(c.estado)}">
+                                #{admCPSController.getEstado(c.estado)}
+                            </p:column>
+                        </p:dataTable>
+                    </p:tab>
+                    <p:tab title="Solicitudes de Citas Aceptadas">
+                        <p:dataTable id="acceptados" value="#{admCPSController.aceptados}" var="c"
+                                     paginator="true" rows="7" selection="#{admCPSController.selected}" 
+                                     selectionMode="single" rowKey="#{c.citaPsicologiaPK}" 
+                                     emptyMessage="No ha hecho citas aún." paginatorAlwaysVisible="false">
+                            <p:ajax event="rowSelect" listener="#{admCPSController.onDetalleRowSelect}"
+                                    update="d1" oncomplete="PF('Dcita').show()"/>
+                            <p:column headerText="Fecha de solicitud" filterMatchMode="contains"
+                                      filterBy="#{admCPSController.getFechaHoraToString(c.fechaSolicitud)}">
+                                #{admCPSController.getFechaHoraToString(c.fechaSolicitud)}
+                            </p:column>
+                            <p:column headerText="Fecha solicitada para la cita" filterMatchMode="contains"
+                                      filterBy="#{admCPSController.getFechaHoraToString(c.citaPsicologiaPK.fechaSolicitada)}">
+                                #{admCPSController.getFechaHoraToString(c.citaPsicologiaPK.fechaSolicitada)}
+                            </p:column>
+                            <p:column headerText="Estado de la solicitud" filterMatchMode="contains"
+                                      filterBy="#{admCPSController.getEstado(c.estado)}">
+                                #{admCPSController.getEstado(c.estado)}
+                            </p:column>
+                        </p:dataTable>
+                    </p:tab>
+                    <p:tab title="Solicitudes de Citas Pospuestas">
+                        <h:panelGrid columns="2" cellpadding="10">
+                            <p:dataTable id="pospuestos" value="#{admCPSController.pospuestos}" var="c"
+                                         paginator="true" rows="7" selection="#{admCPSController.selected}" 
+                                         selectionMode="single" rowKey="#{c.citaPsicologiaPK}" 
+                                         emptyMessage="No ha hecho citas aún." paginatorAlwaysVisible="false">
+                                <p:ajax event="rowSelect" listener="#{admCPSController.onDetalleRowSelect}"
+                                        update="d1" oncomplete="PF('Dcita').show()"/>
+                                <p:column headerText="Fecha de solicitud" filterMatchMode="contains"
+                                          filterBy="#{admCPSController.getFechaHoraToString(c.fechaSolicitud)}">
+                                    #{admCPSController.getFechaHoraToString(c.fechaSolicitud)}
+                                </p:column>
+                                <p:column headerText="Fecha solicitada para la cita" filterMatchMode="contains"
+                                          filterBy="#{admCPSController.getFechaHoraToString(c.citaPsicologiaPK.fechaSolicitada)}">
+                                    #{admCPSController.getFechaHoraToString(c.citaPsicologiaPK.fechaSolicitada)}
+                                </p:column>
+                                <p:column headerText="Estado de la solicitud" filterMatchMode="contains"
+                                          filterBy="#{admCPSController.getEstado(c.estado)}">
+                                    #{admCPSController.getEstado(c.estado)}
+                                </p:column>
+                            </p:dataTable>
+                        </h:panelGrid>
+                    </p:tab>
+                    <p:tab title="Solicitudes de Citas Canceladas">
+                        <p:dataTable id="cancelados" value="#{admCPSController.cancelados}" var="c"
+                                     paginator="true" rows="7" selection="#{admCPSController.selected}" 
+                                     selectionMode="single" rowKey="#{c.citaPsicologiaPK}" 
+                                     emptyMessage="No ha hecho citas aún." paginatorAlwaysVisible="false">
+                            <p:ajax event="rowSelect" listener="#{admCPSController.onDetalleRowSelect}"
+                                    update="d1" oncomplete="PF('Dcita').show()"/>
+                            <p:column headerText="Fecha de solicitud" filterMatchMode="contains"
+                                      filterBy="#{admCPSController.getFechaHoraToString(c.fechaSolicitud)}">
+                                #{admCPSController.getFechaHoraToString(c.fechaSolicitud)}
+                            </p:column>
+                            <p:column headerText="Fecha solicitada para la cita" filterMatchMode="contains"
+                                      filterBy="#{admCPSController.getFechaHoraToString(c.citaPsicologiaPK.fechaSolicitada)}">
+                                #{admCPSController.getFechaHoraToString(c.citaPsicologiaPK.fechaSolicitada)}
+                            </p:column>
+                            <p:column headerText="Estado de la solicitud" filterMatchMode="contains"
+                                      filterBy="#{admCPSController.getEstado(c.estado)}">
+                                #{admCPSController.getEstado(c.estado)}
+                            </p:column>
+                        </p:dataTable>
+                    </p:tab>
+                    <p:tab title="Consultas Realizadas">
+                        <h:panelGrid columns="2" cellpadding="10">
+                            <p:dataTable id="consultas" value="#{admCPSController.consultados}" var="c"
+                                         paginator="true" rows="7" selection="#{admCPSController.selected}" 
+                                         selectionMode="single" rowKey="#{c.citaPsicologiaPK}" 
+                                         emptyMessage="No ha hecho citas aún." paginatorAlwaysVisible="false">
+                                <p:ajax event="rowSelect" listener="#{admCPSController.onDetalleRowSelect}"
+                                        update="d1" oncomplete="PF('Dcita').show()"/>
+                                <p:column headerText="Fecha de solicitud" filterMatchMode="contains"
+                                          filterBy="#{admCPSController.getFechaHoraToString(c.fechaSolicitud)}">
+                                    #{admCPSController.getFechaHoraToString(c.fechaSolicitud)}
+                                </p:column>
+                                <p:column headerText="Fecha solicitada para la cita" filterMatchMode="contains"
+                                          filterBy="#{admCPSController.getFechaHoraToString(c.citaPsicologiaPK.fechaSolicitada)}">
+                                    #{admCPSController.getFechaHoraToString(c.citaPsicologiaPK.fechaSolicitada)}
+                                </p:column>
+                                <p:column headerText="Estado de la solicitud" filterMatchMode="contains"
+                                          filterBy="#{admCPSController.getEstado(c.estado)}">
+                                    #{admCPSController.getEstado(c.estado)}
+                                </p:column>
+                            </p:dataTable>
+                        </h:panelGrid>
+                    </p:tab>
+                </p:accordionPanel>
+            </h:panelGrid>
         </h:form>
-        
+
+        <p:dialog id="dialog" widgetVar="Dcita" modal="true" height="70%"
+                  showHeader="true" header="Solicitud de cita">
+            <h:form id="d1">
+                <h1 align="center">Detalle de solicitud de cita #{admCPSController.textoReserva}a</h1>
+                <h:panelGrid columns="2" cellspacing="5">                            
+                    <p:outputLabel value="Fecha y hora de solicitud: "/>
+                    <h:outputText value="#{admCPSController.getFechaHoraToString(admCPSController.selected.fechaSolicitud)}"/>
+
+                    <p:outputLabel value="Fecha y hora solicitada para la cita: "/>
+                    <h:outputText value="#{admCPSController.getFechaHoraToString(admCPSController.selected.citaPsicologiaPK.fechaSolicitada)}"/>
+
+                    <p:outputLabel value="Razón de solicitud: "/>
+                    <h:outputText value="#{admCPSController.selected.motivo}"/>
+
+                    <p:outputLabel value="Razón para posponer: " 
+                                   rendered="#{admCPSController.isEstado('P')}"/>
+                    <p:inputTextarea value="#{admCPSController.selected.comentarios}" cols="40"
+                                     rendered="#{admCPSController.isEstado('P')}" disabled="true"/>
+
+                    <p:outputLabel value="Razón de cancelación: " 
+                                   rendered="#{admCPSController.isEstado('C')}"/>
+                    <p:inputTextarea value="#{admCPSController.selected.comentarios}" cols="40"
+                                     rendered="#{admCPSController.isEstado('C')}"
+                                     disabled="true"/>
+
+                    <p:column/>
+                    <h:panelGrid columns="1">
+                        <p:commandButton value="Aceptar solicitud" 
+                                         rendered="#{admCPSController.sePuedeAceptar}"
+                                         actionListener="#{admCPSController.aceptar()}"/>
+                        <p:commandButton value="Realizar consulta" 
+                                         rendered="#{admCPSController.sePuedeConsultar}"
+                                         actionListener="#{admCPSController.consultar(true)}"/>
+                        <p:commandButton value="Posponer la cita" update="d2" 
+                                         oncomplete="PF('Dcita1').show();"
+                                         icon="pi pi-times" 
+                                         rendered="#{admCPSController.sePuedePosponer}"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog id="dialog1" widgetVar="Dcita1" modal="true" width="60%" height="90%"
+                  header="Aplazamiento de la solicitud de la cita" responsive="true"
+                  minHeight="400">
+            <h:form id="d2">
+                <h:panelGrid columns="2">
+                    <p:column/>
+                    <p:outputLabel value="Está a punto de aplazar la fecha de la solicitud 
+                                   de la cita con el estudiante"/>
+
+                    <p:outputLabel for="rh" value="Razón del aplazamiento: "/>
+                    <p:inputTextarea id="rh" value="#{admCPSController.selected.comentarios}" 
+                                     autoResize="true" required="true" maxlength="140"
+                                     requiredMessage="Debe indicar el por qué va a posponer la cita"
+                                     cols="50" rows="5"/>
+
+                    <p:outputLabel for="fec" value="Nueva fecha de la cita:"/>
+                    <p:datePicker id="fec" locale="es"
+                                  value="#{admCPSController.fechaPosponer}" 
+                                  monthNavigator="true" showIcon="true" size="20" 
+                                  placeholder="Seleccione la fecha" pattern="dd/MM/yyyy"
+                                  disabledDays="#{admCPSController.invalidDays}"
+                                  required="true" 
+                                  requiredMessage="Debe seleccionar la nueva fecha para la realización de la consulta"/>
+
+                    <p:outputLabel for="fec1" value="Nueva hora de la cita:"/>
+                    <p:datePicker id="fec1" placeholder="Seleccione la hora de la cita"
+                                  value="#{admCPSController.horaPosponer}"
+                                  timeOnly="true" pattern="hh:mm a" 
+                                  showIcon="true" size="20" hourFormat="12"
+                                  validatorMessage="La hora debe ser entre las 8:00 AM y las 12:00 PM."
+                                  required="true" 
+                                  requiredMessage="Debe seleccionar la nueva hora para la realización de la consulta"/>
+
+                    <p:column/>
+                    <p:commandButton value="Aplazar" 
+                                     actionListener="#{admCPSController.posponer()}"
+                                     update="d2 d1 form"/>                    
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+
     </ui:define>
 </ui:composition>

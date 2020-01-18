@@ -86,7 +86,6 @@ public class inscripcionController implements Serializable {
         mat = new Matricula(0, getAño());
         mat.setGrado(new Grado(0, "", "", getAño()));
         doc = new Documentos(0);
-        System.out.println(isTime());
     }
 
     public void guardar() {

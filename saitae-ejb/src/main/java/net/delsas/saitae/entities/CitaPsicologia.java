@@ -39,8 +39,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "CitaPsicologia.findByFechaSolicitud", query = "SELECT c FROM CitaPsicologia c WHERE c.fechaSolicitud = :fechaSolicitud"),
     @NamedQuery(name = "CitaPsicologia.findByComentarios", query = "SELECT c FROM CitaPsicologia c WHERE c.comentarios = :comentarios"),
     @NamedQuery(name = "CitaPsicologia.findByEstado", query = "SELECT c FROM CitaPsicologia c WHERE c.estado = :estado"),
-    @NamedQuery(name = "CitaPsicologia.findByEstadoAndIdEstudiante", query = "SELECT c FROM CitaPsicologia c WHERE c.estado = :estado AND c.citaPsicologiaPK.estudiante = :idEstudiante")
-})
+    @NamedQuery(name = "CitaPsicologia.findByEstadoAndIdEstudiante", query = "SELECT c FROM CitaPsicologia c WHERE c.estado = :estado AND c.citaPsicologiaPK.estudiante = :idEstudiante"),
+    @NamedQuery(name = "CitaPsicologia.findConsultados", query = "SELECT c FROM CitaPsicologia c WHERE c.consulta != NULL")})
 public class CitaPsicologia implements Serializable {
 
     private static final long serialVersionUID = 1L;

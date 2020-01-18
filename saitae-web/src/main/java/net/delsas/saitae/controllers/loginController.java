@@ -83,7 +83,7 @@ public class loginController implements Serializable {
             if (p != null && p.getPersonaActivo() && p.getPersonaContrasenya().equals(passwd)) {
                 System.out.println("El usuario " + p.getPersonaNombre() + " " + p.getPersonaApellido()
                         + " (" + p.getTipoPersona().getTipoPersonaNombre() + ") ha iniciado sesión el "
-                        + new SimpleDateFormat("EEE dd/MMM/yyyy hh:mm a").format(new Date()));
+                        + new SimpleDateFormat("EEEEE dd/MMM/yyyy hh:mm a").format(new Date()));
                 context.getExternalContext().getSessionMap().put("usuario", p);
                 context.getExternalContext().getSessionMap().put("primerInicio", true);
                 context.getExternalContext().redirect("pages/perfil.intex");

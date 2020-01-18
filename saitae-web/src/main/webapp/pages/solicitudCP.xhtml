@@ -21,15 +21,19 @@
                               value="#{solicitudCPController.cita.citaPsicologiaPK.fechaSolicitada}" 
                               monthNavigator="true" showIcon="true" size="20" 
                               placeholder="Seleccione la fecha" pattern="dd/MM/yyyy"
-                              disabledDays="#{solicitudCPController.invalidDays}"/>
+                              disabledDays="#{solicitudCPController.invalidDays}"
+                              required="true" 
+                              requiredMessage="Debe seleccionar la fecha para la realización de la consulta"/>
                 <p:message for="fec"/>
 
                 <p:outputLabel for="fec1" value="Hora de la cita:"/>
                 <p:datePicker id="fec1" placeholder="Seleccione la hora de la cita"
                               value="#{solicitudCPController.cita.fechaSolicitud}"
-                              timeOnly="true" pattern="hh:mm aa" 
+                              timeOnly="true" pattern="hh:mm a" 
                               showIcon="true" size="20" hourFormat="12"
-                              validatorMessage="La hora debe ser entre las 8:00 AM y las 12:00 PM."/>
+                              validatorMessage="La hora debe ser entre las 8:00 AM y las 12:00 PM."
+                              required="true" 
+                              requiredMessage="Debe seleccionar la hora para la realización de la consulta"/>
                 <p:message for="fec1"/>
 
                 <p:outputLabel value="Motivo de la solicitud: "/>
