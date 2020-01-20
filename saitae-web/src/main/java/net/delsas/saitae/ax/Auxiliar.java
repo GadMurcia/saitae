@@ -576,4 +576,36 @@ public class Auxiliar implements Serializable {
         return tmp.getTime();
     }
 
+    public String getEstadoCita1(String estado) {
+        String textoReserva;
+        switch (estado) {
+            case "S":
+                textoReserva = "solicitad";
+                break;
+            case "A":
+                textoReserva = "aceptad";
+                break;
+            case "P":
+                textoReserva = "pospuest";
+                break;
+            case "C":
+                textoReserva = "cancelad";
+                break;
+            case "T":
+                textoReserva = "atendid";
+                break;
+            default:
+                textoReserva = "";
+        }
+        return textoReserva;
+    }
+
+    public String getEstadoCita2(String e) {
+        return e.equals("S") ? "Solicitado"
+                : (e.equals("A") ? "Aceptado"
+                : (e.equals("P") ? "Pospuesto"
+                : (e.equals("C") ? "Cancelado"
+                : (e.equals("T") ? "Atendida" : ""))));
+    }
+
 }

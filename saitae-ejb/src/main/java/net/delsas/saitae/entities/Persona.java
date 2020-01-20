@@ -36,30 +36,31 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "persona", catalog = "intex", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Persona.findAll", query = "SELECT p FROM Persona p")
-    , @NamedQuery(name = "Persona.findByIdpersona", query = "SELECT p FROM Persona p WHERE p.idpersona = :idpersona")
-    , @NamedQuery(name = "Persona.findByPersonaNombre", query = "SELECT p FROM Persona p WHERE p.personaNombre = :personaNombre")
-    , @NamedQuery(name = "Persona.findByPersonaApellido", query = "SELECT p FROM Persona p WHERE p.personaApellido = :personaApellido")
-    , @NamedQuery(name = "Persona.findByPersonaNacimiento", query = "SELECT p FROM Persona p WHERE p.personaNacimiento = :personaNacimiento")
-    , @NamedQuery(name = "Persona.findByPersonaDireccion", query = "SELECT p FROM Persona p WHERE p.personaDireccion = :personaDireccion")
-    , @NamedQuery(name = "Persona.findByPersonaTelefono", query = "SELECT p FROM Persona p WHERE p.personaTelefono = :personaTelefono")
-    , @NamedQuery(name = "Persona.findByPersonaCodigoResidencia", query = "SELECT p FROM Persona p WHERE p.personaCodigoResidencia = :personaCodigoResidencia")
-    , @NamedQuery(name = "Persona.findByPersonaZonaVivienda", query = "SELECT p FROM Persona p WHERE p.personaZonaVivienda = :personaZonaVivienda")
-    , @NamedQuery(name = "Persona.findByPersonaLugarNac", query = "SELECT p FROM Persona p WHERE p.personaLugarNac = :personaLugarNac")
-    , @NamedQuery(name = "Persona.findByPersonaContrasenya", query = "SELECT p FROM Persona p WHERE p.personaContrasenya = :personaContrasenya")
-    , @NamedQuery(name = "Persona.findByPersonaOCupacion", query = "SELECT p FROM Persona p WHERE p.personaOCupacion = :personaOCupacion")
-    , @NamedQuery(name = "Persona.findByPersonaActivo", query = "SELECT p FROM Persona p WHERE p.personaActivo = :personaActivo")
-    , @NamedQuery(name = "Persona.findByPersonaNit", query = "SELECT p FROM Persona p WHERE p.personaNit = :personaNit")
-    , @NamedQuery(name = "Persona.findByPersonaSexo", query = "SELECT p FROM Persona p WHERE p.personaSexo = :personaSexo")
-    , @NamedQuery(name = "Persona.findByPersonaEstadoFamiliar", query = "SELECT p FROM Persona p WHERE p.personaEstadoFamiliar = :personaEstadoFamiliar")
-    , @NamedQuery(name = "Persona.findByPersonaNacionalidad", query = "SELECT p FROM Persona p WHERE p.personaNacionalidad = :personaNacionalidad")
-    , @NamedQuery(name = "Persona.findByPersonaEmail", query = "SELECT p FROM Persona p WHERE p.personaEmail = :personaEmail")
-    , @NamedQuery(name = "Persona.findByPersonaDiscapacidades", query = "SELECT p FROM Persona p WHERE p.personaDiscapacidades = :personaDiscapacidades")
-    , @NamedQuery(name = "Persona.findByPersonaComentarios", query = "SELECT p FROM Persona p WHERE p.personaComentarios = :personaComentarios")
-    , @NamedQuery(name = "Persona.findByLikeIdpersona", query = "SELECT p FROM Persona p WHERE p.idpersona LIKE CONCAT(:idpersona,'%')")
-    , @NamedQuery(name = "Persona.findPlantel", query = "SELECT p FROM Persona p WHERE p.tipoPersona.idtipoPersona NOT IN (1, 8, 9, 10, 11) ORDER BY p.tipoPersona.tipoPersonaNombre, p.personaNombre, p.personaApellido")
-    , @NamedQuery(name = "Persona.findPersonaByLikeIdpersona", query = "SELECT p FROM Persona p WHERE p.tipoPersona.idtipoPersona = :idtipoPersona AND p.idpersona LIKE CONCAT(:idpersona,'%')")
-    , @NamedQuery(name = "Persona.findAdministratorByLikeType", query = "SELECT p FROM Persona p WHERE p.tipoPersona.idtipoPersona IN (2, 3, 5, 6, 7) AND p.idpersona LIKE CONCAT(:idpersona,'%')")
+    @NamedQuery(name = "Persona.findAll", query = "SELECT p FROM Persona p"),
+    @NamedQuery(name = "Persona.findByIdpersona", query = "SELECT p FROM Persona p WHERE p.idpersona = :idpersona"),
+    @NamedQuery(name = "Persona.findByPersonaNombre", query = "SELECT p FROM Persona p WHERE p.personaNombre = :personaNombre"),
+    @NamedQuery(name = "Persona.findByPersonaApellido", query = "SELECT p FROM Persona p WHERE p.personaApellido = :personaApellido"),
+    @NamedQuery(name = "Persona.findByPersonaNacimiento", query = "SELECT p FROM Persona p WHERE p.personaNacimiento = :personaNacimiento"),
+    @NamedQuery(name = "Persona.findByPersonaDireccion", query = "SELECT p FROM Persona p WHERE p.personaDireccion = :personaDireccion"),
+    @NamedQuery(name = "Persona.findByPersonaTelefono", query = "SELECT p FROM Persona p WHERE p.personaTelefono = :personaTelefono"),
+    @NamedQuery(name = "Persona.findByPersonaCodigoResidencia", query = "SELECT p FROM Persona p WHERE p.personaCodigoResidencia = :personaCodigoResidencia"),
+    @NamedQuery(name = "Persona.findByPersonaZonaVivienda", query = "SELECT p FROM Persona p WHERE p.personaZonaVivienda = :personaZonaVivienda"),
+    @NamedQuery(name = "Persona.findByPersonaLugarNac", query = "SELECT p FROM Persona p WHERE p.personaLugarNac = :personaLugarNac"),
+    @NamedQuery(name = "Persona.findByPersonaContrasenya", query = "SELECT p FROM Persona p WHERE p.personaContrasenya = :personaContrasenya"),
+    @NamedQuery(name = "Persona.findByPersonaOCupacion", query = "SELECT p FROM Persona p WHERE p.personaOCupacion = :personaOCupacion"),
+    @NamedQuery(name = "Persona.findByPersonaActivo", query = "SELECT p FROM Persona p WHERE p.personaActivo = :personaActivo"),
+    @NamedQuery(name = "Persona.findByPersonaNit", query = "SELECT p FROM Persona p WHERE p.personaNit = :personaNit"),
+    @NamedQuery(name = "Persona.findByPersonaSexo", query = "SELECT p FROM Persona p WHERE p.personaSexo = :personaSexo"),
+    @NamedQuery(name = "Persona.findByPersonaEstadoFamiliar", query = "SELECT p FROM Persona p WHERE p.personaEstadoFamiliar = :personaEstadoFamiliar"),
+    @NamedQuery(name = "Persona.findByPersonaNacionalidad", query = "SELECT p FROM Persona p WHERE p.personaNacionalidad = :personaNacionalidad"),
+    @NamedQuery(name = "Persona.findByPersonaEmail", query = "SELECT p FROM Persona p WHERE p.personaEmail = :personaEmail"),
+    @NamedQuery(name = "Persona.findByPersonaDiscapacidades", query = "SELECT p FROM Persona p WHERE p.personaDiscapacidades = :personaDiscapacidades"),
+    @NamedQuery(name = "Persona.findByPersonaComentarios", query = "SELECT p FROM Persona p WHERE p.personaComentarios = :personaComentarios"),
+    @NamedQuery(name = "Persona.findByLikeIdpersona", query = "SELECT p FROM Persona p WHERE p.idpersona LIKE CONCAT(:idpersona,'%')"),
+    @NamedQuery(name = "Persona.findPlantel", query = "SELECT p FROM Persona p WHERE p.tipoPersona.idtipoPersona NOT IN (1, 8, 9, 10, 11) ORDER BY p.tipoPersona.tipoPersonaNombre, p.personaNombre, p.personaApellido"),
+    @NamedQuery(name = "Persona.findPersonaByLikeIdpersona", query = "SELECT p FROM Persona p WHERE p.tipoPersona.idtipoPersona = :idtipoPersona AND p.idpersona LIKE CONCAT(:idpersona,'%')"),
+    @NamedQuery(name = "Persona.findAdministratorByLikeType", query = "SELECT p FROM Persona p WHERE p.tipoPersona.idtipoPersona IN (2, 3, 5, 6, 7) AND p.idpersona LIKE CONCAT(:idpersona,'%')"),
+    @NamedQuery(name = "Persona.findPersonaByLikeNombreAndTipo", query = "SELECT p FROM Persona p WHERE p.tipoPersona.idtipoPersona = :idtipoPersona AND p.personaNombre LIKE CONCAT(:likeNombre,'%')")
 })
 public class Persona implements Serializable {
 
@@ -177,7 +178,6 @@ public class Persona implements Serializable {
         this.idpersona = idpersona;
     }
 
-
     public Date getPersonaNacimiento() {
         return personaNacimiento;
     }
@@ -185,7 +185,6 @@ public class Persona implements Serializable {
     public void setPersonaNacimiento(Date personaNacimiento) {
         this.personaNacimiento = personaNacimiento;
     }
-
 
     public Integer getPersonaCodigoResidencia() {
         return personaCodigoResidencia;
@@ -203,7 +202,6 @@ public class Persona implements Serializable {
         this.personaZonaVivienda = personaZonaVivienda;
     }
 
-
     public Boolean getPersonaSexo() {
         return personaSexo;
     }
@@ -219,7 +217,6 @@ public class Persona implements Serializable {
     public void setPersonaEstadoFamiliar(Integer personaEstadoFamiliar) {
         this.personaEstadoFamiliar = personaEstadoFamiliar;
     }
-
 
     @XmlTransient
     public List<Anuncio> getAnuncioList() {
@@ -474,5 +471,5 @@ public class Persona implements Serializable {
     public void setPersonaComentarios(String personaComentarios) {
         this.personaComentarios = personaComentarios;
     }
-    
+
 }

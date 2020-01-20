@@ -3,12 +3,204 @@
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="./../WEB-INF/template/plantilla1.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:f="http://xmlns.jcp.org/jsf/core">
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:t="http://java.sun.com/jsf/composite/components/autentia">
     <ui:define name="content">
         <f:event listener="#{consultasPSController.postRender()}" type="preRenderView"/>
         <h:form id="form">
+            <h:panelGrid>
+                <p:accordionPanel dynamic="true" style="width: 100%;">
+                    <p:tab title="Expediente" rendered="#{consultasPSController.renderizar}">
+                        <p:tabView id="tw0" orientation="left">
+                            <p:tab title="Información general">
+                                <h:panelGrid columns="4">
+                                    <p:outputLabel for="dui" value="NIE: "/>
+                                    <h:outputText id="dui" 
+                                                  value="#{consultasPSController.expediente.estudiante.persona.idpersona}"/>
 
+                                    <p:outputLabel for="nit" value="NIT: " />
+                                    <p:inputMask id="nit" 
+                                                 value="#{consultasPSController.expediente.estudiante.persona.personaNit}" 
+                                                 mask="9999-999999-999-9" disabled="true"/>
+
+                                    <p:outputLabel for="nombre" value="Nombre: "/>
+                                    <h:outputText id="nombre" 
+                                                  value="#{consultasPSController.expediente.estudiante.persona.personaNombre}"/>
+
+                                    <p:outputLabel for="apellido" value="Apellidos: "/>
+                                    <h:outputText id="apellido" 
+                                                  value="#{consultasPSController.expediente.estudiante.persona.personaApellido}"/>
+
+                                    <p:outputLabel for="fecha" value="Fecha de nacimiento: " />
+                                    <p:calendar id="fecha" 
+                                                value="#{consultasPSController.expediente.estudiante.persona.personaNacimiento}" 
+                                                pattern="dd-MM-yyyy" disabled="true"/>
+
+                                    <p:outputLabel for="sexo" value="Sexo: " />
+                                    <p:selectBooleanButton id="sexo" offLabel="Maculino" onLabel="Femenino"
+                                                           value="#{consultasPSController.expediente.estudiante.persona.personaSexo}"
+                                                           disabled="true"/>
+
+                                    <p:outputLabel for="ef" value="Estado Familiar: " />
+                                    <p:selectOneMenu id="ef" 
+                                                     value="#{consultasPSController.expediente.estudiante.persona.personaEstadoFamiliar}"
+                                                     disabled="true">
+                                        <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                        <f:selectItem itemLabel="Solter@" itemValue="0" />
+                                        <f:selectItem itemLabel="Casad@" itemValue="1" />
+                                        <f:selectItem itemLabel="Acompañad@" itemValue="2"/>
+                                    </p:selectOneMenu>       
+
+                                    <p:outputLabel for="nacion" value="Nacionalidad: "/>
+                                    <h:outputText id="nacion"
+                                                  value="#{consultasPSController.expediente.estudiante.persona.personaNacionalidad}"/>
+
+                                    <h:outputLabel for="dep" value="Departamento de nacimiento: " />
+                                    <p:selectOneMenu id="dep" value="#{consultasPSController.dep}"
+                                                     disabled="true">
+                                        <f:selectItems value="#{consultasPSController.departamentos}"/>
+                                    </p:selectOneMenu>
+
+                                    <h:outputLabel for="mun" value="Municipio de nacimiento: " />
+                                    <p:selectOneMenu id="mun" value="#{consultasPSController.mun}"
+                                                     disabled="true">
+                                        <f:selectItems value="#{consultasPSController.municipios}"/>
+                                    </p:selectOneMenu>
+
+                                    <p:outputLabel for="zona" value="Zona de residencia: " />
+                                    <p:selectOneMenu id="zona" disabled="true"
+                                                     value="#{consultasPSController.expediente.estudiante.persona.personaZonaVivienda}">
+                                        <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                        <f:selectItem itemLabel="Rural" itemValue="0" />
+                                        <f:selectItem itemLabel="Urbana" itemValue="1" />
+                                    </p:selectOneMenu>
+
+                                    <p:outputLabel for="disca" value="Discapacidades: " />
+                                    <h:outputText id="disca" 
+                                                  value="#{consultasPSController.expediente.estudiante.persona.personaDiscapacidades}"/>
+
+                                    <p:outputLabel for="enf" value="Enfermedades que padece: "/>
+                                    <h:outputText id="enf" 
+                                                  value="#{consultasPSController.expediente.estudiante.estudianteEnfermedades}"/>
+
+                                    <p:outputLabel for="med" value="Medicamentos permanentes: "/>
+                                    <h:outputText id="med" 
+                                                  value="#{consultasPSController.expediente.estudiante.estudianteMedicamentos}"/>
+                                </h:panelGrid> 
+                            </p:tab>
+                            <p:tab title="Contacto y matricula">
+                                <h:panelGrid columns="2">
+                                    <p:outputLabel for="direcion" value="Dirección: "/>
+                                    <h:outputText id="direcion" 
+                                                  value="#{consultasPSController.expediente.estudiante.persona.personaDireccion}"/>
+
+                                    <p:outputLabel for="telefono" value="Teléfono Personal: "/>
+                                    <p:inputMask id="telefono" 
+                                                 value="#{consultasPSController.expediente.estudiante.persona.personaTelefono}"
+                                                 mask="9999-9999" disabled="true"/>
+
+                                    <p:outputLabel for="email" value="Correo electrónico: "/>
+                                    <h:outputText id="email" 
+                                                  value="#{consultasPSController.expediente.estudiante.persona.personaEmail}"/>
+
+                                    <p:outputLabel for="grado" value="Matricula: "/>
+                                    <h:outputText id="grado" 
+                                                  value="#{consultasPSController.grado}"/>
+                                </h:panelGrid>
+                            </p:tab>
+                            <p:tab title="Otros">
+                                <h:panelGrid columns="1">
+                                    <h:outputText value="Personas con las que vive: "/>
+                                    <p:inputTextarea id="pvn" cols="70" maxlength="300"
+                                                     value="#{consultasPSController.expediente.expedientePsPersonasVivien}"/>
+                                    <p:commandButton value="Guardar Cambios" update="form" 
+                                                     actionListener="#{consultasPSController.guardarExp()}"/>
+                                </h:panelGrid>
+                            </p:tab>
+                        </p:tabView>
+                    </p:tab>
+                    <p:tab title="Consultas anteriores" rendered="#{consultasPSController.renderizar}">
+                        <p:dataTable id="consultas" var="c" value="#{consultasPSController.consultasAnteriores}" 
+                                     rowKey="#{c.consultaPK}" emptyMessage="Sin consultas anteriores."
+                                     selection="#{consultasPSController.selected}" 
+                                     selectionMode="single" rows="5" 
+                                     paginator="true" paginatorAlwaysVisible="false" paginatorPosition="top">
+                            <p:ajax event="rowSelect"  update="h2" oncomplete="PF('Dcita').show();"/>
+                            <f:facet name="header">
+                                Consultas anteriores del estudiante.
+                            </f:facet> 
+                            <p:column headerText="Fecha de consulta" 
+                                      rendered="#{admRecursoC.verTipos}"
+                                      filterBy="#{c.consultaPK.fechaHoraConsulta}"
+                                      filterMatchMode="contains">
+                                #{c.consultaPK.fechaHoraConsulta}
+                            </p:column>
+
+                            <p:column headerText="Motivo" filterBy="#{c.consultaMotivo}"
+                                      filterMatchMode="contains">
+                                #{c.consultaMotivo}
+                            </p:column>
+                            <p:column headerText="Remitido por" filterBy="#{c.consultaRemitidoPor}"
+                                      filterMatchMode="contains">
+                                #{c.consultaRemitidoPor}
+                            </p:column>
+                            <p:column headerText="Remitido a" 
+                                      filterBy="#{c.consultaRemitir}"
+                                      filterMatchMode="contains">
+                                #{c.consultaRemitir}
+                            </p:column>
+                        </p:dataTable>
+                    </p:tab>
+                    <p:tab title="consulta actual" rendered="#{consultasPSController.editar}">
+                        <h:panelGrid columns="1">
+                            <t:consulta desactivado="#{!consultasPSController.editar}" vf="false"
+                                        selected="#{consultasPSController.consulta}"/>
+                            <p:commandButton value="Guardar datos de la consulta" 
+                                             actionListener="#{consultasPSController.guardarConsulta()}"/>
+                        </h:panelGrid>
+                    </p:tab>
+                </p:accordionPanel>
+            </h:panelGrid>
         </h:form>
-        
+
+        <p:dialog header="Visualización de la inofrmación de la cita" 
+                  widgetVar="Dcita" modal="true" closeOnEscape="true" 
+                  resizable="false" responsive="false" height="80%" width="90%" position="center"
+                  showEffect="fade" hideEffect="fade">
+            <h:form id="h2">
+                <t:consulta desactivado="true" vf="true"
+                            selected="#{consultasPSController.selected}"/>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog header="Busqueda del expediente del alumno" 
+                  widgetVar="Dbus" modal="true" closable="false" showHeader="true"
+                  showEffect="fade" hideEffect="fade">
+            <h:form id="h1">
+                <h:panelGrid columns="1">
+                    <p:outputLabel for="nombus" value="Nombre del alumno"/>
+                    <p:autoComplete id="nombus" value="#{consultasPSController.nomEs}" 
+                                    queryDelay="1000" size="60"
+                                    completeMethod="#{consultasPSController.completeText}">
+                        <p:ajax event="itemSelect" listener="#{consultasPSController.onItemSelect}"
+                                update="con exp"/>
+                    </p:autoComplete>
+
+                    <h:panelGrid columns="3">
+                        <p:commandButton value="Cancelar" id="can" 
+                                         actionListener="#{consultasPSController.cancelar()}"/>
+
+                        <p:commandButton value="Rxpediente" id="exp" update="form"
+                                         disabled="#{!consultasPSController.verBotones}"
+                                         actionListener="#{consultasPSController.soloExpediente()}"/>
+
+                        <p:commandButton value="Consultar" id="con" update="form"
+                                         disabled="#{!consultasPSController.verBotones}"
+                                         actionListener="#{consultasPSController.continuar()}"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
     </ui:define>
 </ui:composition>

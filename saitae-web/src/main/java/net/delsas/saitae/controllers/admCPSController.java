@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -97,22 +98,7 @@ public class admCPSController implements Serializable {
 
     public void onDetalleRowSelect(SelectEvent event) {
         selected = (CitaPsicologia) event.getObject();
-        switch (selected.getEstado()) {
-            case "S":
-                textoReserva = "solicitad";
-                break;
-            case "A":
-                textoReserva = "aceptad";
-                break;
-            case "P":
-                textoReserva = "pospuest";
-                break;
-            case "C":
-                textoReserva = "cancelad";
-                break;
-            default:
-                textoReserva = "";
-        }
+        textoReserva = ax.getEstadoCita1(selected.getEstado());
     }
 
     public String getFechaHoraToString(Date d) {
@@ -128,10 +114,7 @@ public class admCPSController implements Serializable {
     }
 
     public String getEstado(String e) {
-        return e.equals("S") ? "Solicitado"
-                : (e.equals("A") ? "Aceptado"
-                : (e.equals("P") ? "Pospuesto"
-                : (e.equals("C") ? "Cancelado" : "")));
+        return ax.getEstadoCita2(e);
     }
 
     public boolean isEstado(String e) {
@@ -150,6 +133,14 @@ public class admCPSController implements Serializable {
 
     public List<CitaPsicologia> getAceptados() {
         aceptados = cpsFL.findByEstado("A");
+        List<CitaPsicologia> brs = new ArrayList<>();
+        aceptados.stream().filter((c) -> (c.getFechaSolicitud().equals(c.getCitaPsicologiaPK().getFechaSolicitada()))).map((c) -> {
+            cpsFL.remove(c);
+            return c;
+        }).forEachOrdered((c) -> {
+            brs.add(c);
+        });
+        aceptados.removeAll(brs);
         return Collections.unmodifiableList(aceptados);
     }
 
@@ -295,6 +286,16 @@ public class admCPSController implements Serializable {
 
     public List<Integer> getInvalidDays() {
         return ax.getDisabledDays();
+    }
+
+    public boolean isTerminada() {
+        return selected == null ? false : selected.getEstado().equals("T");
+    }
+
+    public String getNombreEstudiante(CitaPsicologia c) {
+        Persona e = c == null ? null : c.getEstudiante1().getPersona();
+        return e == null ? "" : e.getPersonaNombre().split(" ")[0]
+                + " " + e.getPersonaApellido().split(" ")[0];
     }
 
 }

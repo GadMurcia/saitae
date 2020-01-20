@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+        <cc:attribute name="selected" required="true" type="net.delsas.saitae.entities.Consulta"/>
+        <cc:attribute name="desactivado" type="java.lang.Boolean" required="true"/>
+        <cc:attribute name="vf" type="java.lang.Boolean" default="false"/>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        <p:tabView>
+            <p:tab title="Etapa inicial">
+                <h:panelGrid columns="2" cellspacing="2" style="height: available">
+                    <p:outputLabel value="Fecha de consulta:" for="Fechaconsulta" rendered="#{cc.attrs.vf}"/>
+                    <p:outputLabel id="Fechaconsulta" rendered="#{cc.attrs.vf}"
+                                   value="#{cc.attrs.selected.consultaPK.fechaHoraConsulta}" 
+                                   title="Fecha de Consulta" >
+                        <f:convertDateTime pattern="dd/MM/yyyy hh:mm a"/>
+                    </p:outputLabel>
+
+                    <p:outputLabel value="Remitido Por:" for="consultaRemitidoPor" />
+                    <p:inputText id="consultaRemitidoPor" size="80" disabled="#{cc.attrs.desactivado}"
+                                 value="#{cc.attrs.selected.consultaRemitidoPor}">
+                        <f:validateLength maximum="45"/>
+                    </p:inputText>
+
+                    <p:outputLabel value="Motivo de consulta:" for="consultaMotivo" />
+                    <p:inputTextarea id="consultaMotivo" cols="80" rows="2" disabled="#{cc.attrs.desactivado}"
+                                     value="#{cc.attrs.selected.consultaMotivo}" required="true" 
+                                     requiredMessage="Debe indicar el motivo de la consuta antes de guardar los datos."
+                                     maxlength="80"/>
+                </h:panelGrid>
+            </p:tab>
+            <p:tab title="Antecedentes">
+                <h:panelGrid columns="2" cellspacing="2" style="height: available">
+                    <p:outputLabel value="Antecedentes Personales:" for="consultaAntecedentePersonal" />
+                    <p:inputTextarea id="consultaAntecedentePersonal" cols="80" rows="2" disabled="#{cc.attrs.desactivado}"
+                                     value="#{cc.attrs.selected.consultaAntecedentePersonal}"
+                                     maxlength="140"/>
+
+                    <p:outputLabel value="Antecedentes Familiares:" for="consultaAntecedenteFamiliar" />
+                    <p:inputTextarea id="consultaAntecedenteFamiliar" cols="80" rows="2" disabled="#{cc.attrs.desactivado}"
+                                     value="#{cc.attrs.selected.consultaAntecedenteFamiliar}"
+                                     maxlength="140"/>
+
+                    <p:outputLabel value="Antecedentes Morbidos:" for="consultaAntecedentesMorbidos" />
+                    <p:inputTextarea id="consultaAntecedentesMorbidos" cols="80" rows="2" disabled="#{cc.attrs.desactivado}"
+                                     value="#{cc.attrs.selected.consultaAntecedentesMorbidos}"
+                                     maxlength="140"/>
+                </h:panelGrid>
+            </p:tab>
+            <p:tab title="Anáisis">
+                <h:panelGrid columns="2" cellspacing="2" style="height: available">
+                    <p:outputLabel value="Conducta Observada:" for="consultaConductaObcerbada" />
+                    <p:inputTextarea id="consultaConductaObcerbada" cols="80" rows="2" disabled="#{cc.attrs.desactivado}"
+                                     value="#{cc.attrs.selected.consultaConductaObcerbada}"
+                                     maxlength="140"/>
+
+                    <p:outputLabel value="Problema:" for="consultaProblema" />
+                    <p:inputTextarea id="consultaProblema" cols="80" rows="2" disabled="#{cc.attrs.desactivado}"
+                                     value="#{cc.attrs.selected.consultaProblema}"
+                                     maxlength="250"/>
+
+                    <p:outputLabel value="Diagnostico:" for="consultaDiagnostico" />
+                    <p:inputTextarea id="consultaDiagnostico" cols="80" rows="2" disabled="#{cc.attrs.desactivado}"
+                                     value="#{cc.attrs.selected.consultaDiagnostico}"
+                                     maxlength="150"/>
+                </h:panelGrid>
+            </p:tab>
+            <p:tab title="Etapa de finalización">
+                <h:panelGrid columns="2" cellspacing="2" style="height: available">
+                    <p:outputLabel value="Evaluacion Psicologica:" for="consultaEvaluacionPsicologica" />
+                    <p:inputTextarea id="consultaEvaluacionPsicologica" cols="80" rows="2" disabled="#{cc.attrs.desactivado}"
+                                     value="#{cc.attrs.selected.consultaEvaluacionPsicologica}"
+                                     maxlength="250"/>
+
+                    <p:outputLabel value="Remitir a:" for="consultaRemitir" />
+                    <p:inputTextarea id="consultaRemitir" cols="80" rows="2" disabled="#{cc.attrs.desactivado}"
+                                     value="#{cc.attrs.selected.consultaRemitir}"
+                                     maxlength="80"/>
+
+                    <p:outputLabel value="Comentario adicional:" for="consultaCoemntario" />
+                    <p:inputText id="consultaCoemntario" size="80" disabled="#{cc.attrs.desactivado}"
+                                 value="#{cc.attrs.selected.consultaCoemntario}">
+                        <f:validateLength maximum="45"/>
+                    </p:inputText>
+                </h:panelGrid>
+            </p:tab>
+        </p:tabView>
+    </cc:implementation>
+</html>

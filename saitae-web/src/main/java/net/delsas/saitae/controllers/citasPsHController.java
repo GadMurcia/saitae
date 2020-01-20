@@ -19,7 +19,6 @@ package net.delsas.saitae.controllers;
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -40,7 +39,6 @@ import net.delsas.saitae.entities.Persona;
 import org.omnifaces.cdi.Push;
 import org.omnifaces.cdi.PushContext;
 import org.primefaces.PrimeFaces;
-import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -50,7 +48,7 @@ import org.primefaces.event.SelectEvent;
 @Named
 @ViewScoped
 public class citasPsHController implements Serializable {
-
+    
     private static final long serialVersionUID = 1L;
     @EJB
     private CitaPsicologiaFacadeLocal cpsFL;
@@ -61,95 +59,78 @@ public class citasPsHController implements Serializable {
     private NotificacionesFacadeLocal notiFL;
     @EJB
     private TipoPersonaFacadeLocal tpFL;
-
+    
     private List<CitaPsicologia> citas;
-
+    
     private CitaPsicologia selected;
     private Persona usuario;
     private FacesContext context;
     private String textoReserva;
-
+    private Auxiliar ax;
+    
     @PostConstruct
     public void init() {
         context = FacesContext.getCurrentInstance();
         usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
+        ax = new Auxiliar();
     }
-
+    
     public void onDetalleRowSelect(SelectEvent event) {
         selected = (CitaPsicologia) event.getObject();
-        switch (selected.getEstado()) {
-            case "S":
-                textoReserva = "solicitad";
-                break;
-            case "A":
-                textoReserva = "aceptad";
-                break;
-            case "P":
-                textoReserva = "pospuest";
-                break;
-            case "C":
-                textoReserva = "cancelad";
-                break;
-            default:
-                textoReserva = "";
-        }
+        textoReserva = ax.getEstadoCita1(selected.getEstado());
     }
-
+    
     public String getFechaHoraToString(Date d) {
         return d == null ? "" : new SimpleDateFormat("dd/MM/yyyy hh:mm a").format(d);
     }
-
+    
     public String getFechasToString(Date d) {
         return d == null ? "" : new SimpleDateFormat("dd/MM/yyyy").format(d);
     }
-
+    
     public String getHoraToString(Date d) {
         return d == null ? "" : new SimpleDateFormat("hh:mm a").format(d);
     }
-
+    
     public String getEstado(String e) {
-        return e.equals("S") ? "Solicitado"
-                : (e.equals("A") ? "Aceptado"
-                : (e.equals("P") ? "Pospuesto"
-                : (e.equals("C") ? "Cancelado" : "")));
+        return ax.getEstadoCita2(e);
     }
-
+    
     public boolean isEstado(String e) {
         return selected == null ? false : selected.getEstado().equals(e);
     }
-
+    
     public boolean getSePuedeEditar() {
         return selected == null ? false
                 : (selected.getEstado().equals("S")
                 || selected.getEstado().equals("P")
                 || selected.getEstado().equals("C"));
     }
-
+    
     public boolean getSePuedeCancelar() {
         return selected == null ? false
                 : (selected.getEstado().equals("S")
                 || selected.getEstado().equals("P"));
     }
-
+    
     public boolean getSePuedeAceptar() {
         return selected == null ? false : selected.getEstado().equals("P");
     }
-
+    
     public void aceptar() {
         cambiarEstado("A");
     }
-
+    
     public void cancelar() {
         cambiarEstado("C");
     }
-
+    
     public void cambiarEstado(String E) {
         if (selected != null) {
             selected.setEstado(E);
             cpsFL.edit(selected);
             String[] est = E.equals("C") ? new String[]{"Cancelación", "cancelad"}
                     : new String[]{"Aceptación", "aceptad"};
-            Auxiliar ax = new Auxiliar();
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_INFO, est[0] + " exitosa",
                             "La  " + est[0] + " se registró con éxito."));
@@ -184,21 +165,21 @@ public class citasPsHController implements Serializable {
             PrimeFaces.current().ajax().update(":form", "d1", "d2");
         }
     }
-
+    
     public String getTextoReserva() {
         return textoReserva;
     }
-
+    
     public int getAñoActual() {
         return Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date()));
     }
-
+    
     public boolean getCancelado() {
         boolean ra = selected == null ? false : !selected.getComentarios().isEmpty();
         boolean v = selected != null ? selected.getEstado().equals("C") : false;
         return (ra && v);
     }
-
+    
     public void vercita() {
         context = FacesContext.getCurrentInstance();
         try {
@@ -212,26 +193,26 @@ public class citasPsHController implements Serializable {
         } catch (IOException ex) {
         }
     }
-
+    
     public List<CitaPsicologia> getCitas() {
         citas = cpsFL.findByEstudiante(usuario.getIdpersona());
         return Collections.unmodifiableList(citas);
     }
-
+    
     public void setCitas(List<CitaPsicologia> citas) {
         this.citas = citas;
     }
-
+    
     public CitaPsicologia getSelected() {
         return selected;
     }
-
+    
     public void setSelected(CitaPsicologia selected) {
         this.selected = selected;
     }
-
+    
     public boolean verMotivo() {
         return selected == null ? false : (selected.getComentarios() != null || !selected.getComentarios().isEmpty());
     }
-
+    
 }

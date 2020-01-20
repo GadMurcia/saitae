@@ -377,17 +377,17 @@ public class solicitudPPController implements Serializable {
     }
 
     public void guardar() {
-        System.out.println(proyecto);
-        boolean va = (getVariasJornadas() && calendas.size() < 1);
+        boolean va  = (getVariasJornadas() && calendas.size() < 1);
         boolean v1j = !getVariasJornadas() && selected2.isEmpty();
+        boolean vr1 = solicitud.isEmpty() || solicitud.get(0).getRecurso() == null;
         List<Reserva> reservas = new ArrayList<>();
         List<Reserva> nr = new ArrayList<>();
         List<ReservaXpedagogia> resXped = new ArrayList<>();
         List<PersonasReserva> prs = new ArrayList<>();
         List<SolicitudReserva> srs = new ArrayList<>();
-        if (va || solicitud.isEmpty() || v1j) {
-            FacesMessage m = null;
-            if (solicitud.isEmpty()) {
+        if (va  || vr1 || v1j) {
+            m = null;
+            if (vr1) {
                 m = new FacesMessage(FacesMessage.SEVERITY_WARN, "Solicitud incompleta",
                         "Debe indicar una serie de recursos del cra a utilizar para que la solicitud"
                         + " de reserva de equipo para un proyecto pedagógico sea válida. "

@@ -28,9 +28,9 @@
                                       filterBy="#{admCPSController.getFechaHoraToString(c.citaPsicologiaPK.fechaSolicitada)}">
                                 #{admCPSController.getFechaHoraToString(c.citaPsicologiaPK.fechaSolicitada)}
                             </p:column>
-                            <p:column headerText="Estado de la solicitud" filterMatchMode="contains"
-                                      filterBy="#{admCPSController.getEstado(c.estado)}">
-                                #{admCPSController.getEstado(c.estado)}
+                            <p:column headerText="Solicitante" filterMatchMode="contains"
+                                      filterBy="#{admCPSController.getNombreEstudiante(c)}">
+                                #{admCPSController.getNombreEstudiante(c)}
                             </p:column>
                         </p:dataTable>
                     </p:tab>
@@ -45,13 +45,13 @@
                                       filterBy="#{admCPSController.getFechaHoraToString(c.fechaSolicitud)}">
                                 #{admCPSController.getFechaHoraToString(c.fechaSolicitud)}
                             </p:column>
-                            <p:column headerText="Fecha solicitada para la cita" filterMatchMode="contains"
+                            <p:column headerText="Fecha aceptada para la cita" filterMatchMode="contains"
                                       filterBy="#{admCPSController.getFechaHoraToString(c.citaPsicologiaPK.fechaSolicitada)}">
                                 #{admCPSController.getFechaHoraToString(c.citaPsicologiaPK.fechaSolicitada)}
                             </p:column>
-                            <p:column headerText="Estado de la solicitud" filterMatchMode="contains"
-                                      filterBy="#{admCPSController.getEstado(c.estado)}">
-                                #{admCPSController.getEstado(c.estado)}
+                            <p:column headerText="Solicitante" filterMatchMode="contains"
+                                      filterBy="#{admCPSController.getNombreEstudiante(c)}">
+                                #{admCPSController.getNombreEstudiante(c)}
                             </p:column>
                         </p:dataTable>
                     </p:tab>
@@ -67,13 +67,13 @@
                                           filterBy="#{admCPSController.getFechaHoraToString(c.fechaSolicitud)}">
                                     #{admCPSController.getFechaHoraToString(c.fechaSolicitud)}
                                 </p:column>
-                                <p:column headerText="Fecha solicitada para la cita" filterMatchMode="contains"
+                                <p:column headerText="Fecha propuesta para la cita" filterMatchMode="contains"
                                           filterBy="#{admCPSController.getFechaHoraToString(c.citaPsicologiaPK.fechaSolicitada)}">
                                     #{admCPSController.getFechaHoraToString(c.citaPsicologiaPK.fechaSolicitada)}
                                 </p:column>
-                                <p:column headerText="Estado de la solicitud" filterMatchMode="contains"
-                                          filterBy="#{admCPSController.getEstado(c.estado)}">
-                                    #{admCPSController.getEstado(c.estado)}
+                                <p:column headerText="Solicitante" filterMatchMode="contains"
+                                          filterBy="#{admCPSController.getNombreEstudiante(c)}">
+                                    #{admCPSController.getNombreEstudiante(c)}
                                 </p:column>
                             </p:dataTable>
                         </h:panelGrid>
@@ -93,9 +93,9 @@
                                       filterBy="#{admCPSController.getFechaHoraToString(c.citaPsicologiaPK.fechaSolicitada)}">
                                 #{admCPSController.getFechaHoraToString(c.citaPsicologiaPK.fechaSolicitada)}
                             </p:column>
-                            <p:column headerText="Estado de la solicitud" filterMatchMode="contains"
-                                      filterBy="#{admCPSController.getEstado(c.estado)}">
-                                #{admCPSController.getEstado(c.estado)}
+                            <p:column headerText="Solicitante" filterMatchMode="contains"
+                                      filterBy="#{admCPSController.getNombreEstudiante(c)}">
+                                #{admCPSController.getNombreEstudiante(c)}
                             </p:column>
                         </p:dataTable>
                     </p:tab>
@@ -111,13 +111,13 @@
                                           filterBy="#{admCPSController.getFechaHoraToString(c.fechaSolicitud)}">
                                     #{admCPSController.getFechaHoraToString(c.fechaSolicitud)}
                                 </p:column>
-                                <p:column headerText="Fecha solicitada para la cita" filterMatchMode="contains"
+                                <p:column headerText="Fecha de realización de la cita" filterMatchMode="contains"
                                           filterBy="#{admCPSController.getFechaHoraToString(c.citaPsicologiaPK.fechaSolicitada)}">
                                     #{admCPSController.getFechaHoraToString(c.citaPsicologiaPK.fechaSolicitada)}
                                 </p:column>
-                                <p:column headerText="Estado de la solicitud" filterMatchMode="contains"
-                                          filterBy="#{admCPSController.getEstado(c.estado)}">
-                                    #{admCPSController.getEstado(c.estado)}
+                                <p:column headerText="Solicitante" filterMatchMode="contains"
+                                          filterBy="#{admCPSController.getNombreEstudiante(c)}">
+                                    #{admCPSController.getNombreEstudiante(c)}
                                 </p:column>
                             </p:dataTable>
                         </h:panelGrid>
@@ -139,6 +139,9 @@
 
                     <p:outputLabel value="Razón de solicitud: "/>
                     <h:outputText value="#{admCPSController.selected.motivo}"/>
+
+                    <p:outputLabel value="Solicitante: "/>
+                    <h:outputText value="#{admCPSController.getNombreEstudiante(admCPSController.selected)}"/>
 
                     <p:outputLabel value="Razón para posponer: " 
                                    rendered="#{admCPSController.isEstado('P')}"/>
@@ -163,6 +166,9 @@
                                          oncomplete="PF('Dcita1').show();"
                                          icon="pi pi-times" 
                                          rendered="#{admCPSController.sePuedePosponer}"/>
+                        <p:commandButton value="Ver expediente del alumno" 
+                                         rendered="#{admCPSController.terminada}"
+                                         actionListener="#{admCPSController.consultar(false)}"/>
                     </h:panelGrid>
                 </h:panelGrid>
             </h:form>

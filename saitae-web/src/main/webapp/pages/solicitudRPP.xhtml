@@ -135,7 +135,7 @@
                                 </p:panel>
                             </p:tab>
                             <p:tab id="calendar" title="Calendarización" rendered="#{solicitudPPController.variasJornadas}">
-                                <p:panel header="Planificación de fechas y horas en las que hará uso del equipo">                                
+                                <p:panel header="Planificación de fechas y horas en las que hará uso del equipo">
                                     <p:remoteCommand name="edit" update=":pp1 :form" oncomplete="PF('Dpp1').show();"
                                                      actionListener="#{solicitudPPController.setTextoDetalle('Edición')}"/>
                                     <h:panelGrid columns="2" cellspacing="5">
@@ -165,10 +165,6 @@
 
                                             <p:column headerText="Hora final" width="10%">
                                                 #{solicitudPPController.getHora(f.horaf.horaFin)}
-                                            </p:column>
-
-                                            <p:column headerText="Observaciones">
-                                                #{f.observacion}                                            
                                             </p:column>
                                         </p:dataTable>
                                         <p:commandButton value="+" styleClass="ui-priority-primary" 
@@ -257,7 +253,7 @@
                                                          update="art"
                                                          disabled="#{solicitudPPController.desactivarVistas}"/>
                                         <p:column/>
-                                        <p:commandButton id="Solicitar2" value="Solicitar Reserva de equipo" update="form"
+                                        <p:commandButton id="Solicitar2" value="Solicitar Reserva de equipo" 
                                                          actionListener="#{solicitudPPController.guardar()}"
                                                          rendered="#{!solicitudPPController.variasJornadas}"
                                                          disabled="#{solicitudPPController.desactivarVistas}"/>
@@ -278,7 +274,7 @@
                                                          disabled="#{solicitudPPController.desactivarVistas}"/>
 
                                         <p:column/>
-                                        <p:commandButton id="Solicitar1" value="Solicitar Reserva de equipo" update="form"
+                                        <p:commandButton id="Solicitar1" value="Solicitar Reserva de equipo" 
                                                          actionListener="#{solicitudPPController.guardar()}"
                                                          disabled="#{solicitudPPController.desactivarVistas}"/>
                                     </h:panelGrid>
