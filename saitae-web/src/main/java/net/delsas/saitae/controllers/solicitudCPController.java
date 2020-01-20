@@ -140,6 +140,7 @@ public class solicitudCPController implements Serializable {
             if (editar) {
                 cpsFL.remove(ctr);
             }
+            cita.setEstudiante1(usuario.getEstudiante());
             cpsFL.create(cita);
             ax.persistirNotificación(
                     new mensaje(0, usuario.getIdpersona(), "admCitasPs<form",
