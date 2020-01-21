@@ -28,13 +28,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "entregaUtiles", catalog = "intex", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "EntregaUtiles.findAll", query = "SELECT e FROM EntregaUtiles e")
-    , @NamedQuery(name = "EntregaUtiles.findByIdEstudiante", query = "SELECT e FROM EntregaUtiles e WHERE e.entregaUtilesPK.idEstudiante = :idEstudiante")
-    , @NamedQuery(name = "EntregaUtiles.findByA\u00f1o", query = "SELECT e FROM EntregaUtiles e WHERE e.entregaUtilesPK.a\u00f1o = :a\u00f1o")
-    , @NamedQuery(name = "EntregaUtiles.findByZapatos", query = "SELECT e FROM EntregaUtiles e WHERE e.zapatos = :zapatos")
-    , @NamedQuery(name = "EntregaUtiles.findByUniforme", query = "SELECT e FROM EntregaUtiles e WHERE e.uniforme = :uniforme")
-    , @NamedQuery(name = "EntregaUtiles.findByUtiles", query = "SELECT e FROM EntregaUtiles e WHERE e.utiles = :utiles")
-    , @NamedQuery(name = "EntregaUtiles.findByComentario", query = "SELECT e FROM EntregaUtiles e WHERE e.comentario = :comentario")})
+    @NamedQuery(name = "EntregaUtiles.findAll", query = "SELECT e FROM EntregaUtiles e"),
+    @NamedQuery(name = "EntregaUtiles.findByIdEstudiante", query = "SELECT e FROM EntregaUtiles e WHERE e.entregaUtilesPK.idEstudiante = :idEstudiante"),
+    @NamedQuery(name = "EntregaUtiles.findByA\u00f1o", query = "SELECT e FROM EntregaUtiles e WHERE e.entregaUtilesPK.a\u00f1o = :a\u00f1o"),
+    @NamedQuery(name = "EntregaUtiles.findByZapatos1", query = "SELECT e FROM EntregaUtiles e WHERE e.zapatos1 = :zapatos1"),
+    @NamedQuery(name = "EntregaUtiles.findByUniforme1", query = "SELECT e FROM EntregaUtiles e WHERE e.uniforme1 = :uniforme1"),
+    @NamedQuery(name = "EntregaUtiles.findByUtiles1", query = "SELECT e FROM EntregaUtiles e WHERE e.utiles1 = :utiles1"),
+    @NamedQuery(name = "EntregaUtiles.findByZapatos2", query = "SELECT e FROM EntregaUtiles e WHERE e.zapatos2 = :zapatos2"),
+    @NamedQuery(name = "EntregaUtiles.findByUniforme2", query = "SELECT e FROM EntregaUtiles e WHERE e.uniforme2 = :uniforme2"),
+    @NamedQuery(name = "EntregaUtiles.findByUtiles2", query = "SELECT e FROM EntregaUtiles e WHERE e.utiles2 = :utiles2"),
+    @NamedQuery(name = "EntregaUtiles.findByComentario", query = "SELECT e FROM EntregaUtiles e WHERE e.comentario = :comentario")})
 public class EntregaUtiles implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -42,16 +45,28 @@ public class EntregaUtiles implements Serializable {
     protected EntregaUtilesPK entregaUtilesPK;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "zapatos")
-    private boolean zapatos;
+    @Column(name = "zapatos1")
+    private boolean zapatos1;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "uniforme")
-    private boolean uniforme;
+    @Column(name = "uniforme1")
+    private boolean uniforme1;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "utiles")
-    private boolean utiles;
+    @Column(name = "utiles1")
+    private boolean utiles1;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "zapatos2")
+    private boolean zapatos2;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "uniforme2")
+    private boolean uniforme2;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "utiles2")
+    private boolean utiles2;
     @Size(max = 100)
     @Column(name = "comentario")
     private String comentario;
@@ -72,11 +87,14 @@ public class EntregaUtiles implements Serializable {
         this.entregaUtilesPK = entregaUtilesPK;
     }
 
-    public EntregaUtiles(EntregaUtilesPK entregaUtilesPK, boolean zapatos, boolean uniforme, boolean utiles) {
+    public EntregaUtiles(EntregaUtilesPK entregaUtilesPK, boolean zapatos1, boolean uniforme1, boolean utiles1, boolean zapatos2, boolean uniforme2, boolean utiles2) {
         this.entregaUtilesPK = entregaUtilesPK;
-        this.zapatos = zapatos;
-        this.uniforme = uniforme;
-        this.utiles = utiles;
+        this.zapatos1 = zapatos1;
+        this.uniforme1 = uniforme1;
+        this.utiles1 = utiles1;
+        this.zapatos2 = zapatos2;
+        this.uniforme2 = uniforme2;
+        this.utiles2 = utiles2;
     }
 
     public EntregaUtiles(int idEstudiante, int año) {
@@ -91,28 +109,52 @@ public class EntregaUtiles implements Serializable {
         this.entregaUtilesPK = entregaUtilesPK;
     }
 
-    public boolean getZapatos() {
-        return zapatos;
+    public boolean getZapatos1() {
+        return zapatos1;
     }
 
-    public void setZapatos(boolean zapatos) {
-        this.zapatos = zapatos;
+    public void setZapatos1(boolean zapatos1) {
+        this.zapatos1 = zapatos1;
     }
 
-    public boolean getUniforme() {
-        return uniforme;
+    public boolean getUniforme1() {
+        return uniforme1;
     }
 
-    public void setUniforme(boolean uniforme) {
-        this.uniforme = uniforme;
+    public void setUniforme1(boolean uniforme1) {
+        this.uniforme1 = uniforme1;
     }
 
-    public boolean getUtiles() {
-        return utiles;
+    public boolean getUtiles1() {
+        return utiles1;
     }
 
-    public void setUtiles(boolean utiles) {
-        this.utiles = utiles;
+    public void setUtiles1(boolean utiles1) {
+        this.utiles1 = utiles1;
+    }
+
+    public boolean getZapatos2() {
+        return zapatos2;
+    }
+
+    public void setZapatos2(boolean zapatos2) {
+        this.zapatos2 = zapatos2;
+    }
+
+    public boolean getUniforme2() {
+        return uniforme2;
+    }
+
+    public void setUniforme2(boolean uniforme2) {
+        this.uniforme2 = uniforme2;
+    }
+
+    public boolean getUtiles2() {
+        return utiles2;
+    }
+
+    public void setUtiles2(boolean utiles2) {
+        this.utiles2 = utiles2;
     }
 
     public String getComentario() {
@@ -145,19 +187,19 @@ public class EntregaUtiles implements Serializable {
 
     public void setIdRepresentante(Estudiante idRepresentante) {
         this.idRepresentante = idRepresentante;
-    }    
+    }
 
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 67 * hash + Objects.hashCode(this.entregaUtilesPK);
-        hash = 67 * hash + (this.zapatos ? 1 : 0);
-        hash = 67 * hash + (this.uniforme ? 1 : 0);
-        hash = 67 * hash + (this.utiles ? 1 : 0);
-        hash = 67 * hash + Objects.hashCode(this.comentario);
-        hash = 67 * hash + Objects.hashCode(this.estudiante);
-        hash = 67 * hash + Objects.hashCode(this.idEntregante);
-        hash = 67 * hash + Objects.hashCode(this.idRepresentante);
+        hash = 79 * hash + Objects.hashCode(this.entregaUtilesPK);
+        hash = 79 * hash + (this.zapatos1 ? 1 : 0);
+        hash = 79 * hash + (this.uniforme1 ? 1 : 0);
+        hash = 79 * hash + (this.utiles1 ? 1 : 0);
+        hash = 79 * hash + (this.zapatos2 ? 1 : 0);
+        hash = 79 * hash + (this.uniforme2 ? 1 : 0);
+        hash = 79 * hash + (this.utiles2 ? 1 : 0);
+        hash = 79 * hash + Objects.hashCode(this.comentario);
         return hash;
     }
 
@@ -173,34 +215,32 @@ public class EntregaUtiles implements Serializable {
             return false;
         }
         final EntregaUtiles other = (EntregaUtiles) obj;
-        if (this.zapatos != other.zapatos) {
+        if (this.zapatos1 != other.getZapatos1()) {
             return false;
         }
-        if (this.uniforme != other.uniforme) {
+        if (this.uniforme1 != other.getUniforme1()) {
             return false;
         }
-        if (this.utiles != other.utiles) {
+        if (this.utiles1 != other.getUtiles1()) {
             return false;
         }
-        if (!Objects.equals(this.comentario, other.comentario)) {
+        if (this.zapatos2 != other.getZapatos2()) {
             return false;
         }
-        if (!Objects.equals(this.entregaUtilesPK, other.entregaUtilesPK)) {
+        if (this.uniforme2 != other.getUniforme2()) {
             return false;
         }
-        if (!Objects.equals(this.estudiante, other.estudiante)) {
+        if (this.utiles2 != other.getUtiles2()) {
             return false;
         }
-        if (!Objects.equals(this.idEntregante, other.idEntregante)) {
+        if (!Objects.equals(this.comentario, other.getComentario())) {
             return false;
         }
-        return Objects.equals(this.idRepresentante, other.idRepresentante);
+        return Objects.equals(this.entregaUtilesPK, other.entregaUtilesPK);
     }
 
     @Override
     public String toString() {
-        return "EntregaUtiles{" + "entregaUtilesPK=" + entregaUtilesPK + ", estudiante=" + estudiante + '}';
+        return "EntregaUtiles{" + "entregaUtilesPK=" + entregaUtilesPK + ", zapatos1=" + zapatos1 + ", uniforme1=" + uniforme1 + ", utiles1=" + utiles1 + ", zapatos2=" + zapatos2 + ", uniforme2=" + uniforme2 + ", utiles2=" + utiles2 + '}';
     }
-    
-    
 }

@@ -35,6 +35,7 @@ import net.delsas.saitae.beans.AccesoFacadeLocal;
 import net.delsas.saitae.beans.AccesoTipoPersonaFacadeLocal;
 import net.delsas.saitae.beans.EntregaUtilesFacadeLocal;
 import net.delsas.saitae.beans.MatriculaFacadeLocal;
+import net.delsas.saitae.beans.NotificacionesFacadeLocal;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.entities.EntregaUtiles;
 import net.delsas.saitae.entities.EntregaUtilesPK;
@@ -57,24 +58,31 @@ public class paquetesController implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    boolean boton;
-    @EJB
-    private PersonaFacadeLocal personaFL;
+    private boolean boton;
+    private EntregaUtiles entregaUtiles;
     private Persona p;
     private Persona usuario;
     private String est;
+    private Auxiliar ax;
     @EJB
     private EntregaUtilesFacadeLocal entregaUFL;
-    private EntregaUtiles entregaUtiles;
     @EJB
     private MatriculaFacadeLocal matriculaFL;
     @EJB
     private AccesoFacadeLocal accesoFL;
     @EJB
     private AccesoTipoPersonaFacadeLocal accesoTPFL;
+    @Inject
+    @Push
+    private PushContext notificacion;
+    @EJB
+    private NotificacionesFacadeLocal notiFL;
+    @EJB
+    private PersonaFacadeLocal personaFL;
 
     @PostConstruct
     public void init() {
+        ax = new Auxiliar();
         boton = true;
         entregaUtiles = new EntregaUtiles(new EntregaUtilesPK(0, getAño()));
         p = new Auxiliar().getEstudiante();
@@ -99,10 +107,10 @@ public class paquetesController implements Serializable {
         try {
             (new Auxiliar()).setDui(query, p);
             listp = personaFL.getPersonaByLikeIdAndType(p.getIdpersona(), 8);
-            for (Persona datos : listp) {
+            listp.forEach((datos) -> {
                 results.add(datos.getPersonaNombre() + " "
                         + datos.getPersonaApellido() + "=>" + datos.getIdpersona().toString().substring(1));
-            }
+            });
         } catch (Exception m) {
             System.out.println(m.getMessage());
         }
@@ -146,12 +154,14 @@ public class paquetesController implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Guardado con éxito", "Se guardaron los datos de paquetes entregados"));
             String g = entrega(entregaUtiles);
-            sendMessage(new mensaje(entregaUtiles.getEntregaUtilesPK().getIdEstudiante(),
-                    usuario.getIdpersona(),
-                    " ",
-                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Se ha registrado actividad en la entrega de paquetes.",
-                            (g.split("").length > 2 ? "Lo que se le ha entregado es: " + g
-                            : "No hay registro de entregas en este año."))).toString());
+            ax.persistirNotificación(
+                    new mensaje(entregaUtiles.getEntregaUtilesPK().getIdEstudiante(),
+                            usuario.getIdpersona(),
+                            " ",
+                            new FacesMessage(FacesMessage.SEVERITY_INFO, "Se ha registrado actividad en la entrega de paquetes.",
+                                    (g.split("").length > 2 ? "Lo que se le ha entregado es: " + g
+                                    : "No hay registro de entregas en este año."))),
+                    entregaUtiles.getEstudiante().getPersona(), notiFL, notificacion);
             this.init();
         } else {
             FacesContext.getCurrentInstance().addMessage(null,
@@ -160,9 +170,9 @@ public class paquetesController implements Serializable {
     }
 
     private String entrega(EntregaUtiles e) {
-        return (e.getUtiles() ? "Útiles" : "")
-                + (e.getUniforme() ? ", Uniforme" : "")
-                + (e.getZapatos() ? ", Zapatos" : "")
+        return ((e.getUtiles1() || e.getUtiles2()) ? "Útiles" : "")
+                + (e.getUniforme1() || e.getUniforme2() ? ", Uniforme" : "")
+                + (e.getZapatos1() || e.getZapatos2() ? ", Zapatos" : "")
                 + ".";
     }
 
@@ -201,37 +211,4 @@ public class paquetesController implements Serializable {
     public void setBoton(boolean boton) {
         this.boton = boton;
     }
-
-    public boolean getUni() {
-        return this.entregaUtiles.getUniforme();
-    }
-
-    public void setUni(boolean boton) {
-        this.entregaUtiles.setUniforme(boton);
-    }
-
-    public boolean getZap() {
-        return this.entregaUtiles.getZapatos();
-    }
-
-    public void setZap(boolean boton) {
-        this.entregaUtiles.setZapatos(boton);
-    }
-
-    public boolean getEsc() {
-        return this.entregaUtiles.getUtiles();
-    }
-
-    public void setEsc(boolean boton) {
-        this.entregaUtiles.setUtiles(boton);
-    }
-
-    @Inject
-    @Push
-    private PushContext notificacion;
-
-    public void sendMessage(String message) {
-        notificacion.send(message);
-    }
-
 }

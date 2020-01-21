@@ -371,13 +371,13 @@
                         </h:panelGrid>
                     </p:panel>
                     <h:panelGrid columns="5">
-                        <p:commandButton value="Rechazar" onclick="PF('Dreserva1').show();"
+                        <p:commandButton value="Rechazar Solicitud" onclick="PF('Dreserva1').show();"
                                          update="d2" rendered="#{adminReservas.verRechazo}"/>
-                        <p:commandButton value="Aceptar" rendered="#{adminReservas.verAceptar}"
+                        <p:commandButton value="Aceptar Solicitud" rendered="#{adminReservas.verAceptar}"
                                          onclick="PF('Dreserva2').show();" update="d3"/>
-                        <p:commandButton value="Entregar" rendered="#{adminReservas.verEntregar}"
+                        <p:commandButton value="Entregar Recursos" rendered="#{adminReservas.verEntregar}"
                                          onclick="PF('Dreserva3').show();" update="d4"/>
-                        <p:commandButton value="Recibir" rendered="#{adminReservas.verRecibir}"
+                        <p:commandButton value="Recibir Recursos" rendered="#{adminReservas.verRecibir}"
                                          onclick="PF('Dreserva4').show();" update="d5"/>
                     </h:panelGrid>
                 </h:panelGrid>

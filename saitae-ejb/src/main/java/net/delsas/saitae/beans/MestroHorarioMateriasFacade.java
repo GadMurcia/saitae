@@ -54,8 +54,10 @@ public class MestroHorarioMateriasFacade extends AbstractFacade<MestroHorarioMat
     }
 
     @Override
-    public List<MestroHorarioMaterias> findAllOrdered() {
-        return em.createNamedQuery("MestroHorarioMaterias.findAll").getResultList();
+    public List<MestroHorarioMaterias> findAllOrdered(int año) {
+        return em.createNamedQuery("MestroHorarioMaterias.findAllOrdered")
+                .setParameter("año", año)
+                .getResultList();
     }
 
     @Override

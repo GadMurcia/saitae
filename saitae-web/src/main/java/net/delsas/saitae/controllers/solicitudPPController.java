@@ -33,6 +33,7 @@ import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import net.delsas.saitae.ax.Auxiliar;
 import net.delsas.saitae.ax.Calendarizacion;
 import net.delsas.saitae.ax.mensaje;
 import net.delsas.saitae.beans.HorarioFacadeLocal;
@@ -117,12 +118,11 @@ public class solicitudPPController implements Serializable {
     private Integer jornadas;
     private boolean editar;
     private FacesMessage m;
+    private Auxiliar ax;
 
     @PostConstruct
     public void init() {
-        disabledDays = new ArrayList<>();
-        disabledDays.add(0);
-        disabledDays.add(6);
+        ax = new Auxiliar();;
         usuario = (Persona) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
         proyecto = (ProyectoPedagogico) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("proyecto");
         proyecto = proyecto == null ? new ProyectoPedagogico() : proyecto;
@@ -152,16 +152,6 @@ public class solicitudPPController implements Serializable {
 
     public String onFlowProcess(FlowEvent event) {
         return event.getNewStep();
-    }
-
-    private void persistirNotificación(mensaje x, List<Persona> ps) {
-        ps.forEach((p) -> {
-            persistirNotificación(x, p);
-        });
-    }
-
-    public void sendMessage(String message) {
-        notificacion.send(message);
     }
 
     private void llenar() {
@@ -194,25 +184,6 @@ public class solicitudPPController implements Serializable {
             }
         }
         return null;
-    }
-
-    private void persistirNotificación(mensaje x, Persona ps) {
-        x.setDestinatario(ps.getIdpersona());
-        x.setRemitente(usuario.getIdpersona());
-        x.getNotificacion().setFechaHora(new Date());
-        sendMessage(x.toString());
-        try {
-            System.out.println("caracteres en el cuerpo: " + x.getNotificacion().getNotificacionCuerpo().split("").length);
-            System.out.println(new SimpleDateFormat("EEEEE dd/MMM/yyyy HH:mm a").format(x.getNotificacion().getFechaHora()));
-            notiFL.create(x.getNotificacion());
-            System.out.println("notificación enviada " + x.getNotificacion().getFechaHora());
-        } catch (Exception e) {
-            try {
-                notiFL.edit(x.getNotificacion());
-            } catch (Exception ex) {
-                System.out.println("doble error:\n" + e + "\n" + ex);
-            }
-        }
     }
 
     public ProyectoPedagogico getProyecto() {
@@ -431,6 +402,7 @@ public class solicitudPPController implements Serializable {
                                 + " se ha" + (calendas.size() > 1 ? "n" : "")
                                 + " enviado con éxitos. Recibirá una notificación del encargado del CRA"
                                 + " cuando su proyecto se haya resuelto."));
+                ax.persistirNotificación(x, usuario, notiFL, notificacion);
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("ms", x.getFacesmessage());
                 try {
                     FacesContext.getCurrentInstance().getExternalContext().redirect("solicitudRPP.intex");
@@ -438,7 +410,6 @@ public class solicitudPPController implements Serializable {
                     init();
                     PrimeFaces.current().ajax().update(":form", ":noti");
                 }
-                persistirNotificación(x, usuario);
             } catch (Exception a) {
                 System.out.println("Error mega grande ocurrido en solicitudPPConroller al guardar la solicitud");
                 System.out.println(a.getMessage());
@@ -512,7 +483,6 @@ public class solicitudPPController implements Serializable {
 
     public void agregar() {
         Date t = new Date();
-        FacesMessage m;
         if (selected2 != null) {
             if (asignarFechas(selected2)) {
                 boolean r = !t.after(selected2.getHorai().getHoraInicio()) && selected2.getHoraf().getIdhorario() >= selected2.getHorai().getIdhorario();
@@ -537,11 +507,11 @@ public class solicitudPPController implements Serializable {
         }
         FacesContext.getCurrentInstance().addMessage(null, m);
         PrimeFaces.current().ajax().update("form0:msgs");
+        m = null;
     }
 
     public void editar() {
         Date t = new Date();
-        FacesMessage m;
         if (asignarFechas(selected2)) {
             boolean r = !t.after(selected2.getHorai().getHoraInicio()) && selected2.getHoraf().getIdhorario() >= selected2.getHorai().getIdhorario();
             if (r && !selected.equals(selected2)) {
@@ -559,6 +529,7 @@ public class solicitudPPController implements Serializable {
         }
         FacesContext.getCurrentInstance().addMessage(null, m);
         PrimeFaces.current().ajax().update("form");
+        m = null;
     }
 
     public void eliminar() {
@@ -681,7 +652,9 @@ public class solicitudPPController implements Serializable {
     public void onAddNew() {
         SolicitudReserva s = new SolicitudReserva();
         s.setSolicitudReservaComentario("1");
-        solicitud.add(s);
+        if (!solicitud.contains(s)) {
+            solicitud.add(s);
+        }
     }
 
     public boolean getVariasJornadas() {
@@ -699,10 +672,18 @@ public class solicitudPPController implements Serializable {
     }
 
     public void jornadasSelect(SelectEvent event) {
-        jornadas = Integer.valueOf(event.getObject().toString());
-        setCom(5, jornadas + "");
-        if (jornadas == 1) {
-            previusAdd();
+        if (event.getComponent().getId().equals("tre")) {
+            for (int i = 0; i < solicitud.size(); i++) {
+                if (solicitud.get(i).getRecurso() == null) {
+                    solicitud.get(i).setRecurso((Recurso) event.getObject());
+                }
+            }
+        } else {
+            jornadas = Integer.valueOf(event.getObject().toString());
+            setCom(5, jornadas + "");
+            if (jornadas == 1) {
+                previusAdd();
+            }
         }
 
     }
@@ -721,28 +702,14 @@ public class solicitudPPController implements Serializable {
     }
 
     private void notificar(Integer idTipoPersona) {
-        List<Persona> personas = new ArrayList<>();
-        TipoPersona ps = tpnFL.find(idTipoPersona);
-        mensaje x;
-        if (ps != null) {
-            personas.addAll(ps.getPersonaList());
-            ps.getDelagacionCargoList().forEach((dl) -> {
-                personas.add(dl.getIdpersona());
-            });
-            ps.getCargoList().forEach((c) -> {
-                c.getMaestoCargoList().forEach((mc) -> {
-                    personas.add(mc.getMaestro().getPersona());
-                });
-            });
-            x = new mensaje(0, usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
-                    + " ha solicitado recursos para proyecto pedagógico planificado."
-                    + " Revise la administración de reservas para más detalles.",
-                    "Nueva solicitud de recursos",
-                    FacesMessage.SEVERITY_INFO,
-                    usuario.getIdpersona(), "srCra<form:ap:solicitados");
-            persistirNotificación(x, personas);
-        }
-
+        ax.persistirNotificación(
+                new mensaje(0, usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
+                        + " ha solicitado recursos para proyecto pedagógico planificado."
+                        + " Revise la administración de reservas para más detalles.",
+                        "Nueva solicitud de recursos",
+                        FacesMessage.SEVERITY_INFO,
+                        usuario.getIdpersona(), "srCra<form:ap:solicitados"),
+                ax.getPersonasParaNotificar(tpnFL.find(idTipoPersona)), notiFL, notificacion);
     }
 
     public boolean getDesactivarVistas() {

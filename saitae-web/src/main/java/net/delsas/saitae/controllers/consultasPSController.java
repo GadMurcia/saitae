@@ -58,7 +58,7 @@ import org.primefaces.event.SelectEvent;
 @Named
 @ViewScoped
 public class consultasPSController implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
     @EJB
     private ConsultaFacadeLocal conFL;
@@ -75,9 +75,9 @@ public class consultasPSController implements Serializable {
     private PersonaFacadeLocal pFL;
     @EJB
     private MatriculaFacadeLocal mFL;
-    
+
     private List<Consulta> consultasAnteriores;
-    
+
     private FacesMessage m;
     private Auxiliar ax;
     private Persona usuario;
@@ -88,7 +88,7 @@ public class consultasPSController implements Serializable {
     private boolean renderizar;
     private boolean renderizar2;
     private String nomEs;
-    
+
     @PostConstruct
     public void init() {
         ax = new Auxiliar();
@@ -126,7 +126,7 @@ public class consultasPSController implements Serializable {
             }
         }
     }
-    
+
     private void initVariables() {
         expediente = exFL.find(cita.getCitaPsicologiaPK().getEstudiante());
         consultasAnteriores = expediente != null ? expediente.getConsultaList() : new ArrayList<>();
@@ -139,7 +139,7 @@ public class consultasPSController implements Serializable {
         consulta.setConsultaExpediente(expediente);
         consulta.setIdPsicologo(usuario.getIdpersona());
     }
-    
+
     public void postRender() {
         if (m != null) {
             FacesContext.getCurrentInstance().addMessage("form0:msgs", m);
@@ -147,47 +147,47 @@ public class consultasPSController implements Serializable {
             m = null;
         }
     }
-    
+
     public List<Consulta> getConsultasAnteriores() {
         return Collections.unmodifiableList(consultasAnteriores);
     }
-    
+
     public ExpedientePS getExpediente() {
         return expediente;
     }
-    
+
     public void setExpediente(ExpedientePS expediente) {
         this.expediente = expediente;
     }
-    
+
     public Consulta getConsulta() {
         return consulta;
     }
-    
+
     public void setConsulta(Consulta consulta) {
         this.consulta = consulta;
     }
-    
+
     public boolean isEditar() {
         return editar;
     }
-    
+
     public List<SelectItem> getDepartamentos() {
         return ax.getDepartamentoLista(expediente.getEstudiante().getPersona());
     }
-    
+
     public List<SelectItem> getMunicipios() {
         return ax.getMunicipioLista(expediente.getEstudiante().getPersona());
     }
-    
+
     public String getDep() {
         return ax.getDepartamento(expediente.getEstudiante().getPersona());
     }
-    
+
     public String getMun() {
         return ax.getMunicipio(expediente.getEstudiante().getPersona());
     }
-    
+
     public void guardarExp() {
         String pv = expediente.getExpedientePsPersonasVivien();
         if (pv != null && pv.split("").length > 0) {
@@ -202,15 +202,15 @@ public class consultasPSController implements Serializable {
             PrimeFaces.current().ajax().update("form");
         }
     }
-    
+
     public Consulta getSelected() {
         return selected;
     }
-    
+
     public void setSelected(Consulta selected) {
         this.selected = selected;
     }
-    
+
     public void guardarConsulta() {
         Consulta ctr = conFL.find(consulta.getConsultaPK());
         cpsFL.remove(cita);
@@ -253,7 +253,7 @@ public class consultasPSController implements Serializable {
                 "Fin de la sesión de consulta.",
                 "La sesión ha terminado. Todos los datos se han actualizado."));
     }
-    
+
     public List<String> completeText(String query) {
         List<String> results = new ArrayList<>();
         List<Persona> list = pFL.getPersonaByLikeNombreAndType(query, 8);
@@ -265,7 +265,7 @@ public class consultasPSController implements Serializable {
         }
         return results;
     }
-    
+
     public void soloExpediente() {
         cpsFL.remove(cita);
         renderizar = true;
@@ -273,14 +273,14 @@ public class consultasPSController implements Serializable {
         editar = false;
         PrimeFaces.current().executeScript("PF('Dbus').hide();");
     }
-    
+
     public void continuar() {
         renderizar2 = true;
         editar = true;
         notificarInicio();
         PrimeFaces.current().executeScript("PF('Dbus').hide();");
     }
-    
+
     public void onItemSelect(SelectEvent event) {
         String t = (String) event.getObject();
         String tt[] = t.split(", NIE:  ");
@@ -305,7 +305,7 @@ public class consultasPSController implements Serializable {
             PrimeFaces.current().ajax().update("form");
         }
     }
-    
+
     public void cancelar() {
         if (cita != null) {
             cpsFL.remove(cita);
@@ -315,7 +315,7 @@ public class consultasPSController implements Serializable {
                 "Como no se seleccionó el expediente de un alumno, no puede continuar viendo el "
                 + "módulo de consultas psicológicas. Seleccione un expediente, antes de continuar."));
     }
-    
+
     private void redirigir(FacesMessage fm) {
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("ms", fm);
         try {
@@ -325,27 +325,27 @@ public class consultasPSController implements Serializable {
             postRender();
         }
     }
-    
+
     public boolean isRenderizar() {
         return renderizar;
     }
-    
+
     public boolean isRenderizar2() {
         return renderizar2;
     }
-    
+
     public boolean isVerBotones() {
         return (cita != null && cita.getCitaPsicologiaPK() != null);
     }
-    
+
     public String getNomEs() {
         return nomEs;
     }
-    
+
     public void setNomEs(String nomEs) {
         this.nomEs = nomEs;
     }
-    
+
     private void notificarInicio() {
         ax.persistirNotificación(
                 new mensaje(0, usuario.getIdpersona(), "citasPSH<form",
@@ -356,7 +356,7 @@ public class consultasPSController implements Serializable {
                                 + " " + usuario.getPersonaApellido().split(" ")[0] + " ha iniciado.")),
                 cita.getEstudiante1().getPersona(), notiFL, notificacion);
     }
-    
+
     public String getGrado() {
         int a = Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date()));
         int e = expediente == null ? 0 : expediente.getIdEstudiante();
@@ -366,5 +366,9 @@ public class consultasPSController implements Serializable {
         h += " " + (pk.getGradoModalidad().equals("C") ? "Contador" : (pk.getGradoModalidad().equals("S") ? "Secretariado" : (pk.getGradoModalidad().equals("G") ? "General" : "")));
         h += " " + pk.getGradoSeccion();
         return h;
+    }
+
+    public String getDateToString(Date d) {
+        return d == null ? "" : new SimpleDateFormat("dd/MM/yyyy hh:mm a").format(d);
     }
 }

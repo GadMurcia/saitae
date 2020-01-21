@@ -27,16 +27,16 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import net.delsas.saitae.ax.mensaje;
 import net.delsas.saitae.ax.Auxiliar;
-import net.delsas.saitae.beans.GradoFacadeLocal;
 import net.delsas.saitae.beans.MatriculaFacadeLocal;
 import net.delsas.saitae.beans.NotificacionesFacadeLocal;
 import net.delsas.saitae.beans.PermisosFacadeLocal;
+import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
 import net.delsas.saitae.entities.GradoPK;
 import net.delsas.saitae.entities.Matricula;
@@ -48,6 +48,7 @@ import net.delsas.saitae.entities.TipoPermiso;
 import net.delsas.saitae.entities.TipopersonaPermiso;
 import org.omnifaces.cdi.Push;
 import org.omnifaces.cdi.PushContext;
+import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -66,29 +67,29 @@ public class admPermisoController implements Serializable {
     private Permisos permiso;
     private Permisos acep;
     private Permisos solc;
-    private GradoPK gradoPK;
+    private String nombreE, duiS;
     private Persona usuario;
     private List<Integer> tps;
+
     @Inject
     @Push
     private PushContext notificacion;
-
     @EJB
     private PermisosFacadeLocal permisosFL;
-    @EJB
-    private GradoFacadeLocal grsoFL;
     @EJB
     private MatriculaFacadeLocal matriculaFL;
     @EJB
     private TipoPersonaFacadeLocal tipoPersonaFL;
     @EJB
     private NotificacionesFacadeLocal notFL;
+    @EJB
+    private PersonaFacadeLocal pFL;
 
     @PostConstruct
     public void init() {
         try {
             acep = solc = new Permisos(new PermisosPK());
-            gradoPK = new GradoPK(0, " ", "", getAño());
+            nombreE = "";
             permiso = new Permisos(new PermisosPK(0, new Date(), 0, new Date()), new Date(), "", "1");
             permiso.setPermisosComentario("0¿¿ ¿¿ ¿¿ ");
             permiso.setTipoPersona(tipoPersonaFL.find(8));
@@ -103,9 +104,6 @@ public class admPermisoController implements Serializable {
                 if (!r) {
                     redirect();
                 } else {
-                    //solicitados = (tps.contains(1) || tps.contains(2)) ? permisosFL.getPermisosPorEstado("0") : permisosFL.findByPEPEs("0");
-                    //aceptados = (tps.contains(1) || tps.contains(2)) ? permisosFL.getPermisosPorEstado("1") : permisosFL.findByPEPEs("1");
-                    //rechazados = (tps.contains(1) || tps.contains(2)) ? permisosFL.getPermisosPorEstado("2") : permisosFL.findByPEPEs("2");
                 }
             }
 
@@ -132,29 +130,6 @@ public class admPermisoController implements Serializable {
             items.add(t.getTipoPermiso());
         });
         return items;
-    }
-
-    public List<SelectItem> getModalidades() {
-        List<SelectItem> items = new ArrayList<>();
-        List<String> mo = grsoFL.getModalidadPorAño(getAño());
-        mo.forEach((s) -> {
-            items.add(new SelectItem(s, s.equals("C") ? "TVC Contador"
-                    : (s.equals("S") ? "TVC Secretariado"
-                    : (s.equals("G") ? "General" : "??"))));
-        });
-        return items;
-    }
-
-    public List<Integer> getNiveles() {
-        return grsoFL.getIdPorAñoyModalidad(getAño(), gradoPK.getGradoModalidad());
-    }
-
-    public List<String> getSecciones() {
-        return grsoFL.getSeccionPorAñoModalidadyId(getAño(), gradoPK.getGradoModalidad(), gradoPK.getIdgrado());
-    }
-
-    public List<Persona> getEstudiantes() {
-        return matriculaFL.findMatriculaByGrado(gradoPK);
     }
 
     public void onRowSelect(SelectEvent event) {
@@ -230,10 +205,16 @@ public class admPermisoController implements Serializable {
                 new Auxiliar().persistirNotificación(m, new Persona(m.getDestinatario()), notFL, notificacion);
                 FacesContext.getCurrentInstance().addMessage(null, ms);
                 init();
+                ms = null;
+            }
+            if (ms != null) {
+                FacesContext.getCurrentInstance().addMessage(null, ms);
+                PrimeFaces.current().ajax().update("form:msgs");
             }
         } catch (Exception e) {
             ms = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage());
             FacesContext.getCurrentInstance().addMessage(null, ms);
+            PrimeFaces.current().ajax().update("form:msgs");
         }
     }
 
@@ -367,30 +348,18 @@ public class admPermisoController implements Serializable {
         this.solc = solc;
     }
 
-    public GradoPK getGradoPK() {
-        return gradoPK;
-    }
-
-    public void setGradoPK(GradoPK gradoPK) {
-        this.gradoPK = gradoPK;
-    }
-
     public boolean isEstudiante() {
         return permiso.getTipoPersona().getIdtipoPersona() == 8;
     }
 
     public void setDuiSol(String dui) {
+        duiS= dui;
         String d[] = dui.split("-");
         permiso.setPermisosComentario(d[0] + d[1] + "¿¿" + getNombreSol() + "¿¿" + getApellidoSol() + "¿¿" + getComentario());
     }
 
     public String getDuiSol() {
-        String d = permiso.getPermisosComentario().split("¿¿")[0];
-        if (d.equals("0")) {
-            return "";
-        }
-        String m = d.substring(0, 7) + "-" + d.substring(8);
-        return m;
+        return duiS;
     }
 
     public void setNombreSol(String nombre) {
@@ -431,7 +400,7 @@ public class admPermisoController implements Serializable {
         String h = "";
         if (g.length < 4) {
             solc.setPermisosComentario(g[0] + "¿¿" + g[1] + "¿¿"
-                + (g.length >= 3 ? g[3] : "") + "¿¿ ");
+                    + (g.length >= 3 ? g[3] : "") + "¿¿ ");
         } else {
             h = g[3];
         }
@@ -454,5 +423,39 @@ public class admPermisoController implements Serializable {
 
     public String dateToString(Date d) {
         return new SimpleDateFormat("dd/MM/yyy").format(d);
+    }
+
+    public List<String> completeText(String query) {
+        List<String> results = new ArrayList<>();
+        List<Persona> list = pFL.getPersonaByLikeNombreAndType(query, 8);
+        list.forEach((p) -> {
+            results.add(p.getPersonaNombre() + " " + p.getPersonaApellido() + ", NIE:  " + p.getIdpersona());
+        });
+        if (results.isEmpty()) {
+            results.add("No hay resultados.");
+        }
+        return results;
+    }
+
+    public void onItemSelect(SelectEvent event) {
+        String[] tt = event.getObject().toString().split(", NIE:  ");
+        Persona est = null;
+        if (tt.length == 2) {
+            est = pFL.find(Integer.valueOf(tt[1]));
+        }
+        permiso.setPersona(est);
+        nombreE = tt[0];
+    }
+    
+    public void onblour(AjaxBehaviorEvent e){
+        
+    }
+
+    public String getNombreE() {
+        return nombreE;
+    }
+
+    public void setNombreE(String nombreE) {
+        this.nombreE = nombreE;
     }
 }

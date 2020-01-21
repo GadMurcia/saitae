@@ -26,20 +26,21 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "mestroHorarioMaterias", catalog = "intex", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "MestroHorarioMaterias.findAll", query = "SELECT m FROM MestroHorarioMaterias m ORDER BY m.diasEstudio, m.horario, m.materia, m.grado, m.maestro")
-    , @NamedQuery(name = "MestroHorarioMaterias.findByIdMaestro", query = "SELECT m FROM MestroHorarioMaterias m WHERE m.mestroHorarioMateriasPK.idMaestro = :idMaestro")
-    , @NamedQuery(name = "MestroHorarioMaterias.findByIdMateria", query = "SELECT m FROM MestroHorarioMaterias m WHERE m.mestroHorarioMateriasPK.idMateria = :idMateria")
-    , @NamedQuery(name = "MestroHorarioMaterias.findByIdHorario", query = "SELECT m FROM MestroHorarioMaterias m WHERE m.mestroHorarioMateriasPK.idHorario = :idHorario")
-    , @NamedQuery(name = "MestroHorarioMaterias.findByDiaSemana", query = "SELECT m FROM MestroHorarioMaterias m WHERE m.mestroHorarioMateriasPK.diaSemana = :diaSemana")
-    , @NamedQuery(name = "MestroHorarioMaterias.findByIdGrado", query = "SELECT m FROM MestroHorarioMaterias m WHERE m.mestroHorarioMateriasPK.idGrado = :idGrado")
-    , @NamedQuery(name = "MestroHorarioMaterias.findByGradoModalidad", query = "SELECT m FROM MestroHorarioMaterias m WHERE m.mestroHorarioMateriasPK.gradoModalidad = :gradoModalidad")
-    , @NamedQuery(name = "MestroHorarioMaterias.findBySeccionGrado", query = "SELECT m FROM MestroHorarioMaterias m WHERE m.mestroHorarioMateriasPK.seccionGrado = :seccionGrado")
-    , @NamedQuery(name = "MestroHorarioMaterias.findByA\u00f1oGrado", query = "SELECT m FROM MestroHorarioMaterias m WHERE m.mestroHorarioMateriasPK.a\u00f1oGrado = :a\u00f1oGrado")
-    , @NamedQuery(name = "MestroHorarioMaterias.findByMestroHorarioMateriasComentarios", query = "SELECT m FROM MestroHorarioMaterias m WHERE m.mestroHorarioMateriasComentarios = :mestroHorarioMateriasComentarios")
-    , @NamedQuery(name = "MestroHorarioMaterias.findByHorarioAndGrado", query = "SELECT m FROM MestroHorarioMaterias m WHERE m.horario = :horario AND m.grado.gradoPK = :gradoPK AND m.diasEstudio = :dia")
-    , @NamedQuery(name = "MestroHorarioMaterias.findByHorarioAndMaestro", query = "SELECT m FROM MestroHorarioMaterias m WHERE m.horario = :horario AND m.maestro = :maestro AND m.diasEstudio = :dia")
-    , @NamedQuery(name = "MestroHorarioMaterias.findMaestrosBygrado", query = "SELECT DISTINCT m.maestro FROM MestroHorarioMaterias m WHERE m.grado.gradoPK = :gradoPK")
-    , @NamedQuery(name = "MestroHorarioMaterias.findMateriasBygradoPkAndMaestroId", query = "SELECT DISTINCT m.materia FROM MestroHorarioMaterias m WHERE m.grado.gradoPK = :gradoPK AND m.maestro.idmaestro = :idMaestro")
+    @NamedQuery(name = "MestroHorarioMaterias.findAll", query = "SELECT m FROM MestroHorarioMaterias m"),
+    @NamedQuery(name = "MestroHorarioMaterias.findByIdMaestro", query = "SELECT m FROM MestroHorarioMaterias m WHERE m.mestroHorarioMateriasPK.idMaestro = :idMaestro"),
+    @NamedQuery(name = "MestroHorarioMaterias.findByIdMateria", query = "SELECT m FROM MestroHorarioMaterias m WHERE m.mestroHorarioMateriasPK.idMateria = :idMateria"),
+    @NamedQuery(name = "MestroHorarioMaterias.findByIdHorario", query = "SELECT m FROM MestroHorarioMaterias m WHERE m.mestroHorarioMateriasPK.idHorario = :idHorario"),
+    @NamedQuery(name = "MestroHorarioMaterias.findByDiaSemana", query = "SELECT m FROM MestroHorarioMaterias m WHERE m.mestroHorarioMateriasPK.diaSemana = :diaSemana"),
+    @NamedQuery(name = "MestroHorarioMaterias.findByIdGrado", query = "SELECT m FROM MestroHorarioMaterias m WHERE m.mestroHorarioMateriasPK.idGrado = :idGrado"),
+    @NamedQuery(name = "MestroHorarioMaterias.findByGradoModalidad", query = "SELECT m FROM MestroHorarioMaterias m WHERE m.mestroHorarioMateriasPK.gradoModalidad = :gradoModalidad"),
+    @NamedQuery(name = "MestroHorarioMaterias.findBySeccionGrado", query = "SELECT m FROM MestroHorarioMaterias m WHERE m.mestroHorarioMateriasPK.seccionGrado = :seccionGrado"),
+    @NamedQuery(name = "MestroHorarioMaterias.findByA\u00f1oGrado", query = "SELECT m FROM MestroHorarioMaterias m WHERE m.mestroHorarioMateriasPK.a\u00f1oGrado = :a\u00f1oGrado"),
+    @NamedQuery(name = "MestroHorarioMaterias.findByMestroHorarioMateriasComentarios", query = "SELECT m FROM MestroHorarioMaterias m WHERE m.mestroHorarioMateriasComentarios = :mestroHorarioMateriasComentarios"),
+    @NamedQuery(name = "MestroHorarioMaterias.findByHorarioAndGrado", query = "SELECT m FROM MestroHorarioMaterias m WHERE m.horario = :horario AND m.grado.gradoPK = :gradoPK AND m.diasEstudio = :dia"),
+    @NamedQuery(name = "MestroHorarioMaterias.findByHorarioAndMaestro", query = "SELECT m FROM MestroHorarioMaterias m WHERE m.horario = :horario AND m.maestro = :maestro AND m.diasEstudio = :dia"),
+    @NamedQuery(name = "MestroHorarioMaterias.findMaestrosBygrado", query = "SELECT DISTINCT m.maestro FROM MestroHorarioMaterias m WHERE m.grado.gradoPK = :gradoPK"),
+    @NamedQuery(name = "MestroHorarioMaterias.findMateriasBygradoPkAndMaestroId", query = "SELECT DISTINCT m.materia FROM MestroHorarioMaterias m WHERE m.grado.gradoPK = :gradoPK AND m.maestro.idmaestro = :idMaestro"),
+    @NamedQuery(name = "MestroHorarioMaterias.findAllOrdered", query = "SELECT m FROM MestroHorarioMaterias m WHERE m.grado.gradoPK.gradoAño = :año ORDER BY m.diasEstudio, m.horario, m.materia, m.grado, m.maestro")
 })
 public class MestroHorarioMaterias implements Serializable {
 
@@ -59,10 +60,10 @@ public class MestroHorarioMaterias implements Serializable {
     @ManyToOne(optional = false)
     private Horario horario;
     @JoinColumns({
-        @JoinColumn(name = "idGrado", referencedColumnName = "idgrado", insertable = false, updatable = false)
-        , @JoinColumn(name = "seccionGrado", referencedColumnName = "gradoSeccion", insertable = false, updatable = false)
-        , @JoinColumn(name = "a\u00f1oGrado", referencedColumnName = "gradoA\u00f1o", insertable = false, updatable = false)
-        , @JoinColumn(name = "gradoModalidad", referencedColumnName = "gradoModalidad", insertable = false, updatable = false)})
+        @JoinColumn(name = "idGrado", referencedColumnName = "idgrado", insertable = false, updatable = false),
+        @JoinColumn(name = "seccionGrado", referencedColumnName = "gradoSeccion", insertable = false, updatable = false),
+        @JoinColumn(name = "a\u00f1oGrado", referencedColumnName = "gradoA\u00f1o", insertable = false, updatable = false),
+        @JoinColumn(name = "gradoModalidad", referencedColumnName = "gradoModalidad", insertable = false, updatable = false)})
     @ManyToOne(optional = false)
     private Grado grado;
     @JoinColumn(name = "diaSemana", referencedColumnName = "idDias", insertable = false, updatable = false)
@@ -160,5 +161,5 @@ public class MestroHorarioMaterias implements Serializable {
     public String toString() {
         return "net.delsas.saitae.entities.MestroHorarioMaterias[ mestroHorarioMateriasPK=" + mestroHorarioMateriasPK + " ]";
     }
-    
+
 }

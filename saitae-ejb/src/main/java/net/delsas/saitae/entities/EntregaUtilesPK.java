@@ -53,32 +53,31 @@ public class EntregaUtilesPK implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 37 * hash + this.idEstudiante;
-        hash = 37 * hash + this.año;
+        int hash = 0;
+        hash += (int) idEstudiante;
+        hash += (int) año;
         return hash;
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof EntregaUtilesPK)) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final EntregaUtilesPK other = (EntregaUtilesPK) obj;
+        EntregaUtilesPK other = (EntregaUtilesPK) object;
         if (this.idEstudiante != other.idEstudiante) {
             return false;
         }
-        return this.año == other.año;
+        if (this.año != other.año) {
+            return false;
+        }
+        return true;
     }
 
     @Override
     public String toString() {
-        return "EntregaUtilesPK{" + "idEstudiante=" + idEstudiante + ", a\u00f1o=" + año + '}';
+        return "net.delsas.saitae.entities.EntregaUtilesPK[ idEstudiante=" + idEstudiante + ", a\u00f1o=" + año + " ]";
     }
+    
 }

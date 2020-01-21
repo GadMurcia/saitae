@@ -34,40 +34,50 @@ public interface MestroHorarioMateriasFacadeLocal {
     List<MestroHorarioMaterias> findRange(int[] range);
 
     int count();
-    
+
     /**
-     * Busca en la base de datos la existencia de un horario asignado en un grado y dia especificados
+     * Busca en la base de datos la existencia de un horario asignado en un
+     * grado y dia especificados
+     *
      * @param horario
      * @param gradoPK
      * @param dia
-     * @return java.util.List net.delsas.saitae.entities.MestroHorarioMaterias 
+     * @return java.util.List net.delsas.saitae.entities.MestroHorarioMaterias
      */
     public List<MestroHorarioMaterias> findByhorarioAndGradoPK(Horario horario, GradoPK gradoPK, DiasEstudio dia);
-    
+
     /**
-     * Busca en la base de datos la existencia de un horario asignado a un maestro en un grado especificados
+     * Busca en la base de datos la existencia de un horario asignado a un
+     * maestro en un grado especificados
+     *
      * @param horario
      * @param maestro
      * @param dia
-     * @return java.util.List net.delsas.saitae.entities.MestroHorarioMaterias 
-     */
-    public List<MestroHorarioMaterias> findByhorarioAndMaestro(Horario horario, Maestro maestro, DiasEstudio dia);
-    
-    /**
-     * Obtiene una lista de maestrosHorarioMaterias ordenada por días, horario, materia, grado, y maestro
      * @return java.util.List net.delsas.saitae.entities.MestroHorarioMaterias
      */
-    public List<MestroHorarioMaterias> findAllOrdered();
-    
+    public List<MestroHorarioMaterias> findByhorarioAndMaestro(Horario horario, Maestro maestro, DiasEstudio dia);
+
     /**
-     * Devuelve una lista de maestros que imparten clases en el grado identificado por la pk dada.
+     * Obtiene una lista de maestrosHorarioMaterias e el año proporcionado
+     * ordenada por días, horario, materia, grado, y maestro
+     *
+     * @return java.util.List net.delsas.saitae.entities.MestroHorarioMaterias
+     */
+    public List<MestroHorarioMaterias> findAllOrdered(int año);
+
+    /**
+     * Devuelve una lista de maestros que imparten clases en el grado
+     * identificado por la pk dada.
+     *
      * @param pk
      * @return java.util.List net.delsas.saitae.entities.Maestro
      */
     public List<Maestro> findMaestroByGradopk(GradoPK pk);
-    
+
     /**
-     * Devuelve una lista de materias que el maestro identificado por su id imparte en el grado identificado por su pk dados
+     * Devuelve una lista de materias que el maestro identificado por su id
+     * imparte en el grado identificado por su pk dados
+     *
      * @param pk
      * @param idMaestro
      * @return java.util.List net.delsas.saitae.entities.Materia

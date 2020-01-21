@@ -36,8 +36,8 @@
                     </p:selectBooleanButton>
                     <p:outputLabel value="FECHA"/>
                     <p:datePicker id="mask0" value="#{contribucionesController.contr.enero}"
-                                  showIcon="false"  pattern="dd/MM/yyyy" 
-                                  disabled= "true"/>
+                                  showIcon="true"  pattern="dd/MM/yyyy" 
+                                  disabled="#{!contribucionesController.eneroPagado}"/>
 
 
                     <p:outputLabel value="FEBRERO"/>
@@ -49,8 +49,8 @@
                     </p:selectBooleanButton>
                     <p:outputLabel value="FECHA"/>
                     <p:datePicker id="mask1" value="#{contribucionesController.contr.febrero}"
-                                  showIcon="false"  pattern="dd/MM/yyyy"
-                                  disabled="true"/>
+                                  showIcon="true"  pattern="dd/MM/yyyy"
+                                  disabled="#{!contribucionesController.febreroPagado}"/>
 
                     <p:outputLabel value="MARZO"/>
                     <p:selectBooleanButton value="#{contribucionesController.marzoPagado}" 
@@ -61,8 +61,8 @@
                     </p:selectBooleanButton>
                     <p:outputLabel value="FECHA"/>
                     <p:datePicker id="mask2" value="#{contribucionesController.contr.marzo}"
-                                  showIcon="false"  pattern="dd/MM/yyyy"
-                                  disabled="true"/>
+                                  showIcon="true"  pattern="dd/MM/yyyy"
+                                  disabled="#{!contribucionesController.marzoPagado}"/>
 
                     <p:outputLabel value="ABRIL"/>
                     <p:selectBooleanButton value="#{contribucionesController.abrilPagado}" 
@@ -73,8 +73,8 @@
                     </p:selectBooleanButton>
                     <p:outputLabel value="FECHA"/>
                     <p:datePicker id="mask3" value="#{contribucionesController.contr.abril}"
-                                  showIcon="false" pattern="dd/MM/yyyy"
-                                  disabled="true"/>
+                                  showIcon="true" pattern="dd/MM/yyyy"
+                                  disabled="#{!contribucionesController.abrilPagado}"/>
 
                     <p:outputLabel value="MAYO"/>
                     <p:selectBooleanButton value="#{contribucionesController.mayoPagado}" 
@@ -85,8 +85,8 @@
                     </p:selectBooleanButton>
                     <p:outputLabel value="FECHA"/>
                     <p:datePicker id="mask4" value="#{contribucionesController.contr.mayo}"
-                                  showIcon="false" pattern="dd/MM/yyyy"
-                                  disabled="true"/>
+                                  showIcon="true" pattern="dd/MM/yyyy"
+                                  disabled="#{!contribucionesController.mayoPagado}"/>
 
                     <p:outputLabel value="JUNIO"/>
                     <p:selectBooleanButton value="#{contribucionesController.junioPagado}" 
@@ -97,8 +97,9 @@
                     </p:selectBooleanButton>
                     <p:outputLabel value="FECHA"/>
                     <p:datePicker id="mask5" value="#{contribucionesController.contr.junio}"
-                                  showIcon="false" pattern="dd/MM/yyyy"
-                                  disabled="true"/>
+                                  showIcon="true" pattern="dd/MM/yyyy"
+                                  disabled="#{!contribucionesController.junioPagado}"/>
+                    
                     <p:outputLabel value="JULIO"/>
                     <p:selectBooleanButton value="#{contribucionesController.julioPagado}" 
                                            onLabel="Cancelado" offLabel="Pendiente" 
@@ -108,8 +109,9 @@
                     </p:selectBooleanButton>
                     <p:outputLabel value="FECHA"/>
                     <p:datePicker id="mask6" value="#{contribucionesController.contr.julio}"
-                                  showIcon="false"  pattern="dd/MM/yyyy"
-                                  disabled="true"/>
+                                  showIcon="true"  pattern="dd/MM/yyyy"
+                                  disabled="#{!contribucionesController.julioPagado}"/>
+                    
                     <p:outputLabel value="AGOSTO"/>
                     <p:selectBooleanButton value="#{contribucionesController.agostoPagado}" 
                                            onLabel="Cancelado" offLabel="Pendiente" 
@@ -119,8 +121,8 @@
                     </p:selectBooleanButton>
                     <p:outputLabel value="FECHA"/>
                     <p:datePicker id="mask7" value="#{contribucionesController.contr.agosto}"
-                                  showIcon="false"  pattern="dd/MM/yyyy"
-                                  disabled="true"/>
+                                  showIcon="true"  pattern="dd/MM/yyyy"
+                                  disabled="#{!contribucionesController.agostoPagado}"/>
 
                     <p:outputLabel value="SEPTIEMBRE"/>
                     <p:selectBooleanButton value="#{contribucionesController.septiembrePagado}" 
@@ -131,8 +133,8 @@
                     </p:selectBooleanButton>
                     <p:outputLabel value="FECHA"/>
                     <p:datePicker id="mask8" value="#{contribucionesController.contr.septiembre}"
-                                  showIcon="false" pattern="dd/MM/yyyy"
-                                  disabled="true"/>
+                                  showIcon="true" pattern="dd/MM/yyyy"
+                                  disabled="#{!contribucionesController.septiembrePagado}"/>
 
                     <p:outputLabel value="OCTUBRE"/>
                     <p:selectBooleanButton value="#{contribucionesController.octubrePagado}" 
@@ -143,8 +145,8 @@
                     </p:selectBooleanButton>
                     <p:outputLabel value="FECHA"/>
                     <p:datePicker id="mask9" value="#{contribucionesController.contr.octubre}"
-                                  showIcon="false"  pattern="dd/MM/yyyy"
-                                  disabled="true"/>
+                                  showIcon="true"  pattern="dd/MM/yyyy"
+                                  disabled="#{!contribucionesController.octubrePagado}"/>
 
                     <p:column/>
                     <p:commandButton id="summit" value="Guardar" 

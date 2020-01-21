@@ -232,9 +232,11 @@
                                                         <p:selectOneMenu id="tre" value="#{i.recurso}" widgetVar="100%"
                                                                          converter="omnifaces.SelectItemsConverter"
                                                                          required="true" immediate="true">
-                                                            <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
+                                                            <f:selectItem itemLabel="Seleccione" itemValue="#{null}" 
+                                                                          noSelectionOption="true"/>
                                                             <f:selectItems value="#{solicitudPPController.recDisp}" var="r"
                                                                            itemValue="#{r}" itemLabel="#{r.nombre}"/>
+                                                            <p:ajax event="itemSelect" listener="#{solicitudPPController.jornadasSelect}"/>
                                                         </p:selectOneMenu>
                                                     </f:facet>
                                                 </p:cellEditor>

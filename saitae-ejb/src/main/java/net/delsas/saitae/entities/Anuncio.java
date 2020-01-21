@@ -39,9 +39,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Anuncio.findByAnuncioTitulo", query = "SELECT a FROM Anuncio a WHERE a.anuncioTitulo = :anuncioTitulo")
     , @NamedQuery(name = "Anuncio.findByAnuncioFechaFin", query = "SELECT a FROM Anuncio a WHERE a.anuncioFechaFin = :anuncioFechaFin")
     , @NamedQuery(name = "Anuncio.findByAnuncioComentario", query = "SELECT a FROM Anuncio a WHERE a.anuncioComentario = :anuncioComentario")
-    , @NamedQuery(name = "Anuncio.findAnunciosInactivos", query = "SELECT a FROM Anuncio a WHERE a.anuncioFechaFin < :fecha")
-    , @NamedQuery(name = "Anuncio.findAnunciosActivos", query = "SELECT a FROM Anuncio a WHERE a.anuncioFechaFin >= :fecha")
-    , @NamedQuery(name = "Anuncio.findAnunciosParaTodos", query = "SELECT a FROM Anuncio a WHERE a.anuncioFechaFin >= :fecha AND a.anuncioTipoPersona = :tipo")
+    , @NamedQuery(name = "Anuncio.findAnunciosInactivos", query = "SELECT a FROM Anuncio a WHERE a.anuncioFechaFin < :fecha ORDER BY a.anuncioFechaFin DESC")
+    , @NamedQuery(name = "Anuncio.findAnunciosActivos", query = "SELECT a FROM Anuncio a WHERE a.anuncioFechaFin >= :fecha ORDER BY a.anuncioFechaFin DESC")
+    , @NamedQuery(name = "Anuncio.findAnunciosParaTodos", query = "SELECT a FROM Anuncio a WHERE a.anuncioFechaFin >= :fecha AND a.anuncioTipoPersona = :tipo  ORDER BY a.anuncioFechaFin DESC")
 })
 public class Anuncio implements Serializable {
 

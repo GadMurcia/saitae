@@ -19,29 +19,57 @@
                                 update="form1"/>
 
                     </p:autoComplete>
-                </h:panelGrid>
-                <h:panelGrid columns="2" cellspacing="10" >
+
                     <p:outputLabel value="Alumno:"/>
                     <p:outputLabel id="alumno" value="#{paquetesController.p.personaNombre} #{paquetesController.p.personaApellido}" />
                     <p:outputLabel value="Grado:"/>
                     <p:outputLabel id="grado" value="#{paquetesController.gradoAlumno}" />
                 </h:panelGrid>
-                <h:panelGrid columns="2" cellspacing="10" >
-                    <p:outputLabel value="Uniforme:"/>
-                    <p:selectBooleanButton value="#{paquetesController.uni}" 
-                                           onLabel="Entregado" offLabel="Pendiente" 
-                                           style="width: 190px"
-                                           disabled="#{paquetesController.boton}"/>
-                    <p:outputLabel value="Zapatos:"/>
-                    <p:selectBooleanButton value="#{paquetesController.zap}" 
-                                           onLabel="Entregado" offLabel="Pendiente" 
-                                           style="width: 190px"
-                                           disabled="#{paquetesController.boton}"/>
-                    <p:outputLabel value="Utiles Escolares:"/>
-                    <p:selectBooleanButton value="#{paquetesController.esc}" 
-                                           onLabel="Entregado" offLabel="Pendiente" 
-                                           style="width: 190px"
-                                           disabled="#{paquetesController.boton}"/>
+                <h:panelGrid columns="1" cellspacing="10" >
+                    <h:panelGrid columns="2">
+                        <p:panel header="Primera entrega">
+                            <h:panelGrid columns="2">
+                                <p:outputLabel value="Uniforme:"/>
+                                <p:selectBooleanButton value="#{paquetesController.entregaUtiles.uniforme1}" 
+                                                       onLabel="Entregado" offLabel="Pendiente" 
+                                                       style="width: 190px"
+                                                       disabled="#{paquetesController.boton}"/>
+
+                                <p:outputLabel value="Zapatos:"/>
+                                <p:selectBooleanButton value="#{paquetesController.entregaUtiles.zapatos1}" 
+                                                       onLabel="Entregado" offLabel="Pendiente" 
+                                                       style="width: 190px"
+                                                       disabled="#{paquetesController.boton}"/>
+
+                                <p:outputLabel value="Utiles Escolares:"/>
+                                <p:selectBooleanButton value="#{paquetesController.entregaUtiles.utiles1}" 
+                                                       onLabel="Entregado" offLabel="Pendiente" 
+                                                       style="width: 190px"
+                                                       disabled="#{paquetesController.boton}"/>
+                            </h:panelGrid>
+                        </p:panel>
+                        <p:panel header="Segunda entrega">
+                            <h:panelGrid columns="2">
+                                <p:outputLabel value="Uniforme:"/>
+                                <p:selectBooleanButton value="#{paquetesController.entregaUtiles.uniforme2}" 
+                                                       onLabel="Entregado" offLabel="Pendiente" 
+                                                       style="width: 190px"
+                                                       disabled="#{paquetesController.boton}"/>
+
+                                <p:outputLabel value="Zapatos:"/>
+                                <p:selectBooleanButton value="#{paquetesController.entregaUtiles.zapatos2}" 
+                                                       onLabel="Entregado" offLabel="Pendiente" 
+                                                       style="width: 190px"
+                                                       disabled="#{paquetesController.boton}"/>
+
+                                <p:outputLabel value="Utiles Escolares:"/>
+                                <p:selectBooleanButton value="#{paquetesController.entregaUtiles.utiles2}" 
+                                                       onLabel="Entregado" offLabel="Pendiente" 
+                                                       style="width: 190px"
+                                                       disabled="#{paquetesController.boton}"/>
+                            </h:panelGrid>
+                        </p:panel>
+                    </h:panelGrid>
                     <p:column/>
                     <p:commandButton id="summit" value="Guardar" 
                                      style="width: 190px"

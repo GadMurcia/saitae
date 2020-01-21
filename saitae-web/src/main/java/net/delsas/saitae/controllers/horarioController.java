@@ -94,7 +94,7 @@ public class horarioController implements Serializable {
     }
 
     public void init2() {
-        horario = mhmFL.findAllOrdered();//new ArrayList<>();         
+        horario = mhmFL.findAllOrdered(getAño());//new ArrayList<>();         
         selected = new MestroHorarioMaterias(new MestroHorarioMateriasPK(0, 0, 0, 0, 0, "", "", 0));
         edit = false;
         pk = new MestroHorarioMateriasPK(0, 0, 0, 0, 0, "", "", 0);
@@ -168,12 +168,21 @@ public class horarioController implements Serializable {
                 m.setHorario(horarioFL.find(selected.getHorario().getIdhorario()));
                 m.setMaestro(maestroFL.find(selected.getMaestro().getIdmaestro()));
                 m.setMateria(materiaFL.find(selected.getMateria().getIdmateria()));
-                m.setMestroHorarioMateriasPK(new MestroHorarioMateriasPK(m.getMaestro().getIdmaestro(), m.getMateria().getIdmateria(), m.getHorario().getIdhorario(), m.getDiasEstudio().getIdDias(), m.getGrado().getGradoPK().getIdgrado(), m.getGrado().getGradoPK().getGradoSeccion(), m.getGrado().getGradoPK().getGradoModalidad(), m.getGrado().getGradoPK().getGradoAño()));
+                m.setMestroHorarioMateriasPK(
+                        new MestroHorarioMateriasPK(
+                                m.getMaestro().getIdmaestro(),
+                                m.getMateria().getIdmateria(),
+                                m.getHorario().getIdhorario(),
+                                m.getDiasEstudio().getIdDias(),
+                                m.getGrado().getGradoPK().getIdgrado(),
+                                m.getGrado().getGradoPK().getGradoModalidad(),
+                                m.getGrado().getGradoPK().getGradoSeccion(),
+                                m.getGrado().getGradoPK().getGradoAño()));
                 if (edit) {
                     selected = mhmFL.find(pk);
                     mhmFL.remove(selected);
                 }
-                mhmFL.edit(m);
+                mhmFL.create(m);
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
                         "Agregación exitosa.",
                         "Las modificaciones se han realizado correctamente."));
