@@ -19,29 +19,6 @@
                                     <h:outputText id="dui" 
                                                   value="#{consultasPSController.expediente.estudiante.persona.idpersona}"/>
 
-                                    <p:outputLabel for="nit" value="NIT: " />
-                                    <p:inputMask id="nit" 
-                                                 value="#{consultasPSController.expediente.estudiante.persona.personaNit}" 
-                                                 mask="9999-999999-999-9" disabled="true"/>
-
-                                    <p:outputLabel for="nombre" value="Nombre: "/>
-                                    <h:outputText id="nombre" 
-                                                  value="#{consultasPSController.expediente.estudiante.persona.personaNombre}"/>
-
-                                    <p:outputLabel for="apellido" value="Apellidos: "/>
-                                    <h:outputText id="apellido" 
-                                                  value="#{consultasPSController.expediente.estudiante.persona.personaApellido}"/>
-
-                                    <p:outputLabel for="fecha" value="Fecha de nacimiento: " />
-                                    <p:calendar id="fecha" 
-                                                value="#{consultasPSController.expediente.estudiante.persona.personaNacimiento}" 
-                                                pattern="dd-MM-yyyy" disabled="true"/>
-
-                                    <p:outputLabel for="sexo" value="Sexo: " />
-                                    <p:selectBooleanButton id="sexo" offLabel="Maculino" onLabel="Femenino"
-                                                           value="#{consultasPSController.expediente.estudiante.persona.personaSexo}"
-                                                           disabled="true"/>
-
                                     <p:outputLabel for="ef" value="Estado Familiar: " />
                                     <p:selectOneMenu id="ef" 
                                                      value="#{consultasPSController.expediente.estudiante.persona.personaEstadoFamiliar}"
@@ -50,11 +27,11 @@
                                         <f:selectItem itemLabel="Solter@" itemValue="0" />
                                         <f:selectItem itemLabel="Casad@" itemValue="1" />
                                         <f:selectItem itemLabel="Acompañad@" itemValue="2"/>
-                                    </p:selectOneMenu>       
+                                    </p:selectOneMenu>
 
-                                    <p:outputLabel for="nacion" value="Nacionalidad: "/>
-                                    <h:outputText id="nacion"
-                                                  value="#{consultasPSController.expediente.estudiante.persona.personaNacionalidad}"/>
+                                    <p:outputLabel for="nit" value="NIT: " />
+                                    <h:outputText id="nit" 
+                                                  value="#{consultasPSController.expediente.estudiante.persona.personaNit}"/>
 
                                     <h:outputLabel for="dep" value="Departamento de nacimiento: " />
                                     <p:selectOneMenu id="dep" value="#{consultasPSController.dep}"
@@ -62,11 +39,19 @@
                                         <f:selectItems value="#{consultasPSController.departamentos}"/>
                                     </p:selectOneMenu>
 
+                                    <p:outputLabel for="nombre" value="Nombre: "/>
+                                    <h:outputText id="nombre" 
+                                                  value="#{consultasPSController.expediente.estudiante.persona.personaNombre}"/>
+
                                     <h:outputLabel for="mun" value="Municipio de nacimiento: " />
                                     <p:selectOneMenu id="mun" value="#{consultasPSController.mun}"
                                                      disabled="true">
                                         <f:selectItems value="#{consultasPSController.municipios}"/>
                                     </p:selectOneMenu>
+
+                                    <p:outputLabel for="apellido" value="Apellidos: "/>
+                                    <h:outputText id="apellido" 
+                                                  value="#{consultasPSController.expediente.estudiante.persona.personaApellido}"/>
 
                                     <p:outputLabel for="zona" value="Zona de residencia: " />
                                     <p:selectOneMenu id="zona" disabled="true"
@@ -76,13 +61,27 @@
                                         <f:selectItem itemLabel="Urbana" itemValue="1" />
                                     </p:selectOneMenu>
 
+                                    <p:outputLabel for="fecha" value="Fecha de nacimiento: " />
+                                    <h:outputText id="fecha" 
+                                                  value="#{consultasPSController.expediente.estudiante.persona.personaNacimiento}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                    </h:outputText>
+
                                     <p:outputLabel for="disca" value="Discapacidades: " />
                                     <h:outputText id="disca" 
                                                   value="#{consultasPSController.expediente.estudiante.persona.personaDiscapacidades}"/>
 
+                                    <p:outputLabel for="sexo" value="Sexo: " />
+                                    <h:outputText id="sexo" 
+                                                  value="#{consultasPSController.expediente.estudiante.persona.personaSexo? 'Femenino':'Masculino'}"/>
+
                                     <p:outputLabel for="enf" value="Enfermedades que padece: "/>
                                     <h:outputText id="enf" 
                                                   value="#{consultasPSController.expediente.estudiante.estudianteEnfermedades}"/>
+
+                                    <p:outputLabel for="nacion" value="Nacionalidad: "/>
+                                    <h:outputText id="nacion"
+                                                  value="#{consultasPSController.expediente.estudiante.persona.personaNacionalidad}"/>
 
                                     <p:outputLabel for="med" value="Medicamentos permanentes: "/>
                                     <h:outputText id="med" 
@@ -96,9 +95,8 @@
                                                   value="#{consultasPSController.expediente.estudiante.persona.personaDireccion}"/>
 
                                     <p:outputLabel for="telefono" value="Teléfono Personal: "/>
-                                    <p:inputMask id="telefono" 
-                                                 value="#{consultasPSController.expediente.estudiante.persona.personaTelefono}"
-                                                 mask="9999-9999" disabled="true"/>
+                                    <h:outputText id="telefono" 
+                                                  value="#{consultasPSController.expediente.estudiante.persona.personaTelefono}"/>
 
                                     <p:outputLabel for="email" value="Correo electrónico: "/>
                                     <h:outputText id="email" 
@@ -191,7 +189,7 @@
                         <p:commandButton value="Cancelar" id="can" 
                                          actionListener="#{consultasPSController.cancelar()}"/>
 
-                        <p:commandButton value="Rxpediente" id="exp" update="form"
+                        <p:commandButton value="Expediente" id="exp" update="form"
                                          disabled="#{!consultasPSController.verBotones}"
                                          actionListener="#{consultasPSController.soloExpediente()}"/>
 

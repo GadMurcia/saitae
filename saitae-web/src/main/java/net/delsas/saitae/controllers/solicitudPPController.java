@@ -58,7 +58,6 @@ import net.delsas.saitae.entities.ReservaXpedagogia;
 import net.delsas.saitae.entities.ReservaXpedagogiaPK;
 import net.delsas.saitae.entities.SolicitudReserva;
 import net.delsas.saitae.entities.SolicitudReservaPK;
-import net.delsas.saitae.entities.TipoPersona;
 import org.omnifaces.cdi.Push;
 import org.omnifaces.cdi.PushContext;
 import org.primefaces.PrimeFaces;
@@ -107,7 +106,6 @@ public class solicitudPPController implements Serializable {
     private List<Horario> horarios;
     private List<Recurso> recDisp;
     private List<SolicitudReserva> solicitud;
-    private List<Integer> disabledDays;
 
     private ProyectoPedagogico proyecto;
     private Persona usuario;
@@ -720,12 +718,8 @@ public class solicitudPPController implements Serializable {
         this.editar = desactivarVistas;
     }
 
-    public List<Integer> getDisabledDays() {
-        return Collections.unmodifiableList(disabledDays);
-    }
-
-    public void setDisabledDays(List<Integer> disabledDays) {
-        this.disabledDays = disabledDays;
+    public List<Integer> getDisabledDays() { 
+        return new Auxiliar().getDisabledDays();
     }
 
     public void preRender() {

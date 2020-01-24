@@ -278,6 +278,10 @@ public class consultasPSController implements Serializable {
         renderizar2 = true;
         editar = true;
         notificarInicio();
+        m = new FacesMessage(FacesMessage.SEVERITY_INFO, "Sesión creada exitosamente",
+                "Esta es una sesión en donde el estudiante no ha solicitado previamente su atención. "
+                + "El estudiante recibirá una notificación.");
+        postRender();
         PrimeFaces.current().executeScript("PF('Dbus').hide();");
     }
 
@@ -297,11 +301,7 @@ public class consultasPSController implements Serializable {
             editar = false;
             renderizar = true;
             renderizar2 = false;
-            m = new FacesMessage(FacesMessage.SEVERITY_INFO, "Sesión creada exitosamente",
-                    "Esta es una sesión en donde el estudiante no ha solicitado previamente su atención. "
-                    + "El estudiante recibirá una notificación.");
             initVariables();
-            postRender();
             PrimeFaces.current().ajax().update("form");
         }
     }
@@ -365,7 +365,7 @@ public class consultasPSController implements Serializable {
         String h = (pk.getIdgrado() == 1 ? "Primero" : (pk.getIdgrado() == 2 ? "Segundo" : (pk.getIdgrado() == 3 ? "Tercero" : "")));
         h += " " + (pk.getGradoModalidad().equals("C") ? "Contador" : (pk.getGradoModalidad().equals("S") ? "Secretariado" : (pk.getGradoModalidad().equals("G") ? "General" : "")));
         h += " " + pk.getGradoSeccion();
-        return h;
+        return h; 
     }
 
     public String getDateToString(Date d) {

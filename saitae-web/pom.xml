@@ -61,9 +61,9 @@
         </dependency>
         -->
         <dependency>
-            <groupId>org.primefaces.themes</groupId>
+            <groupId>org.primefaces.extensions</groupId>
             <artifactId>all-themes</artifactId>
-            <version>1.0.10</version>
+            <version>1.0.8</version>
             <scope>compile</scope>
         </dependency>
         
@@ -71,7 +71,6 @@
             <groupId>org.omnifaces</groupId>
             <artifactId>omnifaces</artifactId>
             <version>2.7.1</version>
-            <scope>compile</scope>
         </dependency>
         
         <dependency>

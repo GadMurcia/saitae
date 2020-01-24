@@ -64,11 +64,6 @@
                         <p:column headerText="Valor unitario">
                             #{r.valorUnitario}
                         </p:column>
-                        <p:column headerText="Tipo valor" filterBy="#{r.tipoValor}"
-                                  filterMatchMode="contains">
-                            #{r.tipoValor}
-                        </p:column>
-
                     </p:dataTable>
                     <p:commandButton value="+" styleClass="ui-priority-primary"
                                      actionListener="#{admRecursoC.nuevoRecurso()}"
