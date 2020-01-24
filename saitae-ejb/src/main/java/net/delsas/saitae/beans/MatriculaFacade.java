@@ -31,19 +31,34 @@ public class MatriculaFacade extends AbstractFacade<Matricula> implements Matric
     public MatriculaFacade() {
         super(Matricula.class);
     }
-    
+
     @Override
     public List<Persona> findMatriculaByGrado(GradoPK pk) {
         return em.createNamedQuery("Matricula.findEstudiantesByGrado")
                 .setParameter("gradoPK", pk)
                 .getResultList();
-}
-    
+    }
+
     @Override
-    public List<Matricula> findAllNewEstudent(GradoPK pk){
+    public List<Matricula> findAllNewEstudent(GradoPK pk) {
         return em.createNamedQuery("Matricula.findAllNew")
                 .setParameter("mod", pk.getGradoModalidad())
                 .setParameter("idgrado", pk.getIdgrado())
+                .getResultList();
+    }
+
+    @Override
+    public List<Integer> findAñoByidEstudiante(Integer idEstudiante) {
+        return em.createNamedQuery("Matricula.findAñoByidEstudiante")
+                .setParameter("idEstudiante", idEstudiante)
+                .getResultList();
+    }
+
+    @Override
+    public List<GradoPK> findGradopkByidEstudianteAndAño(Integer año, Integer idEstudiante) {
+        return em.createNamedQuery("Matricula.findGradopkByidEstudianteAndAño")
+                .setParameter("año", año)
+                .setParameter("idEstudiante", idEstudiante)
                 .getResultList();
     }
 

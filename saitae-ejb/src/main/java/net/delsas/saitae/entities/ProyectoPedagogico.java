@@ -6,8 +6,10 @@
 package net.delsas.saitae.entities;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,10 +18,12 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -41,6 +45,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "ProyectoPedagogico.findByRecursoFinanciero", query = "SELECT p FROM ProyectoPedagogico p WHERE p.recursoFinanciero = :recursoFinanciero")
     , @NamedQuery(name = "ProyectoPedagogico.findByProyectoPedagogicoComentario", query = "SELECT p FROM ProyectoPedagogico p WHERE p.proyectoPedagogicoComentario = :proyectoPedagogicoComentario")})
 public class ProyectoPedagogico implements Serializable {
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "proyectoPedagogico")
+    private List<ReservaXpedagogia> reservaXpedagogiaList;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -336,5 +343,14 @@ public class ProyectoPedagogico implements Serializable {
     @Override
     public String toString() {
         return "ProyectoPedagogico{" + "idproyectoPedagogico=" + idproyectoPedagogico + ", nombreProyecto=" + nombreProyecto + ", beneficiarios=" + beneficiarios + ", duracion=" + duracion + ", diagnostico=" + diagnostico + ", objetivoGeneral=" + objetivoGeneral + ", objetivoEspecifico=" + objetivoEspecifico + ", justificacion=" + justificacion + ", metodologia=" + metodologia + ", actividades=" + actividades + ", recursoHumano=" + recursoHumano + ", recursoMaterial=" + recursoMaterial + ", recursoFinanciero=" + recursoFinanciero + ", seguimiento=" + seguimiento + ", productoEsperado=" + productoEsperado + ", proyectoPedagogicoComentario=" + proyectoPedagogicoComentario + '}';
+    }
+
+    @XmlTransient
+    public List<ReservaXpedagogia> getReservaXpedagogiaList() {
+        return reservaXpedagogiaList;
+    }
+
+    public void setReservaXpedagogiaList(List<ReservaXpedagogia> reservaXpedagogiaList) {
+        this.reservaXpedagogiaList = reservaXpedagogiaList;
     }
 }

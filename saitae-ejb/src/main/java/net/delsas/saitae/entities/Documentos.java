@@ -38,12 +38,6 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Documentos.findByDocumentosComentario", query = "SELECT d FROM Documentos d WHERE d.documentosComentario = :documentosComentario")})
 public class Documentos implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "iddocumentos")
-    private Integer iddocumentos;
     @Lob
     @Column(name = "estudianteDocPartida")
     private byte[] estudianteDocPartida;
@@ -59,6 +53,13 @@ public class Documentos implements Serializable {
     @Lob
     @Column(name = "estudianteDocNotas")
     private byte[] estudianteDocNotas;
+
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "iddocumentos")
+    private Integer iddocumentos;
     @Size(max = 100)
     @Column(name = "estudianteExtencionPartida")
     private String estudianteExtencionPartida;
@@ -96,45 +97,6 @@ public class Documentos implements Serializable {
         this.iddocumentos = iddocumentos;
     }
 
-    public byte[] getEstudianteDocPartida() {
-        return estudianteDocPartida;
-    }
-
-    public void setEstudianteDocPartida(byte[] estudianteDocPartida) {
-        this.estudianteDocPartida = estudianteDocPartida;
-    }
-
-    public byte[] getEstudianteDocCertificado() {
-        return estudianteDocCertificado;
-    }
-
-    public void setEstudianteDocCertificado(byte[] estudianteDocCertificado) {
-        this.estudianteDocCertificado = estudianteDocCertificado;
-    }
-
-    public byte[] getEstudianteDocConducta() {
-        return estudianteDocConducta;
-    }
-
-    public void setEstudianteDocConducta(byte[] estudianteDocConducta) {
-        this.estudianteDocConducta = estudianteDocConducta;
-    }
-
-    public byte[] getEstudianteDocDui() {
-        return estudianteDocDui;
-    }
-
-    public void setEstudianteDocDui(byte[] estudianteDocDui) {
-        this.estudianteDocDui = estudianteDocDui;
-    }
-
-    public byte[] getEstudianteDocNotas() {
-        return estudianteDocNotas;
-    }
-
-    public void setEstudianteDocNotas(byte[] estudianteDocNotas) {
-        this.estudianteDocNotas = estudianteDocNotas;
-    }
 
     public String getEstudianteExtencionPartida() {
         return estudianteExtencionPartida;
@@ -215,6 +177,46 @@ public class Documentos implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.Documentos[ iddocumentos=" + iddocumentos + " ]";
+    }
+
+    public byte[] getEstudianteDocPartida() {
+        return estudianteDocPartida;
+    }
+
+    public void setEstudianteDocPartida(byte[] estudianteDocPartida) {
+        this.estudianteDocPartida = estudianteDocPartida;
+    }
+
+    public byte[] getEstudianteDocCertificado() {
+        return estudianteDocCertificado;
+    }
+
+    public void setEstudianteDocCertificado(byte[] estudianteDocCertificado) {
+        this.estudianteDocCertificado = estudianteDocCertificado;
+    }
+
+    public byte[] getEstudianteDocConducta() {
+        return estudianteDocConducta;
+    }
+
+    public void setEstudianteDocConducta(byte[] estudianteDocConducta) {
+        this.estudianteDocConducta = estudianteDocConducta;
+    }
+
+    public byte[] getEstudianteDocDui() {
+        return estudianteDocDui;
+    }
+
+    public void setEstudianteDocDui(byte[] estudianteDocDui) {
+        this.estudianteDocDui = estudianteDocDui;
+    }
+
+    public byte[] getEstudianteDocNotas() {
+        return estudianteDocNotas;
+    }
+
+    public void setEstudianteDocNotas(byte[] estudianteDocNotas) {
+        this.estudianteDocNotas = estudianteDocNotas;
     }
     
 }

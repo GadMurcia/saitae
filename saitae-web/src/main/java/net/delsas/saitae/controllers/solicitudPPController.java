@@ -122,7 +122,7 @@ public class solicitudPPController implements Serializable {
 
     @PostConstruct
     public void init() {
-        ax = new Auxiliar();;
+        ax = new Auxiliar();
         usuario = (Persona) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
         proyecto = (ProyectoPedagogico) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("proyecto");
         proyecto = proyecto == null ? new ProyectoPedagogico() : proyecto;

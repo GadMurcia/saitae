@@ -28,13 +28,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "matricula", catalog = "intex", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Matricula.findAll", query = "SELECT m FROM Matricula m")
-    , @NamedQuery(name = "Matricula.findByIdmatricula", query = "SELECT m FROM Matricula m WHERE m.matriculaPK.idmatricula = :idmatricula")
-    , @NamedQuery(name = "Matricula.findByMatriculaAnyo", query = "SELECT m FROM Matricula m WHERE m.matriculaPK.matriculaAnyo = :matriculaAnyo")
-    , @NamedQuery(name = "Matricula.findByMatriculaRepite", query = "SELECT m FROM Matricula m WHERE m.matriculaRepite = :matriculaRepite")
-    , @NamedQuery(name = "Matricula.findByMatriculaComentario", query = "SELECT m FROM Matricula m WHERE m.matriculaComentario = :matriculaComentario")
-    , @NamedQuery(name = "Matricula.findEstudiantesByGrado", query = "SELECT m.estudiante.persona FROM Matricula m WHERE m.grado.gradoPK = :gradoPK")
-    , @NamedQuery(name = "Matricula.findAllNew", query = "SELECT m FROM Matricula m WHERE m.matriculaComentario = 'N' AND m.grado.gradoPK.gradoModalidad = :mod AND m.grado.gradoPK.idgrado = :idgrado")
+    @NamedQuery(name = "Matricula.findAll", query = "SELECT m FROM Matricula m"),
+    @NamedQuery(name = "Matricula.findByIdmatricula", query = "SELECT m FROM Matricula m WHERE m.matriculaPK.idmatricula = :idmatricula"),
+    @NamedQuery(name = "Matricula.findByMatriculaAnyo", query = "SELECT m FROM Matricula m WHERE m.matriculaPK.matriculaAnyo = :matriculaAnyo"),
+    @NamedQuery(name = "Matricula.findByMatriculaRepite", query = "SELECT m FROM Matricula m WHERE m.matriculaRepite = :matriculaRepite"),
+    @NamedQuery(name = "Matricula.findByMatriculaComentario", query = "SELECT m FROM Matricula m WHERE m.matriculaComentario = :matriculaComentario"),
+    @NamedQuery(name = "Matricula.findEstudiantesByGrado", query = "SELECT m.estudiante.persona FROM Matricula m WHERE m.grado.gradoPK = :gradoPK"),
+    @NamedQuery(name = "Matricula.findAllNew", query = "SELECT m FROM Matricula m WHERE m.matriculaComentario = 'N' AND m.grado.gradoPK.gradoModalidad = :mod AND m.grado.gradoPK.idgrado = :idgrado"),
+    @NamedQuery(name = "Matricula.findAñoByidEstudiante", query = "SELECT DISTINCT m.grado.gradoPK.gradoAño FROM Matricula m WHERE m.estudiante.idestudiante = :idEstudiante ORDER BY m.grado.gradoPK.gradoAño DESC"),
+    @NamedQuery(name = "Matricula.findGradopkByidEstudianteAndAño", query = "SELECT DISTINCT m.grado.gradoPK FROM Matricula m WHERE m.estudiante.idestudiante = :idEstudiante AND m.grado.gradoPK.gradoAño = :año")
 })
 public class Matricula implements Serializable {
 
@@ -52,10 +54,10 @@ public class Matricula implements Serializable {
     @ManyToOne(optional = false)
     private Estudiante estudiante;
     @JoinColumns({
-        @JoinColumn(name = "matriculaNivel", referencedColumnName = "idgrado")
-        , @JoinColumn(name = "matriculaSeccion", referencedColumnName = "gradoSeccion")
-        , @JoinColumn(name = "matriculaAnyo", referencedColumnName = "gradoA\u00f1o", insertable = false, updatable = false)
-        , @JoinColumn(name = "gradoModalidad", referencedColumnName = "gradoModalidad")})
+        @JoinColumn(name = "matriculaNivel", referencedColumnName = "idgrado"),
+        @JoinColumn(name = "matriculaSeccion", referencedColumnName = "gradoSeccion"),
+        @JoinColumn(name = "matriculaAnyo", referencedColumnName = "gradoA\u00f1o", insertable = false, updatable = false),
+        @JoinColumn(name = "gradoModalidad", referencedColumnName = "gradoModalidad")})
     @ManyToOne(optional = false)
     private Grado grado;
 
@@ -139,5 +141,5 @@ public class Matricula implements Serializable {
     public String toString() {
         return "net.delsas.saitae.entities.Matricula[ matriculaPK=" + matriculaPK + " ]";
     }
-    
+
 }

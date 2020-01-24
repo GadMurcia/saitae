@@ -75,4 +75,28 @@ public class MestroHorarioMateriasFacade extends AbstractFacade<MestroHorarioMat
                 .getResultList();
     }
 
+    @Override
+    public List<MestroHorarioMaterias> findByIdHoraAndGradopk(Integer idhora, GradoPK gradpPK) {
+        return em.createNamedQuery("MestroHorarioMaterias.findByIdDiaAndGradopk")
+                .setParameter("idHora", idhora)
+                .setParameter("gradoPK", gradpPK)
+                .getResultList();
+    }
+    
+    @Override
+    public List<MestroHorarioMaterias> findByIdHoraAndMaestro(Integer año, Integer idHora, Integer idMaestro) {
+        return em.createNamedQuery("MestroHorarioMaterias.findByIdDiaAndMaestro")
+                .setParameter("año", año)
+                .setParameter("idHora", idHora)
+                .setParameter("idMaestro", idMaestro)
+                .getResultList();
+    }
+    
+    @Override
+    public List<Integer> findAñosByIdMaestro(Integer idMaestro) {
+        return em.createNamedQuery("MestroHorarioMaterias.findAñoByidMaestro")
+                .setParameter("idMaestro", idMaestro)
+                .getResultList();
+    }
+
 }

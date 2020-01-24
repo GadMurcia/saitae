@@ -17,8 +17,8 @@
         <h:outputScript library="js" name="locales.js"/>
         <f:event listener="#{sessionController.log()}" type="preRenderView"/>
     </h:head>
-    <!-- color: #ffffff"  style="background-color: #323232; color: white;"-->
-    <h:body style="background-color: #323232; color: white;">
+    <!-- color: #ffffff"  ->style="background-color: #323232; color: white;"-->
+    <h:body>
         <div id="top">
             <ui:insert name="top">
                 <h:form id="form0">
@@ -29,9 +29,6 @@
         </div>
         <div id="right">
             <ui:insert name="right">                
-                <script>
-                    
-                </script>                
                 <o:socket channel="notificacion" onmessage="function socketListener(message) {
                         notificar([{name: 'mss', value: message}]);}"/>
                 <h:form id="noti">

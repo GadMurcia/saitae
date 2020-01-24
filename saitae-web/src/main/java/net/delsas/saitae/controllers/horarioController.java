@@ -28,6 +28,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import net.delsas.saitae.ax.Auxiliar;
+import net.delsas.saitae.ax.axHorario;
 import net.delsas.saitae.ax.mensaje;
 import net.delsas.saitae.beans.DiasEstudioFacadeLocal;
 import net.delsas.saitae.beans.GradoFacadeLocal;
@@ -35,6 +37,7 @@ import net.delsas.saitae.beans.HorarioFacadeLocal;
 import net.delsas.saitae.beans.MaestroFacadeLocal;
 import net.delsas.saitae.beans.MateriaFacadeLocal;
 import net.delsas.saitae.beans.MestroHorarioMateriasFacadeLocal;
+import net.delsas.saitae.beans.NotificacionesFacadeLocal;
 import net.delsas.saitae.entities.DiasEstudio;
 import net.delsas.saitae.entities.Grado;
 import net.delsas.saitae.entities.GradoPK;
@@ -70,8 +73,15 @@ public class horarioController implements Serializable {
     private MaestroFacadeLocal maestroFL;
     @EJB
     private MestroHorarioMateriasFacadeLocal mhmFL;
+    @Inject
+    @Push
+    private PushContext notificacion;
+    @EJB
+    private NotificacionesFacadeLocal notiFL;
 
     private List<MestroHorarioMaterias> horario;
+    private Integer añoSelected;
+    private List<Integer> añosDisponibles;
     private MestroHorarioMaterias selected;
     private List<Maestro> maestros;
     private List<Grado> grados;
@@ -81,9 +91,11 @@ public class horarioController implements Serializable {
     private MestroHorarioMateriasPK pk;
     private boolean edit;
     private Persona us;
+    private Auxiliar ax;
 
     @PostConstruct
     public void init() {
+        ax = new Auxiliar();
         maestros = maestroFL.findAll();
         grados = gradoFL.getPorAñoYActivo(getAño());
         horasClase = horarioFL.findAll();
@@ -94,7 +106,9 @@ public class horarioController implements Serializable {
     }
 
     public void init2() {
-        horario = mhmFL.findAllOrdered(getAño());//new ArrayList<>();         
+        añoSelected = getAño();
+        añosDisponibles = gradoFL.findAños();
+        horario = mhmFL.findAllOrdered(añoSelected);
         selected = new MestroHorarioMaterias(new MestroHorarioMateriasPK(0, 0, 0, 0, 0, "", "", 0));
         edit = false;
         pk = new MestroHorarioMateriasPK(0, 0, 0, 0, 0, "", "", 0);
@@ -106,7 +120,6 @@ public class horarioController implements Serializable {
 
     public void editar() {
         edit = true;
-        PrimeFaces.current().ajax().update(":form", "f1");
     }
 
     public void eliminar() {
@@ -117,14 +130,17 @@ public class horarioController implements Serializable {
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
                         "Eliminación exitosa.",
                         "La eliminación se llevó a cabo con éxito."));
-                sendMessage(new mensaje(selected.getMaestro().getIdmaestro(), us.getIdpersona(), "??",
-                        new FacesMessage(FacesMessage.SEVERITY_INFO, "Se ha eliminado una nueva hora clase del horario",
-                                "Elimnación: " + selected.getDiasEstudio().getDiasEstudioNombre() + " "
-                                + getHora(selected.getHorario().getHoraInicio()) + " - " + getHora(selected.getHorario().getHoraFin())
-                                + " Materia: " + selected.getMateria().getMateriaNombre()
-                                + " Profesor: " + selected.getMaestro().getPersona().getPersonaNombre() + " "
-                                + selected.getMaestro().getPersona().getPersonaApellido() + " Grado: "
-                                + getGrado(selected.getGrado().getGradoPK()))).toString());
+                ax.persistirNotificación(
+                        new mensaje(selected.getMaestro().getIdmaestro(), us.getIdpersona(), "horario<form<<horarioCl<form",
+                                new FacesMessage(FacesMessage.SEVERITY_INFO, "Se ha eliminado una nueva hora clase del horario",
+                                        "Elimnación: " + selected.getDiasEstudio().getDiasEstudioNombre() + " "
+                                        + getHora(selected.getHorario().getHoraInicio()) + " - " + getHora(selected.getHorario().getHoraFin())
+                                        + ". Materia: " + selected.getMateria().getMateriaNombre()
+                                        + ". Profesor: " + selected.getMaestro().getPersona().getPersonaNombre() + " "
+                                        + axHorario.getNomgreCortoPersona(selected.getMaestro().getPersona()) + ". Grado: "
+                                        + getGrado(selected.getGrado().getGradoPK()))),
+                        selected.getMaestro().getPersona(),
+                        notiFL, notificacion);
             } else {
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
                         "No se encuentra la orden.",
@@ -150,7 +166,8 @@ public class horarioController implements Serializable {
             if (!e.isEmpty() && !e.get(0).getMestroHorarioMateriasPK().equals(pk)) {
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
                         "Asignación previa encontrada.",
-                        "Ya hay una asignación igual a la que intenta hacer en la base de datos. "
+                        "Ya hay una asignación igual a la que intenta hacer para el grado "
+                        + getGrado(selected.getGrado().getGradoPK()) + ". "
                         + (edit ? "Elimine" : "Edite") + " ésa en vez de intentar agregarla como nueva."));
             } else if (!x.isEmpty() && !x.get(0).getMestroHorarioMateriasPK().equals(pk)) {
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
@@ -159,8 +176,10 @@ public class horarioController implements Serializable {
                         + selected.getMaestro().getPersona().getPersonaApellido().split(" ")[0]
                         + " ya tiene una asignación el día " + selected.getDiasEstudio().getDiasEstudioNombre()
                         + " entre las horas " + getHora(selected.getHorario().getHoraInicio()) + " y "
-                        + getHora(selected.getHorario().getHoraFin()) + ", por lo que no se procederá a guardar los cambios."
-                        + "Se le recomienda " + (edit ? "Eliminar" : "Editar") + " la asignación en vez de intentar agregarla como nueva."));
+                        + getHora(selected.getHorario().getHoraFin())
+                        + ", por lo que no se procederá a guardar los cambios."
+                        + "Se le recomienda " + (edit ? "Eliminar" : "Editar")
+                        + " la asignación en vez de intentar agregarla como nueva."));
             } else {
                 MestroHorarioMaterias m = new MestroHorarioMaterias(new MestroHorarioMateriasPK());
                 m.setDiasEstudio(diasEstudioFL.find(selected.getDiasEstudio().getIdDias()));
@@ -186,19 +205,21 @@ public class horarioController implements Serializable {
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
                         "Agregación exitosa.",
                         "Las modificaciones se han realizado correctamente."));
-                sendMessage(new mensaje(m.getMaestro().getIdmaestro(), us.getIdpersona(), "??",
-                        new FacesMessage(FacesMessage.SEVERITY_INFO,
-                                (edit ? "Seha editado el horario"
-                                        : "Se ha agregado una nueva hora clase al horario"),
-                                (!edit ? "Agregación: " : "Modificación: ") + m.getDiasEstudio().getDiasEstudioNombre() + " "
-                                + getHora(m.getHorario().getHoraInicio()) + " - " + getHora(m.getHorario().getHoraFin())
-                                + " Materia: " + m.getMateria().getMateriaNombre()
-                                + " Profesor: " + m.getMaestro().getPersona().getPersonaNombre() + " "
-                                + m.getMaestro().getPersona().getPersonaApellido() + " Grado: "
-                                + getGrado(m.getGrado().getGradoPK()))).toString());
+                ax.persistirNotificación(
+                        new mensaje(m.getMaestro().getIdmaestro(), us.getIdpersona(), "horario<form<<horarioCl<form",
+                                new FacesMessage(FacesMessage.SEVERITY_INFO,
+                                        (edit ? "Seha editado el horario"
+                                                : "Se ha agregado una nueva hora clase al horario"),
+                                        (!edit ? "Agregación: " : "Modificación: ") + m.getDiasEstudio().getDiasEstudioNombre() + " "
+                                        + getHora(m.getHorario().getHoraInicio()) + " - " + getHora(m.getHorario().getHoraFin())
+                                        + " Materia: " + m.getMateria().getMateriaNombre()
+                                        + ". Profesor: "
+                                        + axHorario.getNomgreCortoPersona(m.getMaestro().getPersona()) + ". Grado: "
+                                        + getGrado(m.getGrado().getGradoPK()))),
+                        m.getMaestro().getPersona(),
+                        notiFL, notificacion);
             }
             init2();
-            PrimeFaces.current().ajax().update(":form:horario", "f1");
         }
     }
 
@@ -221,12 +242,7 @@ public class horarioController implements Serializable {
     }
 
     public String getGrado(GradoPK gr) {
-        String g = "";
-        g = gr.getIdgrado() + "° " + (gr.getGradoModalidad().equals("C") ? "TVC Contador"
-                : (gr.getGradoModalidad().equals("S") ? "TVC Secretariado"
-                : (gr.getGradoModalidad().equals("G") ? "General" : "??")))
-                + " Sección " + gr.getGradoSeccion();
-        return g;
+        return axHorario.getGradoNomgre(gr);
     }
 
     public MestroHorarioMaterias getSelected() {
@@ -289,33 +305,20 @@ public class horarioController implements Serializable {
         this.edit = edit;
     }
 
-    public void escucha() {
-        try {
-            String mss = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("mss");
-            mensaje m = new mensaje(mss);
-            if (m.getRemitente() != us.getIdpersona() && (us.getIdpersona().equals(m.getDestinatario())
-                    || us.getTipoPersona().equals(1) || us.getTipoPersona().equals(2))) {
-                System.out.println("Rmitente: " + m.getRemitente() + ". Escucha: " + us.getIdpersona());
-                init();
-                PrimeFaces.current().ajax().update("form", "f1");
-                FacesContext.getCurrentInstance().addMessage(null, m.getFacesmessage());
-            }
-        } catch (Exception e) {
-            System.out.println("Error en horarioController/escucha: " + (e.getMessage() == null ? "Error desconocido" : e.getMessage()));
-        }
+    public void onAñoSelected(SelectEvent e) {
+        horario = mhmFL.findAllOrdered(añoSelected == null ? 0 : añoSelected);
     }
 
-    @Inject
-    @Push
-    private PushContext notificacion;
+    public Integer getAñoSelected() {
+        return añoSelected;
+    }
 
-    @Inject
-    @Push
-    private PushContext horarios;
+    public void setAñoSelected(Integer añoSelected) {
+        this.añoSelected = añoSelected;
+    }
 
-    public void sendMessage(String message) {
-        notificacion.send(message);
-        horarios.send(message);
+    public List<Integer> getAñosDisponibles() {
+        return Collections.unmodifiableList(añosDisponibles);
     }
 
 }

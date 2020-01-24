@@ -31,14 +31,34 @@ public interface MatriculaFacadeLocal {
     List<Matricula> findRange(int[] range);
 
     int count();
-    
+
     /**
      * Genera una lista de estudiantes matriculados en el grado especificado.
+     *
      * @param pk
      * @return java.utilList net.delsas.saitae.entities.Estudiante
      */
     public List<Persona> findMatriculaByGrado(GradoPK pk);
 
     public List<Matricula> findAllNewEstudent(GradoPK pk);
-    
+
+    /**
+     * Devuelve una lista de los grados en los que el estudiante ha estado
+     * inscrito.
+     *
+     * @param idEstudiante
+     * @return java.util.List java.lang.Integer
+     */
+    public List<Integer> findAñoByidEstudiante(Integer idEstudiante);
+
+    /**
+     * Devuelve una lista de grados en los que el estudiante ha estado inscrito
+     * en el año indicado.
+     *
+     * @param año
+     * @param idEstudiante
+     * @return java.util.List net.delsa.saitae.entities.GradoPK
+     */
+    public List<GradoPK> findGradopkByidEstudianteAndAño(Integer año, Integer idEstudiante);
+
 }

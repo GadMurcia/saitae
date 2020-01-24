@@ -64,6 +64,11 @@ import javax.xml.bind.annotation.XmlTransient;
 })
 public class Persona implements Serializable {
 
+    @OneToMany(mappedBy = "entregante")
+    private List<Reserva> reservaList;
+    @OneToMany(mappedBy = "recibe")
+    private List<Reserva> reservaList1;
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
@@ -470,6 +475,24 @@ public class Persona implements Serializable {
 
     public void setPersonaComentarios(String personaComentarios) {
         this.personaComentarios = personaComentarios;
+    }
+
+    @XmlTransient
+    public List<Reserva> getReservaList() {
+        return reservaList;
+    }
+
+    public void setReservaList(List<Reserva> reservaList) {
+        this.reservaList = reservaList;
+    }
+
+    @XmlTransient
+    public List<Reserva> getReservaList1() {
+        return reservaList1;
+    }
+
+    public void setReservaList1(List<Reserva> reservaList1) {
+        this.reservaList1 = reservaList1;
     }
 
 }

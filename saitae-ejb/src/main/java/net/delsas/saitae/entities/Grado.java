@@ -32,23 +32,24 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "grado", catalog = "intex", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Grado.findAll", query = "SELECT g FROM Grado g")
-    , @NamedQuery(name = "Grado.findByIdgrado", query = "SELECT g FROM Grado g WHERE g.gradoPK.idgrado = :idgrado")
-    , @NamedQuery(name = "Grado.findByGradoModalidad", query = "SELECT g FROM Grado g WHERE g.gradoPK.gradoModalidad = :gradoModalidad")
-    , @NamedQuery(name = "Grado.findByGradoSeccion", query = "SELECT g FROM Grado g WHERE g.gradoPK.gradoSeccion = :gradoSeccion")
-    , @NamedQuery(name = "Grado.findByGradoA\u00f1o", query = "SELECT g FROM Grado g WHERE g.gradoPK.gradoA\u00f1o = :gradoA\u00f1o")
-    , @NamedQuery(name = "Grado.findByGradoActivo", query = "SELECT g FROM Grado g WHERE g.gradoActivo = :gradoActivo")
-    , @NamedQuery(name = "Grado.findByGradoCoemntario", query = "SELECT g FROM Grado g WHERE g.gradoCoemntario = :gradoCoemntario")
-    , @NamedQuery(name = "Grado.findModalidadByaño", query = "SELECT DISTINCT(g.gradoPK.gradoModalidad) FROM Grado g WHERE g.gradoPK.gradoAño = :año AND g.gradoActivo = true")
-    , @NamedQuery(name = "Grado.findIDByañoAndModalidad", query = "SELECT DISTINCT(g.gradoPK.idgrado) FROM Grado g WHERE g.gradoPK.gradoAño = :año AND g.gradoPK.gradoModalidad = :modalidad AND g.gradoActivo = true")
-    , @NamedQuery(name = "Grado.findSeccionByAñoModId", query = "SELECT DISTINCT(g.gradoPK.gradoSeccion) FROM Grado g WHERE g.gradoPK.gradoAño = :año AND g.gradoPK.gradoModalidad = :modalidad AND g.gradoPK.idgrado = :idgrado AND g.gradoActivo = true")
-    , @NamedQuery(name = "Grado.findByañoAndActivo", query = "SELECT g FROM Grado g WHERE g.gradoPK.gradoAño = :año AND g.gradoActivo = true")
+    @NamedQuery(name = "Grado.findAll", query = "SELECT g FROM Grado g"),
+    @NamedQuery(name = "Grado.findByIdgrado", query = "SELECT g FROM Grado g WHERE g.gradoPK.idgrado = :idgrado"),
+    @NamedQuery(name = "Grado.findByGradoModalidad", query = "SELECT g FROM Grado g WHERE g.gradoPK.gradoModalidad = :gradoModalidad"),
+    @NamedQuery(name = "Grado.findByGradoSeccion", query = "SELECT g FROM Grado g WHERE g.gradoPK.gradoSeccion = :gradoSeccion"),
+    @NamedQuery(name = "Grado.findByGradoAño", query = "SELECT g FROM Grado g WHERE g.gradoPK.gradoAño = :gradoAño"),
+    @NamedQuery(name = "Grado.findByGradoActivo", query = "SELECT g FROM Grado g WHERE g.gradoActivo = :gradoActivo"),
+    @NamedQuery(name = "Grado.findByGradoCoemntario", query = "SELECT g FROM Grado g WHERE g.gradoCoemntario = :gradoCoemntario"),
+    @NamedQuery(name = "Grado.findModalidadByaño", query = "SELECT DISTINCT(g.gradoPK.gradoModalidad) FROM Grado g WHERE g.gradoPK.gradoAño = :año AND g.gradoActivo = true"),
+    @NamedQuery(name = "Grado.findIDByañoAndModalidad", query = "SELECT DISTINCT(g.gradoPK.idgrado) FROM Grado g WHERE g.gradoPK.gradoAño = :año AND g.gradoPK.gradoModalidad = :modalidad AND g.gradoActivo = true"),
+    @NamedQuery(name = "Grado.findSeccionByAñoModId", query = "SELECT DISTINCT(g.gradoPK.gradoSeccion) FROM Grado g WHERE g.gradoPK.gradoAño = :año AND g.gradoPK.gradoModalidad = :modalidad AND g.gradoPK.idgrado = :idgrado AND g.gradoActivo = true"),
+    @NamedQuery(name = "Grado.findByañoAndActivo", query = "SELECT g FROM Grado g WHERE g.gradoPK.gradoAño = :año AND g.gradoActivo = true"),
+    @NamedQuery(name = "Grado.findAños", query = "SELECT DISTINCT g.gradoPK.gradoAño FROM Grado g ORDER BY g.gradoPK.gradoAño DESC")
 })
 public class Grado implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @EmbeddedId
-    protected GradoPK gradoPK;
+    private GradoPK gradoPK;
     @Basic(optional = false)
     @NotNull
     @Column(name = "gradoActivo")
@@ -186,5 +187,5 @@ public class Grado implements Serializable {
     public String toString() {
         return "net.delsas.saitae.entities.Grado[ gradoPK=" + gradoPK + " ]";
     }
-    
+
 }

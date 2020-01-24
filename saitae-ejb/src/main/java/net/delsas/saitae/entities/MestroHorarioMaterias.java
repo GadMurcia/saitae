@@ -40,13 +40,16 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "MestroHorarioMaterias.findByHorarioAndMaestro", query = "SELECT m FROM MestroHorarioMaterias m WHERE m.horario = :horario AND m.maestro = :maestro AND m.diasEstudio = :dia"),
     @NamedQuery(name = "MestroHorarioMaterias.findMaestrosBygrado", query = "SELECT DISTINCT m.maestro FROM MestroHorarioMaterias m WHERE m.grado.gradoPK = :gradoPK"),
     @NamedQuery(name = "MestroHorarioMaterias.findMateriasBygradoPkAndMaestroId", query = "SELECT DISTINCT m.materia FROM MestroHorarioMaterias m WHERE m.grado.gradoPK = :gradoPK AND m.maestro.idmaestro = :idMaestro"),
-    @NamedQuery(name = "MestroHorarioMaterias.findAllOrdered", query = "SELECT m FROM MestroHorarioMaterias m WHERE m.grado.gradoPK.gradoAño = :año ORDER BY m.diasEstudio, m.horario, m.materia, m.grado, m.maestro")
+    @NamedQuery(name = "MestroHorarioMaterias.findAllOrdered", query = "SELECT m FROM MestroHorarioMaterias m WHERE m.grado.gradoPK.gradoAño = :año ORDER BY m.diasEstudio, m.horario, m.materia, m.grado, m.maestro"),
+    @NamedQuery(name = "MestroHorarioMaterias.findByIdDiaAndGradopk", query = "SELECT m FROM MestroHorarioMaterias m WHERE m.horario.idhorario = :idHora AND m.grado.gradoPK = :gradoPK ORDER BY m.horario.idhorario ASC"),
+    @NamedQuery(name = "MestroHorarioMaterias.findByIdDiaAndMaestro", query = "SELECT m FROM MestroHorarioMaterias m WHERE m.grado.gradoPK.gradoAño = :año AND m.horario.idhorario = :idHora AND m.maestro.idmaestro = :idMaestro ORDER BY m.horario.idhorario ASC"),
+    @NamedQuery(name = "MestroHorarioMaterias.findAñoByidMaestro", query = "SELECT DISTINCT m.grado.gradoPK.gradoAño FROM MestroHorarioMaterias m WHERE m.maestro.idmaestro = :idMaestro ORDER BY m.grado.gradoPK.gradoAño DESC")
 })
 public class MestroHorarioMaterias implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @EmbeddedId
-    protected MestroHorarioMateriasPK mestroHorarioMateriasPK;
+    private MestroHorarioMateriasPK mestroHorarioMateriasPK;
     @Size(max = 145)
     @Column(name = "mestroHorarioMateriasComentarios")
     private String mestroHorarioMateriasComentarios;

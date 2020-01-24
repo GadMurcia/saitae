@@ -190,7 +190,7 @@ public class admRecursoController implements Serializable {
                 recurso = recursoFL.findAll();
             } else {
                 if (tps.contains(7)) {
-                    llenado(1, false);
+                    llenado(2, false);
                 }
                 if (tps.contains(6)) {
                     llenado(1, false);
@@ -214,11 +214,12 @@ public class admRecursoController implements Serializable {
                     verCategorias = true;
                     verCategoriastabla = true;
                     tiposRecursos.remove(tiporecursoFL.find(tps.contains(6) ? 7 : 6));
-                } else {
-                    verTipos = true;
-                    verCategorias = true;
-                    verCategoriastabla = true;
-                }
+                } 
+//                else {
+//                    verTipos = true;
+//                    verCategorias = true;
+//                    verCategoriastabla = true;
+//                }
 
             }
         } catch (Exception ex1) {

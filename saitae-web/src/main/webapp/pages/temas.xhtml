@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../WEB-INF/template/plantilla1.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:form id="formtema" >
+            <!--<p:dialog header="Theme" widgetVar="dlgTheme" 
+                      showEffect="bounce" hideEffect="explode" width="400"
+                      height="200">  
+            --><h:panelGrid columns="1">
+
+                <p:selectOneMenu  value="#{themeControlller.tema}" 
+                                  immediate="true" maxlength="70">
+                    <f:selectItems value="#{themeControlller.themes}" />
+                </p:selectOneMenu> 
+                <p:commandButton value="Cambiar tema de la aplicación" action="#{themeControlller.cambiar()}"
+                                 ajax="false"/>
+            </h:panelGrid>
+            <!--</p:dialog>
+            -->
+        </h:form>
+    </ui:define>
+
+</ui:composition>

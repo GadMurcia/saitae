@@ -86,7 +86,7 @@ public class permisoMaController implements Serializable {
 
             } else {
                 initVariables();
-                invDays=new ArrayList<>();
+                invDays = new ArrayList<>();
                 invDays.add(0);
                 invDays.add(6);
             }
@@ -154,22 +154,36 @@ public class permisoMaController implements Serializable {
                     p.setPermisosSolicitante(usuario);
                     p.setPermisosMotivo(null);
                     p.getPermisosPK().setIpPersona(usuario.getIdpersona());
-                    pfl.create(p);
+                    pcontrol = pfl.find(p.getPermisosPK());
+                    if (pcontrol == null) {
+                        pfl.create(p);
+                        x = new mensaje(usuario.getIdpersona(), usuario.getIdpersona(), "permisoH<form",
+                                new FacesMessage(FacesMessage.SEVERITY_INFO, "Solicitud exitosa",
+                                        "Su permiso se ha solicitado para entre las fechas: "
+                                        + (new SimpleDateFormat("dd/MM/yyyy").format(p.getPermisosPK().getPermisoFechaInicio())) + " y "
+                                        + (new SimpleDateFormat("dd/MM/yyyy").format(p.getPermisoFechafin()))));
+                        new Auxiliar().persistirNotificación(x, usuario, notFL, notificacion);
+                        x = new mensaje(0, usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
+                                + " ha solicitado un nuevo permiso.",
+                                "Solicitud de permiso nueva", FacesMessage.SEVERITY_INFO, usuario.getIdpersona(),
+                                "permiso<form");
+                        TipoPersona tp = tipoPersonaFL.find(usuario.getTipoPersona().getIdtipoPersona() == 4 ? 3 : 2);
+                        new Auxiliar().persistirNotificación(x,
+                                new Auxiliar().getPersonasParaNotificar(tp), notFL, notificacion);
+                        initVariables();
+                    } else {
+                        FacesContext.getCurrentInstance().addMessage(null,
+                                new FacesMessage(FacesMessage.SEVERITY_WARN,
+                                        "Solicitud duplicada",
+                                        "Usted ya solicitó hoy un permiso por "
+                                        + p.getTipoPermiso1().getTipoPermisoNombre()
+                                        + ", cuya fecha de inicio es "
+                                        + new SimpleDateFormat("dd/MM/yy")
+                                                .format(p.getPermisosPK().getPermisoFechaInicio())
+                                        + ". Por lo que no se procede con esta solicitud. "
+                                        + "Verifique su historial de permisos."));
+                    }
                 }
-                x = new mensaje(usuario.getIdpersona(), usuario.getIdpersona(), "permisoH<form",
-                        new FacesMessage(FacesMessage.SEVERITY_INFO, "Solicitud exitosa",
-                                "Su permiso se ha solicitado para entre las fechas: "
-                                + (new SimpleDateFormat("dd/MM/yyyy").format(p.getPermisosPK().getPermisoFechaInicio())) + " y "
-                                + (new SimpleDateFormat("dd/MM/yyyy").format(p.getPermisoFechafin()))));
-                new Auxiliar().persistirNotificación(x, usuario, notFL, notificacion);
-                x = new mensaje(0, usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
-                        + " ha solicitado un nuevo permiso.",
-                        "Solicitud de permiso nueva", FacesMessage.SEVERITY_INFO, usuario.getIdpersona(),
-                        "permiso<form");
-                TipoPersona tp = tipoPersonaFL.find(usuario.getTipoPersona().getIdtipoPersona() == 4 ? 3 : 2);
-                new Auxiliar().persistirNotificación(x,
-                        new Auxiliar().getPersonasParaNotificar(tp), notFL, notificacion);
-                initVariables();
             }
             PrimeFaces.current().ajax().update(":form", "form0:msgs");
         } catch (Exception e) {
@@ -237,13 +251,13 @@ public class permisoMaController implements Serializable {
             ms = null;
         }
     }
-    
-    public List<Integer> getInvalidDays(){
+
+    public List<Integer> getInvalidDays() {
         return Collections.unmodifiableList(invDays);
     }
-    
+
     public boolean isEditar() {
-        return editar; 
+        return editar;
     }
 
 }

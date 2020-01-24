@@ -4,22 +4,11 @@
                 template="./../WEB-INF/template/plantilla1.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"                
-                xmlns:o="http://omnifaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns="http://www.w3.org/1999/xhtml">
 
     <ui:define name="content">
         <f:view>
-            <script>
-                function socketListener(message, channel, event) {
-                    tipopp([{name: 'mss', value: message}]);
-                }
-            </script>                
-            <o:socket channel="notificacion" onmessage="socketListener"/>
-            <h:form>
-                <p:remoteCommand name="tipopp" actionListener="#{horarioController.escucha()}" 
-                                 update="form f1 form0"/>
-            </h:form>
             <p:dialog header="Asignación de Materias" widgetVar="Dhorario" modal="true" 
                       showEffect="fade" hideEffect="fade" resizable="false">                  
                 <h:form id="f1">
@@ -78,64 +67,78 @@
 
                         <p:column/>
                         <p:commandButton value="Guardar" actionListener="#{horarioController.guardar()}"
-                                         style="width: 190px"           update="form f1" oncomplete="PF('Dhorario').hide()"/>
+                                         style="width: 190px" update="form f1"/>
 
                         <p:column/>
                     </h:panelGrid>
                 </h:form>
             </p:dialog>
             <h:form id="form">
-                <p:growl id="growl" showDetail="true" life="15000" globalOnly="true"/>
-                <p:dataTable id="horario" var="h" value="#{horarioController.horario}" 
-                             rowKey="#{h.mestroHorarioMateriasPK}" selectionMode="single"
-                             selection="#{horarioController.selected}" rows="6"
-                             paginator="true" paginatorAlwaysVisible="false" paginatorPosition="top"
-                             emptyMessage="Sin registros aún.">
-                    <p:ajax event="rowSelect" listener="#{horarioController.onRowSelect}" 
-                            update="f1"/>
-                    <f:facet name="header">
-                        Horario Institucional
-                    </f:facet>
-                    <p:column headerText="Día"
-                              filterBy="#{h.diasEstudio.diasEstudioNombre}"
-                              filterMatchMode="contains">
-                        #{h.diasEstudio.diasEstudioNombre}
-                    </p:column>
-                    <p:column headerText="Hora" filterMatchMode="contains"
-                              filterBy="#{horarioController.getHora(h.horario.horaInicio)} - #{horarioController.getHora(h.horario.horaFin)}">
-                        #{horarioController.getHora(h.horario.horaInicio)} - 
-                        #{horarioController.getHora(h.horario.horaFin)}
-                    </p:column>
-                    <p:column headerText="Materia" filterMatchMode="contains"
-                              filterBy="#{h.materia.materiaNombre}">
-                        #{h.materia.materiaNombre}
-                    </p:column>
-                    <p:column headerText="Grado" filterMatchMode="contains"
-                              filterBy="#{horarioController.getGrado(h.grado.gradoPK)}">
-                        #{horarioController.getGrado(h.grado.gradoPK)}
-                    </p:column>
-                    <p:column headerText="Maestro" filterMatchMode="contains" 
-                              filterBy="#{h.maestro.persona.personaNombre.split(' ')[0]} #{h.maestro.persona.personaApellido.split(' ')[0]}">
-                        #{h.maestro.persona.personaNombre.split(" ")[0]} 
-                        #{h.maestro.persona.personaApellido.split(" ")[0]}
-                    </p:column>
-                </p:dataTable>
-                <p:commandButton title="Agregar nuevo" icon="pi pi-plus-circle" 
-                                 update=":form :f1"
-                                 actionListener="#{horarioController.nuevo()}"
-                                 oncomplete="PF('Dhorario').show()"/>
-                <p:contextMenu id="ctxm" for="horario">
-                    <p:menuitem value="Agregar nuevo" icon="pi pi-plus-circle" 
-                                update=":form :f1"
-                                actionListener="#{horarioController.nuevo()}"
-                                oncomplete="PF('Dhorario').show()"/>
-                    <p:menuitem value="Editar" icon="fa fa-edit"
-                                actionListener="#{horarioController.editar()}"
-                                oncomplete="PF('Dhorario').show()" />
-                    <p:menuitem value="Eliminar" icon="pi pi-minus-circle" 
-                                actionListener="#{horarioController.eliminar()}"
-                                update=":form :f1"/>
-                </p:contextMenu>
+                <p:growl id="growl" showDetail="true" life="15000"/>
+                <h:panelGrid columns="1">
+                    <h:panelGrid columns="2">
+                        <p:outputLabel for="años" value="Seleccione el año de visualización: "/>
+                        <p:selectOneMenu id="años" value="#{horarioController.añoSelected}" 
+                                         converter="omnifaces.SelectItemsConverter">
+                            <f:selectItem itemLabel="Seleccione" itemValue="#{0}"
+                                          noSelectionOption="true"/>
+                            <f:selectItems value="#{horarioController.añosDisponibles}" var="ad"
+                                           itemLabel="#{ad}" itemValue="#{ad}"/>
+                            <p:ajax event="itemSelect" listener="#{horarioController.onAñoSelected}"
+                                    update=":form:horario"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <p:dataTable id="horario" var="h" value="#{horarioController.horario}" 
+                                 rowKey="#{h.mestroHorarioMateriasPK}" selectionMode="single"
+                                 selection="#{horarioController.selected}" rows="6"
+                                 paginator="true" paginatorAlwaysVisible="false" paginatorPosition="top"
+                                 emptyMessage="No hay horarios disponibles.">
+                        <p:ajax event="rowSelect" listener="#{horarioController.onRowSelect}" 
+                                update="f1"/>
+                        <f:facet name="header">
+                            Horario Institucional
+                        </f:facet>
+                        <p:column headerText="Día"
+                                  filterBy="#{h.diasEstudio.diasEstudioNombre}"
+                                  filterMatchMode="contains">
+                            #{h.diasEstudio.diasEstudioNombre}
+                        </p:column>
+                        <p:column headerText="Hora" filterMatchMode="contains"
+                                  filterBy="#{horarioController.getHora(h.horario.horaInicio)} - #{horarioController.getHora(h.horario.horaFin)}">
+                            #{horarioController.getHora(h.horario.horaInicio)} - 
+                            #{horarioController.getHora(h.horario.horaFin)}
+                        </p:column>
+                        <p:column headerText="Materia" filterMatchMode="contains"
+                                  filterBy="#{h.materia.materiaNombre}">
+                            #{h.materia.materiaNombre}
+                        </p:column>
+                        <p:column headerText="Grado" filterMatchMode="contains"
+                                  filterBy="#{horarioController.getGrado(h.grado.gradoPK)}">
+                            #{horarioController.getGrado(h.grado.gradoPK)}
+                        </p:column>
+                        <p:column headerText="Maestro" filterMatchMode="contains" 
+                                  filterBy="#{h.maestro.persona.personaNombre.split(' ')[0]} #{h.maestro.persona.personaApellido.split(' ')[0]}">
+                            #{h.maestro.persona.personaNombre.split(" ")[0]} 
+                            #{h.maestro.persona.personaApellido.split(" ")[0]}
+                        </p:column>
+                    </p:dataTable>
+                    <p:commandButton title="Agregar nuevo" icon="pi pi-plus-circle" 
+                                     update=":f1"
+                                     actionListener="#{horarioController.nuevo()}"
+                                     oncomplete="PF('Dhorario').show()"/>
+                    <p:contextMenu id="ctxm" for="horario">
+                        <p:menuitem value="Agregar nuevo" icon="pi pi-plus-circle" 
+                                    update=":f1"
+                                    actionListener="#{horarioController.nuevo()}"
+                                    oncomplete="PF('Dhorario').show()"/>
+                        <p:menuitem value="Editar" icon="fa fa-edit" update="f1"
+                                    actionListener="#{horarioController.editar()}"
+                                    oncomplete="PF('Dhorario').show()" />
+                        <p:menuitem value="Eliminar" icon="pi pi-minus-circle" 
+                                    actionListener="#{horarioController.eliminar()}"
+                                    update=":form :f1"/>
+                    </p:contextMenu>
+                </h:panelGrid>
             </h:form>
         </f:view>
     </ui:define>

@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -189,6 +190,8 @@ public class TipoController implements Serializable {
     @EJB
     private GradoFacadeLocal gradoFL;
     private List<Grado> grados;
+    private Integer añoSelected;
+    private List<Integer> añosDisponibles;
     @EJB
     private MaestroFacadeLocal maestroFL;
 
@@ -264,7 +267,9 @@ public class TipoController implements Serializable {
                 tipoMaterias = tipoMateriaFL.findAll();
                 materias = materiaFL.findAll();
                 horario = horarioFL.findAll();
-                grados = gradoFL.findAll();
+                añoSelected = getAño();
+                añosDisponibles = gradoFL.findAños();
+                grados = gradoFL.findByGradoAño(añoSelected);
                 hora = new Horario(0, new Date(), new Date());
                 aulas = afl.findAll();
                 dias = diasEstudioFL.findAll();
@@ -1106,11 +1111,17 @@ public class TipoController implements Serializable {
         return Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date()));
     }
 
+    public List<Integer> getAñosG() {
+        List<Integer> i = new ArrayList<>();
+        i = gradoFL.findAños();
+        return i;
+    }
+
     public void escucha() {
         try {
             String mss = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("mss");
             mensaje m = new mensaje(mss);
-            if (m.getRemitente() != usuario.getIdpersona()) {
+            if (!Objects.equals(m.getRemitente(), usuario.getIdpersona())) {
                 FacesContext.getCurrentInstance().addMessage(null, m.getFacesmessage());
                 init();
                 PrimeFaces.current().ajax().update("form0", "form");
@@ -1134,5 +1145,25 @@ public class TipoController implements Serializable {
 
     public void setTipoS(List<TipoSueldos> tipoS) {
         this.tipoS = tipoS;
+    }
+
+    public void onSelectAños(SelectEvent ev) {
+        grados = añoSelected == null ? new ArrayList<>() : gradoFL.findByGradoAño(añoSelected);
+    }
+
+    public Integer getAñoSelected() {
+        return añoSelected;
+    }
+
+    public void setAñoSelected(Integer añoSelected) {
+        this.añoSelected = añoSelected;
+    }
+
+    public List<Integer> getAñosDisponibles() {
+        return añosDisponibles;
+    }
+
+    public void setAñosDisponibles(List<Integer> añosDisponibles) {
+        this.añosDisponibles = añosDisponibles;
     }
 }

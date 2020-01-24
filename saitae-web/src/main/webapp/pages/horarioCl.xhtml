@@ -1,12 +1,86 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="./../WEB-INF/template/plantilla1.xhtml"
-                xmlns:h="http://xmlns.jcp.org/jsf/html">
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="content">
         <h:form id="form">
-            horario de clases
+            <h:panelGrid columns="1">
+                <h:panelGrid columns="2">
+                    <p:outputLabel for="años" value="Seleccione el año de visualización"/>
+                    <p:selectOneMenu id="años" value="#{horarioClController.añoSelected}" 
+                                     converter="omnifaces.SelectItemsConverter">
+                        <f:selectItem itemLabel="Seleccione" itemValue="#{null}"
+                                      noSelectionOption="true"/>
+                        <f:selectItems value="#{horarioClController.añosDisponibles}" var="ad"
+                                       itemLabel="#{ad}" itemValue="#{ad}"/>
+                        <p:ajax event="itemSelect" listener="#{horarioClController.onAñoSelect}"
+                                update="horario"/>
+                    </p:selectOneMenu>
+                </h:panelGrid>
+                <p:dataTable id="horario" var="h" value="#{horarioClController.horario}"
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} 
+                             {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
+                             paginator="true" rows="11" style="margin-bottom:20px"
+                             paginatorPosition="top">
+                    <f:facet name="{Exporters}">
+                        <div style="float:right;padding-top: 5px;">
+                            <h:commandLink>
+                                <p:graphicImage library="img" name="pdf.png" width="24"/>
+                                <p:dataExporter type="pdf" target="horario"
+                                                fileName="Horario_de_Clases"
+                                                preProcessor="#{horarioClController.preProcessPDF}"/>
+                            </h:commandLink>                       
+                        </div>
+                    </f:facet>
+                    <f:facet name="header">
+                        Horario de clases #{horarioClController.añoSelected}
+                    </f:facet>
+                    <p:column headerText="Hora" width="15%">
+                        <h:outputText value="#{horarioClController.getHoraToString(h.horas.horaInicio)} 
+                                      - #{horarioClController.getHoraToString(h.horas.horaFin)}"/>
+                    </p:column>
+
+                    <p:column headerText="Lunes" style="background-color: ##{h.lunes.materiaComentario}">
+                        <h:outputText value=" #{h.lunes.materiaNombre} "/>
+                        <p:outputLabel value=" #{h.nomL} " style="font-size: 10px;"/>
+                    </p:column>
+
+                    <p:column headerText="Martes" style="background-color: ##{h.martes.materiaComentario}">
+                        <h:outputText value=" #{h.martes.materiaNombre} "/>
+                        <p:outputLabel value=" #{h.nomM} " style="font-size: 10px;"/>
+                    </p:column>
+
+                    <p:column headerText="Miércoles" style="background-color: ##{h.miercoles.materiaComentario}">
+                        <h:outputText value=" #{h.miercoles.materiaNombre} "/>
+                        <p:outputLabel value=" #{h.nomX} " style="font-size: 10px;"/>
+                    </p:column>
+
+                    <p:column headerText="Jueves" style="background-color: ##{h.jueves.materiaComentario}">
+                        <h:outputText value=" #{h.jueves.materiaNombre} "/>
+                        <p:outputLabel value=" #{h.nomJ} " style="font-size: 10px;"/>
+                    </p:column>
+
+                    <p:column headerText="Viernes" style="background-color: ##{h.viernes.materiaComentario}">
+                        <h:outputText value=" #{h.viernes.materiaNombre} "/>
+                        <p:outputLabel value=" #{h.nomV} " style="font-size: 10px;"/>
+                    </p:column>
+
+                  <!--  <p:column headerText="Sábado" style="background-color: ## {h.sabado.materiaComentario}">
+                        <h:outputText value=" # {h.sabado.materiaNombre} "/>
+                        <p:outputLabel value=" # {h.nomS} " style="font-size: 10px;"/>
+                    </p:column>
+
+                    <p:column headerText="Domingo" style="background-color: ## {h.domingo.materiaComentario}">
+                        <h:outputText value=" # {h.domingo.materiaNombre} "/>
+                        <p:outputLabel value=" # {h.nomD} " style="font-size: 10px;"/>
+                    </p:column>
+                --></p:dataTable>
+            </h:panelGrid>
         </h:form>
     </ui:define>
 

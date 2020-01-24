@@ -26,24 +26,28 @@
             <version>7.0</version>
             <scope>compile</scope>
         </dependency>
+        
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
             <version>1.13</version>
             <type>jar</type>
         </dependency>
+        
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
             <version>8.0.1</version>
             <scope>provided</scope>
         </dependency>
+        
         <dependency>
             <groupId>net.delsas</groupId>
             <artifactId>saitae-ejb</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+        
         <dependency>
             <groupId>com.thetransactioncompany</groupId>
             <artifactId>cors-filter</artifactId>
@@ -55,12 +59,14 @@
             <artifactId>all-themes</artifactId>
             <version>1.0.8</version>
         </dependency>
-        --><dependency>
+        -->
+        <dependency>
             <groupId>org.primefaces.themes</groupId>
             <artifactId>all-themes</artifactId>
             <version>1.0.10</version>
             <scope>compile</scope>
         </dependency>
+        
         <dependency>
             <groupId>org.omnifaces</groupId>
             <artifactId>omnifaces</artifactId>
@@ -73,10 +79,23 @@
             <artifactId>qrgen</artifactId>
             <version>1.4</version>
         </dependency>
+        
         <dependency>
             <groupId>net.sf.barcode4j</groupId>
             <artifactId>barcode4j-light</artifactId>
             <version>2.0</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>3.7</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.lowagie</groupId>
+            <artifactId>itext</artifactId>
+            <version>2.1.7</version>
         </dependency>
     </dependencies>
 

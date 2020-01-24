@@ -48,7 +48,6 @@ import net.delsas.saitae.entities.TipoPersona;
 import net.delsas.saitae.entities.TipopersonaPermiso;
 import org.omnifaces.cdi.Push;
 import org.omnifaces.cdi.PushContext;
-import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -98,7 +97,7 @@ public class permisoEstController implements Serializable {
                 FacesContext.getCurrentInstance().getExternalContext().redirect("./../");
             } else {
                 initVariables();
-                invDays=new ArrayList<>();
+                invDays = new ArrayList<>();
                 invDays.add(0);
                 invDays.add(6);
             }
@@ -175,11 +174,13 @@ public class permisoEstController implements Serializable {
                     p.setPersona(personaFL.find(id));
                     p.getPermisosPK().setIpPersona(id);
                     if (pfl.find(p.getPermisosPK()) != null) {
-                        ms = new FacesMessage(FacesMessage.SEVERITY_WARN, "Imposible proceder",
-                                "En la base de datos ya hay un permiso del tipo '" + p.getTipoPermiso1().getTipoPermisoNombre()
-                                + "' para usted en el día "
+                        ms = new FacesMessage(FacesMessage.SEVERITY_WARN, "Solicitud duplicada",
+                                "Usted ya ha solicitado un permiso del tipo '"
+                                + p.getTipoPermiso1().getTipoPermisoNombre()
+                                + "' para el día "
                                 + (new SimpleDateFormat("dd/MM/yyy").format(p.getPermisosPK().getPermisoFechaInicio())
-                                + " por lo que no se procede con la solicitud del permiso."));
+                                + " por lo que no se procede con la solicitud de este permiso. "
+                                + "Verifique en su historial de permisos."));
                         FacesContext.getCurrentInstance().addMessage(null, ms);
                         return;
                     }
@@ -293,8 +294,8 @@ public class permisoEstController implements Serializable {
             ms = null;
         }
     }
-    
-    public List<Integer> getInvalidDays(){
+
+    public List<Integer> getInvalidDays() {
         return Collections.unmodifiableList(invDays);
     }
 }

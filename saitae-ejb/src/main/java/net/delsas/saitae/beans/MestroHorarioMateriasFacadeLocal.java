@@ -61,6 +61,7 @@ public interface MestroHorarioMateriasFacadeLocal {
      * Obtiene una lista de maestrosHorarioMaterias e el año proporcionado
      * ordenada por días, horario, materia, grado, y maestro
      *
+     * @param año
      * @return java.util.List net.delsas.saitae.entities.MestroHorarioMaterias
      */
     public List<MestroHorarioMaterias> findAllOrdered(int año);
@@ -83,4 +84,31 @@ public interface MestroHorarioMateriasFacadeLocal {
      * @return java.util.List net.delsas.saitae.entities.Materia
      */
     public List<Materia> findMateriaByIdMaestroAndGradoPK(GradoPK pk, Integer idMaestro);
+
+    /**
+     * Devuelve una lista con los horarios para el día y grados proporcionados.
+     *
+     * @param idhora
+     * @param gradpPK
+     * @return java.util.List net.delsas.saitae.entities.MestroHorarioMaterias
+     */
+    public List<MestroHorarioMaterias> findByIdHoraAndGradopk(Integer idhora, GradoPK gradpPK);
+
+    /**
+     * Devuelve una lista de horarios para el día y el maestro proporcionados.
+     *
+     * @param año
+     * @param idhora
+     * @param idMaestro
+     * @return java.util.List net.delsas.saitae.entities.MestroHorarioMaterias
+     */
+    public List<MestroHorarioMaterias> findByIdHoraAndMaestro(Integer año, Integer idhora, Integer idMaestro);
+
+    /**
+     * Devuelve una lista de años desde que el maestro tiene asignadas materias.
+     *
+     * @param idMaestro
+     * @return java.util.List java.lang.Integer
+     */
+    public List<Integer> findAñosByIdMaestro(Integer idMaestro);
 }
