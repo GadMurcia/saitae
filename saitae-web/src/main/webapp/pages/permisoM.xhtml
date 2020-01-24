@@ -27,13 +27,13 @@
                                            itemLabel="#{pm.tipoPermisoNombre}"/>
                         </p:selectOneMenu>
 
-                        <p:outputLabel value="Solicitud de licencia:"/>
+                        <p:outputLabel value="Solicita goce de sueldo? "/>
                         <p:selectBooleanButton value="#{permisoMaController.goceDeSueldo}" 
-                                               onLabel="Con Goce de sueldo" offLabel="Sin Goce de sueldo" style="width: 190px"/>
+                                               onLabel="Sí" offLabel="No" style="width: 190px"/>
 
-                        <p:outputLabel value="Ha gozado de Licencias anteriormente:"/>
+                        <p:outputLabel value="Ha gozado de Licencias anteriormente? "/>
                         <p:selectBooleanButton value="#{permisoMaController.licenciasAnteriores}" 
-                                               onLabel="SÍ" offLabel="NO" style="width: 190px"/>
+                                               onLabel="Si" offLabel="No" style="width: 190px"/>
                         
                         <p:outputLabel for="mask" value="Fecha de inicio:" />
                         <p:datePicker id="mask" value="#{permisoMaController.p.permisosPK.permisoFechaInicio}"

@@ -331,19 +331,20 @@
                 <p:dialog header="Administración de horario" widgetVar="Dhorario" modal="true" 
                           showEffect="fade" hideEffect="fade" resizable="false">
                     <h:form id="h1">
-                        <h:panelGrid columns="6" cellspacing="10px">
+                        <h:panelGrid columns="2" cellspacing="10px">
                             <p:outputLabel for="hora" value="Número de hora: "/>
                             <p:inputText id="hora" required="true" value="#{tipoController.hora.idhorario}"/>
 
                             <p:outputLabel for="inicio" value="Hora inicial:" />
                             <p:datePicker id="inicio" value="#{tipoController.hora.horaInicio}" 
-                                          timeOnly="true" pattern="hh:mm a" showTime="true"/>
+                                          timeOnly="true" pattern="hh:mm a" showIcon="true"/>
 
                             <p:outputLabel for="fin" value="Hora final: "/>
                             <p:datePicker id="fin"  value="#{tipoController.hora.horaFin}" 
-                                          timeOnly="true" pattern="hh:mm a" showTime="true"/>
+                                          timeOnly="true" pattern="hh:mm a" showIcon="true"/>
                         </h:panelGrid>
-                        <p:commandButton actionListener="#{tipoController.agregarHorario()}" value="Agregar"
+                        <p:commandButton actionListener="#{tipoController.agregarHorario()}" 
+                                         value="Guardar"
                                          icon="pi pi-save" update="form:tw:horario form0:msgs"/>
                     </h:form>
                 </p:dialog>

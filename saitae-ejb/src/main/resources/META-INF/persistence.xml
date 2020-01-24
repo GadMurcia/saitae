@@ -45,6 +45,7 @@
     <class>net.delsas.saitae.entities.ReservaDetalle</class>
     <class>net.delsas.saitae.entities.ReservaXpedagogia</class>
     <class>net.delsas.saitae.entities.SolicitudReserva</class>
+    <class>net.delsas.saitae.entities.Tema</class>
     <class>net.delsas.saitae.entities.TipoCargo</class>
     <class>net.delsas.saitae.entities.TipoEspecialidades</class>
     <class>net.delsas.saitae.entities.TipoMateria</class>

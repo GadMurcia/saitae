@@ -28,6 +28,7 @@ import javax.inject.Named;
 import net.delsas.saitae.beans.TemaFacadeLocal;
 import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.Tema;
+import org.primefaces.event.SelectEvent;
 
 /**
  *
@@ -39,7 +40,7 @@ public class themeControlller implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private String tema;
+    private String tema = "blitzer";
     private Map<String, String> themes;
     private Persona usuario;
     @EJB
@@ -47,15 +48,13 @@ public class themeControlller implements Serializable {
     private boolean existe;
 
     @PostConstruct
-    public void init() {
-        tema = "cupertino";
+    public void init() { 
         usuario = (Persona) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
-        if(usuario==null){
-            return;
+        if (usuario != null) {
+            Tema t = tFL.find(usuario.getIdpersona());
+            existe = t != null;
+            tema = existe ? t.getTemaNombre() : "blitzer";
         }
-        Tema t = tFL.find(usuario == null ? 0 : usuario.getIdpersona());
-        existe = t != null;
-        tema = existe ? t.getTemaNombre() : "cupertino";
     }
 
     public Map<String, String> getThemes() {
@@ -114,11 +113,13 @@ public class themeControlller implements Serializable {
     public String cambiar() {
         Tema t = new Tema(usuario.getIdpersona(), tema);
         t.setTemaComentario("");
+        t.setPersona(usuario);
         if (existe) {
             tFL.edit(t);
         } else {
             tFL.create(t);
         }
+        existe = true;
         return null;
     }
 

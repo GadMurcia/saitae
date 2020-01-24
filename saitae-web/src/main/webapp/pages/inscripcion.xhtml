@@ -245,7 +245,7 @@
                                              requiredMessage="Debe elegir un año de bachillerato para poder inscribirse.">
                                 <f:selectItem itemLabel="Seleccione" itemValue="" />
                                 <f:selectItems value="#{inscripcionController.niveles}"/>
-                                
+
                             </p:selectOneMenu>
                             <p:message for="console6"/>
 
@@ -429,42 +429,46 @@
                             <p:panel header="Datos del padre">
                                 <p:messages />
                                 <h:panelGrid columns="2" columnClasses="label, value">
-                                    <h:outputText value="DUI del padre: *"/>
-                                    <p:inputMask value="#{inscripcionController.duiP}" rendered="true" 
+                                    <h:outputText value="DUI del padre: "/>
+                                    <p:inputMask value="#{inscripcionController.duiP}"
                                                  label="Número de Documento Único de Identiad" 
                                                  title="Ingrese el número de DUI del padre" mask="99999999-9"/>
 
                                     <h:outputText value="Nombres del padre: *" />
-                                    <p:inputText value="#{inscripcionController.padre.personaNombre}" required="true" label="Nombres" 
+                                    <p:inputText value="#{inscripcionController.padre.personaNombre}" 
+                                                 label="Nombres" 
                                                  title="Ingrese los nombres del padre"/>
 
                                     <h:outputText value="Apellidos del padre: *" />
-                                    <p:inputText value="#{inscripcionController.padre.personaApellido}" required="true" label="Apellidos" 
+                                    <p:inputText value="#{inscripcionController.padre.personaApellido}" 
+                                                 label="Apellidos" 
                                                  title="Ingrese los apellidos del padre"/>
-                                    
+
                                     <h:outputText value="Teléfono: "/>
                                     <p:inputMask value="#{inscripcionController.padre.personaTelefono}" 
                                                  label="Número de teléfono del padre" 
                                                  title="Ingrese el número de teléfono del padre" mask="9999-9999"/>
-                                    
+
                                 </h:panelGrid>
                             </p:panel>
                             <p:panel header="Datos de la madre">
                                 <p:messages />
                                 <h:panelGrid columns="2" columnClasses="label, value">
                                     <h:outputText value="DUI de la madre: *"/>
-                                    <p:inputMask value="#{inscripcionController.duiM}" rendered="true" 
+                                    <p:inputMask value="#{inscripcionController.duiM}"
                                                  label="Número de Documento Único de Identiad" 
                                                  title="Ingrese el número de DUI de la madre" mask="99999999-9"/>
 
                                     <h:outputText value="Nombres de la madre: " />
-                                    <p:inputText value="#{inscripcionController.madre.personaNombre}" required="true" label="Nombres" 
+                                    <p:inputText value="#{inscripcionController.madre.personaNombre}" 
+                                                 label="Nombres" 
                                                  title="Ingrese los nombres de la madre"/>
 
                                     <h:outputText value="Apellidos de la madre: " />
-                                    <p:inputText value="#{inscripcionController.madre.personaApellido}" required="true" label="Apellidos" 
+                                    <p:inputText value="#{inscripcionController.madre.personaApellido}" 
+                                                 label="Apellidos" 
                                                  title="Ingrese los apellidos de la madre"/>
-                                    
+
                                     <h:outputText value="Teléfono: "/>
                                     <p:inputMask value="#{inscripcionController.madre.personaTelefono}" 
                                                  label="Número de teléfono del madre." 

@@ -47,6 +47,9 @@ public class Tema implements Serializable {
     @Size(max = 145)
     @Column(name = "temaComentario")
     private String temaComentario;
+    @JoinColumn(name = "idPersona", referencedColumnName = "idpersona", insertable = false, updatable = false)
+    @OneToOne(optional = false)
+    private Persona persona;
 
     public Tema() {
     }
@@ -82,6 +85,14 @@ public class Tema implements Serializable {
 
     public void setTemaComentario(String temaComentario) {
         this.temaComentario = temaComentario;
+    }
+
+    public Persona getPersona() {
+        return persona;
+    }
+
+    public void setPersona(Persona persona) {
+        this.persona = persona;
     }
 
     @Override

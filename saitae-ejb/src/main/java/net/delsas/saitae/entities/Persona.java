@@ -64,6 +64,9 @@ import javax.xml.bind.annotation.XmlTransient;
 })
 public class Persona implements Serializable {
 
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "persona")
+    private Tema tema;
+
     @OneToMany(mappedBy = "entregante")
     private List<Reserva> reservaList;
     @OneToMany(mappedBy = "recibe")
@@ -493,6 +496,14 @@ public class Persona implements Serializable {
 
     public void setReservaList1(List<Reserva> reservaList1) {
         this.reservaList1 = reservaList1;
+    }
+
+    public Tema getTema() {
+        return tema;
+    }
+
+    public void setTema(Tema tema) {
+        this.tema = tema;
     }
 
 }
