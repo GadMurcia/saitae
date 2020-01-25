@@ -67,7 +67,6 @@ Any value defined here will override the pom.xml file value but is only applicab
         <org-netbeans-spi-editor-hints-projects.text.x-java.org_2e_netbeans_2e_modules_2e_java_2e_hints_2e_EmptyCancelForCancellableTask.enabled>true</org-netbeans-spi-editor-hints-projects.text.x-java.org_2e_netbeans_2e_modules_2e_java_2e_hints_2e_EmptyCancelForCancellableTask.enabled>
         <netbeans.compile.on.save>all</netbeans.compile.on.save>
         <org-netbeans-modules-css-prep.sass_2e_configured>true</org-netbeans-modules-css-prep.sass_2e_configured>
-        <org-netbeans-spi-editor-hints-projects.perProjectHintSettingsEnabled>true</org-netbeans-spi-editor-hints-projects.perProjectHintSettingsEnabled>
-        <netbeans.hint.jdkPlatform>JDK_1.8.241</netbeans.hint.jdkPlatform>
+        <org-netbeans-modules-css-prep.less_2e_configured>true</org-netbeans-modules-css-prep.less_2e_configured>
     </properties>
 </project-shared-configuration>

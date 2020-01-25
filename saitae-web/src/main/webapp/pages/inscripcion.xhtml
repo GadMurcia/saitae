@@ -426,53 +426,66 @@
                 <p:tab title="Padres">
                     <p:panel header="Información de los padres del aspirante">
                         <h:panelGrid >
-                            <p:panel header="Datos del padre">
+                            <p:panel id="papa" header="Datos del padre">
                                 <p:messages />
                                 <h:panelGrid columns="2" columnClasses="label, value">
                                     <h:outputText value="DUI del padre: "/>
-                                    <p:inputMask value="#{inscripcionController.duiP}"
+                                    <p:inputMask id="dp" value="#{inscripcionController.duiP}"
                                                  label="Número de Documento Único de Identiad" 
                                                  title="Ingrese el número de DUI del padre" mask="99999999-9"/>
 
                                     <h:outputText value="Nombres del padre: *" />
-                                    <p:inputText value="#{inscripcionController.padre.personaNombre}" 
+                                    <p:inputText id="np" value="#{inscripcionController.padre.personaNombre}" 
                                                  label="Nombres" 
                                                  title="Ingrese los nombres del padre"/>
 
                                     <h:outputText value="Apellidos del padre: *" />
-                                    <p:inputText value="#{inscripcionController.padre.personaApellido}" 
+                                    <p:inputText id="ap" value="#{inscripcionController.padre.personaApellido}" 
                                                  label="Apellidos" 
                                                  title="Ingrese los apellidos del padre"/>
 
                                     <h:outputText value="Teléfono: "/>
-                                    <p:inputMask value="#{inscripcionController.padre.personaTelefono}" 
+                                    <p:inputMask id="tp" value="#{inscripcionController.padre.personaTelefono}" 
                                                  label="Número de teléfono del padre" 
                                                  title="Ingrese el número de teléfono del padre" mask="9999-9999"/>
-
+                                    
+                                    <p:commandButton value="limpiar datos del padre" 
+                                                     actionListener="#{inscripcionController.limpiarAPadres(1)}"
+                                                     update="dp np ap tp"/>
+                                    <p:commandButton value="Copiar datos del representante"
+                                                     actionListener="#{inscripcionController.copiarAPadres(1)}"
+                                                     update="dp np ap tp"/>
                                 </h:panelGrid>
                             </p:panel>
-                            <p:panel header="Datos de la madre">
+                            <p:panel id="mama" header="Datos de la madre">
                                 <p:messages />
                                 <h:panelGrid columns="2" columnClasses="label, value">
                                     <h:outputText value="DUI de la madre: *"/>
-                                    <p:inputMask value="#{inscripcionController.duiM}"
+                                    <p:inputMask id="dm" value="#{inscripcionController.duiM}"
                                                  label="Número de Documento Único de Identiad" 
                                                  title="Ingrese el número de DUI de la madre" mask="99999999-9"/>
 
                                     <h:outputText value="Nombres de la madre: " />
-                                    <p:inputText value="#{inscripcionController.madre.personaNombre}" 
+                                    <p:inputText id="nm" value="#{inscripcionController.madre.personaNombre}" 
                                                  label="Nombres" 
                                                  title="Ingrese los nombres de la madre"/>
 
                                     <h:outputText value="Apellidos de la madre: " />
-                                    <p:inputText value="#{inscripcionController.madre.personaApellido}" 
+                                    <p:inputText id="am" value="#{inscripcionController.madre.personaApellido}" 
                                                  label="Apellidos" 
                                                  title="Ingrese los apellidos de la madre"/>
 
                                     <h:outputText value="Teléfono: "/>
-                                    <p:inputMask value="#{inscripcionController.madre.personaTelefono}" 
+                                    <p:inputMask id="tm" value="#{inscripcionController.madre.personaTelefono}" 
                                                  label="Número de teléfono del madre." 
                                                  title="Ingrese el número de teléfono de la madre." mask="9999-9999"/>
+                                    
+                                    <p:commandButton value="limpiar datos de la madre" 
+                                                     actionListener="#{inscripcionController.limpiarAPadres(2)}"
+                                                     update="dm nm am tm"/>
+                                    <p:commandButton value="Copiar datos del representante"
+                                                     actionListener="#{inscripcionController.copiarAPadres(2)}"
+                                                     update="dm nm am tm"/>
                                 </h:panelGrid>
                             </p:panel>
                         </h:panelGrid>

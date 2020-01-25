@@ -23,6 +23,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import net.delsas.saitae.ax.Auxiliar;
+import net.delsas.saitae.ax.axHorario;
 import net.delsas.saitae.ax.mensaje;
 import net.delsas.saitae.beans.AccesoTipoPersonaFacadeLocal;
 import net.delsas.saitae.beans.DelagacionCargoFacadeLocal;
@@ -112,7 +113,7 @@ public class sessionController implements Serializable {
                     }
                 } else {
                     context.addMessage("growl", new FacesMessage(FacesMessage.SEVERITY_INFO, "Bienvenido",
-                            "Gracias por iniciar Sesión " + us.getPersonaNombre()));
+                            "Bienvenido " + axHorario.getNomgreCortoPersona(us)));
                     context.getExternalContext().getSessionMap().remove("primerInicio");
                     context.getExternalContext().getSessionMap().put("primerInicio", false);
                 }

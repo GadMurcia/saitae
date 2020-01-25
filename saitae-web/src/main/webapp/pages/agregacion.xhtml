@@ -21,6 +21,8 @@
                                                persona="#{maestroController.maestro.persona}"
                                                onItemSelect="#{maestroController.setChange()}"
                                                t="4" onComplete="#{axiliarController.completeTextMae}"/>
+                                    <p:commandButton value="Limpiar campos" update="form1"
+                                                     actionListener="#{maestroController.init()}"/>
                                 </p:panel>
                             </p:tab>
                             <p:tab id="address" title="Contacto">

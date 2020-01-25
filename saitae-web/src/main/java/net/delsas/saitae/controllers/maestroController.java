@@ -204,7 +204,7 @@ public class maestroController implements Serializable {
             p.setMaestro(maestro);
             Persona m = pfl.find(p.getIdpersona());
             if (m == null) {
-                String pass=new Auxiliar().getDui(maestro.getPersona());
+                String pass=maestro.getPersona().toString().substring(1);
                 maestro.getPersona().setPersonaContrasenya(DigestUtils.md5Hex(pass));
                 pfl.create(p);
             } else {

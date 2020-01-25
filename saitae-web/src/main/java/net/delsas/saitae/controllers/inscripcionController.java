@@ -38,9 +38,7 @@ import javax.faces.view.ViewScoped;
 import javax.imageio.ImageIO;
 import javax.inject.Named;
 import net.delsas.saitae.ax.Auxiliar;
-import net.delsas.saitae.beans.DocumentosFacadeLocal;
 import net.delsas.saitae.beans.GradoFacadeLocal;
-import net.delsas.saitae.beans.MatriculaFacadeLocal;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.entities.Documentos;
 import net.delsas.saitae.entities.Grado;
@@ -174,31 +172,31 @@ public class inscripcionController implements Serializable {
 
     public List<SelectItem> getNiveles() {
         List<SelectItem> items = new ArrayList<>();
-        for (Integer i : gfl.getIdPorAñoyModalidad(getAño(), mat.getGrado().getGradoPK().getGradoModalidad())) {
+        gfl.getIdPorAñoyModalidad(getAño(), mat.getGrado().getGradoPK().getGradoModalidad()).forEach((i) -> {
             items.add(new SelectItem(i, i == 3 ? "Tercer Año"
                     : i == 2 ? "Segundo Año"
                             : "primer Año"));
-        }
+        });
         return items;
     }
 
     public List<SelectItem> getModalidades() {
         List<SelectItem> items = new ArrayList<>();
-        for (String g : gfl.getModalidadPorAño(getAño())) {
+        gfl.getModalidadPorAño(getAño()).forEach((g) -> {
             items.add(new SelectItem(g, g.equals("C") ? "T.V.C. Contaduría"
                     : g.equals("S") ? "T.V.C. Secretariado"
                     : "General"));
-        }
+        });
         return items;
     }
 
     public List<SelectItem> getSecciones() {
         List<SelectItem> items = new ArrayList<>();
-        for (String g : gfl.getSeccionPorAñoModalidadyId(getAño(), mat.getGrado().getGradoPK().getGradoModalidad(), mat.getGrado().getGradoPK().getIdgrado())) {
+        gfl.getSeccionPorAñoModalidadyId(getAño(), mat.getGrado().getGradoPK().getGradoModalidad(), mat.getGrado().getGradoPK().getIdgrado()).forEach((g) -> {
             items.add(new SelectItem(g, g.equals("A") ? "Sección A"
                     : g.equals("B") ? "Sección B"
                     : "Sección C"));
-        }
+        });
         return items;
     }
 
@@ -447,6 +445,22 @@ public class inscripcionController implements Serializable {
 
     private boolean getNacionalidades(Persona p) {
         return p.getPersonaNacionalidad().equals("Salvadoreña");
+    }
+
+    public void copiarAPadres(int q) {
+        if (q == 1) {
+            padre = repP;
+        } else {
+            madre = repP;
+        }
+    }
+
+    public void limpiarAPadres(int q) {
+        if (q == 1) {
+            padre = new Persona(1);
+        } else {
+            madre = new Persona(1);
+        }
     }
 
 }

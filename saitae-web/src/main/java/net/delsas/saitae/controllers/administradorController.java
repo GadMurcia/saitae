@@ -59,15 +59,14 @@ public class administradorController implements Serializable {
     @PostConstruct
     public void init() {
         aux = new Auxiliar();
-        selected=new Persona();
+        selected = new Persona();
         adm = aux.getAdministradorCra();
         adm.setTipoPersona(new TipoPersona());
-        tipos = new ArrayList<>();
-        tipos.add(new TipoPersona(7,"Laboratorista"));
-        tipos.add(new TipoPersona(6,"Administrador CRA"));
-        tipos.add(new TipoPersona(5,"Bibliotecario"));
-        tipos.add(new TipoPersona(3,"Subdirector"));
-        tipos.add(new TipoPersona(2, "Director"));
+        int q[] = new int[]{1, 4, 8, 9, 10, 11};
+        tipos = tpfl.findAll();
+        for (int s : q) {
+            tipos.remove(tpfl.find(s));
+        }
     }
 
     public List<String> completeText(String query) {
@@ -146,8 +145,8 @@ public class administradorController implements Serializable {
             System.out.println("Error en adminitrador.Guaradr:" + e.getMessage());
         }
     }
-    
-    public List<Persona> getPlantel(){
+
+    public List<Persona> getPlantel() {
         return pfl.getPlantel();
     }
 
@@ -158,7 +157,5 @@ public class administradorController implements Serializable {
     public void setSelected(Persona selected) {
         this.selected = selected;
     }
-    
-    
 
 }
