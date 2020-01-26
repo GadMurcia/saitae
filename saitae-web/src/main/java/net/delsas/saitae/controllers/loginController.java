@@ -11,6 +11,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.servlet.http.Cookie;
+import net.delsas.saitae.ax.Auxiliar;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.entities.Persona;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -100,7 +101,7 @@ public class loginController implements Serializable {
     }
     
     public Integer getYear() {
-        return Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date()));
+        return Auxiliar.getAñoActual();
     }
     
     public void redirect() {

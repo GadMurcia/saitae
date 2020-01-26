@@ -10,30 +10,34 @@
     <ui:define name="content">
         <h:form id="form">
             <p:tab  title="Listado Del plantel Institucional">
-                <p:dataTable id="plantel" var="p" value="#{administradorController.plantel}" rowKey="#{p.idpersona}"
-                             emptyMessage="Sin registros aún." rows="10" paginator="true" selectionMode="single"
-                             selection="#{administradorController.selected}">
+                <p:dataTable id="plantel" var="p" value="#{administradorController.plantel}" 
+                             rowKey="#{p.idpersona}" emptyMessage="Sin registros aún." rows="12" 
+                             paginator="true" selectionMode="single" paginatorAlwaysVisible="false"
+                             selection="#{administradorController.selected}" paginatorPosition="top">
                     <f:facet name="header">
                         Lista del plantel institucional
                     </f:facet>
-                    <p:column headerText="DUI" style="width: 100px">
+                    <p:column headerText="DUI" style="width: 100px"
+                              filterBy="#{p.idpersona.toString().substring(1)}">
                         <p:outputLabel value="#{p.idpersona.toString().substring(1)}"/>
                     </p:column>
-                    <p:column headerText="Nombre">
+                    <p:column headerText="Nombre"
+                              filterBy="#{p.personaNombre} #{p.personaApellido}">
                         <p:outputLabel value="#{p.personaNombre} #{p.personaApellido}"/>
                     </p:column>
                     <p:column headerText="Ocupación">
                         <p:outputLabel value="#{p.personaOCupacion}"/>
                     </p:column>                    
-                    <p:column headerText="Cargo Principal">
-                        <p:outputLabel value="#{p.tipoPersona.tipoPersonaNombre}"/>
+                    <p:column headerText="Cargos">
+                        <p:outputLabel value="#{administradorController.getCargos(p)}"/>
                     </p:column>
                 </p:dataTable> 
                 <p:contextMenu for="plantel">
-                    <p:menuitem value="Ver" update="pl" icon="pi pi-search" oncomplete="PF('pld').show()"/>
+                    <p:menuitem value="Ver" update="pl" 
+                                icon="pi pi-search" oncomplete="PF('Dpld').show()"/>
                 </p:contextMenu>
 
-                <p:dialog header="Datos de la persona Seleccionada" widgetVar="pld" modal="true" 
+                <p:dialog header="Datos de la persona Seleccionada" widgetVar="Dpld" modal="true" 
                           showEffect="fade" hideEffect="fade" resizable="false">
                     <p:outputPanel id="pl" style="text-align:center;">
                         <p:panelGrid  columns="2" rendered="#{not empty administradorController.selected}" 
@@ -49,9 +53,9 @@
                             <h:outputText value="Ocupación" />
                             <h:outputText value="#{administradorController.selected.personaOCupacion}" />
 
-                            <h:outputText value="Cargo Principal:" />
-                            <h:outputText value="#{administradorController.selected.tipoPersona.tipoPersonaNombre}"/>
-                            
+                            <h:outputText value="Cargos:" />
+                            <h:outputText value="#{administradorController.getCargos(administradorController.selected)}"/>
+
                             <h:outputText value="Es maestro?"/>
                             <h:outputText value="#{administradorController.selected.maestro!=null? 'Es Maestro' : 'No es Maestro'}"/>
                         </p:panelGrid>

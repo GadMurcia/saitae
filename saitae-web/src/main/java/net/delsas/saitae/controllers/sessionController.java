@@ -23,7 +23,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import net.delsas.saitae.ax.Auxiliar;
-import net.delsas.saitae.ax.axHorario;
 import net.delsas.saitae.ax.mensaje;
 import net.delsas.saitae.beans.AccesoTipoPersonaFacadeLocal;
 import net.delsas.saitae.beans.DelagacionCargoFacadeLocal;
@@ -113,7 +112,8 @@ public class sessionController implements Serializable {
                     }
                 } else {
                     context.addMessage("growl", new FacesMessage(FacesMessage.SEVERITY_INFO, "Bienvenido",
-                            "Bienvenido " + axHorario.getNomgreCortoPersona(us)));
+                            "Bienvenid" + (us.getPersonaSexo() ? "a " : "o ")
+                            + Auxiliar.getNombreCortoPersona(us)));
                     context.getExternalContext().getSessionMap().remove("primerInicio");
                     context.getExternalContext().getSessionMap().put("primerInicio", false);
                 }
@@ -166,7 +166,7 @@ public class sessionController implements Serializable {
         mi.setUrl("perfil.intex");
         mm.addElement(mi);
         List<Acceso> menusDisponibles = new ArrayList<>();
-        List<Integer> tps = new Auxiliar().getTiposPersonas(us);
+        List<Integer> tps = Auxiliar.getTiposPersonas(us);
         tps.stream().map((i) -> atpFL.findAccesoByIdTipoPersona(i)).forEachOrdered((actps) -> {
             actps.stream().filter((a) -> (!menusDisponibles.contains(a))).forEachOrdered((a) -> {
                 menusDisponibles.add(a);
@@ -244,7 +244,7 @@ public class sessionController implements Serializable {
     }
 
     public Integer getAño() {
-        return Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date()));
+        return Auxiliar.getAñoActual();
     }
 
     public void escucha() {
@@ -253,8 +253,10 @@ public class sessionController implements Serializable {
             String[] ac0 = m.getCadenaAccion().split("¿¿¿")[0].split("<<");
             String[] tp0 = m.getCadenaAccion().split("¿¿¿").length > 1
                     ? m.getCadenaAccion().split("¿¿¿")[1].split("¿¿") : new String[]{};
+            Integer tp = 0;
             if (tp0.length > 1) {
                 if (tp0[0].equals("tp")) {
+                    tp = Integer.valueOf(tp0[1]);
                     FacesContext.getCurrentInstance().addMessage(":form0:msgs", m.getFacesmessage());
                     PrimeFaces.current().ajax().update(":noti", ":form0:msgs");
                 }
@@ -266,7 +268,9 @@ public class sessionController implements Serializable {
                 if (ac.length > 1) {
                     String[] acid = ac[1].split(">");
                     if (np.equals((ac[0] + ".intex"))
-                            && (Objects.equals(m.getDestinatario(), us.getIdpersona()) || x == 1 || x == 2)) {
+                            && (Objects.equals(m.getDestinatario(), us.getIdpersona())
+                            || x == 1 || x == 2
+                            || Objects.equals(tp, us.getTipoPersona().getIdtipoPersona()))) {
                         PrimeFaces.current().ajax().update(acid);
                     }
                 }

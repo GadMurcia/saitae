@@ -18,10 +18,8 @@ package net.delsas.saitae.controllers;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -67,6 +65,9 @@ public class matriculaController implements Serializable {
     private GradoFacadeLocal gradoFL;
     @EJB
     private PersonaFacadeLocal personaFL;
+    @Inject
+    @Push
+    private PushContext notificacion;
     private List<Matricula> nuevasMatriculasF;
     private List<Matricula> nuevasMatriculasM;
     private List<Grado> grados;
@@ -82,7 +83,7 @@ public class matriculaController implements Serializable {
     public void init() {
         FacesContext context = FacesContext.getCurrentInstance();
         usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
-        List<Integer> tps = new Auxiliar().getTiposPersonas(usuario);
+        List<Integer> tps = Auxiliar.getTiposPersonas(usuario);
         boolean r = (tps.contains(1) || tps.contains(2) || tps.contains(13));
         if (!r) {
             context.getExternalContext().getSessionMap().put("mensaje", new FacesMessage(FacesMessage.SEVERITY_FATAL,
@@ -137,23 +138,19 @@ public class matriculaController implements Serializable {
                 : mat.getGrado().getGradoPK().getGradoModalidad().equals("S") ? " Secretariado"
                 : mat.getGrado().getGradoPK().getGradoModalidad().equals("G") ? " General" : " ")
                 + ". Vea la nómina de alumnos para comproobar el cambio."));
-        x = new mensaje(buscado.getIdpersona(), usuario.getPersonaNombre().split(" ")[0] + " "
-                + usuario.getPersonaApellido().split(" ")[0]
-                + " ha cambiado la sección donde usted estaba inscrito "
-                + "a la sección '" + mat.getGrado().getGradoPK().getGradoSeccion() + "'.",
-                "Se ha registrado un cambio de sección",
-                FacesMessage.SEVERITY_INFO, usuario.getIdpersona(),
-                " ");
-        sendMessage(x.toString());
-        try {
-            notFL.create(x.getNotificacion());
-        } catch (Exception e) {
-        }
+        Auxiliar.persistirNotificación(
+                new mensaje(buscado.getIdpersona(), usuario.getPersonaNombre().split(" ")[0] + " "
+                        + usuario.getPersonaApellido().split(" ")[0]
+                        + " ha cambiado la sección donde usted estaba inscrito "
+                        + "a la sección '" + mat.getGrado().getGradoPK().getGradoSeccion() + "'.",
+                        "Se ha registrado un cambio de sección",
+                        FacesMessage.SEVERITY_INFO, usuario.getIdpersona(),
+                        " "),
+                buscado, notFL, notificacion);
         init();
     }
 
     public void guardar() {
-        mensaje x;
         int s = getSecciones().size() > 0 ? getSecciones().size() : 1;
         int m = nuevasMatriculasM.size() / s;
         int f = nuevasMatriculasF.size() / s;
@@ -174,31 +171,39 @@ public class matriculaController implements Serializable {
         }
         nuevasMatriculasF.addAll(fem);
         nuevasMatriculasM.addAll(masc);
-        for (Matricula matr : getAllNew()) {
+        getAllNew().stream().map((matr) -> {
             System.out.println(matr.getGrado().getGradoPK().getGradoSeccion());
+            return matr;
+        }).map((matr) -> {
             matriculaFL.remove(matr);
+            return matr;
+        }).map((matr) -> {
             matr.setMatriculaComentario("R");
+            return matr;
+        }).map((matr) -> {
             matriculaFL.create(matr);
+            return matr;
+        }).map((matr) -> {
             matriculaFL.edit(matr);
+            return matr;
+        }).forEachOrdered((matr) -> {
             GradoPK pk = matr.getGrado().getGradoPK();
-            x = new mensaje(matr.getMatriculaPK().getIdmatricula(),
-                    "Usted ha sido aceptado en el Instituto Nacional 'Texistepeque'! "
-                    + "Ha sido inscrito en " + (pk.getIdgrado() == 1 ? "Primero"
-                    : (pk.getIdgrado() == 2 ? "Segundo"
-                    : (pk.getIdgrado() == 3 ? "Tercero" : "")))
-                    + " " + (pk.getGradoModalidad().equals("C") ? "Contador"
-                    : (pk.getGradoModalidad().equals("S") ? "Secretariado"
-                    : (pk.getGradoModalidad().equals("G") ? "General" : "")))
-                    + " Sección " + pk.getGradoSeccion(),
-                    "Su solicitud de nuevo ingreso ha sido aceptada",
-                    FacesMessage.SEVERITY_INFO, usuario.getIdpersona(),
-                    " ");
-            sendMessage(x.toString());
-            try {
-                notFL.create(x.getNotificacion());
-            } catch (Exception e) {
-            }
-        }
+            Auxiliar.persistirNotificación(
+                    new mensaje(matr.getMatriculaPK().getIdmatricula(),
+                            "Usted ha sido aceptado en el Instituto Nacional 'Texistepeque'! "
+                            + "Ha sido inscrito en " + (pk.getIdgrado() == 1 ? "Primero"
+                            : (pk.getIdgrado() == 2 ? "Segundo"
+                            : (pk.getIdgrado() == 3 ? "Tercero" : "")))
+                            + " " + (pk.getGradoModalidad().equals("C") ? "Contador"
+                            : (pk.getGradoModalidad().equals("S") ? "Secretariado"
+                            : (pk.getGradoModalidad().equals("G") ? "General" : "")))
+                            + " Sección " + pk.getGradoSeccion(),
+                            "Su solicitud de nuevo ingreso ha sido aceptada",
+                            FacesMessage.SEVERITY_INFO, usuario.getIdpersona(),
+                            " "),
+                    matr.getEstudiante().getPersona(),
+                    notFL, notificacion);
+        });
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
                 "Asignación de secciones exitosa!",
                 "Todos los datos se han guardado con éxito. "
@@ -222,7 +227,7 @@ public class matriculaController implements Serializable {
     }
 
     private int getAño() {
-        return Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date()));
+        return Auxiliar.getAñoActual();
     }
 
     public List<Grado> getGrados() {
@@ -255,20 +260,7 @@ public class matriculaController implements Serializable {
     }
 
     public String getGradosLabel(GradoPK pk) {
-        String l = "";
-        l += pk.getIdgrado() == 1
-                ? "Primero "
-                : pk.getIdgrado() == 2
-                ? "Segundo "
-                : pk.getIdgrado() == 3
-                ? "Tercero " : "";
-        l += pk.getGradoModalidad().equals("C")
-                ? "T.V.C Contador"
-                : pk.getGradoModalidad().equals("G")
-                ? "General"
-                : pk.getGradoModalidad().equals("S")
-                ? "T.V.C Secretariado" : " ";
-        return l;
+        return Auxiliar.getGradoNombre(pk);
     }
 
     public List<String> completeText(String query) {
@@ -407,14 +399,6 @@ public class matriculaController implements Serializable {
             it.add(new SelectItem(mo, mo));
         });
         return it;
-    }
-
-    @Inject
-    @Push
-    private PushContext notificacion;
-
-    public void sendMessage(String message) {
-        notificacion.send(message);
     }
 
     public GradoPK getSeccion() {

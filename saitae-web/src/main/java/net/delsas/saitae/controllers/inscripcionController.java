@@ -63,10 +63,6 @@ public class inscripcionController implements Serializable {
     private GradoFacadeLocal gfl;
     @EJB
     private PersonaFacadeLocal personaFL;
-//    @EJB
-//    private DocumentosFacadeLocal documentosFL;
-//    @EJB
-//    private MatriculaFacadeLocal matriculaFL;
 
     private Persona estP;
     private Persona repP;
@@ -86,16 +82,30 @@ public class inscripcionController implements Serializable {
         doc = new Documentos(0);
     }
 
+    private void quitarEspaciosAntes(Persona p) {
+        String n = p.getPersonaNombre(), a = p.getPersonaApellido();
+        if (n.split("")[0].equals(" ")) {
+            p.setPersonaNombre(n.substring(1));
+        }
+        if (a.split("")[0].equals(" ")) {
+            p.setPersonaApellido(a.substring(1));
+        }
+    }
+
     public void guardar() {
         System.out.println("Inicio del guardar.");
         madre.setPersonaContrasenya(DigestUtils.md5Hex(madre.getIdpersona().toString().substring(1)));
+        quitarEspaciosAntes(madre);
         padre.setPersonaContrasenya(DigestUtils.md5Hex(padre.getIdpersona().toString().substring(1)));
+        quitarEspaciosAntes(padre);
 
         repP.getEstudiante().setIdestudiante(repP.getIdpersona());
         repP.setPersonaContrasenya(DigestUtils.md5Hex(repP.getIdpersona().toString().substring(1)));
+        quitarEspaciosAntes(repP);
 
         estP.getEstudiante().setIdestudiante(estP.getIdpersona());
         estP.setPersonaContrasenya(DigestUtils.md5Hex(estP.getIdpersona().toString().substring(1)));
+        quitarEspaciosAntes(estP);
         estP.getEstudiante().setEstudianteRepresentante(repP.getEstudiante());
         estP.getEstudiante().setEstudiantePadre(padre);
         estP.getEstudiante().setEstudianteMadre(madre);
@@ -457,9 +467,9 @@ public class inscripcionController implements Serializable {
 
     public void limpiarAPadres(int q) {
         if (q == 1) {
-            padre = new Persona(1);
+            padre = new Auxiliar().getPadre();
         } else {
-            madre = new Persona(1);
+            madre = new Auxiliar().getMadre();
         }
     }
 

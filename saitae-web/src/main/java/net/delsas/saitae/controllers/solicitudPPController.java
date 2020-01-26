@@ -400,7 +400,7 @@ public class solicitudPPController implements Serializable {
                                 + " se ha" + (calendas.size() > 1 ? "n" : "")
                                 + " enviado con éxitos. Recibirá una notificación del encargado del CRA"
                                 + " cuando su proyecto se haya resuelto."));
-                ax.persistirNotificación(x, usuario, notiFL, notificacion);
+                Auxiliar.persistirNotificación(x, usuario, notiFL, notificacion);
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("ms", x.getFacesmessage());
                 try {
                     FacesContext.getCurrentInstance().getExternalContext().redirect("solicitudRPP.intex");
@@ -700,14 +700,14 @@ public class solicitudPPController implements Serializable {
     }
 
     private void notificar(Integer idTipoPersona) {
-        ax.persistirNotificación(
+        Auxiliar.persistirNotificación(
                 new mensaje(0, usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
                         + " ha solicitado recursos para proyecto pedagógico planificado."
                         + " Revise la administración de reservas para más detalles.",
                         "Nueva solicitud de recursos",
                         FacesMessage.SEVERITY_INFO,
                         usuario.getIdpersona(), "srCra<form:ap:solicitados"),
-                ax.getPersonasParaNotificar(tpnFL.find(idTipoPersona)), notiFL, notificacion);
+                Auxiliar.getPersonasParaNotificar(tpnFL.find(idTipoPersona)), notiFL, notificacion);
     }
 
     public boolean getDesactivarVistas() {
@@ -719,7 +719,7 @@ public class solicitudPPController implements Serializable {
     }
 
     public List<Integer> getDisabledDays() { 
-        return new Auxiliar().getDisabledDays();
+        return Auxiliar.getDisabledDays();
     }
 
     public void preRender() {

@@ -18,9 +18,7 @@ package net.delsas.saitae.controllers;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -39,7 +37,6 @@ import net.delsas.saitae.beans.NotificacionesFacadeLocal;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.entities.EntregaUtiles;
 import net.delsas.saitae.entities.EntregaUtilesPK;
-import net.delsas.saitae.entities.GradoPK;
 import net.delsas.saitae.entities.Matricula;
 import net.delsas.saitae.entities.MatriculaPK;
 import net.delsas.saitae.entities.Persona;
@@ -89,7 +86,7 @@ public class paquetesController implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
         String pagina = context.getExternalContext().getRequestServletPath().split("/")[2];
-        if (!(new Auxiliar().permitirAcceso(usuario, accesoTPFL.findTipoPersonaPermitidos(accesoFL.getAccesoByUrl(pagina))))) {
+        if (!(Auxiliar.permitirAcceso(usuario, accesoTPFL.findTipoPersonaPermitidos(accesoFL.getAccesoByUrl(pagina))))) {
             context.getExternalContext().getSessionMap().put("mensaje", new FacesMessage(FacesMessage.SEVERITY_FATAL,
                     "Falla!", "Esa vista no le está permitida."));
             try {
@@ -129,19 +126,14 @@ public class paquetesController implements Serializable {
     }
 
     public int getAño() {
-        return Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date()));
+        return Auxiliar.getAñoActual();
     }
 
     public String getGradoAlumno() {
         String grado = "";
         Matricula mati = matriculaFL.find(new MatriculaPK(p.getIdpersona(), getAño()));
         if (mati != null) {
-            GradoPK pk = mati.getGrado().getGradoPK();
-            grado += pk.getIdgrado() == 1 ? "Primero" : pk.getIdgrado() == 2 ? "Segundo"
-                    : pk.getIdgrado() == 3 ? "Tercero" : "";
-            grado += " " + (pk.getGradoModalidad().equals("G") ? "General"
-                    : pk.getGradoModalidad().equals("S") ? " T.V.C Secretariado"
-                    : pk.getGradoModalidad().equals("C") ? "T.V.C Contador" : "");
+            grado = Auxiliar.getGradoNombre(mati.getGrado().getGradoPK());
         }
         return grado;
     }
@@ -152,16 +144,17 @@ public class paquetesController implements Serializable {
             entregaUtiles.setIdEntregante(usuario);
             entregaUFL.edit(entregaUtiles);
             FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Guardado con éxito", "Se guardaron los datos de paquetes entregados"));
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Guardado con éxito",
+                            "Se guardaron los datos de paquetes entregados"));
             String g = entrega(entregaUtiles);
-            ax.persistirNotificación(
+            Auxiliar.persistirNotificación(
                     new mensaje(entregaUtiles.getEntregaUtilesPK().getIdEstudiante(),
-                            usuario.getIdpersona(),
-                            " ",
+                            usuario.getIdpersona(), " ",
                             new FacesMessage(FacesMessage.SEVERITY_INFO, "Se ha registrado actividad en la entrega de paquetes.",
                                     (g.split("").length > 2 ? "Lo que se le ha entregado es: " + g
                                     : "No hay registro de entregas en este año."))),
-                    entregaUtiles.getEstudiante().getPersona(), notiFL, notificacion);
+                    entregaUtiles.getEstudiante().getPersona(),
+                    notiFL, notificacion);
             this.init();
         } else {
             FacesContext.getCurrentInstance().addMessage(null,

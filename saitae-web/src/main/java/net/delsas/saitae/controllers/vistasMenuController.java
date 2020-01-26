@@ -91,8 +91,8 @@ public class vistasMenuController implements Serializable {
     
     public void onRowEdit(RowEditEvent event) {
         String titulo = "", mensaje = "", id = event.getComponent().getClientId();
-        switch (id) {
-            case "form:tw:accesos":
+        switch (event.getComponent().getId()) {
+            case "accesos":
                 Acceso a = (Acceso) event.getObject();
                 if (a.getIdacceso() != null) {
                     accesoFL.edit(a);
@@ -103,7 +103,7 @@ public class vistasMenuController implements Serializable {
                 titulo = "Tipo de recurso";
                 mensaje = ((Acceso) event.getObject()).getAccesoNombre();
                 break;
-            case "form:tw:tipo":
+            case "tipo":
                 TipoPersona tp = (TipoPersona) event.getObject();
                 if (tp.getIdtipoPersona() != null) {
                     tipoPersonaFL.edit(tp);

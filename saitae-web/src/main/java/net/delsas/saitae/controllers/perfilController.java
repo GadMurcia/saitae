@@ -28,11 +28,9 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import net.delsas.saitae.beans.AnuncioFacadeLocal;
-import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
 import net.delsas.saitae.entities.Anuncio;
 import net.delsas.saitae.entities.MaestoCargo;
 import net.delsas.saitae.entities.Persona;
-import net.delsas.saitae.entities.TipoPersona;
 
 /**
  *

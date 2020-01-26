@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -31,6 +30,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import net.delsas.saitae.ax.Auxiliar;
 import net.delsas.saitae.ax.mensaje;
 import net.delsas.saitae.beans.NotificacionesFacadeLocal;
 import net.delsas.saitae.beans.PersonasReservaFacadeLocal;
@@ -41,7 +41,6 @@ import net.delsas.saitae.beans.SolicitudReservaFacadeLocal;
 import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
 import net.delsas.saitae.entities.Ejemplar;
 import net.delsas.saitae.entities.Grado;
-import net.delsas.saitae.entities.GradoPK;
 import net.delsas.saitae.entities.Maestro;
 import net.delsas.saitae.entities.Matricula;
 import net.delsas.saitae.entities.Persona;
@@ -50,7 +49,6 @@ import net.delsas.saitae.entities.ProyectoPedagogico;
 import net.delsas.saitae.entities.Reserva;
 import net.delsas.saitae.entities.ReservaDetalle;
 import net.delsas.saitae.entities.SolicitudReserva;
-import net.delsas.saitae.entities.TipoPersona;
 import org.omnifaces.cdi.Push;
 import org.omnifaces.cdi.PushContext;
 import org.primefaces.PrimeFaces;
@@ -114,7 +112,6 @@ public class historialRController implements Serializable {
                 PrimeFaces.current().ajax().update(":form0:msgs");
             }
         } else {
-            //reservas = resFL.getReservaByIdUsuario(usuario.getIdpersona());            
             textoReserva = "";
             u = new String[]{"Docente", "Estudiante", "Grupo de estudiantes", "Personal (No académico)"};
         }
@@ -164,7 +161,8 @@ public class historialRController implements Serializable {
 
     public void onDetalleRowSelect(SelectEvent event) {
         selected = (Reserva) event.getObject();
-        List<ProyectoPedagogico> re = rxpFL.findProyectoByIdReserva(selected == null ? 0 : selected.getIdreserva());
+        List<ProyectoPedagogico> re = rxpFL.findProyectoByIdReserva(selected == null
+                ? 0 : selected.getIdreserva());
         if (!re.isEmpty()) {
             proyecto = re.get(0);
         } else {
@@ -172,58 +170,7 @@ public class historialRController implements Serializable {
         }
         procesoDetalle();
         rechazo = false;
-        if (selected == null) {
-            textoReserva = "";
-        } else {
-            switch (selected.getReservaEstado()) {
-                case "S":
-                    textoReserva = "solicitad";
-                    break;
-                case "A":
-                    textoReserva = "aceptad";
-                    break;
-                case "E":
-                    textoReserva = "entregad";
-                    break;
-                case "D":
-                    textoReserva = "devuelt";
-                    break;
-                case "R":
-                    textoReserva = "rechazad";
-                    rechazo = true;
-                    break;
-                case "C":
-                    textoReserva = "cancelad";
-                    break;
-                default:
-                    textoReserva = "";
-            }
-        }
-    }
-
-    private void notificar(Reserva s, mensaje x) {
-        List<Persona> ss = new ArrayList<>();
-        s.getPersonasReservaList().forEach((pr) -> {
-            ss.add(pr.getPersona());
-        });
-        notificar(ss, x);
-    }
-
-    private void notificar(List<Persona> s, mensaje x) {
-        x.getNotificacion().setFechaHora(new Date());
-        s.stream().map((pr) -> {
-            x.setDestinatario(pr.getIdpersona());
-            return pr;
-        }).map((pr) -> {
-            notiFL.create(x.getNotificacion());
-            return pr;
-        }).forEachOrdered((pr) -> {
-            sendMessage(x.toString());
-        });
-    }
-
-    public void sendMessage(String message) {
-        notificacion.send(message);
+        textoReserva = selected == null ? "" : Auxiliar.getEstadoReservas1(selected.getReservaEstado());
     }
 
     public Reserva getSelected() {
@@ -248,12 +195,7 @@ public class historialRController implements Serializable {
     }
 
     public String getEstado(String e) {
-        return e.equals("S") ? "Solicitado"
-                : (e.equals("A") ? "Aceptado"
-                : (e.equals("E") ? "Entregado"
-                : (e.equals("D") ? "Devuelto"
-                : (e.equals("R") ? "Rechazado"
-                : (e.equals("C") ? "Cancelado" : "")))));
+        return Auxiliar.getEstadoReservas2(e);
     }
 
     public boolean getSePuedeCancelar() {
@@ -282,42 +224,30 @@ public class historialRController implements Serializable {
                             "La  cancelación se registró con éxito. "
                             + (selected.getPersonasReservaList().size() > 1
                             ? "Se notificará al resto  de personas en la reserva" : "")));
-            mensaje x = new mensaje(0, usuario.getIdpersona(), "solicitudH<form",
-                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Cancelación de reserva",
-                            "Su solicitud de reserva de equipo con fecha "
-                            + (new SimpleDateFormat("dd/MM/yyyy").format(selected.getReservaFecha()))
-                            + " a las " + (new SimpleDateFormat("hh:mm a").format(selected.getReservaFecha()))
-                            + " ha sido cancelada por " + usuario.getPersonaNombre().split(" ")[0] + " "
-                            + usuario.getPersonaApellido().split(" ")[0]
-                            + ". La razón de lacancelación es: " + getRazonRechazo() + "."));
-            notificar(selected, x);
-            x = new mensaje(0, usuario.getIdpersona(), "srCra<form",
-                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Cancelación de reserva",
-                            "La solicitud de reserva de equipo con fecha "
-                            + (new SimpleDateFormat("dd/MM/yyyy").format(selected.getReservaFecha()))
-                            + " a las " + (new SimpleDateFormat("hh:mm a").format(selected.getReservaFecha()))
-                            + " ha sido cancelada por " + usuario.getPersonaNombre().split(" ")[0] + " "
-                            + usuario.getPersonaApellido().split(" ")[0]
-                            + ". La razón de la cancelación es: " + getRazonRechazo() + "."));
+            Auxiliar.persistirNotificación(
+                    new mensaje(0, usuario.getIdpersona(), "solicitudH<form",
+                            new FacesMessage(FacesMessage.SEVERITY_INFO, "Cancelación de reserva",
+                                    "Su solicitud de reserva de equipo con fecha "
+                                    + (new SimpleDateFormat("dd/MM/yyyy").format(selected.getReservaFecha()))
+                                    + " a las " + (new SimpleDateFormat("hh:mm a").format(selected.getReservaFecha()))
+                                    + " ha sido cancelada por " + usuario.getPersonaNombre().split(" ")[0] + " "
+                                    + usuario.getPersonaApellido().split(" ")[0]
+                                    + ". La razón de lacancelación es: " + getRazonRechazo() + ".")),
+                    Auxiliar.getPersonasEnReserva(selected),
+                    notiFL, notificacion);
             Integer tp = selected.getTipoRecurso().getIdtipoRecurso();
             tp = tp == 1 ? 6 : (tp == 2 ? 7 : (tp == 3 ? 5 : 0));
-            TipoPersona per = tpFL.find(tp);
-            List<Persona> admins = new ArrayList<>();
-            if (per != null) {
-                per.getPersonaList().forEach((p) -> {
-                    admins.add(p);
-                });
-                per.getDelagacionCargoList().stream().filter((dl) -> (!admins.contains(dl.getIdpersona()))).forEachOrdered((dl) -> {
-                    admins.add(dl.getIdpersona());
-                });
-                per.getCargoList().forEach((g) -> {
-                    g.getMaestoCargoList().stream().filter((mc) -> (!admins.contains(mc.getMaestro().getPersona()))).forEachOrdered((mc) -> {
-                        admins.add(mc.getMaestro().getPersona());
-                    });
-                });
-
-            }
-            notificar(admins, x);
+            Auxiliar.persistirNotificación(
+                    new mensaje(0, usuario.getIdpersona(), "srCra<form",
+                            new FacesMessage(FacesMessage.SEVERITY_INFO, "Cancelación de reserva",
+                                    "La solicitud de reserva de equipo con fecha "
+                                    + (new SimpleDateFormat("dd/MM/yyyy").format(selected.getReservaFecha()))
+                                    + " a las " + (new SimpleDateFormat("hh:mm a").format(selected.getReservaFecha()))
+                                    + " ha sido cancelada por " + usuario.getPersonaNombre().split(" ")[0] + " "
+                                    + usuario.getPersonaApellido().split(" ")[0]
+                                    + ". La razón de la cancelación es: " + getRazonRechazo() + ".")),
+                    Auxiliar.getPersonasParaNotificar(tpFL.find(tp)),
+                    notiFL, notificacion);
             if (e1.equals("A") && selected.getReservaDetalleList() != null) {
                 selected.getReservaDetalleList().forEach((rd) -> {
                     rdFL.remove(rd);
@@ -359,12 +289,7 @@ public class historialRController implements Serializable {
     }
 
     public void setCom(Integer ind, String v) {
-        String c[] = selected.getReservaComentario().split("¿¿");
-        String rr = "";
-        for (Integer y = 0; y < c.length; y++) {
-            rr += (y > 0 ? "¿¿" : "") + (Objects.equals(y, ind) ? v : c[y]);
-        }
-        selected.setReservaComentario(rr);
+        selected.setReservaComentario(Auxiliar.setComentario(ind, v, selected.getReservaComentario()));
     }
 
     public String getRazonRechazo() {
@@ -442,8 +367,7 @@ public class historialRController implements Serializable {
         Maestro m = selected != null ? selected.getDocente() : null;
         String salida = "";
         if (m != null) {
-            salida += m.getPersona().getPersonaNombre().split(" ")[0]
-                    + " " + m.getPersona().getPersonaApellido().split(" ")[0];
+            salida += Auxiliar.getNombreCortoPersona(m.getPersona());
         }
         return salida;
     }
@@ -453,7 +377,7 @@ public class historialRController implements Serializable {
     }
 
     public int getAñoActual() {
-        return Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date()));
+        return Auxiliar.getAñoActual();
     }
 
     public Grado getGradoActualDePersonas(Persona p) {
@@ -469,13 +393,7 @@ public class historialRController implements Serializable {
     }
 
     public String getGradoNombre(Grado g) {
-        if (g == null) {
-            return "";
-        }
-        GradoPK id = g.getGradoPK();
-        return id.getIdgrado() + "° " + (id.getGradoModalidad().equals("C") ? "TVC Contador"
-                : (id.getGradoModalidad().equals("S") ? "TVC Secretariado" : "General"))
-                + " " + id.getGradoSeccion();
+        return Auxiliar.getGradoNombre(g.getGradoPK());
     }
 
     public String getGradoUso() {
@@ -504,7 +422,7 @@ public class historialRController implements Serializable {
     }
 
     public void verProyecto() {
-        FacesContext context = FacesContext.getCurrentInstance();
+        context = FacesContext.getCurrentInstance();
         try {
             context.getExternalContext().getSessionMap().put("proyecto", proyecto);
             context.getExternalContext().getSessionMap().put("editar", false);

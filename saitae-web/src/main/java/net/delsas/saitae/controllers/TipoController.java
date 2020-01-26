@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -219,24 +218,28 @@ public class TipoController implements Serializable {
     private AccesoTipoPersonaFacadeLocal accesoTPFL;
     @EJB
     private AccesoFacadeLocal accesoFL;
+    @Inject
+    @Push
+    private PushContext notificacion;
+    String pagina;
 
     @PostConstruct
     public void init() {
         context = FacesContext.getCurrentInstance();
         usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
-        String pagina = context.getExternalContext().getRequestServletPath().split("/")[2];
-        controlUsuarios(pagina);
+        pagina = context.getExternalContext().getRequestServletPath().split("/")[2];
+        controlUsuarios();
     }
 
-    public void controlUsuarios(String pagina) {
+    public void controlUsuarios() {
         try {
-            if (!(new Auxiliar().permitirAcceso(usuario, accesoTPFL.findTipoPersonaPermitidos(accesoFL.getAccesoByUrl(pagina))))) {
+            if (!(Auxiliar.permitirAcceso(usuario, accesoTPFL.findTipoPersonaPermitidos(accesoFL.getAccesoByUrl(pagina))))) {
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("mensaje",
                         new FacesMessage(FacesMessage.SEVERITY_WARN, "Página prohibida",
                                 "Usted no tiene los permisos suficientes para ver y utilizar esa página."));
                 FacesContext.getCurrentInstance().getExternalContext().redirect("./../");
             }
-            variables(pagina);
+            variables();
         } catch (IOException ex) {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error Inesperado",
@@ -245,8 +248,8 @@ public class TipoController implements Serializable {
 
     }
 
-    private void variables(String pg) {
-        switch (pg) {
+    private void variables() {
+        switch (pagina) {
             case "tipopp.intex":
                 aulas = afl.findAll();
                 cargo = cargoFL.findAll();
@@ -323,9 +326,17 @@ public class TipoController implements Serializable {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
                         "Eliminación exitosa.",
                         "La eliminación se llevo a cabo con éxito."));
-                enviarNotificación("Se ha eliminado un día laboral", "El día que se ha eliminado es: "
-                        + diasSelected.getDiasEstudioNombre() + ". Eliminado por "
-                        + usuario.getPersonaNombre() + " " + usuario.getPersonaApellido());
+                Auxiliar.notificar(
+                        new mensaje(
+                                0,
+                                usuario.getIdpersona(),
+                                pagina.split(".")[0] + "<form¿¿¿tp¿¿" + usuario.getTipoPersona().getIdtipoPersona(),
+                                new FacesMessage(
+                                        FacesMessage.SEVERITY_INFO,
+                                        "Se ha eliminado un día laboral", "El día que se ha eliminado es: "
+                                        + diasSelected.getDiasEstudioNombre() + ". Eliminado por "
+                                        + usuario.getPersonaNombre() + " " + usuario.getPersonaApellido())),
+                        new Persona(0), notificacion);
             } else {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
                         "No se encuentra la orden.",
@@ -350,10 +361,21 @@ public class TipoController implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
                     "Agregación exitosa.",
                     "La agregación se llevó a cabo con éxito."));
-            enviarNotificación("Se ha " + (editarDia > 0 ? "editado " : "agregado ")
-                    + "un día laboral", "El día que se ha " + (editarDia > 0 ? "editado " : "agregado ")
-                    + "es: " + diasSelected.getDiasEstudioNombre() + ". " + (editarDia > 0 ? "Editado " : "Agregado ")
-                    + "por " + usuario.getPersonaNombre() + " " + usuario.getPersonaApellido());
+            Auxiliar.notificar(
+                    new mensaje(
+                            0,
+                            usuario.getIdpersona(),
+                            pagina.split(".")[0] + "<form¿¿¿tp¿¿" + usuario.getTipoPersona().getIdtipoPersona(),
+                            new FacesMessage(
+                                    FacesMessage.SEVERITY_INFO,
+                                    "Se ha " + (editarDia > 0 ? "editado " : "agregado ")
+                                    + "un día laboral", "El día que se ha "
+                                    + (editarDia > 0 ? "editado " : "agregado ")
+                                    + "es: " + diasSelected.getDiasEstudioNombre()
+                                    + ". " + (editarDia > 0 ? "Editado " : "Agregado ")
+                                    + "por " + usuario.getPersonaNombre() + " "
+                                    + usuario.getPersonaApellido())),
+                    new Persona(0), notificacion);
         }
         init();
         PrimeFaces.current().ajax().update(":form0", ":form:tw:dias", "f1");
@@ -608,8 +630,16 @@ public class TipoController implements Serializable {
             }
             init();
             PrimeFaces.current().ajax().update(event.getComponent().getClientId());
-            enviarNotificación(titulo + " Editado", mensaje);
-            msg = new FacesMessage(titulo + " Editado", mensaje);
+            Auxiliar.notificar(
+                    new mensaje(
+                            0,
+                            usuario.getIdpersona(),
+                            pagina.split(".")[0] + "<form¿¿¿tp¿¿" + usuario.getTipoPersona().getIdtipoPersona(),
+                            new FacesMessage(
+                                    FacesMessage.SEVERITY_INFO,
+                                    titulo + " Editado",
+                                    mensaje)),
+                    new Persona(0), notificacion);
         } catch (Exception e) {
             msg = new FacesMessage("Error en la edición", e.getMessage() != null ? e.getMessage() : "Error desconocido");
             PrimeFaces.current().ajax().update("form");
@@ -1068,31 +1098,12 @@ public class TipoController implements Serializable {
         this.diasSelected = diasSelected;
     }
 
-    private void enviarNotificación(String titulo, String mensaje) {
-        sendMessage(new mensaje(0, usuario.getIdpersona(), "??",
-                new FacesMessage(FacesMessage.SEVERITY_INFO, titulo,
-                        mensaje)).toString());
-    }
-
     public List<DiasEstudio> getDiasSeleccionables() {
         return Collections.unmodifiableList(diasSeleccionables);
     }
 
     public void setDiasSeleccionables(List<DiasEstudio> diasSeleccionables) {
         this.diasSeleccionables = diasSeleccionables;
-    }
-
-    @Inject
-    @Push
-    private PushContext notificacion;
-
-    @Inject
-    @Push
-    private PushContext tipopp;
-
-    public void sendMessage(String message) {
-        notificacion.send(message);
-        tipopp.send(message);
     }
 
     public List<Integer> getAñosGrados(Grado g) {
@@ -1108,27 +1119,11 @@ public class TipoController implements Serializable {
     }
 
     public Integer getAño() {
-        return Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date()));
+        return Auxiliar.getAñoActual();
     }
 
     public List<Integer> getAñosG() {
-        List<Integer> i = new ArrayList<>();
-        i = gradoFL.findAños();
-        return i;
-    }
-
-    public void escucha() {
-        try {
-            String mss = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("mss");
-            mensaje m = new mensaje(mss);
-            if (!Objects.equals(m.getRemitente(), usuario.getIdpersona())) {
-                FacesContext.getCurrentInstance().addMessage(null, m.getFacesmessage());
-                init();
-                PrimeFaces.current().ajax().update("form0", "form");
-            }
-        } catch (Exception e) {
-            System.out.println("Error en tipoController/escucha: " + (e.getMessage() == null ? "Error desconocido" : e.getMessage()));
-        }
+        return gradoFL.findAños();
     }
 
     public List<TipoEspecialidades> getTipoE() {

@@ -18,7 +18,6 @@ package net.delsas.saitae.controllers;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -36,12 +35,11 @@ import net.delsas.saitae.ax.Auxiliar;
 import net.delsas.saitae.beans.AccesoFacadeLocal;
 import net.delsas.saitae.beans.AccesoTipoPersonaFacadeLocal;
 import net.delsas.saitae.beans.ContribucionesFacadeLocal;
-
 import net.delsas.saitae.beans.MatriculaFacadeLocal;
+import net.delsas.saitae.beans.NotificacionesFacadeLocal;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.entities.Contribuciones;
 import net.delsas.saitae.entities.ContribucionesPK;
-import net.delsas.saitae.entities.GradoPK;
 import net.delsas.saitae.entities.Matricula;
 import net.delsas.saitae.entities.MatriculaPK;
 import net.delsas.saitae.entities.Persona;
@@ -74,6 +72,11 @@ public class contribucionesController implements Serializable {
     private AccesoFacadeLocal accesoFL;
     @EJB
     private AccesoTipoPersonaFacadeLocal accesoTPFL;
+    @Inject
+    @Push
+    private PushContext notificacion;
+    @EJB
+    private NotificacionesFacadeLocal notiFL;
 
     @PostConstruct
     public void init() {
@@ -83,7 +86,7 @@ public class contribucionesController implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
         String pagina = context.getExternalContext().getRequestServletPath().split("/")[2];
-        if (!(new Auxiliar().permitirAcceso(usuario, accesoTPFL.findTipoPersonaPermitidos(accesoFL.getAccesoByUrl(pagina))))) {
+        if (!(Auxiliar.permitirAcceso(usuario, accesoTPFL.findTipoPersonaPermitidos(accesoFL.getAccesoByUrl(pagina))))) {
             context.getExternalContext().getSessionMap().put("mensaje", new FacesMessage(FacesMessage.SEVERITY_FATAL,
                     "Falla!", "Esa vista no le está permitida."));
             try {
@@ -100,10 +103,10 @@ public class contribucionesController implements Serializable {
         try {
             (new Auxiliar()).setDui(query, p);
             listp = personaFL.getPersonaByLikeIdAndType(p.getIdpersona(), 8);
-            for (Persona datos : listp) {
+            listp.forEach((datos) -> {
                 results.add(datos.getPersonaNombre() + " "
                         + datos.getPersonaApellido() + "=>" + datos.getIdpersona().toString().substring(1));
-            }
+            });
         } catch (Exception m) {
             System.out.println(m.getMessage());
         }
@@ -120,19 +123,14 @@ public class contribucionesController implements Serializable {
     }
 
     public Integer getAño() {
-        return Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date()));
+        return Auxiliar.getAñoActual();
     }
 
     public String getGradoAlumno() {
         String grado = "";
         Matricula mati = matriculaFL.find(new MatriculaPK(p.getIdpersona(), getAño()));
         if (mati != null) {
-            GradoPK pk = mati.getGrado().getGradoPK();
-            grado += pk.getIdgrado() == 1 ? "Primero" : pk.getIdgrado() == 2 ? "Segundo"
-                    : pk.getIdgrado() == 3 ? "Tercero" : "";
-            grado += " " + (pk.getGradoModalidad().equals("G") ? "General"
-                    : pk.getGradoModalidad().equals("S") ? " T.V.C Secretariado"
-                    : pk.getGradoModalidad().equals("C") ? "T.V.C Contador" : "");
+            grado = Auxiliar.getGradoNombre(mati.getGrado().getGradoPK());
         }
         return grado;
     }
@@ -145,13 +143,13 @@ public class contribucionesController implements Serializable {
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Guardado con éxito",
                             "Se guardaron los datos de la contribución"));
             String g = mesesPagados(contr);
-            sendMessage(new mensaje(contr.getContribucionesPK().getIdEstudiante(),
-                    usuario.getIdpersona(),
-                    " ",
-                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Actividad en las contribuciones registrado.",
-                            (g.split("").length > 8 ? "Los meses que ya ha pagado son : " + g
-                            : (g.split("").length > 2 ? "El mes pagado es " + g
-                            : "No tiene registro de pago de las contribuciones para el año en curso.")))).toString());
+            Auxiliar.persistirNotificación(
+                    new mensaje(contr.getContribucionesPK().getIdEstudiante(), usuario.getIdpersona(), " ",
+                            new FacesMessage(FacesMessage.SEVERITY_INFO, "Actividad en las contribuciones registrado.",
+                                    (g.split("").length > 8 ? "Los meses que ya ha pagado son : " + g
+                                    : (g.split("").length > 2 ? "El mes pagado es " + g
+                                    : "No tiene registro de pago de las contribuciones para el año en curso.")))),
+                    contr.getEstudiante().getPersona(), notiFL, notificacion);
             this.init();
         } else {
             FacesContext.getCurrentInstance().addMessage(null,
@@ -283,13 +281,4 @@ public class contribucionesController implements Serializable {
     public void setBoton(boolean boton) {
         this.boton = boton;
     }
-
-    @Inject
-    @Push
-    private PushContext notificacion;
-
-    public void sendMessage(String message) {
-        notificacion.send(message);
-    }
-
 }

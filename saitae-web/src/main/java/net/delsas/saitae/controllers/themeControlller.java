@@ -28,7 +28,6 @@ import javax.inject.Named;
 import net.delsas.saitae.beans.TemaFacadeLocal;
 import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.Tema;
-import org.primefaces.event.SelectEvent;
 
 /**
  *
@@ -48,53 +47,54 @@ public class themeControlller implements Serializable {
     private boolean existe;
 
     @PostConstruct
-    public void init() { 
+    public void init() {
         usuario = (Persona) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
         if (usuario != null) {
             Tema t = tFL.find(usuario.getIdpersona());
             existe = t != null;
-            tema = existe ? t.getTemaNombre() : "blitzer";
+            tema = existe ? t.getTemaNombre() : "luna-pink";
         }
     }
 
     public Map<String, String> getThemes() {
         themes = new TreeMap<>();
-        themes.put("aristo", "aristo");
-        themes.put("black-tie", "black-tie");
-        themes.put("blitzer", "blitzer");
-        themes.put("bluesky", "bluesky");
-        themes.put("casablanca", "casablanca");
-        themes.put("cupertino", "cupertino");
-        themes.put("dark-hive", "dark-hive");
-        themes.put("dot-luv", "dot-luv");
-        themes.put("eggplant", "eggplant");
-        themes.put("excite-bike", "excite-bike");
-        themes.put("flick", "flick");
-        themes.put("luna-pink", "luna-pink");
-        themes.put("luna-amber", "luna-amber");
-        themes.put("luna-green", "luna-green");
-        themes.put("luna-blue", "luna-blue");
-        themes.put("glass-x", "glass-x");
-        themes.put("hot-sneaks", "hot-sneaks");
-        themes.put("humanity", "humanity");
-        themes.put("le-frog", "le-frog");
-        themes.put("midnight", "midnight");
-        themes.put("mint-choc", "mint-choc");
-        themes.put("none", "none");
-        themes.put("overcast", "overcast");
-        themes.put("pepper-grinder", "pepper-grinder");
-        themes.put("redmond", "redmond");
-        themes.put("rocket", "rocket");
-        themes.put("sam", "sam");
-        themes.put("smoothness", "smoothness");
-        themes.put("south-street", "south-street");
-        themes.put("start", "start");
-        themes.put("sunny", "sunny");
-        themes.put("swanky-purse", "swanky-purse");
-        themes.put("trontastic", "trontastic");
-        themes.put("ui-darkness", "ui-darkness");
-        themes.put("ui-lightness", "ui-lightness");
-        themes.put("vader", "vader");
+        themes.put("Predeterminado", "luna-pink");
+        themes.put("Aristo", "aristo");
+        themes.put("Black Tie", "black-tie");
+        themes.put("Blitzer", "blitzer");
+        themes.put("Bluesky", "bluesky");
+        themes.put("Casablanca", "casablanca");
+        themes.put("Cupertino", "cupertino");
+        themes.put("Dark Hive", "dark-hive");
+        themes.put("Dot Luv", "dot-luv");
+        themes.put("Eggplant", "eggplant");
+        themes.put("Excite Bike", "excite-bike");
+        themes.put("Flick", "flick");
+        themes.put("Glass-x", "glass-x");
+        themes.put("Hot Sneaks", "hot-sneaks");
+        themes.put("Humanity", "humanity");
+        themes.put("Le Frog", "le-frog");
+        themes.put("Luna Amber", "luna-amber");
+        themes.put("Luna Blue", "luna-blue");
+        themes.put("Luna Green", "luna-green");
+        themes.put("Luna Pink", "luna-pink");
+        themes.put("Midnight", "midnight");
+        themes.put("Mint Choc", "mint-choc");
+        themes.put("None", "none");
+        themes.put("Overcast", "overcast");
+        themes.put("Pepper Grinder", "pepper-grinder");
+        themes.put("Redmond", "redmond");
+        themes.put("Rocket", "rocket");
+        themes.put("Sam", "sam");
+        themes.put("Smoothness", "smoothness");
+        themes.put("South Street", "south-street");
+        themes.put("Start", "start");
+        themes.put("Sunny", "sunny");
+        themes.put("Swanky Purse", "swanky-purse");
+        themes.put("Srontastic", "trontastic");
+        themes.put("Ui Darkness", "ui-darkness");
+        themes.put("Ui Lightness", "ui-lightness");
+        themes.put("Vader", "vader");
         return Collections.unmodifiableMap(themes);
     }
 

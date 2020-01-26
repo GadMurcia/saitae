@@ -122,8 +122,7 @@
                                           monthNavigator="true" showIcon="true" size="30" 
                                           placeholder="Seleccione la fecha" showButtonBar="true"
                                           disabledDays="#{reservaSController.invalidDays}">
-                                <p:ajax event="dateSelect" listener="#{reservaSController.fechaSelect}"/>
-                                <p:ajax event="change" listener="#{reservaSController.horasSelect}"/>
+                                <p:ajax event="dateSelect" listener="#{reservaSController.onBlur}"/>
                             </p:datePicker>
 
                             <p:outputLabel for="hi" value="Hora de inicio del uso"/>
@@ -131,17 +130,15 @@
                                           monthNavigator="true" maxlength="50" locale="es"
                                           showTime="true" hourFormat="12" timeOnly="true"
                                           showIcon="true" required="true" pattern="hh:mm a">
-                                <p:ajax event="dateSelect" listener="#{reservaSController.fechaSelect}"/>
-                                <p:ajax event="change" listener="#{reservaSController.horasSelect}"/>
+                                <p:ajax event="dateSelect" listener="#{reservaSController.onBlur}"/>
                             </p:datePicker>
 
                             <p:outputLabel for="hf" value="Hora de fin del uso"/>
                             <p:datePicker id="hf" value="#{reservaSController.hf}"
                                           monthNavigator="true" maxlength="50" locale="es"
                                           showTime="true" hourFormat="12" timeOnly="true"
-                                          showIcon="true" required="true" pattern="hh:mm a">
-                                <p:ajax event="dateSelect" listener="#{reservaSController.fechaSelect}"/>
-                                <p:ajax event="change" listener="#{reservaSController.horasSelect}"/>
+                                          showIcon="true" required="true" pattern="hh:mm a">                                
+                                <p:ajax event="dateSelect" listener="#{reservaSController.onBlur}"/>
                             </p:datePicker>
 
                             <p:outputLabel value="Responsale del equipo: "/>
@@ -178,16 +175,12 @@
                             <p:column style="width:35px">
                                 <p:rowEditor />
                             </p:column>
-                        </p:dataTable> 
-                        <div class="ui-g">
-                            <div class="ui-g-12">
-                                <p:commandButton id="b" value="+" styleClass="ui-priority-primary" 
-                                                 process="@this"
-                                                 action="#{reservaSController.onAddNew('es')}" 
-                                                 title="Agregar un alumno al grupo."
-                                                 update="alumnos" rendered="#{reservaSController.alumnos}"/>
-                            </div>
-                        </div>
+                        </p:dataTable>
+                        <p:commandButton id="b" value="+" styleClass="ui-priority-primary" 
+                                         process="@this"
+                                         action="#{reservaSController.onAddNew('es')}" 
+                                         title="Agregar un alumno al grupo."
+                                         update="alumnos" rendered="#{reservaSController.alumnos}"/>
                         <h:panelGrid columns="3">
                             <p:column/>
                             <p:commandButton id="summitCra" value="Solicitar" process="@this"
@@ -222,8 +215,7 @@
                                           monthNavigator="true" showIcon="true" size="30" 
                                           placeholder="Seleccione la fecha"
                                           disabledDays="#{reservaSController.invalidDays}">
-                                <p:ajax event="dateSelect" listener="#{reservaSController.fechaSelect}"/>
-                                <p:ajax event="change" listener="#{reservaSController.horasSelect}"/>
+                                <p:ajax event="dateSelect" listener="#{reservaSController.onBlur}"/>
                             </p:datePicker>
 
                             <p:outputLabel for="hil" value="Hora de inicio del uso"/>
@@ -231,8 +223,7 @@
                                           monthNavigator="true" maxlength="50" locale="es"
                                           showTime="true" hourFormat="12" timeOnly="true"
                                           showIcon="true" required="true" pattern="hh:mm a">
-                                <p:ajax event="dateSelect" listener="#{reservaSController.fechaSelect}"/>
-                                <p:ajax event="change" listener="#{reservaSController.horasSelect}"/>
+                                <p:ajax event="dateSelect" listener="#{reservaSController.onBlur}"/>
                             </p:datePicker>
 
                             <p:outputLabel for="hfl" value="Hora de fin del uso"/>
@@ -240,8 +231,7 @@
                                           monthNavigator="true" maxlength="50" locale="es"
                                           showTime="true" hourFormat="12" timeOnly="true"
                                           showIcon="true" required="true" pattern="hh:mm a">
-                                <p:ajax event="dateSelect" listener="#{reservaSController.fechaSelect}"/>
-                                <p:ajax event="change" listener="#{reservaSController.horasSelect}"/>
+                                <p:ajax event="dateSelect" listener="#{reservaSController.onBlur}"/>
                             </p:datePicker>
                         </h:panelGrid>
                         <p:dataTable id="art" var="i" value="#{reservaSController.solicitud}" 
@@ -286,16 +276,12 @@
                             <p:column style="width:35px">
                                 <p:rowEditor />
                             </p:column>
-                        </p:dataTable> 
-                        <div class="ui-g">
-                            <div class="ui-g-12">
-                                <p:commandButton value="+" styleClass="ui-priority-primary" 
-                                                 process="@this"
-                                                 action="#{reservaSController.onAddNew('art')}" 
-                                                 title="Recursos a la lista."
-                                                 update="art"/>
-                            </div>
-                        </div>
+                        </p:dataTable>">
+                        <p:commandButton value="+" styleClass="ui-priority-primary" 
+                                         process="@this"
+                                         action="#{reservaSController.onAddNew('art')}" 
+                                         title="Recursos a la lista."
+                                         update="art"/>
 
                         <p:dataTable id="alumnosl" var="el" value="#{reservaSController.estudiantes}" 
                                      editable="true" widgetVar="alumnos1" styleClass="tabla"
@@ -327,16 +313,12 @@
                             <p:column style="width:35px">
                                 <p:rowEditor />
                             </p:column>
-                        </p:dataTable> 
-                        <div class="ui-g">
-                            <div class="ui-g-12">
-                                <p:commandButton id="bl" value="+" styleClass="ui-priority-primary" 
-                                                 process="@this"
-                                                 action="#{reservaSController.onAddNew('es')}" 
-                                                 title="Agregar un alumno al grupo."
-                                                 update="alumnosl"/>
-                            </div>
-                        </div>
+                        </p:dataTable>
+                        <p:commandButton id="bl" value="+" styleClass="ui-priority-primary" 
+                                         process="@this"
+                                         action="#{reservaSController.onAddNew('es')}" 
+                                         title="Agregar un alumno al grupo."
+                                         update="alumnosl"/>
 
                         <p:commandButton id="summitLab" value="Solicitar" process="@this"
                                          action="#{reservaSController.guardar()}"/>
@@ -364,8 +346,7 @@
                                       monthNavigator="true" showIcon="true" size="30" 
                                       placeholder="Seleccione la fecha"
                                       disabledDays="#{reservaSController.invalidDays}">
-                            <p:ajax event="dateSelect" listener="#{reservaSController.fechaSelect}"/>
-                            <p:ajax event="change" listener="#{reservaSController.onBlur}"/>
+                            <p:ajax event="dateSelect" listener="#{reservaSController.onBlur}"/>
                         </p:datePicker>
 
                         <p:outputLabel for="hii" value="Hora de uso: "/>
@@ -373,8 +354,7 @@
                                       monthNavigator="true" maxlength="50" locale="es"
                                       showTime="true" hourFormat="12" timeOnly="true"
                                       showIcon="true" required="true" pattern="hh:mm a">
-                            <p:ajax event="dateSelect" listener="#{reservaSController.fechaSelect}"/>
-                            <p:ajax event="change" listener="#{reservaSController.horasSelect}"/>
+                            <p:ajax event="dateSelect" listener="#{reservaSController.onBlur}"/>
                         </p:datePicker>
 
                         <p:outputLabel for="fecf" value="Fecha en la que devolverá el libro: "/>
@@ -384,7 +364,6 @@
                                       placeholder="Seleccione la fecha"
                                       disabledDays="#{reservaSController.invalidDays}">
                             <p:ajax event="dateSelect" listener="#{reservaSController.onBlur}"/>
-                            <p:ajax event="change" listener="#{reservaSController.onBlur}"/>
                         </p:datePicker>
 
                         <p:outputLabel for="hff" value="Hora de devolución: "/>
@@ -392,8 +371,7 @@
                                       monthNavigator="true" maxlength="50" locale="es"
                                       showTime="true" hourFormat="12" timeOnly="true"
                                       showIcon="true" required="true" pattern="hh:mm a">
-                            <p:ajax event="dateSelect" listener="#{reservaSController.fechaSelect}"/>
-                            <p:ajax event="change" listener="#{reservaSController.horasSelect}"/>
+                            <p:ajax event="dateSelect" listener="#{reservaSController.onBlur}"/>
                         </p:datePicker>
 
                         <p:column/>
@@ -448,7 +426,7 @@
                                                  rendered="#{reservaSController.mst}"
                                                  update="pp libros" widgetVar="btag"/>
                                 <h:outputText id="ppl" rendered="#{reservaSController.verTexto}"
-                                    value="Éste libro no se puede reservar en el tipo de reserva que ha elegido."/>
+                                              value="Éste libro no se puede reservar en el tipo de reserva que ha elegido."/>
                             </h:panelGrid>
                         </p:panel>
 

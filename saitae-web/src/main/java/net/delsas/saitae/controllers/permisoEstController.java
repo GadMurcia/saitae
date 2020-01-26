@@ -37,6 +37,8 @@ import net.delsas.saitae.beans.NotificacionesFacadeLocal;
 import net.delsas.saitae.beans.PermisosFacadeLocal;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
+import net.delsas.saitae.entities.Constancias;
+import net.delsas.saitae.entities.ConstanciasPK;
 import net.delsas.saitae.entities.Estudiante;
 import net.delsas.saitae.entities.Matricula;
 import net.delsas.saitae.entities.MatriculaPK;
@@ -48,6 +50,7 @@ import net.delsas.saitae.entities.TipoPersona;
 import net.delsas.saitae.entities.TipopersonaPermiso;
 import org.omnifaces.cdi.Push;
 import org.omnifaces.cdi.PushContext;
+import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -83,7 +86,7 @@ public class permisoEstController implements Serializable {
     private Permisos pcontrol;
     private boolean editar;
     FacesMessage ms;
-    private List<Integer> invDays;
+    private Constancias constancia;
 
     @PostConstruct
     public void init() {
@@ -97,9 +100,6 @@ public class permisoEstController implements Serializable {
                 FacesContext.getCurrentInstance().getExternalContext().redirect("./../");
             } else {
                 initVariables();
-                invDays = new ArrayList<>();
-                invDays.add(0);
-                invDays.add(6);
             }
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
@@ -112,6 +112,8 @@ public class permisoEstController implements Serializable {
         p = (Permisos) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("permiso");
         if (p == null) {
             p = new Permisos();
+            constancia = new Constancias(new ConstanciasPK());
+            p.setConstancias(constancia);
             p.setTipoPermiso1(new TipoPermiso(0));
             p.setPermisosPK(new PermisosPK(0, new Date(), 0, new Date()));
             p.setTipoPersona(tipoPersonaFL.find(8));
@@ -119,6 +121,9 @@ public class permisoEstController implements Serializable {
             p.setPermisoFechafin(p.getPermisosPK().getPermisoFechaInicio());
         } else {
             PermisosPK pk = p.getPermisosPK();
+            constancia = p.getConstancias();
+            constancia = constancia == null ? new Constancias(new ConstanciasPK()) : constancia;
+            p.setConstancias(constancia);
             pcontrol = new Permisos(new PermisosPK(pk.getIpPersona(), pk.getPermisoFechaSolicitud(), pk.getTipoPermiso(), pk.getPermisoFechaInicio()));
             pcontrol.setPermisoFechafin(p.getPermisoFechafin());
             pcontrol.setTipoPersona(p.getTipoPersona());
@@ -147,7 +152,7 @@ public class permisoEstController implements Serializable {
     }
 
     public void guardar() {
-        FacesMessage ms = null;
+        ms = null;
         try {
             if (p.getPermisosPK().getPermisoFechaInicio().before(new SimpleDateFormat("dd/MM/yyyy").parse(new SimpleDateFormat("dd/MM/yyyy").format(new Date())))) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
@@ -162,6 +167,15 @@ public class permisoEstController implements Serializable {
             } else {
                 p.setPermisosSolicitante(usuario);
                 p.setPermisosEstado("0");
+                if (constancia.getDocumento() != null) {
+                    constancia.setConstanciasPK(new ConstanciasPK(p.getPermisosPK().getIpPersona(),
+                            p.getPermisosPK().getPermisoFechaSolicitud(),
+                            p.getPermisosPK().getTipoPermiso(),
+                            p.getPermisosPK().getPermisoFechaInicio()));
+                } else {
+                    constancia = null;
+                }
+                p.setConstancias(constancia);
                 if (editar) {
                     if (pcontrol.getPermisosPK().getPermisoFechaInicio() != p.getPermisosPK().getPermisoFechaInicio()) {
                         pfl.remove(pcontrol);
@@ -194,8 +208,8 @@ public class permisoEstController implements Serializable {
                         + " ha solicitado un nuevo permiso.",
                         "Solicitud de permiso nueva", FacesMessage.SEVERITY_INFO, id, "permiso<form");
                 TipoPersona tp = tipoPersonaFL.find(3);
-                new Auxiliar().persistirNotificación(x,
-                        new Auxiliar().getPersonasParaNotificar(tp), notFL, notificacion);
+                Auxiliar.persistirNotificación(x,
+                        Auxiliar.getPersonasParaNotificar(tp), notFL, notificacion);
                 FacesContext.getCurrentInstance().addMessage(null, ms);
                 initVariables();
             }
@@ -273,7 +287,7 @@ public class permisoEstController implements Serializable {
     }
 
     private int getAño() {
-        return Integer.valueOf(new SimpleDateFormat("YYYY").format(new Date()));
+        return Auxiliar.getAñoActual();
     }
 
     public boolean isEditar() {
@@ -296,6 +310,23 @@ public class permisoEstController implements Serializable {
     }
 
     public List<Integer> getInvalidDays() {
-        return Collections.unmodifiableList(invDays);
+        return Auxiliar.getDisabledDays();
+    }
+
+    public Constancias getConstancia() {
+        return constancia;
+    }
+
+    public void setConstancia(Constancias constancia) {
+        this.constancia = constancia;
+    }
+    
+    public void notas(FileUploadEvent f) {
+        constancia.setDocumento(f.getFile().getContents());
+        constancia.setExtención(f.getFile().getFileName() + "¿¿" + f.getFile().getContentType());
+    }
+
+    public boolean getHayDocumento() {
+        return constancia.getDocumento() != null;
     }
 }

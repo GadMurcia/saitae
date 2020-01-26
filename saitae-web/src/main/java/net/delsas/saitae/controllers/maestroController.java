@@ -21,7 +21,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -63,7 +62,7 @@ import org.primefaces.event.RowEditEvent;
 @Named(value = "maestroController")
 @ViewScoped
 public class maestroController implements Serializable {
-    
+
     private List<Cargo> cargos;
     @EJB
     private CargoFacadeLocal cargoFL;
@@ -73,7 +72,7 @@ public class maestroController implements Serializable {
     private List<TipoNombramiento> nombramientos;
     @EJB
     private TipoNombramientoFacadeLocal tipoNombramientoFL;
-    
+
     private static final long serialVersionUID = 1L;
     private Maestro maestro;
     @EJB
@@ -90,6 +89,9 @@ public class maestroController implements Serializable {
     private MaestoCargoFacadeLocal mcfl;
     @EJB
     private NotificacionesFacadeLocal notiFL;
+    @Inject
+    @Push
+    private PushContext notificacion;
     @EJB
     private TipoSueldosFacadeLocal tiposFL;
     private List<TipoSueldos> tipoS;
@@ -111,52 +113,52 @@ public class maestroController implements Serializable {
         tipoS = tiposFL.findAll();
         usuario = (Persona) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
     }
-    
+
     public Maestro getMaestro() {
         return maestro;
     }
-    
+
     public void setMaestro(Maestro maestro) {
         this.maestro = maestro;
     }
-    
+
     public void setDepartamento(String dep) {
         new Auxiliar().setDepartamento(dep, maestro.getPersona());
     }
-    
+
     public String getDepartamento() {
         return new Auxiliar().getDepartamento(maestro.getPersona());
     }
-    
+
     public void setMunicipio(String mun) {
         new Auxiliar().setMunicipio(mun, maestro.getPersona());
     }
-    
+
     public String getMunicipio() {
         return new Auxiliar().getMunicipio(maestro.getPersona());
     }
-    
+
     public void setDui(String dui) {
         new Auxiliar().setDui(dui, maestro.getPersona());
         maestro.setIdmaestro(maestro.getPersona().getIdpersona());
     }
-    
+
     public String getDui() {
         return new Auxiliar().getDui(maestro.getPersona());
     }
-    
+
     public List<SelectItem> getMunicipiosLista() {
         return new Auxiliar().getMunicipioLista(maestro.getPersona());
     }
-    
+
     public List<SelectItem> getDepartamentosLista() {
         return new Auxiliar().getDepartamentoLista(maestro.getPersona());
     }
-    
+
     public String onFlowProcess(FlowEvent event) {
         return event.getNewStep();
     }
-    
+
     public void onRowEdit(RowEditEvent event) {
         MaestoCargo mc = (MaestoCargo) event.getObject();
         mc.getMaestoCargoPK().setIdCargo(mc.getCargo().getIdcargo());
@@ -169,7 +171,7 @@ public class maestroController implements Serializable {
                 "Modificado: " + mc.getCargo().getCargoNombre());
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
-    
+
     public void onRowCancel(RowEditEvent event) {
         MaestoCargo mc = (MaestoCargo) event.getObject();
         if (mc.getCargo().getIdcargo() != null | mc.getCargo().getIdcargo() > 0) {
@@ -179,7 +181,7 @@ public class maestroController implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
     private int index = 0;
-    
+
     public void onAddNew() {
         MaestoCargo mc = new MaestoCargo(0, 0, 0, 0, Calendar.getInstance().getTime());
         mc.setCargo(new Cargo(0, ""));
@@ -192,19 +194,19 @@ public class maestroController implements Serializable {
                 "Seleccione los datos adecuados antes de proceder a guardarlos");
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
-    
+
     public void setChange() {
         maestro = mfl.find(axiliarController.getP().getIdpersona());
         maestro.setMaestoCargoList(mcfl.getMaestroCargoByIdMaestro(maestro.getIdmaestro()));
     }
-    
+
     public void guardar() {
         try {
             Persona p = maestro.getPersona();
             p.setMaestro(maestro);
             Persona m = pfl.find(p.getIdpersona());
             if (m == null) {
-                String pass=maestro.getPersona().toString().substring(1);
+                String pass = maestro.getPersona().toString().substring(1);
                 maestro.getPersona().setPersonaContrasenya(DigestUtils.md5Hex(pass));
                 pfl.create(p);
             } else {
@@ -216,22 +218,30 @@ public class maestroController implements Serializable {
                 mm0.forEach((mc) -> {
                     if (!mm.contains(mc)) {
                         mcfl.remove(mc);
-                        persistirNotificación(new mensaje(maestro.getIdmaestro(), usuario.getIdpersona(), " ",
-                                new FacesMessage(FacesMessage.SEVERITY_INFO, "Relevación de Cargo",
-                                        "Ha sido relevado de su cargo como " + mc.getCargo().getCargoNombre() + " "
-                                        + "Por " + usuario.getPersonaNombre().split(" ")[0] + " "
-                                        + usuario.getPersonaApellido().split(" ")[0])));
+                        Auxiliar.persistirNotificación(
+                                new mensaje(maestro.getIdmaestro(), usuario.getIdpersona(), " ",
+                                        new FacesMessage(FacesMessage.SEVERITY_INFO,
+                                                "Relevación de Cargo",
+                                                "Ha sido relevado de su cargo como "
+                                                + mc.getCargo().getCargoNombre() + " "
+                                                + "Por " + usuario.getPersonaNombre().split(" ")[0] + " "
+                                                + usuario.getPersonaApellido().split(" ")[0])),
+                                maestro.getPersona(), notiFL, notificacion);
                     } else {
                         mm.remove(mc);
                     }
                 });
                 mm.forEach((mc) -> {
                     mcfl.create(mc);
-                    persistirNotificación(new mensaje(maestro.getIdmaestro(), usuario.getIdpersona(), " ",
-                            new FacesMessage(FacesMessage.SEVERITY_INFO, "Asignación de Cargo",
-                                    usuario.getPersonaNombre().split(" ")[0] + " "
-                                    + usuario.getPersonaApellido().split(" ")[0]
-                                    + " le ha asignado el cargo de " + mc.getCargo().getCargoNombre())));
+                    Auxiliar.persistirNotificación(
+                            new mensaje(maestro.getIdmaestro(), usuario.getIdpersona(), " ",
+                                    new FacesMessage(FacesMessage.SEVERITY_INFO,
+                                            "Asignación de Cargo",
+                                            usuario.getPersonaNombre().split(" ")[0] + " "
+                                            + usuario.getPersonaApellido().split(" ")[0]
+                                            + " le ha asignado el cargo de "
+                                            + mc.getCargo().getCargoNombre())),
+                            maestro.getPersona(), notiFL, notificacion);
                 });
             }
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("mensaje",
@@ -252,50 +262,33 @@ public class maestroController implements Serializable {
             }
         }
     }
-    
+
     public List<Cargo> getCargos() {
         return Collections.unmodifiableList(cargos);
     }
-    
+
     public List<Financiamiento> getFinanciamientos() {
         return Collections.unmodifiableList(financiamientos);
     }
-    
+
     public List<TipoNombramiento> getNombramientos() {
         return Collections.unmodifiableList(nombramientos);
     }
-    
-    private void persistirNotificación(mensaje x) {
-        try {
-            x.getNotificacion().setFechaHora(new Date());
-            notiFL.create(x.getNotificacion());
-            sendMessage(x.toString());
-        } catch (Exception e) {
-        }
-    }
-    
-    @Inject
-    @Push
-    private PushContext notificacion;
-    
-    public void sendMessage(String message) {
-        notificacion.send(message);
-    }
-    
+
     public List<TipoSueldos> getTipoS() {
         return tipoS;
     }
-    
+
     public void setTipoS(List<TipoSueldos> tipoS) {
         this.tipoS = tipoS;
     }
-    
+
     public List<TipoEspecialidades> getTipoE() {
         return tipoE;
     }
-    
+
     public void setTipoE(List<TipoEspecialidades> tipoE) {
         this.tipoE = tipoE;
     }
-    
+
 }

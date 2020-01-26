@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -72,7 +73,7 @@ public class permisoController implements Serializable {
                 p.setPermisosPK(new PermisosPK(0, Calendar.getInstance().getTime(), 0, Calendar.getInstance().getTime()));
                 permisos = u.getTipoPersona().getTipopersonaPermisoList();
                 e = u.getEstudiante().getEstudianteEsEstudiante()
-                        ? new ArrayList<Estudiante>()
+                        ? new ArrayList<>()
                         : u.getEstudiante().getEstudianteList();
                 p.setTipoPersona(tipoPersonaFL.find(8));
                 p.setPersona(new Persona(0));
@@ -96,9 +97,9 @@ public class permisoController implements Serializable {
     public ArrayList<SelectItem> listaPermisos() {
         ArrayList<SelectItem> items = new ArrayList<>();
         items.add(new SelectItem(-1, "Seleccione"));
-        for (TipopersonaPermiso t : permisos) {
+        permisos.forEach((t) -> {
             items.add(new SelectItem(t.getTipoPermiso().getIdtipoPermiso(), t.getTipoPermiso().getTipoPermisoNombre()));
-        }
+        });
         return items;
     }
 
@@ -133,10 +134,10 @@ public class permisoController implements Serializable {
             items.add(new SelectItem(us.getPersona().getIdpersona(), us.getPersona().getPersonaNombre() + " "
                     + us.getPersona().getPersonaApellido()));
         }
-        for (Estudiante e1 : e) {
+        e.forEach((e1) -> {
             items.add(new SelectItem(e1.getPersona().getIdpersona(), e1.getPersona().getPersonaNombre() + " "
                     + e1.getPersona().getPersonaApellido()));
-        }
+        });
         return items;
     }
 
@@ -154,7 +155,8 @@ public class permisoController implements Serializable {
             ms = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage());
         } finally {
             FacesContext.getCurrentInstance().addMessage(null, ms);
-            p = new Permisos(new PermisosPK((us == null ? 0 : us.getIdestudiante()), Calendar.getInstance().getTime(), 0, Calendar.getInstance().getTime()));
+            p = new Permisos(new PermisosPK((us == null ? 0 : us.getIdestudiante()), 
+                    new Date(), 0, new Date()));
             p.setTipoPersona(tipoPersonaFL.find(8));
             p.setPersona(new Persona(0));
             p.setTipoPermiso1(new TipoPermiso(0));

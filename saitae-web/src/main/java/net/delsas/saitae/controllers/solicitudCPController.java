@@ -142,13 +142,13 @@ public class solicitudCPController implements Serializable {
             }
             cita.setEstudiante1(usuario.getEstudiante());
             cpsFL.create(cita);
-            ax.persistirNotificación(
+            Auxiliar.persistirNotificación(
                     new mensaje(0, usuario.getIdpersona(), "admCitasPs<form",
                             new FacesMessage(FacesMessage.SEVERITY_INFO, "Nueva solicitud de cita",
                                     "El estudiante " + getNombreUs() + " ha hecho una solicitud de cita. "
                                     + "Revise la administración de las citas para más detalles")),
-                    ax.getPersonasParaNotificar(tpFL.find(14)), notiFL, notificacion);
-            ax.persistirNotificación(
+                    Auxiliar.getPersonasParaNotificar(tpFL.find(14)), notiFL, notificacion);
+            Auxiliar.persistirNotificación(
                     new mensaje(usuario.getIdpersona(), usuario.getIdpersona(), " ",
                             new FacesMessage(FacesMessage.SEVERITY_INFO, "Solicitud exitosa",
                                     "Su solicitud de citas con el psicólogo de la institución se ha "
@@ -188,15 +188,15 @@ public class solicitudCPController implements Serializable {
     }
 
     public Date getMinHora() {
-        return getHoras(ax.getMinTimeCPs());
+        return getHoras(Auxiliar.getMinTimeCPs());
     }
 
     public Date getMaxHora() {
-        return getHoras(ax.getMaxTimeCPs());
+        return getHoras(Auxiliar.getMaxTimeCPs());
     }
 
     public List<Integer> getInvalidDays() {
-        return ax.getDisabledDays();
+        return Auxiliar.getDisabledDays();
     }
 
     private Date getHoras(Date d) {

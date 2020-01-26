@@ -8,6 +8,7 @@ package net.delsas.saitae.entities;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -15,6 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -42,6 +44,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Permisos.findByPEPEs", query = "SELECT p FROM Permisos p WHERE p.permisosEstado = :permisoEstado AND p.tipoPersona.idtipoPersona = :tipo ORDER BY p.permisosPK.permisoFechaSolicitud DESC, p.permisosPK.permisoFechaInicio ASC")
 })
 public class Permisos implements Serializable {
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "permisos")
+    private Constancias constancias;
 
     private static final long serialVersionUID = 1L;
     @EmbeddedId
@@ -189,6 +194,14 @@ public class Permisos implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.Permisos[ permisosPK=" + permisosPK + " ]";
+    }
+
+    public Constancias getConstancias() {
+        return constancias;
+    }
+
+    public void setConstancias(Constancias constancias) {
+        this.constancias = constancias;
     }
     
 }

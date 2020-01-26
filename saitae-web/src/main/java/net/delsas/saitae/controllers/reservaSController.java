@@ -54,7 +54,6 @@ import net.delsas.saitae.entities.ContenidoLibro;
 import net.delsas.saitae.entities.EditorialLibro;
 import net.delsas.saitae.entities.Estudiante;
 import net.delsas.saitae.entities.Grado;
-import net.delsas.saitae.entities.GradoPK;
 import net.delsas.saitae.entities.Maestro;
 import net.delsas.saitae.entities.Materia;
 import net.delsas.saitae.entities.Persona;
@@ -63,7 +62,6 @@ import net.delsas.saitae.entities.Recurso;
 import net.delsas.saitae.entities.Reserva;
 import net.delsas.saitae.entities.SolicitudReserva;
 import net.delsas.saitae.entities.SolicitudReservaPK;
-import net.delsas.saitae.entities.TipoPersona;
 import net.delsas.saitae.entities.TipoProyecto;
 import net.delsas.saitae.entities.TipoRecurso;
 import net.delsas.saitae.entities.TipoReserva;
@@ -71,7 +69,6 @@ import net.delsas.saitae.entities.TipoReservaRecurso;
 import org.omnifaces.cdi.Push;
 import org.omnifaces.cdi.PushContext;
 import org.primefaces.PrimeFaces;
-import org.primefaces.component.selectcheckboxmenu.SelectCheckboxMenu;
 import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
@@ -83,7 +80,7 @@ import org.primefaces.event.UnselectEvent;
 @Named
 @ViewScoped
 public class reservaSController implements Serializable {
-
+    
     private static final long serialVersionUID = 1L;
     @EJB
     private ReservaFacadeLocal resFL;
@@ -114,7 +111,7 @@ public class reservaSController implements Serializable {
     @Inject
     @Push
     private PushContext notificacion;
-
+    
     private List<TipoRecurso> tiporList;
     private List<SolicitudReserva> solicitud;
     private List<Recurso> recursos;
@@ -125,14 +122,13 @@ public class reservaSController implements Serializable {
     private List<Estudiante> estudiantes;
     private List<Grado> grados;
     private List<SelectItem> usadoPorList;
-    private List<Integer> invalidDays;
-
+    
     private TipoRecurso tp;
     private Persona usuario;
     private Grado grado;
     private Maestro maestro;
     private Reserva reserva;
-
+    
     private Integer usos;
     private boolean cra;
     private boolean lab;
@@ -155,15 +151,12 @@ public class reservaSController implements Serializable {
     private boolean mst;
     @EJB
     private ContenidoLibroFacadeLocal contenidoFL;
-
+    
     @PostConstruct
     public void init() {
         usuario = (Persona) FacesContext.getCurrentInstance()
                 .getExternalContext().getSessionMap().get("usuario");
         newReserva();
-        invalidDays = new ArrayList<>();
-        invalidDays.add(0);
-        invalidDays.add(6);
         recursos = new ArrayList<>();
         tiporList = trFL.findAll();
         cra = false;
@@ -222,11 +215,11 @@ public class reservaSController implements Serializable {
             }
         }
     }
-
+    
     private Integer getAño() {
-        return Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date()));
+        return Auxiliar.getAñoActual();
     }
-
+    
     public boolean getUsoenAula() {
         TipoReserva tres = reserva.getTipoReserva();
         boolean dif = false;
@@ -240,17 +233,14 @@ public class reservaSController implements Serializable {
         }
         return dif;
     }
-
+    
     public String getGradoNombre(Grado g) {
         if (g == null) {
             return "";
         }
-        GradoPK id = g.getGradoPK();
-        return id.getIdgrado() + "° " + (id.getGradoModalidad().equals("C") ? "TVC Contador"
-                : (id.getGradoModalidad().equals("S") ? "TVC Secretariado" : "General"))
-                + " " + id.getGradoSeccion();
+        return Auxiliar.getGradoNombre(g.getGradoPK());
     }
-
+    
     public void newReserva() {
         reserva = new Reserva(0);
         reserva.setReservaFecha(new Date());
@@ -261,7 +251,7 @@ public class reservaSController implements Serializable {
         setResponsable(usuario.getPersonaNombre().split(" ")[0] + " "
                 + usuario.getPersonaApellido().split(" ")[0]);
     }
-
+    
     public void tipoRecursoSelect(SelectEvent event) {
         init();
         tp = ((TipoRecurso) event.getObject());
@@ -292,14 +282,14 @@ public class reservaSController implements Serializable {
         alumnos = false;
         System.out.println(tp == null ? "No Selection" : tp);
     }
-
+    
     public void usosSelect(SelectEvent event) {
         usos = event.getObject() != null ? Integer.valueOf(event.getObject().toString()) : 0;
         setUsadoPor(usos + "");
         alumnos = usos == 3;
         System.out.println(usos == 0 ? "No Selection" : usos);
     }
-
+    
     public void tipoReservaSelect(SelectEvent event) {
         reserva.setTipoReserva((TipoReserva) event.getObject());
         recursos.clear();
@@ -326,7 +316,7 @@ public class reservaSController implements Serializable {
         }
         System.out.println("" + reserva.getTipoReserva());
     }
-
+    
     public void gradoSelect(SelectEvent event) {
         grado = (Grado) event.getObject();
         if (grado != null) {
@@ -334,7 +324,7 @@ public class reservaSController implements Serializable {
         }
         System.out.println(grado);
     }
-
+    
     public void maestroSelect(SelectEvent event) {
         maestro = (Maestro) event.getObject();
         if (maestro != null && grado != null) {
@@ -342,48 +332,23 @@ public class reservaSController implements Serializable {
         }
         System.out.println(maestro);
     }
-
+    
     public void materiaSelect(SelectEvent event) {
         Materia m = (Materia) event.getObject();
         reserva.setMaeria(m);
         System.out.println(m == null ? "no selection" : m.getMateriaNombre());
     }
-
+    
     public void tipoProyectoSelect(SelectEvent event) {
         TipoProyecto p = (TipoProyecto) event.getObject();
         reserva.setTipoProyecto(p);
         System.out.println(p == null ? "no selection" : p.getTipoProyectoNombre());
     }
-
+    
     public void onBlur(AjaxBehaviorEvent event) {
         System.out.println(event.getComponent().getId());
-        System.out.println(event);
     }
-
-    public void fechaSelect(SelectEvent event) {
-        switch (event.getComponent().getId()) {
-            case "fec":
-                fecha = (Date) event.getObject();
-                break;
-            case "hi":
-                hi = (Date) event.getObject();
-                break;
-            case "hf":
-                hf = (Date) event.getObject();
-                break;
-            default:
-        }
-
-        System.out.println(event.getObject());
-    }
-
-    public void horasSelect(AjaxBehaviorEvent event) {
-        SelectCheckboxMenu men = (SelectCheckboxMenu) event.getSource();
-        Object o = men.getValue();
-        System.out.println(o);
-        System.out.println(event.getSource());
-    }
-
+    
     public void onAddNew(String id) {
         switch (id) {
             case "es":
@@ -399,10 +364,10 @@ public class reservaSController implements Serializable {
             default:
                 System.out.println("def");
         }
-
+        
     }
     boolean existe;
-
+    
     public void onRowEdit(RowEditEvent event) {
         switch (event.getComponent().getId()) {
             case "alumnos":
@@ -469,9 +434,9 @@ public class reservaSController implements Serializable {
                 System.out.println("def");
         }
         System.out.println(event.getComponent().getClientId());
-
+        
     }
-
+    
     public void onRowCancel(RowEditEvent event) {
         switch (event.getComponent().getId()) {
             case "alumnos":
@@ -494,10 +459,10 @@ public class reservaSController implements Serializable {
             default:
                 System.out.println("def");
         }
-
+        
         System.out.println(event.getComponent().getClientId());
     }
-
+    
     void limpia() {
         try {
             estudiantes.stream().filter((e) -> (!e.getEstudianteEsEstudiante())).forEachOrdered((e) -> {
@@ -505,10 +470,10 @@ public class reservaSController implements Serializable {
             });
             PrimeFaces.current().ajax().update("form:alumnos");
         } catch (Exception e) {
-
+            
         }
     }
-
+    
     public void guardar() {
         System.out.println(reserva);
         if (fecha == null || (bib ? fechaf : fecha) == null || hi == null || hf == null) {
@@ -539,7 +504,6 @@ public class reservaSController implements Serializable {
             if (reserva.getReservaEntrega().after(reserva.getReservaFecha())
                     && reserva.getReservaDevolucion().after(reserva.getReservaEntrega())
                     && !getUsadoPor().equals("0") && solicitud.size() > 0 && lleno) {
-                mensaje x;
                 reserva.setIdreserva(null);
                 resFL.create(reserva);
                 List<PersonasReserva> pr = new ArrayList<>();
@@ -575,13 +539,14 @@ public class reservaSController implements Serializable {
                 }).forEachOrdered((prs) -> {
                     solicitantes.add(prs.getPersona());
                 });
-                x = new mensaje(0, usuario.getIdpersona(), "solicitudH<form",
-                        new FacesMessage(FacesMessage.SEVERITY_INFO,
-                                "Solicitud exitosa", "Su solicitud de recursos de "
-                                + tp.getTipoRecursoNombre()
-                                + " ha sido guardada con éxito. Recibirá una notificación "
-                                + "cuando sea aprobada por el encargado de área correspondiente."));
-                persistirNotificación(x, solicitantes);
+                Auxiliar.persistirNotificación(
+                        new mensaje(0, usuario.getIdpersona(), "solicitudH<form",
+                                new FacesMessage(FacesMessage.SEVERITY_INFO,
+                                        "Solicitud exitosa", "Su solicitud de recursos de "
+                                        + tp.getTipoRecursoNombre()
+                                        + " ha sido guardada con éxito. Recibirá una notificación "
+                                        + "cuando sea aprobada por el encargado de área correspondiente.")),
+                        solicitantes, notiFL, notificacion);
                 solicitud.stream().map((s) -> {
                     s.setReserva(reserva);
                     return s;
@@ -603,22 +568,13 @@ public class reservaSController implements Serializable {
                 });
                 Integer id = tp.getIdtipoRecurso();
                 id = id == 1 ? 6 : (id == 2 ? 7 : (id == 3 ? 5 : 0));
-                TipoPersona ps = tpFL.find(id);
-                List<Persona> personas = new ArrayList<>();
-                personas.addAll(ps.getPersonaList());
-                ps.getDelagacionCargoList().forEach((dl) -> {
-                    personas.add(dl.getIdpersona());
-                });
-                ps.getCargoList().forEach((c) -> {
-                    c.getMaestoCargoList().forEach((mc) -> {
-                        personas.add(mc.getMaestro().getPersona());
-                    });
-                });
-                x = new mensaje(0, usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
-                        + " ha solicitado recursos", "Nueva solicitud de recursos",
-                        FacesMessage.SEVERITY_INFO,
-                        usuario.getIdpersona(), "srCra<form:ap:solicitados");
-                persistirNotificación(x, personas);
+                Auxiliar.persistirNotificación(
+                        new mensaje(0, usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
+                                + " ha solicitado recursos", "Nueva solicitud de recursos",
+                                FacesMessage.SEVERITY_INFO,
+                                usuario.getIdpersona(), "srCra<form:ap:solicitados"),
+                        Auxiliar.getPersonasParaNotificar(tpFL.find(id)),
+                        notiFL, notificacion);
                 if (!solicitantes.contains(usuario)) {
                     FacesContext.getCurrentInstance().addMessage(":not:msgs",
                             new FacesMessage(FacesMessage.SEVERITY_INFO, "Solicitud exitosa",
@@ -639,107 +595,107 @@ public class reservaSController implements Serializable {
             }
         }
     }
-
+    
     public List<SolicitudReserva> getSolicitud() {
         return Collections.unmodifiableList(solicitud);
     }
-
+    
     public void setSolicitud(List<SolicitudReserva> solicitud) {
         this.solicitud = solicitud;
     }
-
+    
     public List<Recurso> getRecursos() {
         return Collections.unmodifiableList(recursos);
     }
-
+    
     public void setRecursos(List<Recurso> recursos) {
         this.recursos = recursos;
     }
-
+    
     public List<TipoReserva> getTiposReserva() {
         return Collections.unmodifiableList(tiposReserva);
     }
-
+    
     public void setTiposReserva(List<TipoReserva> tr) {
         tiposReserva = tr;
     }
-
+    
     public List<Grado> getGrados() {
         return Collections.unmodifiableList(grados);
     }
-
+    
     public Grado getGrado() {
         return grado;
     }
-
+    
     public void setGrado(Grado grado) {
         this.grado = grado;
     }
-
+    
     public Maestro getMaestro() {
         return maestro;
     }
-
+    
     public void setMaestro(Maestro maestro) {
         this.maestro = maestro;
     }
-
+    
     public List<Maestro> getMaestros() {
         return Collections.unmodifiableList(maestros);
     }
-
+    
     public List<Materia> getMaterias() {
         return Collections.unmodifiableList(materias);
     }
-
+    
     public List<TipoProyecto> getTProyectos() {
         return Collections.unmodifiableList(tProyectos);
     }
-
+    
     public boolean isAlumnos() {
         return alumnos;
     }
-
+    
     public List<Estudiante> getEstudiantes() {
         return Collections.unmodifiableList(estudiantes);
     }
-
+    
     public void setEstudiantes(List<Estudiante> estudiantes) {
         this.estudiantes = estudiantes;
     }
-
+    
     public List<TipoRecurso> getTiporList() {
         return Collections.unmodifiableList(tiporList);
     }
-
+    
     public Reserva getReserva() {
         return reserva;
     }
-
+    
     public void setReserva(Reserva reserva) {
         this.reserva = reserva;
     }
-
+    
     public boolean isCra() {
         return cra;
     }
-
+    
     public boolean isLab() {
         return lab;
     }
-
+    
     public boolean isBib() {
         return bib;
     }
-
+    
     public TipoRecurso getTp() {
         return tp;
     }
-
+    
     public void setTp(TipoRecurso tp) {
         this.tp = tp;
     }
-
+    
     public void setReservaDetalle(List<Recurso> recs) {
         solicitud.clear();
         recs.stream().map((r) -> {
@@ -750,7 +706,7 @@ public class reservaSController implements Serializable {
             solicitud.add(s);
         });
     }
-
+    
     public List<Recurso> getReservaDetalle() {
         List<Recurso> r = new ArrayList<>();
         if (solicitud == null) {
@@ -761,112 +717,107 @@ public class reservaSController implements Serializable {
         });
         return r;
     }
-
+    
     public Integer getUsos() {
         return usos;
     }
-
+    
     public void setUsos(Integer usos) {
         this.usos = usos;
     }
-
+    
     public void setResponsable(String resp) {
         setCom(0, resp);
     }
-
+    
     public String getResponsable() {
         return reserva.getReservaComentario().split("¿¿")[0];
     }
-
+    
     public Integer getNumeroPractica() {
         return Integer.valueOf(reserva.getReservaComentario().split("¿¿")[2]);
     }
-
+    
     public void setNumeroPractica(Integer n) {
         setCom(2, n + "");
     }
-
+    
     public void setCom(Integer ind, String v) {
-        String c[] = reserva.getReservaComentario().split("¿¿");
-        String rr = "";
-        for (Integer y = 0; y < c.length; y++) {
-            rr += (y > 0 ? "¿¿" : "") + (Objects.equals(y, ind) ? v : c[y]);
-        }
-        reserva.setReservaComentario(rr);
+        reserva.setReservaComentario(Auxiliar.setComentario(ind, v, reserva.getReservaComentario()));
     }
-
+    
     public void setUsadoPor(String usadoPor) {
         setCom(1, usadoPor);
     }
-
+    
     public String getUsadoPor() {
         return reserva.getReservaComentario().split("¿¿")[1];
     }
-
+    
     public Date getFecha() {
         return fecha;
     }
-
+    
     public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
-
+    
     public Date getHi() {
         return hi;
     }
-
+    
     public void setHi(Date hi) {
         this.hi = hi;
     }
-
+    
     public Date getHf() {
         return hf;
     }
-
+    
     public void setHf(Date hf) {
         this.hf = hf;
     }
-
+    
     public String getTema() {
         return tema;
     }
-
+    
     public void setTema(String tema) {
         this.tema = tema;
     }
-
+    
     public String getObjetivo() {
         return objetivo;
     }
-
+    
     public void setObjetivo(String objetivo) {
         this.objetivo = objetivo;
     }
-
+    
     public boolean getXTitulo() {
         return xTitulo;
     }
-
+    
     public void setxTitulo(boolean xTitulo) {
         this.xTitulo = xTitulo;
     }
-
+    
     public boolean getXAutor() {
         return xAutor;
     }
-
+    
     public void setxAutor(boolean xAutor) {
         this.xAutor = xAutor;
     }
-
+    
     public boolean getXContenido() {
         return xContenido;
     }
-
+    
     public void setxContenido(boolean xContenido) {
         this.xContenido = xContenido;
     }
-
+    
     public List<String> completeText(String query) {
         List<String> results = new ArrayList<>();
         if (xTitulo) {
@@ -897,7 +848,7 @@ public class reservaSController implements Serializable {
         }
         return results;
     }
-
+    
     public void onItemSelect(SelectEvent event) {
         if (event.getComponent().getId().equals("tres")) {
             System.out.println("eliminando los recursos que no concuerden");
@@ -931,51 +882,41 @@ public class reservaSController implements Serializable {
         }
         mst = getMismoTR(libroSeleccionado);
     }
-
-    public void sendMessage(String message) {
-        notificacion.send(message);
-    }
-
+    
     public String getBusqueda() {
         return busqueda;
     }
-
+    
     public void setBusqueda(String busqueda) {
         this.busqueda = busqueda;
     }
-
+    
     public Recurso getLibroSeleccionado() {
         return libroSeleccionado;
     }
-
+    
     public void setLibroSeleccionado(Recurso libroSeleccionado) {
         this.libroSeleccionado = libroSeleccionado;
     }
-
+    
     public int getParametro() {
         return (xTitulo ? 1 : (xAutor ? 2 : (xContenido ? 3 : 0)));
     }
-
+    
     public void setParametro(int p) {
         xTitulo = p == 1;
         xAutor = p == 2;
         xContenido = p == 3;
     }
-
+    
     public Date getFechaf() {
         return fechaf;
     }
-
+    
     public void setFechaf(Date fechaf) {
         this.fechaf = fechaf;
     }
-
-    private void persistirNotificación(mensaje x, List<Persona> ps) {
-        ps.forEach((p) -> {
-            persistirNotificación(x, p);
-        });
-    }
-
+    
     public String getAutoresLibros(Recurso r) {
         String a = "";
         List<AutorLibro> all = r.getAutorLibroList() == null ? new ArrayList<>() : r.getAutorLibroList();
@@ -984,7 +925,7 @@ public class reservaSController implements Serializable {
         }
         return a;
     }
-
+    
     public String getTiposReservaLibro(Recurso r) {
         String t = "";
         List<TipoReservaRecurso> trsrl = r.getTipoReservaRecursoList() == null ? new ArrayList<>() : r.getTipoReservaRecursoList();
@@ -993,7 +934,7 @@ public class reservaSController implements Serializable {
         }
         return t;
     }
-
+    
     public String getEditorialesLibro(Recurso r) {
         String e = "";
         List<EditorialLibro> ell = r.getEditorialLibroList() == null ? new ArrayList<>() : r.getEditorialLibroList();
@@ -1002,7 +943,7 @@ public class reservaSController implements Serializable {
         }
         return e;
     }
-
+    
     public boolean getMismoTR(Recurso r) {
         List<Integer> trl = new ArrayList<>();
         if (r.getTipoReservaRecursoList() != null) {
@@ -1016,7 +957,7 @@ public class reservaSController implements Serializable {
             return trl.contains(reserva.getTipoReserva().getIdtipoReserva());
         }
     }
-
+    
     public void agregarLibroLista() {
         SolicitudReserva s = new SolicitudReserva();
         s.setRecurso(libroSeleccionado);
@@ -1034,15 +975,15 @@ public class reservaSController implements Serializable {
             PrimeFaces.current().ajax().update(":form0:msgs");
         }
     }
-
+    
     public SolicitudReserva getSrtabla() {
         return srtabla;
     }
-
+    
     public void setSrtabla(SolicitudReserva srtabla) {
         this.srtabla = srtabla;
     }
-
+    
     public void onRowSelect(SelectEvent event) {
         SolicitudReserva sl = (SolicitudReserva) event.getObject();
         if (sl != null) {
@@ -1050,12 +991,12 @@ public class reservaSController implements Serializable {
             mst = false;
         }
     }
-
+    
     public void onRowUnselect(UnselectEvent event) {
         libroSeleccionado = new Recurso();
         mst = false;
     }
-
+    
     public void eliminarDeLista() {
         libroSeleccionado = new Recurso();
         mst = false;
@@ -1065,47 +1006,24 @@ public class reservaSController implements Serializable {
         srtabla = new SolicitudReserva();
         PrimeFaces.current().ajax().update(":form:libros");
     }
-
-    private void persistirNotificación(mensaje x, Persona ps) {
-        x.setDestinatario(ps.getIdpersona());
-        x.setRemitente(usuario.getIdpersona());
-        x.getNotificacion().setFechaHora(new Date());
-        sendMessage(x.toString());
-        try {
-            System.out.println("caracteres en el cuerpo: " + x.getNotificacion().getNotificacionCuerpo().split("").length);
-            System.out.println(new SimpleDateFormat("EEEEE dd/MMM/yyyy HH:mm a").format(x.getNotificacion().getFechaHora()));
-            notiFL.create(x.getNotificacion());
-            System.out.println("notificación enviada " + x.getNotificacion().getFechaHora());
-        } catch (Exception e) {
-            try {
-                notiFL.edit(x.getNotificacion());
-            } catch (Exception ex) {
-                System.out.println("doble error:\n" + e + "\n" + ex);
-            }
-        }
-    }
-
+    
     public boolean getMst() {
         return mst;
     }
-
+    
     public boolean getVerTexto() {
         return (!mst && libroSeleccionado != null && libroSeleccionado.getIdrecurso() != null);
     }
-
+    
     public List<SelectItem> getUsadoPorList() {
         return Collections.unmodifiableList(usadoPorList);
     }
-
+    
     public void setUsadoPorList(List<SelectItem> usadoPorList) {
         this.usadoPorList = usadoPorList;
     }
-
+    
     public List<Integer> getInvalidDays() {
-        return Collections.unmodifiableList(invalidDays);
-    }
-
-    public void setInvalidDays(List<Integer> invalidDays) {
-        this.invalidDays = invalidDays;
+        return Auxiliar.getDisabledDays();
     }
 }

@@ -182,7 +182,7 @@ public class admRecursoController implements Serializable {
     public void controlUsuarios() {
         try {
             recurso = new ArrayList<>();
-            List<Integer> tps = new Auxiliar().getTiposPersonas(usuario);
+            List<Integer> tps = Auxiliar.getTiposPersonas(usuario);
             if (tps.contains(1) || tps.contains(2)) {
                 verTipos = true;
                 verCategorias = true;
@@ -214,7 +214,7 @@ public class admRecursoController implements Serializable {
                     verCategorias = true;
                     verCategoriastabla = true;
                     tiposRecursos.remove(tiporecursoFL.find(tps.contains(6) ? 7 : 6));
-                } 
+                }
 //                else {
 //                    verTipos = true;
 //                    verCategorias = true;
@@ -319,7 +319,7 @@ public class admRecursoController implements Serializable {
 
     public void onRowCancel(RowEditEvent event) {
         System.out.println(event.getObject());
-        ejemplares.remove(event.getObject());
+        ejemplares.remove((Ejemplar) event.getObject());
     }
 
     public Integer[] getAutoresXlibro() {
@@ -400,7 +400,7 @@ public class admRecursoController implements Serializable {
 
     public void guardar() {
         System.out.println("guardar");
-        mensaje x = null;
+        mensaje x;
         seleccionado.setContenidoLibroList(new ArrayList<>());
         seleccionado.setEjemplarList(ejemplares);
         seleccionado.setTipoReservaRecursoList(new ArrayList<>());
@@ -463,8 +463,8 @@ public class admRecursoController implements Serializable {
                             + " Ha editado la información del recurso: ID: "
                             + seleccionado.getIdrecurso()
                             + ", NOMBRE: " + seleccionado.getNombre()));
-            new Auxiliar().persistirNotificación(x,
-                    new Auxiliar().getPersonasParaNotificar(tperFL.find(tp)), notiFL, notificacion);
+            Auxiliar.persistirNotificación(x,
+                    Auxiliar.getPersonasParaNotificar(tperFL.find(tp)), notiFL, notificacion);
             FacesContext.getCurrentInstance().addMessage("form0:msgs",
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Edición exitosa",
                             "El recurso con el id: " + seleccionado.getIdrecurso()
@@ -481,8 +481,8 @@ public class admRecursoController implements Serializable {
                             + usuario.getPersonaApellido().split(" ")[0]
                             + " Ha agregado un nuevo recurso: ID: " + seleccionado.getIdrecurso()
                             + ", NOMBRE: " + seleccionado.getNombre()));
-            new Auxiliar().persistirNotificación(x,
-                    new Auxiliar().getPersonasParaNotificar(tperFL.find(tp)), notiFL, notificacion);
+            Auxiliar.persistirNotificación(x,
+                    Auxiliar.getPersonasParaNotificar(tperFL.find(tp)), notiFL, notificacion);
             FacesContext.getCurrentInstance().addMessage("form0:msgs",
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Creación exitosa",
                             "El recurso con el id: " + seleccionado.getIdrecurso()

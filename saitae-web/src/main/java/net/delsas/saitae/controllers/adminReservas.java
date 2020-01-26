@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -33,6 +32,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import net.delsas.saitae.ax.Auxiliar;
 import net.delsas.saitae.ax.mensaje;
 import net.delsas.saitae.beans.EjemplarFacadeLocal;
 import net.delsas.saitae.beans.NotificacionesFacadeLocal;
@@ -44,7 +44,6 @@ import net.delsas.saitae.beans.SolicitudReservaFacadeLocal;
 import net.delsas.saitae.beans.TipoRecursoFacadeLocal;
 import net.delsas.saitae.entities.Ejemplar;
 import net.delsas.saitae.entities.Grado;
-import net.delsas.saitae.entities.GradoPK;
 import net.delsas.saitae.entities.Maestro;
 import net.delsas.saitae.entities.Matricula;
 import net.delsas.saitae.entities.Persona;
@@ -67,7 +66,7 @@ import org.primefaces.event.SelectEvent;
 @Named
 @ViewScoped
 public class adminReservas implements Serializable {
-
+    
     private static final long serialVersionUID = 1L;
     @EJB
     private ReservaFacadeLocal resFL;
@@ -88,7 +87,7 @@ public class adminReservas implements Serializable {
     private ReservaDetalleFacadeLocal rdFL;
     @EJB
     private ReservaXpedagogiaFacadeLocal rxpFL;
-
+    
     private List<Reserva> solicitados, entregados, devueltos, rechazados, cancelados, aceptados;
     private List<Integer> tipos;
     private List<Ejemplar> r;
@@ -100,7 +99,7 @@ public class adminReservas implements Serializable {
     private Persona usuario;
     private Ejemplar ejemplar;
     private ProyectoPedagogico proyecto;
-
+    
     @PostConstruct
     public void init() {
         usuario = (Persona) FacesContext.getCurrentInstance()
@@ -135,11 +134,11 @@ public class adminReservas implements Serializable {
             rechazo = false;
         }
     }
-
+    
     private void completeList() {
-
+        
     }
-
+    
     public List<Reserva> getSolicitados() {
         solicitados = tipos.contains(1) || tipos.contains(2) ? resFL.getReservaByEstado("S") : resFL.findByEstadoAndIdTipoRecurso("S", (tipos.contains(5) ? 3 : (tipos.contains(6) ? 1 : (tipos.contains(7) ? 2 : 0))));
         solicitados.stream().map((s) -> {
@@ -150,11 +149,7 @@ public class adminReservas implements Serializable {
         });
         return Collections.unmodifiableList(solicitados);
     }
-
-    public void setSolicitados(List<Reserva> solicitados) {
-        this.solicitados = solicitados;
-    }
-
+    
     public List<Reserva> getEntregados() {
         entregados = tipos.contains(1) || tipos.contains(2) ? resFL.getReservaByEstado("E") : resFL.findByEstadoAndIdTipoRecurso("E", (tipos.contains(5) ? 3 : (tipos.contains(6) ? 1 : (tipos.contains(7) ? 2 : 0))));
         entregados.stream().map((s) -> {
@@ -165,11 +160,7 @@ public class adminReservas implements Serializable {
         });
         return Collections.unmodifiableList(entregados);
     }
-
-    public void setEntregados(List<Reserva> entregados) {
-        this.entregados = entregados;
-    }
-
+    
     public List<Reserva> getDevueltos() {
         devueltos = tipos.contains(1) || tipos.contains(2) ? resFL.getReservaByEstado("D") : resFL.findByEstadoAndIdTipoRecurso("D", (tipos.contains(5) ? 3 : (tipos.contains(6) ? 1 : (tipos.contains(7) ? 2 : 0))));
         devueltos.stream().map((s) -> {
@@ -180,11 +171,7 @@ public class adminReservas implements Serializable {
         });
         return Collections.unmodifiableList(devueltos);
     }
-
-    public void setDevueltos(List<Reserva> devueltos) {
-        this.devueltos = devueltos;
-    }
-
+    
     public List<Reserva> getRechazados() {
         rechazados = tipos.contains(1) || tipos.contains(2) ? resFL.getReservaByEstado("R") : resFL.findByEstadoAndIdTipoRecurso("R", (tipos.contains(5) ? 3 : (tipos.contains(6) ? 1 : (tipos.contains(7) ? 2 : 0))));
         rechazados.stream().map((s) -> {
@@ -195,19 +182,15 @@ public class adminReservas implements Serializable {
         });
         return Collections.unmodifiableList(rechazados);
     }
-
-    public void setRechazados(List<Reserva> rechazados) {
-        this.rechazados = rechazados;
-    }
-
+    
     public Reserva getSelected() {
         return selected;
     }
-
+    
     public void setSelected(Reserva selected) {
         this.selected = selected;
     }
-
+    
     public List<Reserva> getCancelados() {
         cancelados = tipos.contains(1) || tipos.contains(2) ? resFL.getReservaByEstado("C") : resFL.findByEstadoAndIdTipoRecurso("C", (tipos.contains(5) ? 3 : (tipos.contains(6) ? 1 : (tipos.contains(7) ? 2 : 0))));
         cancelados.stream().map((s) -> {
@@ -218,11 +201,7 @@ public class adminReservas implements Serializable {
         });
         return Collections.unmodifiableList(cancelados);
     }
-
-    public void setCancelados(List<Reserva> cancelados) {
-        this.cancelados = cancelados;
-    }
-
+    
     public List<Reserva> getAceptados() {
         aceptados = tipos.contains(1) || tipos.contains(2) ? resFL.getReservaByEstado("A") : resFL.findByEstadoAndIdTipoRecurso("A", (tipos.contains(5) ? 3 : (tipos.contains(6) ? 1 : (tipos.contains(7) ? 2 : 0))));
         aceptados.stream().map((s) -> {
@@ -233,22 +212,18 @@ public class adminReservas implements Serializable {
         });
         return Collections.unmodifiableList(aceptados);
     }
-
-    public void setAceptados(List<Reserva> aceptados) {
-        this.aceptados = aceptados;
-    }
-
+    
     public String getFechaString(Date d) {
         if (d == null) {
             return "";
         }
         return new SimpleDateFormat("dd/MM/yyyy hh:mm a").format(d);
     }
-
+    
     public void onRowSelect(SelectEvent event) {
-        String id = event.getComponent().getId();
         selected = (Reserva) event.getObject();
-        List<ProyectoPedagogico> re = rxpFL.findProyectoByIdReserva(selected == null ? 0 : selected.getIdreserva());
+        List<ProyectoPedagogico> re = rxpFL.findProyectoByIdReserva(selected == null
+                ? 0 : selected.getIdreserva());
         if (!re.isEmpty()) {
             proyecto = re.get(0);
         } else {
@@ -256,46 +231,25 @@ public class adminReservas implements Serializable {
         }
         procesoDetalle();
         rechazo = false;
-        switch (id) {
-            case "solicitados":
-                textoReserva = "solicitad";
-                break;
-            case "aceptados":
-                textoReserva = "aceptad";
-                break;
-            case "entregados":
-                textoReserva = "entregad";
-                break;
-            case "devueltos":
-                textoReserva = "devuelt";
-                break;
-            case "rechazados":
-                textoReserva = "rechazad";
-                rechazo = true;
-                break;
-            case "cancelados":
-                textoReserva = "cancelad";
-                break;
-            default:
-        }
+        textoReserva = Auxiliar.getEstadoCita1(selected.getReservaEstado());
     }
-
+    
     public String getTextoReserva() {
         return textoReserva;
     }
-
+    
     public void setTextoReserva(String textoReserva) {
         this.textoReserva = textoReserva;
     }
-
+    
     public void setReservaDetalle(List<Ejemplar> ejs) {
         r = ejs != null ? ejs : new ArrayList<>();
     }
-
+    
     public List<Ejemplar> getReservaDetalle() {
         return Collections.unmodifiableList(r != null ? r : new ArrayList<>());
     }
-
+    
     public void procesoDetalle() {
         r = new ArrayList<>();
         if (selected != null) {
@@ -329,7 +283,7 @@ public class adminReservas implements Serializable {
             }
         }
     }
-
+    
     public List<SolicitudReserva> getSolicitudReservaDetalle() {
         return selected != null
                 ? ((selected.getSolicitudReservaList() == null || selected.getSolicitudReservaList().isEmpty())
@@ -337,89 +291,76 @@ public class adminReservas implements Serializable {
                 : selected.getSolicitudReservaList())
                 : new ArrayList<>();
     }
-
+    
     public String getUsos() {
         return (selected != null && getUsadoPor() > 0) ? u[(getUsadoPor() - 1)] : "";
     }
-
+    
     public void setResponsable(String resp) {
         setCom(0, resp);
     }
-
+    
     public String getResponsable() {
         return selected != null ? selected.getReservaComentario().split("¿¿")[0] : " ";
     }
-
+    
     public String getResponsableTabla(Reserva r) {
         return r != null ? r.getReservaComentario().split("¿¿")[0] : "";
     }
-
+    
     public Integer getNumeroPractica() {
         return selected != null ? Integer.valueOf(selected.getReservaComentario().split("¿¿")[2]) : 0;
     }
-
+    
     public void setNumeroPractica(Integer n) {
         setCom(2, n + "");
     }
-
+    
     public void setCom(Integer ind, String v) {
-        String c[] = selected.getReservaComentario().split("¿¿");
-        String rr = "";
-        for (Integer y = 0; y < c.length; y++) {
-            rr += (y > 0 ? "¿¿" : "") + (Objects.equals(y, ind) ? v : c[y]);
-        }
-        selected.setReservaComentario(rr);
-        System.out.println("Se guardó " + ind + " en el indice " + ind + ". Cadena total: " + rr);
+        selected.setReservaComentario(Auxiliar.setComentario(ind, v, selected.getReservaComentario()));
     }
-
+    
     public void setUsadoPor(int usadoPor) {
         setCom(1, usadoPor + "");
     }
-
+    
     public int getUsadoPor() {
         return selected != null ? Integer.valueOf(selected.getReservaComentario().split("¿¿")[1]) : 0;
     }
-
+    
     public String getDocente(Reserva r) {
         Maestro m = r != null ? r.getDocente() : null;
         String salida = "";
         if (m != null) {
-            salida += m.getPersona().getPersonaNombre().split(" ")[0]
-                    + " " + m.getPersona().getPersonaApellido().split(" ")[0];
+            salida = Auxiliar.getNombreCortoPersona(m.getPersona());
         }
         return salida;
     }
-
+    
     public String getRazonRechazo() {
         return selected != null ? selected.getReservaComentario().split("¿¿")[3] : "";
     }
-
+    
     public void setRazonRechazo(String rechazo) {
         setCom(3, rechazo);
     }
-
+    
     public String getGradoNombre(Grado g) {
-        if (g == null) {
-            return "";
-        }
-        GradoPK id = g.getGradoPK();
-        return id.getIdgrado() + "° " + (id.getGradoModalidad().equals("C") ? "TVC Contador"
-                : (id.getGradoModalidad().equals("S") ? "TVC Secretariado" : "General"))
-                + " " + id.getGradoSeccion();
+        return Auxiliar.getGradoNombre(g.getGradoPK());
     }
-
+    
     public boolean isRechazo() {
         return rechazo;
     }
-
+    
     public void setRechazo(boolean rechazo) {
         this.rechazo = rechazo;
     }
-
+    
     public boolean isVariasPersonas() {
         return selected == null ? false : selected.getPersonasReservaList().size() > 1;
     }
-
+    
     public Grado getGradoActualDePersonas(Persona p) {
         Grado g = null;
         if (p != null && p.getEstudiante() != null) {
@@ -431,11 +372,11 @@ public class adminReservas implements Serializable {
         }
         return g;
     }
-
+    
     public boolean isGradoValido() {
         return getGradoUso().split("").length > 1;
     }
-
+    
     public String getGradoUso() {
         String g = "";
         for (Persona p : getPersonasEnSolicitud()) {
@@ -450,11 +391,11 @@ public class adminReservas implements Serializable {
         }
         return g;
     }
-
+    
     public int getAñoActual() {
-        return Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date()));
+        return Auxiliar.getAñoActual();
     }
-
+    
     public List<Persona> getPersonasEnSolicitud() {
         List<Persona> l = new ArrayList<>();
         if (selected != null) {
@@ -464,10 +405,10 @@ public class adminReservas implements Serializable {
                 l.add(pr.getPersona());
             });
         }
-
+        
         return l;
     }
-
+    
     public String getPersonasEnSolicitudTexto() {
         String l = "";
         for (Persona p : getPersonasEnSolicitud()) {
@@ -476,17 +417,17 @@ public class adminReservas implements Serializable {
         }
         return l;
     }
-
+    
     public boolean isadmin() {
         return (tipos.contains(1) || tipos.contains(2));
     }
-
+    
     public String getTipoRecurso(Reserva r) {
         return r == null ? "" : (!r.getSolicitudReservaList().isEmpty()
                 ? r.getSolicitudReservaList().get(0).getRecurso().getIdTipoRecurso().getTipoRecursoNombre()
                 : "");
     }
-
+    
     public boolean getEslaboratorio() {
         TipoRecurso tr = trFL.find(2);
         if (tr == null || selected == null) {
@@ -494,12 +435,12 @@ public class adminReservas implements Serializable {
         }
         return getTipoRecurso(selected).equals(tr.getTipoRecursoNombre());
     }
-
+    
     public boolean getVerEquipoDetalle() {
         boolean m = (selected == null ? false : (!selected.getReservaEstado().equals("S") && !selected.getReservaEstado().equals("R") && !selected.getReservaEstado().equals("C") && !getEslaboratorio()));
         return m;
     }
-
+    
     public void rechazar() {
         System.out.println(getRazonRechazo());
         if (selected != null) {
@@ -510,14 +451,16 @@ public class adminReservas implements Serializable {
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Rechazo exitoso",
                             "El rechazo de la solicitud de reserva de equipo se ha llevado a cabo con éxito."
                             + "Se notificarán a las personas solicitantes del rechazo."));
-            mensaje x = new mensaje(0, usuario.getIdpersona(), "solicitudH<form",
-                    new FacesMessage(FacesMessage.SEVERITY_WARN, "Rechazo de reserva",
-                            "Su solicitud de reserva de equipo con fecha "
-                            + (new SimpleDateFormat("dd/MM/yyyy").format(selected.getReservaFecha()))
-                            + " a las " + (new SimpleDateFormat("hh:mm a").format(selected.getReservaFecha()))
-                            + " ha sido rechazada por " + usuario.getPersonaNombre().split(" ")[0] + " "
-                            + usuario.getPersonaApellido().split(" ")[0] + ". La razón del rechazo es: " + getRazonRechazo() + "."));
-            notificar(selected, x);
+            Auxiliar.persistirNotificación(
+                    new mensaje(0, usuario.getIdpersona(), "solicitudH<form",
+                            new FacesMessage(FacesMessage.SEVERITY_WARN, "Rechazo de reserva",
+                                    "Su solicitud de reserva de equipo con fecha "
+                                    + (new SimpleDateFormat("dd/MM/yyyy").format(selected.getReservaFecha()))
+                                    + " a las " + (new SimpleDateFormat("hh:mm a").format(selected.getReservaFecha()))
+                                    + " ha sido rechazada por " + usuario.getPersonaNombre().split(" ")[0] + " "
+                                    + usuario.getPersonaApellido().split(" ")[0] + ". La razón del rechazo es: "
+                                    + getRazonRechazo() + ".")),
+                    Auxiliar.getPersonasEnReserva(selected), notiFL, notificacion);
             solicitados.remove(selected);
             aceptados.remove(selected);
             rechazados.add(selected);
@@ -532,7 +475,7 @@ public class adminReservas implements Serializable {
             PrimeFaces.current().ajax().update(":form0:msgs", "noti", ":form", "d1", "d2");
         }
     }
-
+    
     public void aceptar() {
         boolean lleno = true;
         if (!getEslaboratorio()) {
@@ -545,7 +488,7 @@ public class adminReservas implements Serializable {
         if (selected != null && lleno) {
             selected.setReservaEstado("A");
             resFL.edit(selected);
-            Reserva res = null;
+            Reserva res;
             if (!getEslaboratorio()) {
                 r.stream().map((ej) -> {
                     ReservaDetalle rd = new ReservaDetalle(ej.getEjemplarPK().getIdRecurso(),
@@ -570,15 +513,16 @@ public class adminReservas implements Serializable {
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Aceptación Exitosa",
                             "La asignación de recursos para la solicitud de reserva de equipo se ha llevado a cabo con éxito."
                             + "Se notificarán a las personas solicitantes de la aceptación de su solicitud."));
-            mensaje x = new mensaje(0, usuario.getIdpersona(), "solicitudH<form",
-                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Aceptación de reserva",
-                            "Su solicitud de reserva de equipo con fecha "
-                            + (new SimpleDateFormat("dd/MM/yyyy").format(selected.getReservaFecha()))
-                            + " a las " + (new SimpleDateFormat("hh:mm a").format(selected.getReservaFecha()))
-                            + " ha sido aceptada por " + usuario.getPersonaNombre().split(" ")[0] + " "
-                            + usuario.getPersonaApellido().split(" ")[0]
-                            + "."));
-            notificar(selected, x);
+            Auxiliar.persistirNotificación(
+                    new mensaje(0, usuario.getIdpersona(), "solicitudH<form",
+                            new FacesMessage(FacesMessage.SEVERITY_INFO, "Aceptación de reserva",
+                                    "Su solicitud de reserva de equipo con fecha "
+                                    + (new SimpleDateFormat("dd/MM/yyyy").format(selected.getReservaFecha()))
+                                    + " a las " + (new SimpleDateFormat("hh:mm a").format(selected.getReservaFecha()))
+                                    + " ha sido aceptada por " + usuario.getPersonaNombre().split(" ")[0] + " "
+                                    + usuario.getPersonaApellido().split(" ")[0]
+                                    + ".")),
+                    Auxiliar.getPersonasEnReserva(selected), notiFL, notificacion);
             solicitados.remove(selected);
             aceptados.add(selected);
             selected = null;
@@ -591,7 +535,7 @@ public class adminReservas implements Serializable {
         }
         PrimeFaces.current().ajax().update(":form0:msgs", "noti", ":form", "d1", "d3");
     }
-
+    
     public void entregar() {
         if (selected != null) {
             selected.setReservaEstado("E");
@@ -601,24 +545,25 @@ public class adminReservas implements Serializable {
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Entrega exitosa",
                             "La entrega de los recursos solicitados se ha llevado a cabo con éxito."
                             + "Se notificarán a las personas solicitantes."));
-            mensaje x = new mensaje(0, usuario.getIdpersona(), "solicitudH<form",
-                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Entrega de equipo reservado",
-                            "Los recursos que solicitó el día "
-                            + (new SimpleDateFormat("dd/MM/yyyy").format(selected.getReservaFecha()))
-                            + " a las " + (new SimpleDateFormat("hh:mm a").format(selected.getReservaFecha()))
-                            + " han sido entregados en este momento por " + usuario.getPersonaNombre().split(" ")[0] + " "
-                            + usuario.getPersonaApellido().split(" ")[0]));
-            notificar(selected, x);
+            Auxiliar.persistirNotificación(
+                    new mensaje(0, usuario.getIdpersona(), "solicitudH<form",
+                            new FacesMessage(FacesMessage.SEVERITY_INFO, "Entrega de equipo reservado",
+                                    "Los recursos que solicitó el día "
+                                    + (new SimpleDateFormat("dd/MM/yyyy").format(selected.getReservaFecha()))
+                                    + " a las " + (new SimpleDateFormat("hh:mm a").format(selected.getReservaFecha()))
+                                    + " han sido entregados en este momento por " + usuario.getPersonaNombre().split(" ")[0] + " "
+                                    + usuario.getPersonaApellido().split(" ")[0])),
+                    Auxiliar.getPersonasEnReserva(selected), notiFL, notificacion);
             aceptados.remove(selected);
             entregados.add(selected);
             selected = null;
             PrimeFaces.current().executeScript("PF('Dreserva3').hide();"
                     + "PF('Dreserva').hide();");
             PrimeFaces.current().ajax().update(":form0:msgs", "noti", ":form", "d1", "d4");
-
+            
         }
     }
-
+    
     public void recibir() {
         if (selected != null) {
             selected.setReservaEstado("D");
@@ -628,120 +573,104 @@ public class adminReservas implements Serializable {
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Devolución exitosa",
                             "La devolución de los recursos solicitados se ha llevado a cabo con éxito."
                             + "Se notificarán a las personas solicitantes."));
-            mensaje x = new mensaje(0, usuario.getIdpersona(), "solicitudH<form",
-                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Devolución de equipo reservado",
-                            "Los recursos que solicitó el día "
-                            + (new SimpleDateFormat("dd/MM/yyyy").format(selected.getReservaFecha()))
-                            + " a las " + (new SimpleDateFormat("hh:mm a").format(selected.getReservaFecha()))
-                            + " han sido recibidos en este momento por " + usuario.getPersonaNombre().split(" ")[0] + " "
-                            + usuario.getPersonaApellido().split(" ")[0]));
-            notificar(selected, x);
+            Auxiliar.persistirNotificación(
+                    new mensaje(0, usuario.getIdpersona(), "solicitudH<form",
+                            new FacesMessage(FacesMessage.SEVERITY_INFO, "Devolución de equipo reservado",
+                                    "Los recursos que solicitó el día "
+                                    + (new SimpleDateFormat("dd/MM/yyyy").format(selected.getReservaFecha()))
+                                    + " a las " + (new SimpleDateFormat("hh:mm a").format(selected.getReservaFecha()))
+                                    + " han sido recibidos en este momento por " + usuario.getPersonaNombre().split(" ")[0] + " "
+                                    + usuario.getPersonaApellido().split(" ")[0])),
+                    Auxiliar.getPersonasEnReserva(selected), notiFL, notificacion);
             entregados.remove(selected);
             devueltos.add(selected);
             selected = null;
             PrimeFaces.current().executeScript("PF('Dreserva4').hide();"
                     + "PF('Dreserva').hide();");
             PrimeFaces.current().ajax().update(":form0:msgs", "noti", ":form", "d1", "d5");
-
+            
         }
     }
-
+    
     public boolean getVerRechazo() {
         return (selected == null ? false
                 : (selected.getReservaEstado().equals("S")
                 || selected.getReservaEstado().equals("A")));
     }
-
+    
     public boolean getVerEntregar() {
         return (selected == null ? false
                 : (selected.getReservaEstado().equals("A")));
     }
-
+    
     public boolean getVerAceptar() {
         return (selected == null ? false
                 : (selected.getReservaEstado().equals("S")));
     }
-
+    
     public boolean getVerRecibir() {
         return (selected == null ? false
                 : (selected.getReservaEstado().equals("E")));
     }
-
+    
     public boolean getVertema() {
         String x = selected != null ? selected.getTema() : "";
         return !(x.isEmpty() || x.equals(" "));
     }
-
+    
     public boolean getVerObjetivo() {
         String x = selected != null ? selected.getObjetivoTema() : "";
         return !(x.isEmpty() || x.equals(" "));
     }
-
-    public void sendMessage(String message) {
-        notificacion.send(message);
-    }
-
+    
     public List<Integer> getCorrelativos(Ejemplar e) {
         List<Integer> co = ejFL.findCorrelativosByIdRecurso(
                 e == null ? 0 : e.getRecurso().getIdrecurso());
         co = co == null ? new ArrayList<>() : co;
         return co;
     }
-
+    
     public void onRowEdit(RowEditEvent event) {
         System.out.println(event.getObject());
     }
-
+    
     public void onRowCancel(RowEditEvent event) {
         System.out.println(event.getObject());
         Ejemplar ej = (Ejemplar) event.getObject();
         r.remove(ej);
         ejemplar = null;
     }
-
+    
     public void onDetalleRowSelect(SelectEvent event) {
         ejemplar = (Ejemplar) event.getObject();
         System.out.println(ejemplar);
     }
-
+    
     public void onItemSelect(SelectEvent event) {
         System.out.println(event.getObject());
         int co = (int) event.getObject();
         int o = r.indexOf(ejemplar);
         r.get(o).getEjemplarPK().setEjemplarCorrelativo(co);
     }
-
+    
     public Ejemplar getEjemplar() {
         return ejemplar;
     }
-
+    
     public void setEjemplar(Ejemplar ejemplar) {
         this.ejemplar = ejemplar;
     }
-
-    private void notificar(Reserva s, mensaje x) {
-        x.getNotificacion().setFechaHora(new Date());
-        s.getPersonasReservaList().stream().map((pr) -> {
-            x.setDestinatario(pr.getPersona().getIdpersona());
-            return pr;
-        }).map((pr) -> {
-            notiFL.create(x.getNotificacion());
-            return pr;
-        }).forEachOrdered((pr) -> {
-            sendMessage(x.toString());
-        });
-    }
-
+    
     public boolean getCancelado() {
         boolean ra = selected == null ? false : !getRazonRechazo().isEmpty();
         boolean v = selected != null ? selected.getReservaEstado().equals("C") : false;
         return (ra && v);
     }
-
+    
     public boolean getHayProyecto() {
         return proyecto != null;
     }
-
+    
     public void verProyecto() {
         FacesContext context = FacesContext.getCurrentInstance();
         try {
@@ -757,5 +686,5 @@ public class adminReservas implements Serializable {
         } catch (IOException ex) {
         }
     }
-
+    
 }

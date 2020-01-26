@@ -100,19 +100,14 @@ public class permisoHController implements Serializable {
                             "Ha cancelado la solicitud de permiso con fechas: "
                             + getFechas(selected.getPermisosPK().getPermisoFechaInicio(), selected.getPermisoFechafin())
                             + ". La razón del cancelamiento es: " + getRazonRechazo() + "."));
-            new Auxiliar().persistirNotificación(x, usuario, notiFL, notificacion);
+            Auxiliar.persistirNotificación(x, usuario, notiFL, notificacion);
             PrimeFaces.current().ajax().update("form", "d1", "d2", "form0:msgs");
             PrimeFaces.current().executeScript("PF('Dper1').hide(); PF('Dper2').hide();");
         }
     }
 
     public String getEstado(String e) {
-        return e == null ? ""
-                : (e.equals("0") ? "Solicitado"
-                : (e.equals("1") ? "Aceptado"
-                : (e.equals("2") ? "Rechazado"
-                : (e.equals("3") ? "Cancelado"
-                : "????"))));
+        return Auxiliar.getEstadoPermisos2(e);
     }
 
     public boolean isSolicitado() {

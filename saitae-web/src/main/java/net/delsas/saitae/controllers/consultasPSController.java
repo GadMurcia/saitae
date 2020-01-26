@@ -232,7 +232,7 @@ public class consultasPSController implements Serializable {
         expediente.setExpedientePSComentario("");
         exFL.edit(expediente);
         Persona p = expediente.getEstudiante().getPersona();
-        ax.persistirNotificación(
+        Auxiliar.persistirNotificación(
                 new mensaje(0, usuario.getIdpersona(), "admCitasPs<form",
                         new FacesMessage(FacesMessage.SEVERITY_INFO, "Sesión de consulta terminada",
                                 "La sesión de consulta psicológica con "
@@ -241,7 +241,7 @@ public class consultasPSController implements Serializable {
                                 + p.getPersonaNombre().split(" ")[0]
                                 + " " + p.getPersonaApellido().split(" ")[0] + " ha terminado.")),
                 usuario, notiFL, notificacion);
-        ax.persistirNotificación(
+        Auxiliar.persistirNotificación(
                 new mensaje(0, usuario.getIdpersona(), "citasPSH<form",
                         new FacesMessage(FacesMessage.SEVERITY_INFO, "Sesión de consulta terminada",
                                 "La sesión de consulta con "
@@ -347,7 +347,7 @@ public class consultasPSController implements Serializable {
     }
 
     private void notificarInicio() {
-        ax.persistirNotificación(
+        Auxiliar.persistirNotificación(
                 new mensaje(0, usuario.getIdpersona(), "citasPSH<form",
                         new FacesMessage(FacesMessage.SEVERITY_INFO, "Sesión de consulta iniciada",
                                 "La sesión de consulta con "
@@ -358,7 +358,7 @@ public class consultasPSController implements Serializable {
     }
 
     public String getGrado() {
-        int a = Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date()));
+        int a = Auxiliar.getAñoActual();
         int e = expediente == null ? 0 : expediente.getIdEstudiante();
         Matricula ma = mFL.find(new MatriculaPK(e, a));
         GradoPK pk = ma == null ? new GradoPK(0, "", "", 0) : ma.getGrado().getGradoPK();

@@ -158,4 +158,13 @@ public class administradorController implements Serializable {
         this.selected = selected;
     }
 
+    public String getCargos(Persona p) {
+        String g = "";
+        List<Integer> tps = Auxiliar.getTiposPersonas(p);
+        for (Integer i : tps) {
+            g += (g.isEmpty() ? "" : ", ") + tpfl.find(i).getTipoPersonaNombre();
+        }
+        return g;
+    }
+
 }

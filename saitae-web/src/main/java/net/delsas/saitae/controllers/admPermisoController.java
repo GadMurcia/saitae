@@ -99,7 +99,7 @@ public class admPermisoController implements Serializable {
             if (usuario == null) {
                 redirect();
             } else {
-                tps = new Auxiliar().getTiposPersonas(usuario);
+                tps = Auxiliar.getTiposPersonas(usuario);
                 boolean r = (tps.contains(3) || tps.contains(2) || tps.contains(1));
                 if (!r) {
                     redirect();
@@ -202,7 +202,7 @@ public class admPermisoController implements Serializable {
                         "Nueva concesión de permiso",
                         FacesMessage.SEVERITY_INFO,
                         permiso.getPermisosSolicitante().getIdpersona(), "permisoH<form");
-                new Auxiliar().persistirNotificación(m, new Persona(m.getDestinatario()), notFL, notificacion);
+                Auxiliar.persistirNotificación(m, new Persona(m.getDestinatario()), notFL, notificacion);
                 FacesContext.getCurrentInstance().addMessage(null, ms);
                 init();
                 ms = null;
@@ -236,19 +236,17 @@ public class admPermisoController implements Serializable {
                 + (w == 2 ? "Motivo del rechazo: " + getComentarioSolc() : ""),
                 (w == 1 ? "Aceptación" : "Rechado") + " de permiso",
                 FacesMessage.SEVERITY_INFO, usuario.getIdpersona(), "permiso<form<<permisoH<form");
-        new Auxiliar().persistirNotificación(x, new Persona(x.getDestinatario()), notFL, notificacion);
+        Auxiliar.persistirNotificación(x, new Persona(x.getDestinatario()), notFL, notificacion);
     }
 
     public String getGrado(Integer id) {
         Matricula mat = matriculaFL.find(new MatriculaPK(id, getAño()));
         if (mat != null) {
             GradoPK gr = mat.getGrado().getGradoPK();
-            String g = "";
-            g = gr.getIdgrado() + "° " + (gr.getGradoModalidad().equals("C") ? "TVC Contador"
+            return gr.getIdgrado() + "° " + (gr.getGradoModalidad().equals("C") ? "TVC Contador"
                     : (gr.getGradoModalidad().equals("S") ? "TVC Secretariado"
                     : (gr.getGradoModalidad().equals("G") ? "General" : "??")))
                     + " Sección " + gr.getGradoSeccion();
-            return g;
         } else {
             return " ";
         }
@@ -353,7 +351,7 @@ public class admPermisoController implements Serializable {
     }
 
     public void setDuiSol(String dui) {
-        duiS= dui;
+        duiS = dui;
         String d[] = dui.split("-");
         permiso.setPermisosComentario(d[0] + d[1] + "¿¿" + getNombreSol() + "¿¿" + getApellidoSol() + "¿¿" + getComentario());
     }
@@ -446,9 +444,9 @@ public class admPermisoController implements Serializable {
         permiso.setPersona(est);
         nombreE = tt[0];
     }
-    
-    public void onblour(AjaxBehaviorEvent e){
-        
+
+    public void onblour(AjaxBehaviorEvent e) {
+
     }
 
     public String getNombreE() {

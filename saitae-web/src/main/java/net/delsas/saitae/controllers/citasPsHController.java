@@ -48,7 +48,7 @@ import org.primefaces.event.SelectEvent;
 @Named
 @ViewScoped
 public class citasPsHController implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
     @EJB
     private CitaPsicologiaFacadeLocal cpsFL;
@@ -59,72 +59,70 @@ public class citasPsHController implements Serializable {
     private NotificacionesFacadeLocal notiFL;
     @EJB
     private TipoPersonaFacadeLocal tpFL;
-    
+
     private List<CitaPsicologia> citas;
-    
+
     private CitaPsicologia selected;
     private Persona usuario;
     private FacesContext context;
     private String textoReserva;
-    private Auxiliar ax;
-    
+
     @PostConstruct
     public void init() {
         context = FacesContext.getCurrentInstance();
         usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
-        ax = new Auxiliar();
     }
-    
+
     public void onDetalleRowSelect(SelectEvent event) {
         selected = (CitaPsicologia) event.getObject();
-        textoReserva = ax.getEstadoCita1(selected.getEstado());
+        textoReserva = Auxiliar.getEstadoCita1(selected.getEstado());
     }
-    
+
     public String getFechaHoraToString(Date d) {
         return d == null ? "" : new SimpleDateFormat("dd/MM/yyyy hh:mm a").format(d);
     }
-    
+
     public String getFechasToString(Date d) {
         return d == null ? "" : new SimpleDateFormat("dd/MM/yyyy").format(d);
     }
-    
+
     public String getHoraToString(Date d) {
         return d == null ? "" : new SimpleDateFormat("hh:mm a").format(d);
     }
-    
+
     public String getEstado(String e) {
-        return ax.getEstadoCita2(e);
+        return Auxiliar.getEstadoCita2(e);
     }
-    
+
     public boolean isEstado(String e) {
         return selected == null ? false : selected.getEstado().equals(e);
     }
-    
+
     public boolean getSePuedeEditar() {
         return selected == null ? false
                 : (selected.getEstado().equals("S")
                 || selected.getEstado().equals("P")
                 || selected.getEstado().equals("C"));
     }
-    
+
     public boolean getSePuedeCancelar() {
         return selected == null ? false
                 : (selected.getEstado().equals("S")
                 || selected.getEstado().equals("P"));
     }
-    
+
     public boolean getSePuedeAceptar() {
         return selected == null ? false : selected.getEstado().equals("P");
     }
-    
+
     public void aceptar() {
         cambiarEstado("A");
     }
-    
+
     public void cancelar() {
         cambiarEstado("C");
     }
-    
+
     public void cambiarEstado(String E) {
         if (selected != null) {
             selected.setEstado(E);
@@ -134,7 +132,7 @@ public class citasPsHController implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_INFO, est[0] + " exitosa",
                             "La  " + est[0] + " se registró con éxito."));
-            ax.persistirNotificación(
+            Auxiliar.persistirNotificación(
                     new mensaje(0, usuario.getIdpersona(), "citasPSH<form",
                             new FacesMessage(FacesMessage.SEVERITY_INFO, est[0] + " de cita",
                                     "Usted ha " + est[1] + "o "
@@ -146,7 +144,7 @@ public class citasPsHController implements Serializable {
                                     + (E.equals("C") ? (". La razón de la " + est[0] + " es: " + selected.getComentarios()) : "")
                                     + ".")),
                     usuario, notiFL, notificacion);
-            ax.persistirNotificación(
+            Auxiliar.persistirNotificación(
                     new mensaje(0, usuario.getIdpersona(), "admCitasPs<form",
                             new FacesMessage(FacesMessage.SEVERITY_INFO, est[0] + " de cita",
                                     "La solicitud de cita con fecha "
@@ -157,7 +155,7 @@ public class citasPsHController implements Serializable {
                                     + usuario.getPersonaApellido().split(" ")[0]
                                     + (E.equals("C") ? (". La razón de la " + est[0] + " es: " + selected.getComentarios())
                                     : "") + ".")),
-                    ax.getPersonasParaNotificar(tpFL.find(14)),
+                    Auxiliar.getPersonasParaNotificar(tpFL.find(14)),
                     notiFL, notificacion);
             selected = null;
             PrimeFaces.current().executeScript("PF('Dcita1').hide();"
@@ -165,21 +163,21 @@ public class citasPsHController implements Serializable {
             PrimeFaces.current().ajax().update(":form", "d1", "d2");
         }
     }
-    
+
     public String getTextoReserva() {
         return textoReserva;
     }
-    
+
     public int getAñoActual() {
-        return Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date()));
+        return Auxiliar.getAñoActual();
     }
-    
+
     public boolean getCancelado() {
         boolean ra = selected == null ? false : !selected.getComentarios().isEmpty();
         boolean v = selected != null ? selected.getEstado().equals("C") : false;
         return (ra && v);
     }
-    
+
     public void vercita() {
         context = FacesContext.getCurrentInstance();
         try {
@@ -193,26 +191,22 @@ public class citasPsHController implements Serializable {
         } catch (IOException ex) {
         }
     }
-    
+
     public List<CitaPsicologia> getCitas() {
         citas = cpsFL.findByEstudiante(usuario.getIdpersona());
         return Collections.unmodifiableList(citas);
     }
-    
-    public void setCitas(List<CitaPsicologia> citas) {
-        this.citas = citas;
-    }
-    
+
     public CitaPsicologia getSelected() {
         return selected;
     }
-    
+
     public void setSelected(CitaPsicologia selected) {
         this.selected = selected;
     }
-    
+
     public boolean verMotivo() {
         return selected == null ? false : (selected.getComentarios() != null || !selected.getComentarios().isEmpty());
     }
-    
+
 }

@@ -16,20 +16,18 @@
  */
 package net.delsas.saitae.controllers;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
+import net.delsas.saitae.ax.Auxiliar;
 import net.delsas.saitae.beans.GradoFacadeLocal;
 import net.delsas.saitae.entities.Estudiante;
 import net.delsas.saitae.entities.Grado;
 import net.delsas.saitae.entities.GradoPK;
-import net.delsas.saitae.entities.Matricula;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 
@@ -55,7 +53,7 @@ public class representanteController {
     }
 
     public Integer getAñoActual() {
-        return Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date()));
+        return Auxiliar.getAñoActual();
     }
 
     public void selectAño(SelectEvent event) {
@@ -63,9 +61,9 @@ public class representanteController {
         String[] id = event.getObject().toString().split("¿¿");
         if (id.length == 3) {
             Grado g = gFL.find(new GradoPK(Integer.valueOf(id[0]), id[1], id[2], getAñoActual()));
-            for (Matricula m : g.getMatriculaList()) {
+            g.getMatriculaList().forEach((m) -> {
                 representantes.add(m.getEstudiante());
-            }
+            });
             nombreGrado = getLabel(g.getGradoPK());
         } else {
             nombreGrado = "";
@@ -90,9 +88,7 @@ public class representanteController {
     }
 
     public String getLabel(GradoPK id) {
-        return id.getIdgrado() + "° " + (id.getGradoModalidad().equals("C") ? "TVC Contador"
-                : (id.getGradoModalidad().equals("S") ? "TVC Secretariado" : "General"))
-                + " " + id.getGradoSeccion();
+        return Auxiliar.getGradoNombre(id);
     }
 
     public String getValue(GradoPK id) {

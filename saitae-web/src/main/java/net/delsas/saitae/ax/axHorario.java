@@ -17,13 +17,8 @@
 package net.delsas.saitae.ax;
 
 import java.io.Serializable;
-import java.util.List;
-import net.delsas.saitae.beans.MestroHorarioMateriasFacadeLocal;
-import net.delsas.saitae.entities.GradoPK;
 import net.delsas.saitae.entities.Horario;
 import net.delsas.saitae.entities.Materia;
-import net.delsas.saitae.entities.MestroHorarioMaterias;
-import net.delsas.saitae.entities.Persona;
 
 /**
  *
@@ -189,99 +184,4 @@ public class axHorario implements Serializable {
     public void setNomD(String nomD) {
         this.nomD = nomD;
     }
-
-    public static axHorario llenar(Horario h, GradoPK pk, MestroHorarioMateriasFacadeLocal mhmFL) {
-        axHorario x = new axHorario();
-        x.setHoras(h);
-        List<MestroHorarioMaterias> mhmList = mhmFL.findByIdHoraAndGradopk(h.getIdhorario(), pk);
-        for (MestroHorarioMaterias mhm : mhmList) {
-            switch (mhm.getDiasEstudio().getIdDias()) {
-                case 1:
-                    x.setLunes(mhm.getMateria());
-                    x.setNomL(" (" + getNomgreCortoPersona(mhm.getMaestro().getPersona()) + ") ");
-                    break;
-                case 2:
-                    x.setMartes(mhm.getMateria());
-                    x.setNomM(" (" + getNomgreCortoPersona(mhm.getMaestro().getPersona()) + ") ");
-                    break;
-                case 3:
-                    x.setMiercoles(mhm.getMateria());
-                    x.setNomX(" (" + getNomgreCortoPersona(mhm.getMaestro().getPersona()) + ") ");
-                    break;
-                case 4:
-                    x.setJueves(mhm.getMateria());
-                    x.setNomJ(" (" + getNomgreCortoPersona(mhm.getMaestro().getPersona()) + ") ");
-                    break;
-                case 5:
-                    x.setViernes(mhm.getMateria());
-                    x.setNomV(" (" + getNomgreCortoPersona(mhm.getMaestro().getPersona()) + ") ");
-                    break;
-                case 6:
-                    x.setSabado(mhm.getMateria());
-                    x.setNomS(" (" + getNomgreCortoPersona(mhm.getMaestro().getPersona()) + ") ");
-                    break;
-                case 7:
-                    x.setDomingo(mhm.getMateria());
-                    x.setNomD(" (" + getNomgreCortoPersona(mhm.getMaestro().getPersona()) + ") ");
-                    break;
-            }
-        }
-        return x;
-    }
-
-    public static axHorario llenar(Integer año, Horario h, Integer idMaestro, MestroHorarioMateriasFacadeLocal mhmFL) {
-        axHorario x = new axHorario();
-        x.setHoras(h);
-        for (MestroHorarioMaterias mhm : mhmFL.findByIdHoraAndMaestro(año, h.getIdhorario(), idMaestro)) {
-            switch (mhm.getDiasEstudio().getIdDias()) {
-                case 1:
-                    x.setLunes(mhm.getMateria());
-                    x.setNomL(" (" + getGradoNomgre(mhm.getGrado().getGradoPK()) + ") ");
-                    break;
-                case 2:
-                    x.setMartes(mhm.getMateria());
-                    x.setNomM(" (" + getGradoNomgre(mhm.getGrado().getGradoPK()) + ") ");
-                    break;
-                case 3:
-                    x.setMiercoles(mhm.getMateria());
-                    x.setNomX(" (" + getGradoNomgre(mhm.getGrado().getGradoPK()) + ") ");
-                    break;
-                case 4:
-                    x.setJueves(mhm.getMateria());
-                    x.setNomJ(" (" + getGradoNomgre(mhm.getGrado().getGradoPK()) + ") ");
-                    break;
-                case 5:
-                    x.setViernes(mhm.getMateria());
-                    x.setNomV(" (" + getGradoNomgre(mhm.getGrado().getGradoPK()) + ") ");
-                    break;
-                case 6:
-                    x.setSabado(mhm.getMateria());
-                    x.setNomS(" (" + getGradoNomgre(mhm.getGrado().getGradoPK()) + ") ");
-                    break;
-                case 7:
-                    x.setDomingo(mhm.getMateria());
-                    x.setNomD(" (" + getGradoNomgre(mhm.getGrado().getGradoPK()) + ") ");
-                    break;
-            }
-        }
-        return x;
-    }
-
-    public static String getGradoNomgre(GradoPK gr) {
-        String g = "";
-        g = gr.getIdgrado() + "° " + (gr.getGradoModalidad().equals("C") ? "TVC Contador"
-                : (gr.getGradoModalidad().equals("S") ? "TVC Secretariado"
-                : (gr.getGradoModalidad().equals("G") ? "General" : "??")))
-                + " Sección " + gr.getGradoSeccion();
-        return g;
-    }
-
-    public static String getNomgreCortoPersona(Persona p) {
-        return p == null ? "" : p.getPersonaNombre().split(" ")[0] + " " + p.getPersonaApellido().split(" ")[0];
-    }
-
-    public static String getNomgreCompletoPersona(Persona p) {
-        return p == null ? "" : p.getPersonaNombre() + " " + p.getPersonaApellido();
-    }
-
 }

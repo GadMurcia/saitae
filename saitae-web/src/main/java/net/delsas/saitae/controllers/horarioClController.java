@@ -33,6 +33,7 @@ import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import net.delsas.saitae.ax.Auxiliar;
 import net.delsas.saitae.ax.axHorario;
 import net.delsas.saitae.beans.HorarioFacadeLocal;
 import net.delsas.saitae.beans.MatriculaFacadeLocal;
@@ -71,7 +72,8 @@ public class horarioClController implements Serializable {
         usuario = (Persona) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
         estudiate = usuario.getTipoPersona().getIdtipoPersona().equals(8);
         añoSelected = getAño();
-        List<GradoPK> grList = mFL.findGradopkByidEstudianteAndAño(añoSelected, estudiate ? usuario.getIdpersona() : 0);
+        List<GradoPK> grList = mFL.findGradopkByidEstudianteAndAño(añoSelected, 
+                estudiate ? usuario.getIdpersona() : 0);
         pk = grList.size() > 0 ? grList.get(0) : new GradoPK(0, "", "", 0);
         añosDisponibles = estudiate
                 ? mFL.findAñoByidEstudiante(usuario.getIdpersona())
@@ -80,11 +82,12 @@ public class horarioClController implements Serializable {
     }
 
     private Integer getAño() {
-        return Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date()));
+        return Auxiliar.getAñoActual();
     }
 
     public void onAñoSelect(SelectEvent ev) {
-        List<GradoPK> grList = mFL.findGradopkByidEstudianteAndAño(añoSelected, estudiate ? usuario.getIdpersona() : 0);
+        List<GradoPK> grList = mFL.findGradopkByidEstudianteAndAño(añoSelected, 
+                estudiate ? usuario.getIdpersona() : 0);
         pk = grList.size() > 0 ? grList.get(0) : new GradoPK(0, "", "", 0);
     }
 
@@ -92,8 +95,8 @@ public class horarioClController implements Serializable {
         horario = new ArrayList<>();
         horas.forEach((h) -> {
             horario.add(estudiate
-                    ? axHorario.llenar(h, pk, mhmFL)
-                    : axHorario.llenar(añoSelected, h, usuario.getIdpersona(), mhmFL));
+                    ? Auxiliar.llenar(h, pk, mhmFL)
+                    : Auxiliar.llenar(añoSelected, h, usuario.getIdpersona(), mhmFL));
         });
         return Collections.unmodifiableList(horario);
     }
@@ -122,7 +125,8 @@ public class horarioClController implements Serializable {
         Document pdf = (Document) document;
         pdf.open();
         pdf.setPageSize(new Rectangle(842, 842));
-        pdf.addTitle("SAITAE-INTEX_" + getAño() + " Horario de clases de " + axHorario.getNomgreCortoPersona(usuario));
+        pdf.addTitle("SAITAE-INTEX_" + getAño() + " Horario de clases de " +
+                Auxiliar.getNombreCortoPersona(usuario));
     }
 
 }

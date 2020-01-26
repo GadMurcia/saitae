@@ -59,6 +59,7 @@
     <class>net.delsas.saitae.entities.TipoSueldos</class>
     <class>net.delsas.saitae.entities.TipopersonaPermiso</class>
     <class>net.delsas.saitae.entities.Zona</class>
+    <class>net.delsas.saitae.entities.Constancias</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties/>
   </persistence-unit>
