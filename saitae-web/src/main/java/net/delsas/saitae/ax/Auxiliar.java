@@ -38,6 +38,7 @@ import net.delsas.saitae.entities.Reserva;
 import net.delsas.saitae.entities.TipoEspecialidades;
 import net.delsas.saitae.entities.TipoPersona;
 import net.delsas.saitae.entities.TipoSueldos;
+import org.apache.commons.codec.binary.Base64;
 import org.omnifaces.cdi.PushContext;
 
 /**
@@ -789,6 +790,12 @@ public class Auxiliar implements Serializable {
             rr += (y > 0 ? "¿¿" : "") + (Objects.equals(y, ind) ? v : c[y]);
         }
         return rr;
+    }
+
+    public static String getDoc(byte[] doc, String ex) {
+        String a = doc == null ? ""
+                : "data:" + ex + ";base64, " + new String(Base64.encodeBase64(doc));
+        return a;
     }
 
 }

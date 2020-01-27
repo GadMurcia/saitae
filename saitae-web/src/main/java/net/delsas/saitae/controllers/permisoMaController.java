@@ -31,6 +31,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import net.delsas.saitae.ax.Auxiliar;
 import net.delsas.saitae.ax.mensaje;
+import net.delsas.saitae.beans.ConstanciasFacadeLocal;
 import net.delsas.saitae.beans.NotificacionesFacadeLocal;
 import net.delsas.saitae.beans.PermisosFacadeLocal;
 import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
@@ -40,8 +41,8 @@ import net.delsas.saitae.entities.Permisos;
 import net.delsas.saitae.entities.PermisosPK;
 import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.TipoPermiso;
-import net.delsas.saitae.entities.TipoPersona;
 import net.delsas.saitae.entities.TipopersonaPermiso;
+import org.apache.commons.codec.binary.Base64;
 import org.omnifaces.cdi.Push;
 import org.omnifaces.cdi.PushContext;
 import org.primefaces.PrimeFaces;
@@ -65,6 +66,8 @@ public class permisoMaController implements Serializable {
     @Inject
     @Push
     private PushContext notificacion;
+    @EJB
+    private ConstanciasFacadeLocal conFL;
     private List<TipopersonaPermiso> permisos;
     private Persona usuario;
     private Permisos p;
@@ -145,7 +148,6 @@ public class permisoMaController implements Serializable {
                         "No debe seleccionar una fecha para el final del periodo del permiso anterior a la fecha en la que inicia éste."));
                 p.setPermisoFechafin(p.getPermisosPK().getPermisoFechaInicio());
             } else {
-                mensaje x;
                 p.setPermisosEstado("0");
                 if (constancia.getDocumento() != null) {
                     constancia.setConstanciasPK(new ConstanciasPK(p.getPermisosPK().getIpPersona(),
@@ -157,12 +159,40 @@ public class permisoMaController implements Serializable {
                 }
                 p.setConstancias(constancia);
                 if (editar) {
+                    Constancias cControl = conFL.find(
+                            new ConstanciasPK(
+                                    pcontrol.getPermisosPK().getIpPersona(),
+                                    pcontrol.getPermisosPK().getPermisoFechaSolicitud(),
+                                    pcontrol.getPermisosPK().getTipoPermiso(),
+                                    pcontrol.getPermisosPK().getPermisoFechaInicio()));
+                    if (cControl != null) {
+                        conFL.remove(cControl);
+                    }
                     if (pcontrol.getPermisosPK().getPermisoFechaInicio() != p.getPermisosPK().getPermisoFechaInicio()) {
                         pfl.remove(pcontrol);
                         pfl.create(p);
                     } else {
                         pfl.edit(p);
                     }
+                    Auxiliar.persistirNotificación(
+                            new mensaje(usuario.getIdpersona(), usuario.getIdpersona(), "permisoH<form",
+                                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Modificación de solicitud de permiso",
+                                            "Su permiso se ha solicitado para entre las fechas: "
+                                            + (new SimpleDateFormat("dd/MM/yyyy").format(p.getPermisosPK().getPermisoFechaInicio())) + " y "
+                                            + (new SimpleDateFormat("dd/MM/yyyy").format(p.getPermisoFechafin())))),
+                            usuario, notFL, notificacion);
+                    Auxiliar.persistirNotificación(
+                            new mensaje(0, usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
+                                    + " ha cambiado su solicitud de permiso.",
+                                    "Modificaciones en una solicitud de permiso",
+                                    FacesMessage.SEVERITY_INFO, usuario.getIdpersona(),
+                                    "permiso<form"),
+                            Auxiliar.getPersonasParaNotificar(
+                                    tipoPersonaFL.find(
+                                            usuario.getTipoPersona().getIdtipoPersona() == 4
+                                            ? 3 : 2)),
+                            notFL, notificacion);
+                    initVariables();
                 } else {
                     p.getPermisosPK().setTipoPermiso(p.getTipoPermiso1().getIdtipoPermiso());
                     p.setPermisosSolicitante(usuario);
@@ -170,6 +200,13 @@ public class permisoMaController implements Serializable {
                     p.getPermisosPK().setIpPersona(usuario.getIdpersona());
                     pcontrol = pfl.find(p.getPermisosPK());
                     if (pcontrol == null) {
+                        if (constancia != null && constancia.getDocumento() != null) {
+                            constancia.setConstanciasPK(
+                                    new ConstanciasPK(p.getPermisosPK().getIpPersona(),
+                                            p.getPermisosPK().getPermisoFechaSolicitud(),
+                                            p.getPermisosPK().getTipoPermiso(),
+                                            p.getPermisosPK().getPermisoFechaInicio()));
+                        }
                         pfl.create(p);
                         Auxiliar.persistirNotificación(
                                 new mensaje(usuario.getIdpersona(), usuario.getIdpersona(), "permisoH<form",
@@ -178,13 +215,16 @@ public class permisoMaController implements Serializable {
                                                 + (new SimpleDateFormat("dd/MM/yyyy").format(p.getPermisosPK().getPermisoFechaInicio())) + " y "
                                                 + (new SimpleDateFormat("dd/MM/yyyy").format(p.getPermisoFechafin())))),
                                 usuario, notFL, notificacion);
-                        TipoPersona tp = tipoPersonaFL.find(usuario.getTipoPersona().getIdtipoPersona() == 4 ? 3 : 2);
                         Auxiliar.persistirNotificación(
                                 new mensaje(0, usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
                                         + " ha solicitado un nuevo permiso.",
                                         "Solicitud de permiso nueva", FacesMessage.SEVERITY_INFO, usuario.getIdpersona(),
                                         "permiso<form"),
-                                Auxiliar.getPersonasParaNotificar(tp), notFL, notificacion);
+                                Auxiliar.getPersonasParaNotificar(
+                                        tipoPersonaFL.find(
+                                                usuario.getTipoPersona().getIdtipoPersona() == 4
+                                                ? 3 : 2)),
+                                notFL, notificacion);
                         initVariables();
                     } else {
                         FacesContext.getCurrentInstance().addMessage(null,
@@ -202,7 +242,6 @@ public class permisoMaController implements Serializable {
             }
             PrimeFaces.current().ajax().update(":form", "form0:msgs");
         } catch (Exception e) {
-            init();
             ms = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage());
             FacesContext.getCurrentInstance().addMessage("form0:msgs", ms);
             PrimeFaces.current().ajax().update(":form", "form0:msgs");
@@ -290,6 +329,18 @@ public class permisoMaController implements Serializable {
 
     public boolean getHayDocumento() {
         return constancia.getDocumento() != null;
+    }
+
+    public String getDoc() {
+        return Auxiliar.getDoc(
+                constancia.getDocumento(),
+                (constancia.getExtención() == null || constancia.getExtención().isEmpty())
+                ? "" : constancia.getExtención().split("¿¿")[1]);
+    }
+
+    public void quitarConstancia() {
+        constancia.setDocumento(null);
+        constancia.setExtención("");
     }
 
 }

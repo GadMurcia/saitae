@@ -2,63 +2,94 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 
-      <ui:composition template="./../WEB-INF/template/plantilla1.xhtml"
-      xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<ui:composition template="./../WEB-INF/template/plantilla1.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:o='http://omnifaces.org/ui'>
 
-            <ui:define name="content">
-                <f:event listener="#{permisoMaController.postRender()}" type="preRenderView"/>
-                <h:form id="form">
-                     <p:panel style="width: 50%; margin: 0 auto" >
-                         <h1 style="text-align: center" >Solicitud de Permisos Y Licencias</h1>
-                   
-                    <h:panelGrid columns="2" > 
-                        <p:outputLabel value="Tipo de permiso a solicitar"/>  
-                        <p:selectOneMenu converter="omnifaces.SelectItemsConverter" 
-                                         required="true" disabled="#{permisoMaController.editar}"
-                                         value="#{permisoMaController.p.tipoPermiso1}" 
-                                         style="width: 190px">
+    <ui:define name="content">
+        <f:event listener="#{permisoMaController.postRender()}" type="preRenderView"/>
+        <h:form id="form">
+            <p:panel style="width: 50%; margin: 0 auto" >
+                <h1 style="text-align: center" >Solicitud de Permisos Y Licencias</h1>
 
-                            <f:selectItem  itemLabel="Seleccione" itemValue=""/>
-                            <f:selectItems value="#{permisoMaController.listaPermisos}" var="pm" itemValue="#{pm}"
-                                           itemLabel="#{pm.tipoPermisoNombre}"/>
-                        </p:selectOneMenu>
+                <h:panelGrid columns="2" > 
+                    <p:outputLabel value="Tipo de permiso a solicitar"/>  
+                    <p:selectOneMenu converter="omnifaces.SelectItemsConverter" 
+                                     required="true" disabled="#{permisoMaController.editar}"
+                                     value="#{permisoMaController.p.tipoPermiso1}" 
+                                     style="width: 190px"
+                                     requiredMessage="Debe seleccionar un tipo de permiso válido.">
 
-                        <p:outputLabel value="Solicita goce de sueldo? "/>
-                        <p:selectBooleanButton value="#{permisoMaController.goceDeSueldo}" 
-                                               onLabel="Sí" offLabel="No" style="width: 190px"/>
+                        <f:selectItem  itemLabel="Seleccione" itemValue=""/>
+                        <f:selectItems value="#{permisoMaController.listaPermisos}" var="pm" itemValue="#{pm}"
+                                       itemLabel="#{pm.tipoPermisoNombre}"/>
+                    </p:selectOneMenu>
 
-                        <p:outputLabel value="Ha gozado de Licencias anteriormente? "/>
-                        <p:selectBooleanButton value="#{permisoMaController.licenciasAnteriores}" 
-                                               onLabel="Si" offLabel="No" style="width: 190px"/>
-                        
-                        <p:outputLabel for="mask" value="Fecha de inicio:" />
-                        <p:datePicker id="mask" value="#{permisoMaController.p.permisosPK.permisoFechaInicio}"
-                                      showIcon="true" required="true" pattern="dd/MM/yyyy" locale="es"
-                                      disabledDays="#{permisoMaController.invalidDays}"/>
+                    <p:outputLabel value="Solicita goce de sueldo? "/>
+                    <p:selectBooleanButton value="#{permisoMaController.goceDeSueldo}" 
+                                           onLabel="Sí" offLabel="No" style="width: 190px"/>
+
+                    <p:outputLabel value="Ha gozado de Licencias anteriormente? "/>
+                    <p:selectBooleanButton value="#{permisoMaController.licenciasAnteriores}" 
+                                           onLabel="Si" offLabel="No" style="width: 190px"/>
+
+                    <p:outputLabel for="mask" value="Fecha de inicio:" />
+                    <p:datePicker id="mask" value="#{permisoMaController.p.permisosPK.permisoFechaInicio}"
+                                  showIcon="true" required="true" pattern="dd/MM/yyyy" locale="es"
+                                  disabledDays="#{permisoMaController.invalidDays}"
+                                  requiredMessage="Debe seleccionar una fecha válida"
+                                  placeholder="Selecciona la fecha de inicio del permiso" 
+                                  validatorMessage="Nunguna fecha puede ser en los días Sábado y Domingo"/>
 
 
-                        <p:outputLabel for="mask1" value="Fecha de finalización: " />
-                        <p:datePicker id="mask1" value="#{permisoMaController.p.permisoFechafin}"
-                                      showIcon="true" required="true" pattern="dd/MM/yyyy" locale="es"
-                                      disabledDays="#{permisoMaController.invalidDays}"/>
-                        <p:column/>
-                        <p:commandButton id="summit" value="Solicitar" 
-                                         actionListener="#{permisoMaController.guardar()}" 
-                                         update=":form0:msgs form"/>
+                    <p:outputLabel for="mask1" value="Fecha de finalización: " />
+                    <p:datePicker id="mask1" value="#{permisoMaController.p.permisoFechafin}"
+                                  showIcon="true" required="true" pattern="dd/MM/yyyy" locale="es"
+                                  disabledDays="#{permisoMaController.invalidDays}"
+                                  requiredMessage="Debe seleccionar una fecha válida"
+                                  placeholder="Selecciona la fecha de finalización del permiso" 
+                                  validatorMessage="Nunguna fecha puede ser en los días Sábado y Domingo"/>
 
+                    <p:outputLabel value="Constancia: " />
+                    <h:panelGrid columns="3">
+                        <p:fileUpload id="partida" fileUploadListener="#{permisoMaController.notas}" 
+                                      mode="advanced" invalidSizeMessage="El archivo sobrepasa el límited de 1MB."
+                                      invalidFileMessage="El archivo seleccionado no es válido"
+                                      update="messagesp"  sizeLimit="1000000" label="Elejir"
+                                      allowTypes="/(\.|\/)(jpe?g|png)$/" auto="true"
+                                      oncomplete="update();"/>
+                        <p:remoteCommand name="update" update="btnV"/>
+                        <p:commandButton id="btnV" value="Ver constancia" update="h0" 
+                                         disabled="#{!permisoMaController.hayDocumento}"
+                                         oncomplete="PF('DConstancia').show();"/>                        
+                        <p:growl id="messagesp" showDetail="true" for="partida"/> 
                     </h:panelGrid>
-                    </p:panel>
 
+                    <p:column/>
+                    <p:commandButton id="summit" value="Solicitar" 
+                                     actionListener="#{permisoMaController.guardar()}" 
+                                     update=":form0:msgs form"/>
+                </h:panelGrid>
+            </p:panel>
+        </h:form> 
+        <p:dialog id="dialog" widgetVar="DConstancia" modal="true" style="width: 60%;"
+                  showHeader="true" header="Visualización de constancia" closeOnEscape="true">
+            <h:form id="h0">
+                <h:panelGrid columns="1" cellspacing="2">
+                    <img src="#{permisoMaController.getDoc()}"
+                         width="640" height="480"/>
+                    <p:commandButton value="Eliminar Consancia" update="form:btnV"
+                                     onsuccess="PF('DConstancia').hide();"
+                                     actionListener="#{permisoMaController.quitarConstancia()}"/>
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+    </ui:define>
 
-                </h:form> 
-
-
-            </ui:define>
-
-        </ui:composition>
+</ui:composition>
 
 
