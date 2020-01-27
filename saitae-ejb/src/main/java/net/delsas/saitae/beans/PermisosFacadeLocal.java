@@ -29,9 +29,10 @@ public interface PermisosFacadeLocal {
     List<Permisos> findRange(int[] range);
 
     int count();
-    
+
     /**
      * Busca los permisos que estén en el estado indicado.
+     *
      * @param estado
      * @return java.util.List net.delsas.saitae.entities.Permisos
      */
@@ -39,17 +40,31 @@ public interface PermisosFacadeLocal {
 
     /**
      * Busca los permisos pa estudiantes que estén en el estado indicado.
+     *
      * @param estado
      * @return java.util.List net.delsas.saitae.entities.Permisos
      */
     public List<Permisos> findByPEPEs(String estado);
-    
+
     /**
-     * Devuelve una lista con los permisos solicitados por la 
-     * persona identificaa por el id proporcionado ordenados de forma ascendente por el estado del permiso.
+     * Devuelve una lista con los permisos solicitados por la persona
+     * identificaa por el id proporcionado ordenados de forma ascendente por el
+     * estado del permiso.
+     *
      * @param idPersona
      * @return
      */
     public List<Permisos> findByIpPersona(Integer idPersona);
-    
+
+    /**
+     * Devuelve una lista con los permisos con el estado indicado y en los que
+     * los solicitantes tienen un idTipoPersona que se encuentre entre los indicados en
+     * la lista
+     *
+     * @param estado
+     * @param tiposexluir
+     * @return java.util.List net.delsas.saitae.entities.Permisos
+     */
+    public List<Permisos> findByEstadoAndTipos(String estado, List<Integer> tiposexluir);
+
 }

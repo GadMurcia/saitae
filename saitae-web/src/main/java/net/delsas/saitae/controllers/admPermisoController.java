@@ -33,11 +33,14 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import net.delsas.saitae.ax.mensaje;
 import net.delsas.saitae.ax.Auxiliar;
+import net.delsas.saitae.beans.ConstanciasFacadeLocal;
 import net.delsas.saitae.beans.MatriculaFacadeLocal;
 import net.delsas.saitae.beans.NotificacionesFacadeLocal;
 import net.delsas.saitae.beans.PermisosFacadeLocal;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
+import net.delsas.saitae.entities.Constancias;
+import net.delsas.saitae.entities.ConstanciasPK;
 import net.delsas.saitae.entities.GradoPK;
 import net.delsas.saitae.entities.Matricula;
 import net.delsas.saitae.entities.MatriculaPK;
@@ -49,6 +52,7 @@ import net.delsas.saitae.entities.TipopersonaPermiso;
 import org.omnifaces.cdi.Push;
 import org.omnifaces.cdi.PushContext;
 import org.primefaces.PrimeFaces;
+import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -65,11 +69,13 @@ public class admPermisoController implements Serializable {
     private List<Permisos> rechazados;
     private List<Permisos> cancelados;
     private Permisos permiso;
+    private Constancias constancia;
     private Permisos acep;
     private Permisos solc;
     private String nombreE, duiS;
     private Persona usuario;
     private List<Integer> tps;
+    private List<Integer> tipos;
 
     @Inject
     @Push
@@ -84,6 +90,8 @@ public class admPermisoController implements Serializable {
     private NotificacionesFacadeLocal notFL;
     @EJB
     private PersonaFacadeLocal pFL;
+    @EJB
+    private ConstanciasFacadeLocal conFL;
 
     @PostConstruct
     public void init() {
@@ -93,6 +101,8 @@ public class admPermisoController implements Serializable {
             permiso = new Permisos(new PermisosPK(0, new Date(), 0, new Date()), new Date(), "", "1");
             permiso.setPermisosComentario("0¿¿ ¿¿ ¿¿ ");
             permiso.setTipoPersona(tipoPersonaFL.find(8));
+            constancia = new Constancias();
+            permiso.setConstancias(constancia);
             solicitados = rechazados = aceptados = new ArrayList<>();
             usuario = (Persona) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
             tps = new ArrayList<>();
@@ -103,8 +113,10 @@ public class admPermisoController implements Serializable {
                 boolean r = (tps.contains(3) || tps.contains(2) || tps.contains(1));
                 if (!r) {
                     redirect();
-                } else {
                 }
+                tipos = new ArrayList<>();
+                tipos.add(8);
+                tipos.add(4);
             }
 
         } catch (Exception ex) {
@@ -189,6 +201,16 @@ public class admPermisoController implements Serializable {
                             + " por lo que no se procede con la concesión del permiso"));
                     FacesContext.getCurrentInstance().addMessage(null, ms);
                     return;
+                }
+                if (constancia != null && constancia.getDocumento() != null) {
+                    constancia.setConstanciasPK(
+                            new ConstanciasPK(
+                                    permiso.getPermisosPK().getIpPersona(),
+                                    permiso.getPermisosPK().getPermisoFechaSolicitud(),
+                                    permiso.getPermisosPK().getTipoPermiso(),
+                                    permiso.getPermisosPK().getPermisoFechaInicio()));
+                } else {
+                    constancia = null;
                 }
                 permisosFL.create(permiso);
                 ms = new FacesMessage(FacesMessage.SEVERITY_INFO, "Concesión exitosa",
@@ -277,7 +299,7 @@ public class admPermisoController implements Serializable {
     public List<Permisos> getSolicitados() {
         solicitados = (tps.contains(1) || tps.contains(2))
                 ? permisosFL.getPermisosPorEstado("0")
-                : permisosFL.findByPEPEs("0");
+                : permisosFL.findByEstadoAndTipos("0", tipos);
         return Collections.unmodifiableList(solicitados);
     }
 
@@ -288,7 +310,7 @@ public class admPermisoController implements Serializable {
     public List<Permisos> getAceptados() {
         aceptados = (tps.contains(1) || tps.contains(2))
                 ? permisosFL.getPermisosPorEstado("1")
-                : permisosFL.findByPEPEs("1");
+                : permisosFL.findByEstadoAndTipos("1", tipos);
         return Collections.unmodifiableList(aceptados);
     }
 
@@ -299,7 +321,7 @@ public class admPermisoController implements Serializable {
     public List<Permisos> getRechazados() {
         rechazados = (tps.contains(1) || tps.contains(2))
                 ? permisosFL.getPermisosPorEstado("2")
-                : permisosFL.findByPEPEs("2");
+                : permisosFL.findByEstadoAndTipos("2", tipos);
         return Collections.unmodifiableList(rechazados);
     }
 
@@ -310,7 +332,7 @@ public class admPermisoController implements Serializable {
     public List<Permisos> getCancelados() {
         cancelados = (tps.contains(1) || tps.contains(2))
                 ? permisosFL.getPermisosPorEstado("3")
-                : permisosFL.findByPEPEs("3");
+                : permisosFL.findByEstadoAndTipos("3", tipos);
         return Collections.unmodifiableList(cancelados);
     }
 
@@ -455,5 +477,43 @@ public class admPermisoController implements Serializable {
 
     public void setNombreE(String nombreE) {
         this.nombreE = nombreE;
+    }
+
+    public boolean getHayConstancia() {
+        return acep == null ? false : acep.getConstancias() != null;
+    }
+
+    public String getConstanciaSelected() {
+        Constancias c = acep == null ? null : acep.getConstancias();
+        return c == null ? "" : Auxiliar.getDoc(c.getDocumento(), c.getExtención().split("¿¿")[1]);
+    }
+
+    public Constancias getConstancia() {
+        return constancia;
+    }
+
+    public void setConstancia(Constancias constancia) {
+        this.constancia = constancia;
+    }
+
+    public void notas(FileUploadEvent f) {
+        constancia.setDocumento(f.getFile().getContents());
+        constancia.setExtención(f.getFile().getFileName() + "¿¿" + f.getFile().getContentType());
+    }
+
+    public boolean getHayDocumento() {
+        return constancia.getDocumento() != null;
+    }
+
+    public String getDoc() {
+        return Auxiliar.getDoc(
+                constancia.getDocumento(),
+                (constancia.getExtención() == null || constancia.getExtención().isEmpty())
+                ? "" : constancia.getExtención().split("¿¿")[1]);
+    }
+
+    public void quitarConstancia() {
+        constancia.setDocumento(null);
+        constancia.setExtención("");
     }
 }

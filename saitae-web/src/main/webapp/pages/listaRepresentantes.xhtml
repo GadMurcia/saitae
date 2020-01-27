@@ -30,18 +30,18 @@
                                     #{representanteController.nombreGrado}
                                 </f:facet>
                                 <p:column headerText="Dui" style="width: 100px;">
-                                    #{r.persona.idpersona.toString().substring(1)}
+                                    #{r.estudianteRepresentante.persona.idpersona.toString().substring(1)}
                                 </p:column>
 
                                 <p:column headerText="Nombre del Representante">
                                     #{r.estudianteRepresentante.persona.personaNombre} 
                                     #{r.estudianteRepresentante.persona.personaApellido}
                                 </p:column>                                
-                                
+
                                 <p:column headerText="Nombre del Representado">
                                     #{r.persona.personaNombre} #{r.persona.personaApellido}
                                 </p:column>
-                                
+
                                 <p:column headerText="Firma" style="width: 25%;">
                                 </p:column>
                             </p:dataTable>

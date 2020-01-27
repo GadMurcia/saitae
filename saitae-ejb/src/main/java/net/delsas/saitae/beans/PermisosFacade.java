@@ -44,6 +44,14 @@ public class PermisosFacade extends AbstractFacade<Permisos> implements Permisos
                 .setParameter("tipo", 8)
                 .getResultList();
     }
+    
+    @Override
+    public List<Permisos> findByEstadoAndTipos(String estado, List<Integer> tipos) {
+        return em.createNamedQuery("Permisos.findByEstadoAndTipos")
+                .setParameter("permisoEstado", estado)
+                .setParameter("tipos", tipos)
+                .getResultList();
+    }
 
     @Override
     public List<Permisos> findByIpPersona(Integer idPersona) {

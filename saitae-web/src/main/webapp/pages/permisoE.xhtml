@@ -41,13 +41,7 @@
                         <p:message for="es"/>
 
                         <p:outputLabel for="m" value="El estudiante está matriculado en:  "/>
-                        <p:outputLabel id="m" value="#{permisoEstController.m.grado.gradoPK.idgrado==1
-                                                       ? 'Primero': (permisoEstController.m.grado.gradoPK.idgrado==2
-                                                       ? 'Segundo' : (permisoEstController.m.grado.gradoPK.idgrado==3
-                                                       ? 'Tercero': ' '))} #{permisoEstController.m.grado.gradoPK.gradoModalidad.equals('C') 
-                                                       ? 'Contador' : (permisoEstController.m.grado.gradoPK.gradoModalidad.equals('S')
-                                                       ? 'Secretariado' : (permisoEstController.m.grado.gradoPK.gradoModalidad.equals('G')
-                                                       ? 'General' : ' '))} #{permisoEstController.m.grado.gradoPK.gradoSeccion} "
+                        <p:outputLabel id="m" value="#{permisoEstController.getNombreGrado(permisoEstController.m.grado)}"
                                        style="width: 400px;"/>
                         <p:column/>
 
@@ -72,15 +66,46 @@
                         <p:datePicker id="mask1" value="#{permisoEstController.p.permisoFechafin}"
                                       showIcon="true" required="true" pattern="dd/MM/yyyy" locale="es"
                                       disabledDays="#{permisoEstController.invalidDays}"/>
+                        <p:message for="mask1"/>
+
+                        <p:outputLabel value="Constancia: " />
+                        <h:panelGrid columns="3">
+                            <p:fileUpload id="partida" fileUploadListener="#{permisoEstController.notas}" 
+                                          mode="advanced" invalidSizeMessage="El archivo sobrepasa el límited de 1MB."
+                                          invalidFileMessage="El archivo seleccionado no es válido"
+                                          update="messagesp"  sizeLimit="1000000" label="Elejir"
+                                          allowTypes="/(\.|\/)(jpe?g|png)$/" auto="true"
+                                          oncomplete="update();"/>
+                            <p:remoteCommand name="update" update="btnV"/>
+                            <p:commandButton id="btnV" value="Ver constancia" update="h0" 
+                                             disabled="#{!permisoEstController.hayDocumento}"
+                                             oncomplete="PF('DConstancia').show();"/>                             
+                            <p:growl id="messagesp" showDetail="true" for="partida"/>
+                        </h:panelGrid>
+
 
                         <p:column/>
                         <p:column/>
                         <p:commandButton id="summit" value="Solicitar" 
                                          disabled="#{!permisoEstController.seleccionEstudiante}"
                                          actionListener="#{permisoEstController.guardar()}" 
-                                         update=":form0:msgs frm"/>
+                                         update="frm"/>
                     </h:panelGrid>
                 </h:form>
+
+                <p:dialog id="dialog" widgetVar="DConstancia" modal="true" style="width: 60%;"
+                          showHeader="true" header="Visualización de constancia" closeOnEscape="true">
+                    <h:form id="h0">
+                        <h:panelGrid columns="1" cellspacing="2">
+                            <img src="#{permisoEstController.doc}"
+                                 width="640" height="480"/>
+                            <p:commandButton value="Eliminar Consancia" update="frm:btnV"
+                                             onsuccess="PF('DConstancia').hide();"
+                                             actionListener="#{permisoEstController.quitarConstancia()}"/>
+                        </h:panelGrid>
+                    </h:form>
+                </p:dialog>
+
                 <h:outputScript library="js" name="locales.js"/>
             </ui:define>
         </ui:composition>

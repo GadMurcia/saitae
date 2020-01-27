@@ -32,6 +32,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import net.delsas.saitae.ax.Auxiliar;
 import net.delsas.saitae.ax.mensaje;
+import net.delsas.saitae.beans.ConstanciasFacadeLocal;
 import net.delsas.saitae.beans.MatriculaFacadeLocal;
 import net.delsas.saitae.beans.NotificacionesFacadeLocal;
 import net.delsas.saitae.beans.PermisosFacadeLocal;
@@ -40,13 +41,13 @@ import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
 import net.delsas.saitae.entities.Constancias;
 import net.delsas.saitae.entities.ConstanciasPK;
 import net.delsas.saitae.entities.Estudiante;
+import net.delsas.saitae.entities.Grado;
 import net.delsas.saitae.entities.Matricula;
 import net.delsas.saitae.entities.MatriculaPK;
 import net.delsas.saitae.entities.Permisos;
 import net.delsas.saitae.entities.PermisosPK;
 import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.TipoPermiso;
-import net.delsas.saitae.entities.TipoPersona;
 import net.delsas.saitae.entities.TipopersonaPermiso;
 import org.omnifaces.cdi.Push;
 import org.omnifaces.cdi.PushContext;
@@ -76,6 +77,8 @@ public class permisoEstController implements Serializable {
     @Inject
     @Push
     private PushContext notificacion;
+    @EJB
+    private ConstanciasFacadeLocal conFL;
 
     private Matricula m;
     private List<TipopersonaPermiso> permisos;
@@ -177,41 +180,79 @@ public class permisoEstController implements Serializable {
                 }
                 p.setConstancias(constancia);
                 if (editar) {
+                    Constancias cControl = conFL.find(
+                            new ConstanciasPK(
+                                    pcontrol.getPermisosPK().getIpPersona(),
+                                    pcontrol.getPermisosPK().getPermisoFechaSolicitud(),
+                                    pcontrol.getPermisosPK().getTipoPermiso(),
+                                    pcontrol.getPermisosPK().getPermisoFechaInicio()));
+                    if (cControl != null) {
+                        conFL.remove(cControl);
+                    }
                     if (pcontrol.getPermisosPK().getPermisoFechaInicio() != p.getPermisosPK().getPermisoFechaInicio()) {
                         pfl.remove(pcontrol);
                         pfl.create(p);
                     } else {
                         pfl.edit(p);
                     }
+                    List<Persona> solicitantes = new ArrayList<>();
+                    solicitantes.add(usuario);
+                    if (usuario.getTipoPersona().getIdtipoPersona() != 8 && !solicitantes.contains(p.getPersona())) {
+                        solicitantes.add(p.getPersona());
+                    }
+                    Auxiliar.persistirNotificación(
+                            new mensaje(usuario.getIdpersona(), usuario.getIdpersona(), "permisoH<form",
+                                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Modificación de solicitud de permiso",
+                                            "Su permiso se ha solicitado para entre las fechas: "
+                                            + (new SimpleDateFormat("dd/MM/yyyy").format(p.getPermisosPK().getPermisoFechaInicio())) + " y "
+                                            + (new SimpleDateFormat("dd/MM/yyyy").format(p.getPermisoFechafin())))),
+                            solicitantes, notFL, notificacion);
+                    Auxiliar.persistirNotificación(
+                            new mensaje(0, usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
+                                    + " ha cambiado su solicitud de permiso.",
+                                    "Modificaciones en una solicitud de permiso",
+                                    FacesMessage.SEVERITY_INFO, usuario.getIdpersona(),
+                                    "permiso<form"),
+                            Auxiliar.getPersonasParaNotificar(
+                                    tipoPersonaFL.find(3)),
+                            notFL, notificacion);
+                    initVariables();
                 } else {
                     p.getPermisosPK().setTipoPermiso(p.getTipoPermiso1().getIdtipoPermiso());
                     p.setPersona(personaFL.find(id));
                     p.getPermisosPK().setIpPersona(id);
                     if (pfl.find(p.getPermisosPK()) != null) {
-                        ms = new FacesMessage(FacesMessage.SEVERITY_WARN, "Solicitud duplicada",
-                                "Usted ya ha solicitado un permiso del tipo '"
-                                + p.getTipoPermiso1().getTipoPermisoNombre()
-                                + "' para el día "
-                                + (new SimpleDateFormat("dd/MM/yyy").format(p.getPermisosPK().getPermisoFechaInicio())
-                                + " por lo que no se procede con la solicitud de este permiso. "
-                                + "Verifique en su historial de permisos."));
-                        FacesContext.getCurrentInstance().addMessage(null, ms);
+                        FacesContext.getCurrentInstance().addMessage(null,
+                                new FacesMessage(FacesMessage.SEVERITY_WARN, "Solicitud duplicada",
+                                        "Usted ya ha solicitado un permiso del tipo '"
+                                        + p.getTipoPermiso1().getTipoPermisoNombre()
+                                        + "' para el día "
+                                        + (new SimpleDateFormat("dd/MM/yyy").format(p.getPermisosPK().getPermisoFechaInicio())
+                                        + " por lo que no se procede con la solicitud de este permiso. "
+                                        + "Verifique en su historial de permisos.")));
                         return;
                     }
+                    if (constancia != null && constancia.getDocumento() != null) {
+                        constancia.setConstanciasPK(
+                                new ConstanciasPK(p.getPermisosPK().getIpPersona(),
+                                        p.getPermisosPK().getPermisoFechaSolicitud(),
+                                        p.getPermisosPK().getTipoPermiso(),
+                                        p.getPermisosPK().getPermisoFechaInicio()));
+                    }
                     pfl.create(p);
+                    Auxiliar.persistirNotificación(
+                            new mensaje(0, usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
+                                    + " ha solicitado un nuevo permiso.",
+                                    "Solicitud de permiso nueva", FacesMessage.SEVERITY_INFO, id, "permiso<form"),
+                            Auxiliar.getPersonasParaNotificar(tipoPersonaFL.find(3)),
+                            notFL, notificacion);
+                    FacesContext.getCurrentInstance().addMessage("frm:msgs",
+                            new FacesMessage(FacesMessage.SEVERITY_INFO, "Solicitud exitosa",
+                                    "Su permiso se ha solicitado para entre las fechas: "
+                                    + (new SimpleDateFormat("dd/MM/yyyy").format(p.getPermisosPK().getPermisoFechaInicio())) + " y "
+                                    + (new SimpleDateFormat("dd/MM/yyyy").format(p.getPermisoFechafin()))));
+                    initVariables();
                 }
-                ms = new FacesMessage(FacesMessage.SEVERITY_INFO, "Solicitud exitosa",
-                        "Su permiso se ha solicitado para entre las fechas: "
-                        + (new SimpleDateFormat("dd/MM/yyyy").format(p.getPermisosPK().getPermisoFechaInicio())) + " y "
-                        + (new SimpleDateFormat("dd/MM/yyyy").format(p.getPermisoFechafin())));
-                mensaje x = new mensaje(0, usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
-                        + " ha solicitado un nuevo permiso.",
-                        "Solicitud de permiso nueva", FacesMessage.SEVERITY_INFO, id, "permiso<form");
-                TipoPersona tp = tipoPersonaFL.find(3);
-                Auxiliar.persistirNotificación(x,
-                        Auxiliar.getPersonasParaNotificar(tp), notFL, notificacion);
-                FacesContext.getCurrentInstance().addMessage(null, ms);
-                initVariables();
             }
         } catch (ParseException sx) {
             ms = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", sx.getMessage());
@@ -320,13 +361,29 @@ public class permisoEstController implements Serializable {
     public void setConstancia(Constancias constancia) {
         this.constancia = constancia;
     }
-    
+
     public void notas(FileUploadEvent f) {
         constancia.setDocumento(f.getFile().getContents());
         constancia.setExtención(f.getFile().getFileName() + "¿¿" + f.getFile().getContentType());
     }
 
     public boolean getHayDocumento() {
-        return constancia.getDocumento() != null;
+        return constancia == null ? false : constancia.getDocumento() != null;
+    }
+
+    public String getDoc() {
+        return Auxiliar.getDoc(
+                constancia.getDocumento(),
+                (constancia.getExtención() == null || constancia.getExtención().isEmpty())
+                ? "" : constancia.getExtención().split("¿¿")[1]);
+    }
+
+    public void quitarConstancia() {
+        constancia.setDocumento(null);
+        constancia.setExtención("");
+    }
+
+    public String getNombreGrado(Grado g) {
+        return g == null ? "" : Auxiliar.getGradoNombre(g.getGradoPK());
     }
 }

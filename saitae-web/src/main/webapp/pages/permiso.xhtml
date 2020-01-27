@@ -177,6 +177,21 @@
                                 <p:datePicker id="mask1" value="#{admPermisoController.permiso.permisoFechafin}"
                                               showIcon="true" required="true" pattern="dd/MM/yyyy" />
 
+                                <p:outputLabel value="Constancia: " />
+                                <h:panelGrid columns="3">
+                                    <p:fileUpload id="partida" fileUploadListener="#{admPermisoController.notas}" 
+                                                  mode="advanced" invalidSizeMessage="El archivo sobrepasa el límited de 1MB."
+                                                  invalidFileMessage="El archivo seleccionado no es válido"
+                                                  update="messagesp"  sizeLimit="1000000" label="Elejir"
+                                                  allowTypes="/(\.|\/)(jpe?g|png)$/" auto="true"
+                                                  oncomplete="update();"/>
+                                    <p:remoteCommand name="update" update="btnV"/>
+                                    <p:commandButton id="btnV" value="Ver constancia" update="h1" 
+                                                     disabled="#{!admPermisoController.hayDocumento}"
+                                                     oncomplete="PF('DConstancia1').show();"/>                        
+                                    <p:growl id="messagesp" showDetail="true" for="partida"/> 
+                                </h:panelGrid>
+
                                 <p:outputLabel for="dui" value="Dui del solicitante: "/>
                                 <p:inputMask id="dui" value="#{admPermisoController.duiSol}" mask="99999999-9"
                                              required="true" style="width: 400px;">
@@ -231,6 +246,10 @@
                             <h:outputText value="#{admPermisoController.getFechas(
                                                    admPermisoController.solc.permisosPK.permisoFechaInicio,
                                                    admPermisoController.solc.permisoFechafin)}"/>
+                            <p:column/>
+                            <p:commandButton id="btnV" value="Ver constancia" update="h0" 
+                                             disabled="#{!admPermisoController.hayConstancia}"
+                                             oncomplete="PF('DConstancia').show();"/>
 
                             <p:commandButton value="Aceptar" actionListener="#{admPermisoController.guardar(1)}"
                                              oncomplete="PF('Dsol').hide();" update="form sol :form0:msgs"/>
@@ -277,6 +296,11 @@
                                                    ? 'Rechazado': (admPermisoController.acep.permisosEstado.equals('3')
                                                    ? 'Cancelado': '????'))}"/>
 
+                            <p:column/>
+                            <p:commandButton id="btnV" value="Ver constancia" update="h0" 
+                                             disabled="#{!admPermisoController.hayConstancia}"
+                                             oncomplete="PF('DConstancia').show();"/>
+
                             <p:outputLabel value="Motivo del rechazo: " 
                                            rendered="#{admPermisoController.acep.permisosEstado.equals('2')}"/>
                             <h:outputText value="#{admPermisoController.comentarioAcep}"
@@ -303,8 +327,28 @@
                         </h:panelGrid>
                     </h:form>
                 </p:dialog>
-            </ui:define>
 
+                <p:dialog id="dlg" widgetVar="DConstancia" modal="true" style="width: 60%;"
+                          showHeader="true" header="Visualización de constancia" closeOnEscape="true">
+                    <h:form id="h0">
+                        <h:panelGrid columns="1" cellspacing="2">
+                            <img src="#{admPermisoController.constanciaSelected}"
+                                 width="640" height="480"/>
+                        </h:panelGrid>
+                    </h:form>
+                </p:dialog>
+                
+                <p:dialog id="dlg1" widgetVar="DConstancia1" modal="true" style="width: 60%;"
+                          showHeader="true" header="Visualización de constancia" closeOnEscape="true">
+                    <h:form id="h1">
+                        <h:panelGrid columns="1" cellspacing="2">
+                            <img src="#{admPermisoController.doc}"
+                                 width="640" height="480"/>
+                        </h:panelGrid>
+                    </h:form>
+                </p:dialog>
+
+            </ui:define>
         </ui:composition>
     </body>
 </html>

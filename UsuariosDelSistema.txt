@@ -1,0 +1,21 @@
+Lista del plantel institucional
+DUI		Nombre					Rol				Contraseña
+045367080	María Carmen Peña Cárcamo		Administrador CRA
+045367081	Hugo Daniel Flores Diaz	Abogado		Bibliotecario
+045367090	Pablo Alejandro Martínez Santos		Colector
+045367083	Laura María López Suñiga		Director
+045367082	José Antonio Murcia Pérez		Laboratorista
+045367085	Francisco Javier Magaña Arriola		Maestro, Subdirector
+045367086	Juan Manuel Bartanes Pilar		Maestro
+045367087	María Dolores Pineda Mata		Maestro
+045367084	María Pilar Dolores ALvarado		Maestro, Subdirector
+045367089	Álvaro Mateo Cienfuegos Altamirano	Ordenanza
+045367088	Laura Isabel Pneda Rosell		Psicologo
+045367091	Alba Lucía Aybara Campos		Secretaria
+045367073	Guillermo Aldolfo Delsas Murcia		Administrador Global		delsas
+6018		Francisco Antonio Regalado Cruz		Estudiante (1CA)
+6019		Rigoberto Alexander Cárcamo Murga	Estudiante (1GA)
+6020		Andrea Johana Pleitez Alcántara		Estudiante (2CA)
+045367070	Jorge Agustín Pereira Cruz		Representante (6018)
+045367072	Ana Lidia Cárcamo Flores		Representante (6019)
+045367075	Pablo José Martínez Córdova		Representante (6020)

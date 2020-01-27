@@ -31,8 +31,10 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import net.delsas.saitae.ax.Auxiliar;
 import net.delsas.saitae.ax.mensaje;
+import net.delsas.saitae.beans.ConstanciasFacadeLocal;
 import net.delsas.saitae.beans.NotificacionesFacadeLocal;
 import net.delsas.saitae.beans.PermisosFacadeLocal;
+import net.delsas.saitae.entities.Constancias;
 import net.delsas.saitae.entities.Permisos;
 import net.delsas.saitae.entities.Persona;
 import org.omnifaces.cdi.Push;
@@ -58,6 +60,8 @@ public class permisoHController implements Serializable {
     @Inject
     @Push
     private PushContext notificacion;
+    @EJB
+    private ConstanciasFacadeLocal conFL;
 
     @PostConstruct
     public void init() {
@@ -94,6 +98,11 @@ public class permisoHController implements Serializable {
     public void cancelarPermiso() {
         if (selected != null) {
             selected.setPermisosEstado("3");
+            Constancias c=selected.getConstancias();
+            if(c!=null){
+                selected.setConstancias(null);
+                conFL.remove(c);
+            }
             psFL.edit(selected);
             mensaje x = new mensaje(usuario.getIdpersona(), usuario.getIdpersona(), "permiso<form",
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Cancelación exitosa",
@@ -151,7 +160,7 @@ public class permisoHController implements Serializable {
 
     public boolean getVerEditar() {
         String e = selected == null ? "" : selected.getPermisosEstado();
-        return e.equals("0") || e.equals("2")|| e.equals("3");
+        return e.equals("0") || e.equals("2") || e.equals("3");
     }
 
     public void verProyecto() {
@@ -172,6 +181,15 @@ public class permisoHController implements Serializable {
             context.getExternalContext().redirect(pagina + ".intex");
         } catch (IOException ex) {
         }
+    }
+
+    public boolean getHayConstancia() {
+        return selected == null ? false : selected.getConstancias() != null;
+    }
+
+    public String getConstanciaSelected() {
+        Constancias c = selected == null ? null : selected.getConstancias();
+        return c == null ? "" : Auxiliar.getDoc(c.getDocumento(), c.getExtención().split("¿¿")[1]);
     }
 
 }

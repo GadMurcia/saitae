@@ -42,7 +42,6 @@ import net.delsas.saitae.entities.PermisosPK;
 import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.TipoPermiso;
 import net.delsas.saitae.entities.TipopersonaPermiso;
-import org.apache.commons.codec.binary.Base64;
 import org.omnifaces.cdi.Push;
 import org.omnifaces.cdi.PushContext;
 import org.primefaces.PrimeFaces;
@@ -68,6 +67,7 @@ public class permisoMaController implements Serializable {
     private PushContext notificacion;
     @EJB
     private ConstanciasFacadeLocal conFL;
+
     private List<TipopersonaPermiso> permisos;
     private Persona usuario;
     private Permisos p;
@@ -328,7 +328,7 @@ public class permisoMaController implements Serializable {
     }
 
     public boolean getHayDocumento() {
-        return constancia.getDocumento() != null;
+        return constancia == null ? false : constancia.getDocumento() != null;
     }
 
     public String getDoc() {

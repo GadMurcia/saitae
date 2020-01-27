@@ -634,7 +634,7 @@ public class TipoController implements Serializable {
                     new mensaje(
                             0,
                             usuario.getIdpersona(),
-                            pagina.split(".")[0] + "<form¿¿¿tp¿¿" + usuario.getTipoPersona().getIdtipoPersona(),
+                            pagina.split(".intex")[0] + "<form¿¿¿tp¿¿" + usuario.getTipoPersona().getIdtipoPersona(),
                             new FacesMessage(
                                     FacesMessage.SEVERITY_INFO,
                                     titulo + " Editado",
@@ -642,9 +642,9 @@ public class TipoController implements Serializable {
                     new Persona(0), notificacion);
         } catch (Exception e) {
             msg = new FacesMessage("Error en la edición", e.getMessage() != null ? e.getMessage() : "Error desconocido");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
             PrimeFaces.current().ajax().update("form");
         }
-        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
     public void onRowCancel(RowEditEvent event) {

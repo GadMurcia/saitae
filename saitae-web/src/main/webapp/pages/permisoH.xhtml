@@ -113,6 +113,11 @@
                                           title="Razón de rechazo" />
 
                             <p:column/>
+                            <p:commandButton id="btnV" value="Ver constancia" update="h0" 
+                                             disabled="#{!permisoHController.hayConstancia}"
+                                             oncomplete="PF('DConstancia').show();"/>                        
+
+                            <p:column/>
                             <h:panelGrid columns="1">
                                 <p:commandButton value="Cancelar solicitud" update="d2"                                             
                                                  rendered="#{permisoHController.solicitado}"
@@ -142,9 +147,17 @@
                         </h:panelGrid>
                     </h:form>
                 </p:dialog>
+                <p:dialog id="dlg" widgetVar="DConstancia" modal="true" style="width: 60%;"
+                          showHeader="true" header="Visualización de constancia" closeOnEscape="true">
+                    <h:form id="h0">
+                        <h:panelGrid columns="1" cellspacing="2">
+                            <img src="#{permisoHController.constanciaSelected}"
+                                 width="640" height="480"/>
+                        </h:panelGrid>
+                    </h:form>
+                </p:dialog>
+
             </ui:define>
-
         </ui:composition>
-
     </body>
 </html>
