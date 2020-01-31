@@ -149,11 +149,12 @@ public class contribucionesController implements Serializable {
                                     (g.split("").length > 8 ? "Los meses que ya ha pagado son : " + g
                                     : (g.split("").length > 2 ? "El mes pagado es " + g
                                     : "No tiene registro de pago de las contribuciones para el año en curso.")))),
-                    contr.getEstudiante().getPersona(), notiFL, notificacion);
+                    new Persona(contr.getContribucionesPK().getIdEstudiante()),
+                    notiFL, notificacion);
             this.init();
         } else {
             FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_WARN, "Falló", "No se seleccionaron datos"));
+                    new FacesMessage(FacesMessage.SEVERITY_WARN, "No hay cambios", "No se seleccionaron datos nuevos"));
         }
     }
 
