@@ -5,6 +5,7 @@
  */
 package net.delsas.saitae.beans;
 
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -31,9 +32,10 @@ public class PermisosFacade extends AbstractFacade<Permisos> implements Permisos
     }
 
     @Override
-    public List<Permisos> getPermisosPorEstado(String estado) {
+    public List<Permisos> getPermisosPorEstado(String estado, Integer año) {
         return em.createNamedQuery("Permisos.findByPermisosEstado")
                 .setParameter("permisoEstado", estado)
+                .setParameter("año", año)
                 .getResultList();
     }
 
@@ -44,19 +46,34 @@ public class PermisosFacade extends AbstractFacade<Permisos> implements Permisos
                 .setParameter("tipo", 8)
                 .getResultList();
     }
-    
+
     @Override
-    public List<Permisos> findByEstadoAndTipos(String estado, List<Integer> tipos) {
+    public List<Permisos> findByEstadoAndTipos(String estado, List<Integer> tipos, Integer año) {
         return em.createNamedQuery("Permisos.findByEstadoAndTipos")
                 .setParameter("permisoEstado", estado)
                 .setParameter("tipos", tipos)
+                .setParameter("año", año)
                 .getResultList();
     }
 
     @Override
-    public List<Permisos> findByIpPersona(Integer idPersona) {
+    public List<Permisos> findByIpPersona(Integer idPersona, Integer año) {
         return em.createNamedQuery("Permisos.findByIpPersona")
                 .setParameter("ipPersona", idPersona)
+                .setParameter("año", año)
+                .getResultList();
+    }
+
+    @Override
+    public List<Integer> findAñosGlobales() {
+        return em.createNamedQuery("Permisos.findAñosGlobales")
+                .getResultList();
+    }
+
+    @Override
+    public List<Integer> findAñosPersona(Integer idPersona) {
+        return em.createNamedQuery("Permisos.findAñosPersona")
+                .setParameter("idPersona", idPersona)
                 .getResultList();
     }
 }

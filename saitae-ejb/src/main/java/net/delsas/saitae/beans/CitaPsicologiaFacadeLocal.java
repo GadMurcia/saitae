@@ -32,26 +32,48 @@ public interface CitaPsicologiaFacadeLocal {
 
     /**
      * Devuelve una lista de citas solicitadas pro el estudiante identificado
-     * con el id proporcionado.
+     * con el id y año proporcionados.
      *
      * @param idEstudiante
+     * @param año
      * @return java.util.List net.delsas.saitae.entities.CitaPsicologia
      */
-    public List<CitaPsicologia> findByEstudiante(Integer idEstudiante);
+    public List<CitaPsicologia> findByEstudiante(Integer idEstudiante, Integer año);
 
     /**
-     * Devuelve una lista con las citas marcadas con el estado proporcionado.
+     * Devuelve una lista con las citas marcadas con el estado y año
+     * proporcionados.
      *
      * @param estado
+     * @param año
      * @return java.util.List net.delsas.saitae.entities.CitaPsicologia
      */
-    public List<CitaPsicologia> findByEstado(String estado);
+    public List<CitaPsicologia> findByEstado(String estado, Integer año);
 
     /**
-     * Devuelve una lista de citas que han sido atendidas en consultas
+     * Devuelve una lista de citas que han sido atendidas en consultas en el año
+     * proporcionado.
      *
+     * @param año
      * @return java.util.List net.delsas.saitae.entities.CitaPsicologia
      */
-    public List<CitaPsicologia> findConsultados();
+    public List<CitaPsicologia> findConsultados(Integer año);
+
+    /**
+     * Devuelve la lista con todos los años en los que se han pedido citas con
+     * el psicólogo.
+     *
+     * @return java.util.List java.lang.Integer
+     */
+    public List<Integer> findAñosGlobales();
+
+    /**
+     * Devuelve una lista con los años en los que el estudiante ha solicitado
+     * citas con el psicólogo.
+     *
+     * @param idEstudiante
+     * @return java.util.List java.lang.Integer
+     */
+    public List<Integer> findAñosPersonales(Integer idEstudiante);
 
 }

@@ -453,7 +453,8 @@ public class Auxiliar implements Serializable {
     }
 
     private static Date getEdad(Integer menos) {
-        String g = new SimpleDateFormat("dd-mm").format(new Date()) + (Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date())) - menos);
+        String g = new SimpleDateFormat("dd-mm").format(new Date())
+                + (Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date())) - menos);
         Date d;
         try {
             d = new SimpleDateFormat("dd-mm-yyyy").parse(g);

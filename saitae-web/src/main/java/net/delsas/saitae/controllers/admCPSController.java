@@ -28,6 +28,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -70,6 +71,8 @@ public class admCPSController implements Serializable {
     private Persona usuario;
     private FacesMessage m;
     private FacesContext context;
+    private Integer añoSelected;
+    private List<Integer> añosDisponibles;
 
     @PostConstruct
     public void init() {
@@ -78,6 +81,8 @@ public class admCPSController implements Serializable {
         if (tp == 14 || tp == 1) {
             m = (FacesMessage) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("ms");
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("ms");
+            añoSelected=Auxiliar.getAñoActual();
+            añosDisponibles=cpsFL.findAñosGlobales();
         } else {
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("mensaje",
                     new FacesMessage(FacesMessage.SEVERITY_ERROR,
@@ -120,17 +125,17 @@ public class admCPSController implements Serializable {
     }
 
     public List<CitaPsicologia> getConsultados() {
-        consultados = cpsFL.findConsultados();
+        consultados = cpsFL.findConsultados(añoSelected);
         return Collections.unmodifiableList(consultados);
     }
 
     public List<CitaPsicologia> getSolicitados() {
-        solicitados = cpsFL.findByEstado("S");
+        solicitados = cpsFL.findByEstado("S",añoSelected);
         return Collections.unmodifiableList(solicitados);
     }
 
     public List<CitaPsicologia> getAceptados() {
-        aceptados = cpsFL.findByEstado("A");
+        aceptados = cpsFL.findByEstado("A",añoSelected);
         List<CitaPsicologia> brs = new ArrayList<>();
         aceptados.stream().filter((c) -> (c.getFechaSolicitud().equals(c.getCitaPsicologiaPK().getFechaSolicitada()))).map((c) -> {
             cpsFL.remove(c);
@@ -143,12 +148,12 @@ public class admCPSController implements Serializable {
     }
 
     public List<CitaPsicologia> getPospuestos() {
-        pospuestos = cpsFL.findByEstado("P");
+        pospuestos = cpsFL.findByEstado("P", añoSelected);
         return Collections.unmodifiableList(pospuestos);
     }
 
     public List<CitaPsicologia> getCancelados() {
-        cancelados = cpsFL.findByEstado("C");
+        cancelados = cpsFL.findByEstado("C", añoSelected);
         return Collections.unmodifiableList(cancelados);
     }
 
@@ -294,6 +299,26 @@ public class admCPSController implements Serializable {
         Persona e = c == null ? null : c.getEstudiante1().getPersona();
         return e == null ? "" : e.getPersonaNombre().split(" ")[0]
                 + " " + e.getPersonaApellido().split(" ")[0];
+    }
+    
+    public void onBlour(AjaxBehaviorEvent a){
+        
+    }
+
+    public Integer getAñoSelected() {
+        return añoSelected;
+    }
+
+    public void setAñoSelected(Integer añoSelected) {
+        this.añoSelected = añoSelected;
+    }
+
+    public List<Integer> getAñosDisponibles() {
+        return añosDisponibles;
+    }
+
+    public void setAñosDisponibles(List<Integer> añosDisponibles) {
+        this.añosDisponibles = añosDisponibles;
     }
 
 }

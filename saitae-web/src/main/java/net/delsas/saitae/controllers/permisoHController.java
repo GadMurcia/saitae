@@ -26,6 +26,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -62,14 +63,18 @@ public class permisoHController implements Serializable {
     private PushContext notificacion;
     @EJB
     private ConstanciasFacadeLocal conFL;
+    private Integer añoSelected;
+    private List<Integer> añosDisponnibles;
 
     @PostConstruct
     public void init() {
         usuario = (Persona) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
+        añoSelected = Auxiliar.getAñoActual();
+        añosDisponnibles = psFL.findAñosPersona(usuario.getIdpersona());
     }
 
     public List<Permisos> getPermisos() {
-        permisos = psFL.findByIpPersona(usuario.getIdpersona());
+        permisos = psFL.findByIpPersona(usuario.getIdpersona(), añoSelected);
         return Collections.unmodifiableList(permisos);
     }
 
@@ -98,8 +103,8 @@ public class permisoHController implements Serializable {
     public void cancelarPermiso() {
         if (selected != null) {
             selected.setPermisosEstado("3");
-            Constancias c=selected.getConstancias();
-            if(c!=null){
+            Constancias c = selected.getConstancias();
+            if (c != null) {
                 selected.setConstancias(null);
                 conFL.remove(c);
             }
@@ -190,6 +195,22 @@ public class permisoHController implements Serializable {
     public String getConstanciaSelected() {
         Constancias c = selected == null ? null : selected.getConstancias();
         return c == null ? "" : Auxiliar.getDoc(c.getDocumento(), c.getExtención().split("¿¿")[1]);
+    }
+
+    public void onBour(AjaxBehaviorEvent e) {
+
+    }
+
+    public List<Integer> getAñosDisponnibles() {
+        return añosDisponnibles;
+    }
+
+    public Integer getAñoSelected() {
+        return añoSelected;
+    }
+
+    public void setAñoSelected(Integer añoSelected) {
+        this.añoSelected = añoSelected;
     }
 
 }

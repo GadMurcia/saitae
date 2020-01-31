@@ -3,8 +3,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
-    
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
 
     <body>
 
@@ -13,6 +14,18 @@
             <ui:define name="content">
                 <h:form id="form">
                     <h:panelGrid columns="1">
+                        <h:panelGrid columns="2">
+                            <p:outputLabel for="años" value="Seleccione el año de visualización: "/>
+                            <p:selectOneMenu id="años" value="#{historialRController.añoSelected}" 
+                                             converter="omnifaces.SelectItemsConverter">
+                                <f:selectItem itemLabel="Seleccione" itemValue="#{0}"
+                                              noSelectionOption="true"/>
+                                <f:selectItems value="#{historialRController.añosDisponibles}" var="ad"
+                                               itemLabel="#{ad}" itemValue="#{ad}"/>
+                                <p:ajax event="itemSelect" listener="#{historialRController.onBlour}"
+                                        update="form"/>
+                            </p:selectOneMenu>
+                        </h:panelGrid>
                         <h1 align="center">Historial de solicitudes de Reserva de equipo</h1>
                         <p:dataTable id="hreserva" value="#{historialRController.reservas}" var="r"
                                      paginator="true" rows="7" selection="#{historialRController.selected}" 

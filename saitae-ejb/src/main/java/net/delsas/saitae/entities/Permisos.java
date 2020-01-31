@@ -33,16 +33,18 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Permisos.findAll", query = "SELECT p FROM Permisos p"),
-    @NamedQuery(name = "Permisos.findByIpPersona", query = "SELECT p FROM Permisos p WHERE p.permisosPK.ipPersona = :ipPersona ORDER BY p.permisosEstado ASC"),
+    @NamedQuery(name = "Permisos.findByIpPersona", query = "SELECT p FROM Permisos p WHERE p.permisosPK.ipPersona = :ipPersona AND FUNCTION('YEAR' , p.permisosPK.permisoFechaInicio) = :año ORDER BY p.permisosEstado ASC"),
     @NamedQuery(name = "Permisos.findByPermisoFechaSolicitud", query = "SELECT p FROM Permisos p WHERE p.permisosPK.permisoFechaSolicitud = :permisoFechaSolicitud"),
     @NamedQuery(name = "Permisos.findByTipoPermiso", query = "SELECT p FROM Permisos p WHERE p.permisosPK.tipoPermiso = :tipoPermiso"),
     @NamedQuery(name = "Permisos.findByPermisoFechaInicio", query = "SELECT p FROM Permisos p WHERE p.permisosPK.permisoFechaInicio = :permisoFechaInicio"),
     @NamedQuery(name = "Permisos.findByPermisoFechafin", query = "SELECT p FROM Permisos p WHERE p.permisoFechafin = :permisoFechafin"),
     @NamedQuery(name = "Permisos.findByPermisosMotivo", query = "SELECT p FROM Permisos p WHERE p.permisosMotivo = :permisosMotivo"),
-    @NamedQuery(name = "Permisos.findByPermisosEstado", query = "SELECT p FROM Permisos p WHERE p.permisosEstado = :permisoEstado ORDER BY p.permisosPK.permisoFechaSolicitud DESC"),
+    @NamedQuery(name = "Permisos.findByPermisosEstado", query = "SELECT p FROM Permisos p WHERE p.permisosEstado = :permisoEstado AND FUNCTION('YEAR' , p.permisosPK.permisoFechaInicio) = :año ORDER BY p.permisosPK.permisoFechaSolicitud DESC"),
     @NamedQuery(name = "Permisos.findByPermisosComentario", query = "SELECT p FROM Permisos p WHERE p.permisosComentario = :permisosComentario"),
     @NamedQuery(name = "Permisos.findByPEPEs", query = "SELECT p FROM Permisos p WHERE p.permisosEstado = :permisoEstado AND p.tipoPersona.idtipoPersona = :tipo ORDER BY p.permisosPK.permisoFechaSolicitud DESC, p.permisosPK.permisoFechaInicio ASC"),
-    @NamedQuery(name = "Permisos.findByEstadoAndTipos", query = "SELECT p FROM Permisos p WHERE p.permisosEstado = :permisoEstado AND p.tipoPersona.idtipoPersona IN :tipos ORDER BY p.permisosPK.permisoFechaSolicitud DESC, p.permisosPK.permisoFechaInicio ASC")
+    @NamedQuery(name = "Permisos.findByEstadoAndTipos", query = "SELECT p FROM Permisos p WHERE p.permisosEstado = :permisoEstado AND p.tipoPersona.idtipoPersona IN :tipos AND FUNCTION('YEAR' , p.permisosPK.permisoFechaInicio) = :año ORDER BY p.permisosPK.permisoFechaSolicitud DESC, p.permisosPK.permisoFechaInicio ASC"),
+    @NamedQuery(name = "Permisos.findAñosGlobales", query = "SELECT DISTINCT FUNCTION('YEAR' ,p.permisosPK.permisoFechaInicio) FROM Permisos p ORDER BY 1 ASC"),
+    @NamedQuery(name = "Permisos.findAñosPersona", query = "SELECT DISTINCT FUNCTION('YEAR' ,p.permisosPK.permisoFechaInicio)  FROM Permisos p WHERE p.permisosPK.ipPersona = :idPersona ORDER BY 1 ASC")
 })
 public class Permisos implements Serializable {
 

@@ -33,7 +33,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import net.delsas.saitae.ax.mensaje;
 import net.delsas.saitae.ax.Auxiliar;
-import net.delsas.saitae.beans.ConstanciasFacadeLocal;
 import net.delsas.saitae.beans.MatriculaFacadeLocal;
 import net.delsas.saitae.beans.NotificacionesFacadeLocal;
 import net.delsas.saitae.beans.PermisosFacadeLocal;
@@ -76,6 +75,8 @@ public class admPermisoController implements Serializable {
     private Persona usuario;
     private List<Integer> tps;
     private List<Integer> tipos;
+    private List<Integer> añosDisponnibles;
+    private Integer añoSelected;
 
     @Inject
     @Push
@@ -90,8 +91,6 @@ public class admPermisoController implements Serializable {
     private NotificacionesFacadeLocal notFL;
     @EJB
     private PersonaFacadeLocal pFL;
-    @EJB
-    private ConstanciasFacadeLocal conFL;
 
     @PostConstruct
     public void init() {
@@ -106,6 +105,8 @@ public class admPermisoController implements Serializable {
             solicitados = rechazados = aceptados = new ArrayList<>();
             usuario = (Persona) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
             tps = new ArrayList<>();
+            añoSelected=Auxiliar.getAñoActual();
+            añosDisponnibles=permisosFL.findAñosGlobales();
             if (usuario == null) {
                 redirect();
             } else {
@@ -298,8 +299,8 @@ public class admPermisoController implements Serializable {
 
     public List<Permisos> getSolicitados() {
         solicitados = (tps.contains(1) || tps.contains(2))
-                ? permisosFL.getPermisosPorEstado("0")
-                : permisosFL.findByEstadoAndTipos("0", tipos);
+                ? permisosFL.getPermisosPorEstado("0",añoSelected)
+                : depurar(permisosFL.findByEstadoAndTipos("0", tipos,añoSelected));
         return Collections.unmodifiableList(solicitados);
     }
 
@@ -309,8 +310,8 @@ public class admPermisoController implements Serializable {
 
     public List<Permisos> getAceptados() {
         aceptados = (tps.contains(1) || tps.contains(2))
-                ? permisosFL.getPermisosPorEstado("1")
-                : permisosFL.findByEstadoAndTipos("1", tipos);
+                ? permisosFL.getPermisosPorEstado("1",añoSelected)
+                : depurar(permisosFL.findByEstadoAndTipos("1", tipos,añoSelected));
         return Collections.unmodifiableList(aceptados);
     }
 
@@ -320,8 +321,8 @@ public class admPermisoController implements Serializable {
 
     public List<Permisos> getRechazados() {
         rechazados = (tps.contains(1) || tps.contains(2))
-                ? permisosFL.getPermisosPorEstado("2")
-                : permisosFL.findByEstadoAndTipos("2", tipos);
+                ? permisosFL.getPermisosPorEstado("2",añoSelected)
+                : depurar(permisosFL.findByEstadoAndTipos("2", tipos,añoSelected));
         return Collections.unmodifiableList(rechazados);
     }
 
@@ -331,9 +332,17 @@ public class admPermisoController implements Serializable {
 
     public List<Permisos> getCancelados() {
         cancelados = (tps.contains(1) || tps.contains(2))
-                ? permisosFL.getPermisosPorEstado("3")
-                : permisosFL.findByEstadoAndTipos("3", tipos);
+                ? permisosFL.getPermisosPorEstado("3",añoSelected)
+                : depurar(permisosFL.findByEstadoAndTipos("3", tipos,añoSelected));
         return Collections.unmodifiableList(cancelados);
+    }
+
+    private List<Permisos> depurar(List<Permisos> pps) {
+        List<Permisos> psr = new ArrayList<>();
+        pps.stream().filter((p) -> (!Auxiliar.getTiposPersonas(p.getPersona()).contains(3))).forEachOrdered((p) -> {
+            psr.add(p);
+        });
+        return psr;
     }
 
     public void setCancelados(List<Permisos> cancelados) {
@@ -515,5 +524,25 @@ public class admPermisoController implements Serializable {
     public void quitarConstancia() {
         constancia.setDocumento(null);
         constancia.setExtención("");
+    }
+    
+    public void onBour(AjaxBehaviorEvent e){
+        
+    }
+
+    public List<Integer> getAñosDisponnibles() {
+        return añosDisponnibles;
+    }
+
+    public void setAñosDisponnibles(List<Integer> añosDisponnibles) {
+        this.añosDisponnibles = añosDisponnibles;
+    }
+
+    public Integer getAñoSelected() {
+        return añoSelected;
+    }
+
+    public void setAñoSelected(Integer añoSelected) {
+        this.añoSelected = añoSelected;
     }
 }

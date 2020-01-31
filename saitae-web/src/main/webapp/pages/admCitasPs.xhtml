@@ -11,6 +11,18 @@
         <h:form id="form">
             <f:event listener="#{admCPSController.postRender()}" type="preRenderView"/>
             <h:panelGrid columns="1">
+                <h:panelGrid columns="2">
+                    <p:outputLabel for="años" value="Seleccione el año de visualización: "/>
+                    <p:selectOneMenu id="años" value="#{admCPSController.añoSelected}" 
+                                     converter="omnifaces.SelectItemsConverter">
+                        <f:selectItem itemLabel="Seleccione" itemValue="#{0}"
+                                      noSelectionOption="true"/>
+                        <f:selectItems value="#{admCPSController.añosDisponibles}" var="ad"
+                                       itemLabel="#{ad}" itemValue="#{ad}"/>
+                        <p:ajax event="itemSelect" listener="#{admCPSController.onBlour}"
+                                update="form"/>
+                    </p:selectOneMenu>
+                </h:panelGrid>
                 <h1 align="center">Administración de solicitudes de reservas de equipo</h1>
                 <p:accordionPanel id="ap">
                     <p:tab title="Solicitudes de Citas Pendientes">

@@ -42,22 +42,24 @@ public interface ReservaFacadeLocal {
 
     /**
      * Devuelve una lista de objetos reserva cuyo estado concuerde con la cadena
-     * proporcionada.
+     * y el año proporcionados.
      *
      * @param estado
+     * @param año
      * @return java.util.List net.delsas.saitae.entities.Reserva
      */
-    public List<Reserva> getReservaByEstado(String estado);
+    public List<Reserva> getReservaByEstado(String estado, Integer año);
 
     /**
-     * retorna una lista de reservas que concuerden con el estado y el id del
-     * tipo de recurso proporcionados
+     * retorna una lista de reservas que concuerden con el estado, el id del
+     * tipo de recurso y el año proporcionados
      *
      * @param estado
      * @param idTipoRecurso
+     * @param año
      * @return java.util.List net.delsas.saitae.entities.Reserva
      */
-    public List<Reserva> findByEstadoAndIdTipoRecurso(String estado, Integer idTipoRecurso);
+    public List<Reserva> findByEstadoAndIdTipoRecurso(String estado, Integer idTipoRecurso, Integer año);
 
     /**
      * Genera una lista con las reservas en las que la persona identificada con
@@ -67,5 +69,12 @@ public interface ReservaFacadeLocal {
      * @return java.util.List net.delsas.saitae.entities.Reserva
      */
     public List<Reserva> getReservaByIdUsuario(Integer idpersona);
+
+    /**
+     * Devuelve una lista de años en los que se han hecho resrvas
+     *
+     * @return java.util.List java.lang.Integer
+     */
+    public List<Integer> findAñosGlobales();
 
 }

@@ -75,6 +75,7 @@ public class permisoMaController implements Serializable {
     private Permisos pcontrol;
     private boolean editar;
     private FacesMessage ms;
+    private List<Integer> tps;
 
     @PostConstruct
     public void init() {
@@ -102,6 +103,7 @@ public class permisoMaController implements Serializable {
         permisos = usuario.getTipoPersona().getTipopersonaPermisoList();
         editar = false;
         p = (Permisos) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("permiso");
+        tps = Auxiliar.getTiposPersonas(usuario);
         if (p == null) {
             p = new Permisos();
             constancia = new Constancias(new ConstanciasPK());
@@ -149,7 +151,7 @@ public class permisoMaController implements Serializable {
                 p.setPermisoFechafin(p.getPermisosPK().getPermisoFechaInicio());
             } else {
                 p.setPermisosEstado("0");
-                if (constancia.getDocumento() != null) {
+                if (constancia != null && constancia.getDocumento() != null) {
                     constancia.setConstanciasPK(new ConstanciasPK(p.getPermisosPK().getIpPersona(),
                             p.getPermisosPK().getPermisoFechaSolicitud(),
                             p.getPermisosPK().getTipoPermiso(),
@@ -189,7 +191,7 @@ public class permisoMaController implements Serializable {
                                     "permiso<form"),
                             Auxiliar.getPersonasParaNotificar(
                                     tipoPersonaFL.find(
-                                            usuario.getTipoPersona().getIdtipoPersona() == 4
+                                            (tps.contains(4) && !tps.contains(3))
                                             ? 3 : 2)),
                             notFL, notificacion);
                     initVariables();
@@ -222,7 +224,7 @@ public class permisoMaController implements Serializable {
                                         "permiso<form"),
                                 Auxiliar.getPersonasParaNotificar(
                                         tipoPersonaFL.find(
-                                                usuario.getTipoPersona().getIdtipoPersona() == 4
+                                                (tps.contains(4) && !tps.contains(3))
                                                 ? 3 : 2)),
                                 notFL, notificacion);
                         initVariables();

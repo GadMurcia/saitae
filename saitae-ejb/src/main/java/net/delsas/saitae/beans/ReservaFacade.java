@@ -39,17 +39,19 @@ public class ReservaFacade extends AbstractFacade<Reserva> implements ReservaFac
     }
 
     @Override
-    public List<Reserva> getReservaByEstado(String estado) {
+    public List<Reserva> getReservaByEstado(String estado, Integer año) {
         return em.createNamedQuery("Reserva.findByReservaEstado")
                 .setParameter("reservaEstado", estado)
+                .setParameter("año", año)
                 .getResultList();
     }
-    
+
     @Override
-    public List<Reserva> findByEstadoAndIdTipoRecurso(String estado, Integer idTipoRecurso){
+    public List<Reserva> findByEstadoAndIdTipoRecurso(String estado, Integer idTipoRecurso, Integer año) {
         return em.createNamedQuery("Reserva.findByEstadoAndIdTipoRecurso")
                 .setParameter("estado", estado)
                 .setParameter("idTipoRecurso", idTipoRecurso)
+                .setParameter("año", año)
                 .getResultList();
     }
 
@@ -58,5 +60,10 @@ public class ReservaFacade extends AbstractFacade<Reserva> implements ReservaFac
         return em.createNamedQuery("PersonasReserva.findReservaByIdpersona")
                 .setParameter("idPersona", idpersona)
                 .getResultList();
+    }
+
+    @Override
+    public List<Integer> findAñosGlobales() {
+        return em.createNamedQuery("Reserva.findAñosGlobales").getResultList();
     }
 }

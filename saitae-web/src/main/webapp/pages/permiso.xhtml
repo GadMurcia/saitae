@@ -11,209 +11,222 @@
 
             <ui:define name="content">
                 <h:outputScript library="js" name="locales.js"/>
-                <h:form id="form">  
-                    <p:growl id="msgs" showDetail="true" />
-
-                    <h1 align="center">Administración de permisos de estudiantes</h1>
-                    <p:accordionPanel id="ap" dynamic="true">
-                        <p:tab title="Permisos Solicitados">
-                            <p:dataTable id="solicitados" value="#{admPermisoController.solicitados}" var="p"
-                                         paginator="true" rows="7" selection="#{admPermisoController.acep}" 
-                                         selectionMode="single" rowKey="#{p.permisosPK}" 
-                                         emptyMessage="Sin nuevos permisos solicitados aún.">
-                                <p:ajax event="rowSelect" listener="#{admPermisoController.onRowSelect}" 
-                                        update="sol" oncomplete="PF('Dsol').show();"/>
-                                <p:column headerText="Fecha de solicitud" 
-                                          filterMatchMode="contains" 
-                                          filterBy="#{admPermisoController.dateToString(p.permisosPK.permisoFechaSolicit)}">
-                                    #{admPermisoController.dateToString(p.permisosPK.permisoFechaSolicitud)}
-                                </p:column>
-
-                                <p:column headerText="Beneficiario"
-                                          filterMatchMode="contains" filterBy="#{p.persona.personaNombre.split(' ')[0]} 
-                                          #{p.persona.personaApellido.split(' ')[0]}">
-                                    #{p.persona.personaNombre.split(' ')[0]} 
-                                    #{p.persona.personaApellido.split(' ')[0]} 
-                                    (#{p.persona.tipoPersona.tipoPersonaNombre})
-                                </p:column>
-
-                                <p:column headerText="Periodo del permiso">
-                                    #{admPermisoController.getFechas(p.permisosPK.permisoFechaInicio, p.permisoFechafin)}
-                                </p:column>
-
-                                <p:column headerText="Tipo de permiso solicitado">
-                                    #{p.tipoPermiso1.tipoPermisoNombre}
-                                </p:column>
-                            </p:dataTable>
-                        </p:tab>
-                        <p:tab title="Permisos Aceptados">
-                            <h:panelGrid columns="2" cellpadding="10">
-                                <p:dataTable id="aceptados" value="#{admPermisoController.aceptados}" var="a"
+                <h:form id="form">
+                    <h:panelGrid columns="1">
+                        <h:panelGrid columns="2">
+                            <p:outputLabel for="años" value="Seleccione el año de visualización: "/>
+                            <p:selectOneMenu id="años" value="#{admPermisoController.añoSelected}" 
+                                             converter="omnifaces.SelectItemsConverter">
+                                <f:selectItem itemLabel="Seleccione" itemValue="#{0}"
+                                              noSelectionOption="true"/>
+                                <f:selectItems value="#{admPermisoController.añosDisponnibles}" var="ad"
+                                               itemLabel="#{ad}" itemValue="#{ad}"/>
+                                <p:ajax event="change" listener="#{admPermisoController.onBour}"
+                                        update="form"/>
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                        <p:growl id="msgs" showDetail="true" />
+                        <h1 align="center">Administración de permisos de estudiantes</h1>
+                        <p:accordionPanel id="ap" dynamic="true">
+                            <p:tab title="Permisos Solicitados">
+                                <p:dataTable id="solicitados" value="#{admPermisoController.solicitados}" var="p"
                                              paginator="true" rows="7" selection="#{admPermisoController.acep}" 
-                                             selectionMode="single" rowKey="#{a.permisosPK}" 
-                                             emptyMessage="Sin registros aún.">
+                                             selectionMode="single" rowKey="#{p.permisosPK}" 
+                                             emptyMessage="Sin nuevos permisos solicitados aún.">
                                     <p:ajax event="rowSelect" listener="#{admPermisoController.onRowSelect}" 
-                                            update="ace" oncomplete="PF('Dotro').show();"/>
-
-                                    <p:column headerText="Fecha de solicitud"
+                                            update="sol" oncomplete="PF('Dsol').show();"/>
+                                    <p:column headerText="Fecha de solicitud" 
                                               filterMatchMode="contains" 
-                                              filterBy="#{admPermisoController.dateToString(a.permisosPK.permisoFechaSolicitud)}">
-                                        #{admPermisoController.dateToString(a.permisosPK.permisoFechaSolicitud)}
+                                              filterBy="#{admPermisoController.dateToString(p.permisosPK.permisoFechaSolicitud)}">
+                                        #{admPermisoController.dateToString(p.permisosPK.permisoFechaSolicitud)}
                                     </p:column>
 
                                     <p:column headerText="Beneficiario"
-                                              filterMatchMode="contains" 
-                                              filterBy="#{a.persona.personaNombre.split(' ')[0]} 
-                                              #{a.persona.personaApellido.split(' ')[0]}">
-                                        #{a.persona.personaNombre.split(' ')[0]} 
-                                        #{a.persona.personaApellido.split(' ')[0]} 
-                                        (#{a.persona.tipoPersona.tipoPersonaNombre})
+                                              filterMatchMode="contains" filterBy="#{p.persona.personaNombre.split(' ')[0]} 
+                                              #{p.persona.personaApellido.split(' ')[0]}">
+                                        #{p.persona.personaNombre.split(' ')[0]} 
+                                        #{p.persona.personaApellido.split(' ')[0]} 
+                                        (#{p.persona.tipoPersona.tipoPersonaNombre})
                                     </p:column>
 
                                     <p:column headerText="Periodo del permiso">
-                                        #{admPermisoController.getFechas(a.permisosPK.permisoFechaInicio, a.permisoFechafin)}
+                                        #{admPermisoController.getFechas(p.permisosPK.permisoFechaInicio, p.permisoFechafin)}
                                     </p:column>
 
                                     <p:column headerText="Tipo de permiso solicitado">
-                                        #{a.tipoPermiso1.tipoPermisoNombre}
+                                        #{p.tipoPermiso1.tipoPermisoNombre}
                                     </p:column>
                                 </p:dataTable>
-                            </h:panelGrid>
-                        </p:tab>
-                        <p:tab title="Permisos Rechazados">
-                            <h:panelGrid columns="2" cellpadding="10">
-                                <p:dataTable id="rachazados" value="#{admPermisoController.rechazados}" var="r"
-                                             paginator="true" rows="7" selection="#{admPermisoController.acep}" 
-                                             selectionMode="single" rowKey="#{r.permisosPK}" 
-                                             emptyMessage="Sin registros aún.">
-                                    <p:ajax event="rowSelect" listener="#{admPermisoController.onRowSelect}" 
-                                            update="ace" oncomplete="PF('Dotro').show();"/>
-                                    <p:column headerText="Fecha de solicitud"
-                                              filterMatchMode="contains" 
-                                              filterBy="#{admPermisoController.dateToString(r.permisosPK.permisoFechaSolicitud)}">
-                                        #{admPermisoController.dateToString(r.permisosPK.permisoFechaSolicitud)}
-                                    </p:column>
+                            </p:tab>
+                            <p:tab title="Permisos Aceptados">
+                                <h:panelGrid columns="2" cellpadding="10">
+                                    <p:dataTable id="aceptados" value="#{admPermisoController.aceptados}" var="a"
+                                                 paginator="true" rows="7" selection="#{admPermisoController.acep}" 
+                                                 selectionMode="single" rowKey="#{a.permisosPK}" 
+                                                 emptyMessage="Sin registros aún.">
+                                        <p:ajax event="rowSelect" listener="#{admPermisoController.onRowSelect}" 
+                                                update="ace" oncomplete="PF('Dotro').show();"/>
 
-                                    <p:column headerText="Beneficiario"
-                                              filterMatchMode="contains" 
-                                              filterBy="#{r.persona.personaNombre.split(' ')[0]} 
-                                              #{r.persona.personaApellido.split(' ')[0]}">
-                                        #{r.persona.personaNombre.split(' ')[0]} 
-                                        #{r.persona.personaApellido.split(' ')[0]} 
-                                        (#{r.persona.tipoPersona.tipoPersonaNombre})
-                                    </p:column>
+                                        <p:column headerText="Fecha de solicitud"
+                                                  filterMatchMode="contains" 
+                                                  filterBy="#{admPermisoController.dateToString(a.permisosPK.permisoFechaSolicitud)}">
+                                            #{admPermisoController.dateToString(a.permisosPK.permisoFechaSolicitud)}
+                                        </p:column>
 
-                                    <p:column headerText="Periodo del permiso">
-                                        #{admPermisoController.getFechas(r.permisosPK.permisoFechaInicio, r.permisoFechafin)}
-                                    </p:column>
+                                        <p:column headerText="Beneficiario"
+                                                  filterMatchMode="contains" 
+                                                  filterBy="#{a.persona.personaNombre.split(' ')[0]} 
+                                                  #{a.persona.personaApellido.split(' ')[0]}">
+                                            #{a.persona.personaNombre.split(' ')[0]} 
+                                            #{a.persona.personaApellido.split(' ')[0]} 
+                                            (#{a.persona.tipoPersona.tipoPersonaNombre})
+                                        </p:column>
 
-                                    <p:column headerText="Tipo de permiso solicitado">
-                                        #{r.tipoPermiso1.tipoPermisoNombre}
-                                    </p:column>
-                                </p:dataTable>
-                            </h:panelGrid>
-                        </p:tab>
-                        <p:tab title="Permisos Cancelados">
-                            <h:panelGrid columns="2" cellpadding="10">
-                                <p:dataTable id="cancelados" value="#{admPermisoController.cancelados}" var="r"
-                                             paginator="true" rows="7" selection="#{admPermisoController.acep}" 
-                                             selectionMode="single" rowKey="#{r.permisosPK}" 
-                                             emptyMessage="Sin registros aún.">
-                                    <p:ajax event="rowSelect" listener="#{admPermisoController.onRowSelect}" 
-                                            update="ace" oncomplete="PF('Dotro').show();"/>
-                                    <p:column headerText="Fecha de solicitud"
-                                              filterMatchMode="contains" 
-                                              filterBy="#{admPermisoController.dateToString(r.permisosPK.permisoFechaSolicitud)}">
-                                        #{admPermisoController.dateToString(r.permisosPK.permisoFechaSolicitud)}
-                                    </p:column>
+                                        <p:column headerText="Periodo del permiso">
+                                            #{admPermisoController.getFechas(a.permisosPK.permisoFechaInicio, a.permisoFechafin)}
+                                        </p:column>
 
-                                    <p:column headerText="Beneficiario"
-                                              filterMatchMode="contains" 
-                                              filterBy="#{r.persona.personaNombre.split(' ')[0]} 
-                                              #{r.persona.personaApellido.split(' ')[0]}">
-                                        #{r.persona.personaNombre.split(' ')[0]} 
-                                        #{r.persona.personaApellido.split(' ')[0]} 
-                                        (#{r.persona.tipoPersona.tipoPersonaNombre})
-                                    </p:column>
-
-                                    <p:column headerText="Periodo del permiso">
-                                        #{admPermisoController.getFechas(r.permisosPK.permisoFechaInicio, r.permisoFechafin)}
-                                    </p:column>
-
-                                    <p:column headerText="Tipo de permiso solicitado">
-                                        #{r.tipoPermiso1.tipoPermisoNombre}
-                                    </p:column>
-                                </p:dataTable>
-                            </h:panelGrid>
-                        </p:tab>
-                        <p:tab title="Conceder Permiso A Estudiantes">
-                            <h:panelGrid columns="2">
-                                <p:outputLabel for="nombus" value="Nombre del alumno:"/>
-                                <p:autoComplete id="nombus" value="#{admPermisoController.nombreE}" 
-                                                queryDelay="500" size="50"
-                                                completeMethod="#{admPermisoController.completeText}">
-                                    <p:ajax event="itemSelect" listener="#{admPermisoController.onItemSelect}"
-                                            update="nombus summit"/>
-                                </p:autoComplete>
-
-                                <p:outputLabel for="tp" value="Tipo de permiso a conceder: "/>
-                                <p:selectOneMenu id="tp" immediate="true" required="true" style="width: 400px;"
-                                                 value="#{admPermisoController.permiso.tipoPermiso1}"
-                                                 converter="omnifaces.SelectItemsConverter">
-                                    <f:selectItem itemValue="null" itemLabel="Seleccione" noSelectionOption="true"/>
-                                    <f:selectItems value="#{admPermisoController.tipoPermiso}" var="tpe"
-                                                   itemValue="#{tpe}" itemLabel="#{tpe.tipoPermisoNombre}"/>
-                                </p:selectOneMenu>
-
-                                <p:outputLabel for="mot" value="Motivo de la solicitud: "/>
-                                <p:inputText id="mot" value="#{admPermisoController.permiso.permisosMotivo}" 
-                                             required="true" style="width: 400px;"/>
-
-                                <p:outputLabel for="mask" value="Fecha de inicio:" />
-                                <p:datePicker id="mask" value="#{admPermisoController.permiso.permisosPK.permisoFechaInicio}"
-                                              showIcon="true" required="true" pattern="dd/MM/yyyy"/>
-
-                                <p:outputLabel for="mask1" value="Fecha de finalización: " />
-                                <p:datePicker id="mask1" value="#{admPermisoController.permiso.permisoFechafin}"
-                                              showIcon="true" required="true" pattern="dd/MM/yyyy" />
-
-                                <p:outputLabel value="Constancia: " />
-                                <h:panelGrid columns="3">
-                                    <p:fileUpload id="partida" fileUploadListener="#{admPermisoController.notas}" 
-                                                  mode="advanced" invalidSizeMessage="El archivo sobrepasa el límited de 1MB."
-                                                  invalidFileMessage="El archivo seleccionado no es válido"
-                                                  update="messagesp"  sizeLimit="1000000" label="Elejir"
-                                                  allowTypes="/(\.|\/)(jpe?g|png)$/" auto="true"
-                                                  oncomplete="update();"/>
-                                    <p:remoteCommand name="update" update="btnV"/>
-                                    <p:commandButton id="btnV" value="Ver constancia" update="h1" 
-                                                     disabled="#{!admPermisoController.hayDocumento}"
-                                                     oncomplete="PF('DConstancia1').show();"/>                        
-                                    <p:growl id="messagesp" showDetail="true" for="partida"/> 
+                                        <p:column headerText="Tipo de permiso solicitado">
+                                            #{a.tipoPermiso1.tipoPermisoNombre}
+                                        </p:column>
+                                    </p:dataTable>
                                 </h:panelGrid>
+                            </p:tab>
+                            <p:tab title="Permisos Rechazados">
+                                <h:panelGrid columns="2" cellpadding="10">
+                                    <p:dataTable id="rachazados" value="#{admPermisoController.rechazados}" var="r"
+                                                 paginator="true" rows="7" selection="#{admPermisoController.acep}" 
+                                                 selectionMode="single" rowKey="#{r.permisosPK}" 
+                                                 emptyMessage="Sin registros aún.">
+                                        <p:ajax event="rowSelect" listener="#{admPermisoController.onRowSelect}" 
+                                                update="ace" oncomplete="PF('Dotro').show();"/>
+                                        <p:column headerText="Fecha de solicitud"
+                                                  filterMatchMode="contains" 
+                                                  filterBy="#{admPermisoController.dateToString(r.permisosPK.permisoFechaSolicitud)}">
+                                            #{admPermisoController.dateToString(r.permisosPK.permisoFechaSolicitud)}
+                                        </p:column>
 
-                                <p:outputLabel for="dui" value="Dui del solicitante: "/>
-                                <p:inputMask id="dui" value="#{admPermisoController.duiSol}" mask="99999999-9"
-                                             required="true" style="width: 400px;">
-                                    <p:ajax event="change" listener="#{admPermisoController.onblour}" update="dui"/>
-                                </p:inputMask>
+                                        <p:column headerText="Beneficiario"
+                                                  filterMatchMode="contains" 
+                                                  filterBy="#{r.persona.personaNombre.split(' ')[0]} 
+                                                  #{r.persona.personaApellido.split(' ')[0]}">
+                                            #{r.persona.personaNombre.split(' ')[0]} 
+                                            #{r.persona.personaApellido.split(' ')[0]} 
+                                            (#{r.persona.tipoPersona.tipoPersonaNombre})
+                                        </p:column>
 
-                                <p:outputLabel for="nomb" value="Nombres del solicitante: "/>
-                                <p:inputText id="nomb" value="#{admPermisoController.nombreSol}" 
-                                             required="true" style="width: 400px;"/>
+                                        <p:column headerText="Periodo del permiso">
+                                            #{admPermisoController.getFechas(r.permisosPK.permisoFechaInicio, r.permisoFechafin)}
+                                        </p:column>
 
-                                <p:outputLabel for="apel" value="Apellidos del solicitante: "/>
-                                <p:inputText id="apel" value="#{admPermisoController.apellidoSol}" 
-                                             required="true" style="width: 400px;"/>
+                                        <p:column headerText="Tipo de permiso solicitado">
+                                            #{r.tipoPermiso1.tipoPermisoNombre}
+                                        </p:column>
+                                    </p:dataTable>
+                                </h:panelGrid>
+                            </p:tab>
+                            <p:tab title="Permisos Cancelados">
+                                <h:panelGrid columns="2" cellpadding="10">
+                                    <p:dataTable id="cancelados" value="#{admPermisoController.cancelados}" var="r"
+                                                 paginator="true" rows="7" selection="#{admPermisoController.acep}" 
+                                                 selectionMode="single" rowKey="#{r.permisosPK}" 
+                                                 emptyMessage="Sin registros aún.">
+                                        <p:ajax event="rowSelect" listener="#{admPermisoController.onRowSelect}" 
+                                                update="ace" oncomplete="PF('Dotro').show();"/>
+                                        <p:column headerText="Fecha de solicitud"
+                                                  filterMatchMode="contains" 
+                                                  filterBy="#{admPermisoController.dateToString(r.permisosPK.permisoFechaSolicitud)}">
+                                            #{admPermisoController.dateToString(r.permisosPK.permisoFechaSolicitud)}
+                                        </p:column>
 
-                                <p:column/>
-                                <p:commandButton id="summit" value="Conceder" 
-                                                 disabled="#{admPermisoController.permiso.persona==null}"
-                                                 actionListener="#{admPermisoController.concederPermiso()}" 
-                                                 update="form"/>
-                            </h:panelGrid>
-                        </p:tab>
-                    </p:accordionPanel>
+                                        <p:column headerText="Beneficiario"
+                                                  filterMatchMode="contains" 
+                                                  filterBy="#{r.persona.personaNombre.split(' ')[0]} 
+                                                  #{r.persona.personaApellido.split(' ')[0]}">
+                                            #{r.persona.personaNombre.split(' ')[0]} 
+                                            #{r.persona.personaApellido.split(' ')[0]} 
+                                            (#{r.persona.tipoPersona.tipoPersonaNombre})
+                                        </p:column>
+
+                                        <p:column headerText="Periodo del permiso">
+                                            #{admPermisoController.getFechas(r.permisosPK.permisoFechaInicio, r.permisoFechafin)}
+                                        </p:column>
+
+                                        <p:column headerText="Tipo de permiso solicitado">
+                                            #{r.tipoPermiso1.tipoPermisoNombre}
+                                        </p:column>
+                                    </p:dataTable>
+                                </h:panelGrid>
+                            </p:tab>
+                            <p:tab title="Conceder Permiso A Estudiantes">
+                                <h:panelGrid columns="2">
+                                    <p:outputLabel for="nombus" value="Nombre del alumno:"/>
+                                    <p:autoComplete id="nombus" value="#{admPermisoController.nombreE}" 
+                                                    queryDelay="500" size="50"
+                                                    completeMethod="#{admPermisoController.completeText}">
+                                        <p:ajax event="itemSelect" listener="#{admPermisoController.onItemSelect}"
+                                                update="nombus summit"/>
+                                    </p:autoComplete>
+
+                                    <p:outputLabel for="tp" value="Tipo de permiso a conceder: "/>
+                                    <p:selectOneMenu id="tp" immediate="true" required="true" style="width: 400px;"
+                                                     value="#{admPermisoController.permiso.tipoPermiso1}"
+                                                     converter="omnifaces.SelectItemsConverter">
+                                        <f:selectItem itemValue="null" itemLabel="Seleccione" noSelectionOption="true"/>
+                                        <f:selectItems value="#{admPermisoController.tipoPermiso}" var="tpe"
+                                                       itemValue="#{tpe}" itemLabel="#{tpe.tipoPermisoNombre}"/>
+                                    </p:selectOneMenu>
+
+                                    <p:outputLabel for="mot" value="Motivo de la solicitud: "/>
+                                    <p:inputText id="mot" value="#{admPermisoController.permiso.permisosMotivo}" 
+                                                 required="true" style="width: 400px;"/>
+
+                                    <p:outputLabel for="mask" value="Fecha de inicio:" />
+                                    <p:datePicker id="mask" value="#{admPermisoController.permiso.permisosPK.permisoFechaInicio}"
+                                                  showIcon="true" required="true" pattern="dd/MM/yyyy"/>
+
+                                    <p:outputLabel for="mask1" value="Fecha de finalización: " />
+                                    <p:datePicker id="mask1" value="#{admPermisoController.permiso.permisoFechafin}"
+                                                  showIcon="true" required="true" pattern="dd/MM/yyyy" />
+
+                                    <p:outputLabel value="Constancia: " />
+                                    <h:panelGrid columns="3">
+                                        <p:fileUpload id="partida" fileUploadListener="#{admPermisoController.notas}" 
+                                                      mode="advanced" invalidSizeMessage="El archivo sobrepasa el límited de 1MB."
+                                                      invalidFileMessage="El archivo seleccionado no es válido"
+                                                      update="messagesp"  sizeLimit="1000000" label="Elejir"
+                                                      allowTypes="/(\.|\/)(jpe?g|png)$/" auto="true"
+                                                      oncomplete="update();"/>
+                                        <p:remoteCommand name="update" update="btnV"/>
+                                        <p:commandButton id="btnV" value="Ver constancia" update="h1" 
+                                                         disabled="#{!admPermisoController.hayDocumento}"
+                                                         oncomplete="PF('DConstancia1').show();"/>                        
+                                        <p:growl id="messagesp" showDetail="true" for="partida"/> 
+                                    </h:panelGrid>
+
+                                    <p:outputLabel for="dui" value="Dui del solicitante: "/>
+                                    <p:inputMask id="dui" value="#{admPermisoController.duiSol}" mask="99999999-9"
+                                                 required="true" style="width: 400px;">
+                                        <p:ajax event="change" listener="#{admPermisoController.onblour}" update="dui"/>
+                                    </p:inputMask>
+
+                                    <p:outputLabel for="nomb" value="Nombres del solicitante: "/>
+                                    <p:inputText id="nomb" value="#{admPermisoController.nombreSol}" 
+                                                 required="true" style="width: 400px;"/>
+
+                                    <p:outputLabel for="apel" value="Apellidos del solicitante: "/>
+                                    <p:inputText id="apel" value="#{admPermisoController.apellidoSol}" 
+                                                 required="true" style="width: 400px;"/>
+
+                                    <p:column/>
+                                    <p:commandButton id="summit" value="Conceder" 
+                                                     disabled="#{admPermisoController.permiso.persona==null}"
+                                                     actionListener="#{admPermisoController.concederPermiso()}" 
+                                                     update="form"/>
+                                </h:panelGrid>
+                            </p:tab>
+                        </p:accordionPanel>
+                    </h:panelGrid>
                 </h:form>
 
                 <p:dialog widgetVar="Dsol" closeOnEscape="true" header="Detalle del permiso solicitado" modal="true"
@@ -337,7 +350,7 @@
                         </h:panelGrid>
                     </h:form>
                 </p:dialog>
-                
+
                 <p:dialog id="dlg1" widgetVar="DConstancia1" modal="true" style="width: 60%;"
                           showHeader="true" header="Visualización de constancia" closeOnEscape="true">
                     <h:form id="h1">

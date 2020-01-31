@@ -28,7 +28,7 @@
             </ui:insert>
         </div>
         <div id="right">
-            <ui:insert name="right">                
+            <ui:insert name="right">
                 <o:socket channel="notificacion" onmessage="function socketListener(message) {
                           notificar([{name: 'mss', value: message}]);}"/>
                 <h:form id="noti">
@@ -48,6 +48,8 @@
                             </f:facet>
                         </p:panel>
                     </ui:repeat>
+                    <h:outputText value="Sin notificaciones." rendered="#{sessionController.notificaciones.size() == 0}"
+                                  style="alignment-adjust: central"/>
                 </h:form>
             </ui:insert>
         </div>

@@ -4,11 +4,24 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="./../WEB-INF/template/plantilla1.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:p="http://primefaces.org/ui">
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:define name="content">
 
         <h:form id="form">
             <h:panelGrid columns="1">
+                <h:panelGrid columns="2">
+                    <p:outputLabel for="años" value="Seleccione el año de visualización: "/>
+                    <p:selectOneMenu id="años" value="#{citasPsHController.añoSelected}" 
+                                     converter="omnifaces.SelectItemsConverter">
+                        <f:selectItem itemLabel="Seleccione" itemValue="#{0}"
+                                      noSelectionOption="true"/>
+                        <f:selectItems value="#{citasPsHController.añosDisponibles}" var="ad"
+                                       itemLabel="#{ad}" itemValue="#{ad}"/>
+                        <p:ajax event="itemSelect" listener="#{citasPsHController.onBlour}"
+                                update="form"/>
+                    </p:selectOneMenu>
+                </h:panelGrid>
                 <h1 align="center">Historial de solicitudes de Reserva de equipo</h1>
                 <p:dataTable id="hcitas" value="#{citasPsHController.citas}" var="c"
                              paginator="true" rows="7" selection="#{citasPsHController.selected}" 
@@ -31,7 +44,7 @@
                 </p:dataTable>
             </h:panelGrid>
         </h:form>
-        
+
         <p:dialog id="dialog" widgetVar="Dcita" modal="true" style="width: 60%;"
                   showHeader="true" header="Solicitud de cita">
             <h:form id="d1">
@@ -73,7 +86,7 @@
                 </h:panelGrid>
             </h:form>
         </p:dialog>
-        
+
         <p:dialog id="dialog1" widgetVar="Dcita1" modal="true" 
                   header="Cancelación de la solicitud de cita">
             <h:form id="d2">

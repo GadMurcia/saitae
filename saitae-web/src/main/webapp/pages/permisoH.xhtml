@@ -12,43 +12,57 @@
 
             <ui:define name="content">
                 <h:form id="form">
-                    <p:dataTable id="ph" var="p" value="#{permisoHController.permisos}" 
-                                 rowKey="#{p.permisosPK}"
-                                 widgetVar="ph1"  emptyMessage="Sin registros aún."
-                                 selection="#{permisoHController.selected}" 
-                                 selectionMode="single" rows="8" 
-                                 paginator="true" paginatorAlwaysVisible="false" 
-                                 paginatorPosition="top">
-                        <p:ajax event="rowSelect" 
-                                update="d1" oncomplete="PF('Dper1').show()"/>
-                        <f:facet name="header">
-                            Historial de permisos
-                        </f:facet>
+                    <h:panelGrid columns="1">
+                        <h:panelGrid columns="2">
+                            <p:outputLabel for="años" value="Seleccione el año de visualización: "/>
+                            <p:selectOneMenu id="años" value="#{permisoHController.añoSelected}" 
+                                             converter="omnifaces.SelectItemsConverter">
+                                <f:selectItem itemLabel="Seleccione" itemValue="#{0}"
+                                              noSelectionOption="true"/>
+                                <f:selectItems value="#{permisoHController.añosDisponnibles}" var="ad"
+                                               itemLabel="#{ad}" itemValue="#{ad}"/>
+                                <p:ajax event="change" listener="#{permisoHController.onBour}"
+                                        update="form"/>
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                        <p:dataTable id="ph" var="p" value="#{permisoHController.permisos}" 
+                                     rowKey="#{p.permisosPK}"
+                                     widgetVar="ph1"  emptyMessage="Sin registros aún."
+                                     selection="#{permisoHController.selected}" 
+                                     selectionMode="single" rows="8" 
+                                     paginator="true" paginatorAlwaysVisible="false" 
+                                     paginatorPosition="top">
+                            <p:ajax event="rowSelect" 
+                                    update="d1" oncomplete="PF('Dper1').show()"/>
+                            <f:facet name="header">
+                                Historial de permisos
+                            </f:facet>
 
-                        <p:column headerText="Fecha de solicitud"
-                                  filterBy="#{permisoHController.getFechas(p.permisosPK.permisoFechaSolicitud)}"
-                                  filterMatchMode="contains">
-                            #{permisoHController.getFechas(p.permisosPK.permisoFechaSolicitud)}
-                        </p:column>
+                            <p:column headerText="Fecha de solicitud"
+                                      filterBy="#{permisoHController.getFechas(p.permisosPK.permisoFechaSolicitud)}"
+                                      filterMatchMode="contains">
+                                #{permisoHController.getFechas(p.permisosPK.permisoFechaSolicitud)}
+                            </p:column>
 
-                        <p:column headerText="Tipo de permiso"
-                                  filterBy="#{p.tipoPermiso1.tipoPermisoNombre}"
-                                  filterMatchMode="contains">
-                            #{p.tipoPermiso1.tipoPermisoNombre}
-                        </p:column>
+                            <p:column headerText="Tipo de permiso"
+                                      filterBy="#{p.tipoPermiso1.tipoPermisoNombre}"
+                                      filterMatchMode="contains">
+                                #{p.tipoPermiso1.tipoPermisoNombre}
+                            </p:column>
 
-                        <p:column headerText="Fechas"
-                                  filterBy="#{permisoHController.getFechas(p.permisosPK.permisoFechaInicio, p.permisoFechafin)}"
-                                  filterMatchMode="contains">
-                            #{permisoHController.getFechas(p.permisosPK.permisoFechaInicio, p.permisoFechafin)}
-                        </p:column>
+                            <p:column headerText="Fechas"
+                                      filterBy="#{permisoHController.getFechas(p.permisosPK.permisoFechaInicio, p.permisoFechafin)}"
+                                      filterMatchMode="contains">
+                                #{permisoHController.getFechas(p.permisosPK.permisoFechaInicio, p.permisoFechafin)}
+                            </p:column>
 
-                        <p:column headerText="Estado"
-                                  filterBy="#{permisoHController.getEstado(p.permisosEstado)}"
-                                  filterMatchMode="contains">
-                            #{permisoHController.getEstado(p.permisosEstado)}
-                        </p:column>
-                    </p:dataTable>
+                            <p:column headerText="Estado"
+                                      filterBy="#{permisoHController.getEstado(p.permisosEstado)}"
+                                      filterMatchMode="contains">
+                                #{permisoHController.getEstado(p.permisosEstado)}
+                            </p:column>
+                        </p:dataTable>
+                    </h:panelGrid>
                 </h:form>
 
                 <p:dialog id="dialog" widgetVar="Dper1" modal="true"

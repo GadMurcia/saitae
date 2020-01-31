@@ -34,13 +34,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "CitaPsicologia.findAll", query = "SELECT c FROM CitaPsicologia c"),
-    @NamedQuery(name = "CitaPsicologia.findByEstudiante", query = "SELECT c FROM CitaPsicologia c WHERE c.citaPsicologiaPK.estudiante = :estudiante"),
+    @NamedQuery(name = "CitaPsicologia.findByEstudiante", query = "SELECT c FROM CitaPsicologia c WHERE c.citaPsicologiaPK.estudiante = :estudiante AND FUNCTION('YEAR', c.citaPsicologiaPK.fechaSolicitada)= :año"),
     @NamedQuery(name = "CitaPsicologia.findByFechaSolicitada", query = "SELECT c FROM CitaPsicologia c WHERE c.citaPsicologiaPK.fechaSolicitada = :fechaSolicitada"),
     @NamedQuery(name = "CitaPsicologia.findByFechaSolicitud", query = "SELECT c FROM CitaPsicologia c WHERE c.fechaSolicitud = :fechaSolicitud"),
     @NamedQuery(name = "CitaPsicologia.findByComentarios", query = "SELECT c FROM CitaPsicologia c WHERE c.comentarios = :comentarios"),
-    @NamedQuery(name = "CitaPsicologia.findByEstado", query = "SELECT c FROM CitaPsicologia c WHERE c.estado = :estado ORDER BY c.fechaSolicitud DESC, c.citaPsicologiaPK.fechaSolicitada ASC"),
+    @NamedQuery(name = "CitaPsicologia.findByEstado", query = "SELECT c FROM CitaPsicologia c WHERE c.estado = :estado AND FUNCTION('YEAR', c.citaPsicologiaPK.fechaSolicitada)= :año ORDER BY c.fechaSolicitud DESC, c.citaPsicologiaPK.fechaSolicitada ASC"),
     @NamedQuery(name = "CitaPsicologia.findByEstadoAndIdEstudiante", query = "SELECT c FROM CitaPsicologia c WHERE c.estado = :estado AND c.citaPsicologiaPK.estudiante = :idEstudiante ORDER BY c.fechaSolicitud DESC, c.citaPsicologiaPK.fechaSolicitada ASC"),
-    @NamedQuery(name = "CitaPsicologia.findConsultados", query = "SELECT c FROM CitaPsicologia c WHERE c.consulta != NULL  ORDER BY c.fechaSolicitud DESC, c.citaPsicologiaPK.fechaSolicitada ASC")})
+    @NamedQuery(name = "CitaPsicologia.findConsultados", query = "SELECT c FROM CitaPsicologia c WHERE FUNCTION('YEAR', c.citaPsicologiaPK.fechaSolicitada)= :año AND c.consulta != NULL  ORDER BY c.fechaSolicitud DESC, c.citaPsicologiaPK.fechaSolicitada ASC"),
+    @NamedQuery(name = "CitaPsicologia.findAñosGlobales", query = "SELECT DISTINCT FUNCTION('YEAR', c.citaPsicologiaPK.fechaSolicitada) FROM CitaPsicologia c ORDER BY 1 ASC"),
+    @NamedQuery(name = "CitaPsicologia.findAñosPersonales", query = "SELECT DISTINCT FUNCTION('YEAR', c.citaPsicologiaPK.fechaSolicitada) FROM CitaPsicologia c WHERE c.citaPsicologiaPK.estudiante = :idEstudiante ORDER BY 1 ASC")
+})
 public class CitaPsicologia implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -31,22 +31,38 @@ public class CitaPsicologiaFacade extends AbstractFacade<CitaPsicologia> impleme
     }
 
     @Override
-    public List<CitaPsicologia> findByEstudiante(Integer idEstudiante) {
+    public List<CitaPsicologia> findByEstudiante(Integer idEstudiante, Integer año) {
         return em.createNamedQuery("CitaPsicologia.findByEstudiante")
                 .setParameter("estudiante", idEstudiante)
+                .setParameter("año", año)
                 .getResultList();
     }
-    
+
     @Override
-    public List<CitaPsicologia> findByEstado(String estado) {
+    public List<CitaPsicologia> findByEstado(String estado, Integer año) {
         return em.createNamedQuery("CitaPsicologia.findByEstado")
                 .setParameter("estado", estado)
+                .setParameter("año", año)
                 .getResultList();
     }
-    
+
     @Override
-    public List<CitaPsicologia> findConsultados(){
-        return em.createNamedQuery("CitaPsicologia.findConsultados").getResultList();
+    public List<CitaPsicologia> findConsultados(Integer año) {
+        return em.createNamedQuery("CitaPsicologia.findConsultados")
+                .setParameter("año", año)
+                .getResultList();
+    }
+
+    @Override
+    public List<Integer> findAñosGlobales() {
+        return em.createNamedQuery("CitaPsicologia.findAñosGlobales").getResultList();
+    }
+
+    @Override
+    public List<Integer> findAñosPersonales(Integer idEstudiante) {
+        return em.createNamedQuery("CitaPsicologia.findAñosPersonales")
+                .setParameter("idEstudiante", idEstudiante)
+                .getResultList();
     }
 
 }

@@ -5,6 +5,7 @@
  */
 package net.delsas.saitae.beans;
 
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Local;
 import net.delsas.saitae.entities.Permisos;
@@ -34,9 +35,10 @@ public interface PermisosFacadeLocal {
      * Busca los permisos que estén en el estado indicado.
      *
      * @param estado
+     * @param año
      * @return java.util.List net.delsas.saitae.entities.Permisos
      */
-    public List<Permisos> getPermisosPorEstado(String estado);
+    public List<Permisos> getPermisosPorEstado(String estado, Integer año);
 
     /**
      * Busca los permisos pa estudiantes que estén en el estado indicado.
@@ -52,19 +54,38 @@ public interface PermisosFacadeLocal {
      * estado del permiso.
      *
      * @param idPersona
+     * @param año
      * @return
      */
-    public List<Permisos> findByIpPersona(Integer idPersona);
+    public List<Permisos> findByIpPersona(Integer idPersona, Integer año);
 
     /**
      * Devuelve una lista con los permisos con el estado indicado y en los que
-     * los solicitantes tienen un idTipoPersona que se encuentre entre los indicados en
-     * la lista
+     * los solicitantes tienen un idTipoPersona que se encuentre entre los
+     * indicados en la lista
      *
      * @param estado
-     * @param tiposexluir
+     * @param tiposAListar
+     * @param año
      * @return java.util.List net.delsas.saitae.entities.Permisos
      */
-    public List<Permisos> findByEstadoAndTipos(String estado, List<Integer> tiposexluir);
+    public List<Permisos> findByEstadoAndTipos(String estado, List<Integer> tiposAListar, Integer año);
+
+    /**
+     * devuelve una lista con todos los años en los que se han seleccionado
+     * permisos;
+     *
+     * @return java.util.List java.lang.Integer
+     */
+    public List<Integer> findAñosGlobales();
+
+    /**
+     * devuelve una lista con todos los años en los que se han seleccionado
+     * permisos para la persona indicada;
+     *
+     * @param idPersona
+     * @return java.util.List java.lang.Integer
+     */
+    public List<Integer> findAñosPersona(Integer idPersona);
 
 }

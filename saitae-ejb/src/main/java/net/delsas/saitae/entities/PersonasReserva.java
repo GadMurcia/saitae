@@ -25,11 +25,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "personasReserva", catalog = "intex", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "PersonasReserva.findAll", query = "SELECT p FROM PersonasReserva p")
-    , @NamedQuery(name = "PersonasReserva.findByIdReserva", query = "SELECT p FROM PersonasReserva p WHERE p.personasReservaPK.idReserva = :idReserva")
-    , @NamedQuery(name = "PersonasReserva.findByIdpersona", query = "SELECT p FROM PersonasReserva p WHERE p.personasReservaPK.idpersona = :idpersona")
-    , @NamedQuery(name = "PersonasReserva.findByPersonasReservaComentario", query = "SELECT p FROM PersonasReserva p WHERE p.personasReservaComentario = :personasReservaComentario")
-    , @NamedQuery(name = "PersonasReserva.findReservaByIdpersona", query = "SELECT DISTINCT p.reserva FROM PersonasReserva p WHERE p.personasReservaPK.idpersona = :idPersona ORDER BY p.reserva.reservaFecha DESC , p.reserva.reservaEstado")
+    @NamedQuery(name = "PersonasReserva.findAll", query = "SELECT p FROM PersonasReserva p"),
+    @NamedQuery(name = "PersonasReserva.findByIdReserva", query = "SELECT p FROM PersonasReserva p WHERE p.personasReservaPK.idReserva = :idReserva"),
+    @NamedQuery(name = "PersonasReserva.findByIdpersona", query = "SELECT p FROM PersonasReserva p WHERE p.personasReservaPK.idpersona = :idpersona"),
+    @NamedQuery(name = "PersonasReserva.findByPersonasReservaComentario", query = "SELECT p FROM PersonasReserva p WHERE p.personasReservaComentario = :personasReservaComentario"),
+    @NamedQuery(name = "PersonasReserva.findAñosPersonasles", query = "SELECT DISTINCT FUNCTION('YEAR', p.reserva.reservaEntrega) FROM PersonasReserva p WHERE p.personasReservaPK.idpersona = :idPersona ORDER BY 1 ASC"),
+    @NamedQuery(name = "PersonasReserva.findReservaByIdpersona", query = "SELECT p.reserva FROM PersonasReserva p WHERE p.personasReservaPK.idpersona = :idPersona AND FUNCTION('YEAR', p.reserva.reservaEntrega) = :año ORDER BY p.reserva.reservaFecha DESC , p.reserva.reservaEstado")
 })
 public class PersonasReserva implements Serializable {
 

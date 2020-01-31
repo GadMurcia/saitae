@@ -10,6 +10,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import net.delsas.saitae.entities.PersonasReserva;
+import net.delsas.saitae.entities.Reserva;
 
 /**
  *
@@ -29,12 +30,27 @@ public class PersonasReservaFacade extends AbstractFacade<PersonasReserva> imple
     public PersonasReservaFacade() {
         super(PersonasReserva.class);
     }
-    
+
     @Override
-    public List<PersonasReserva> findByIdReserva(Integer id){
+    public List<PersonasReserva> findByIdReserva(Integer id) {
         return em.createNamedQuery("PersonasReserva.findByIdReserva")
                 .setParameter("idReserva", id)
                 .getResultList();
     }
-    
+
+    @Override
+    public List<Reserva> findReservaByIdpersona(Integer idPersona, Integer año) {
+        return em.createNamedQuery("PersonasReserva.findReservaByIdpersona")
+                .setParameter("idPersona", idPersona)
+                .setParameter("año", año)
+                .getResultList();
+    }
+
+    @Override
+    public List<Integer> findAñosPersonasles(Integer idPersona) {
+        return em.createNamedQuery("PersonasReserva.findAñosPersonasles")
+                .setParameter("idPersona", idPersona)
+                .getResultList();
+    }
+
 }

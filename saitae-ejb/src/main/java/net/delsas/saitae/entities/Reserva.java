@@ -37,17 +37,18 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "reserva", catalog = "intex", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Reserva.findAll", query = "SELECT r FROM Reserva r")
-    , @NamedQuery(name = "Reserva.findByIdreserva", query = "SELECT r FROM Reserva r WHERE r.idreserva = :idreserva")
-    , @NamedQuery(name = "Reserva.findByReservaFecha", query = "SELECT r FROM Reserva r WHERE r.reservaFecha = :reservaFecha")
-    , @NamedQuery(name = "Reserva.findByReservaEntrega", query = "SELECT r FROM Reserva r WHERE r.reservaEntrega = :reservaEntrega")
-    , @NamedQuery(name = "Reserva.findByReservaDevolucion", query = "SELECT r FROM Reserva r WHERE r.reservaDevolucion = :reservaDevolucion")
-    , @NamedQuery(name = "Reserva.findByReservaEstado", query = "SELECT r FROM Reserva r WHERE r.reservaEstado = :reservaEstado ORDER BY r.reservaEntrega DESC")
-    , @NamedQuery(name = "Reserva.findByReservaDevuelto", query = "SELECT r FROM Reserva r WHERE r.reservaDevuelto = :reservaDevuelto")
-    , @NamedQuery(name = "Reserva.findByTema", query = "SELECT r FROM Reserva r WHERE r.tema = :tema")
-    , @NamedQuery(name = "Reserva.findByObjetivoTema", query = "SELECT r FROM Reserva r WHERE r.objetivoTema = :objetivoTema")
-    , @NamedQuery(name = "Reserva.findByReservaComentario", query = "SELECT r FROM Reserva r WHERE r.reservaComentario = :reservaComentario")
-    , @NamedQuery(name = "Reserva.findByEstadoAndIdTipoRecurso", query = "SELECT r FROM Reserva r WHERE r.reservaEstado = :estado AND :idTipoRecurso IN (SELECT  s.recurso.idTipoRecurso.idtipoRecurso FROM SolicitudReserva s WHERE s.reserva.idreserva = r.idreserva) ORDER BY r.reservaEntrega DESC")
+    @NamedQuery(name = "Reserva.findAll", query = "SELECT r FROM Reserva r"),
+    @NamedQuery(name = "Reserva.findByIdreserva", query = "SELECT r FROM Reserva r WHERE r.idreserva = :idreserva"),
+    @NamedQuery(name = "Reserva.findByReservaFecha", query = "SELECT r FROM Reserva r WHERE r.reservaFecha = :reservaFecha"),
+    @NamedQuery(name = "Reserva.findByReservaEntrega", query = "SELECT r FROM Reserva r WHERE r.reservaEntrega = :reservaEntrega"),
+    @NamedQuery(name = "Reserva.findByReservaDevolucion", query = "SELECT r FROM Reserva r WHERE r.reservaDevolucion = :reservaDevolucion"),
+    @NamedQuery(name = "Reserva.findByReservaEstado", query = "SELECT r FROM Reserva r WHERE r.reservaEstado = :reservaEstado AND FUNCTION('YEAR', r.reservaEntrega) = :año"),
+    @NamedQuery(name = "Reserva.findByReservaDevuelto", query = "SELECT r FROM Reserva r WHERE r.reservaDevuelto = :reservaDevuelto"),
+    @NamedQuery(name = "Reserva.findByTema", query = "SELECT r FROM Reserva r WHERE r.tema = :tema"),
+    @NamedQuery(name = "Reserva.findByObjetivoTema", query = "SELECT r FROM Reserva r WHERE r.objetivoTema = :objetivoTema"),
+    @NamedQuery(name = "Reserva.findByReservaComentario", query = "SELECT r FROM Reserva r WHERE r.reservaComentario = :reservaComentario"),
+    @NamedQuery(name = "Reserva.findByEstadoAndIdTipoRecurso", query = "SELECT r FROM Reserva r WHERE r.reservaEstado = :estado AND :idTipoRecurso IN (SELECT  s.recurso.idTipoRecurso.idtipoRecurso FROM SolicitudReserva s WHERE s.reserva.idreserva = r.idreserva) AND FUNCTION('YEAR', r.reservaEntrega) = :año ORDER BY r.reservaEntrega DESC"),
+    @NamedQuery(name = "Reserva.findAñosGlobales", query = "SELECT DISTINCT FUNCTION('YEAR', r.reservaEntrega) FROM Reserva r ORDER BY 1 ASC")
 })
 public class Reserva implements Serializable {
 

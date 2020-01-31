@@ -26,6 +26,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -66,11 +67,15 @@ public class citasPsHController implements Serializable {
     private Persona usuario;
     private FacesContext context;
     private String textoReserva;
+    private Integer añoSelected;
+    private List<Integer> añosDisponibles;
 
     @PostConstruct
     public void init() {
         context = FacesContext.getCurrentInstance();
         usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
+        añoSelected = Auxiliar.getAñoActual();
+        añosDisponibles = cpsFL.findAñosPersonales(usuario.getIdpersona());
     }
 
     public void onDetalleRowSelect(SelectEvent event) {
@@ -193,7 +198,7 @@ public class citasPsHController implements Serializable {
     }
 
     public List<CitaPsicologia> getCitas() {
-        citas = cpsFL.findByEstudiante(usuario.getIdpersona());
+        citas = cpsFL.findByEstudiante(usuario.getIdpersona(), añoSelected);
         return Collections.unmodifiableList(citas);
     }
 
@@ -207,6 +212,26 @@ public class citasPsHController implements Serializable {
 
     public boolean verMotivo() {
         return selected == null ? false : (selected.getComentarios() != null || !selected.getComentarios().isEmpty());
+    }
+
+    public void onBlour(AjaxBehaviorEvent a) {
+
+    }
+
+    public Integer getAñoSelected() {
+        return añoSelected;
+    }
+
+    public void setAñoSelected(Integer añoSelected) {
+        this.añoSelected = añoSelected;
+    }
+
+    public List<Integer> getAñosDisponibles() {
+        return añosDisponibles;
+    }
+
+    public void setAñosDisponibles(List<Integer> añosDisponibles) {
+        this.añosDisponibles = añosDisponibles;
     }
 
 }
