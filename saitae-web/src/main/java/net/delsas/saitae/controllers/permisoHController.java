@@ -70,7 +70,8 @@ public class permisoHController implements Serializable {
     public void init() {
         usuario = (Persona) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
         añoSelected = Auxiliar.getAñoActual();
-        añosDisponnibles = psFL.findAñosPersona(usuario.getIdpersona());
+        añosDisponnibles = Auxiliar.getAñosParaMostrar(
+                usuario.getTipoPersona().getIdtipoPersona().equals(8) ? 3 : 5);
     }
 
     public List<Permisos> getPermisos() {

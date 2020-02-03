@@ -50,7 +50,7 @@ import org.primefaces.event.SelectEvent;
 @Named
 @ViewScoped
 public class admCPSController implements Serializable {
-
+    
     private static final long serialVersionUID = 1L;
     @EJB
     private CitaPsicologiaFacadeLocal cpsFL;
@@ -73,7 +73,7 @@ public class admCPSController implements Serializable {
     private FacesContext context;
     private Integer añoSelected;
     private List<Integer> añosDisponibles;
-
+    
     @PostConstruct
     public void init() {
         usuario = (Persona) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
@@ -81,8 +81,8 @@ public class admCPSController implements Serializable {
         if (tp == 14 || tp == 1) {
             m = (FacesMessage) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("ms");
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("ms");
-            añoSelected=Auxiliar.getAñoActual();
-            añosDisponibles=cpsFL.findAñosGlobales();
+            añoSelected = Auxiliar.getAñoActual();
+            añosDisponibles = Auxiliar.getAñosParaMostrar(5);
         } else {
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("mensaje",
                     new FacesMessage(FacesMessage.SEVERITY_ERROR,
@@ -98,44 +98,44 @@ public class admCPSController implements Serializable {
             }
         }
     }
-
+    
     public void onDetalleRowSelect(SelectEvent event) {
         selected = (CitaPsicologia) event.getObject();
         textoReserva = Auxiliar.getEstadoCita1(selected.getEstado());
     }
-
+    
     public String getFechaHoraToString(Date d) {
         return d == null ? "" : new SimpleDateFormat("dd/MM/yyyy hh:mm a").format(d);
     }
-
+    
     public String getFechasToString(Date d) {
         return d == null ? "" : new SimpleDateFormat("dd/MM/yyyy").format(d);
     }
-
+    
     public String getHoraToString(Date d) {
         return d == null ? "" : new SimpleDateFormat("hh:mm a").format(d);
     }
-
+    
     public String getEstado(String e) {
         return Auxiliar.getEstadoCita2(e);
     }
-
+    
     public boolean isEstado(String e) {
         return selected == null ? false : selected.getEstado().equals(e);
     }
-
+    
     public List<CitaPsicologia> getConsultados() {
         consultados = cpsFL.findConsultados(añoSelected);
         return Collections.unmodifiableList(consultados);
     }
-
+    
     public List<CitaPsicologia> getSolicitados() {
-        solicitados = cpsFL.findByEstado("S",añoSelected);
+        solicitados = cpsFL.findByEstado("S", añoSelected);
         return Collections.unmodifiableList(solicitados);
     }
-
+    
     public List<CitaPsicologia> getAceptados() {
-        aceptados = cpsFL.findByEstado("A",añoSelected);
+        aceptados = cpsFL.findByEstado("A", añoSelected);
         List<CitaPsicologia> brs = new ArrayList<>();
         aceptados.stream().filter((c) -> (c.getFechaSolicitud().equals(c.getCitaPsicologiaPK().getFechaSolicitada()))).map((c) -> {
             cpsFL.remove(c);
@@ -146,43 +146,43 @@ public class admCPSController implements Serializable {
         aceptados.removeAll(brs);
         return Collections.unmodifiableList(aceptados);
     }
-
+    
     public List<CitaPsicologia> getPospuestos() {
         pospuestos = cpsFL.findByEstado("P", añoSelected);
         return Collections.unmodifiableList(pospuestos);
     }
-
+    
     public List<CitaPsicologia> getCancelados() {
         cancelados = cpsFL.findByEstado("C", añoSelected);
         return Collections.unmodifiableList(cancelados);
     }
-
+    
     public CitaPsicologia getSelected() {
         return selected;
     }
-
+    
     public void setSelected(CitaPsicologia selected) {
         this.selected = selected;
     }
-
+    
     public String getTextoReserva() {
         return textoReserva;
     }
-
+    
     public boolean getSePuedeConsultar() {
         return selected == null ? false : selected.getEstado().equals("A");
     }
-
+    
     public boolean getSePuedePosponer() {
         return selected == null ? false
                 : (selected.getEstado().equals("S")
                 || selected.getEstado().equals("A"));
     }
-
+    
     public boolean getSePuedeAceptar() {
         return selected == null ? false : selected.getEstado().equals("S");
     }
-
+    
     public void postRender() {
         if (m != null) {
             FacesContext.getCurrentInstance().addMessage("form0:msgs", m);
@@ -190,7 +190,7 @@ public class admCPSController implements Serializable {
             m = null;
         }
     }
-
+    
     private Date getFechas(Date fecha, Date hora) {
         Date s = null;
         try {
@@ -201,7 +201,7 @@ public class admCPSController implements Serializable {
         }
         return s;
     }
-
+    
     public void aceptar() {
         selected.setEstado("A");
         selected.setComentarios("");
@@ -221,7 +221,7 @@ public class admCPSController implements Serializable {
         PrimeFaces.current().executeScript("PF('Dcita1').hide(); PF('Dcita').hide();");
         PrimeFaces.current().ajax().update("form", "d1", "d2");
     }
-
+    
     public void posponer() {
         fechaPosponer = getFechas(fechaPosponer, horaPosponer);
         if (!fechaPosponer.after(selected.getFechaSolicitud())) {
@@ -256,7 +256,7 @@ public class admCPSController implements Serializable {
         PrimeFaces.current().executeScript("PF('Dcita1').hide(); PF('Dcita').hide();");
         PrimeFaces.current().ajax().update("form", "d1", "d2");
     }
-
+    
     public void consultar(boolean editar) {
         context = FacesContext.getCurrentInstance();
         try {
@@ -270,55 +270,55 @@ public class admCPSController implements Serializable {
         } catch (IOException ex) {
         }
     }
-
+    
     public Date getFechaPosponer() {
         return fechaPosponer;
     }
-
+    
     public void setFechaPosponer(Date fechaPosponer) {
         this.fechaPosponer = fechaPosponer;
     }
-
+    
     public Date getHoraPosponer() {
         return horaPosponer;
     }
-
+    
     public void setHoraPosponer(Date horaPosponer) {
         this.horaPosponer = horaPosponer;
     }
-
+    
     public List<Integer> getInvalidDays() {
         return Auxiliar.getDisabledDays();
     }
-
+    
     public boolean isTerminada() {
         return selected == null ? false : selected.getEstado().equals("T");
     }
-
+    
     public String getNombreEstudiante(CitaPsicologia c) {
         Persona e = c == null ? null : c.getEstudiante1().getPersona();
         return e == null ? "" : e.getPersonaNombre().split(" ")[0]
                 + " " + e.getPersonaApellido().split(" ")[0];
     }
     
-    public void onBlour(AjaxBehaviorEvent a){
+    public void onBlour(AjaxBehaviorEvent a) {
         
     }
-
+    
     public Integer getAñoSelected() {
         return añoSelected;
     }
-
+    
     public void setAñoSelected(Integer añoSelected) {
         this.añoSelected = añoSelected;
     }
-
+    
     public List<Integer> getAñosDisponibles() {
         return añosDisponibles;
     }
-
+    
     public void setAñosDisponibles(List<Integer> añosDisponibles) {
         this.añosDisponibles = añosDisponibles;
     }
-
+    
 }

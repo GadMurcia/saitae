@@ -75,7 +75,7 @@ public class citasPsHController implements Serializable {
         context = FacesContext.getCurrentInstance();
         usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
         añoSelected = Auxiliar.getAñoActual();
-        añosDisponibles = cpsFL.findAñosPersonales(usuario.getIdpersona());
+        añosDisponibles = Auxiliar.getAñosParaMostrar(3);
     }
 
     public void onDetalleRowSelect(SelectEvent event) {

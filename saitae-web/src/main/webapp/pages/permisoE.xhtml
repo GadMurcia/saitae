@@ -13,7 +13,7 @@
                     <p:growl id="msgs" showDetail="true" life="20000"/>
                     <h1 align="center"> Solicitud de Permisos</h1>
                     <h:panelGrid columns="3">
-                        <p:outputLabel for="tp" value="Tipo de permiso a solicitar: "/>
+                        <p:outputLabel for="tp" value="Permiso a solicitar: "/>
                         <p:selectOneMenu id="tp" immediate="true" required="true" style="width: 400px;"
                                          value="#{permisoEstController.p.tipoPermiso1}"
                                          converter="omnifaces.SelectItemsConverter"
@@ -25,8 +25,8 @@
                         </p:selectOneMenu>
                         <p:message for="tp"/>
 
-                        <p:outputLabel for="es" value="¿Para quién es el permiso? "/>
-                        <p:selectOneMenu id="es" immediate="true" required="true" 
+                        <p:outputLabel for="es" value="Beneficiario del permiso: "/>
+                        <p:selectOneMenu id="es" immediate="true" required="true"
                                          value="#{permisoEstController.id}" style="width: 400px;"
                                          disabled="#{permisoEstController.disabled()}"
                                          converter="omnifaces.SelectItemsConverter">

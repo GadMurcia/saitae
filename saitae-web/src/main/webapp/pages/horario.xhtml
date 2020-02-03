@@ -67,7 +67,9 @@
 
                         <p:column/>
                         <p:commandButton value="Guardar" actionListener="#{horarioController.guardar()}"
-                                         style="width: 190px" update="form f1"/>
+                                         style="width: 190px" update="form f1 d2"
+                                         onstart="PF('D1').show();" 
+                                         oncomplete="PF('D1').hide();"/>
 
                         <p:column/>
                     </h:panelGrid>
@@ -85,61 +87,157 @@
                             <f:selectItems value="#{horarioController.añosDisponibles}" var="ad"
                                            itemLabel="#{ad}" itemValue="#{ad}"/>
                             <p:ajax event="itemSelect" listener="#{horarioController.onAñoSelected}"
-                                    update=":form:horario"/>
+                                    update=":form:horario" 
+                                    onstart="PF('D1').show();" oncomplete="PF('D1').hide();"/>
                         </p:selectOneMenu>
                     </h:panelGrid>
-                    <p:dataTable id="horario" var="h" value="#{horarioController.horario}" 
-                                 rowKey="#{h.mestroHorarioMateriasPK}" selectionMode="single"
-                                 selection="#{horarioController.selected}" rows="6"
-                                 paginator="true" paginatorAlwaysVisible="false" paginatorPosition="top"
+                    <h:panelGrid columns="2">
+                        <p:outputLabel for="dias" value="Seleccione el día de visualización: "/>
+                        <p:selectOneMenu id="dias" value="#{horarioController.diaSelected}" 
+                                         converter="omnifaces.SelectItemsConverter">
+                            <f:selectItems value="#{horarioController.dias}" var="ds"
+                                           itemLabel="#{ds.diasEstudioNombre}" itemValue="#{ds}"/>
+                            <p:ajax event="itemSelect" listener="#{horarioController.onAñoSelected}"
+                                    update=":form:horario"
+                                    onstart="PF('D1').show();" oncomplete="PF('D1').hide();"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <p:dataTable id="horario" var="h" value="#{horarioController.horario2}" 
+                                 rowKey="#{h.idHorarioGlobal}" selectionMode="single"
+                                 selection="#{horarioController.horario2Selected}"
                                  emptyMessage="No hay horarios disponibles.">
                         <p:ajax event="rowSelect" listener="#{horarioController.onRowSelect}" 
-                                update="f1"/>
+                                update="d2" onstart="PF('D1').show();" 
+                                oncomplete="PF('D1').hide(); PF('Deditar').show();"/>
                         <f:facet name="header">
                             Horario Institucional
                         </f:facet>
-                        <p:column headerText="Día"
-                                  filterBy="#{h.diasEstudio.diasEstudioNombre}"
-                                  filterMatchMode="contains">
-                            #{h.diasEstudio.diasEstudioNombre}
+                        <p:columnGroup type="header">
+                            <p:row>
+                                <p:column rowspan="2" headerText="Hora" style="border:#000000 1px solid" width="25%"/>
+                                <p:column colspan="4" headerText="Generales" style="border:#000000 1px solid"/>
+                                <p:column colspan="6" headerText="Comercios" style="border:#000000 1px solid"/>
+                            </p:row>
+                            <p:row>
+                                <p:column headerText="1A" style="border:#000000 1px solid"/>
+                                <p:column headerText="1B" style="border:#000000 1px solid"/>
+                                <p:column headerText="2A" style="border:#000000 1px solid"/>
+                                <p:column headerText="2B" style="border:#000000 1px solid"/>
+                                <p:column headerText="1A" style="border:#000000 1px solid"/>
+                                <p:column headerText="1B" style="border:#000000 1px solid"/>
+                                <p:column headerText="2A" style="border:#000000 1px solid"/>
+                                <p:column headerText="2B" style="border:#000000 1px solid"/>
+                                <p:column headerText="3A" style="border:#000000 1px solid"/>
+                                <p:column headerText="3B" style="border:#000000 1px solid"/>
+                            </p:row>
+                        </p:columnGroup>
+                        <p:column>
+                            #{horarioController.getHora(h.hora.horaInicio)} - 
+                            #{horarioController.getHora(h.hora.horaFin)}
                         </p:column>
-                        <p:column headerText="Hora" filterMatchMode="contains"
-                                  filterBy="#{horarioController.getHora(h.horario.horaInicio)} - #{horarioController.getHora(h.horario.horaFin)}">
-                            #{horarioController.getHora(h.horario.horaInicio)} - 
-                            #{horarioController.getHora(h.horario.horaFin)}
+                        <p:column>
+                            <h:outputText value="#{h.generales.a1.materia.materiaAbreviacion}" 
+                                          title="#{h.generales.a1.materia.materiaNombre} 
+                                          (#{horarioController.getNombreCorto(h.generales.a1.maestro)})"/>
                         </p:column>
-                        <p:column headerText="Materia" filterMatchMode="contains"
-                                  filterBy="#{h.materia.materiaNombre}">
-                            #{h.materia.materiaNombre}
+                        <p:column>
+                            <h:outputText value="#{h.generales.b1.materia.materiaAbreviacion}" 
+                                          title="#{h.generales.b1.materia.materiaNombre} 
+                                          (#{horarioController.getNombreCorto(h.generales.b1.maestro)})"/>
                         </p:column>
-                        <p:column headerText="Grado" filterMatchMode="contains"
-                                  filterBy="#{horarioController.getGrado(h.grado.gradoPK)}">
-                            #{horarioController.getGrado(h.grado.gradoPK)}
+                        <p:column>
+                            <h:outputText value="#{h.generales.a2.materia.materiaAbreviacion}" 
+                                          title="#{h.generales.a2.materia.materiaNombre} 
+                                          (#{horarioController.getNombreCorto(h.generales.a2.maestro)})"/>
                         </p:column>
-                        <p:column headerText="Maestro" filterMatchMode="contains" 
-                                  filterBy="#{h.maestro.persona.personaNombre.split(' ')[0]} #{h.maestro.persona.personaApellido.split(' ')[0]}">
-                            #{h.maestro.persona.personaNombre.split(" ")[0]} 
-                            #{h.maestro.persona.personaApellido.split(" ")[0]}
+                        <p:column>
+                            <h:outputText value="#{h.generales.b2.materia.materiaAbreviacion}" 
+                                          title="#{h.generales.b2.materia.materiaNombre} 
+                                          (#{horarioController.getNombreCorto(h.generales.b2.maestro)})"/>
                         </p:column>
+                        <p:column>
+                            <h:outputText value="#{h.comercios.a1.materia.materiaAbreviacion}" 
+                                          title="#{h.comercios.a1.materia.materiaNombre} 
+                                          (#{horarioController.getNombreCorto(h.comercios.a1.maestro)})"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{h.comercios.b1.materia.materiaAbreviacion}" 
+                                          title="#{h.comercios.b1.materia.materiaNombre} 
+                                          (#{horarioController.getNombreCorto(h.comercios.b1.maestro)})"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{h.comercios.a2.materia.materiaAbreviacion}" 
+                                          title="#{h.comercios.a2.materia.materiaNombre} 
+                                          (#{horarioController.getNombreCorto(h.comercios.a2.maestro)})"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{h.comercios.b2.materia.materiaAbreviacion}" 
+                                          title="#{h.comercios.b2.materia.materiaNombre} 
+                                          (#{horarioController.getNombreCorto(h.comercios.b2.maestro)})"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{h.comercios.a3.materia.materiaAbreviacion}" 
+                                          title="#{h.comercios.a3.materia.materiaNombre} 
+                                          (#{horarioController.getNombreCorto(h.comercios.a3.maestro)})"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{h.comercios.b3.materia.materiaAbreviacion}" 
+                                          title="#{h.comercios.b3.materia.materiaNombre} 
+                                          (#{horarioController.getNombreCorto(h.comercios.b3.maestro)})"/>
+                        </p:column>
+
                     </p:dataTable>
                     <p:commandButton title="Agregar nuevo" icon="pi pi-plus-circle" 
                                      update=":f1"
                                      actionListener="#{horarioController.nuevo()}"
-                                     oncomplete="PF('Dhorario').show()"/>
-                    <p:contextMenu id="ctxm" for="horario">
-                        <p:menuitem value="Agregar nuevo" icon="pi pi-plus-circle" 
-                                    update=":f1"
-                                    actionListener="#{horarioController.nuevo()}"
-                                    oncomplete="PF('Dhorario').show()"/>
-                        <p:menuitem value="Editar" icon="fa fa-edit" update="f1"
+                                     onstart="PF('D1').show();" 
+                                     oncomplete="PF('D1').hide(); PF('Dhorario').show()"/>
+                </h:panelGrid>
+            </h:form>
+
+            <p:dialog header="Procesando solicitud" widgetVar="D1" modal="true" closable="false" 
+                      resizable="false" responsive="true">
+                <h:form>
+                    Espere mientras se cargan los datos...
+                </h:form>
+            </p:dialog>
+
+            <p:dialog header="Seleccione uno" widgetVar="Deditar" modal="true" closeOnEscape="true"
+                      resizable="false" responsive="true">
+                <h:form id="d2">
+                    <p:dataTable id="horario2" var="h2" value="#{horarioController.horario}" 
+                                 rowKey="#{h2.mestroHorarioMateriasPK}" selectionMode="single"
+                                 selection="#{horarioController.selected}"
+                                 emptyMessage="No hay horarios disponibles.">
+                        <p:ajax event="rowSelect" listener="#{horarioController.onRowSelect}" 
+                                update="f1"/>
+                        <f:facet name="header">
+                            Horario institucional día: #{h2.diasEstudio.diasEstudioNombre}, 
+                            hora: #{horarioController.getHora(h2.horario.horaInicio)} - 
+                            #{horarioController.getHora(h2.horario.horaFin)}
+                        </f:facet>
+                        <p:column headerText="Materia">
+                            #{h2.materia.materiaNombre}
+                        </p:column>
+                        <p:column headerText="Grado">
+                            #{horarioController.getGrado(h2.grado.gradoPK)}
+                        </p:column>
+                        <p:column headerText="Mestro">
+                            #{horarioController.getNombreCorto(h2.maestro)}
+                        </p:column>
+                    </p:dataTable>
+                    <p:contextMenu id="ctxm" for="horario2">
+                        <p:menuitem value="Editar" icon="fa fa-edit" update="f1 d2 form"
                                     actionListener="#{horarioController.editar()}"
                                     oncomplete="PF('Dhorario').show()" />
                         <p:menuitem value="Eliminar" icon="pi pi-minus-circle" 
                                     actionListener="#{horarioController.eliminar()}"
-                                    update=":form :f1"/>
+                                    update=":form :f1 d2" 
+                                    oncomplete="PF('Deditar').hide()"/>
                     </p:contextMenu>
-                </h:panelGrid>
-            </h:form>
+
+                </h:form>
+            </p:dialog>
         </f:view>
     </ui:define>
 </ui:composition>

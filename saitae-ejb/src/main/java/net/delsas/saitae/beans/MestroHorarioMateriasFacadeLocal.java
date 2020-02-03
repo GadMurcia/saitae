@@ -111,4 +111,15 @@ public interface MestroHorarioMateriasFacadeLocal {
      * @return java.util.List java.lang.Integer
      */
     public List<Integer> findAñosByIdMaestro(Integer idMaestro);
+
+    /**
+     * Devuelve una lista con los horarios para el día, grados y horario
+     * proporcionados.
+     *
+     * @param idhora
+     * @param gradpPK
+     * @param idDia
+     * @return java.util.List net.delsas.saitae.entities.MestroHorarioMaterias
+     */
+    public List<MestroHorarioMaterias> findByIdDiaAndGradopkAndidHora(Integer idhora, GradoPK gradpPK, Integer idDia);
 }

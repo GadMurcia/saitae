@@ -63,7 +63,7 @@ import org.primefaces.event.SelectEvent;
 @Named
 @ViewScoped
 public class historialRController implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
     @EJB
     private ReservaFacadeLocal resFL;
@@ -82,13 +82,13 @@ public class historialRController implements Serializable {
     private PersonasReservaFacadeLocal prFL;
     @EJB
     private ReservaXpedagogiaFacadeLocal rxpFL;
-    
+
     private List<Ejemplar> r;
     private List<Reserva> reservas;
     private List<Integer> añosDisponibles;
-    
+
     private String[] u;
-    
+
     private String textoReserva;
     private Reserva selected;
     private Persona usuario;
@@ -96,7 +96,7 @@ public class historialRController implements Serializable {
     private boolean rechazo;
     private ProyectoPedagogico proyecto;
     private Integer añoSelected;
-    
+
     @PostConstruct
     public void init() {
         context = FacesContext.getCurrentInstance();
@@ -118,18 +118,19 @@ public class historialRController implements Serializable {
             textoReserva = "";
             u = new String[]{"Docente", "Estudiante", "Grupo de estudiantes", "Personal (No académico)"};
             añoSelected = Auxiliar.getAñoActual();
-            añosDisponibles = prFL.findAñosPersonasles(usuario.getIdpersona());
+            añosDisponibles = Auxiliar.getAñosParaMostrar(
+                    usuario.getTipoPersona().getIdtipoPersona().equals(8) ? 3 : 5);
         }
     }
-    
+
     public void onRowEdit(RowEditEvent event) {
         System.out.println(event.getObject());
     }
-    
+
     public void onRowCancel(RowEditEvent event) {
         System.out.println(event.getObject());
     }
-    
+
     public void procesoDetalle() {
         r = new ArrayList<>();
         if (selected != null) {
@@ -163,7 +164,7 @@ public class historialRController implements Serializable {
             }
         }
     }
-    
+
     public void onDetalleRowSelect(SelectEvent event) {
         selected = (Reserva) event.getObject();
         List<ProyectoPedagogico> re = rxpFL.findProyectoByIdReserva(selected == null
@@ -177,43 +178,43 @@ public class historialRController implements Serializable {
         rechazo = false;
         textoReserva = selected == null ? "" : Auxiliar.getEstadoReservas1(selected.getReservaEstado());
     }
-    
+
     public Reserva getSelected() {
         return selected;
     }
-    
+
     public void setSelected(Reserva selected) {
         this.selected = selected;
     }
-    
+
     public List<Reserva> getReservas() {
         reservas = prFL.findReservaByIdpersona(usuario.getIdpersona(), añoSelected);
         return Collections.unmodifiableList(reservas);
     }
-    
+
     public String getFechasToString(Date d) {
         return d == null ? "" : new SimpleDateFormat("dd/MM/yyyy hh:mm a").format(d);
     }
-    
+
     public String getEstado(String e) {
         return Auxiliar.getEstadoReservas2(e);
     }
-    
+
     public boolean getSePuedeCancelar() {
         return selected == null ? false
                 : (selected.getReservaEstado().equals("S") || selected.getReservaEstado().equals("A"));
     }
-    
+
     public String getResponsable(String r) {
         return r.split("¿¿")[0];
     }
-    
+
     public String getTipoRecurso(Reserva r) {
         return r == null ? "" : (!r.getSolicitudReservaList().isEmpty()
                 ? r.getSolicitudReservaList().get(0).getRecurso().getIdTipoRecurso().getTipoRecursoNombre()
                 : "");
     }
-    
+
     public void cancelar() {
         System.out.println(getRazonRechazo());
         if (selected != null) {
@@ -260,13 +261,13 @@ public class historialRController implements Serializable {
             PrimeFaces.current().ajax().update(":form0:msgs", "noti", ":form", "d1", "d2");
         }
     }
-    
+
     public boolean getVerRechazo() {
         return (selected == null ? false
                 : (selected.getReservaEstado().equals("S")
                 || selected.getReservaEstado().equals("A")));
     }
-    
+
     public List<Persona> getPersonasEnSolicitud() {
         List<Persona> l = new ArrayList<>();
         if (selected != null) {
@@ -276,10 +277,10 @@ public class historialRController implements Serializable {
                 l.add(pr.getPersona());
             });
         }
-        
+
         return l;
     }
-    
+
     public String getPersonasEnSolicitudTexto() {
         String l = "";
         for (Persona p : getPersonasEnSolicitud()) {
@@ -288,36 +289,36 @@ public class historialRController implements Serializable {
         }
         return l;
     }
-    
+
     public void setCom(Integer ind, String v) {
         selected.setReservaComentario(Auxiliar.setComentario(ind, v, selected.getReservaComentario()));
     }
-    
+
     public String getRazonRechazo() {
         return selected != null ? selected.getReservaComentario().split("¿¿")[3] : "";
     }
-    
+
     public void setRazonRechazo(String rechazo) {
         setCom(3, rechazo);
     }
-    
+
     public void setReservaDetalle(List<Ejemplar> ejs) {
         r = ejs != null ? ejs : new ArrayList<>();
     }
-    
+
     public List<Ejemplar> getReservaDetalle() {
         return Collections.unmodifiableList(r != null ? r : new ArrayList<>());
     }
-    
+
     public boolean getEslaboratorio() {
         return selected.getTipoRecurso().getIdtipoRecurso().equals(2);
     }
-    
+
     public boolean getVerEquipoDetalle() {
         boolean m = (selected == null ? false : (!selected.getReservaEstado().equals("S") && !selected.getReservaEstado().equals("R") && !selected.getReservaEstado().equals("C") && !getEslaboratorio()));
         return m;
     }
-    
+
     public List<SolicitudReserva> getSolicitudReservaDetalle() {
         return selected != null
                 ? ((selected.getSolicitudReservaList() == null || selected.getSolicitudReservaList().isEmpty())
@@ -325,45 +326,45 @@ public class historialRController implements Serializable {
                 : selected.getSolicitudReservaList())
                 : new ArrayList<>();
     }
-    
+
     public void setUsadoPor(int usadoPor) {
         setCom(1, usadoPor + "");
     }
-    
+
     public int getUsadoPor() {
         return selected != null ? Integer.valueOf(selected.getReservaComentario().split("¿¿")[1]) : 0;
     }
-    
+
     public String getUsos() {
         return (selected != null && getUsadoPor() > 0) ? u[(getUsadoPor() - 1)] : "";
     }
-    
+
     public boolean getRechazo() {
         return rechazo;
     }
-    
+
     public void setRechazo(boolean rechazo) {
         this.rechazo = rechazo;
     }
-    
+
     public String getTextoReserva() {
         return textoReserva;
     }
-    
+
     public void setTextoReserva(String textoReserva) {
         this.textoReserva = textoReserva;
     }
-    
+
     public boolean getVertema() {
         String x = selected != null ? selected.getTema() : "";
         return !(x.isEmpty() || x.equals(" "));
     }
-    
+
     public boolean getVerObjetivo() {
         String x = selected != null ? selected.getObjetivoTema() : "";
         return !(x.isEmpty() || x.equals(" "));
     }
-    
+
     public String getDocente() {
         Maestro m = selected != null ? selected.getDocente() : null;
         String salida = "";
@@ -372,15 +373,15 @@ public class historialRController implements Serializable {
         }
         return salida;
     }
-    
+
     public boolean isGradoValido() {
         return getGradoUso().split("").length > 1;
     }
-    
+
     public int getAñoActual() {
         return Auxiliar.getAñoActual();
     }
-    
+
     public Grado getGradoActualDePersonas(Persona p) {
         Grado g = null;
         if (p != null && p.getEstudiante() != null) {
@@ -392,11 +393,11 @@ public class historialRController implements Serializable {
         }
         return g;
     }
-    
+
     public String getGradoNombre(Grado g) {
         return Auxiliar.getGradoNombre(g.getGradoPK());
     }
-    
+
     public String getGradoUso() {
         String g = "";
         for (Persona p : getPersonasEnSolicitud()) {
@@ -411,17 +412,17 @@ public class historialRController implements Serializable {
         }
         return g;
     }
-    
+
     public boolean getCancelado() {
         boolean ra = selected == null ? false : !getRazonRechazo().isEmpty();
         boolean v = selected != null ? selected.getReservaEstado().equals("C") : false;
         return (ra && v);
     }
-    
+
     public boolean getHayProyecto() {
         return proyecto != null;
     }
-    
+
     public void verProyecto() {
         context = FacesContext.getCurrentInstance();
         try {
@@ -453,9 +454,9 @@ public class historialRController implements Serializable {
     public void setAñoSelected(Integer añoSelected) {
         this.añoSelected = añoSelected;
     }
-    
-    public void onBlour(AjaxBehaviorEvent a){
-        
+
+    public void onBlour(AjaxBehaviorEvent a) {
+
     }
-    
+
 }

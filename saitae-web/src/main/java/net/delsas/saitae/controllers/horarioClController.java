@@ -19,7 +19,6 @@ package net.delsas.saitae.controllers;
 import com.lowagie.text.BadElementException;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
-import com.lowagie.text.PageSize;
 import com.lowagie.text.Rectangle;
 import java.io.IOException;
 import java.io.Serializable;
@@ -50,7 +49,7 @@ import org.primefaces.event.SelectEvent;
 @Named
 @ViewScoped
 public class horarioClController implements Serializable {
-
+    
     private static final long serialVersionUID = 1L;
     private Persona usuario;
     private List<axHorario> horario;
@@ -59,38 +58,36 @@ public class horarioClController implements Serializable {
     private List<Integer> añosDisponibles;
     private boolean estudiate;
     private GradoPK pk;
-
+    
     @EJB
     private MestroHorarioMateriasFacadeLocal mhmFL;
     @EJB
     private MatriculaFacadeLocal mFL;
     @EJB
     private HorarioFacadeLocal hFL;
-
+    
     @PostConstruct
     public void init() {
         usuario = (Persona) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
         estudiate = usuario.getTipoPersona().getIdtipoPersona().equals(8);
         añoSelected = getAño();
-        List<GradoPK> grList = mFL.findGradopkByidEstudianteAndAño(añoSelected, 
+        List<GradoPK> grList = mFL.findGradopkByidEstudianteAndAño(añoSelected,
                 estudiate ? usuario.getIdpersona() : 0);
         pk = grList.size() > 0 ? grList.get(0) : new GradoPK(0, "", "", 0);
-        añosDisponibles = estudiate
-                ? mFL.findAñoByidEstudiante(usuario.getIdpersona())
-                : mhmFL.findAñosByIdMaestro(usuario.getIdpersona());
+        añosDisponibles = Auxiliar.getAñosParaMostrar(estudiate ? 3 : 5);
         horas = hFL.findAll();
     }
-
+    
     private Integer getAño() {
         return Auxiliar.getAñoActual();
     }
-
+    
     public void onAñoSelect(SelectEvent ev) {
-        List<GradoPK> grList = mFL.findGradopkByidEstudianteAndAño(añoSelected, 
+        List<GradoPK> grList = mFL.findGradopkByidEstudianteAndAño(añoSelected,
                 estudiate ? usuario.getIdpersona() : 0);
         pk = grList.size() > 0 ? grList.get(0) : new GradoPK(0, "", "", 0);
     }
-
+    
     public List<axHorario> getHorario() {
         horario = new ArrayList<>();
         horas.forEach((h) -> {
@@ -100,33 +97,33 @@ public class horarioClController implements Serializable {
         });
         return Collections.unmodifiableList(horario);
     }
-
+    
     public Integer getAñoSelected() {
         return añoSelected;
     }
-
+    
     public void setAñoSelected(Integer añoSelected) {
         this.añoSelected = añoSelected;
     }
-
+    
     public List<Integer> getAñosDisponibles() {
         return Collections.unmodifiableList(añosDisponibles);
     }
-
+    
     public boolean isEstudiate() {
         return estudiate;
     }
-
+    
     public String getHoraToString(Date d) {
         return new SimpleDateFormat("hh:mm a").format(d);
     }
-
+    
     public void preProcessPDF(Object document) throws IOException, BadElementException, DocumentException {
         Document pdf = (Document) document;
         pdf.open();
         pdf.setPageSize(new Rectangle(842, 842));
-        pdf.addTitle("SAITAE-INTEX_" + getAño() + " Horario de clases de " +
-                Auxiliar.getNombreCortoPersona(usuario));
+        pdf.addTitle("SAITAE-INTEX_" + getAño() + " Horario de clases de "
+                + Auxiliar.getNombreCortoPersona(usuario));
     }
-
+    
 }

@@ -126,7 +126,7 @@ public class adminReservas implements Serializable {
             u = new String[]{"Docente", "Estudiante", "Grupo de estudiantes", "Personal (No académico)"};
             rechazo = false;
             añoSelected = Auxiliar.getAñoActual();
-            añosDisponibles = resFL.findAñosGlobales();
+            añosDisponibles = Auxiliar.getAñosParaMostrar(5);
         }
     }
 

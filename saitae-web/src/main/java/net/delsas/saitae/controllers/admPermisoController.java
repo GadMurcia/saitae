@@ -105,8 +105,8 @@ public class admPermisoController implements Serializable {
             solicitados = rechazados = aceptados = new ArrayList<>();
             usuario = (Persona) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
             tps = new ArrayList<>();
-            añoSelected=Auxiliar.getAñoActual();
-            añosDisponnibles=permisosFL.findAñosGlobales();
+            añoSelected = Auxiliar.getAñoActual();
+            añosDisponnibles = Auxiliar.getAñosParaMostrar(5);
             if (usuario == null) {
                 redirect();
             } else {
@@ -299,8 +299,8 @@ public class admPermisoController implements Serializable {
 
     public List<Permisos> getSolicitados() {
         solicitados = (tps.contains(1) || tps.contains(2))
-                ? permisosFL.getPermisosPorEstado("0",añoSelected)
-                : depurar(permisosFL.findByEstadoAndTipos("0", tipos,añoSelected));
+                ? permisosFL.getPermisosPorEstado("0", añoSelected)
+                : depurar(permisosFL.findByEstadoAndTipos("0", tipos, añoSelected));
         return Collections.unmodifiableList(solicitados);
     }
 
@@ -310,8 +310,8 @@ public class admPermisoController implements Serializable {
 
     public List<Permisos> getAceptados() {
         aceptados = (tps.contains(1) || tps.contains(2))
-                ? permisosFL.getPermisosPorEstado("1",añoSelected)
-                : depurar(permisosFL.findByEstadoAndTipos("1", tipos,añoSelected));
+                ? permisosFL.getPermisosPorEstado("1", añoSelected)
+                : depurar(permisosFL.findByEstadoAndTipos("1", tipos, añoSelected));
         return Collections.unmodifiableList(aceptados);
     }
 
@@ -321,8 +321,8 @@ public class admPermisoController implements Serializable {
 
     public List<Permisos> getRechazados() {
         rechazados = (tps.contains(1) || tps.contains(2))
-                ? permisosFL.getPermisosPorEstado("2",añoSelected)
-                : depurar(permisosFL.findByEstadoAndTipos("2", tipos,añoSelected));
+                ? permisosFL.getPermisosPorEstado("2", añoSelected)
+                : depurar(permisosFL.findByEstadoAndTipos("2", tipos, añoSelected));
         return Collections.unmodifiableList(rechazados);
     }
 
@@ -332,8 +332,8 @@ public class admPermisoController implements Serializable {
 
     public List<Permisos> getCancelados() {
         cancelados = (tps.contains(1) || tps.contains(2))
-                ? permisosFL.getPermisosPorEstado("3",añoSelected)
-                : depurar(permisosFL.findByEstadoAndTipos("3", tipos,añoSelected));
+                ? permisosFL.getPermisosPorEstado("3", añoSelected)
+                : depurar(permisosFL.findByEstadoAndTipos("3", tipos, añoSelected));
         return Collections.unmodifiableList(cancelados);
     }
 
@@ -525,9 +525,9 @@ public class admPermisoController implements Serializable {
         constancia.setDocumento(null);
         constancia.setExtención("");
     }
-    
-    public void onBour(AjaxBehaviorEvent e){
-        
+
+    public void onBour(AjaxBehaviorEvent e) {
+
     }
 
     public List<Integer> getAñosDisponnibles() {

@@ -26,8 +26,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import javax.faces.model.SelectItem;
+import net.delsas.saitae.beans.GradoFacadeLocal;
 import net.delsas.saitae.beans.MestroHorarioMateriasFacadeLocal;
 import net.delsas.saitae.beans.NotificacionesFacadeLocal;
+import net.delsas.saitae.entities.DiasEstudio;
 import net.delsas.saitae.entities.Estudiante;
 import net.delsas.saitae.entities.GradoPK;
 import net.delsas.saitae.entities.Horario;
@@ -797,6 +799,79 @@ public class Auxiliar implements Serializable {
         String a = doc == null ? ""
                 : "data:" + ex + ";base64, " + new String(Base64.encodeBase64(doc));
         return a;
+    }
+
+    public static List<Integer> getAñosParaMostrar(int numeroAños) {
+        List<Integer> i = new ArrayList<>();
+        for (int t = 0; t < numeroAños; t++) {
+            i.add(getAñoActual() - t);
+        }
+        return i;
+    }
+
+    public static List<horarioGlobal> llenar(Integer año, List<Horario> hs, DiasEstudio dh, MestroHorarioMateriasFacadeLocal mhmFL, GradoFacadeLocal gFL) {
+        List<horarioGlobal> i = new ArrayList<>();
+        hs.stream().map((h) -> {
+            horarioGlobal gl = new horarioGlobal(h.getIdhorario() + "-" + dh.getIdDias(), h, dh);
+            List<Integer> idGs = gFL.getIdPorAñoyModalidad(año, "G");
+            List<Integer> idCs = gFL.getIdPorAñoyModalidad(año, "C");
+            idGs.forEach((idg) -> {
+                List<String> sGs = gFL.getSeccionPorAñoModalidadyId(año, "G", idg);
+                sGs.forEach((sg) -> {
+                    GradoPK pkg = new GradoPK(idg, "G", sg, año);
+                    List<MestroHorarioMaterias> lm1 = mhmFL.findByIdDiaAndGradopkAndidHora(h.getIdhorario(), pkg, dh.getIdDias());
+                    MestroHorarioMaterias m1 = lm1.size() > 0 ? lm1.get(0) : null;
+                    if (m1 != null) {
+                        switch (sg + idg) {
+                            case "A1":
+                                gl.getGenerales().setA1(m1);
+                                break;
+                            case "B1":
+                                gl.getGenerales().setB1(m1);
+                                break;
+                            case "A2":
+                                gl.getGenerales().setA2(m1);
+                                break;
+                            case "B2":
+                                gl.getGenerales().setB2(m1);
+                        }
+                    }
+                });
+            });
+            idCs.forEach((idc) -> {
+                List<String> sCs = gFL.getSeccionPorAñoModalidadyId(año, "C", idc);
+                sCs.forEach((sc) -> {
+                    GradoPK pkg = new GradoPK(idc, "C", sc, año);
+                    List<MestroHorarioMaterias> lm1 = mhmFL.findByIdDiaAndGradopkAndidHora(h.getIdhorario(), pkg, dh.getIdDias());
+                    MestroHorarioMaterias m1 = lm1.size() > 0 ? lm1.get(0) : null;
+                    if (m1 != null) {
+                        switch (sc + idc) {
+                            case "A1":
+                                gl.getComercios().setA1(m1);
+                                break;
+                            case "B1":
+                                gl.getComercios().setB1(m1);
+                                break;
+                            case "A2":
+                                gl.getComercios().setA2(m1);
+                                break;
+                            case "B2":
+                                gl.getComercios().setB2(m1);
+                                break;
+                            case "A3":
+                                gl.getComercios().setA3(m1);
+                                break;
+                            case "B3":
+                                gl.getComercios().setB3(m1);
+                        }
+                    }
+                });
+            });
+            return gl;
+        }).forEachOrdered((gl) -> {
+            i.add(gl);
+        });
+        return i;
     }
 
 }

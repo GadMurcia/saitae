@@ -18,8 +18,10 @@ package net.delsas.saitae.controllers;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -29,6 +31,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import net.delsas.saitae.ax.Auxiliar;
+import net.delsas.saitae.ax.horarioGlobal;
 import net.delsas.saitae.ax.mensaje;
 import net.delsas.saitae.beans.DiasEstudioFacadeLocal;
 import net.delsas.saitae.beans.GradoFacadeLocal;
@@ -79,6 +82,8 @@ public class horarioController implements Serializable {
     private NotificacionesFacadeLocal notiFL;
 
     private List<MestroHorarioMaterias> horario;
+    private List<horarioGlobal> horario2;
+    private horarioGlobal horario2Selected;
     private Integer añoSelected;
     private List<Integer> añosDisponibles;
     private MestroHorarioMaterias selected;
@@ -87,6 +92,7 @@ public class horarioController implements Serializable {
     private List<Horario> horasClase;
     private List<DiasEstudio> dias;
     private List<Materia> materias;
+    private DiasEstudio diaSelected;
     private MestroHorarioMateriasPK pk;
     private boolean edit;
     private Persona us;
@@ -98,15 +104,17 @@ public class horarioController implements Serializable {
         horasClase = horarioFL.findAll();
         dias = diasEstudioFL.findAll();
         materias = materiaFL.findAll();
-        us = (Persona) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
+        us = (Persona) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");        
+        añoSelected = getAño();
+        diaSelected = dias.get(0);
+        añosDisponibles = Auxiliar.getAñosParaMostrar(5);
+        horario = new ArrayList<>();
         init2();
     }
 
     public void init2() {
-        añoSelected = getAño();
-        añosDisponibles = gradoFL.findAños();
-        horario = mhmFL.findAllOrdered(añoSelected);
         selected = new MestroHorarioMaterias(new MestroHorarioMateriasPK(0, 0, 0, 0, 0, "", "", 0));
+        selected.setDiasEstudio(diaSelected);
         edit = false;
         pk = new MestroHorarioMateriasPK(0, 0, 0, 0, 0, "", "", 0);
     }
@@ -200,6 +208,7 @@ public class horarioController implements Serializable {
                 if (edit) {
                     selected = mhmFL.find(pk);
                     mhmFL.remove(selected);
+                    PrimeFaces.current().executeScript("PF('Deditar').hide(); PF('Dhorario').hide();");
                 }
                 mhmFL.create(m);
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
@@ -220,27 +229,55 @@ public class horarioController implements Serializable {
                                         + Auxiliar.getNombreCortoPersona(m.getMaestro().getPersona())
                                         + ". Grado: " + getGrado(m.getGrado().getGradoPK()))),
                         m.getMaestro().getPersona(),
-                        notiFL, notificacion);
-            }
+                        notiFL, notificacion);                
             init2();
+            }
         }
     }
 
     public void onRowSelect(SelectEvent event) {
-        this.pk = ((MestroHorarioMaterias) event.getObject()).getMestroHorarioMateriasPK();
-        setSelected((MestroHorarioMaterias) event.getObject());
+        if ("horario".equals(event.getComponent().getId())) {
+            horarioGlobal gl = (horarioGlobal) event.getObject();
+            horario = new ArrayList<>();
+            if (gl.getComercios().getA1() != null) {
+                horario.add(gl.getComercios().getA1());
+            }
+            if (gl.getComercios().getB1() != null) {
+                horario.add(gl.getComercios().getB1());
+            }
+            if (gl.getComercios().getA2() != null) {
+                horario.add(gl.getComercios().getA2());
+            }
+            if (gl.getComercios().getB2() != null) {
+                horario.add(gl.getComercios().getB2());
+            }
+            if (gl.getComercios().getA3() != null) {
+                horario.add(gl.getComercios().getA3());
+            }
+            if (gl.getComercios().getB3() != null) {
+                horario.add(gl.getComercios().getB3());
+            }
+            if (gl.getGenerales().getA1() != null) {
+                horario.add(gl.getGenerales().getA1());
+            }
+            if (gl.getGenerales().getB1() != null) {
+                horario.add(gl.getGenerales().getB1());
+            }
+            if (gl.getGenerales().getA2() != null) {
+                horario.add(gl.getGenerales().getA2());
+            }
+            if (gl.getGenerales().getB2() != null) {
+                horario.add(gl.getGenerales().getB2());
+            }
+        }
     }
 
     public List<MestroHorarioMaterias> getHorario() {
         return Collections.unmodifiableList(horario);
     }
 
-    public void setHorario(List<MestroHorarioMaterias> horario) {
-        this.horario = horario;
-    }
-
     public String getHora(Date hora) {
-        return new SimpleDateFormat("hh:mm a").format(hora);
+        return hora == null ? "" : new SimpleDateFormat("hh:mm a").format(hora);
     }
 
     public String getGrado(GradoPK gr) {
@@ -308,7 +345,6 @@ public class horarioController implements Serializable {
     }
 
     public void onAñoSelected(SelectEvent e) {
-        horario = mhmFL.findAllOrdered(añoSelected == null ? 0 : añoSelected);
     }
 
     public Integer getAñoSelected() {
@@ -321,6 +357,46 @@ public class horarioController implements Serializable {
 
     public List<Integer> getAñosDisponibles() {
         return Collections.unmodifiableList(añosDisponibles);
+    }
+
+    public List<horarioGlobal> getHorario2() {
+        horario2 = Auxiliar.llenar(añoSelected, horasClase, diaSelected, mhmFL, gradoFL);
+        return horario2;
+    }
+
+    public void setHorario2(List<horarioGlobal> horario2) {
+        this.horario2 = horario2;
+    }
+
+    public DiasEstudio getDiaSelected() {
+        return diaSelected;
+    }
+
+    public void setDiaSelected(DiasEstudio diaSelected) {
+        this.diaSelected = diaSelected;
+    }
+
+    public horarioGlobal getHorario2Selected() {
+        return horario2Selected;
+    }
+
+    public void setHorario2Selected(horarioGlobal horario2Selected) {
+        this.selected = horario2Selected == null ? null
+                : mhmFL.find(new MestroHorarioMateriasPK(0, 0, 0, 0, 0, "", "", 0));
+        this.horario2Selected = horario2Selected;
+    }
+
+    public Materia getMateria(Object clave) {
+        return (Materia) clave;
+    }
+
+    public String getNombreCorto(Maestro m) {
+        return m == null ? "" : Auxiliar.getNombreCortoPersona(m.getPersona());
+    }
+
+    public String getAccion(boolean ac) {
+        edit = ac;
+        return (ac ? "Edición" : "Eliminación");
     }
 
 }
