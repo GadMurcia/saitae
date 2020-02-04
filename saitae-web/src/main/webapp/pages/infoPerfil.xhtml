@@ -1,0 +1,288 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../WEB-INF/template/plantilla1.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="content">
+        <h:form id="form">
+            <h:panelGrid columns="1">
+                <h1 align="center">Visualice y/o edite su información personal</h1>
+                <p:fieldset legend="Información Personal" toggleable="true" toggleSpeed="500" collapsed="true">
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="Usuario (DUI/NIE) :" for="idpersona" />
+                        <p:inputText id="idpersona" value="#{infoPerfilController.usuario.idpersona.toString().substring(1)}" 
+                                     title="Idpersona" required="true" disabled="true"
+                                     requiredMessage="The Idpersona field is required.">
+                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
+                        </p:inputText>
+
+                        <p:outputLabel value="Nit:" for="Nit" />
+                        <p:inputMask id="Nit" value="#{infoPerfilController.usuario.personaNit}" 
+                                     title="PersonaNit" mask="9999-999999-999-9">
+                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
+                        </p:inputMask>
+
+                        <p:outputLabel value="Nombres:" for="pm" />
+                        <p:inputText id="pm" 
+                                     value="#{infoPerfilController.usuario.personaNombre}" 
+                                     title="PersonaNombre" required="true" 
+                                     requiredMessage="The PersonaNombre field is required.">
+                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
+                        </p:inputText>
+
+                        <p:outputLabel value="Apellidos:" for="pa" />
+                        <p:inputText id="pa" 
+                                     value="#{infoPerfilController.usuario.personaApellido}" 
+                                     title="PersonaApellido" required="true" 
+                                     requiredMessage="The PersonaApellido field is required.">
+                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
+                        </p:inputText>
+
+                        <p:outputLabel value="Fecha Nacimiento:" for="pn" />
+                        <p:datePicker id="pn" 
+                                      value="#{infoPerfilController.usuario.personaNacimiento}" 
+                                      title="PersonaNacimiento" pattern="dd/MM/yyyy" locale="es"
+                                      showIcon="true">
+                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
+                        </p:datePicker>
+
+                        <p:outputLabel value="Sexo:" for="ps" />
+                        <p:selectBooleanButton id="ps" value="#{infoPerfilController.usuario.personaSexo}" 
+                                               offLabel="Masculino" onLabel="Femenino" 
+                                               title="PersonaSexo">
+                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
+                        </p:selectBooleanButton>
+
+                        <p:outputLabel value="Direccion:" for="pd" />
+                        <p:inputText id="pd" 
+                                     value="#{infoPerfilController.usuario.personaDireccion}" 
+                                     title="PersonaDireccion">
+                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
+                        </p:inputText>
+
+                        <p:outputLabel value="Estado Familiar:" for="pef" />
+                        <p:selectOneMenu id="pef" 
+                                         value="#{infoPerfilController.usuario.personaEstadoFamiliar}" 
+                                         title="PersonaEstadoFamiliar" >
+                            <f:selectItem itemLabel="Seleccione" itemValue="" />
+                            <f:selectItem itemLabel="Solter@" itemValue="0" />
+                            <f:selectItem itemLabel="Casad@" itemValue="1" />
+                            <f:selectItem itemLabel="Acompañad@" itemValue="2"/>
+                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="Telefono personal:" for="pt" />
+                        <p:inputMask id="pt" value="#{infoPerfilController.usuario.personaTelefono}" 
+                                     title="PersonaTelefono" mask="9999-9999">
+                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
+                        </p:inputMask>
+
+                        <p:outputLabel value="Nacionalidad:" for="Nac" />
+                        <p:selectOneMenu id="Nac" value="#{infoPerfilController.usuario.personaNacionalidad}" 
+                                         title="Nacionalidad" >
+                            <f:selectItem itemLabel="Seleccione" itemValue="9" noSelectionOption="true"/>
+                            <f:selectItem itemLabel="Salvadoreña" itemValue="Salvadoreña" />
+                            <f:selectItem itemLabel="Extrangera" itemValue="Extrangera" />
+                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}" update="plnd plnm"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="Departamento:" for="plnd" />
+                        <p:selectOneMenu id="plnd" value="#{infoPerfilController.depto}" 
+                                         title="PersonaLugarNac" >
+                            <f:selectItems value="#{infoPerfilController.depList}"/>
+                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}" update="plnm"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="Municipio:" for="plnd" />
+                        <p:selectOneMenu id="plnm" value="#{infoPerfilController.muni}" 
+                                         title="PersonaLugarNac" >
+                            <f:selectItems value="#{infoPerfilController.munList}"/>
+                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="Zona de Vivienda:" for="pzv" />
+                        <p:selectOneMenu id="pzv" 
+                                         value="#{infoPerfilController.usuario.personaZonaVivienda}" 
+                                         title="PersonaZonaVivienda" >
+                            <f:selectItem itemLabel="Seleccione" itemValue="" noSelectionOption="true"/>
+                            <f:selectItem itemLabel="Rural" itemValue="0" />
+                            <f:selectItem itemLabel="Urbana" itemValue="1" />
+                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="Ocupacion:" for="po" />
+                        <p:inputText id="po" value="#{infoPerfilController.usuario.personaOCupacion}" 
+                                     title="PersonaOCupacion">
+                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
+                        </p:inputText>
+
+                        <p:outputLabel value="Email:" for="email" />
+                        <p:inputText id="email" value="#{infoPerfilController.usuario.personaEmail}" 
+                                     title="PersonaEmail">
+                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
+                        </p:inputText>
+
+                        <p:outputLabel value="Discapacidades:" for="pds" />
+                        <p:inputText id="pds" value="#{infoPerfilController.usuario.personaDiscapacidades}" 
+                                     title="PersonaDiscapacidades">
+                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
+                        </p:inputText>
+
+                        <p:column/>
+                        <p:commandButton value="Guardar Cambios" process="@this" update="form"
+                                         actionListener="#{infoPerfilController.guardarPersona()}"/>
+                    </h:panelGrid>
+                </p:fieldset>
+
+                <p:fieldset legend="Información Estudiantil" toggleable="true" collapsed="true" 
+                            title="Su información de estudiante"
+                            toggleSpeed="500" rendered="#{infoPerfilController.estudiante}">
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="Tiene partida de nacimiento:" for="estudiantePartidaNac" />
+                        <p:selectBooleanButton id="estudiantePartidaNac" 
+                                               value="#{infoPerfilController.usuario.estudiante.estudiantePartidaNac}" 
+                                               title="EstudiantePartidaNac" required="true" 
+                                               requiredMessage="The EstudiantePartidaNac field is required."
+                                               offLabel="No" onLabel="Sí">
+                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}" 
+                                    update="estudianteNoPartida"/>
+                        </p:selectBooleanButton>
+
+                        <h:outputLabel value="Razón para no tener partida de nacimiento:" for="estudianteNoPartida" />
+                        <p:inputText id="estudianteNoPartida" 
+                                     disabled="#{infoPerfilController.usuario.estudiante.estudiantePartidaNac}"
+                                     value="#{infoPerfilController.usuario.estudiante.estudianteNoPartida}" 
+                                     title="EstudianteNoPartida">
+                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
+                        </p:inputText>
+
+                        <h:outputLabel value="Tipo de Calle:" for="estudianteTipoCalle" />
+                        <p:selectOneMenu id="estudianteTipoCalle" 
+                                         value="#{infoPerfilController.usuario.estudiante.estudianteTipoCalle}" 
+                                         title="EstudianteTipoCalle" required="true" 
+                                         requiredMessage="The EstudianteTipoCalle field is required.">
+                            <f:selectItem itemLabel="Seleccione" itemValue="" />
+                            <f:selectItem itemLabel="Tierra" itemValue="0" />
+                            <f:selectItem itemLabel="Pavimentada" itemValue="1" />
+                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="Riesgo o Vulnerabilidad:" for="estudianteRiesgoVulnerabilidad" />
+                        <p:inputText id="estudianteRiesgoVulnerabilidad" 
+                                     value="#{infoPerfilController.usuario.estudiante.estudianteRiesgoVulnerabilidad}" 
+                                     title="EstudianteRiesgoVulnerabilidad">
+                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
+                        </p:inputText>
+
+                        <p:outputLabel value="Medio de Transporte:" for="estudianteMedioTransporte" />
+                        <p:selectOneMenu id="estudianteMedioTransporte" 
+                                         value="#{infoPerfilController.usuario.estudiante.estudianteMedioTransporte}" 
+                                         title="EstudianteMedioTransporte">
+                            <f:selectItem itemLabel="Seleccione" itemValue="" />
+                            <f:selectItem itemLabel="A pie" itemValue="0" />
+                            <f:selectItem itemLabel="Bicicleta" itemValue="1" />
+                            <f:selectItem itemLabel="Moto" itemValue="2" />
+                            <f:selectItem itemLabel="Carro propio" itemValue="3" />
+                            <f:selectItem itemLabel="Bus" itemValue="4" />
+                            <f:selectItem itemLabel="Microbús" itemValue="5" />
+                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="Distancia Al Centro:" for="estudianteDistanciaAlCentro" />
+                        <p:inputNumber id="estudianteDistanciaAlCentro" 
+                                       value="#{infoPerfilController.usuario.estudiante.estudianteDistanciaAlCentro}" 
+                                       title="EstudianteDistanciaAlCentro" symbol=" Km" symbolPosition="s" 
+                                       decimalSeparator="." thousandSeparator=",">
+                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
+                        </p:inputNumber>
+
+                        <p:outputLabel value="Trabaja:" for="estudianteTrabaja" />
+                        <p:selectBooleanButton id="estudianteTrabaja" offLabel="No" onLabel="Sí"
+                                               value="#{infoPerfilController.usuario.estudiante.estudianteTrabaja}" 
+                                               title="EstudianteTrabaja">
+                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}" 
+                                    update="estudianteFormaTrabajo"/>
+                        </p:selectBooleanButton>
+
+                        <p:outputLabel value="Forma de Trabajo:" for="estudianteFormaTrabajo" />
+                        <p:inputText id="estudianteFormaTrabajo" 
+                                     disabled="#{!infoPerfilController.usuario.estudiante.estudianteTrabaja}"
+                                     value="#{infoPerfilController.usuario.estudiante.estudianteFormaTrabajo}" 
+                                     title="EstudianteFormaTrabajo">
+                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
+                        </p:inputText>
+
+                        <p:outputLabel value="Dependencia Economica:" for="estudianteDependenciaEconomica" />
+                        <p:selectManyCheckbox id="estudianteDependenciaEconomica" 
+                                              value="#{infoPerfilController.dependencia}">
+                            <f:selectItem itemLabel="Padre" itemValue="Padre" />
+                            <f:selectItem itemLabel="Madre" itemValue="Madre" />
+                            <f:selectItem itemLabel="Abuelos" itemValue="Abuelo/a" />
+                            <f:selectItem itemLabel="Hermanos" itemValue="Hermano/a" />
+                            <f:selectItem itemLabel="Otros" itemValue="Otro"  />
+                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}" update="ot"/>
+                        </p:selectManyCheckbox>
+
+                        <h:outputText value="Especifique: "/>
+                        <p:inputText id="ot" value="#{infoPerfilController.otraDependenciaEcon}"  
+                                     title="Escriba quién más le ayuda para sus estudios" 
+                                     disabled="#{!infoPerfilController.otraDependencia}">
+                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
+                        </p:inputText>
+
+                        <p:outputLabel value="Cursó Parvularia:" for="estudianteParvularia" />
+                        <p:selectBooleanButton id="estudianteParvularia" offLabel="No" onLabel="Sí"
+                                               value="#{infoPerfilController.usuario.estudiante.estudianteParvularia}" 
+                                               title="EstudianteParvularia">
+                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
+                        </p:selectBooleanButton>
+
+                        <p:outputLabel value="Enfermedades que padece:" for="estudianteEnfermedades" />
+                        <p:inputText id="estudianteEnfermedades" 
+                                     value="#{infoPerfilController.usuario.estudiante.estudianteEnfermedades}" 
+                                     title="EstudianteEnfermedades">
+                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
+                        </p:inputText>
+
+                        <p:outputLabel value="Medicamentos permanentes:" for="estudianteMedicamentos" />
+                        <p:inputText id="estudianteMedicamentos" 
+                                     value="#{infoPerfilController.usuario.estudiante.estudianteMedicamentos}" 
+                                     title="EstudianteMedicamentos">
+                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
+                        </p:inputText>
+
+                        <p:outputLabel value="Parentesco con el representante:" for="estudianteParentescoRepresentante" />
+                        <p:inputText id="estudianteParentescoRepresentante" 
+                                     value="#{infoPerfilController.usuario.estudiante.estudianteParentescoRepresentante}" 
+                                     title="EstudianteParentescoRepresentante">
+                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
+                        </p:inputText>
+
+                        <p:outputLabel value="Centro de Procedencia:" for="estudianteCentroProcedencia" />
+                        <p:inputText id="estudianteCentroProcedencia" 
+                                     value="#{infoPerfilController.usuario.estudiante.estudianteCentroProcedencia}" 
+                                     title="EstudianteCentroProcedencia">
+                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
+                        </p:inputText>
+
+                        <p:outputLabel value="Su representante es un familiar:" for="estudianteRepresentanteFamiliar" />
+                        <p:selectBooleanButton id="estudianteRepresentanteFamiliar" offLabel="No" onLabel="Sí"
+                                               value="#{infoPerfilController.usuario.estudiante.estudianteRepresentanteFamiliar}" 
+                                               title="EstudianteRepresentanteFamiliar">
+                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
+                        </p:selectBooleanButton>
+
+                        <p:column/>
+                        <p:commandButton value="Guardar Cambios" process="@this" update="form"
+                                         actionListener="#{infoPerfilController.guardarPersona()}"/>
+                    </h:panelGrid>
+                </p:fieldset>
+            </h:panelGrid>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

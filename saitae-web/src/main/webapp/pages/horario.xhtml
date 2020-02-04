@@ -108,7 +108,8 @@
                                  emptyMessage="No hay horarios disponibles.">
                         <p:ajax event="rowSelect" listener="#{horarioController.onRowSelect}" 
                                 update="d2" onstart="PF('D1').show();" 
-                                oncomplete="PF('D1').hide(); PF('Deditar').show();"/>
+                                oncomplete="PF('D1').hide(); PF('Deditar').show();" 
+                                disabled="#{horarioController.disabled(h)}"/>
                         <f:facet name="header">
                             Horario Institucional
                         </f:facet>
@@ -136,54 +137,54 @@
                             #{horarioController.getHora(h.hora.horaFin)}
                         </p:column>
                         <p:column>
-                            <h:outputText value="#{h.generales.a1.materia.materiaAbreviacion}" 
-                                          title="#{h.generales.a1.materia.materiaNombre} 
-                                          (#{horarioController.getNombreCorto(h.generales.a1.maestro)})"/>
+                            <h:outputText value="#{horarioController.getMateria(h.generales.a1.idMateria).materiaAbreviacion}" 
+                                          title="#{horarioController.getMateria(h.generales.a1.idMateria).materiaNombre} 
+                                          (#{horarioController.getNombreCorto(h.generales.a1.idMaestro)})"/>
                         </p:column>
                         <p:column>
-                            <h:outputText value="#{h.generales.b1.materia.materiaAbreviacion}" 
-                                          title="#{h.generales.b1.materia.materiaNombre} 
-                                          (#{horarioController.getNombreCorto(h.generales.b1.maestro)})"/>
+                            <h:outputText value="#{horarioController.getMateria(h.generales.b1.idMateria).materiaAbreviacion}" 
+                                          title="#{horarioController.getMateria(h.generales.b1.idMateria).materiaNombre} 
+                                          (#{horarioController.getNombreCorto(h.generales.b1.idMaestro)})"/>
                         </p:column>
                         <p:column>
-                            <h:outputText value="#{h.generales.a2.materia.materiaAbreviacion}" 
-                                          title="#{h.generales.a2.materia.materiaNombre} 
-                                          (#{horarioController.getNombreCorto(h.generales.a2.maestro)})"/>
+                            <h:outputText value="#{horarioController.getMateria(h.generales.a2.idMateria).materiaAbreviacion}" 
+                                          title="#{horarioController.getMateria(h.generales.a2.idMateria).materiaNombre} 
+                                          (#{horarioController.getNombreCorto(h.generales.a2.idMaestro)})"/>
                         </p:column>
                         <p:column>
-                            <h:outputText value="#{h.generales.b2.materia.materiaAbreviacion}" 
-                                          title="#{h.generales.b2.materia.materiaNombre} 
-                                          (#{horarioController.getNombreCorto(h.generales.b2.maestro)})"/>
+                            <h:outputText value="#{horarioController.getMateria(h.generales.b2.idMateria).materiaAbreviacion}" 
+                                          title="#{horarioController.getMateria(h.generales.b2.idMateria).materiaNombre} 
+                                          (#{horarioController.getNombreCorto(h.generales.b2.idMaestro)})"/>
                         </p:column>
                         <p:column>
-                            <h:outputText value="#{h.comercios.a1.materia.materiaAbreviacion}" 
-                                          title="#{h.comercios.a1.materia.materiaNombre} 
-                                          (#{horarioController.getNombreCorto(h.comercios.a1.maestro)})"/>
+                            <h:outputText value="#{horarioController.getMateria(h.comercios.a1.idMateria).materiaAbreviacion}" 
+                                          title="#{horarioController.getMateria(h.comercios.a1.idMateria).materiaNombre} 
+                                          (#{horarioController.getNombreCorto(h.comercios.a1.idMaestro)})"/>
                         </p:column>
                         <p:column>
-                            <h:outputText value="#{h.comercios.b1.materia.materiaAbreviacion}" 
-                                          title="#{h.comercios.b1.materia.materiaNombre} 
-                                          (#{horarioController.getNombreCorto(h.comercios.b1.maestro)})"/>
+                            <h:outputText value="#{horarioController.getMateria(h.comercios.b1.idMateria).materiaAbreviacion}" 
+                                          title="#{horarioController.getMateria(h.comercios.b1.idMateria).materiaNombre} 
+                                          (#{horarioController.getNombreCorto(h.comercios.b1.idMaestro)})"/>
                         </p:column>
                         <p:column>
-                            <h:outputText value="#{h.comercios.a2.materia.materiaAbreviacion}" 
-                                          title="#{h.comercios.a2.materia.materiaNombre} 
-                                          (#{horarioController.getNombreCorto(h.comercios.a2.maestro)})"/>
+                            <h:outputText value="#{horarioController.getMateria(h.comercios.a2.idMateria).materiaAbreviacion}" 
+                                          title="#{horarioController.getMateria(h.comercios.a2.idMateria).materiaNombre} 
+                                          (#{horarioController.getNombreCorto(h.comercios.a2.idMaestro)})"/>
                         </p:column>
                         <p:column>
-                            <h:outputText value="#{h.comercios.b2.materia.materiaAbreviacion}" 
-                                          title="#{h.comercios.b2.materia.materiaNombre} 
-                                          (#{horarioController.getNombreCorto(h.comercios.b2.maestro)})"/>
+                            <h:outputText value="#{horarioController.getMateria(h.comercios.b2.idMateria).materiaAbreviacion}" 
+                                          title="#{horarioController.getMateria(h.comercios.b2.idMateria).materiaNombre} 
+                                          (#{horarioController.getNombreCorto(h.comercios.b2.idMaestro)})"/>
                         </p:column>
                         <p:column>
-                            <h:outputText value="#{h.comercios.a3.materia.materiaAbreviacion}" 
-                                          title="#{h.comercios.a3.materia.materiaNombre} 
-                                          (#{horarioController.getNombreCorto(h.comercios.a3.maestro)})"/>
+                            <h:outputText value="#{horarioController.getMateria(h.comercios.a3.idMateria).materiaAbreviacion}" 
+                                          title="#{horarioController.getMateria(h.comercios.a3.idMateria).materiaNombre} 
+                                          (#{horarioController.getNombreCorto(h.comercios.a3.idMaestro)})"/>
                         </p:column>
                         <p:column>
-                            <h:outputText value="#{h.comercios.b3.materia.materiaAbreviacion}" 
-                                          title="#{h.comercios.b3.materia.materiaNombre} 
-                                          (#{horarioController.getNombreCorto(h.comercios.b3.maestro)})"/>
+                            <h:outputText value="#{horarioController.getMateria(h.comercios.b3.idMateria).materiaAbreviacion}" 
+                                          title="#{horarioController.getMateria(h.comercios.b3.idMateria).materiaNombre} 
+                                          (#{horarioController.getNombreCorto(h.comercios.b3.idMaestro)})"/>
                         </p:column>
 
                     </p:dataTable>
@@ -223,7 +224,7 @@
                             #{horarioController.getGrado(h2.grado.gradoPK)}
                         </p:column>
                         <p:column headerText="Mestro">
-                            #{horarioController.getNombreCorto(h2.maestro)}
+                            #{horarioController.getNombreCorto(h2.maestro.idmaestro)}
                         </p:column>
                     </p:dataTable>
                     <p:contextMenu id="ctxm" for="horario2">

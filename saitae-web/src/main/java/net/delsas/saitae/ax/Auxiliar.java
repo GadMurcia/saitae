@@ -824,16 +824,16 @@ public class Auxiliar implements Serializable {
                     if (m1 != null) {
                         switch (sg + idg) {
                             case "A1":
-                                gl.getGenerales().setA1(m1);
+                                gl.getGenerales().setA1(m1.getMestroHorarioMateriasPK());
                                 break;
                             case "B1":
-                                gl.getGenerales().setB1(m1);
+                                gl.getGenerales().setB1(m1.getMestroHorarioMateriasPK());
                                 break;
                             case "A2":
-                                gl.getGenerales().setA2(m1);
+                                gl.getGenerales().setA2(m1.getMestroHorarioMateriasPK());
                                 break;
                             case "B2":
-                                gl.getGenerales().setB2(m1);
+                                gl.getGenerales().setB2(m1.getMestroHorarioMateriasPK());
                         }
                     }
                 });
@@ -847,22 +847,22 @@ public class Auxiliar implements Serializable {
                     if (m1 != null) {
                         switch (sc + idc) {
                             case "A1":
-                                gl.getComercios().setA1(m1);
+                                gl.getComercios().setA1(m1.getMestroHorarioMateriasPK());
                                 break;
                             case "B1":
-                                gl.getComercios().setB1(m1);
+                                gl.getComercios().setB1(m1.getMestroHorarioMateriasPK());
                                 break;
                             case "A2":
-                                gl.getComercios().setA2(m1);
+                                gl.getComercios().setA2(m1.getMestroHorarioMateriasPK());
                                 break;
                             case "B2":
-                                gl.getComercios().setB2(m1);
+                                gl.getComercios().setB2(m1.getMestroHorarioMateriasPK());
                                 break;
                             case "A3":
-                                gl.getComercios().setA3(m1);
+                                gl.getComercios().setA3(m1.getMestroHorarioMateriasPK());
                                 break;
                             case "B3":
-                                gl.getComercios().setB3(m1);
+                                gl.getComercios().setB3(m1.getMestroHorarioMateriasPK());
                         }
                     }
                 });

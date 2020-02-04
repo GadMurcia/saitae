@@ -17,7 +17,7 @@
 package net.delsas.saitae.ax;
 
 import java.io.Serializable;
-import net.delsas.saitae.entities.MestroHorarioMaterias;
+import net.delsas.saitae.entities.MestroHorarioMateriasPK;
 
 /**
  *
@@ -25,61 +25,61 @@ import net.delsas.saitae.entities.MestroHorarioMaterias;
  */
 public class secciones implements Serializable {
 
-    private MestroHorarioMaterias a1;
-    private MestroHorarioMaterias b1;
-    private MestroHorarioMaterias a2;
-    private MestroHorarioMaterias b2;
-    private MestroHorarioMaterias a3;
-    private MestroHorarioMaterias b3;
+    private MestroHorarioMateriasPK a1;
+    private MestroHorarioMateriasPK b1;
+    private MestroHorarioMateriasPK a2;
+    private MestroHorarioMateriasPK b2;
+    private MestroHorarioMateriasPK a3;
+    private MestroHorarioMateriasPK b3;
 
     public secciones() {
     }
 
-    public MestroHorarioMaterias getA1() {
+    public MestroHorarioMateriasPK getA1() {
         return a1;
     }
 
-    public void setA1(MestroHorarioMaterias a1) {
+    public void setA1(MestroHorarioMateriasPK a1) {
         this.a1 = a1;
     }
 
-    public MestroHorarioMaterias getB1() {
+    public MestroHorarioMateriasPK getB1() {
         return b1;
     }
 
-    public void setB1(MestroHorarioMaterias b1) {
+    public void setB1(MestroHorarioMateriasPK b1) {
         this.b1 = b1;
     }
 
-    public MestroHorarioMaterias getA2() {
+    public MestroHorarioMateriasPK getA2() {
         return a2;
     }
 
-    public void setA2(MestroHorarioMaterias a2) {
+    public void setA2(MestroHorarioMateriasPK a2) {
         this.a2 = a2;
     }
 
-    public MestroHorarioMaterias getB2() {
+    public MestroHorarioMateriasPK getB2() {
         return b2;
     }
 
-    public void setB2(MestroHorarioMaterias b2) {
+    public void setB2(MestroHorarioMateriasPK b2) {
         this.b2 = b2;
     }
 
-    public MestroHorarioMaterias getA3() {
+    public MestroHorarioMateriasPK getA3() {
         return a3;
     }
 
-    public void setA3(MestroHorarioMaterias a3) {
+    public void setA3(MestroHorarioMateriasPK a3) {
         this.a3 = a3;
     }
 
-    public MestroHorarioMaterias getB3() {
+    public MestroHorarioMateriasPK getB3() {
         return b3;
     }
 
-    public void setB3(MestroHorarioMaterias b3) {
+    public void setB3(MestroHorarioMateriasPK b3) {
         this.b3 = b3;
     }
 }

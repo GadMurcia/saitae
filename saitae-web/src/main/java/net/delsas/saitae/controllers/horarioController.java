@@ -104,7 +104,7 @@ public class horarioController implements Serializable {
         horasClase = horarioFL.findAll();
         dias = diasEstudioFL.findAll();
         materias = materiaFL.findAll();
-        us = (Persona) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");        
+        us = (Persona) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
         añoSelected = getAño();
         diaSelected = dias.get(0);
         añosDisponibles = Auxiliar.getAñosParaMostrar(5);
@@ -229,8 +229,8 @@ public class horarioController implements Serializable {
                                         + Auxiliar.getNombreCortoPersona(m.getMaestro().getPersona())
                                         + ". Grado: " + getGrado(m.getGrado().getGradoPK()))),
                         m.getMaestro().getPersona(),
-                        notiFL, notificacion);                
-            init2();
+                        notiFL, notificacion);
+                init2();
             }
         }
     }
@@ -240,34 +240,34 @@ public class horarioController implements Serializable {
             horarioGlobal gl = (horarioGlobal) event.getObject();
             horario = new ArrayList<>();
             if (gl.getComercios().getA1() != null) {
-                horario.add(gl.getComercios().getA1());
+                horario.add(mhmFL.find(gl.getComercios().getA1()));
             }
             if (gl.getComercios().getB1() != null) {
-                horario.add(gl.getComercios().getB1());
+                horario.add(mhmFL.find(gl.getComercios().getB1()));
             }
             if (gl.getComercios().getA2() != null) {
-                horario.add(gl.getComercios().getA2());
+                horario.add(mhmFL.find(gl.getComercios().getA2()));
             }
             if (gl.getComercios().getB2() != null) {
-                horario.add(gl.getComercios().getB2());
+                horario.add(mhmFL.find(gl.getComercios().getB2()));
             }
             if (gl.getComercios().getA3() != null) {
-                horario.add(gl.getComercios().getA3());
+                horario.add(mhmFL.find(gl.getComercios().getA3()));
             }
             if (gl.getComercios().getB3() != null) {
-                horario.add(gl.getComercios().getB3());
+                horario.add(mhmFL.find(gl.getComercios().getB3()));
             }
             if (gl.getGenerales().getA1() != null) {
-                horario.add(gl.getGenerales().getA1());
+                horario.add(mhmFL.find(gl.getGenerales().getA1()));
             }
             if (gl.getGenerales().getB1() != null) {
-                horario.add(gl.getGenerales().getB1());
+                horario.add(mhmFL.find(gl.getGenerales().getB1()));
             }
             if (gl.getGenerales().getA2() != null) {
-                horario.add(gl.getGenerales().getA2());
+                horario.add(mhmFL.find(gl.getGenerales().getA2()));
             }
             if (gl.getGenerales().getB2() != null) {
-                horario.add(gl.getGenerales().getB2());
+                horario.add(mhmFL.find(gl.getGenerales().getB2()));
             }
         }
     }
@@ -381,22 +381,35 @@ public class horarioController implements Serializable {
     }
 
     public void setHorario2Selected(horarioGlobal horario2Selected) {
-        this.selected = horario2Selected == null ? null
-                : mhmFL.find(new MestroHorarioMateriasPK(0, 0, 0, 0, 0, "", "", 0));
+//        this.selected = horario2Selected == null ? null
+//                : mhmFL.find(new MestroHorarioMateriasPK(0, 0, 0, 0, 0, "", "", 0));
         this.horario2Selected = horario2Selected;
     }
 
-    public Materia getMateria(Object clave) {
-        return (Materia) clave;
+    public Materia getMateria(Integer id) {
+        return materiaFL.find(id == null ? 0 : id);
     }
 
-    public String getNombreCorto(Maestro m) {
-        return m == null ? "" : Auxiliar.getNombreCortoPersona(m.getPersona());
+    public String getNombreCorto(Integer m) {
+        return m == null ? "" : Auxiliar.getNombreCortoPersona(maestroFL.find(m).getPersona());
     }
 
     public String getAccion(boolean ac) {
         edit = ac;
         return (ac ? "Edición" : "Eliminación");
+    }
+
+    public String nombreGrado(Integer n, String m, String s, Integer a) {
+        return getGrado(new GradoPK(n, m, s, a));
+    }
+
+    public boolean disabled(horarioGlobal hg) {
+        List<Integer> dis = new ArrayList<>();
+        dis.add(3);
+        dis.add(6);
+        dis.add(9);
+        dis.add(12);
+        return hg == null ? false : dis.contains(hg.getHora().getIdhorario());
     }
 
 }
