@@ -5,13 +5,44 @@
                 template="./../WEB-INF/template/plantilla1.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:p="http://primefaces.org/ui">
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:t="http://xmlns.jcp.org/jsf/composite/components/autentia">
 
     <ui:define name="content">
         <h:form id="form">
             <h:panelGrid columns="1">
-                <h1 align="center">Visualice y/o edite su información personal</h1>
-                <p:fieldset legend="Información Personal" toggleable="true" toggleSpeed="500" collapsed="true">
+                <h1 align="center">Visualice y/o edite su información personal</h1>                
+                <p:fieldset legend="Actualización de la contraseña" toggleable="true" toggleSpeed="500" 
+                            collapsed="true" title="Edite su contraseña de acceso a su cuenta SAITAE">
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="Usuario (DUI/NIE) :" for="idp" />
+                        <h:outputText id="idp" value="#{infoPerfilController.usuario.idpersona.toString().substring(1)}"/>
+
+                        <p:outputLabel for="c0" value="Contraseña Anterior"/>
+                        <p:password id="c0" required="true" value="#{infoPerfilController.contra}"
+                                    placeholder="Contraseña anterior">
+                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
+                        </p:password>
+
+                        <p:outputLabel for="c1" value="Contraseña Anterior"/>
+                        <p:password id="c1" required="true" value="#{infoPerfilController.contra1}"
+                                    placeholder="Contraseña nueva">
+                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
+                        </p:password>
+
+                        <p:outputLabel for="c2" value="Repita la Contraseña"/>
+                        <p:password id="c2" required="true" value="#{infoPerfilController.contra2}"
+                                    placeholder="Repetir la contraseña nueva">
+                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
+                        </p:password>
+
+                        <p:column/>
+                        <p:commandButton value="Cambiar Contraseña" process="@this" update="form"
+                                         actionListener="#{infoPerfilController.acContra()}"/>
+                    </h:panelGrid>
+                </p:fieldset>
+                <p:fieldset legend="Información Personal" toggleable="true" toggleSpeed="500" 
+                            collapsed="true" title="Visualice o edite su información personal.">
                     <h:panelGrid columns="2">
                         <p:outputLabel value="Usuario (DUI/NIE) :" for="idpersona" />
                         <p:inputText id="idpersona" value="#{infoPerfilController.usuario.idpersona.toString().substring(1)}" 
@@ -81,6 +112,15 @@
                             <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
                         </p:inputMask>
 
+                        <p:outputLabel for="telefono1" value="Teléfono de Residencia: " 
+                                       rendered="#{infoPerfilController.maestro}"/>
+                        <p:inputMask id="telefono1" value="#{infoPerfilController.usuario.maestro.maestrocolTelefonoResidencia}" 
+                                     required="true" mask="9999-9999" 
+                                     rendered="#{infoPerfilController.maestro}"
+                                     title="Ingrese el número de reléfono de la residencia de la persona">
+                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
+                        </p:inputMask>
+
                         <p:outputLabel value="Nacionalidad:" for="Nac" />
                         <p:selectOneMenu id="Nac" value="#{infoPerfilController.usuario.personaNacionalidad}" 
                                          title="Nacionalidad" >
@@ -137,11 +177,19 @@
                                          actionListener="#{infoPerfilController.guardarPersona()}"/>
                     </h:panelGrid>
                 </p:fieldset>
-
                 <p:fieldset legend="Información Estudiantil" toggleable="true" collapsed="true" 
-                            title="Su información de estudiante"
+                            title="Visualice o edite su información de estudiante"
                             toggleSpeed="500" rendered="#{infoPerfilController.estudiante}">
                     <h:panelGrid columns="2">
+                        <p:outputLabel value="Nombre del representante: "/>
+                        <h:outputText value="#{infoPerfilController.getNombre(infoPerfilController.usuario.estudiante.estudianteRepresentante.persona)}"/>
+
+                        <p:outputLabel value="Nombre de la madre: "/>
+                        <h:outputText value="#{infoPerfilController.getNombre(infoPerfilController.usuario.estudiante.estudianteMadre)}"/>
+
+                        <p:outputLabel value="Nombre del padre: "/>
+                        <h:outputText value="#{infoPerfilController.getNombre(infoPerfilController.usuario.estudiante.estudiantePadre)}"/>
+
                         <p:outputLabel value="Tiene partida de nacimiento:" for="estudiantePartidaNac" />
                         <p:selectBooleanButton id="estudiantePartidaNac" 
                                                value="#{infoPerfilController.usuario.estudiante.estudiantePartidaNac}" 
@@ -160,6 +208,20 @@
                             <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
                         </p:inputText>
 
+                        <p:outputLabel value="Parentesco con el representante:" for="estudianteParentescoRepresentante" />
+                        <p:inputText id="estudianteParentescoRepresentante" 
+                                     value="#{infoPerfilController.usuario.estudiante.estudianteParentescoRepresentante}" 
+                                     title="EstudianteParentescoRepresentante">
+                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
+                        </p:inputText>
+
+                        <p:outputLabel value="Su representante es un familiar:" for="estudianteRepresentanteFamiliar" />
+                        <p:selectBooleanButton id="estudianteRepresentanteFamiliar" offLabel="No" onLabel="Sí"
+                                               value="#{infoPerfilController.usuario.estudiante.estudianteRepresentanteFamiliar}" 
+                                               title="EstudianteRepresentanteFamiliar">
+                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
+                        </p:selectBooleanButton>
+
                         <h:outputLabel value="Tipo de Calle:" for="estudianteTipoCalle" />
                         <p:selectOneMenu id="estudianteTipoCalle" 
                                          value="#{infoPerfilController.usuario.estudiante.estudianteTipoCalle}" 
@@ -170,13 +232,6 @@
                             <f:selectItem itemLabel="Pavimentada" itemValue="1" />
                             <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
                         </p:selectOneMenu>
-
-                        <p:outputLabel value="Riesgo o Vulnerabilidad:" for="estudianteRiesgoVulnerabilidad" />
-                        <p:inputText id="estudianteRiesgoVulnerabilidad" 
-                                     value="#{infoPerfilController.usuario.estudiante.estudianteRiesgoVulnerabilidad}" 
-                                     title="EstudianteRiesgoVulnerabilidad">
-                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
-                        </p:inputText>
 
                         <p:outputLabel value="Medio de Transporte:" for="estudianteMedioTransporte" />
                         <p:selectOneMenu id="estudianteMedioTransporte" 
@@ -192,6 +247,20 @@
                             <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
                         </p:selectOneMenu>
 
+                        <p:outputLabel value="Cursó Parvularia:" for="estudianteParvularia" />
+                        <p:selectBooleanButton id="estudianteParvularia" offLabel="No" onLabel="Sí"
+                                               value="#{infoPerfilController.usuario.estudiante.estudianteParvularia}" 
+                                               title="EstudianteParvularia">
+                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
+                        </p:selectBooleanButton>
+
+                        <p:outputLabel value="Centro de Procedencia:" for="estudianteCentroProcedencia" />
+                        <p:inputText id="estudianteCentroProcedencia" 
+                                     value="#{infoPerfilController.usuario.estudiante.estudianteCentroProcedencia}" 
+                                     title="EstudianteCentroProcedencia">
+                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
+                        </p:inputText>
+
                         <p:outputLabel value="Distancia Al Centro:" for="estudianteDistanciaAlCentro" />
                         <p:inputNumber id="estudianteDistanciaAlCentro" 
                                        value="#{infoPerfilController.usuario.estudiante.estudianteDistanciaAlCentro}" 
@@ -199,6 +268,13 @@
                                        decimalSeparator="." thousandSeparator=",">
                             <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
                         </p:inputNumber>
+
+                        <p:outputLabel value="Riesgo o Vulnerabilidad:" for="estudianteRiesgoVulnerabilidad" />
+                        <p:inputText id="estudianteRiesgoVulnerabilidad" 
+                                     value="#{infoPerfilController.usuario.estudiante.estudianteRiesgoVulnerabilidad}" 
+                                     title="EstudianteRiesgoVulnerabilidad">
+                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
+                        </p:inputText>
 
                         <p:outputLabel value="Trabaja:" for="estudianteTrabaja" />
                         <p:selectBooleanButton id="estudianteTrabaja" offLabel="No" onLabel="Sí"
@@ -229,17 +305,10 @@
 
                         <h:outputText value="Especifique: "/>
                         <p:inputText id="ot" value="#{infoPerfilController.otraDependenciaEcon}"  
-                                     title="Escriba quién más le ayuda para sus estudios" 
+                                     title="Escriba quién más le ayuda para sus estudios" required="true"
                                      disabled="#{!infoPerfilController.otraDependencia}">
                             <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
                         </p:inputText>
-
-                        <p:outputLabel value="Cursó Parvularia:" for="estudianteParvularia" />
-                        <p:selectBooleanButton id="estudianteParvularia" offLabel="No" onLabel="Sí"
-                                               value="#{infoPerfilController.usuario.estudiante.estudianteParvularia}" 
-                                               title="EstudianteParvularia">
-                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
-                        </p:selectBooleanButton>
 
                         <p:outputLabel value="Enfermedades que padece:" for="estudianteEnfermedades" />
                         <p:inputText id="estudianteEnfermedades" 
@@ -255,28 +324,88 @@
                             <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
                         </p:inputText>
 
-                        <p:outputLabel value="Parentesco con el representante:" for="estudianteParentescoRepresentante" />
-                        <p:inputText id="estudianteParentescoRepresentante" 
-                                     value="#{infoPerfilController.usuario.estudiante.estudianteParentescoRepresentante}" 
-                                     title="EstudianteParentescoRepresentante">
-                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
-                        </p:inputText>
-
-                        <p:outputLabel value="Centro de Procedencia:" for="estudianteCentroProcedencia" />
-                        <p:inputText id="estudianteCentroProcedencia" 
-                                     value="#{infoPerfilController.usuario.estudiante.estudianteCentroProcedencia}" 
-                                     title="EstudianteCentroProcedencia">
-                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
-                        </p:inputText>
-
-                        <p:outputLabel value="Su representante es un familiar:" for="estudianteRepresentanteFamiliar" />
-                        <p:selectBooleanButton id="estudianteRepresentanteFamiliar" offLabel="No" onLabel="Sí"
-                                               value="#{infoPerfilController.usuario.estudiante.estudianteRepresentanteFamiliar}" 
-                                               title="EstudianteRepresentanteFamiliar">
-                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
-                        </p:selectBooleanButton>
-
                         <p:column/>
+                        <p:commandButton value="Guardar Cambios" process="@this" update="form"
+                                         actionListener="#{infoPerfilController.guardarPersona()}"/>
+                    </h:panelGrid>
+                </p:fieldset>
+                <p:fieldset legend="Información de matriculas" toggleable="true" collapsed="true" 
+                            title="Información de sus matriculas"
+                            toggleSpeed="500" rendered="#{infoPerfilController.estudiante}">
+                    <h:panelGrid columns="1">
+                        <p:panel rendered="#{!infoPerfilController.matriculado}">
+                            <h1><h:outputText value="Matricúlese este año"/></h1>
+                            <h:panelGrid columns="2">
+                                <p:outputLabel value="Repite año: " for="matriculaRepite" />
+                                <p:selectBooleanButton id="matriculaRepite" offLabel="No" onLabel="Sí"
+                                                       value="#{infoPerfilController.m.matriculaRepite}" 
+                                                       title="Repite grado" disabled="true">
+                                    <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
+                                </p:selectBooleanButton>
+
+                                <p:outputLabel value="Modalidad: " for="modal" />
+                                <p:selectOneMenu id="modal" value="#{infoPerfilController.m.grado.gradoPK.gradoModalidad}" 
+                                                 title="Modalidad a inscribirse" required="true" 
+                                                 requiredMessage="The Grado field is required."
+                                                 converter="omnifaces.SelectItemsConverter">
+                                    <f:selectItem itemValue="#{null}" itemLabel="Seleccione" noSelectionOption="true"/>
+                                    <f:selectItems value="#{infoPerfilController.modalidades}" var="md"
+                                                   itemValue="#{md}" 
+                                                   itemLabel="#{infoPerfilController.getModalidadNombre(md)}"/>
+                                    <p:ajax event="change" listener="#{infoPerfilController.onBlour}" update="niv"/>
+                                </p:selectOneMenu>
+
+                                <p:outputLabel value="Año: " for="niv" />
+                                <p:selectOneMenu id="niv" value="#{infoPerfilController.m.grado.gradoPK.idgrado}" 
+                                                 title="año a inscribirse" required="true" 
+                                                 requiredMessage="The Grado field is required."
+                                                 converter="omnifaces.SelectItemsConverter">
+                                    <f:selectItem itemValue="#{null}" itemLabel="Seleccione" noSelectionOption="true"/>
+                                    <f:selectItems value="#{infoPerfilController.niveles}" var="nv"
+                                                   itemValue="#{nv}" itemLabel="#{nv}"/>
+                                    <p:ajax event="change" listener="#{infoPerfilController.onBlour}" update="matriculaRepite"/>
+                                </p:selectOneMenu>
+
+                                <p:column/>
+                                <p:commandButton value="Matricularme" process="@this" update="form"
+                                                 actionListener="#{infoPerfilController.matricular()}"/>
+                            </h:panelGrid>
+                        </p:panel>
+                        <p:dataTable var="m" value="#{infoPerfilController.usuario.estudiante.matriculaList}">
+                            <f:facet name="header">
+                                Historial de matriculas
+                            </f:facet>
+                            <p:column headerText="Año" width="10%">
+                                #{m.matriculaPK.matriculaAnyo}
+                            </p:column>
+                            <p:column headerText="Grado" width="40%">
+                                #{infoPerfilController.getNombreGrado(m.grado.gradoPK)}
+                            </p:column>
+                            <p:column headerText="Maestro guía">
+                                #{infoPerfilController.getNombre(m.grado.gradoMaestroGuia.persona)}
+                            </p:column>
+                        </p:dataTable>
+                    </h:panelGrid>
+                </p:fieldset>
+                <p:fieldset legend="Información magisterial" toggleable="true" toggleSpeed="500" 
+                            collapsed="true" title="Edite su información magisterial"
+                            rendered="#{infoPerfilController.maestro}">
+                    <h:panelGrid columns="1">
+                        <t:maestro maestro="#{infoPerfilController.usuario.maestro}" 
+                                   disable="true"/>
+                        <t:maestro1 maestro="#{infoPerfilController.usuario.maestro}" 
+                                    especialidades="#{infoPerfilController.especialidades}"
+                                    salarios="#{infoPerfilController.sueldos}"
+                                    disable="true"/>
+                        <p:commandButton value="Guardar Cambios" process="@this" update="form"
+                                         actionListener="#{infoPerfilController.guardarPersona()}"/>
+                    </h:panelGrid>
+                </p:fieldset>
+                <p:fieldset legend="Información como representante" toggleable="true" toggleSpeed="500" 
+                            collapsed="true" title="Edite su información de representante"
+                            rendered="#{infoPerfilController.representante}">                    
+                    <h:panelGrid columns="1">
+                        <t:representante representante="#{infoPerfilController.usuario}"/>
                         <p:commandButton value="Guardar Cambios" process="@this" update="form"
                                          actionListener="#{infoPerfilController.guardarPersona()}"/>
                     </h:panelGrid>

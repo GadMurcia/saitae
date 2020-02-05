@@ -49,6 +49,7 @@
                                          label="Número de Identificación Estudiantil"
                                          title="Ingrese su NIE">
                                 <f:validateLength maximum="10" minimum="4"/>
+                                <p:ajax event="change" listener="#{inscripcionController.onBlour}"/>
                             </p:inputText>
 
                             <p:outputLabel value="Nombres: " for="nom"/>
@@ -448,7 +449,7 @@
                                     <p:inputMask id="tp" value="#{inscripcionController.padre.personaTelefono}" 
                                                  label="Número de teléfono del padre" 
                                                  title="Ingrese el número de teléfono del padre" mask="9999-9999"/>
-                                    
+
                                     <p:commandButton value="limpiar datos del padre" 
                                                      actionListener="#{inscripcionController.limpiarAPadres(1)}"
                                                      update="dp np ap tp"/>
@@ -479,7 +480,7 @@
                                     <p:inputMask id="tm" value="#{inscripcionController.madre.personaTelefono}" 
                                                  label="Número de teléfono del madre." 
                                                  title="Ingrese el número de teléfono de la madre." mask="9999-9999"/>
-                                    
+
                                     <p:commandButton value="limpiar datos de la madre" 
                                                      actionListener="#{inscripcionController.limpiarAPadres(2)}"
                                                      update="dm nm am tm"/>

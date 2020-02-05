@@ -8,64 +8,90 @@
     <!-- INTERFACE -->
     <cc:interface>
         <cc:attribute name="maestro" required="true" type="net.delsas.saitae.entities.Maestro"/>
+        <cc:attribute name="disable" default="#{false}" type="java.lang.Boolean"/>
     </cc:interface>
 
     <!-- IMPLEMENTATION -->
     <cc:implementation>
         <h:panelGrid columns="3">
             <p:outputLabel for="nip" value="NIP: "/>
-            <p:inputText id="nip" value="#{cc.attrs.maestro.maestroNip}" required="true"/>
+            <p:inputText id="nip" value="#{cc.attrs.maestro.maestroNip}" required="true">
+                <p:ajax event="change" listener="#{loginController.onBlour}"/>
+            </p:inputText>
             <p:message for="nip"/>
-            
+
             <p:outputLabel for="nup" value="NUP: "/>
-            <p:inputText id="nup" value="#{cc.attrs.maestro.maestroNup}" required="true"/>
+            <p:inputText id="nup" value="#{cc.attrs.maestro.maestroNup}" required="true">
+                <p:ajax event="change" listener="#{loginController.onBlour}"/>
+            </p:inputText>
             <p:message for="nup"/>
-            
+
             <p:outputLabel for="cod" value="Código: "/>
-            <p:inputText id="cod" value="#{cc.attrs.maestro.maestroCodigo}" required="true"/>
+            <p:inputText id="cod" value="#{cc.attrs.maestro.maestroCodigo}" required="true">
+                <p:ajax event="change" listener="#{loginController.onBlour}"/>
+            </p:inputText>
             <p:message for="cod"/>
-            
+
             <p:outputLabel for="par" value="Partidas"/>
-            <p:inputText id="par" value="#{cc.attrs.maestro.maestroPartidas}" required="true"/>
+            <p:inputText id="par" value="#{cc.attrs.maestro.maestroPartidas}" required="true">
+                <p:ajax event="change" listener="#{loginController.onBlour}"/>
+            </p:inputText>
             <p:message for="par"/>
-            
+
             <p:outputLabel for="sub" value="Subnúmeros: "/>
-            <p:inputText id="sub" value="#{cc.attrs.maestro.maestroSubnumeros}" required="true"/>
+            <p:inputText id="sub" value="#{cc.attrs.maestro.maestroSubnumeros}" required="true">
+                <p:ajax event="change" listener="#{loginController.onBlour}"/>
+            </p:inputText>
             <p:message for="sub"/>
-            
+
             <p:outputLabel for="nivel" value="Nivel: "/>
-            <p:inputText id="nivel" value="#{cc.attrs.maestro.maestroNivel}" required="true"/>
+            <p:inputText id="nivel" value="#{cc.attrs.maestro.maestroNivel}" required="true">
+                <p:ajax event="change" listener="#{loginController.onBlour}"/>
+            </p:inputText>
             <p:message for="nivel"/>
-            
+
             <p:outputLabel for="cat" value="Categoría: "/>
-            <p:inputText id="cat" value="#{cc.attrs.maestro.maestroCategoria}" required="true"/>
+            <p:inputText id="cat" value="#{cc.attrs.maestro.maestroCategoria}" required="true">
+                <p:ajax event="change" listener="#{loginController.onBlour}"/>
+            </p:inputText>
             <p:message for="cat"/>
-            
+
             <p:outputLabel for="mag" value="Fecha de ingreso al Magisterio: "/>
-            <p:calendar id="mag" value="#{cc.attrs.maestro.maestroFechaMagisterio}" pattern="dd-MM-yyyy" mask="true" 
-                        title=" "/>
+            <p:calendar id="mag" value="#{cc.attrs.maestro.maestroFechaMagisterio}" pattern="dd-MM-yyyy" mask="true">
+                <p:ajax event="change" listener="#{loginController.onBlour}"/>
+            </p:calendar>
             <p:message for="mag"/>
-            
+
             <p:outputLabel for="ins" value="Fecha de ingreso a la Institución: "/>
             <p:calendar id="ins" value="#{cc.attrs.maestro.maestroFechaInstitucion}" pattern="dd-MM-yyyy" mask="true" 
-                        title=" "/>
+                        disabled="#{cc.attrs.disable}">
+                <p:ajax event="change" listener="#{loginController.onBlour}"/>
+            </p:calendar>
             <p:message for="ins"/>
-            
+
             <p:outputLabel for="asc" value="Fecha de próximo asenso: "/>
             <p:calendar id="asc" value="#{cc.attrs.maestro.maestroFechaProximoAsenso}" pattern="dd-MM-yyyy" mask="true" 
-                        title=" "/>
+                        disabled="#{cc.attrs.disable}">
+                <p:ajax event="change" listener="#{loginController.onBlour}"/>
+            </p:calendar>
             <p:message for="asc"/>
-            
+
             <p:outputLabel for="tcat" value="Número de años desde que está en la categoría actual: "/>
-            <p:inputText id="tcat" value="#{cc.attrs.maestro.maestroTiempoCategoria}" required="true" />
+            <p:inputText id="tcat" value="#{cc.attrs.maestro.maestroTiempoCategoria}" required="true">
+                <p:ajax event="change" listener="#{loginController.onBlour}"/>
+            </p:inputText>
             <p:message for="tcat"/>
-            
+
             <p:outputLabel for="afp" value="Nombre de AFP: "/>
-            <p:inputText id="afp" value="#{cc.attrs.maestro.maestroAfp}" required="true"/>
+            <p:inputText id="afp" value="#{cc.attrs.maestro.maestroAfp}" required="true">
+                <p:ajax event="change" listener="#{loginController.onBlour}"/>
+            </p:inputText>
             <p:message for="afp"/>
-            
+
             <p:outputLabel for="bien" value="Número de Bienestar Magisterial: "/>
-            <p:inputText id="bien" value="#{cc.attrs.maestro.maestroBienestar}" required="true"/>
+            <p:inputText id="bien" value="#{cc.attrs.maestro.maestroBienestar}" required="true">
+                <p:ajax event="change" listener="#{loginController.onBlour}"/>
+            </p:inputText>
             <p:message for="bien"/>
         </h:panelGrid>
     </cc:implementation>

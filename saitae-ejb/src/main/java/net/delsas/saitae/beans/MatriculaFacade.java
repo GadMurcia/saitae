@@ -62,4 +62,11 @@ public class MatriculaFacade extends AbstractFacade<Matricula> implements Matric
                 .getResultList();
     }
 
+    @Override
+    public List<Matricula> findByIdmatricula(Integer idestudiante) {
+        return em.createNamedQuery("Matricula.findByIdmatricula")
+                .setParameter("idmatricula", idestudiante)
+                .getResultList();
+    }
+
 }

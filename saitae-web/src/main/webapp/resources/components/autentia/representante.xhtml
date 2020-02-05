@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+        <cc:attribute name="representante" required="true" type="net.delsas.saitae.entities.Persona"/>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        <p:messages for="yhh02"/>
+        <h:panelGrid columns="2" id="yhh02">
+
+            <h:outputText value="¿Es familiar del estudiante?: *" />
+            <p:selectBooleanButton id="value3" value="#{cc.attrs.representante.estudiante.estudianteRepresentanteFamiliar}" 
+                                   onLabel="Sí" offLabel="No" style="width:190px">
+                <p:ajax event="change" listener="#{loginController.onBlour}"/>
+            </p:selectBooleanButton>
+
+            <h:outputText value="Parentesco con el estudiante: *" />
+            <p:inputText value="#{cc.attrs.representante.estudiante.estudianteParentescoRepresentante}" 
+                         required="true" label="Apellidos"
+                         title="Ingrese el parentesco con el estudiante.">
+                <p:ajax event="change" listener="#{loginController.onBlour}"/>
+            </p:inputText>
+
+
+            <h:outputText value="¿Posee partida de nacimiento?: *" />
+            <p:selectBooleanButton id="value4" value="#{cc.attrs.representante.estudiante.estudiantePartidaNac}" 
+                                   onLabel="Sí" offLabel="No" style="width:190px">
+                <p:ajax event="change" listener="#{loginController.onBlour}" update="m"/>
+            </p:selectBooleanButton>
+
+            <h:outputText value="¿Por qué no tiene partida de nacimiento: " />
+            <p:inputText id="m" value="#{cc.attrs.representante.estudiante.estudianteNoPartida}" 
+                         label="Apellidos" disabled="#{cc.attrs.representante.estudiante.estudiantePartidaNac}"
+                         title="Ingrese el motivo por el que no tiene partidas de nacimiento en la actualidad">
+                <p:ajax event="change" listener="#{loginController.onBlour}"/>
+            </p:inputText>
+
+            <p:outputLabel for="console10" value="Tipo de calle de donde vive: *" />
+            <p:selectOneMenu id="console10" value="#{cc.attrs.representante.estudiante.estudianteTipoCalle}"  required="true"
+                             style="width:190px" title="Seleccione el tipo de calle de el lugar donde vive">
+                <f:selectItem itemLabel="Seleccione" itemValue="" />
+                <f:selectItem itemLabel="Tierra" itemValue="0" />
+                <f:selectItem itemLabel="Pavimentada" itemValue="1" />
+                <p:ajax event="change" listener="#{loginController.onBlour}"/>
+            </p:selectOneMenu>
+
+            <h:outputText value="Riesgos o vulnarebilidades: " />
+            <p:inputText value="#{cc.attrs.representante.estudiante.estudianteRiesgoVulnerabilidad}" 
+                         title="Escriba las vulnarebilidades que perciba en el lugar donde vive.">
+                <p:ajax event="change" listener="#{loginController.onBlour}"/>
+            </p:inputText>
+
+            <h:outputText value="Profesión u oficio: *" />
+            <p:inputText label="Profesión" value="#{cc.attrs.representante.estudiante.estudianteFormaTrabajo}" required="true">
+                <p:ajax event="change" listener="#{loginController.onBlour}"/>
+            </p:inputText>
+
+            <h:outputText value="Escolaridad: *" />
+            <p:inputText label="Escolaridad" value="#{cc.attrs.representante.estudiante.estudianteEscolaridad}" required="true" 
+                         title="Escriba hasta qué grado estudió.">
+                <p:ajax event="change" listener="#{loginController.onBlour}"/>
+            </p:inputText>
+        </h:panelGrid>
+    </cc:implementation>
+</html>

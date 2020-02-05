@@ -772,10 +772,15 @@ public class Auxiliar implements Serializable {
 
     public static String getGradoNombre(GradoPK gr) {
         return gr == null ? ""
-                : (gr.getIdgrado() + "° " + (gr.getGradoModalidad().equals("C") ? "TVC Contador"
-                : (gr.getGradoModalidad().equals("S") ? "TVC Secretariado"
-                : (gr.getGradoModalidad().equals("G") ? "General" : "??")))
+                : (gr.getIdgrado() + "° "
+                + getModalidadNombre(gr.getGradoModalidad())
                 + " Sección " + gr.getGradoSeccion());
+    }
+
+    public static String getModalidadNombre(String gr) {
+        return (gr.equals("C") ? "TVC Contador"
+                : (gr.equals("S") ? "TVC Secretariado"
+                : (gr.equals("G") ? "General" : "??")));
     }
 
     public static String getNombreCortoPersona(Persona p) {
@@ -874,4 +879,28 @@ public class Auxiliar implements Serializable {
         return i;
     }
 
+    public static Integer getAñoInscripcion() {
+        Date r = new Date();
+        Integer y;
+        try {
+            y = r.before(new SimpleDateFormat("dd-MM-yyyy").parse("24-11-" + getAñoActual()))
+                    ? getAñoActual() + 0
+                    : (getAñoActual() + 1);
+        } catch (ParseException ex) {
+            y = getAñoActual();
+        }
+        return y;
+    }
+
+    public static boolean isTimeToInsciption() {
+        try {
+            Date d = new Date();
+            Date d1 = new SimpleDateFormat("dd-MM-yyyy").parse("22-11-" + getAñoActual());
+            Date d2 = new SimpleDateFormat("dd-MM-yyyy").parse("31-01-" + getAñoActual());
+            return !d.before(d1) || !d.after(d2);
+        } catch (ParseException ex) {
+            System.out.println(ex);
+            return false;
+        }
+    }
 }

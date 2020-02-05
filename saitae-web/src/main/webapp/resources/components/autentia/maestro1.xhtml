@@ -9,6 +9,9 @@
     <!-- INTERFACE -->
     <cc:interface>
         <cc:attribute name="maestro" required="true" type="net.delsas.saitae.entities.Maestro"/>
+        <cc:attribute name="especialidades" default="#{null}"/>
+        <cc:attribute name="salarios" default="#{null}"/>
+        <cc:attribute name="disable" default="#{false}" type="java.lang.Boolean"/>
     </cc:interface>
 
     <!-- IMPLEMENTATION -->
@@ -16,57 +19,73 @@
         <h:panelGrid columns="3">
             <p:outputLabel for="esp" value="Especialidad: "/>
             <p:selectOneMenu id="esp" value="#{cc.attrs.maestro.maestroEspecialidad}" required="true" 
-                             converter="omnifaces.SelectItemsConverter">
+                             converter="omnifaces.SelectItemsConverter" disabled="#{cc.attrs.disable}">
                 <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
-                <f:selectItems value="#{maestroController.tipoE}" var="e" 
+                <f:selectItems value="#{cc.attrs.especialidades==null? maestroController.tipoE : cc.attrs.especialidades}" var="e" 
                                itemLabel="#{e.tipoEspecialidadesNombre}" itemValue="#{e}"/>
+                <p:ajax event="change" listener="#{loginController.onBlour}"/>
             </p:selectOneMenu>
             <p:message for="esp"/>
 
             <p:outputLabel for="escal" value="Tiene escalafón: "/>
-            <p:selectBooleanButton id="escal" value="#{cc.attrs.maestro.maestroSinEscalafon}" 
-                                   onLabel="Sí" offLabel="No" style="width:60px" required="true"/>
+            <p:selectBooleanButton id="escal" value="#{cc.attrs.maestro.maestroSinEscalafon}" disabled="#{cc.attrs.disable}"
+                                   onLabel="Sí" offLabel="No" style="width:60px" required="true">
+                <p:ajax event="change" listener="#{loginController.onBlour}"/>
+            </p:selectBooleanButton>
             <p:message for="escal"/>
 
             <p:outputLabel for="turno" value="Turno"/>
-            <p:selectOneMenu id="turno" value="#{cc.attrs.maestro.maestroTurno}" required="true" style="width:100%">
+            <p:selectOneMenu id="turno" value="#{cc.attrs.maestro.maestroTurno}" required="true" style="width:100%"
+                             disabled="#{cc.attrs.disable}">
                 <f:selectItem itemLabel="Todo el día" itemValue="T"/>
                 <f:selectItem itemLabel="Mañana" itemValue="M"/>
                 <f:selectItem itemLabel="Tarde" itemValue="V"/>
+                <p:ajax event="change" listener="#{loginController.onBlour}"/>
             </p:selectOneMenu>
             <p:message for="turno"/>
 
             <p:outputLabel for="sal" value="Tipo de sueldo: "/>
             <p:selectOneMenu id="sal" value="#{cc.attrs.maestro.maestroTipoSalario}" required="true" 
-                             converter="omnifaces.SelectItemsConverter">
+                             converter="omnifaces.SelectItemsConverter" disabled="#{cc.attrs.disable}">
                 <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
-                <f:selectItems value="#{maestroController.tipoS}" var="s"
+                <f:selectItems value="#{cc.attrs.salarios == null? maestroController.tipoS : cc.attrs.salarios}" var="s"
                                itemLabel="#{s.tipoSueldoNombre}" itemValue="#{s}"/>
+                <p:ajax event="change" listener="#{loginController.onBlour}"/>
             </p:selectOneMenu>
             <p:message for="sal"/>
 
             <p:outputLabel for="tec" value="Le ha sido útil la tecnología en la enseñanza? "/>
             <p:selectBooleanButton id="tec" value="#{cc.attrs.maestro.maestroUtilidadTecnologica}" 
-                                   onLabel="Sí" offLabel="No" style="width:60px" required="true"/>
+                                   onLabel="Sí" offLabel="No" style="width:60px" required="true">
+                <p:ajax event="change" listener="#{loginController.onBlour}"/>
+            </p:selectBooleanButton>
             <p:message for="tec"/>
 
             <p:outputLabel for="horas" value="Horas a la semana que usa tecnología en la enseñanza: "/>
-            <p:inputText id="horas" value="#{cc.attrs.maestro.maestroHorasUsoTecnologia}" required="true"/>
+            <p:inputText id="horas" value="#{cc.attrs.maestro.maestroHorasUsoTecnologia}" required="true">
+                <p:ajax event="change" listener="#{loginController.onBlour}"/>
+            </p:inputText>
             <p:message for="horas"/>
 
             <p:outputLabel for="video" value="Ha usado videoconferencias? "/>
             <p:selectBooleanButton id="video" value="#{cc.attrs.maestro.maestroUsoVideoconferencias}" 
-                                   onLabel="Sí" offLabel="No" style="width:60px" required="true"/>
+                                   onLabel="Sí" offLabel="No" style="width:60px" required="true">
+                <p:ajax event="change" listener="#{loginController.onBlour}"/>
+            </p:selectBooleanButton>
             <p:message for="video"/>
 
             <p:outputLabel for="rec" value="Puede usar recursos web (Navegador, Internet, ...)?"/>
             <p:selectBooleanButton id="rec" value="#{cc.attrs.maestro.maestroRecursosWeb}" 
-                                   onLabel="Sí" offLabel="No" style="width:60px" required="true"/>
+                                   onLabel="Sí" offLabel="No" style="width:60px" required="true">
+                <p:ajax event="change" listener="#{loginController.onBlour}"/>
+            </p:selectBooleanButton>
             <p:message for="rec"/>
 
             <p:outputLabel for="capa" value="Tiene capacitaciones Virtuales? "/>
             <p:selectBooleanButton id="capa" value="#{cc.attrs.maestro.maestroCapacitacionesVirtuales}" 
-                                   onLabel="Sí" offLabel="No" style="width:60px" required="true"/>
+                                   onLabel="Sí" offLabel="No" style="width:60px" required="true">
+                <p:ajax event="change" listener="#{loginController.onBlour}"/>
+            </p:selectBooleanButton>
             <p:message for="capa"/>
         </h:panelGrid>
     </cc:implementation>

@@ -22,10 +22,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,16 +30,19 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.imageio.ImageIO;
 import javax.inject.Named;
 import net.delsas.saitae.ax.Auxiliar;
 import net.delsas.saitae.beans.GradoFacadeLocal;
+import net.delsas.saitae.beans.MatriculaFacadeLocal;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.entities.Documentos;
 import net.delsas.saitae.entities.Grado;
 import net.delsas.saitae.entities.Matricula;
+import net.delsas.saitae.entities.MatriculaPK;
 import net.delsas.saitae.entities.Persona;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.primefaces.event.FileUploadEvent;
@@ -63,6 +63,8 @@ public class inscripcionController implements Serializable {
     private GradoFacadeLocal gfl;
     @EJB
     private PersonaFacadeLocal personaFL;
+    @EJB
+    private MatriculaFacadeLocal mFL;
 
     private Persona estP;
     private Persona repP;
@@ -211,29 +213,11 @@ public class inscripcionController implements Serializable {
     }
 
     public Integer getAño() {
-        Date r = new Date();
-        Integer y;
-        try {
-            y = r.before(new SimpleDateFormat("dd-MM-yyyy").parse("24-11-"
-                    + new SimpleDateFormat("yyyy").format(r)))
-                    ? Integer.valueOf(new SimpleDateFormat("yyyy").format(r))
-                    : (Integer.valueOf(new SimpleDateFormat("yyyy").format(r)) + 1);
-        } catch (ParseException ex) {
-            y = Integer.valueOf(new SimpleDateFormat("yyyy").format(r));
-        }
-        return y;
+        return Auxiliar.getAñoInscripcion();
     }
 
     public boolean isTime() {
-        try {
-            Date d = new Date();
-            Date d1 = new SimpleDateFormat("dd-MM-yyyy").parse("22-11-" + new SimpleDateFormat("yyyy").format(d));
-            Date d2 = new SimpleDateFormat("dd-MM-yyyy").parse("30-01-" + new SimpleDateFormat("yyyy").format(d));
-            return !d.before(d1) || d.before(d2);
-        } catch (ParseException ex) {
-            System.out.println(ex);
-            return false;
-        }
+        return Auxiliar.isTimeToInsciption();
     }
 
     public Persona getEst() {
@@ -471,6 +455,25 @@ public class inscripcionController implements Serializable {
         } else {
             madre = new Auxiliar().getMadre();
         }
+    }
+
+    public void onBlour(AjaxBehaviorEvent a) {
+        Matricula mc = mFL.find(new MatriculaPK(estP.getIdpersona(), getAño()));
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (mc != null) {
+            try {
+                context.getExternalContext().getSessionMap().put("mensaje",
+                        new FacesMessage(FacesMessage.SEVERITY_WARN,
+                                "Inscripción duplicada!",
+                                "El NIE proporcionado pertenece a un estudiante que ya se ha inscrito."
+                                + " Si necesita modificar su información personal, inicie sessión y vaya a su perfil. "
+                                + "Si lo que necesita es cambiar los datos de su inscripción, solicítelo en la "
+                                + "oficina de la secretaria de la institución."));
+                context.getExternalContext().redirect("./../");
+            } catch (IOException e) {
+            }
+        }
+
     }
 
 }

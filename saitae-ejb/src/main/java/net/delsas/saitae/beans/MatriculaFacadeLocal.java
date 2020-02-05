@@ -61,4 +61,12 @@ public interface MatriculaFacadeLocal {
      */
     public List<GradoPK> findGradopkByidEstudianteAndAño(Integer año, Integer idEstudiante);
 
+    /**
+     * Devuelve una lista de las matriculas que tiene el estudiante
+     *
+     * @param idestudiante
+     * @return java.util.List net.delsas.saitae.entities.Matricula
+     */
+    public List<Matricula> findByIdmatricula(Integer idestudiante);
+
 }

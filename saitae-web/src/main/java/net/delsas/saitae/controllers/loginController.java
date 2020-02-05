@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import javax.servlet.http.Cookie;
@@ -126,6 +127,10 @@ public class loginController implements Serializable {
                             + " ha sido redirigido a esta página. Clickee el enlace para continuar"));
             PrimeFaces.current().ajax().update("form:msgs");
         }
+    }
+    
+    public void onBlour(AjaxBehaviorEvent e){
+        
     }
     
 }

@@ -17,23 +17,30 @@
 package net.delsas.saitae.controllers;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
+import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import net.delsas.saitae.ax.Auxiliar;
-import net.delsas.saitae.beans.MaestroFacadeLocal;
+import net.delsas.saitae.beans.GradoFacadeLocal;
 import net.delsas.saitae.beans.MatriculaFacadeLocal;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
-import net.delsas.saitae.entities.Maestro;
+import net.delsas.saitae.beans.TipoEspecialidadesFacadeLocal;
+import net.delsas.saitae.beans.TipoSueldosFacadeLocal;
+import net.delsas.saitae.entities.Grado;
+import net.delsas.saitae.entities.GradoPK;
 import net.delsas.saitae.entities.Matricula;
 import net.delsas.saitae.entities.MatriculaPK;
 import net.delsas.saitae.entities.Persona;
+import net.delsas.saitae.entities.TipoEspecialidades;
+import net.delsas.saitae.entities.TipoSueldos;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.primefaces.PrimeFaces;
 
 /**
@@ -41,28 +48,58 @@ import org.primefaces.PrimeFaces;
  * @author delsas
  */
 @Named
-@SessionScoped
+@ViewScoped
 public class infoPerfilController implements Serializable {
 
     private Persona usuario;
     private Matricula m;
-    private Maestro ma;
-    private boolean maestro, estudiante;
+    private boolean maestro, estudiante, matriculado, representante;
+    private String contra, contra1, contra2;
+    private List<String> modalidades;
+    private List<Integer> niveles;
+    private List<TipoSueldos> sueldos;
+    private List<TipoEspecialidades> especialidades;
 
     @EJB
     private PersonaFacadeLocal pFL;
     @EJB
     private MatriculaFacadeLocal mFL;
     @EJB
-    private MaestroFacadeLocal maFL;
+    private GradoFacadeLocal gFL;
+    @EJB
+    private TipoEspecialidadesFacadeLocal teFL;
+    @EJB
+    private TipoSueldosFacadeLocal tsFL;
 
     @PostConstruct
     public void init() {
         usuario = (Persona) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
-        m = mFL.find(new MatriculaPK(usuario.getIdpersona(), Auxiliar.getAñoActual()));
-        ma = usuario.getMaestro();
         estudiante = usuario.getTipoPersona().getIdtipoPersona().equals(8);
         maestro = usuario.getTipoPersona().getIdtipoPersona().equals(4);
+        representante = usuario.getTipoPersona().getIdtipoPersona().equals(9);
+        contra = "";
+        contra1 = "";
+        contra2 = "";
+        if (maestro) {
+            especialidades = teFL.findAll();
+            sueldos = tsFL.findAll();
+        }
+        if (estudiante) {
+            matriculado = mFL.find(new MatriculaPK(usuario.getIdpersona(), Auxiliar.getAñoActual())) != null;
+            m = new Matricula(new MatriculaPK(usuario.getIdpersona(), Auxiliar.getAñoActual()));
+            m.setEstudiante(usuario.getEstudiante());
+            m.setGrado(new Grado(new GradoPK(0, "", "", Auxiliar.getAñoActual())));
+            List<Matricula> mctr = mFL.findByIdmatricula(usuario.getIdpersona());
+            if (!mctr.equals(usuario.getEstudiante().getMatriculaList())) {
+                usuario.getEstudiante().setMatriculaList(mctr);
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("usuario");
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuario", usuario);
+            }
+            if (!matriculado) {
+                modalidades = gFL.getModalidadPorAño(Auxiliar.getAñoActual());
+                niveles = new ArrayList<>();
+            }
+        }
     }
 
     public Persona getUsuario() {
@@ -79,14 +116,6 @@ public class infoPerfilController implements Serializable {
 
     public void setM(Matricula m) {
         this.m = m;
-    }
-
-    public Maestro getMa() {
-        return ma;
-    }
-
-    public void setMa(Maestro ma) {
-        this.ma = ma;
     }
 
     public boolean isMaestro() {
@@ -137,11 +166,22 @@ public class infoPerfilController implements Serializable {
                 new FacesMessage(FacesMessage.SEVERITY_INFO, "Cambios realizados", "Los datos se han actualizado"));
         PrimeFaces.current().ajax().update("form0:msgs");
     }
-    
-    public void onBlour(AjaxBehaviorEvent e){
-        
+
+    public void onBlour(AjaxBehaviorEvent e) {
+        switch (e.getComponent().getId()) {
+            case "modal":
+                m.getGrado().getGradoPK().setIdgrado(0);
+                niveles = gFL.getIdPorAñoyModalidad(Auxiliar.getAñoActual(), m.getGrado().getGradoPK().getGradoModalidad());
+                break;
+            case "niv":
+                Matricula mc = mFL.find(new MatriculaPK(usuario.getIdpersona(), Auxiliar.getAñoActual() - 1));
+                m.setMatriculaRepite(mc == null ? false
+                        : (mc.getGrado().getGradoPK().getGradoModalidad().equals(m.getGrado().getGradoPK().getGradoModalidad())
+                        && mc.getGrado().getGradoPK().getIdgrado() == m.getGrado().getGradoPK().getIdgrado()));
+                break;
+        }
     }
-    
+
     public void setDependencia(String[] dep) {
         String d[] = usuario.getEstudiante().getEstudianteDependenciaEconomica().split("¿");
         String ot = d.length > 1 ? d[1] : " ";
@@ -168,19 +208,140 @@ public class infoPerfilController implements Serializable {
         for (String o : c) {
             f = o.equals("Otro");
         }
+        if (!f) {
+            setOtraDependenciaEcon("");
+        }
         return f;
     }
 
     public String getOtraDependenciaEcon() {
         String d[] = usuario.getEstudiante().getEstudianteDependenciaEconomica().split("¿");
-        String ot = d.length > 1 ? d[1] : " ";
+        String ot = d.length > 1 ? d[1] : "";
         return ot;
     }
 
     public void setOtraDependenciaEcon(String otrDependencia) {
         String d[] = usuario.getEstudiante().getEstudianteDependenciaEconomica().split("¿");
         String dt = d[0];
-        usuario.getEstudiante().setEstudianteDependenciaEconomica(dt + "¿" + otrDependencia);
+        usuario.getEstudiante().setEstudianteDependenciaEconomica(dt + ((otrDependencia == null || otrDependencia.isEmpty())
+                ? "" : "¿" + otrDependencia));
+    }
+
+    public String getContra() {
+        return contra;
+    }
+
+    public void setContra(String contra) {
+        this.contra = contra;
+    }
+
+    public String getContra2() {
+        return contra2;
+    }
+
+    public void setContra2(String contra2) {
+        this.contra2 = contra2;
+    }
+
+    public void acContra() {
+        FacesMessage ms = null;
+        if (contra == null && contra.isEmpty()) {
+            ms = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Debe ingresar la contraseña actual");
+        } else if (!usuario.getPersonaContrasenya().equals(DigestUtils.md5Hex(contra))) {
+            ms = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "La contraseña actual ingresada difiere de la real");
+        } else if (!contra1.equals(contra2)) {
+            ms = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "La contraseña nueva debe coincidir");
+        } else {
+            usuario.setPersonaContrasenya(DigestUtils.md5Hex(contra1));
+            guardarPersona();
+        }
+        if (ms != null) {
+            FacesContext.getCurrentInstance().addMessage("form0:msgs", ms);
+            PrimeFaces.current().ajax().update("form0:msgs");
+        }
+    }
+
+    public String getContra1() {
+        return contra1;
+    }
+
+    public void setContra1(String contra1) {
+        this.contra1 = contra1;
+    }
+
+    public String getNombre(Persona p) {
+        return Auxiliar.getNombreCompletoPersona(p);
+    }
+
+    public String getNombreGrado(GradoPK pk) {
+        return Auxiliar.getGradoNombre(pk);
+    }
+
+    public boolean isMatriculado() {
+        return matriculado;
+    }
+
+    public void setMatriculado(boolean matriculado) {
+        this.matriculado = matriculado;
+    }
+
+    public List<String> getModalidades() {
+        return modalidades;
+    }
+
+    public void setModalidades(List<String> modalidades) {
+        this.modalidades = modalidades;
+    }
+
+    public List<Integer> getNiveles() {
+        return niveles;
+    }
+
+    public void setNiveles(List<Integer> niveles) {
+        this.niveles = niveles;
+    }
+
+    public String getModalidadNombre(String md) {
+        return Auxiliar.getModalidadNombre(md);
+    }
+
+    public void matricular() {
+        Matricula mc = mFL.find(new MatriculaPK(usuario.getIdpersona(), Auxiliar.getAñoActual() - 1));
+        boolean repite = m.getMatriculaRepite();
+        m.getGrado().getGradoPK().setGradoSeccion(repite ? "A"
+                : (mc == null ? "A" : mc.getGrado().getGradoPK().getGradoSeccion()));
+        m.setMatriculaComentario(repite ? "N" : (mc == null ? "N" : "R"));
+        usuario.getEstudiante().getMatriculaList().add(m);
+        guardarPersona();
+        if (mFL.find(new MatriculaPK(usuario.getIdpersona(), Auxiliar.getAñoActual())) == null) {
+            mFL.create(mc);
+            guardarPersona();
+        }
+        init();
+    }
+
+    public boolean isRepresentante() {
+        return representante;
+    }
+
+    public void setRepresentante(boolean representante) {
+        this.representante = representante;
+    }
+
+    public List<TipoSueldos> getSueldos() {
+        return sueldos;
+    }
+
+    public void setSueldos(List<TipoSueldos> sueldos) {
+        this.sueldos = sueldos;
+    }
+
+    public List<TipoEspecialidades> getEspecialidades() {
+        return especialidades;
+    }
+
+    public void setEspecialidades(List<TipoEspecialidades> especialidades) {
+        this.especialidades = especialidades;
     }
 
 }
