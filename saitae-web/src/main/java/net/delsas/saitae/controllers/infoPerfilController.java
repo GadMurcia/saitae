@@ -32,16 +32,20 @@ import net.delsas.saitae.beans.GradoFacadeLocal;
 import net.delsas.saitae.beans.MatriculaFacadeLocal;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.beans.TipoEspecialidadesFacadeLocal;
+import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
 import net.delsas.saitae.beans.TipoSueldosFacadeLocal;
+import net.delsas.saitae.entities.Documentos;
 import net.delsas.saitae.entities.Grado;
 import net.delsas.saitae.entities.GradoPK;
 import net.delsas.saitae.entities.Matricula;
 import net.delsas.saitae.entities.MatriculaPK;
 import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.TipoEspecialidades;
+import net.delsas.saitae.entities.TipoPersona;
 import net.delsas.saitae.entities.TipoSueldos;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.primefaces.PrimeFaces;
+import org.primefaces.event.FileUploadEvent;
 
 /**
  *
@@ -59,6 +63,7 @@ public class infoPerfilController implements Serializable {
     private List<Integer> niveles;
     private List<TipoSueldos> sueldos;
     private List<TipoEspecialidades> especialidades;
+    private List<TipoPersona> cargos;
 
     @EJB
     private PersonaFacadeLocal pFL;
@@ -70,6 +75,8 @@ public class infoPerfilController implements Serializable {
     private TipoEspecialidadesFacadeLocal teFL;
     @EJB
     private TipoSueldosFacadeLocal tsFL;
+    @EJB
+    private TipoPersonaFacadeLocal tpFL;
 
     @PostConstruct
     public void init() {
@@ -80,6 +87,13 @@ public class infoPerfilController implements Serializable {
         contra = "";
         contra1 = "";
         contra2 = "";
+        List<Integer> tps = Auxiliar.getTiposPersonas(usuario);
+        cargos = new ArrayList<>();
+        if (tps.size() > 1) {
+            tps.forEach((c) -> {
+                cargos.add(tpFL.find(c));
+            });
+        }
         if (maestro) {
             especialidades = teFL.findAll();
             sueldos = tsFL.findAll();
@@ -90,6 +104,11 @@ public class infoPerfilController implements Serializable {
             m.setEstudiante(usuario.getEstudiante());
             m.setGrado(new Grado(new GradoPK(0, "", "", Auxiliar.getAñoActual())));
             List<Matricula> mctr = mFL.findByIdmatricula(usuario.getIdpersona());
+            if (usuario.getEstudiante().getDocumentos() == null) {
+                usuario.getEstudiante().setDocumentos(new Documentos(usuario.getIdpersona()));
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("usuario");
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuario", usuario);
+            }
             if (!mctr.equals(usuario.getEstudiante().getMatriculaList())) {
                 usuario.getEstudiante().setMatriculaList(mctr);
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("usuario");
@@ -342,6 +361,100 @@ public class infoPerfilController implements Serializable {
 
     public void setEspecialidades(List<TipoEspecialidades> especialidades) {
         this.especialidades = especialidades;
+    }
+
+    public List<TipoPersona> getCargos() {
+        return cargos;
+    }
+
+    public void partida(FileUploadEvent f) {
+        usuario.getEstudiante().getDocumentos().setEstudianteDocPartida(f.getFile().getContents());
+        usuario.getEstudiante().getDocumentos().setEstudianteExtencionPartida(f.getFile().getFileName() + "¿¿" + f.getFile().getContentType());
+    }
+
+    public boolean getHayPartida() {
+        return usuario.getEstudiante().getDocumentos() == null
+                ? false : usuario.getEstudiante().getDocumentos().getEstudianteExtencionPartida() != null;
+    }
+
+    public String getDocPartida() {
+        return Auxiliar.getDoc(
+                usuario.getEstudiante().getDocumentos().getEstudianteDocPartida(),
+                (usuario.getEstudiante().getDocumentos().getEstudianteExtencionPartida() == null
+                || usuario.getEstudiante().getDocumentos().getEstudianteExtencionPartida().isEmpty())
+                ? "" : usuario.getEstudiante().getDocumentos().getEstudianteExtencionPartida().split("¿¿")[1]);
+    }
+
+    public void certificado(FileUploadEvent f) {
+        usuario.getEstudiante().getDocumentos().setEstudianteDocCertificado(f.getFile().getContents());
+        usuario.getEstudiante().getDocumentos().setEstudianteExtencionCertificado(f.getFile().getFileName() + "¿¿" + f.getFile().getContentType());
+    }
+
+    public boolean getHayCertifcado() {
+        return usuario.getEstudiante().getDocumentos() == null ? false
+                : usuario.getEstudiante().getDocumentos().getEstudianteExtencionCertificado() != null;
+    }
+
+    public String getDocCertificado() {
+        return Auxiliar.getDoc(
+                usuario.getEstudiante().getDocumentos().getEstudianteDocCertificado(),
+                (usuario.getEstudiante().getDocumentos().getEstudianteExtencionCertificado() == null
+                || usuario.getEstudiante().getDocumentos().getEstudianteExtencionCertificado().isEmpty())
+                ? "" : usuario.getEstudiante().getDocumentos().getEstudianteExtencionCertificado().split("¿¿")[1]);
+    }
+
+    public void conducta(FileUploadEvent f) {
+        usuario.getEstudiante().getDocumentos().setEstudianteDocConducta(f.getFile().getContents());
+        usuario.getEstudiante().getDocumentos().setEstudianteExtencionConducta(f.getFile().getFileName() + "¿¿" + f.getFile().getContentType());
+    }
+
+    public boolean getHayConducta() {
+        return usuario.getEstudiante().getDocumentos() == null
+                ? false : usuario.getEstudiante().getDocumentos().getEstudianteExtencionConducta() != null;
+    }
+
+    public String getDocConducta() {
+        return Auxiliar.getDoc(
+                usuario.getEstudiante().getDocumentos().getEstudianteDocConducta(),
+                (usuario.getEstudiante().getDocumentos().getEstudianteExtencionConducta() == null
+                || usuario.getEstudiante().getDocumentos().getEstudianteExtencionConducta().isEmpty())
+                ? "" : usuario.getEstudiante().getDocumentos().getEstudianteExtencionConducta().split("¿¿")[1]);
+    }
+
+    public void dui(FileUploadEvent f) {
+        usuario.getEstudiante().getDocumentos().setEstudianteDocDui(f.getFile().getContents());
+        usuario.getEstudiante().getDocumentos().setEstudianteExtencionDui(f.getFile().getFileName() + "¿¿" + f.getFile().getContentType());
+    }
+
+    public boolean getHayDui() {
+        return usuario.getEstudiante().getDocumentos() == null
+                ? false : usuario.getEstudiante().getDocumentos().getEstudianteExtencionDui() != null;
+    }
+
+    public String getDocDui() {
+        return Auxiliar.getDoc(
+                usuario.getEstudiante().getDocumentos().getEstudianteDocDui(),
+                (usuario.getEstudiante().getDocumentos().getEstudianteExtencionDui() == null
+                || usuario.getEstudiante().getDocumentos().getEstudianteExtencionDui().isEmpty())
+                ? "" : usuario.getEstudiante().getDocumentos().getEstudianteExtencionDui().split("¿¿")[1]);
+    }
+
+    public void notas(FileUploadEvent f) {
+        usuario.getEstudiante().getDocumentos().setEstudianteDocNotas(f.getFile().getContents());
+        usuario.getEstudiante().getDocumentos().setEstudianteExtencionNotas(f.getFile().getFileName() + "¿¿" + f.getFile().getContentType());
+    }
+
+    public boolean getHayNotas() {
+        return usuario.getEstudiante().getDocumentos() == null
+                ? false : usuario.getEstudiante().getDocumentos().getEstudianteExtencionNotas() != null;
+    }
+
+    public String getDocNotas() {
+        return Auxiliar.getDoc(
+                usuario.getEstudiante().getDocumentos().getEstudianteDocNotas(),
+                (usuario.getEstudiante().getDocumentos().getEstudianteExtencionNotas() == null
+                || usuario.getEstudiante().getDocumentos().getEstudianteExtencionNotas().isEmpty())
+                ? "" : usuario.getEstudiante().getDocumentos().getEstudianteExtencionNotas().split("¿¿")[1]);
     }
 
 }

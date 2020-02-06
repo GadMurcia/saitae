@@ -154,7 +154,7 @@
                             <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
                         </p:selectOneMenu>
 
-                        <p:outputLabel value="Ocupacion:" for="po" />
+                        <p:outputLabel value="Profesión u oficio:" for="po" />
                         <p:inputText id="po" value="#{infoPerfilController.usuario.personaOCupacion}" 
                                      title="PersonaOCupacion">
                             <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
@@ -410,8 +410,148 @@
                                          actionListener="#{infoPerfilController.guardarPersona()}"/>
                     </h:panelGrid>
                 </p:fieldset>
+                <p:fieldset legend="Cargos" toggleable="true" toggleSpeed="500" 
+                            collapsed="true" title="Edite su información de representante"
+                            rendered="#{infoPerfilController.cargos.size() > 1}">
+                    <p:dataTable value="#{infoPerfilController.cargos}" var="cs">
+                        <f:facet name="header">
+                            Lista de su asignación de cargos
+                        </f:facet>
+                        <p:column headerText="Cargo">
+                            #{cs.tipoPersonaNombre}
+                        </p:column>
+                    </p:dataTable>
+                </p:fieldset>
+                <p:fieldset legend="Documentos personales" toggleable="true" collapsed="true" 
+                            title="Información de sus matriculas"
+                            toggleSpeed="500" rendered="#{infoPerfilController.estudiante}">
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="Partida de Nacimiento: " />
+                        <h:panelGrid columns="3">
+                            <p:fileUpload id="partida" fileUploadListener="#{infoPerfilController.partida}"
+                                          mode="advanced" invalidSizeMessage="El archivo sobrepasa el límited de 1MB."
+                                          invalidFileMessage="El archivo seleccionado no es válido"
+                                          update="messagesp0 btnV0"  sizeLimit="1000000" label="Elejir"
+                                          allowTypes="/(\.|\/)(jpe?g|png)$/" auto="true"/>
+                            <p:commandButton id="btnV0" value="Ver" update="h0" 
+                                             disabled="#{!infoPerfilController.hayPartida}"
+                                             oncomplete="PF('DConstancia0').show();"/>                             
+                            <p:growl id="messagesp0" showDetail="true" for="partida"/>
+                        </h:panelGrid>
+
+                        <p:outputLabel value="Certificado 9° grado: " />
+                        <h:panelGrid columns="3">
+                            <p:fileUpload id="nov" fileUploadListener="#{infoPerfilController.certificado}"
+                                          mode="advanced" invalidSizeMessage="El archivo sobrepasa el límited de 1MB."
+                                          invalidFileMessage="El archivo seleccionado no es válido"
+                                          update="messagesp1 btnV1"  sizeLimit="1000000" label="Elejir"
+                                          allowTypes="/(\.|\/)(jpe?g|png)$/" auto="true"/>
+                            <p:commandButton id="btnV1" value="Ver" update="h1" 
+                                             disabled="#{!infoPerfilController.hayCertifcado}"
+                                             oncomplete="PF('DConstancia1').show();"/>                             
+                            <p:growl id="messagesp1" showDetail="true" for="nov"/>
+                        </h:panelGrid>
+
+                        <p:outputLabel value="Constancia de conducta: " />
+                        <h:panelGrid columns="3">
+                            <p:fileUpload id="con" fileUploadListener="#{infoPerfilController.conducta}"
+                                          mode="advanced" invalidSizeMessage="El archivo sobrepasa el límited de 1MB."
+                                          invalidFileMessage="El archivo seleccionado no es válido"
+                                          update="messagesp2 btnV2"  sizeLimit="1000000" label="Elejir"
+                                          allowTypes="/(\.|\/)(jpe?g|png)$/" auto="true"/>
+                            <p:commandButton id="btnV2" value="Ver" update="h2" 
+                                             disabled="#{!infoPerfilController.hayConducta}"
+                                             oncomplete="PF('DConstancia2').show();"/>                             
+                            <p:growl id="messagesp2" showDetail="true" for="con"/>
+                        </h:panelGrid>
+
+                        <p:outputLabel value="Copia de DUI: " />
+                        <h:panelGrid columns="3">
+                            <p:fileUpload id="duis" fileUploadListener="#{infoPerfilController.dui}"
+                                          mode="advanced" invalidSizeMessage="El archivo sobrepasa el límited de 1MB."
+                                          invalidFileMessage="El archivo seleccionado no es válido"
+                                          update="messagesp3 btnV3"  sizeLimit="1000000" label="Elejir"
+                                          allowTypes="/(\.|\/)(jpe?g|png)$/" auto="true"/>
+                            <p:commandButton id="btnV3" value="Ver" update="h3" 
+                                             disabled="#{!infoPerfilController.hayDui}"
+                                             oncomplete="PF('DConstancia3').show();"/>                             
+                            <p:growl id="messagesp3" showDetail="true" for="duis"/>
+                        </h:panelGrid>
+
+                        <p:outputLabel value="Constancia de notas bachillerato: " />
+                        <h:panelGrid columns="3">
+                            <p:fileUpload id="not" fileUploadListener="#{infoPerfilController.notas}"
+                                          mode="advanced" invalidSizeMessage="El archivo sobrepasa el límited de 1MB."
+                                          invalidFileMessage="El archivo seleccionado no es válido"
+                                          update="messagesp4 btnV4"  sizeLimit="1000000" label="Elejir"
+                                          allowTypes="/(\.|\/)(jpe?g|png)$/" auto="true"/>
+                            <p:commandButton id="btnV4" value="Ver" update="h4" 
+                                             disabled="#{!infoPerfilController.hayNotas}"
+                                             oncomplete="PF('DConstancia4').show();"/>                             
+                            <p:growl id="messagesp4" showDetail="true" for="not"/>
+                        </h:panelGrid>
+                        
+                        <p:commandButton value="Guardar Cambios" process="@this" update="form"
+                                         actionListener="#{infoPerfilController.guardarPersona()}"/>
+                    </h:panelGrid>
+                </p:fieldset>
             </h:panelGrid>
         </h:form>
+
+        <p:dialog id="dialog0" widgetVar="DConstancia0" modal="true" style="width: 60%;"
+                  showHeader="true" header="Visualización de partida de nacimiento" 
+                  closeOnEscape="true">
+            <h:form id="h0">
+                <h:panelGrid columns="1">
+                    <img src="#{infoPerfilController.docPartida}"
+                         width="640" height="480"/>
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog id="dialog1" widgetVar="DConstancia1" modal="true" style="width: 60%;"
+                  showHeader="true" header="Visualización de certificado de 9° grado" 
+                  closeOnEscape="true">
+            <h:form id="h1">
+                <h:panelGrid columns="1">
+                    <img src="#{infoPerfilController.docCertificado}"
+                         width="640" height="480"/>
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog id="dialog2" widgetVar="DConstancia" modal="true" style="width: 60%;"
+                  showHeader="true" header="Visualización de constancia de conducta" 
+                  closeOnEscape="true">
+            <h:form id="h2">
+                <h:panelGrid columns="1">
+                    <img src="#{infoPerfilController.docConducta}"
+                         width="640" height="480"/>
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog id="dialog3" widgetVar="DConstancia3" modal="true" style="width: 60%;"
+                  showHeader="true" header="Visualización de copia de dui" 
+                  closeOnEscape="true">
+            <h:form id="h3">
+                <h:panelGrid columns="1">
+                    <img src="#{infoPerfilController.docDui}"
+                         width="640" height="480"/>
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog id="dialog4" widgetVar="DConstancia4" modal="true" style="width: 60%;"
+                  showHeader="true" header="Visualización de constancia de notas de bachillerato" 
+                  closeOnEscape="true">
+            <h:form id="h4">
+                <h:panelGrid columns="1">
+                    <img src="#{infoPerfilController.docNotas}"
+                         width="640" height="480"/>
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
     </ui:define>
 
 </ui:composition>
