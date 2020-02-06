@@ -29,6 +29,7 @@ import javax.faces.model.SelectItem;
 import net.delsas.saitae.beans.GradoFacadeLocal;
 import net.delsas.saitae.beans.MestroHorarioMateriasFacadeLocal;
 import net.delsas.saitae.beans.NotificacionesFacadeLocal;
+import net.delsas.saitae.entities.DelagacionCargo;
 import net.delsas.saitae.entities.DiasEstudio;
 import net.delsas.saitae.entities.Estudiante;
 import net.delsas.saitae.entities.GradoPK;
@@ -470,10 +471,12 @@ public class Auxiliar implements Serializable {
         List<Integer> items = new ArrayList<>();
         if (p != null && p.getTipoPersona() != null) {
             items.add(p.getTipoPersona().getIdtipoPersona());
-            p.getDelagacionCargoList().forEach((dl) -> {
-                items.add(dl.getIdTipoPersona().getIdtipoPersona());
-            });
-            if (p.getMaestro() != null) {
+            if (p.getDelagacionCargoList() != null) {
+                p.getDelagacionCargoList().stream().filter((dl) -> (dl.getIdTipoPersona() != null)).forEachOrdered((dl) -> {
+                    items.add(dl.getIdTipoPersona().getIdtipoPersona());
+                });
+            }
+            if (p.getMaestro() != null && p.getMaestro().getMaestoCargoList() != null) {
                 p.getMaestro().getMaestoCargoList().forEach((mc) -> {
                     items.add(mc.getCargo().getCargoTipoPersona().getIdtipoPersona());
                 });

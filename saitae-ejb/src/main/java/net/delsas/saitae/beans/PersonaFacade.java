@@ -78,4 +78,11 @@ public class PersonaFacade extends AbstractFacade<Persona> implements PersonaFac
                 .setParameter("idtipoPersona", tipo)
                 .getResultList();
     }
+    
+    @Override
+    public List<Persona> getPersonaByLikeNombre(String nombre) {
+        return em.createNamedQuery("Persona.findPersonaByLikeNombre")
+                .setParameter("likeNombre", nombre)
+                .getResultList();
+    }
 }

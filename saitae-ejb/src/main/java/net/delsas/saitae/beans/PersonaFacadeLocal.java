@@ -83,4 +83,13 @@ public interface PersonaFacadeLocal {
      */
     public List<Persona> getPersonaByLikeNombreAndType(String LikeNombre, int LikeTipo);
 
+    /**
+     * Devuelve una lista de personas cuyo nombre inicie por la cadena
+     * LikeNombre proporcionada
+     *
+     * @param LikeNombre
+     * @return java.util.List net.delsas.saitae.entities.Persona
+     */
+    public List<Persona> getPersonaByLikeNombre(String LikeNombre);
+
 }

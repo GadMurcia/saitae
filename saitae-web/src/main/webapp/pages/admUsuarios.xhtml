@@ -1,10 +1,132 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="./../WEB-INF/template/plantilla1.xhtml">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../WEB-INF/template/plantilla1.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="content">
-        content
+        <h:form id="form">
+            <h:panelGrid columns="1">
+                <h1 align="center">Gestión de usuarios</h1>
+
+                <h:panelGrid columns="3">
+                    <p:outputLabel value="Ingrese el nombre del usuario: "/>
+                    <p:autoComplete value="#{admUsuariosController.query}" 
+                                    completeMethod="#{admUsuariosController.autoComplete}">
+                        <p:ajax event="itemSelect" listener="#{admUsuariosController.onPersonaSelect}"
+                                update="form"/>
+                    </p:autoComplete>
+                    <p:commandButton value="Limpiar campos" update=":form" process="@this"
+                                     action="#{admUsuariosController.setQuery('')}"
+                                     actionListener="#{admUsuariosController.setPersona(null)}"/>
+                </h:panelGrid>
+
+                <p:panel header="Cambiar Contraseña" toggleable="true"
+                         rendered="#{admUsuariosController.persona != null}">
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="Usuario (DUI/NIE) :" for="idp" />
+                        <h:outputText id="idp" 
+                                      value="#{admUsuariosController.persona.idpersona.toString().substring(1)}"/>
+
+                        <p:outputLabel for="c1" value="Contraseña Nueva"/>
+                        <p:password id="c1" required="true" value="#{admUsuariosController.contra1}"
+                                    placeholder="Contraseña nueva">
+                            <p:ajax event="change" listener="#{loginController.onBlour}"/>
+                        </p:password>
+
+                        <p:outputLabel for="c2" value="Repita la Contraseña"/>
+                        <p:password id="c2" required="true" value="#{admUsuariosController.contra2}"
+                                    placeholder="Repetir la contraseña nueva">
+                            <p:ajax event="change" listener="#{loginController.onBlour}"/>
+                        </p:password>
+
+                        <p:column/>
+                        <p:commandButton value="Cambiar Contraseña" process="@this" update="form"
+                                         actionListener="#{admUsuariosController.cambiarContraseña()}"/>
+                    </h:panelGrid>
+                </p:panel>
+
+                <p:panel header="Cambio de estado" toggleable="true"
+                         rendered="#{admUsuariosController.persona != null}">
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="Estado actual del usuario"/>
+                        <p:selectBooleanButton value="#{admUsuariosController.persona.personaActivo}"
+                                               offLabel="Inactivo" onLabel="Activo" immediate="true"
+                                               title="Cambia el estado del usuario">
+                            <p:ajax event="change" listener="#{loginController.onBlour}" update="btn0"/>
+                        </p:selectBooleanButton>
+
+                        <p:column/>
+                        <p:commandButton id="btn0" 
+                                         value="#{(admUsuariosController.persona.personaActivo? 'Habilitar':'Desabilitar')} usuario"
+                                         onclick="PF('Dcu').show();"/>
+                    </h:panelGrid>
+                </p:panel>
+
+                <p:panel header="Delegación de cargos" toggleable="true"
+                         rendered="#{admUsuariosController.verDelegaciones}">
+                    <h:panelGrid columns="1">
+                        <p:dataTable id="cargos" var="cs" 
+                                     value="#{admUsuariosController.persona.delagacionCargoList}" 
+                                     editable="true" 
+                                     widgetVar="cargos1" 
+                                     styleClass="tabla" emptyMessage="Sin cargos delegados.">
+                            <f:facet name="header">
+                                Administración de delegación de cargos.
+                            </f:facet>
+                            <p:ajax event="rowEdit" update=":form:cargos"
+                                    listener="#{admUsuariosController.onRowEdit}"/>
+                            <p:ajax event="rowEditCancel" update=":form:cargos"
+                                    listener="#{admUsuariosController.onRowCancel}"/>
+                            <p:column headerText="Id Cargo" style="width: 10px">
+                                <p:outputLabel value="#{cs.idTipoPersona.idtipoPersona}"/>
+                            </p:column>
+
+                            <p:column headerText="Nombre">
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <p:outputLabel value="#{cs.idTipoPersona.tipoPersonaNombre}" />
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:selectOneMenu value="#{cs.idTipoPersona}" 
+                                                         converter="omnifaces.SelectItemsConverter">
+                                            <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
+                                            <f:selectItems var="tp" itemLabel="#{tp.tipoPersonaNombre}" 
+                                                           itemValue="#{tp}" 
+                                                           value="#{admUsuariosController.cargos}"/>
+                                        </p:selectOneMenu>    
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column style="width:35px">
+                                <p:rowEditor />
+                            </p:column>
+                        </p:dataTable>
+                        <p:commandButton value="+" styleClass="ui-priority-primary" 
+                                         process="@this" update="cargos"
+                                         action="#{admUsuariosController.onAddNew()}"
+                                         title="Agregar nueva delegación."/>
+                    </h:panelGrid>
+                </p:panel>
+            </h:panelGrid>
+        </h:form>
+
+        <p:dialog header="Cambio del estado del usuario" 
+                  widgetVar="Dcu" modal="true" closeOnEscape="true"
+                  showEffect="fade" hideEffect="fade">
+            <h:form>
+                <h:panelGrid columns="1">
+                    Al cambiar el estado de un usuario, el usuario no acceder a su perfil 
+                    si coloca su estado como inactivo.
+                    <p:commandButton value="proceder" 
+                                     actionListener="#{admUsuariosController.guardarPersona()}"
+                                     update="form" oncomplete="PF('Dcu').hide();"/>
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
     </ui:define>
 
 </ui:composition>
