@@ -45,11 +45,8 @@
                             collapsed="true" title="Visualice o edite su información personal.">
                     <h:panelGrid columns="2">
                         <p:outputLabel value="Usuario (DUI/NIE) :" for="idpersona" />
-                        <p:inputText id="idpersona" value="#{infoPerfilController.usuario.idpersona.toString().substring(1)}" 
-                                     title="Idpersona" required="true" disabled="true"
-                                     requiredMessage="The Idpersona field is required.">
-                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
-                        </p:inputText>
+                        <h:outputText id="idpersona" value="#{infoPerfilController.usuario.idpersona.toString().substring(1)}" 
+                                      title="Idpersona"/>
 
                         <p:outputLabel value="Nit:" for="Nit" />
                         <p:inputMask id="Nit" value="#{infoPerfilController.usuario.personaNit}" 
@@ -490,7 +487,7 @@
                                              oncomplete="PF('DConstancia4').show();"/>                             
                             <p:growl id="messagesp4" showDetail="true" for="not"/>
                         </h:panelGrid>
-                        
+
                         <p:commandButton value="Guardar Cambios" process="@this" update="form"
                                          actionListener="#{infoPerfilController.guardarPersona()}"/>
                     </h:panelGrid>
