@@ -373,16 +373,17 @@ public class infoPerfilController implements Serializable {
     }
 
     public boolean getHayPartida() {
-        return usuario.getEstudiante().getDocumentos() == null
+        return usuario.getEstudiante() == null || usuario.getEstudiante().getDocumentos() == null
                 ? false : usuario.getEstudiante().getDocumentos().getEstudianteExtencionPartida() != null;
     }
 
     public String getDocPartida() {
-        return Auxiliar.getDoc(
-                usuario.getEstudiante().getDocumentos().getEstudianteDocPartida(),
-                (usuario.getEstudiante().getDocumentos().getEstudianteExtencionPartida() == null
-                || usuario.getEstudiante().getDocumentos().getEstudianteExtencionPartida().isEmpty())
-                ? "" : usuario.getEstudiante().getDocumentos().getEstudianteExtencionPartida().split("¿¿")[1]);
+        return usuario.getEstudiante() == null ? ""
+                : (Auxiliar.getDoc(
+                        usuario.getEstudiante().getDocumentos().getEstudianteDocPartida(),
+                        (usuario.getEstudiante().getDocumentos().getEstudianteExtencionPartida() == null
+                        || usuario.getEstudiante().getDocumentos().getEstudianteExtencionPartida().isEmpty())
+                        ? "" : usuario.getEstudiante().getDocumentos().getEstudianteExtencionPartida().split("¿¿")[1]));
     }
 
     public void certificado(FileUploadEvent f) {
@@ -391,16 +392,17 @@ public class infoPerfilController implements Serializable {
     }
 
     public boolean getHayCertifcado() {
-        return usuario.getEstudiante().getDocumentos() == null ? false
+        return usuario.getEstudiante() == null || usuario.getEstudiante().getDocumentos() == null ? false
                 : usuario.getEstudiante().getDocumentos().getEstudianteExtencionCertificado() != null;
     }
 
     public String getDocCertificado() {
-        return Auxiliar.getDoc(
-                usuario.getEstudiante().getDocumentos().getEstudianteDocCertificado(),
-                (usuario.getEstudiante().getDocumentos().getEstudianteExtencionCertificado() == null
-                || usuario.getEstudiante().getDocumentos().getEstudianteExtencionCertificado().isEmpty())
-                ? "" : usuario.getEstudiante().getDocumentos().getEstudianteExtencionCertificado().split("¿¿")[1]);
+        return usuario.getEstudiante() == null ? ""
+                : (Auxiliar.getDoc(
+                        usuario.getEstudiante().getDocumentos().getEstudianteDocCertificado(),
+                        (usuario.getEstudiante().getDocumentos().getEstudianteExtencionCertificado() == null
+                        || usuario.getEstudiante().getDocumentos().getEstudianteExtencionCertificado().isEmpty())
+                        ? "" : usuario.getEstudiante().getDocumentos().getEstudianteExtencionCertificado().split("¿¿")[1]));
     }
 
     public void conducta(FileUploadEvent f) {
@@ -409,16 +411,17 @@ public class infoPerfilController implements Serializable {
     }
 
     public boolean getHayConducta() {
-        return usuario.getEstudiante().getDocumentos() == null
+        return usuario.getEstudiante() == null || usuario.getEstudiante().getDocumentos() == null
                 ? false : usuario.getEstudiante().getDocumentos().getEstudianteExtencionConducta() != null;
     }
 
     public String getDocConducta() {
-        return Auxiliar.getDoc(
-                usuario.getEstudiante().getDocumentos().getEstudianteDocConducta(),
-                (usuario.getEstudiante().getDocumentos().getEstudianteExtencionConducta() == null
-                || usuario.getEstudiante().getDocumentos().getEstudianteExtencionConducta().isEmpty())
-                ? "" : usuario.getEstudiante().getDocumentos().getEstudianteExtencionConducta().split("¿¿")[1]);
+        return usuario.getEstudiante() == null ? ""
+                : (Auxiliar.getDoc(
+                        usuario.getEstudiante().getDocumentos().getEstudianteDocConducta(),
+                        (usuario.getEstudiante().getDocumentos().getEstudianteExtencionConducta() == null
+                        || usuario.getEstudiante().getDocumentos().getEstudianteExtencionConducta().isEmpty())
+                        ? "" : usuario.getEstudiante().getDocumentos().getEstudianteExtencionConducta().split("¿¿")[1]));
     }
 
     public void dui(FileUploadEvent f) {
@@ -427,16 +430,17 @@ public class infoPerfilController implements Serializable {
     }
 
     public boolean getHayDui() {
-        return usuario.getEstudiante().getDocumentos() == null
+        return usuario.getEstudiante() == null || usuario.getEstudiante().getDocumentos() == null
                 ? false : usuario.getEstudiante().getDocumentos().getEstudianteExtencionDui() != null;
     }
 
     public String getDocDui() {
-        return Auxiliar.getDoc(
-                usuario.getEstudiante().getDocumentos().getEstudianteDocDui(),
-                (usuario.getEstudiante().getDocumentos().getEstudianteExtencionDui() == null
-                || usuario.getEstudiante().getDocumentos().getEstudianteExtencionDui().isEmpty())
-                ? "" : usuario.getEstudiante().getDocumentos().getEstudianteExtencionDui().split("¿¿")[1]);
+        return usuario.getEstudiante() == null ? ""
+                : (Auxiliar.getDoc(
+                        usuario.getEstudiante().getDocumentos().getEstudianteDocDui(),
+                        (usuario.getEstudiante().getDocumentos().getEstudianteExtencionDui() == null
+                        || usuario.getEstudiante().getDocumentos().getEstudianteExtencionDui().isEmpty())
+                        ? "" : usuario.getEstudiante().getDocumentos().getEstudianteExtencionDui().split("¿¿")[1]));
     }
 
     public void notas(FileUploadEvent f) {
@@ -445,16 +449,17 @@ public class infoPerfilController implements Serializable {
     }
 
     public boolean getHayNotas() {
-        return usuario.getEstudiante().getDocumentos() == null
+        return usuario.getEstudiante() == null || usuario.getEstudiante().getDocumentos() == null
                 ? false : usuario.getEstudiante().getDocumentos().getEstudianteExtencionNotas() != null;
     }
 
     public String getDocNotas() {
-        return Auxiliar.getDoc(
-                usuario.getEstudiante().getDocumentos().getEstudianteDocNotas(),
-                (usuario.getEstudiante().getDocumentos().getEstudianteExtencionNotas() == null
-                || usuario.getEstudiante().getDocumentos().getEstudianteExtencionNotas().isEmpty())
-                ? "" : usuario.getEstudiante().getDocumentos().getEstudianteExtencionNotas().split("¿¿")[1]);
+        return usuario.getEstudiante() == null ? ""
+                : (Auxiliar.getDoc(
+                        usuario.getEstudiante().getDocumentos().getEstudianteDocNotas(),
+                        (usuario.getEstudiante().getDocumentos().getEstudianteExtencionNotas() == null
+                        || usuario.getEstudiante().getDocumentos().getEstudianteExtencionNotas().isEmpty())
+                        ? "" : usuario.getEstudiante().getDocumentos().getEstudianteExtencionNotas().split("¿¿")[1]));
     }
 
 }
