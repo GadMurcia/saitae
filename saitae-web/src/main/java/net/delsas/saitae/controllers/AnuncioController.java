@@ -32,8 +32,10 @@ import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import net.delsas.saitae.ax.Auxiliar;
 import net.delsas.saitae.ax.mensaje;
 import net.delsas.saitae.beans.AnuncioFacadeLocal;
+import net.delsas.saitae.beans.NotificacionesFacadeLocal;
 import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
 import net.delsas.saitae.entities.Anuncio;
 import net.delsas.saitae.entities.Persona;
@@ -59,6 +61,8 @@ public class AnuncioController implements Serializable {
     @Inject
     @Push
     private PushContext notificacion;
+    @EJB
+    private NotificacionesFacadeLocal notiFL;
 
     private Anuncio anuncio;
     private Persona usuario;
@@ -119,12 +123,14 @@ public class AnuncioController implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Anunciado con éxito",
                             "El anuncio ha sido publicado con éxito"));
-            sendMessage(new mensaje(0, "Nuevo auncio publicado recientemente por "
-                    + anuncio.getAnuncioAnunciante().getPersonaNombre().split(" ")[0]
-                    + " " + anuncio.getAnuncioAnunciante().getPersonaApellido().split(" ")[0],
-                    "Nuevo anuncio disponible", FacesMessage.SEVERITY_INFO, usuario.getIdpersona(),
-                    " ¿¿¿tp¿¿" + (anuncio.getAnuncioTipoPersona() == null ? 0
-                    : anuncio.getAnuncioTipoPersona().getIdtipoPersona())).toString());
+            Auxiliar.persistirNotificación(
+                    new mensaje(0, "Nuevo auncio publicado recientemente por "
+                            + Auxiliar.getNombreCortoPersona(anuncio.getAnuncioAnunciante()),
+                            "Nuevo anuncio disponible", FacesMessage.SEVERITY_INFO, usuario.getIdpersona(),
+                            " ¿¿¿tp¿¿" + (anuncio.getAnuncioTipoPersona() == null ? 0
+                            : anuncio.getAnuncioTipoPersona().getIdtipoPersona())),
+                    Auxiliar.getPersonasParaNotificar(anuncio.getAnuncioTipoPersona()),
+                    notiFL, notificacion);
             init();
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null,
@@ -150,10 +156,6 @@ public class AnuncioController implements Serializable {
 
     public List<Anuncio> getInactivos() {
         return Collections.unmodifiableList(inactivos);
-    }
-
-    public void sendMessage(String message) {
-        notificacion.send(message);
     }
 
     public String getAnunciante(Anuncio a) {

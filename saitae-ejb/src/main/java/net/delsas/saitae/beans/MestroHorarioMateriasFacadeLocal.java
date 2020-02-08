@@ -5,6 +5,7 @@
  */
 package net.delsas.saitae.beans;
 
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Local;
 import net.delsas.saitae.entities.DiasEstudio;
@@ -122,4 +123,15 @@ public interface MestroHorarioMateriasFacadeLocal {
      * @return java.util.List net.delsas.saitae.entities.MestroHorarioMaterias
      */
     public List<MestroHorarioMaterias> findByIdDiaAndGradopkAndidHora(Integer idhora, GradoPK gradpPK, Integer idDia);
+
+    /**
+     * Deuelve la asignación en la que el maestro está para el horario y año
+     * proporcionados.
+     *
+     * @param idMaestro
+     * @param fecha
+     * @param año
+     * @return java.util.List net.delsas.saitae.entities.MestroHorarioMaterias
+     */
+    public MestroHorarioMaterias finHorarioActual(Integer idMaestro, Date fecha, Integer año);
 }

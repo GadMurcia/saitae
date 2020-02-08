@@ -13,7 +13,6 @@ import javax.persistence.Embeddable;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 /**
  *
@@ -31,19 +30,13 @@ public class EvaluacionMaestroPK implements Serializable {
     @Column(name = "fechaHora")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaHora;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 2)
-    @Column(name = "gradoModalidad")
-    private String gradoModalidad;
 
     public EvaluacionMaestroPK() {
     }
 
-    public EvaluacionMaestroPK(int idMaestro, Date fechaHora, String gradoModalidad) {
+    public EvaluacionMaestroPK(int idMaestro, Date fechaHora) {
         this.idMaestro = idMaestro;
         this.fechaHora = fechaHora;
-        this.gradoModalidad = gradoModalidad;
     }
 
     public int getIdMaestro() {
@@ -62,20 +55,11 @@ public class EvaluacionMaestroPK implements Serializable {
         this.fechaHora = fechaHora;
     }
 
-    public String getGradoModalidad() {
-        return gradoModalidad;
-    }
-
-    public void setGradoModalidad(String gradoModalidad) {
-        this.gradoModalidad = gradoModalidad;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (int) idMaestro;
         hash += (fechaHora != null ? fechaHora.hashCode() : 0);
-        hash += (gradoModalidad != null ? gradoModalidad.hashCode() : 0);
         return hash;
     }
 
@@ -92,15 +76,12 @@ public class EvaluacionMaestroPK implements Serializable {
         if ((this.fechaHora == null && other.fechaHora != null) || (this.fechaHora != null && !this.fechaHora.equals(other.fechaHora))) {
             return false;
         }
-        if ((this.gradoModalidad == null && other.gradoModalidad != null) || (this.gradoModalidad != null && !this.gradoModalidad.equals(other.gradoModalidad))) {
-            return false;
-        }
         return true;
     }
 
     @Override
     public String toString() {
-        return "net.delsas.saitae.entities.EvaluacionMaestroPK[ idMaestro=" + idMaestro + ", fechaHora=" + fechaHora + ", gradoModalidad=" + gradoModalidad + " ]";
+        return "net.delsas.saitae.entities.EvaluacionMaestroPK[ idMaestro=" + idMaestro + ", fechaHora=" + fechaHora + " ]";
     }
     
 }

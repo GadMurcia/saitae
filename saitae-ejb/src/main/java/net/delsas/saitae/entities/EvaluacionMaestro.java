@@ -32,30 +32,23 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "evaluacionMaestro", catalog = "intex", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "EvaluacionMaestro.findAll", query = "SELECT e FROM EvaluacionMaestro e")
-    , @NamedQuery(name = "EvaluacionMaestro.findByIdMaestro", query = "SELECT e FROM EvaluacionMaestro e WHERE e.evaluacionMaestroPK.idMaestro = :idMaestro")
-    , @NamedQuery(name = "EvaluacionMaestro.findByFechaHora", query = "SELECT e FROM EvaluacionMaestro e WHERE e.evaluacionMaestroPK.fechaHora = :fechaHora")
-    , @NamedQuery(name = "EvaluacionMaestro.findByMateria", query = "SELECT e FROM EvaluacionMaestro e WHERE e.materia = :materia")
-    , @NamedQuery(name = "EvaluacionMaestro.findByTurno", query = "SELECT e FROM EvaluacionMaestro e WHERE e.turno = :turno")
-    , @NamedQuery(name = "EvaluacionMaestro.findByEstudiantes", query = "SELECT e FROM EvaluacionMaestro e WHERE e.estudiantes = :estudiantes")
-    , @NamedQuery(name = "EvaluacionMaestro.findByHoraInicio", query = "SELECT e FROM EvaluacionMaestro e WHERE e.horaInicio = :horaInicio")
-    , @NamedQuery(name = "EvaluacionMaestro.findByHoraFin", query = "SELECT e FROM EvaluacionMaestro e WHERE e.horaFin = :horaFin")
-    , @NamedQuery(name = "EvaluacionMaestro.findByUnidad", query = "SELECT e FROM EvaluacionMaestro e WHERE e.unidad = :unidad")
-    , @NamedQuery(name = "EvaluacionMaestro.findByObjetivo", query = "SELECT e FROM EvaluacionMaestro e WHERE e.objetivo = :objetivo")
-    , @NamedQuery(name = "EvaluacionMaestro.findByEvaluador", query = "SELECT e FROM EvaluacionMaestro e WHERE e.evaluador = :evaluador")
-    , @NamedQuery(name = "EvaluacionMaestro.findByResumen", query = "SELECT e FROM EvaluacionMaestro e WHERE e.resumen = :resumen")
-    , @NamedQuery(name = "EvaluacionMaestro.findByPropuestaMejora", query = "SELECT e FROM EvaluacionMaestro e WHERE e.propuestaMejora = :propuestaMejora")
-    , @NamedQuery(name = "EvaluacionMaestro.findByEvaluacionMaestroComentario", query = "SELECT e FROM EvaluacionMaestro e WHERE e.evaluacionMaestroComentario = :evaluacionMaestroComentario")
-    , @NamedQuery(name = "EvaluacionMaestro.findByGradoModalidad", query = "SELECT e FROM EvaluacionMaestro e WHERE e.evaluacionMaestroPK.gradoModalidad = :gradoModalidad")})
+    @NamedQuery(name = "EvaluacionMaestro.findAll", query = "SELECT e FROM EvaluacionMaestro e"),
+    @NamedQuery(name = "EvaluacionMaestro.findByIdMaestro", query = "SELECT e FROM EvaluacionMaestro e WHERE e.evaluacionMaestroPK.idMaestro = :idMaestro"),
+    @NamedQuery(name = "EvaluacionMaestro.findByFechaHora", query = "SELECT e FROM EvaluacionMaestro e WHERE e.evaluacionMaestroPK.fechaHora = :fechaHora"),
+    @NamedQuery(name = "EvaluacionMaestro.findByTurno", query = "SELECT e FROM EvaluacionMaestro e WHERE e.turno = :turno"),
+    @NamedQuery(name = "EvaluacionMaestro.findByEstudiantes", query = "SELECT e FROM EvaluacionMaestro e WHERE e.estudiantes = :estudiantes"),
+    @NamedQuery(name = "EvaluacionMaestro.findByHoraInicio", query = "SELECT e FROM EvaluacionMaestro e WHERE e.horaInicio = :horaInicio"),
+    @NamedQuery(name = "EvaluacionMaestro.findByHoraFin", query = "SELECT e FROM EvaluacionMaestro e WHERE e.horaFin = :horaFin"),
+    @NamedQuery(name = "EvaluacionMaestro.findByUnidad", query = "SELECT e FROM EvaluacionMaestro e WHERE e.unidad = :unidad"),
+    @NamedQuery(name = "EvaluacionMaestro.findByObjetivo", query = "SELECT e FROM EvaluacionMaestro e WHERE e.objetivo = :objetivo"),
+    @NamedQuery(name = "EvaluacionMaestro.findByResumen", query = "SELECT e FROM EvaluacionMaestro e WHERE e.resumen = :resumen"),
+    @NamedQuery(name = "EvaluacionMaestro.findByPropuestaMejora", query = "SELECT e FROM EvaluacionMaestro e WHERE e.propuestaMejora = :propuestaMejora"),
+    @NamedQuery(name = "EvaluacionMaestro.findByEvaluacionMaestroComentario", query = "SELECT e FROM EvaluacionMaestro e WHERE e.evaluacionMaestroComentario = :evaluacionMaestroComentario")})
 public class EvaluacionMaestro implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected EvaluacionMaestroPK evaluacionMaestroPK;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "materia")
-    private int materia;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 2)
@@ -85,10 +78,6 @@ public class EvaluacionMaestro implements Serializable {
     @Size(min = 1, max = 80)
     @Column(name = "objetivo")
     private String objetivo;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "evaluador")
-    private int evaluador;
     @Basic(optional = false)
     @NotNull
     @Lob
@@ -126,12 +115,18 @@ public class EvaluacionMaestro implements Serializable {
     @ManyToOne(optional = false)
     private Maestro maestro;
     @JoinColumns({
-        @JoinColumn(name = "grado", referencedColumnName = "idgrado")
-        , @JoinColumn(name = "seccion", referencedColumnName = "gradoSeccion")
-        , @JoinColumn(name = "a\u00f1o", referencedColumnName = "gradoA\u00f1o")
-        , @JoinColumn(name = "gradoModalidad", referencedColumnName = "gradoModalidad", insertable = false, updatable = false)})
+        @JoinColumn(name = "grado", referencedColumnName = "idgrado"),
+        @JoinColumn(name = "seccion", referencedColumnName = "gradoSeccion"),
+        @JoinColumn(name = "a\u00f1o", referencedColumnName = "gradoA\u00f1o"),
+        @JoinColumn(name = "gradoModalidad", referencedColumnName = "gradoModalidad")})
     @ManyToOne(optional = false)
     private Grado grado;
+    @JoinColumn(name = "evaluador", referencedColumnName = "idpersona")
+    @ManyToOne(optional = false)
+    private Persona evaluador;
+    @JoinColumn(name = "materia", referencedColumnName = "idmateria")
+    @ManyToOne(optional = false)
+    private Materia materia;
 
     public EvaluacionMaestro() {
     }
@@ -140,24 +135,22 @@ public class EvaluacionMaestro implements Serializable {
         this.evaluacionMaestroPK = evaluacionMaestroPK;
     }
 
-    public EvaluacionMaestro(EvaluacionMaestroPK evaluacionMaestroPK, int materia, String turno, int estudiantes, Date horaInicio, Date horaFin, String unidad, String objetivo, int evaluador, String faceIniciacion, String faceDesarrollo, String faceCulminación, String actitudicionales) {
+    public EvaluacionMaestro(EvaluacionMaestroPK evaluacionMaestroPK, String turno, int estudiantes, Date horaInicio, Date horaFin, String unidad, String objetivo, String faceIniciacion, String faceDesarrollo, String faceCulminación, String actitudicionales) {
         this.evaluacionMaestroPK = evaluacionMaestroPK;
-        this.materia = materia;
         this.turno = turno;
         this.estudiantes = estudiantes;
         this.horaInicio = horaInicio;
         this.horaFin = horaFin;
         this.unidad = unidad;
         this.objetivo = objetivo;
-        this.evaluador = evaluador;
         this.faceIniciacion = faceIniciacion;
         this.faceDesarrollo = faceDesarrollo;
         this.faceCulminación = faceCulminación;
         this.actitudicionales = actitudicionales;
     }
 
-    public EvaluacionMaestro(int idMaestro, Date fechaHora, String gradoModalidad) {
-        this.evaluacionMaestroPK = new EvaluacionMaestroPK(idMaestro, fechaHora, gradoModalidad);
+    public EvaluacionMaestro(int idMaestro, Date fechaHora) {
+        this.evaluacionMaestroPK = new EvaluacionMaestroPK(idMaestro, fechaHora);
     }
 
     public EvaluacionMaestroPK getEvaluacionMaestroPK() {
@@ -166,14 +159,6 @@ public class EvaluacionMaestro implements Serializable {
 
     public void setEvaluacionMaestroPK(EvaluacionMaestroPK evaluacionMaestroPK) {
         this.evaluacionMaestroPK = evaluacionMaestroPK;
-    }
-
-    public int getMateria() {
-        return materia;
-    }
-
-    public void setMateria(int materia) {
-        this.materia = materia;
     }
 
     public String getTurno() {
@@ -222,14 +207,6 @@ public class EvaluacionMaestro implements Serializable {
 
     public void setObjetivo(String objetivo) {
         this.objetivo = objetivo;
-    }
-
-    public int getEvaluador() {
-        return evaluador;
-    }
-
-    public void setEvaluador(int evaluador) {
-        this.evaluador = evaluador;
     }
 
     public String getFaceIniciacion() {
@@ -302,6 +279,22 @@ public class EvaluacionMaestro implements Serializable {
 
     public void setGrado(Grado grado) {
         this.grado = grado;
+    }
+
+    public Persona getEvaluador() {
+        return evaluador;
+    }
+
+    public void setEvaluador(Persona evaluador) {
+        this.evaluador = evaluador;
+    }
+
+    public Materia getMateria() {
+        return materia;
+    }
+
+    public void setMateria(Materia materia) {
+        this.materia = materia;
     }
 
     @Override

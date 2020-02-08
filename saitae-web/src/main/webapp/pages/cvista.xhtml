@@ -15,9 +15,10 @@
                     <h1 style="align-content: center;">Administración de las vistas del sistema.</h1>
                     <p:tabView id="tw" orientation="left" dynamic="true" style="height: 100%; width: 90%;">
                         <p:tab title="Accesos">
-                            <p:dataTable id="accesos" var="a" value="#{vistasMenuController.accesos}" editable="true" 
-                                         widgetVar="acceso" styleClass="tabla" 
-                                         emptyMessage="Sin registros aún.">
+                            <p:dataTable id="accesos" var="a" value="#{vistasMenuController.accesos}" 
+                                         editable="true" paginator="true" paginatorAlwaysVisible="false"
+                                         widgetVar="acceso" styleClass="tabla" rows="7" paginatorPosition="top"
+                                         emptyMessage="Sin registros aún." resizeMode="expand">
                                 <f:facet name="header">
                                     Administración de los Accesos
                                 </f:facet>
@@ -139,10 +140,14 @@
                                 </p:selectOneMenu>
 
                                 <h:outputLabel for="pickList" value="Accesos"/>
-                                <p:pickList id="pickList" value="#{vistasMenuController.model}" var="perm" 
-                                            itemLabel="#{perm}" itemValue="#{perm}">
-                                    <f:facet name="sourceCaption">Disponibles</f:facet>
-                                    <f:facet name="targetCaption">Asignados</f:facet>
+                                <p:pickList id="pickList" value="#{vistasMenuController.model}" 
+                                            var="perm" addAllLabel="Agregar todos" addLabel="Agregar"
+                                            removeAllLabel="Quitar todos" removeLabel="Quitar" 
+                                            moveBottomLabel="Mover hasta el final" moveDownLabel="Mover hacia abajo"
+                                            moveTopLabel="Mover hasta el inicio" moveUpLabel="Mover hacia arriba"  
+                                            itemLabel="#{perm}" itemValue="#{perm}" style="height: 80%;">
+                                    <f:facet name="sourceCaption">Menús disponibles</f:facet>
+                                    <f:facet name="targetCaption">Menús asignados</f:facet>
                                 </p:pickList>
                                 <p:commandButton value="Guardar" actionListener="#{vistasMenuController.guardar()}"/>
 

@@ -257,8 +257,6 @@ public class sessionController implements Serializable {
             if (tp0.length > 1) {
                 if (tp0[0].equals("tp")) {
                     tp = Integer.valueOf(tp0[1]);
-                    FacesContext.getCurrentInstance().addMessage(":form0:msgs", m.getFacesmessage());
-                    PrimeFaces.current().ajax().update(":noti", ":form0:msgs");
                 }
             }
             String np = FacesContext.getCurrentInstance().getExternalContext().getRequestServletPath().split("/")[2];
@@ -275,7 +273,8 @@ public class sessionController implements Serializable {
                     }
                 }
             }
-            if (Objects.equals(m.getDestinatario(), us.getIdpersona())) {
+            if (Objects.equals(m.getDestinatario(), us.getIdpersona())
+                    || Objects.equals(tp, us.getTipoPersona().getIdtipoPersona())) {
                 ordenarNotificaciones();
                 verNoti = true;
                 FacesContext.getCurrentInstance().addMessage(null, m.getFacesmessage());

@@ -5,7 +5,12 @@
  */
 package net.delsas.saitae.beans;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -82,7 +87,7 @@ public class MestroHorarioMateriasFacade extends AbstractFacade<MestroHorarioMat
                 .setParameter("gradoPK", gradpPK)
                 .getResultList();
     }
-    
+
     @Override
     public List<MestroHorarioMaterias> findByIdHoraAndMaestro(Integer año, Integer idHora, Integer idMaestro) {
         return em.createNamedQuery("MestroHorarioMaterias.findByIdDiaAndMaestro")
@@ -91,14 +96,14 @@ public class MestroHorarioMateriasFacade extends AbstractFacade<MestroHorarioMat
                 .setParameter("idMaestro", idMaestro)
                 .getResultList();
     }
-    
+
     @Override
     public List<Integer> findAñosByIdMaestro(Integer idMaestro) {
         return em.createNamedQuery("MestroHorarioMaterias.findAñoByidMaestro")
                 .setParameter("idMaestro", idMaestro)
                 .getResultList();
     }
-    
+
     @Override
     public List<MestroHorarioMaterias> findByIdDiaAndGradopkAndidHora(Integer idhora, GradoPK gradpPK, Integer idDia) {
         return em.createNamedQuery("MestroHorarioMaterias.findByIdDiaAndGradopkAndidHora")
@@ -106,6 +111,25 @@ public class MestroHorarioMateriasFacade extends AbstractFacade<MestroHorarioMat
                 .setParameter("gradoPK", gradpPK)
                 .setParameter("idDia", idDia)
                 .getResultList();
+    }
+
+    @Override
+    public MestroHorarioMaterias finHorarioActual(Integer idMaestro, Date fecha, Integer año) {
+        fecha = fecha == null ? new Date() : fecha;
+        try {
+            fecha = new SimpleDateFormat("hh:mm a").parse(new SimpleDateFormat("hh:mm a").format(fecha));
+        } catch (ParseException ex) {
+            fecha = new Date();
+        }
+        List<MestroHorarioMaterias> rs = em.createNamedQuery("MestroHorarioMaterias.finHorarioActual")
+                .setParameter("idMaestro", idMaestro)
+                .setParameter("año", año)
+                .setParameter("fecha", fecha)
+                .getResultList();
+        if (!rs.isEmpty()) {
+            return rs.get(0);
+        }
+        return null;
     }
 
 }

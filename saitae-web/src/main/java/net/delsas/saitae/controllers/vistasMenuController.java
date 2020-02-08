@@ -26,13 +26,19 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
+import net.delsas.saitae.ax.Auxiliar;
+import net.delsas.saitae.ax.mensaje;
 import net.delsas.saitae.beans.AccesoFacadeLocal;
 import net.delsas.saitae.beans.AccesoTipoPersonaFacadeLocal;
+import net.delsas.saitae.beans.NotificacionesFacadeLocal;
 import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
 import net.delsas.saitae.entities.Acceso;
 import net.delsas.saitae.entities.AccesoTipoPersona;
 import net.delsas.saitae.entities.TipoPersona;
+import org.omnifaces.cdi.Push;
+import org.omnifaces.cdi.PushContext;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.ItemSelectEvent;
 import org.primefaces.event.RowEditEvent;
@@ -45,22 +51,27 @@ import org.primefaces.model.DualListModel;
 @Named
 @ViewScoped
 public class vistasMenuController implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     @EJB
     private AccesoFacadeLocal accesoFL;
     private List<Acceso> accesos;
     private DualListModel<String> model;
-    
+
     @EJB
     private AccesoTipoPersonaFacadeLocal accesoTPFL;
-    
+
     @EJB
     private TipoPersonaFacadeLocal tipoPersonaFL;
     private List<TipoPersona> tipoPersonas;
     private TipoPersona tipo;
-    
+    @Inject
+    @Push
+    private PushContext notificacion;
+    @EJB
+    private NotificacionesFacadeLocal notiFL;
+
     @PostConstruct
     public void init() {
         tipo = new TipoPersona();
@@ -68,7 +79,7 @@ public class vistasMenuController implements Serializable {
         tipoPersonas = tipoPersonaFL.findAll();
         model = new DualListModel<>(new ArrayList<>(), new ArrayList<>());
     }
-    
+
     public void onAddNew(String id) {
         // Add one new car to the table:
         switch (id) {
@@ -82,13 +93,13 @@ public class vistasMenuController implements Serializable {
                 break;
             default:
                 System.out.println(id);
-            
+
         }
         FacesMessage msg = new FacesMessage("Campos Nuevos agregados.",
                 "Edite los campos para que las modificaciones sean permenentes");
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
-    
+
     public void onRowEdit(RowEditEvent event) {
         String titulo = "", mensaje = "", id = event.getComponent().getClientId();
         switch (event.getComponent().getId()) {
@@ -122,7 +133,7 @@ public class vistasMenuController implements Serializable {
         FacesMessage msg = new FacesMessage(titulo + " Editado", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
-    
+
     public void onRowCancel(RowEditEvent event) {
         String mensaje = "", id = event.getComponent().getClientId();
         switch (id) {
@@ -148,7 +159,7 @@ public class vistasMenuController implements Serializable {
         FacesMessage msg = new FacesMessage("Edición cancelada", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
-    
+
     public void onItemSelect(ItemSelectEvent event) {
         tipo = tipoPersonaFL.find(tipo.getIdtipoPersona());
         tipo = tipo == null ? new TipoPersona(0) : tipo;
@@ -162,7 +173,7 @@ public class vistasMenuController implements Serializable {
             }).forEachOrdered((a) -> {
                 target.add(a.getAcceso().getAccesoNombre());
             });
-            
+
             accesos.stream().filter((p) -> (!l.contains(p))).forEachOrdered((p) -> {
                 source.add(p.getAccesoNombre());
             });
@@ -172,7 +183,7 @@ public class vistasMenuController implements Serializable {
         model.setTarget(target);
         model.setSource(source);
     }
-    
+
     public List<SelectItem> getTiposPersonas() {
         List<SelectItem> list = new ArrayList<>();
         list.add(new SelectItem(0, "Seleccione"));
@@ -181,7 +192,7 @@ public class vistasMenuController implements Serializable {
         });
         return list;
     }
-    
+
     public void guardar() {
         if (tipo.getIdtipoPersona() > 0) {
             List<AccesoTipoPersona> access = new ArrayList<>();
@@ -213,6 +224,14 @@ public class vistasMenuController implements Serializable {
                 }
             });
             tipoPersonaFL.edit(tipo);
+            Auxiliar.persistirNotificación(
+                    new mensaje(0, 1045367073, "perfil<form0:menubar¿¿¿tp¿¿" + tipo.getIdtipoPersona(),
+                            new FacesMessage(FacesMessage.SEVERITY_INFO,
+                                    "Cambios en el menú",
+                                    "La barra de menús ha sufrido cambios y los verá cuando "
+                                    + "actualice o cambie de página. Notificación del sistema.")),
+                    Auxiliar.getPersonasParaNotificar(tipo),
+                    notiFL, notificacion);
             String m = "Al Tipo de Ususario " + tipo.getTipoPersonaNombre();
             if (model.getTarget().size() > 0) {
                 m += " se le han asignado los siguientes accesos:";
@@ -223,10 +242,10 @@ public class vistasMenuController implements Serializable {
             FacesMessage msg = new FacesMessage("Las modificaciones se han realizado:", m);
             FacesContext.getCurrentInstance().addMessage(null, msg);
             PrimeFaces.current().ajax().update(new String[]{"form0:msgs", "form0:menubar"});
-            
+
         }
     }
-    
+
     public List<SelectItem> getAccesosItems() {
         List<SelectItem> items = new ArrayList<>();
         items.add(new SelectItem(0, "Ninguno"));
@@ -235,37 +254,37 @@ public class vistasMenuController implements Serializable {
         });
         return items;
     }
-    
+
     public List<Acceso> getAccesos() {
         return Collections.unmodifiableList(accesos);
     }
-    
+
     public void setAccesos(List<Acceso> accesos) {
         this.accesos = accesos;
     }
-    
+
     public List<TipoPersona> getTipoPersonas() {
         return Collections.unmodifiableList(tipoPersonas);
     }
-    
+
     public void setTipoPersonas(List<TipoPersona> tipoPersonas) {
         this.tipoPersonas = tipoPersonas;
     }
-    
+
     public TipoPersona getTipo() {
         return tipo;
     }
-    
+
     public void setTipo(TipoPersona tipo) {
         this.tipo = tipo;
     }
-    
+
     public DualListModel<String> getModel() {
         return model;
     }
-    
+
     public void setModel(DualListModel<String> model) {
         this.model = model;
     }
-    
+
 }

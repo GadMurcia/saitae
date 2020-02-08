@@ -17,15 +17,19 @@
 package net.delsas.saitae.controllers;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.view.ViewScoped;
 import net.delsas.saitae.ax.Auxiliar;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
+import net.delsas.saitae.entities.Grado;
 import net.delsas.saitae.entities.Persona;
 import org.primefaces.event.SelectEvent;
 
@@ -121,6 +125,34 @@ public class axiliarController implements Serializable {
      */
     public static void setP(Persona aP) {
         p = aP;
+    }
+
+    public String getGradoNombre(Grado g) {
+        return Auxiliar.getGradoNombre(g.getGradoPK());
+    }
+
+    public String getTimeToString(Date d) {
+        return new SimpleDateFormat("hh:mm a").format(d);
+    }
+
+    public String getDateString(Date d) {
+        return new SimpleDateFormat("dd/MM/yyyy").format(d);
+    }
+
+    public String getDateTimeToString(Date d) {
+        return getDateString(d) + " " + getTimeToString(d);
+    }
+
+    public String getNombreCompleto(Persona p) {
+        return Auxiliar.getNombreCompletoPersona(p);
+    }
+
+    public String getNombreCorto(Persona p) {
+        return Auxiliar.getNombreCortoPersona(p);
+    }
+
+    public void onBlour(AjaxBehaviorEvent e) {
+
     }
 
 }
