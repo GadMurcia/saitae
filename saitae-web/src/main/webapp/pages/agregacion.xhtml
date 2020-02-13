@@ -18,7 +18,7 @@
                                                departamentoLista="#{maestroController.departamentosLista}" 
                                                dui="#{maestroController.dui}" municipio="#{maestroController.municipio}" 
                                                municipioLista="#{maestroController.municipiosLista}" 
-                                               persona="#{maestroController.maestro.persona}"
+                                               persona="#{maestroController.maestroM.persona}"
                                                onItemSelect="#{maestroController.setChange()}"
                                                t="4" onComplete="#{axiliarController.completeTextMae}"/>
                                     <p:commandButton value="Limpiar campos" update="form1"
@@ -27,18 +27,18 @@
                             </p:tab>
                             <p:tab id="address" title="Contacto">
                                 <p:panel header="Información de Constacto.">
-                                    <t:persona1 persona="#{maestroController.maestro.persona}"                                            
-                                                maestro="#{maestroController.maestro}"/>
+                                    <t:persona1 persona="#{maestroController.maestroM.persona}"                                            
+                                                maestro="#{maestroController.maestroM}"/>
                                 </p:panel>
                             </p:tab>
                             <p:tab id="contact" title="Profesional">
                                 <p:panel header="Información Profesional.">
-                                    <t:maestro maestro="#{maestroController.maestro}"/>
+                                    <t:maestro maestro="#{maestroController.maestroM}"/>
                                 </p:panel>
                             </p:tab>
                             <p:tab id="confirm" title="Contratación">
                                 <p:panel header="Información de Contratación.">
-                                    <t:maestro1 maestro="#{maestroController.maestro}"/>
+                                    <t:maestro1 maestro="#{maestroController.maestroM}"/>
                                 </p:panel>
                             </p:tab>
                             <p:tab title="Cargos Ostentados">

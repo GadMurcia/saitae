@@ -16,7 +16,7 @@
                 <p:tab id="general" title="Generalidades" >
                     <p:panel header="Generalidades sobre la inscipción.">
                         <p>Este es el proceso de inscripción para aspirantes a estudiantes de nuevo ingreso para el año 
-                            <strong>#{inscripcionController.año}</strong>.
+                            <strong>#{inscripcionController.añoActual}</strong>.
                             <br/><br/>
                             Bienvenido!
                             <br/><br/>
@@ -314,15 +314,15 @@
                                          title="Ingrese su DUI"/>
 
                             <h:outputText value="Nombres: *" />
-                            <p:inputText value="#{inscripcionController.representante.personaNombre}" required="true" 
+                            <p:inputText value="#{inscripcionController.repPresentanteI.personaNombre}" required="true" 
                                          label="Nombres" title="Ingrese los nombres del responsable"/>
 
                             <h:outputText value="Apellidos: *" />
-                            <p:inputText value="#{inscripcionController.representante.personaApellido}" required="true" label="Apellidos" 
+                            <p:inputText value="#{inscripcionController.repPresentanteI.personaApellido}" required="true" label="Apellidos" 
                                          title="Ingrese los apellidos del reponsable"/>
 
                             <p:outputLabel for="fechaR" value="Fecha de Nacimiento :" />
-                            <p:datePicker id="fechaR" value="#{inscripcionController.representante.personaNacimiento}"
+                            <p:datePicker id="fechaR" value="#{inscripcionController.repPresentanteI.personaNacimiento}"
                                           showIcon="true" required="true" yearRange="#{inscripcionController.año-80}:#{inscripcionController.año-18}"
                                           yearNavigator="true" pattern="dd/MM/yyyy" monthNavigator="true" locale="es"/>
 
@@ -333,39 +333,39 @@
                             </p:selectBooleanButton>
 
                             <h:outputText value="¿Es familiar del estudiante?: *" />
-                            <p:selectBooleanButton id="value3" value="#{inscripcionController.representante.estudiante.estudianteRepresentanteFamiliar}" 
+                            <p:selectBooleanButton id="value3" value="#{inscripcionController.repPresentanteI.estudiante.estudianteRepresentanteFamiliar}" 
                                                    onLabel="Sí" offLabel="No" style="width:190px"/>
 
                             <h:outputText value="Parentesco con el estudiante: *" />
-                            <p:inputText value="#{inscripcionController.representante.estudiante.estudianteParentescoRepresentante}" 
+                            <p:inputText value="#{inscripcionController.repPresentanteI.estudiante.estudianteParentescoRepresentante}" 
                                          required="true" label="Apellidos"
                                          title="Ingrese el parentesco con el estudiante."/>
 
 
                             <h:outputText value="NIT: " />
-                            <p:inputMask value="#{inscripcionController.representante.personaNit}" mask="9999-999999-999-9" 
+                            <p:inputMask value="#{inscripcionController.repPresentanteI.personaNit}" mask="9999-999999-999-9" 
                                          title="Ingrese su NIT si posee uno."/>
 
                             <p:outputLabel for="console7" value="Sexo: *" />
-                            <p:selectBooleanButton id="console7" value="#{inscripcionController.representante.personaSexo}" 
+                            <p:selectBooleanButton id="console7" value="#{inscripcionController.repPresentanteI.personaSexo}" 
                                                    onLabel="Femenino" offLabel="Masculino" style="width:190px"/>
 
                             <p:outputLabel for="console8" value="Estado Familiar: *" />
-                            <p:selectOneMenu id="console8" value="#{inscripcionController.representante.personaEstadoFamiliar}" 
+                            <p:selectOneMenu id="console8" value="#{inscripcionController.repPresentanteI.personaEstadoFamiliar}" 
                                              style="width: 190px">
                                 <f:selectItem itemLabel="Solter@" itemValue="0" />
                                 <f:selectItem itemLabel="Casad@" itemValue="1" />
                             </p:selectOneMenu>
 
                             <h:outputText value="¿Posee partida de nacimiento?: *" />
-                            <p:selectBooleanButton id="value4" value="#{inscripcionController.representante.estudiante.estudiantePartidaNac}" 
+                            <p:selectBooleanButton id="value4" value="#{inscripcionController.repPresentanteI.estudiante.estudiantePartidaNac}" 
                                                    onLabel="Sí" offLabel="No" style="width:190px">
                                 <p:ajax update="m"/>
                             </p:selectBooleanButton>
 
                             <h:outputText value="¿Por qué no tiene partida de nacimiento: " />
-                            <p:inputText id="m" value="#{inscripcionController.representante.estudiante.estudianteNoPartida}" 
-                                         label="Apellidos" disabled="#{inscripcionController.representante.estudiante.estudiantePartidaNac}"
+                            <p:inputText id="m" value="#{inscripcionController.repPresentanteI.estudiante.estudianteNoPartida}" 
+                                         label="Apellidos" disabled="#{inscripcionController.repPresentanteI.estudiante.estudiantePartidaNac}"
                                          title="Ingrese el motivo por el que no tiene partidas de nacimiento en la actualidad"/>
 
                             <p:outputLabel for="depR" value="Departamento de nacimiento: *" />
@@ -382,20 +382,20 @@
                             </p:selectOneMenu>
 
                             <h:outputText value="Teléfono: " />
-                            <p:inputMask value="#{inscripcionController.representante.personaTelefono}" type="telephone" mask="9999-9999" 
+                            <p:inputMask value="#{inscripcionController.repPresentanteI.personaTelefono}" type="telephone" mask="9999-9999" 
                                          title="Ingrese su número telefónico"/>
 
 
                             <h:outputText value="email: " />
-                            <p:inputText value="#{inscripcionController.representante.personaEmail}" type="email" 
+                            <p:inputText value="#{inscripcionController.repPresentanteI.personaEmail}" type="email" 
                                          title="Ingrese su correo electrónico"/>
 
                             <h:outputText value="Dirección: *" />
-                            <p:inputText label="Dirección" value="#{inscripcionController.representante.personaDireccion}" required="true" 
+                            <p:inputText label="Dirección" value="#{inscripcionController.repPresentanteI.personaDireccion}" required="true" 
                                          title="Ingrese su dirección de recidencia completa"/>
 
                             <p:outputLabel for="console9" value="Zona de residencia: *" />
-                            <p:selectOneMenu id="console9" value="#{inscripcionController.representante.personaZonaVivienda}" required="true"
+                            <p:selectOneMenu id="console9" value="#{inscripcionController.repPresentanteI.personaZonaVivienda}" required="true"
                                              style="width:190px" title="Seleccione su Zona donde vive">
                                 <f:selectItem itemLabel="Seleccione" itemValue="" />
                                 <f:selectItem itemLabel="Rural" itemValue="0" />
@@ -403,7 +403,7 @@
                             </p:selectOneMenu>
 
                             <p:outputLabel for="console10" value="Tipo de calle de donde vive: *" />
-                            <p:selectOneMenu id="console10" value="#{inscripcionController.representante.estudiante.estudianteTipoCalle}"  required="true"
+                            <p:selectOneMenu id="console10" value="#{inscripcionController.repPresentanteI.estudiante.estudianteTipoCalle}"  required="true"
                                              style="width:190px" title="Seleccione el tipo de calle de el lugar donde vive">
                                 <f:selectItem itemLabel="Seleccione" itemValue="" />
                                 <f:selectItem itemLabel="Tierra" itemValue="0" />
@@ -411,15 +411,15 @@
                             </p:selectOneMenu>
 
                             <h:outputText value="Riesgos o vulnarebilidades: " />
-                            <p:inputText value="#{inscripcionController.representante.estudiante.estudianteRiesgoVulnerabilidad}" 
+                            <p:inputText value="#{inscripcionController.repPresentanteI.estudiante.estudianteRiesgoVulnerabilidad}" 
                                          title="Escriba las vulnarebilidades que perciba en el lugar donde vive."/>
 
                             <h:outputText value="Profesión u oficio: *" />
-                            <p:inputText label="Profesión" value="#{inscripcionController.representante.estudiante.estudianteFormaTrabajo}" required="true" 
+                            <p:inputText label="Profesión" value="#{inscripcionController.repPresentanteI.estudiante.estudianteFormaTrabajo}" required="true" 
                                          title="Ingrese su profesión u oficio segun su DUI"/>
 
                             <h:outputText value="Escolaridad: *" />
-                            <p:inputText label="Escolaridad" value="#{inscripcionController.representante.estudiante.estudianteEscolaridad}" required="true" 
+                            <p:inputText label="Escolaridad" value="#{inscripcionController.repPresentanteI.estudiante.estudianteEscolaridad}" required="true" 
                                          title="Escriba hasta qué grado estudió."/>
                         </h:panelGrid>
                     </p:panel>
@@ -436,24 +436,24 @@
                                                  title="Ingrese el número de DUI del padre" mask="99999999-9"/>
 
                                     <h:outputText value="Nombres del padre: *" />
-                                    <p:inputText id="np" value="#{inscripcionController.padre.personaNombre}" 
+                                    <p:inputText id="np" value="#{inscripcionController.padreI.personaNombre}" 
                                                  label="Nombres" 
                                                  title="Ingrese los nombres del padre"/>
 
                                     <h:outputText value="Apellidos del padre: *" />
-                                    <p:inputText id="ap" value="#{inscripcionController.padre.personaApellido}" 
+                                    <p:inputText id="ap" value="#{inscripcionController.padreI.personaApellido}" 
                                                  label="Apellidos" 
                                                  title="Ingrese los apellidos del padre"/>
 
                                     <h:outputText value="Teléfono: "/>
-                                    <p:inputMask id="tp" value="#{inscripcionController.padre.personaTelefono}" 
+                                    <p:inputMask id="tp" value="#{inscripcionController.padreI.personaTelefono}" 
                                                  label="Número de teléfono del padre" 
                                                  title="Ingrese el número de teléfono del padre" mask="9999-9999"/>
 
                                     <p:commandButton value="limpiar datos del padre" 
                                                      actionListener="#{inscripcionController.limpiarAPadres(1)}"
                                                      update="dp np ap tp"/>
-                                    <p:commandButton value="Copiar datos del representante"
+                                    <p:commandButton value="Copiar datos del repPresentanteI"
                                                      actionListener="#{inscripcionController.copiarAPadres(1)}"
                                                      update="dp np ap tp"/>
                                 </h:panelGrid>
@@ -467,24 +467,24 @@
                                                  title="Ingrese el número de DUI de la madre" mask="99999999-9"/>
 
                                     <h:outputText value="Nombres de la madre: " />
-                                    <p:inputText id="nm" value="#{inscripcionController.madre.personaNombre}" 
+                                    <p:inputText id="nm" value="#{inscripcionController.madreI.personaNombre}" 
                                                  label="Nombres" 
                                                  title="Ingrese los nombres de la madre"/>
 
                                     <h:outputText value="Apellidos de la madre: " />
-                                    <p:inputText id="am" value="#{inscripcionController.madre.personaApellido}" 
+                                    <p:inputText id="am" value="#{inscripcionController.madreI.personaApellido}" 
                                                  label="Apellidos" 
                                                  title="Ingrese los apellidos de la madre"/>
 
                                     <h:outputText value="Teléfono: "/>
-                                    <p:inputMask id="tm" value="#{inscripcionController.madre.personaTelefono}" 
+                                    <p:inputMask id="tm" value="#{inscripcionController.madreI.personaTelefono}" 
                                                  label="Número de teléfono del madre." 
                                                  title="Ingrese el número de teléfono de la madre." mask="9999-9999"/>
 
                                     <p:commandButton value="limpiar datos de la madre" 
                                                      actionListener="#{inscripcionController.limpiarAPadres(2)}"
                                                      update="dm nm am tm"/>
-                                    <p:commandButton value="Copiar datos del representante"
+                                    <p:commandButton value="Copiar datos del repPresentanteI"
                                                      actionListener="#{inscripcionController.copiarAPadres(2)}"
                                                      update="dm nm am tm"/>
                                 </h:panelGrid>

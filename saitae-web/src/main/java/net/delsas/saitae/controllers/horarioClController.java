@@ -48,7 +48,7 @@ import org.primefaces.event.SelectEvent;
  */
 @Named
 @ViewScoped
-public class horarioClController implements Serializable {
+public class horarioClController extends Auxiliar implements Serializable {
     
     private static final long serialVersionUID = 1L;
     private Persona usuario;
@@ -74,12 +74,12 @@ public class horarioClController implements Serializable {
         List<GradoPK> grList = mFL.findGradopkByidEstudianteAndAño(añoSelected,
                 estudiate ? usuario.getIdpersona() : 0);
         pk = grList.size() > 0 ? grList.get(0) : new GradoPK(0, "", "", 0);
-        añosDisponibles = Auxiliar.getAñosParaMostrar(estudiate ? 3 : 5);
+        añosDisponibles = getAñosParaMostrar(estudiate ? 3 : 5);
         horas = hFL.findAll();
     }
     
     private Integer getAño() {
-        return Auxiliar.getAñoActual();
+        return getAñoActual();
     }
     
     public void onAñoSelect(SelectEvent ev) {
@@ -92,8 +92,8 @@ public class horarioClController implements Serializable {
         horario = new ArrayList<>();
         horas.forEach((h) -> {
             horario.add(estudiate
-                    ? Auxiliar.llenar(h, pk, mhmFL)
-                    : Auxiliar.llenar(añoSelected, h, usuario.getIdpersona(), mhmFL));
+                    ? llenar(h, pk, mhmFL)
+                    : llenar(añoSelected, h, usuario.getIdpersona(), mhmFL));
         });
         return Collections.unmodifiableList(horario);
     }
@@ -123,7 +123,7 @@ public class horarioClController implements Serializable {
         pdf.open();
         pdf.setPageSize(new Rectangle(842, 842));
         pdf.addTitle("SAITAE-INTEX_" + getAño() + " Horario de clases de "
-                + Auxiliar.getNombreCortoPersona(usuario));
+                + getNombreCortoPersona(usuario));
     }
     
 }

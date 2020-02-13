@@ -62,7 +62,7 @@ import org.primefaces.event.SelectEvent;
  */
 @Named
 @ViewScoped
-public class historialRController implements Serializable {
+public class historialRController extends Auxiliar implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @EJB
@@ -117,8 +117,8 @@ public class historialRController implements Serializable {
         } else {
             textoReserva = "";
             u = new String[]{"Docente", "Estudiante", "Grupo de estudiantes", "Personal (No académico)"};
-            añoSelected = Auxiliar.getAñoActual();
-            añosDisponibles = Auxiliar.getAñosParaMostrar(
+            añoSelected = getAñoActual();
+            añosDisponibles = getAñosParaMostrar(
                     usuario.getTipoPersona().getIdtipoPersona().equals(8) ? 3 : 5);
         }
     }
@@ -176,7 +176,7 @@ public class historialRController implements Serializable {
         }
         procesoDetalle();
         rechazo = false;
-        textoReserva = selected == null ? "" : Auxiliar.getEstadoReservas1(selected.getReservaEstado());
+        textoReserva = selected == null ? "" : getEstadoReservas1(selected.getReservaEstado());
     }
 
     public Reserva getSelected() {
@@ -197,7 +197,7 @@ public class historialRController implements Serializable {
     }
 
     public String getEstado(String e) {
-        return Auxiliar.getEstadoReservas2(e);
+        return getEstadoReservas2(e);
     }
 
     public boolean getSePuedeCancelar() {
@@ -226,7 +226,7 @@ public class historialRController implements Serializable {
                             "La  cancelación se registró con éxito. "
                             + (selected.getPersonasReservaList().size() > 1
                             ? "Se notificará al resto  de personas en la reserva" : "")));
-            Auxiliar.persistirNotificación(
+            persistirNotificación(
                     new mensaje(0, usuario.getIdpersona(), "solicitudH<form",
                             new FacesMessage(FacesMessage.SEVERITY_INFO, "Cancelación de reserva",
                                     "Su solicitud de reserva de equipo con fecha "
@@ -235,11 +235,11 @@ public class historialRController implements Serializable {
                                     + " ha sido cancelada por " + usuario.getPersonaNombre().split(" ")[0] + " "
                                     + usuario.getPersonaApellido().split(" ")[0]
                                     + ". La razón de lacancelación es: " + getRazonRechazo() + ".")),
-                    Auxiliar.getPersonasEnReserva(selected),
+                    getPersonasEnReserva(selected),
                     notiFL, notificacion);
             Integer tp = selected.getTipoRecurso().getIdtipoRecurso();
             tp = tp == 1 ? 6 : (tp == 2 ? 7 : (tp == 3 ? 5 : 0));
-            Auxiliar.persistirNotificación(
+            persistirNotificación(
                     new mensaje(0, usuario.getIdpersona(), "srCra<form",
                             new FacesMessage(FacesMessage.SEVERITY_INFO, "Cancelación de reserva",
                                     "La solicitud de reserva de equipo con fecha "
@@ -248,7 +248,7 @@ public class historialRController implements Serializable {
                                     + " ha sido cancelada por " + usuario.getPersonaNombre().split(" ")[0] + " "
                                     + usuario.getPersonaApellido().split(" ")[0]
                                     + ". La razón de la cancelación es: " + getRazonRechazo() + ".")),
-                    Auxiliar.getPersonasParaNotificar(tpFL.find(tp)),
+                    getPersonasParaNotificar(tpFL.find(tp)),
                     notiFL, notificacion);
             if (e1.equals("A") && selected.getReservaDetalleList() != null) {
                 selected.getReservaDetalleList().forEach((rd) -> {
@@ -291,7 +291,7 @@ public class historialRController implements Serializable {
     }
 
     public void setCom(Integer ind, String v) {
-        selected.setReservaComentario(Auxiliar.setComentario(ind, v, selected.getReservaComentario()));
+        selected.setReservaComentario(setComentario(ind, v, selected.getReservaComentario()));
     }
 
     public String getRazonRechazo() {
@@ -369,17 +369,13 @@ public class historialRController implements Serializable {
         Maestro m = selected != null ? selected.getDocente() : null;
         String salida = "";
         if (m != null) {
-            salida += Auxiliar.getNombreCortoPersona(m.getPersona());
+            salida += getNombreCortoPersona(m.getPersona());
         }
         return salida;
     }
 
     public boolean isGradoValido() {
         return getGradoUso().split("").length > 1;
-    }
-
-    public int getAñoActual() {
-        return Auxiliar.getAñoActual();
     }
 
     public Grado getGradoActualDePersonas(Persona p) {
@@ -395,7 +391,7 @@ public class historialRController implements Serializable {
     }
 
     public String getGradoNombre(Grado g) {
-        return Auxiliar.getGradoNombre(g.getGradoPK());
+        return getGradoNombre(g.getGradoPK());
     }
 
     public String getGradoUso() {

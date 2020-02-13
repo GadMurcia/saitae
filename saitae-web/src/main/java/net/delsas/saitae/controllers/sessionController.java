@@ -51,7 +51,7 @@ import org.primefaces.model.menu.MenuElement;
  */
 @Named
 @ViewScoped
-public class sessionController implements Serializable {
+public class sessionController extends Auxiliar implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -113,7 +113,7 @@ public class sessionController implements Serializable {
                 } else {
                     context.addMessage("growl", new FacesMessage(FacesMessage.SEVERITY_INFO, "Bienvenido",
                             "Bienvenid" + (us.getPersonaSexo() ? "a " : "o ")
-                            + Auxiliar.getNombreCortoPersona(us)));
+                            + getNombreCortoPersona(us)));
                     context.getExternalContext().getSessionMap().remove("primerInicio");
                     context.getExternalContext().getSessionMap().put("primerInicio", false);
                 }
@@ -166,7 +166,7 @@ public class sessionController implements Serializable {
         mi.setUrl("perfil.intex");
         mm.addElement(mi);
         List<Acceso> menusDisponibles = new ArrayList<>();
-        List<Integer> tps = Auxiliar.getTiposPersonas(us);
+        List<Integer> tps = getTiposPersonas(us);
         tps.stream().map((i) -> atpFL.findAccesoByIdTipoPersona(i)).forEachOrdered((actps) -> {
             actps.stream().filter((a) -> (!menusDisponibles.contains(a))).forEachOrdered((a) -> {
                 menusDisponibles.add(a);
@@ -244,7 +244,7 @@ public class sessionController implements Serializable {
     }
 
     public Integer getAño() {
-        return Auxiliar.getAñoActual();
+        return getAñoActual();
     }
 
     public void escucha() {

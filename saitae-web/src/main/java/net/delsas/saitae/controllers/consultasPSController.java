@@ -18,7 +18,6 @@ package net.delsas.saitae.controllers;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -57,7 +56,7 @@ import org.primefaces.event.SelectEvent;
  */
 @Named
 @ViewScoped
-public class consultasPSController implements Serializable {
+public class consultasPSController extends Auxiliar implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @EJB
@@ -232,7 +231,7 @@ public class consultasPSController implements Serializable {
         expediente.setExpedientePSComentario("");
         exFL.edit(expediente);
         Persona p = expediente.getEstudiante().getPersona();
-        Auxiliar.persistirNotificación(
+        persistirNotificación(
                 new mensaje(0, usuario.getIdpersona(), "admCitasPs<form",
                         new FacesMessage(FacesMessage.SEVERITY_INFO, "Sesión de consulta terminada",
                                 "La sesión de consulta psicológica con "
@@ -241,7 +240,7 @@ public class consultasPSController implements Serializable {
                                 + p.getPersonaNombre().split(" ")[0]
                                 + " " + p.getPersonaApellido().split(" ")[0] + " ha terminado.")),
                 usuario, notiFL, notificacion);
-        Auxiliar.persistirNotificación(
+        persistirNotificación(
                 new mensaje(0, usuario.getIdpersona(), "citasPSH<form",
                         new FacesMessage(FacesMessage.SEVERITY_INFO, "Sesión de consulta terminada",
                                 "La sesión de consulta con "
@@ -347,7 +346,7 @@ public class consultasPSController implements Serializable {
     }
 
     private void notificarInicio() {
-        Auxiliar.persistirNotificación(
+        persistirNotificación(
                 new mensaje(0, usuario.getIdpersona(), "citasPSH<form",
                         new FacesMessage(FacesMessage.SEVERITY_INFO, "Sesión de consulta iniciada",
                                 "La sesión de consulta con "
@@ -358,17 +357,11 @@ public class consultasPSController implements Serializable {
     }
 
     public String getGrado() {
-        int a = Auxiliar.getAñoActual();
+        int a = getAñoActual();
         int e = expediente == null ? 0 : expediente.getIdEstudiante();
         Matricula ma = mFL.find(new MatriculaPK(e, a));
         GradoPK pk = ma == null ? new GradoPK(0, "", "", 0) : ma.getGrado().getGradoPK();
-        String h = (pk.getIdgrado() == 1 ? "Primero" : (pk.getIdgrado() == 2 ? "Segundo" : (pk.getIdgrado() == 3 ? "Tercero" : "")));
-        h += " " + (pk.getGradoModalidad().equals("C") ? "Contador" : (pk.getGradoModalidad().equals("S") ? "Secretariado" : (pk.getGradoModalidad().equals("G") ? "General" : "")));
-        h += " " + pk.getGradoSeccion();
+        String h = getGradoNombre(pk);
         return h; 
-    }
-
-    public String getDateToString(Date d) {
-        return d == null ? "" : new SimpleDateFormat("dd/MM/yyyy hh:mm a").format(d);
     }
 }

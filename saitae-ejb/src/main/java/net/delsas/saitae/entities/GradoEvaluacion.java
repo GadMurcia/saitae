@@ -16,10 +16,7 @@ import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -32,37 +29,32 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "gradoEvaluacion", catalog = "intex", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "GradoEvaluacion.findAll", query = "SELECT g FROM GradoEvaluacion g")
-    , @NamedQuery(name = "GradoEvaluacion.findByIdGrado", query = "SELECT g FROM GradoEvaluacion g WHERE g.gradoEvaluacionPK.idGrado = :idGrado")
-    , @NamedQuery(name = "GradoEvaluacion.findByGradoSeccion", query = "SELECT g FROM GradoEvaluacion g WHERE g.gradoEvaluacionPK.gradoSeccion = :gradoSeccion")
-    , @NamedQuery(name = "GradoEvaluacion.findByGradoA\u00f1o", query = "SELECT g FROM GradoEvaluacion g WHERE g.gradoEvaluacionPK.gradoA\u00f1o = :gradoA\u00f1o")
-    , @NamedQuery(name = "GradoEvaluacion.findByGradoModalidad", query = "SELECT g FROM GradoEvaluacion g WHERE g.gradoEvaluacionPK.gradoModalidad = :gradoModalidad")
-    , @NamedQuery(name = "GradoEvaluacion.findByFechaEvaluacion", query = "SELECT g FROM GradoEvaluacion g WHERE g.fechaEvaluacion = :fechaEvaluacion")
-    , @NamedQuery(name = "GradoEvaluacion.findByOrganizadorLimpieza", query = "SELECT g FROM GradoEvaluacion g WHERE g.organizadorLimpieza = :organizadorLimpieza")
-    , @NamedQuery(name = "GradoEvaluacion.findByOrganizadorClase", query = "SELECT g FROM GradoEvaluacion g WHERE g.organizadorClase = :organizadorClase")
-    , @NamedQuery(name = "GradoEvaluacion.findByNormas", query = "SELECT g FROM GradoEvaluacion g WHERE g.normas = :normas")
-    , @NamedQuery(name = "GradoEvaluacion.findByMision", query = "SELECT g FROM GradoEvaluacion g WHERE g.mision = :mision")
-    , @NamedQuery(name = "GradoEvaluacion.findByVision", query = "SELECT g FROM GradoEvaluacion g WHERE g.vision = :vision")
-    , @NamedQuery(name = "GradoEvaluacion.findByMapasRiesgo", query = "SELECT g FROM GradoEvaluacion g WHERE g.mapasRiesgo = :mapasRiesgo")
-    , @NamedQuery(name = "GradoEvaluacion.findByComites", query = "SELECT g FROM GradoEvaluacion g WHERE g.comites = :comites")
-    , @NamedQuery(name = "GradoEvaluacion.findByBienvenidos", query = "SELECT g FROM GradoEvaluacion g WHERE g.bienvenidos = :bienvenidos")
-    , @NamedQuery(name = "GradoEvaluacion.findByValores", query = "SELECT g FROM GradoEvaluacion g WHERE g.valores = :valores")
-    , @NamedQuery(name = "GradoEvaluacion.findByDirectiva", query = "SELECT g FROM GradoEvaluacion g WHERE g.directiva = :directiva")
-    , @NamedQuery(name = "GradoEvaluacion.findByMaterial", query = "SELECT g FROM GradoEvaluacion g WHERE g.material = :material")
-    , @NamedQuery(name = "GradoEvaluacion.findByObservacionesPositivas", query = "SELECT g FROM GradoEvaluacion g WHERE g.observacionesPositivas = :observacionesPositivas")
-    , @NamedQuery(name = "GradoEvaluacion.findByObservacioneNegativas", query = "SELECT g FROM GradoEvaluacion g WHERE g.observacioneNegativas = :observacioneNegativas")
-    , @NamedQuery(name = "GradoEvaluacion.findByRecomendaciones", query = "SELECT g FROM GradoEvaluacion g WHERE g.recomendaciones = :recomendaciones")
-    , @NamedQuery(name = "GradoEvaluacion.findByEvaluacionGradoComentario", query = "SELECT g FROM GradoEvaluacion g WHERE g.evaluacionGradoComentario = :evaluacionGradoComentario")})
+    @NamedQuery(name = "GradoEvaluacion.findAll", query = "SELECT g FROM GradoEvaluacion g"),
+    @NamedQuery(name = "GradoEvaluacion.findByIdGrado", query = "SELECT g FROM GradoEvaluacion g WHERE g.gradoEvaluacionPK.idGrado = :idGrado"),
+    @NamedQuery(name = "GradoEvaluacion.findByGradoSeccion", query = "SELECT g FROM GradoEvaluacion g WHERE g.gradoEvaluacionPK.gradoSeccion = :gradoSeccion"),
+    @NamedQuery(name = "GradoEvaluacion.findByGradoA\u00f1o", query = "SELECT g FROM GradoEvaluacion g WHERE g.gradoEvaluacionPK.gradoA\u00f1o = :gradoA\u00f1o"),
+    @NamedQuery(name = "GradoEvaluacion.findByGradoModalidad", query = "SELECT g FROM GradoEvaluacion g WHERE g.gradoEvaluacionPK.gradoModalidad = :gradoModalidad"),
+    @NamedQuery(name = "GradoEvaluacion.findByFechaEvaluacion", query = "SELECT g FROM GradoEvaluacion g WHERE g.gradoEvaluacionPK.fechaEvaluacion = :fechaEvaluacion"),
+    @NamedQuery(name = "GradoEvaluacion.findByOrganizadorLimpieza", query = "SELECT g FROM GradoEvaluacion g WHERE g.organizadorLimpieza = :organizadorLimpieza"),
+    @NamedQuery(name = "GradoEvaluacion.findByOrganizadorClase", query = "SELECT g FROM GradoEvaluacion g WHERE g.organizadorClase = :organizadorClase"),
+    @NamedQuery(name = "GradoEvaluacion.findByNormas", query = "SELECT g FROM GradoEvaluacion g WHERE g.normas = :normas"),
+    @NamedQuery(name = "GradoEvaluacion.findByMision", query = "SELECT g FROM GradoEvaluacion g WHERE g.mision = :mision"),
+    @NamedQuery(name = "GradoEvaluacion.findByVision", query = "SELECT g FROM GradoEvaluacion g WHERE g.vision = :vision"),
+    @NamedQuery(name = "GradoEvaluacion.findByMapasRiesgo", query = "SELECT g FROM GradoEvaluacion g WHERE g.mapasRiesgo = :mapasRiesgo"),
+    @NamedQuery(name = "GradoEvaluacion.findByComites", query = "SELECT g FROM GradoEvaluacion g WHERE g.comites = :comites"),
+    @NamedQuery(name = "GradoEvaluacion.findByBienvenidos", query = "SELECT g FROM GradoEvaluacion g WHERE g.bienvenidos = :bienvenidos"),
+    @NamedQuery(name = "GradoEvaluacion.findByValores", query = "SELECT g FROM GradoEvaluacion g WHERE g.valores = :valores"),
+    @NamedQuery(name = "GradoEvaluacion.findByDirectiva", query = "SELECT g FROM GradoEvaluacion g WHERE g.directiva = :directiva"),
+    @NamedQuery(name = "GradoEvaluacion.findByMaterial", query = "SELECT g FROM GradoEvaluacion g WHERE g.material = :material"),
+    @NamedQuery(name = "GradoEvaluacion.findByObservacionesPositivas", query = "SELECT g FROM GradoEvaluacion g WHERE g.observacionesPositivas = :observacionesPositivas"),
+    @NamedQuery(name = "GradoEvaluacion.findByObservacioneNegativas", query = "SELECT g FROM GradoEvaluacion g WHERE g.observacioneNegativas = :observacioneNegativas"),
+    @NamedQuery(name = "GradoEvaluacion.findByRecomendaciones", query = "SELECT g FROM GradoEvaluacion g WHERE g.recomendaciones = :recomendaciones"),
+    @NamedQuery(name = "GradoEvaluacion.findByEvaluacionGradoComentario", query = "SELECT g FROM GradoEvaluacion g WHERE g.evaluacionGradoComentario = :evaluacionGradoComentario")})
 public class GradoEvaluacion implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected GradoEvaluacionPK gradoEvaluacionPK;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "fechaEvaluacion")
-    @Temporal(TemporalType.DATE)
-    private Date fechaEvaluacion;
     @Basic(optional = false)
     @NotNull
     @Column(name = "organizadorLimpieza")
@@ -120,11 +112,11 @@ public class GradoEvaluacion implements Serializable {
     @Column(name = "evaluacionGradoComentario")
     private String evaluacionGradoComentario;
     @JoinColumns({
-        @JoinColumn(name = "idGrado", referencedColumnName = "idgrado", insertable = false, updatable = false)
-        , @JoinColumn(name = "gradoSeccion", referencedColumnName = "gradoSeccion", insertable = false, updatable = false)
-        , @JoinColumn(name = "gradoA\u00f1o", referencedColumnName = "gradoA\u00f1o", insertable = false, updatable = false)
-        , @JoinColumn(name = "gradoModalidad", referencedColumnName = "gradoModalidad", insertable = false, updatable = false)})
-    @OneToOne(optional = false)
+        @JoinColumn(name = "idGrado", referencedColumnName = "idgrado", insertable = false, updatable = false),
+        @JoinColumn(name = "gradoSeccion", referencedColumnName = "gradoSeccion", insertable = false, updatable = false),
+        @JoinColumn(name = "gradoA\u00f1o", referencedColumnName = "gradoA\u00f1o", insertable = false, updatable = false),
+        @JoinColumn(name = "gradoModalidad", referencedColumnName = "gradoModalidad", insertable = false, updatable = false)})
+    @ManyToOne(optional = false)
     private Grado grado;
     @JoinColumn(name = "evaluador", referencedColumnName = "idpersona")
     @ManyToOne(optional = false)
@@ -137,9 +129,18 @@ public class GradoEvaluacion implements Serializable {
         this.gradoEvaluacionPK = gradoEvaluacionPK;
     }
 
-    public GradoEvaluacion(GradoEvaluacionPK gradoEvaluacionPK, Date fechaEvaluacion, boolean organizadorLimpieza, boolean organizadorClase, boolean normas, boolean mision, boolean vision, boolean mapasRiesgo, boolean comites, boolean bienvenidos, boolean valores, boolean directiva, boolean material) {
+    public GradoEvaluacion(Grado g) {
+        this.gradoEvaluacionPK = g == null
+                ? new GradoEvaluacionPK()
+                : new GradoEvaluacionPK(g.getGradoPK().getIdgrado(),
+                        g.getGradoPK().getGradoSeccion(),
+                        g.getGradoPK().getGradoAño(),
+                        g.getGradoPK().getGradoModalidad(),
+                         new Date());
+    }
+
+    public GradoEvaluacion(GradoEvaluacionPK gradoEvaluacionPK, boolean organizadorLimpieza, boolean organizadorClase, boolean normas, boolean mision, boolean vision, boolean mapasRiesgo, boolean comites, boolean bienvenidos, boolean valores, boolean directiva, boolean material) {
         this.gradoEvaluacionPK = gradoEvaluacionPK;
-        this.fechaEvaluacion = fechaEvaluacion;
         this.organizadorLimpieza = organizadorLimpieza;
         this.organizadorClase = organizadorClase;
         this.normas = normas;
@@ -153,8 +154,8 @@ public class GradoEvaluacion implements Serializable {
         this.material = material;
     }
 
-    public GradoEvaluacion(int idGrado, String gradoSeccion, int gradoAño, String gradoModalidad) {
-        this.gradoEvaluacionPK = new GradoEvaluacionPK(idGrado, gradoSeccion, gradoAño, gradoModalidad);
+    public GradoEvaluacion(int idGrado, String gradoSeccion, int gradoAño, String gradoModalidad, Date fechaEvaluacion) {
+        this.gradoEvaluacionPK = new GradoEvaluacionPK(idGrado, gradoSeccion, gradoAño, gradoModalidad, fechaEvaluacion);
     }
 
     public GradoEvaluacionPK getGradoEvaluacionPK() {
@@ -163,14 +164,6 @@ public class GradoEvaluacion implements Serializable {
 
     public void setGradoEvaluacionPK(GradoEvaluacionPK gradoEvaluacionPK) {
         this.gradoEvaluacionPK = gradoEvaluacionPK;
-    }
-
-    public Date getFechaEvaluacion() {
-        return fechaEvaluacion;
-    }
-
-    public void setFechaEvaluacion(Date fechaEvaluacion) {
-        this.fechaEvaluacion = fechaEvaluacion;
     }
 
     public boolean getOrganizadorLimpieza() {
@@ -333,5 +326,5 @@ public class GradoEvaluacion implements Serializable {
     public String toString() {
         return "net.delsas.saitae.entities.GradoEvaluacion[ gradoEvaluacionPK=" + gradoEvaluacionPK + " ]";
     }
-    
+
 }

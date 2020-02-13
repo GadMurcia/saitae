@@ -54,7 +54,7 @@ import org.primefaces.event.SelectEvent;
  */
 @Named
 @ViewScoped
-public class matriculaController implements Serializable {
+public class matriculaController extends Auxiliar implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @EJB
@@ -83,7 +83,7 @@ public class matriculaController implements Serializable {
     public void init() {
         FacesContext context = FacesContext.getCurrentInstance();
         usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
-        List<Integer> tps = Auxiliar.getTiposPersonas(usuario);
+        List<Integer> tps = getTiposPersonas(usuario);
         boolean r = (tps.contains(1) || tps.contains(2) || tps.contains(13));
         if (!r) {
             context.getExternalContext().getSessionMap().put("mensaje", new FacesMessage(FacesMessage.SEVERITY_FATAL,
@@ -138,7 +138,7 @@ public class matriculaController implements Serializable {
                 : mat.getGrado().getGradoPK().getGradoModalidad().equals("S") ? " Secretariado"
                 : mat.getGrado().getGradoPK().getGradoModalidad().equals("G") ? " General" : " ")
                 + ". Vea la nómina de alumnos para comproobar el cambio."));
-        Auxiliar.persistirNotificación(
+        persistirNotificación(
                 new mensaje(buscado.getIdpersona(), usuario.getPersonaNombre().split(" ")[0] + " "
                         + usuario.getPersonaApellido().split(" ")[0]
                         + " ha cambiado la sección donde usted estaba inscrito "
@@ -188,7 +188,7 @@ public class matriculaController implements Serializable {
             return matr;
         }).forEachOrdered((matr) -> {
             GradoPK pk = matr.getGrado().getGradoPK();
-            Auxiliar.persistirNotificación(
+            persistirNotificación(
                     new mensaje(matr.getMatriculaPK().getIdmatricula(),
                             "Usted ha sido aceptado en el Instituto Nacional 'Texistepeque'! "
                             + "Ha sido inscrito en " + (pk.getIdgrado() == 1 ? "Primero"
@@ -227,7 +227,7 @@ public class matriculaController implements Serializable {
     }
 
     private int getAño() {
-        return Auxiliar.getAñoActual();
+        return getAñoActual();
     }
 
     public List<Grado> getGrados() {
@@ -260,7 +260,7 @@ public class matriculaController implements Serializable {
     }
 
     public String getGradosLabel(GradoPK pk) {
-        return Auxiliar.getGradoNombre(pk);
+        return getGradoNombre(pk);
     }
 
     public List<String> completeText(String query) {
@@ -312,14 +312,6 @@ public class matriculaController implements Serializable {
 
     public boolean isBtnGuardarp2() {
         return btnGuardarp2;
-    }
-
-    public String getDepartamento(Persona p) {
-        return p != null ? p.getPersonaLugarNac().split("#").length > 1 ? p.getPersonaLugarNac().split("#")[0] : " " : " ";
-    }
-
-    public String getMunicipio(Persona p) {
-        return p != null ? p.getPersonaLugarNac().split("#").length > 1 ? p.getPersonaLugarNac().split("#")[1] : " " : " ";
     }
 
     public List<SelectItem> getDepLista(Persona p) {

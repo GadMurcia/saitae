@@ -53,7 +53,7 @@ import org.primefaces.event.FileUploadEvent;
  */
 @Named
 @ViewScoped
-public class permisoMaController implements Serializable {
+public class permisoMaController extends Auxiliar implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @EJB
@@ -103,7 +103,7 @@ public class permisoMaController implements Serializable {
         permisos = usuario.getTipoPersona().getTipopersonaPermisoList();
         editar = false;
         p = (Permisos) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("permiso");
-        tps = Auxiliar.getTiposPersonas(usuario);
+        tps = getTiposPersonas(usuario);
         if (p == null) {
             p = new Permisos();
             constancia = new Constancias(new ConstanciasPK());
@@ -176,20 +176,20 @@ public class permisoMaController implements Serializable {
                     } else {
                         pfl.edit(p);
                     }
-                    Auxiliar.persistirNotificación(
+                    persistirNotificación(
                             new mensaje(usuario.getIdpersona(), usuario.getIdpersona(), "permisoH<form",
                                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Modificación de solicitud de permiso",
                                             "Su permiso se ha solicitado para entre las fechas: "
                                             + (new SimpleDateFormat("dd/MM/yyyy").format(p.getPermisosPK().getPermisoFechaInicio())) + " y "
                                             + (new SimpleDateFormat("dd/MM/yyyy").format(p.getPermisoFechafin())))),
                             usuario, notFL, notificacion);
-                    Auxiliar.persistirNotificación(
+                    persistirNotificación(
                             new mensaje(0, usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
                                     + " ha cambiado su solicitud de permiso.",
                                     "Modificaciones en una solicitud de permiso",
                                     FacesMessage.SEVERITY_INFO, usuario.getIdpersona(),
                                     "permiso<form"),
-                            Auxiliar.getPersonasParaNotificar(
+                            getPersonasParaNotificar(
                                     tipoPersonaFL.find(
                                             (tps.contains(4) && !tps.contains(3))
                                             ? 3 : 2)),
@@ -210,19 +210,19 @@ public class permisoMaController implements Serializable {
                                             p.getPermisosPK().getPermisoFechaInicio()));
                         }
                         pfl.create(p);
-                        Auxiliar.persistirNotificación(
+                        persistirNotificación(
                                 new mensaje(usuario.getIdpersona(), usuario.getIdpersona(), "permisoH<form",
                                         new FacesMessage(FacesMessage.SEVERITY_INFO, "Solicitud exitosa",
                                                 "Su permiso se ha solicitado para entre las fechas: "
                                                 + (new SimpleDateFormat("dd/MM/yyyy").format(p.getPermisosPK().getPermisoFechaInicio())) + " y "
                                                 + (new SimpleDateFormat("dd/MM/yyyy").format(p.getPermisoFechafin())))),
                                 usuario, notFL, notificacion);
-                        Auxiliar.persistirNotificación(
+                        persistirNotificación(
                                 new mensaje(0, usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
                                         + " ha solicitado un nuevo permiso.",
                                         "Solicitud de permiso nueva", FacesMessage.SEVERITY_INFO, usuario.getIdpersona(),
                                         "permiso<form"),
-                                Auxiliar.getPersonasParaNotificar(
+                                getPersonasParaNotificar(
                                         tipoPersonaFL.find(
                                                 (tps.contains(4) && !tps.contains(3))
                                                 ? 3 : 2)),
@@ -309,7 +309,7 @@ public class permisoMaController implements Serializable {
     }
 
     public List<Integer> getInvalidDays() {
-        return Auxiliar.getDisabledDays();
+        return getDisabledDays();
     }
 
     public boolean isEditar() {
@@ -334,7 +334,7 @@ public class permisoMaController implements Serializable {
     }
 
     public String getDoc() {
-        return Auxiliar.getDoc(
+        return getDoc(
                 constancia.getDocumento(),
                 (constancia.getExtención() == null || constancia.getExtención().isEmpty())
                 ? "" : constancia.getExtención().split("¿¿")[1]);

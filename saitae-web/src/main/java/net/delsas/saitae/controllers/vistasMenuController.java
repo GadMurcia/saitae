@@ -50,7 +50,7 @@ import org.primefaces.model.DualListModel;
  */
 @Named
 @ViewScoped
-public class vistasMenuController implements Serializable {
+public class vistasMenuController extends Auxiliar implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -224,13 +224,13 @@ public class vistasMenuController implements Serializable {
                 }
             });
             tipoPersonaFL.edit(tipo);
-            Auxiliar.persistirNotificación(
+            persistirNotificación(
                     new mensaje(0, 1045367073, "perfil<form0:menubar¿¿¿tp¿¿" + tipo.getIdtipoPersona(),
                             new FacesMessage(FacesMessage.SEVERITY_INFO,
                                     "Cambios en el menú",
                                     "La barra de menús ha sufrido cambios y los verá cuando "
                                     + "actualice o cambie de página. Notificación del sistema.")),
-                    Auxiliar.getPersonasParaNotificar(tipo),
+                    getPersonasParaNotificar(tipo),
                     notiFL, notificacion);
             String m = "Al Tipo de Ususario " + tipo.getTipoPersonaNombre();
             if (model.getTarget().size() > 0) {

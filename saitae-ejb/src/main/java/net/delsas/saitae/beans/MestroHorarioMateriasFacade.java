@@ -111,20 +111,44 @@ public class MestroHorarioMateriasFacade extends AbstractFacade<MestroHorarioMat
                 .setParameter("gradoPK", gradpPK)
                 .setParameter("idDia", idDia)
                 .getResultList();
+    }   
+
+    private Integer getIdDia(Date s) {
+        String f = new SimpleDateFormat("EEEEE").format(s).substring(0, 2);
+        System.out.println(f);
+        if (f.equalsIgnoreCase("do")) {
+            return 7;
+        } else if (f.equalsIgnoreCase("lu")) {
+            return 1;
+        } else if (f.equalsIgnoreCase("ma")) {
+            return 2;
+        }
+        if (f.equalsIgnoreCase("mi")) {
+            return 3;
+        } else if (f.equalsIgnoreCase("ju")) {
+            return 4;
+        } else if (f.equalsIgnoreCase("vi")) {
+            return 5;
+        } else if (f.equalsIgnoreCase("sa")) {
+            return 6;
+        } else {
+            return 0;
+        }
     }
 
     @Override
     public MestroHorarioMaterias finHorarioActual(Integer idMaestro, Date fecha, Integer año) {
-        fecha = fecha == null ? new Date() : fecha;
+        Date fecha0;
         try {
-            fecha = new SimpleDateFormat("hh:mm a").parse(new SimpleDateFormat("hh:mm a").format(fecha));
+            fecha0 = new SimpleDateFormat("hh:mm a").parse(new SimpleDateFormat("hh:mm a").format(fecha));
         } catch (ParseException ex) {
-            fecha = new Date();
+            fecha0 = new Date();
         }
         List<MestroHorarioMaterias> rs = em.createNamedQuery("MestroHorarioMaterias.finHorarioActual")
                 .setParameter("idMaestro", idMaestro)
                 .setParameter("año", año)
-                .setParameter("fecha", fecha)
+                .setParameter("fecha", fecha0)
+                .setParameter("idDia", getIdDia(fecha))
                 .getResultList();
         if (!rs.isEmpty()) {
             return rs.get(0);

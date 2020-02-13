@@ -6,9 +6,12 @@
 package net.delsas.saitae.entities;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -37,15 +40,21 @@ public class GradoEvaluacionPK implements Serializable {
     @Size(min = 1, max = 2)
     @Column(name = "gradoModalidad")
     private String gradoModalidad;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "fechaEvaluacion")
+    @Temporal(TemporalType.DATE)
+    private Date fechaEvaluacion;
 
     public GradoEvaluacionPK() {
     }
 
-    public GradoEvaluacionPK(int idGrado, String gradoSeccion, int gradoAño, String gradoModalidad) {
+    public GradoEvaluacionPK(int idGrado, String gradoSeccion, int gradoAño, String gradoModalidad, Date fechaEvaluacion) {
         this.idGrado = idGrado;
         this.gradoSeccion = gradoSeccion;
         this.gradoAño = gradoAño;
         this.gradoModalidad = gradoModalidad;
+        this.fechaEvaluacion = fechaEvaluacion;
     }
 
     public int getIdGrado() {
@@ -80,6 +89,14 @@ public class GradoEvaluacionPK implements Serializable {
         this.gradoModalidad = gradoModalidad;
     }
 
+    public Date getFechaEvaluacion() {
+        return fechaEvaluacion;
+    }
+
+    public void setFechaEvaluacion(Date fechaEvaluacion) {
+        this.fechaEvaluacion = fechaEvaluacion;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -87,6 +104,7 @@ public class GradoEvaluacionPK implements Serializable {
         hash += (gradoSeccion != null ? gradoSeccion.hashCode() : 0);
         hash += (int) gradoAño;
         hash += (gradoModalidad != null ? gradoModalidad.hashCode() : 0);
+        hash += (fechaEvaluacion != null ? fechaEvaluacion.hashCode() : 0);
         return hash;
     }
 
@@ -109,12 +127,15 @@ public class GradoEvaluacionPK implements Serializable {
         if ((this.gradoModalidad == null && other.gradoModalidad != null) || (this.gradoModalidad != null && !this.gradoModalidad.equals(other.gradoModalidad))) {
             return false;
         }
+        if ((this.fechaEvaluacion == null && other.fechaEvaluacion != null) || (this.fechaEvaluacion != null && !this.fechaEvaluacion.equals(other.fechaEvaluacion))) {
+            return false;
+        }
         return true;
     }
 
     @Override
     public String toString() {
-        return "net.delsas.saitae.entities.GradoEvaluacionPK[ idGrado=" + idGrado + ", gradoSeccion=" + gradoSeccion + ", gradoA\u00f1o=" + gradoAño + ", gradoModalidad=" + gradoModalidad + " ]";
+        return "net.delsas.saitae.entities.GradoEvaluacionPK[ idGrado=" + idGrado + ", gradoSeccion=" + gradoSeccion + ", gradoA\u00f1o=" + gradoAño + ", gradoModalidad=" + gradoModalidad + ", fechaEvaluacion=" + fechaEvaluacion + " ]";
     }
     
 }

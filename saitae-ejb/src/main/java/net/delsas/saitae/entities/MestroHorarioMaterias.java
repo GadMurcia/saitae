@@ -46,7 +46,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "MestroHorarioMaterias.findByIdDiaAndMaestro", query = "SELECT m FROM MestroHorarioMaterias m WHERE m.grado.gradoPK.gradoAño = :año AND m.horario.idhorario = :idHora AND m.maestro.idmaestro = :idMaestro ORDER BY m.horario.idhorario ASC"),
     @NamedQuery(name = "MestroHorarioMaterias.findAñoByidMaestro", query = "SELECT DISTINCT m.grado.gradoPK.gradoAño FROM MestroHorarioMaterias m WHERE m.maestro.idmaestro = :idMaestro ORDER BY m.grado.gradoPK.gradoAño DESC"),
     @NamedQuery(name = "MestroHorarioMaterias.findByIdDiaAndGradopkAndidHora", query = "SELECT m FROM MestroHorarioMaterias m WHERE m.horario.idhorario = :idHora AND m.grado.gradoPK = :gradoPK AND m.diasEstudio.idDias =:idDia ORDER BY m.horario.idhorario ASC"),
-    @NamedQuery(name = "MestroHorarioMaterias.finHorarioActual", query = "SELECT m FROM MestroHorarioMaterias m WHERE m.maestro.idmaestro = :idMaestro AND m.horario.horaInicio <= :fecha AND m.horario.horaFin >= :fecha AND m.grado.gradoPK.gradoAño = :año")
+    @NamedQuery(name = "MestroHorarioMaterias.finHorarioActual", query = "SELECT m FROM MestroHorarioMaterias m WHERE m.maestro.idmaestro = :idMaestro AND m.horario.horaInicio <= :fecha AND m.horario.horaFin >= :fecha AND m.grado.gradoPK.gradoAño = :año AND m.diasEstudio.idDias = :idDia")
 })
 public class MestroHorarioMaterias implements Serializable {
 

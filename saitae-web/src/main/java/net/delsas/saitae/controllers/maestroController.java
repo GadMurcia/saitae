@@ -61,7 +61,7 @@ import org.primefaces.event.RowEditEvent;
  */
 @Named(value = "maestroController")
 @ViewScoped
-public class maestroController implements Serializable {
+public class maestroController extends Auxiliar implements Serializable {
 
     private List<Cargo> cargos;
     @EJB
@@ -114,11 +114,11 @@ public class maestroController implements Serializable {
         usuario = (Persona) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
     }
 
-    public Maestro getMaestro() {
+    public Maestro getMaestroM() {
         return maestro;
     }
 
-    public void setMaestro(Maestro maestro) {
+    public void setMaestroM(Maestro maestro) {
         this.maestro = maestro;
     }
 
@@ -218,7 +218,7 @@ public class maestroController implements Serializable {
                 mm0.forEach((mc) -> {
                     if (!mm.contains(mc)) {
                         mcfl.remove(mc);
-                        Auxiliar.persistirNotificación(
+                        persistirNotificación(
                                 new mensaje(maestro.getIdmaestro(), usuario.getIdpersona(), " ",
                                         new FacesMessage(FacesMessage.SEVERITY_INFO,
                                                 "Relevación de Cargo",
@@ -233,7 +233,7 @@ public class maestroController implements Serializable {
                 });
                 mm.forEach((mc) -> {
                     mcfl.create(mc);
-                    Auxiliar.persistirNotificación(
+                    persistirNotificación(
                             new mensaje(maestro.getIdmaestro(), usuario.getIdpersona(), " ",
                                     new FacesMessage(FacesMessage.SEVERITY_INFO,
                                             "Asignación de Cargo",

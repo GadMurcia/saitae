@@ -51,7 +51,7 @@ import org.primefaces.event.SelectEvent;
 @Named
 
 @ViewScoped
-public class paquetesController implements Serializable {
+public class paquetesController extends Auxiliar implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -86,7 +86,7 @@ public class paquetesController implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
         String pagina = context.getExternalContext().getRequestServletPath().split("/")[2];
-        if (!(Auxiliar.permitirAcceso(usuario, accesoTPFL.findTipoPersonaPermitidos(accesoFL.getAccesoByUrl(pagina))))) {
+        if (!(permitirAcceso(usuario, accesoTPFL.findTipoPersonaPermitidos(accesoFL.getAccesoByUrl(pagina))))) {
             context.getExternalContext().getSessionMap().put("mensaje", new FacesMessage(FacesMessage.SEVERITY_FATAL,
                     "Falla!", "Esa vista no le está permitida."));
             try {
@@ -126,14 +126,14 @@ public class paquetesController implements Serializable {
     }
 
     public int getAño() {
-        return Auxiliar.getAñoActual();
+        return getAñoActual();
     }
 
     public String getGradoAlumno() {
         String grado = "";
         Matricula mati = matriculaFL.find(new MatriculaPK(p.getIdpersona(), getAño()));
         if (mati != null) {
-            grado = Auxiliar.getGradoNombre(mati.getGrado().getGradoPK());
+            grado = getGradoNombre(mati.getGrado().getGradoPK());
         }
         return grado;
     }
@@ -147,7 +147,7 @@ public class paquetesController implements Serializable {
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Guardado con éxito",
                             "Se guardaron los datos de paquetes entregados"));
             String g = entrega(entregaUtiles);
-            Auxiliar.persistirNotificación(
+            persistirNotificación(
                     new mensaje(entregaUtiles.getEntregaUtilesPK().getIdEstudiante(),
                             usuario.getIdpersona(), " ",
                             new FacesMessage(FacesMessage.SEVERITY_INFO, "Se ha registrado actividad en la entrega de paquetes.",

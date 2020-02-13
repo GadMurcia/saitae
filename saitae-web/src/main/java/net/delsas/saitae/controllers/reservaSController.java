@@ -79,7 +79,7 @@ import org.primefaces.event.UnselectEvent;
  */
 @Named
 @ViewScoped
-public class reservaSController implements Serializable {
+public class reservaSController extends Auxiliar implements Serializable {
     
     private static final long serialVersionUID = 1L;
     @EJB
@@ -217,7 +217,7 @@ public class reservaSController implements Serializable {
     }
     
     private Integer getAño() {
-        return Auxiliar.getAñoActual();
+        return getAñoActual();
     }
     
     public boolean getUsoenAula() {
@@ -238,7 +238,7 @@ public class reservaSController implements Serializable {
         if (g == null) {
             return "";
         }
-        return Auxiliar.getGradoNombre(g.getGradoPK());
+        return getGradoNombre(g.getGradoPK());
     }
     
     public void newReserva() {
@@ -539,7 +539,7 @@ public class reservaSController implements Serializable {
                 }).forEachOrdered((prs) -> {
                     solicitantes.add(prs.getPersona());
                 });
-                Auxiliar.persistirNotificación(
+                persistirNotificación(
                         new mensaje(0, usuario.getIdpersona(), "solicitudH<form",
                                 new FacesMessage(FacesMessage.SEVERITY_INFO,
                                         "Solicitud exitosa", "Su solicitud de recursos de "
@@ -568,12 +568,12 @@ public class reservaSController implements Serializable {
                 });
                 Integer id = tp.getIdtipoRecurso();
                 id = id == 1 ? 6 : (id == 2 ? 7 : (id == 3 ? 5 : 0));
-                Auxiliar.persistirNotificación(
+                persistirNotificación(
                         new mensaje(0, usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
                                 + " ha solicitado recursos", "Nueva solicitud de recursos",
                                 FacesMessage.SEVERITY_INFO,
                                 usuario.getIdpersona(), "srCra<form:ap:solicitados"),
-                        Auxiliar.getPersonasParaNotificar(tpFL.find(id)),
+                        getPersonasParaNotificar(tpFL.find(id)),
                         notiFL, notificacion);
                 if (!solicitantes.contains(usuario)) {
                     FacesContext.getCurrentInstance().addMessage(":not:msgs",
@@ -630,14 +630,6 @@ public class reservaSController implements Serializable {
     
     public void setGrado(Grado grado) {
         this.grado = grado;
-    }
-    
-    public Maestro getMaestro() {
-        return maestro;
-    }
-    
-    public void setMaestro(Maestro maestro) {
-        this.maestro = maestro;
     }
     
     public List<Maestro> getMaestros() {
@@ -743,7 +735,7 @@ public class reservaSController implements Serializable {
     }
     
     public void setCom(Integer ind, String v) {
-        reserva.setReservaComentario(Auxiliar.setComentario(ind, v, reserva.getReservaComentario()));
+        reserva.setReservaComentario(setComentario(ind, v, reserva.getReservaComentario()));
     }
     
     public void setUsadoPor(String usadoPor) {
@@ -1024,6 +1016,6 @@ public class reservaSController implements Serializable {
     }
     
     public List<Integer> getInvalidDays() {
-        return Auxiliar.getDisabledDays();
+        return getDisabledDays();
     }
 }

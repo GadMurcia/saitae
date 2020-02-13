@@ -51,7 +51,7 @@ import org.primefaces.event.SelectEvent;
  */
 @Named
 @ViewScoped
-public class AnuncioController implements Serializable {
+public class AnuncioController extends Auxiliar implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @EJB
@@ -123,13 +123,13 @@ public class AnuncioController implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Anunciado con éxito",
                             "El anuncio ha sido publicado con éxito"));
-            Auxiliar.persistirNotificación(
+            persistirNotificación(
                     new mensaje(0, "Nuevo auncio publicado recientemente por "
-                            + Auxiliar.getNombreCortoPersona(anuncio.getAnuncioAnunciante()),
+                            + getNombreCortoPersona(anuncio.getAnuncioAnunciante()),
                             "Nuevo anuncio disponible", FacesMessage.SEVERITY_INFO, usuario.getIdpersona(),
                             " ¿¿¿tp¿¿" + (anuncio.getAnuncioTipoPersona() == null ? 0
                             : anuncio.getAnuncioTipoPersona().getIdtipoPersona())),
-                    Auxiliar.getPersonasParaNotificar(anuncio.getAnuncioTipoPersona()),
+                    getPersonasParaNotificar(anuncio.getAnuncioTipoPersona()),
                     notiFL, notificacion);
             init();
         } catch (Exception e) {
@@ -252,10 +252,6 @@ public class AnuncioController implements Serializable {
             default:
                 return 30;
         }
-    }
-
-    public int getAñoActual() {
-        return Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date()));
     }
 
     public void onBlour(AjaxBehaviorEvent ev) {

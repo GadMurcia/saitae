@@ -28,12 +28,12 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import net.delsas.saitae.ax.Auxiliar;
 import net.delsas.saitae.ax.mensaje;
+import net.delsas.saitae.beans.EvaluacionMaestroFacadeLocal;
 import net.delsas.saitae.beans.GradoFacadeLocal;
 import net.delsas.saitae.beans.HorarioFacadeLocal;
 import net.delsas.saitae.beans.MateriaFacadeLocal;
@@ -58,37 +58,30 @@ import org.primefaces.event.SelectEvent;
  */
 @Named
 @ViewScoped
-public class maestroEvalController implements Serializable {
+public class maestroEvalController extends Auxiliar implements Serializable {
 
     private List<Persona> maestros;
-    private List<Grado> grados;
-    private List<Materia> materias;
-    private List<Horario> horarios;
     private Persona usuario;
     private Persona persona;
-    private EvaluacionMaestro evMa;
+    private EvaluacionMaestro evMa, evMaSelected;
 
     @EJB
     private PersonaFacadeLocal pFL;
     @EJB
     private MestroHorarioMateriasFacadeLocal mhmFL;
-    @EJB
-    private GradoFacadeLocal gFL;
-    @EJB
-    private MateriaFacadeLocal mFL;
-    @EJB
-    private HorarioFacadeLocal hFL;
     @Inject
     @Push
     private PushContext notificacion;
     @EJB
     private NotificacionesFacadeLocal notiFL;
+    @EJB
+    private EvaluacionMaestroFacadeLocal emFL;
 
     @PostConstruct
     public void init() {
         usuario = (Persona) FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
                 .get("usuario");
-        List<Integer> tps = Auxiliar.getTiposPersonas(usuario);
+        List<Integer> tps = getTiposPersonas(usuario);
         boolean r = (tps.contains(1) || tps.contains(2));
         if (!r) {
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
@@ -105,27 +98,26 @@ public class maestroEvalController implements Serializable {
             return;
         }
         maestros = pFL.getMaestros();
-        horarios = hFL.findAll();
-        grados = gFL.getPorAñoYActivo(Auxiliar.getAñoActual());
-        materias = mFL.findAll();
     }
 
     private void prepararEval() {
         if (persona.getMaestro().getEvaluacionMaestroList() == null) {
             persona.getMaestro().setEvaluacionMaestroList(new ArrayList<>());
         }
+        Date d = new Date();
         evMa = new EvaluacionMaestro(
-                new EvaluacionMaestroPK(persona.getIdpersona(), new Date()));
+                new EvaluacionMaestroPK(persona.getIdpersona(), d));
         evMa.setMaestro(persona.getMaestro());
         evMa.setEvaluador(usuario);
         MestroHorarioMaterias h = mhmFL.finHorarioActual(
                 persona.getIdpersona(),
-                evMa.getEvaluacionMaestroPK().getFechaHora(),
-                Auxiliar.getAñoActual());
+                evMa.getEvaluacionMaestroPK().getFechaHora(), getAñoActual());
         if (h != null) {
             evMa.setHoraInicio(h.getHorario().getHoraInicio());
             evMa.setHoraFin(h.getHorario().getHoraFin());
             evMa.setGrado(h.getGrado());
+            evMa.setMateria(h.getMateria());
+            evMa.setTurno((new SimpleDateFormat("a").format(d).equalsIgnoreCase("am") ? "M" : "V"));
         }
     }
 
@@ -142,10 +134,10 @@ public class maestroEvalController implements Serializable {
     public void guardarEval() {
         persona.getMaestro().getEvaluacionMaestroList().add(evMa);
         pFL.edit(persona);
-        Auxiliar.persistirNotificación(
-                new mensaje(0, usuario.getIdpersona(), " ",
+        persistirNotificación(
+                new mensaje(0, usuario.getIdpersona(), "maEvalH<form",
                         new FacesMessage(FacesMessage.SEVERITY_INFO, "Evaluación nueva",
-                                Auxiliar.getNombreCortoPersona(usuario)
+                                getNombreCortoPersona(usuario)
                                 + " ha realizado una nueva evaluación de su desempeño. "
                                 + "Puede ver su historial de desempeño en la pestaña historiales del menú perfil.")),
                 persona, notiFL, notificacion);
@@ -154,6 +146,24 @@ public class maestroEvalController implements Serializable {
                         "Puede ver el historial de evaluaciones en el panel inferior \"Historial\""));
         PrimeFaces.current().ajax().update("form0:msgs");
         prepararEval();
+    }
+
+    public void eliminarEval() {
+        persona.getMaestro().getEvaluacionMaestroList().remove(evMaSelected);
+        pFL.edit(persona);
+        emFL.remove(evMaSelected);
+        persistirNotificación(
+                new mensaje(0, usuario.getIdpersona(), "maEvalH<form",
+                        new FacesMessage(FacesMessage.SEVERITY_INFO, "Evaluación eliminada",
+                                getNombreCortoPersona(usuario)
+                                + " le ha retirado una evaluación de su desempeño. "
+                                + "Puede ver su historial de desempeño en la pestaña historiales del menú perfil.")),
+                persona, notiFL, notificacion);
+        FacesContext.getCurrentInstance().addMessage("form0:msgs",
+                new FacesMessage(FacesMessage.SEVERITY_INFO, "Evaluación eliminada con éxito",
+                        "Puede ver el historial de evaluaciones en el panel inferior \"Historial\""));
+        PrimeFaces.current().ajax().update("form0:msgs");
+        evMaSelected = null;
     }
 
     public void limpiar() {
@@ -166,30 +176,6 @@ public class maestroEvalController implements Serializable {
 
     public void setMaestros(List<Persona> maestros) {
         this.maestros = maestros;
-    }
-
-    public List<Grado> getGrados() {
-        return grados;
-    }
-
-    public void setGrados(List<Grado> grados) {
-        this.grados = grados;
-    }
-
-    public List<Materia> getMaterias() {
-        return materias;
-    }
-
-    public void setMaterias(List<Materia> materias) {
-        this.materias = materias;
-    }
-
-    public List<Horario> getHorarios() {
-        return horarios;
-    }
-
-    public void setHorarios(List<Horario> horarios) {
-        this.horarios = horarios;
     }
 
     public Persona getPersona() {
@@ -206,5 +192,13 @@ public class maestroEvalController implements Serializable {
 
     public void setEvMa(EvaluacionMaestro evMa) {
         this.evMa = evMa;
+    }
+
+    public EvaluacionMaestro getEvMaSelected() {
+        return evMaSelected;
+    }
+
+    public void setEvMaSelected(EvaluacionMaestro evMaSelected) {
+        this.evMaSelected = evMaSelected;
     }
 }

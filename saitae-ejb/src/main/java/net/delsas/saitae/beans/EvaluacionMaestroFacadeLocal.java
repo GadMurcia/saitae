@@ -29,5 +29,13 @@ public interface EvaluacionMaestroFacadeLocal {
     List<EvaluacionMaestro> findRange(int[] range);
 
     int count();
-    
+
+    /**
+     * Devuelve una lista de las evaluaciones del maestro identificado por el id
+     * proporcionado.
+     *
+     * @param idMaestro
+     * @return java. util.List net.delsas.saite.entities.EvaluacionMaestro
+     */
+    List<EvaluacionMaestro> findByIdMaestro(Integer idMaestro);
 }

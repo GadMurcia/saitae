@@ -7,6 +7,7 @@ package net.delsas.saitae.entities;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -65,8 +66,8 @@ public class Grado implements Serializable {
     private Aula aulaGrado;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "grado")
     private List<MestroHorarioMaterias> mestroHorarioMateriasList;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "grado")
-    private GradoEvaluacion gradoEvaluacion;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "grado")
+    private List<GradoEvaluacion> gradoEvaluacionList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "grado")
     private List<EvaluacionMaestro> evaluacionMaestroList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "grado")
@@ -137,14 +138,6 @@ public class Grado implements Serializable {
         this.mestroHorarioMateriasList = mestroHorarioMateriasList;
     }
 
-    public GradoEvaluacion getGradoEvaluacion() {
-        return gradoEvaluacion;
-    }
-
-    public void setGradoEvaluacion(GradoEvaluacion gradoEvaluacion) {
-        this.gradoEvaluacion = gradoEvaluacion;
-    }
-
     @XmlTransient
     public List<EvaluacionMaestro> getEvaluacionMaestroList() {
         return evaluacionMaestroList;
@@ -165,22 +158,40 @@ public class Grado implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (gradoPK != null ? gradoPK.hashCode() : 0);
+        int hash = 3;
+        hash = 17 * hash + Objects.hashCode(this.gradoPK);
+        hash = 17 * hash + (this.gradoActivo ? 1 : 0);
+        hash = 17 * hash + Objects.hashCode(this.gradoCoemntario);
+        hash = 17 * hash + Objects.hashCode(this.gradoMaestroGuia);
+        hash = 17 * hash + Objects.hashCode(this.aulaGrado);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Grado)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        Grado other = (Grado) object;
-        if ((this.gradoPK == null && other.gradoPK != null) || (this.gradoPK != null && !this.gradoPK.equals(other.gradoPK))) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
-        return true;
+        final Grado other = (Grado) obj;
+        if (this.gradoActivo != other.gradoActivo) {
+            return false;
+        }
+        if (!Objects.equals(this.gradoCoemntario, other.gradoCoemntario)) {
+            return false;
+        }
+        if (!Objects.equals(this.gradoPK, other.gradoPK)) {
+            return false;
+        }
+        if (!Objects.equals(this.gradoMaestroGuia, other.gradoMaestroGuia)) {
+            return false;
+        }
+        return Objects.equals(this.aulaGrado, other.aulaGrado);
     }
 
     @Override
@@ -188,4 +199,13 @@ public class Grado implements Serializable {
         return "net.delsas.saitae.entities.Grado[ gradoPK=" + gradoPK + " ]";
     }
 
+    @XmlTransient
+    public List<GradoEvaluacion> getGradoEvaluacionList() {
+        return gradoEvaluacionList;
+    }
+
+    public void setGradoEvaluacionList(List<GradoEvaluacion> gradoEvaluacionList) {
+        this.gradoEvaluacionList = gradoEvaluacionList;
+    }
+    
 }

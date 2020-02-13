@@ -71,7 +71,7 @@ import org.primefaces.event.SelectEvent;
  */
 @Named
 @ViewScoped
-public class solicitudPPController implements Serializable {
+public class solicitudPPController extends Auxiliar implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @EJB
@@ -400,7 +400,7 @@ public class solicitudPPController implements Serializable {
                                 + " se ha" + (calendas.size() > 1 ? "n" : "")
                                 + " enviado con éxitos. Recibirá una notificación del encargado del CRA"
                                 + " cuando su proyecto se haya resuelto."));
-                Auxiliar.persistirNotificación(x, usuario, notiFL, notificacion);
+                persistirNotificación(x, usuario, notiFL, notificacion);
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("ms", x.getFacesmessage());
                 try {
                     FacesContext.getCurrentInstance().getExternalContext().redirect("solicitudRPP.intex");
@@ -700,14 +700,14 @@ public class solicitudPPController implements Serializable {
     }
 
     private void notificar(Integer idTipoPersona) {
-        Auxiliar.persistirNotificación(
+        persistirNotificación(
                 new mensaje(0, usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
                         + " ha solicitado recursos para proyecto pedagógico planificado."
                         + " Revise la administración de reservas para más detalles.",
                         "Nueva solicitud de recursos",
                         FacesMessage.SEVERITY_INFO,
                         usuario.getIdpersona(), "srCra<form:ap:solicitados"),
-                Auxiliar.getPersonasParaNotificar(tpnFL.find(idTipoPersona)), notiFL, notificacion);
+                getPersonasParaNotificar(tpnFL.find(idTipoPersona)), notiFL, notificacion);
     }
 
     public boolean getDesactivarVistas() {
@@ -716,10 +716,6 @@ public class solicitudPPController implements Serializable {
 
     public void setDesactivarVistas(boolean desactivarVistas) {
         this.editar = desactivarVistas;
-    }
-
-    public List<Integer> getDisabledDays() { 
-        return Auxiliar.getDisabledDays();
     }
 
     public void preRender() {

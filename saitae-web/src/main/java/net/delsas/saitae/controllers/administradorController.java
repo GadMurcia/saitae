@@ -43,7 +43,7 @@ import org.primefaces.event.SelectEvent;
  */
 @Named
 @ViewScoped
-public class administradorController implements Serializable {
+public class administradorController extends Auxiliar implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -160,7 +160,7 @@ public class administradorController implements Serializable {
 
     public String getCargos(Persona p) {
         String g = "";
-        List<Integer> tps = Auxiliar.getTiposPersonas(p);
+        List<Integer> tps = getTiposPersonas(p);
         for (Integer i : tps) {
             g += (g.isEmpty() ? "" : ", ") + tpfl.find(i).getTipoPersonaNombre();
         }

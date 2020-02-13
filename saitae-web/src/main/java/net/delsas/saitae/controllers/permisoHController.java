@@ -48,7 +48,7 @@ import org.primefaces.PrimeFaces;
  */
 @Named
 @ViewScoped
-public class permisoHController implements Serializable {
+public class permisoHController extends Auxiliar implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @EJB
@@ -69,8 +69,8 @@ public class permisoHController implements Serializable {
     @PostConstruct
     public void init() {
         usuario = (Persona) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
-        añoSelected = Auxiliar.getAñoActual();
-        añosDisponnibles = Auxiliar.getAñosParaMostrar(
+        añoSelected = getAñoActual();
+        añosDisponnibles = getAñosParaMostrar(
                 usuario.getTipoPersona().getIdtipoPersona().equals(8) ? 3 : 5);
     }
 
@@ -115,14 +115,14 @@ public class permisoHController implements Serializable {
                             "Ha cancelado la solicitud de permiso con fechas: "
                             + getFechas(selected.getPermisosPK().getPermisoFechaInicio(), selected.getPermisoFechafin())
                             + ". La razón del cancelamiento es: " + getRazonRechazo() + "."));
-            Auxiliar.persistirNotificación(x, usuario, notiFL, notificacion);
+            persistirNotificación(x, usuario, notiFL, notificacion);
             PrimeFaces.current().ajax().update("form", "d1", "d2", "form0:msgs");
             PrimeFaces.current().executeScript("PF('Dper1').hide(); PF('Dper2').hide();");
         }
     }
 
     public String getEstado(String e) {
-        return Auxiliar.getEstadoPermisos2(e);
+        return getEstadoPermisos2(e);
     }
 
     public boolean isSolicitado() {
@@ -195,7 +195,7 @@ public class permisoHController implements Serializable {
 
     public String getConstanciaSelected() {
         Constancias c = selected == null ? null : selected.getConstancias();
-        return c == null ? "" : Auxiliar.getDoc(c.getDocumento(), c.getExtención().split("¿¿")[1]);
+        return c == null ? "" : getDoc(c.getDocumento(), c.getExtención().split("¿¿")[1]);
     }
 
     public void onBour(AjaxBehaviorEvent e) {

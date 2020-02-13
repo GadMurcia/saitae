@@ -52,7 +52,7 @@ import org.primefaces.event.SelectEvent;
  */
 @Named
 @ViewScoped
-public class admUsuariosController implements Serializable {
+public class admUsuariosController extends Auxiliar implements Serializable {
 
     @EJB
     private PersonaFacadeLocal pFL;
@@ -75,7 +75,7 @@ public class admUsuariosController implements Serializable {
     public void init() {
         usuario = (Persona) FacesContext.getCurrentInstance()
                 .getExternalContext().getSessionMap().get("usuario");
-        List<Integer> tps = Auxiliar.getTiposPersonas(usuario);
+        List<Integer> tps = getTiposPersonas(usuario);
         boolean v = tps.contains(1) || tps.contains(2) || tps.contains(13);
         if (!v) {
             FacesContext context = FacesContext.getCurrentInstance();
@@ -107,7 +107,7 @@ public class admUsuariosController implements Serializable {
         List<Persona> ps = secret ? pFL.getPersonaByLikeNombreAndType(q, 8)
                 : pFL.getPersonaByLikeNombre(q);
         ps.stream().filter((p) -> (!p.getTipoPersona().getIdtipoPersona().equals(1))).forEachOrdered((p) -> {
-            i.add(Auxiliar.getNombreCompletoPersona(p) + " ID: " + p.getIdpersona().toString().substring(1));
+            i.add(getNombreCompletoPersona(p) + " ID: " + p.getIdpersona().toString().substring(1));
         });
         if (i.size() < 1) {
             i.add("No hay resultados");
@@ -164,12 +164,12 @@ public class admUsuariosController implements Serializable {
         } else {
             persona.setPersonaContrasenya(DigestUtils.md5Hex(contra1));
             guardarPersona();
-            Auxiliar.persistirNotificación(
+            persistirNotificación(
                     new mensaje(0, usuario.getIdpersona(), " ",
                             new FacesMessage(FacesMessage.SEVERITY_WARN,
                                     "Recuperaciń de contraseña",
                                     "Su contraseña ha sido modificada por "
-                                    + Auxiliar.getNombreCortoPersona(usuario)
+                                    + getNombreCortoPersona(usuario)
                                     + ". Recuerde cambiar su contraseña en su perfil "
                                     + "y mantenerla en secreto")),
                     persona, notiFL, notificacion);
@@ -229,11 +229,11 @@ public class admUsuariosController implements Serializable {
         dcFL.edit(dl);
         persona.getDelagacionCargoList().add(dl);
         guardarPersona();
-        Auxiliar.persistirNotificación(
+        persistirNotificación(
                 new mensaje(0, usuario.getIdpersona(), "admUsuarios<form",
                         new FacesMessage(FacesMessage.SEVERITY_WARN,
                                 "Asignación de cargo",
-                                Auxiliar.getNombreCortoPersona(usuario)
+                                getNombreCortoPersona(usuario)
                                 + " le ha asignado el cargo de " + dl.getIdTipoPersona().getTipoPersonaNombre()
                                 + ". Los cambios en su menú lo verá "
                                 + "cuando actualice o cambie de págiba. "
@@ -247,11 +247,11 @@ public class admUsuariosController implements Serializable {
         persona.getDelagacionCargoList().remove(dl);
         if (!dl.getIddelagacionCargo().equals(-1)) {
             dcFL.remove(dl);
-            Auxiliar.persistirNotificación(
+            persistirNotificación(
                     new mensaje(0, usuario.getIdpersona(), "admUsuarios<form",
                             new FacesMessage(FacesMessage.SEVERITY_WARN,
                                     "Relevación de cargo",
-                                    Auxiliar.getNombreCortoPersona(usuario)
+                                    getNombreCortoPersona(usuario)
                                     + " le ha relevado del cargo de " + dl.getIdTipoPersona().getTipoPersonaNombre()
                                     + ". Los cambios en su menú los verá "
                                     + "cuando actualice o cambie de págiba. "
@@ -264,7 +264,7 @@ public class admUsuariosController implements Serializable {
 
     public List<TipoPersona> getCargos() {
         cargos = tpFL.findAll();
-        List<Integer> tps = Auxiliar.getTiposPersonas(persona);
+        List<Integer> tps = getTiposPersonas(persona);
         for (Integer i : new Integer[]{1, 2, 3, 4, 8, 9, 10, 11}) {
             if (!tps.contains(i)) {
                 tps.add(i);

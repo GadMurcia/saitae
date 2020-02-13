@@ -79,7 +79,7 @@ import org.primefaces.event.SelectEvent;
  */
 @Named(value = "admRecursoC")
 @ViewScoped
-public class admRecursoController implements Serializable {
+public class admRecursoController extends Auxiliar implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private Persona usuario;
@@ -182,7 +182,7 @@ public class admRecursoController implements Serializable {
     public void controlUsuarios() {
         try {
             recurso = new ArrayList<>();
-            List<Integer> tps = Auxiliar.getTiposPersonas(usuario);
+            List<Integer> tps = getTiposPersonas(usuario);
             if (tps.contains(1) || tps.contains(2)) {
                 verTipos = true;
                 verCategorias = true;
@@ -463,8 +463,8 @@ public class admRecursoController implements Serializable {
                             + " Ha editado la información del recurso: ID: "
                             + seleccionado.getIdrecurso()
                             + ", NOMBRE: " + seleccionado.getNombre()));
-            Auxiliar.persistirNotificación(x,
-                    Auxiliar.getPersonasParaNotificar(tperFL.find(tp)), notiFL, notificacion);
+            persistirNotificación(x,
+                    getPersonasParaNotificar(tperFL.find(tp)), notiFL, notificacion);
             FacesContext.getCurrentInstance().addMessage("form0:msgs",
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Edición exitosa",
                             "El recurso con el id: " + seleccionado.getIdrecurso()
@@ -481,8 +481,8 @@ public class admRecursoController implements Serializable {
                             + usuario.getPersonaApellido().split(" ")[0]
                             + " Ha agregado un nuevo recurso: ID: " + seleccionado.getIdrecurso()
                             + ", NOMBRE: " + seleccionado.getNombre()));
-            Auxiliar.persistirNotificación(x,
-                    Auxiliar.getPersonasParaNotificar(tperFL.find(tp)), notiFL, notificacion);
+            persistirNotificación(x,
+                    getPersonasParaNotificar(tperFL.find(tp)), notiFL, notificacion);
             FacesContext.getCurrentInstance().addMessage("form0:msgs",
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Creación exitosa",
                             "El recurso con el id: " + seleccionado.getIdrecurso()
@@ -679,10 +679,6 @@ public class admRecursoController implements Serializable {
 
     public void setEjemplarSeleccionado(Ejemplar ejemplarSeleccionado) {
         this.ejemplarSeleccionado = ejemplarSeleccionado;
-    }
-
-    public Integer getAñoActual() {
-        return Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date()));
     }
 
     public List<Autor> getAutores() {

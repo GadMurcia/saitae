@@ -66,7 +66,7 @@ import org.primefaces.event.SelectEvent;
  */
 @Named
 @ViewScoped
-public class adminReservas implements Serializable {
+public class adminReservas extends Auxiliar implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @EJB
@@ -106,7 +106,7 @@ public class adminReservas implements Serializable {
     public void init() {
         usuario = (Persona) FacesContext.getCurrentInstance()
                 .getExternalContext().getSessionMap().get("usuario");
-        tipos = Auxiliar.getTiposPersonas(usuario);
+        tipos = getTiposPersonas(usuario);
         boolean tr = (tipos.contains(1) || tipos.contains(2) || tipos.contains(5) || tipos.contains(6) || tipos.contains(7));
         if (!tr) {
             solicitados = entregados = devueltos = rechazados = cancelados = aceptados = new ArrayList<>();
@@ -125,8 +125,8 @@ public class adminReservas implements Serializable {
             textoReserva = "";
             u = new String[]{"Docente", "Estudiante", "Grupo de estudiantes", "Personal (No académico)"};
             rechazo = false;
-            añoSelected = Auxiliar.getAñoActual();
-            añosDisponibles = Auxiliar.getAñosParaMostrar(5);
+            añoSelected = getAñoActual();
+            añosDisponibles = getAñosParaMostrar(5);
         }
     }
 
@@ -252,7 +252,7 @@ public class adminReservas implements Serializable {
         }
         procesoDetalle();
         rechazo = false;
-        textoReserva = Auxiliar.getEstadoCita1(selected.getReservaEstado());
+        textoReserva = getEstadoCita1(selected.getReservaEstado());
     }
 
     public String getTextoReserva() {
@@ -338,7 +338,7 @@ public class adminReservas implements Serializable {
     }
 
     public void setCom(Integer ind, String v) {
-        selected.setReservaComentario(Auxiliar.setComentario(ind, v, selected.getReservaComentario()));
+        selected.setReservaComentario(setComentario(ind, v, selected.getReservaComentario()));
     }
 
     public void setUsadoPor(int usadoPor) {
@@ -353,7 +353,7 @@ public class adminReservas implements Serializable {
         Maestro m = r != null ? r.getDocente() : null;
         String salida = "";
         if (m != null) {
-            salida = Auxiliar.getNombreCortoPersona(m.getPersona());
+            salida = getNombreCortoPersona(m.getPersona());
         }
         return salida;
     }
@@ -367,7 +367,7 @@ public class adminReservas implements Serializable {
     }
 
     public String getGradoNombre(Grado g) {
-        return Auxiliar.getGradoNombre(g.getGradoPK());
+        return getGradoNombre(g.getGradoPK());
     }
 
     public boolean isRechazo() {
@@ -411,10 +411,6 @@ public class adminReservas implements Serializable {
             }
         }
         return g;
-    }
-
-    public int getAñoActual() {
-        return Auxiliar.getAñoActual();
     }
 
     public List<Persona> getPersonasEnSolicitud() {
@@ -472,7 +468,7 @@ public class adminReservas implements Serializable {
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Rechazo exitoso",
                             "El rechazo de la solicitud de reserva de equipo se ha llevado a cabo con éxito."
                             + "Se notificarán a las personas solicitantes del rechazo."));
-            Auxiliar.persistirNotificación(
+            persistirNotificación(
                     new mensaje(0, usuario.getIdpersona(), "solicitudH<form",
                             new FacesMessage(FacesMessage.SEVERITY_WARN, "Rechazo de reserva",
                                     "Su solicitud de reserva de equipo con fecha "
@@ -481,7 +477,7 @@ public class adminReservas implements Serializable {
                                     + " ha sido rechazada por " + usuario.getPersonaNombre().split(" ")[0] + " "
                                     + usuario.getPersonaApellido().split(" ")[0] + ". La razón del rechazo es: "
                                     + getRazonRechazo() + ".")),
-                    Auxiliar.getPersonasEnReserva(selected), notiFL, notificacion);
+                    getPersonasEnReserva(selected), notiFL, notificacion);
             solicitados.remove(selected);
             aceptados.remove(selected);
             rechazados.add(selected);
@@ -534,7 +530,7 @@ public class adminReservas implements Serializable {
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Aceptación Exitosa",
                             "La asignación de recursos para la solicitud de reserva de equipo se ha llevado a cabo con éxito."
                             + "Se notificarán a las personas solicitantes de la aceptación de su solicitud."));
-            Auxiliar.persistirNotificación(
+            persistirNotificación(
                     new mensaje(0, usuario.getIdpersona(), "solicitudH<form",
                             new FacesMessage(FacesMessage.SEVERITY_INFO, "Aceptación de reserva",
                                     "Su solicitud de reserva de equipo con fecha "
@@ -543,7 +539,7 @@ public class adminReservas implements Serializable {
                                     + " ha sido aceptada por " + usuario.getPersonaNombre().split(" ")[0] + " "
                                     + usuario.getPersonaApellido().split(" ")[0]
                                     + ".")),
-                    Auxiliar.getPersonasEnReserva(selected), notiFL, notificacion);
+                    getPersonasEnReserva(selected), notiFL, notificacion);
             solicitados.remove(selected);
             aceptados.add(selected);
             selected = null;
@@ -566,7 +562,7 @@ public class adminReservas implements Serializable {
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Entrega exitosa",
                             "La entrega de los recursos solicitados se ha llevado a cabo con éxito."
                             + "Se notificarán a las personas solicitantes."));
-            Auxiliar.persistirNotificación(
+            persistirNotificación(
                     new mensaje(0, usuario.getIdpersona(), "solicitudH<form",
                             new FacesMessage(FacesMessage.SEVERITY_INFO, "Entrega de equipo reservado",
                                     "Los recursos que solicitó el día "
@@ -574,7 +570,7 @@ public class adminReservas implements Serializable {
                                     + " a las " + (new SimpleDateFormat("hh:mm a").format(selected.getReservaFecha()))
                                     + " han sido entregados en este momento por " + usuario.getPersonaNombre().split(" ")[0] + " "
                                     + usuario.getPersonaApellido().split(" ")[0])),
-                    Auxiliar.getPersonasEnReserva(selected), notiFL, notificacion);
+                    getPersonasEnReserva(selected), notiFL, notificacion);
             aceptados.remove(selected);
             entregados.add(selected);
             selected = null;
@@ -594,7 +590,7 @@ public class adminReservas implements Serializable {
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Devolución exitosa",
                             "La devolución de los recursos solicitados se ha llevado a cabo con éxito."
                             + "Se notificarán a las personas solicitantes."));
-            Auxiliar.persistirNotificación(
+            persistirNotificación(
                     new mensaje(0, usuario.getIdpersona(), "solicitudH<form",
                             new FacesMessage(FacesMessage.SEVERITY_INFO, "Devolución de equipo reservado",
                                     "Los recursos que solicitó el día "
@@ -602,7 +598,7 @@ public class adminReservas implements Serializable {
                                     + " a las " + (new SimpleDateFormat("hh:mm a").format(selected.getReservaFecha()))
                                     + " han sido recibidos en este momento por " + usuario.getPersonaNombre().split(" ")[0] + " "
                                     + usuario.getPersonaApellido().split(" ")[0])),
-                    Auxiliar.getPersonasEnReserva(selected), notiFL, notificacion);
+                    getPersonasEnReserva(selected), notiFL, notificacion);
             entregados.remove(selected);
             devueltos.add(selected);
             selected = null;

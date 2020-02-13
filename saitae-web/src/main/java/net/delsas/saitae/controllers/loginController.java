@@ -24,7 +24,7 @@ import org.primefaces.PrimeFaces;
  */
 @Named
 @ViewScoped
-public class loginController implements Serializable {
+public class loginController extends Auxiliar implements Serializable {
     
     private static final long serialVersionUID = 1L;
     private String user = "";
@@ -40,11 +40,11 @@ public class loginController implements Serializable {
         this.pass = pass;
     }
     
-    public String getUser() {
+    public String getUserL() {
         return user;
     }
     
-    public void setUser(String user) {
+    public void setUserL(String user) {
         this.user = user;
     }
     
@@ -102,7 +102,7 @@ public class loginController implements Serializable {
     }
     
     public Integer getYear() {
-        return Auxiliar.getAñoActual();
+        return getAñoActual();
     }
     
     public void redirect() {

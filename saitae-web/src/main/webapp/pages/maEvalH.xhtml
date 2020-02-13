@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../WEB-INF/template/plantilla1.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:t="http://xmlns.jcp.org/jsf/composite/components/autentia">
+
+    <ui:define name="content">
+        <h:form id="form">
+            <h1 align="center">Historial de sus evaluaciones</h1>
+            <p:dataTable value="#{maEvalHistController.evaluaciones}" var="e"
+                         selectionMode="single" selection="#{maEvalHistController.evSelected}"
+                         rowKey="#{e.evaluacionMaestroPK}">
+                <p:ajax event="rowSelect" listener="#{axiliarController.onBlour}"
+                        update="h0" oncomplete="PF('Devh').show();"/>
+                <f:facet name="header">
+                    HIstorial de evaluciones
+                </f:facet>
+                <p:column headerText="Fecha y hora">
+                    #{maEvalHistController.getDateTimeToString(e.evaluacionMaestroPK.fechaHora)}
+                </p:column>
+                <p:column headerText="Materia">
+                    #{e.materia.materiaNombre}
+                </p:column>
+                <p:column headerText="Grado">
+                    #{maEvalHistController.getGradoNombre(e.grado.gradoPK)}
+                </p:column>
+                <p:column headerText="Evaluador">
+                    #{maEvalHistController.getNombreCortoPersona(e.evaluador)}
+                </p:column>
+            </p:dataTable>
+        </h:form>
+
+        <p:dialog modal="true" widgetVar="Devh" closeOnEscape="true">
+            <h:form id="h0">
+                <t:evMaestro editar="false" evMaestro="#{maEvalHistController.evSelected}"/>
+            </h:form>
+        </p:dialog>
+    </ui:define>
+
+</ui:composition>

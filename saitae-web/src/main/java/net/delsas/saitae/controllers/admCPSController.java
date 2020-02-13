@@ -49,7 +49,7 @@ import org.primefaces.event.SelectEvent;
  */
 @Named
 @ViewScoped
-public class admCPSController implements Serializable {
+public class admCPSController extends Auxiliar implements Serializable{
     
     private static final long serialVersionUID = 1L;
     @EJB
@@ -81,8 +81,8 @@ public class admCPSController implements Serializable {
         if (tp == 14 || tp == 1) {
             m = (FacesMessage) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("ms");
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("ms");
-            añoSelected = Auxiliar.getAñoActual();
-            añosDisponibles = Auxiliar.getAñosParaMostrar(5);
+            añoSelected = getAñoActual();
+            añosDisponibles = getAñosParaMostrar(5);
         } else {
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("mensaje",
                     new FacesMessage(FacesMessage.SEVERITY_ERROR,
@@ -101,7 +101,7 @@ public class admCPSController implements Serializable {
     
     public void onDetalleRowSelect(SelectEvent event) {
         selected = (CitaPsicologia) event.getObject();
-        textoReserva = Auxiliar.getEstadoCita1(selected.getEstado());
+        textoReserva = getEstadoCita1(selected.getEstado());
     }
     
     public String getFechaHoraToString(Date d) {
@@ -117,7 +117,7 @@ public class admCPSController implements Serializable {
     }
     
     public String getEstado(String e) {
-        return Auxiliar.getEstadoCita2(e);
+        return getEstadoCita2(e);
     }
     
     public boolean isEstado(String e) {
@@ -206,7 +206,7 @@ public class admCPSController implements Serializable {
         selected.setEstado("A");
         selected.setComentarios("");
         cpsFL.edit(selected);
-        Auxiliar.persistirNotificación(
+        persistirNotificación(
                 new mensaje(0, usuario.getIdpersona(), "citasPSH<form",
                         new FacesMessage(FacesMessage.SEVERITY_INFO, "Solicitud de cita aceptada",
                                 "Su solicitud para una cita con el psicólogo institucional fue aprobada por "
@@ -237,7 +237,7 @@ public class admCPSController implements Serializable {
         selected.getCitaPsicologiaPK().setFechaSolicitada(fechaPosponer);
         cpsFL.remove(ctr);
         cpsFL.create(selected);
-        Auxiliar.persistirNotificación(
+        persistirNotificación(
                 new mensaje(0, usuario.getIdpersona(), "citasPSH<form",
                         new FacesMessage(FacesMessage.SEVERITY_WARN, "Solicitud de cita pospuesta",
                                 "Su solicitud para una cita con el psicólogo institucional fue aplazada por "
@@ -288,7 +288,7 @@ public class admCPSController implements Serializable {
     }
     
     public List<Integer> getInvalidDays() {
-        return Auxiliar.getDisabledDays();
+        return getDisabledDays();
     }
     
     public boolean isTerminada() {

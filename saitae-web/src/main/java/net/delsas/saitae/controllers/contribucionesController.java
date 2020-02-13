@@ -54,7 +54,7 @@ import org.primefaces.event.SelectEvent;
  */
 @Named
 @ViewScoped
-public class contribucionesController implements Serializable {
+public class contribucionesController extends Auxiliar implements Serializable {
 
     private static final long serialVersionUID = 1L;
     boolean boton;
@@ -86,7 +86,7 @@ public class contribucionesController implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
         String pagina = context.getExternalContext().getRequestServletPath().split("/")[2];
-        if (!(Auxiliar.permitirAcceso(usuario, accesoTPFL.findTipoPersonaPermitidos(accesoFL.getAccesoByUrl(pagina))))) {
+        if (!(permitirAcceso(usuario, accesoTPFL.findTipoPersonaPermitidos(accesoFL.getAccesoByUrl(pagina))))) {
             context.getExternalContext().getSessionMap().put("mensaje", new FacesMessage(FacesMessage.SEVERITY_FATAL,
                     "Falla!", "Esa vista no le está permitida."));
             try {
@@ -123,14 +123,14 @@ public class contribucionesController implements Serializable {
     }
 
     public Integer getAño() {
-        return Auxiliar.getAñoActual();
+        return getAñoActual();
     }
 
     public String getGradoAlumno() {
         String grado = "";
         Matricula mati = matriculaFL.find(new MatriculaPK(p.getIdpersona(), getAño()));
         if (mati != null) {
-            grado = Auxiliar.getGradoNombre(mati.getGrado().getGradoPK());
+            grado = getGradoNombre(mati.getGrado().getGradoPK());
         }
         return grado;
     }
@@ -143,7 +143,7 @@ public class contribucionesController implements Serializable {
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Guardado con éxito",
                             "Se guardaron los datos de la contribución"));
             String g = mesesPagados(contr);
-            Auxiliar.persistirNotificación(
+            persistirNotificación(
                     new mensaje(contr.getContribucionesPK().getIdEstudiante(), usuario.getIdpersona(), " ",
                             new FacesMessage(FacesMessage.SEVERITY_INFO, "Actividad en las contribuciones registrado.",
                                     (g.split("").length > 8 ? "Los meses que ya ha pagado son : " + g

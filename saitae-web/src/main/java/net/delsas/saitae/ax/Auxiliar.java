@@ -29,7 +29,6 @@ import javax.faces.model.SelectItem;
 import net.delsas.saitae.beans.GradoFacadeLocal;
 import net.delsas.saitae.beans.MestroHorarioMateriasFacadeLocal;
 import net.delsas.saitae.beans.NotificacionesFacadeLocal;
-import net.delsas.saitae.entities.DelagacionCargo;
 import net.delsas.saitae.entities.DiasEstudio;
 import net.delsas.saitae.entities.Estudiante;
 import net.delsas.saitae.entities.GradoPK;
@@ -50,7 +49,7 @@ import org.omnifaces.cdi.PushContext;
  */
 public class Auxiliar implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private final long serialVersionUID = 1L;
 
     private Persona user;
 
@@ -391,15 +390,15 @@ public class Auxiliar implements Serializable {
     }
 
     public String getDepartamento(Persona p) {
-        return p != null ? p.getPersonaLugarNac().split("#")[0] : " ";
+        return p != null ? p.getPersonaLugarNac().split("#").length > 1 ? p.getPersonaLugarNac().split("#")[0] : " " : " ";
+    }
+
+    public String getMunicipio(Persona p) {
+        return p != null ? p.getPersonaLugarNac().split("#").length > 1 ? p.getPersonaLugarNac().split("#")[1] : " " : " ";
     }
 
     public void setMunicipio(String mun, Persona p) {
         p.setPersonaLugarNac(p.getPersonaLugarNac().split("#")[0] + "#" + mun);
-    }
-
-    public String getMunicipio(Persona p) {
-        return p != null ? p.getPersonaLugarNac().split("#")[1] : " ";
     }
 
     public void setDui(String dui, Persona p) {
@@ -413,7 +412,7 @@ public class Auxiliar implements Serializable {
         p.setIdpersona(Integer.valueOf(i));
     }
 
-    private static boolean isNumber(String a) {
+    private boolean isNumber(String a) {
         String[] aa = a.split("");
         for (String aaa : aa) {
             switch (aaa) {
@@ -455,7 +454,7 @@ public class Auxiliar implements Serializable {
         this.user = user;
     }
 
-    private static Date getEdad(Integer menos) {
+    private Date getEdad(Integer menos) {
         String g = new SimpleDateFormat("dd-mm").format(new Date())
                 + (Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date())) - menos);
         Date d;
@@ -467,7 +466,7 @@ public class Auxiliar implements Serializable {
         return d;
     }
 
-    public static List<Integer> getTiposPersonas(Persona p) {
+    public List<Integer> getTiposPersonas(Persona p) {
         List<Integer> items = new ArrayList<>();
         if (p != null && p.getTipoPersona() != null) {
             items.add(p.getTipoPersona().getIdtipoPersona());
@@ -485,9 +484,9 @@ public class Auxiliar implements Serializable {
         return items;
     }
 
-    public static boolean permitirAcceso(Persona p, List<TipoPersona> lista) {
+    public boolean permitirAcceso(Persona p, List<TipoPersona> lista) {
         List<Integer> permitidos = new ArrayList<>();
-        List<Integer> tps = Auxiliar.getTiposPersonas(p);
+        List<Integer> tps = getTiposPersonas(p);
         lista.forEach((tp) -> {
             permitidos.add(tp.getIdtipoPersona());
         });
@@ -500,7 +499,7 @@ public class Auxiliar implements Serializable {
         return r;
     }
 
-    public static List<Persona> getPersonasParaNotificar(TipoPersona tp) {
+    public List<Persona> getPersonasParaNotificar(TipoPersona tp) {
         List<Persona> ps = new ArrayList<>();
         if (tp != null) {
             ps.addAll(tp.getPersonaList());
@@ -516,17 +515,17 @@ public class Auxiliar implements Serializable {
         return ps;
     }
 
-    public static void sendMessage(String message, PushContext notificacion) {
+    public void sendMessage(String message, PushContext notificacion) {
         notificacion.send(message);
     }
 
-    public static void persistirNotificación(mensaje x, List<Persona> ps, NotificacionesFacadeLocal notiFL, PushContext notificacion) {
+    public void persistirNotificación(mensaje x, List<Persona> ps, NotificacionesFacadeLocal notiFL, PushContext notificacion) {
         ps.forEach((p) -> {
             persistirNotificación(x, p, notiFL, notificacion);
         });
     }
 
-    public static void persistirNotificación(mensaje x, Persona ps, NotificacionesFacadeLocal notiFL, PushContext notificacion) {
+    public void persistirNotificación(mensaje x, Persona ps, NotificacionesFacadeLocal notiFL, PushContext notificacion) {
         notificar(x, ps, notificacion);
         try {
             notiFL.create(x.getNotificacion());
@@ -539,20 +538,20 @@ public class Auxiliar implements Serializable {
         }
     }
 
-    public static void notificar(mensaje x, Persona ps, PushContext notificacion) {
+    public void notificar(mensaje x, Persona ps, PushContext notificacion) {
         x.setDestinatario(ps.getIdpersona());
         x.getNotificacion().setFechaHora(new Date());
         sendMessage(x.toString(), notificacion);
     }
 
-    public static List<Integer> getDisabledDays() {
+    public List<Integer> getDisabledDays() {
         List<Integer> i = new ArrayList<>();
         i.add(0);
         i.add(6);
         return i;
     }
 
-    public static Date getMinTimeCPs() {
+    public Date getMinTimeCPs() {
         Calendar tmp = Calendar.getInstance();
         tmp.set(Calendar.HOUR_OF_DAY, 8);
         tmp.set(Calendar.MINUTE, 0);
@@ -561,7 +560,7 @@ public class Auxiliar implements Serializable {
         return tmp.getTime();
     }
 
-    public static Date getMaxTimeCPs() {
+    public Date getMaxTimeCPs() {
         Calendar tmp = Calendar.getInstance();
         tmp.set(Calendar.HOUR_OF_DAY, 12);
         tmp.set(Calendar.MINUTE, 0);
@@ -570,7 +569,7 @@ public class Auxiliar implements Serializable {
         return tmp.getTime();
     }
 
-    public static Date getMinTimeReservas() {
+    public Date getMinTimeReservas() {
         Calendar tmp = Calendar.getInstance();
         tmp.set(Calendar.HOUR_OF_DAY, 7);
         tmp.set(Calendar.MINUTE, 15);
@@ -588,7 +587,7 @@ public class Auxiliar implements Serializable {
         return tmp.getTime();
     }
 
-    public static String getEstadoCita1(String estado) {
+    public String getEstadoCita1(String estado) {
         String textoReserva;
         switch (estado) {
             case "S":
@@ -612,7 +611,7 @@ public class Auxiliar implements Serializable {
         return textoReserva;
     }
 
-    public static String getEstadoCita2(String e) {
+    public String getEstadoCita2(String e) {
         return e.equals("S") ? "Solicitada"
                 : (e.equals("A") ? "Aceptada"
                 : (e.equals("P") ? "Pospuesta"
@@ -620,14 +619,14 @@ public class Auxiliar implements Serializable {
                 : (e.equals("T") ? "Atendida" : ""))));
     }
 
-    public static String getEstadoPermisos2(String e) {
+    public String getEstadoPermisos2(String e) {
         return e.equals("0") ? "Solicitado"
                 : (e.equals("1") ? "Aceptado"
                 : (e.equals("2") ? "Rechazado"
                 : (e.equals("3") ? "Cancelado" : "")));
     }
 
-    public static String getEstadoPermisos1(String estado) {
+    public String getEstadoPermisos1(String estado) {
         String textoReserva;
         switch (estado) {
             case "0":
@@ -648,7 +647,7 @@ public class Auxiliar implements Serializable {
         return textoReserva;
     }
 
-    public static String getEstadoReservas2(String e) {
+    public String getEstadoReservas2(String e) {
         return e.equals("S") ? "Solicitada"
                 : (e.equals("A") ? "Aceptada"
                 : (e.equals("R") ? "Rechazada"
@@ -657,7 +656,7 @@ public class Auxiliar implements Serializable {
                 : (e.equals("D") ? "Devuelta" : "")))));
     }
 
-    public static String getEstadoReservas1(String estado) {
+    public String getEstadoReservas1(String estado) {
         String textoReserva;
         switch (estado) {
             case "S":
@@ -684,7 +683,7 @@ public class Auxiliar implements Serializable {
         return textoReserva;
     }
 
-    public static List<Persona> getPersonasEnReserva(Reserva r) {
+    public List<Persona> getPersonasEnReserva(Reserva r) {
         List<Persona> i = new ArrayList<>();
         r.getPersonasReservaList().forEach((ps) -> {
             i.add(ps.getPersona());
@@ -692,11 +691,11 @@ public class Auxiliar implements Serializable {
         return i;
     }
 
-    public static Integer getAñoActual() {
+    public Integer getAñoActual() {
         return Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date()));
     }
 
-    public static axHorario llenar(Horario h, GradoPK pk, MestroHorarioMateriasFacadeLocal mhmFL) {
+    public axHorario llenar(Horario h, GradoPK pk, MestroHorarioMateriasFacadeLocal mhmFL) {
         axHorario x = new axHorario();
         x.setHoras(h);
         List<MestroHorarioMaterias> mhmList = mhmFL.findByIdHoraAndGradopk(h.getIdhorario(), pk);
@@ -735,7 +734,7 @@ public class Auxiliar implements Serializable {
         return x;
     }
 
-    public static axHorario llenar(Integer año, Horario h, Integer idMaestro, MestroHorarioMateriasFacadeLocal mhmFL) {
+    public axHorario llenar(Integer año, Horario h, Integer idMaestro, MestroHorarioMateriasFacadeLocal mhmFL) {
         axHorario x = new axHorario();
         x.setHoras(h);
         for (MestroHorarioMaterias mhm : mhmFL.findByIdHoraAndMaestro(año, h.getIdhorario(), idMaestro)) {
@@ -773,28 +772,28 @@ public class Auxiliar implements Serializable {
         return x;
     }
 
-    public static String getGradoNombre(GradoPK gr) {
+    public String getGradoNombre(GradoPK gr) {
         return gr == null ? ""
                 : (gr.getIdgrado() + "° "
                 + getModalidadNombre(gr.getGradoModalidad())
                 + " Sección " + gr.getGradoSeccion());
     }
 
-    public static String getModalidadNombre(String gr) {
+    public String getModalidadNombre(String gr) {
         return (gr.equals("C") ? "TVC Contador"
                 : (gr.equals("S") ? "TVC Secretariado"
                 : (gr.equals("G") ? "General" : "??")));
     }
 
-    public static String getNombreCortoPersona(Persona p) {
+    public String getNombreCortoPersona(Persona p) {
         return p == null ? "" : p.getPersonaNombre().split(" ")[0] + " " + p.getPersonaApellido().split(" ")[0];
     }
 
-    public static String getNombreCompletoPersona(Persona p) {
+    public String getNombreCompletoPersona(Persona p) {
         return p == null ? "" : p.getPersonaNombre() + " " + p.getPersonaApellido();
     }
 
-    public static String setComentario(Integer ind, String v, String com) {
+    public String setComentario(Integer ind, String v, String com) {
         String c[] = com.split("¿¿");
         String rr = "";
         for (Integer y = 0; y < c.length; y++) {
@@ -803,13 +802,13 @@ public class Auxiliar implements Serializable {
         return rr;
     }
 
-    public static String getDoc(byte[] doc, String ex) {
+    public String getDoc(byte[] doc, String ex) {
         String a = doc == null ? ""
                 : "data:" + ex + ";base64, " + new String(Base64.encodeBase64(doc));
         return a;
     }
 
-    public static List<Integer> getAñosParaMostrar(int numeroAños) {
+    public List<Integer> getAñosParaMostrar(int numeroAños) {
         List<Integer> i = new ArrayList<>();
         for (int t = 0; t < numeroAños; t++) {
             i.add(getAñoActual() - t);
@@ -817,7 +816,7 @@ public class Auxiliar implements Serializable {
         return i;
     }
 
-    public static List<horarioGlobal> llenar(Integer año, List<Horario> hs, DiasEstudio dh, MestroHorarioMateriasFacadeLocal mhmFL, GradoFacadeLocal gFL) {
+    public List<horarioGlobal> llenar(Integer año, List<Horario> hs, DiasEstudio dh, MestroHorarioMateriasFacadeLocal mhmFL, GradoFacadeLocal gFL) {
         List<horarioGlobal> i = new ArrayList<>();
         hs.stream().map((h) -> {
             horarioGlobal gl = new horarioGlobal(h.getIdhorario() + "-" + dh.getIdDias(), h, dh);
@@ -882,7 +881,7 @@ public class Auxiliar implements Serializable {
         return i;
     }
 
-    public static Integer getAñoInscripcion() {
+    public Integer getAñoInscripcion() {
         Date r = new Date();
         Integer y;
         try {
@@ -895,7 +894,7 @@ public class Auxiliar implements Serializable {
         return y;
     }
 
-    public static boolean isTimeToInsciption() {
+    public boolean isTimeToInsciption() {
         try {
             Date d = new Date();
             Date d1 = new SimpleDateFormat("dd-MM-yyyy").parse("22-11-" + getAñoActual());
@@ -905,5 +904,17 @@ public class Auxiliar implements Serializable {
             System.out.println(ex);
             return false;
         }
+    }
+
+    public String getDateTimeToString(Date s) {
+        return new SimpleDateFormat("dd/MM/yyyy hh:mm a").format(s);
+    }
+    
+    public String getDateToString(Date s) {
+        return new SimpleDateFormat("dd/MM/yyyy").format(s);
+    }
+    
+    public String getTimeToString(Date s) {
+        return new SimpleDateFormat("hh:mm a").format(s);
     }
 }

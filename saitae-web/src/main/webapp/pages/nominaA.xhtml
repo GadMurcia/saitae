@@ -24,16 +24,11 @@
                              widgetVar="nom1" emptyMessage="Sin registros aún.">
                     <f:facet name="header">
                             <p:outputLabel value="#{nominaAController.PK.idgrado == 0? '' : 'Nómina de Alumnos para el grado: '}"/>
-                            <p:outputLabel value="#{nominaAController.PK.idgrado == 0? '' : nominaAController.PK.idgrado} "/>
-                            <p:outputLabel value="#{nominaAController.PK.gradoModalidad.equals('C')? 'TVC Contador' 
-                                                    : nominaAController.PK.gradoModalidad.equals('S') ? 'TVC Secretariado'
-                                                    : nominaAController.PK.gradoModalidad.equals('G') ? 'General': ''}"/>
-                            <p:outputLabel value="#{nominaAController.PK.idgrado == 0? '' : ' Sección '}"/>
-                            <p:outputLabel value="#{nominaAController.PK.gradoSeccion}"/>
+                            <p:outputLabel value="#{nominaAController.getModalidadNombre(nominaAController.PK)}"/>
                     </f:facet>
 
-                  <!--  <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" update=":form:msgs form:tw:zona" />
-                    <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" update=":form:msgs" />
+                  <!--  <p:ajax event="rowEdit" listener="# {tipoController.onRowEdit}" update=":form:msgs form:tw:zona" />
+                    <p:ajax event="rowEditCancel" listener="# {tipoController.onRowCancel}" update=":form:msgs" />
                     -->
 
                     <p:column headerText="NIE" style="width: 100px">

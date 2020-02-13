@@ -55,7 +55,7 @@ import org.primefaces.model.UploadedFile;
  */
 @Named
 @ViewScoped
-public class inscripcionController implements Serializable {
+public class inscripcionController extends Auxiliar implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -213,11 +213,11 @@ public class inscripcionController implements Serializable {
     }
 
     public Integer getAño() {
-        return Auxiliar.getAñoInscripcion();
+        return getAñoInscripcion();
     }
 
     public boolean isTime() {
-        return Auxiliar.isTimeToInsciption();
+        return isTimeToInsciption();
     }
 
     public Persona getEst() {
@@ -228,27 +228,27 @@ public class inscripcionController implements Serializable {
         this.estP = estP;
     }
 
-    public Persona getRepresentante() {
+    public Persona getRepPresentanteI() {
         return repP;
     }
 
-    public void setRepresentante(Persona repP) {
+    public void setRepresentanteI(Persona repP) {
         this.repP = repP;
     }
 
-    public Persona getMadre() {
+    public Persona getMadreI() {
         return madre;
     }
 
-    public void setMadre(Persona madre) {
+    public void setMadreI(Persona madre) {
         this.madre = madre;
     }
 
-    public Persona getPadre() {
+    public Persona getPadreI() {
         return padre;
     }
 
-    public void setPadre(Persona padre) {
+    public void setPadreI(Persona padre) {
         this.padre = padre;
     }
 

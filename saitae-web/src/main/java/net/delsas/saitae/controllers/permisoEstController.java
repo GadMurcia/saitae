@@ -60,7 +60,7 @@ import org.primefaces.event.SelectEvent;
  */
 @Named
 @ViewScoped
-public class permisoEstController implements Serializable {
+public class permisoEstController extends Auxiliar implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -200,20 +200,20 @@ public class permisoEstController implements Serializable {
                     if (usuario.getTipoPersona().getIdtipoPersona() != 8 && !solicitantes.contains(p.getPersona())) {
                         solicitantes.add(p.getPersona());
                     }
-                    Auxiliar.persistirNotificación(
+                    persistirNotificación(
                             new mensaje(usuario.getIdpersona(), usuario.getIdpersona(), "permisoH<form",
                                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Modificación de solicitud de permiso",
                                             "Su permiso se ha solicitado para entre las fechas: "
                                             + (new SimpleDateFormat("dd/MM/yyyy").format(p.getPermisosPK().getPermisoFechaInicio())) + " y "
                                             + (new SimpleDateFormat("dd/MM/yyyy").format(p.getPermisoFechafin())))),
                             solicitantes, notFL, notificacion);
-                    Auxiliar.persistirNotificación(
+                    persistirNotificación(
                             new mensaje(0, usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
                                     + " ha cambiado su solicitud de permiso.",
                                     "Modificaciones en una solicitud de permiso",
                                     FacesMessage.SEVERITY_INFO, usuario.getIdpersona(),
                                     "permiso<form"),
-                            Auxiliar.getPersonasParaNotificar(
+                            getPersonasParaNotificar(
                                     tipoPersonaFL.find(3)),
                             notFL, notificacion);
                     initVariables();
@@ -240,11 +240,11 @@ public class permisoEstController implements Serializable {
                                         p.getPermisosPK().getPermisoFechaInicio()));
                     }
                     pfl.create(p);
-                    Auxiliar.persistirNotificación(
+                    persistirNotificación(
                             new mensaje(0, usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
                                     + " ha solicitado un nuevo permiso.",
                                     "Solicitud de permiso nueva", FacesMessage.SEVERITY_INFO, id, "permiso<form"),
-                            Auxiliar.getPersonasParaNotificar(tipoPersonaFL.find(3)),
+                            getPersonasParaNotificar(tipoPersonaFL.find(3)),
                             notFL, notificacion);
                     FacesContext.getCurrentInstance().addMessage("frm:msgs",
                             new FacesMessage(FacesMessage.SEVERITY_INFO, "Solicitud exitosa",
@@ -328,7 +328,7 @@ public class permisoEstController implements Serializable {
     }
 
     private int getAño() {
-        return Auxiliar.getAñoActual();
+        return getAñoActual();
     }
 
     public boolean isEditar() {
@@ -351,7 +351,7 @@ public class permisoEstController implements Serializable {
     }
 
     public List<Integer> getInvalidDays() {
-        return Auxiliar.getDisabledDays();
+        return getDisabledDays();
     }
 
     public Constancias getConstancia() {
@@ -372,7 +372,7 @@ public class permisoEstController implements Serializable {
     }
 
     public String getDoc() {
-        return Auxiliar.getDoc(
+        return getDoc(
                 constancia.getDocumento(),
                 (constancia.getExtención() == null || constancia.getExtención().isEmpty())
                 ? "" : constancia.getExtención().split("¿¿")[1]);
@@ -384,6 +384,6 @@ public class permisoEstController implements Serializable {
     }
 
     public String getNombreGrado(Grado g) {
-        return g == null ? "" : Auxiliar.getGradoNombre(g.getGradoPK());
+        return g == null ? "" : getGradoNombre(g.getGradoPK());
     }
 }

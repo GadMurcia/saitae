@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../WEB-INF/template/plantilla1.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:t="http://xmlns.jcp.org/jsf/composite/components/autentia"
+                xmlns="http://www.w3.org/1999/xhtml">
+
+    <ui:define name="content">
+        <h:form id="form">
+            <h:panelGrid columns="1">
+                <h:panelGrid columns="2">
+                    <p:outputLabel for="gr" value="Grado: "/>
+                    <p:selectOneMenu id="gr" value="#{gradoEvalController.gradoSelected}" 
+                                     requiredMessage="Es necesario que seleccione una opción válida."
+                                     converter="omnifaces.SelectItemsConverter" required="true">
+                        <f:selectItem itemValue="#{null}" itemLabel="Seleccione" noSelectionOption="true"/>
+                        <f:selectItems value="#{gradoEvalController.grados}" var="gs" 
+                                       itemLabel="#{axiliarController.getGradoNombre(gs.gradoPK)}" 
+                                       itemValue="#{gs}"/>
+                        <p:ajax event="itemSelect" listener="#{gradoEvalController.onSelect}" 
+                                update="form"/>
+                    </p:selectOneMenu>
+                </h:panelGrid>
+
+                <p:panel header="Eveluación del maestro #{axiliarController.getGradoNombre(gradoEvalController.gradoSelected.gradoPK)}"
+                         rendered="#{gradoEvalController.gradoSelected != null}" 
+                         collapsed="true" toggleable="true">
+                    <t:evGrado evGrado="#{gradoEvalController.eval}" editar="true"/>
+
+                    <p:commandButton value="Guardar evaluación" update=":form" 
+                                     actionListener="#{gradoEvalController.guardarEvaluación()}"/>
+                </p:panel>
+
+                <p:panel header="Historial"
+                         rendered="#{gradoEvalController.gradoSelected != null}" toggleable="true">
+
+                    <p:dataTable value="#{gradoEvalController.gradoSelected.gradoEvaluacionList}"
+                                 var="ev" emptyMessage="Sin evaluaciones" selectionMode="single" 
+                                 selection="#{gradoEvalController.evalSelected}"
+                                 rowKey="#{ev.gradoEvaluacionPK}" id="evalg">
+                        <p:ajax event="rowSelect"/>
+                        <f:facet name="header">
+                            Historial de evaluaciones del grado 
+                            #{axiliarController.getGradoNombre(gradoEvalController.gradoSelected.gradoPK)}
+                        </f:facet>
+                        <p:column headerText="Fecha y hora">
+                            #{gradoEvalController.getDateTimeToString(ev.gradoEvaluacionPK.fechaEvaluacion)}
+                        </p:column>
+                        <p:column headerText="Evaluador">
+                            #{gradoEvalController.getNombreCortoPersona(ev.evaluador)}
+                        </p:column>
+                    </p:dataTable>
+                    <p:contextMenu for="evalg">
+                        <p:menuitem value="Mostrat" icon="fa fa-edit"                                    
+                                    update="h0" oncomplete="PF('Deval').show();"
+                                    resetValues="true"/>
+                        <p:menuitem value="eliminar" icon="fa fa-delete"                                    
+                                    update="h0 form" actionListener="#{gradoEvalController.eliminarEva()}"
+                                    resetValues="true"/>
+                    </p:contextMenu>
+                </p:panel>
+            </h:panelGrid>
+        </h:form>
+
+        <p:dialog modal="true" widgetVar="Deval" closeOnEscape="true">
+            <h:form id="h0">
+                <t:evGrado evGrado="#{gradoEvalController.evalSelected}" editar="false"/>
+            </h:form>
+        </p:dialog>
+    </ui:define>
+
+</ui:composition>

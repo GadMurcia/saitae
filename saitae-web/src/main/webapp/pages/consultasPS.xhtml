@@ -130,9 +130,9 @@
                             </f:facet> 
                             <p:column headerText="Fecha de consulta" 
                                       rendered="#{admRecursoC.verTipos}"
-                                      filterBy="#{consultasPSController.getDateToString(c.consultaPK.fechaHoraConsulta)}"
+                                      filterBy="#{consultasPSController.getDateTimeToString(c.consultaPK.fechaHoraConsulta)}"
                                       filterMatchMode="contains">
-                                #{consultasPSController.getDateToString(c.consultaPK.fechaHoraConsulta)}
+                                #{consultasPSController.getDateTimeToString(c.consultaPK.fechaHoraConsulta)}
                             </p:column>
 
                             <p:column headerText="Motivo" filterBy="#{c.consultaMotivo}"

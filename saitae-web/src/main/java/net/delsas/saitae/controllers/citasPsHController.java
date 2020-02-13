@@ -48,7 +48,7 @@ import org.primefaces.event.SelectEvent;
  */
 @Named
 @ViewScoped
-public class citasPsHController implements Serializable {
+public class citasPsHController extends Auxiliar implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @EJB
@@ -74,13 +74,13 @@ public class citasPsHController implements Serializable {
     public void init() {
         context = FacesContext.getCurrentInstance();
         usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
-        añoSelected = Auxiliar.getAñoActual();
-        añosDisponibles = Auxiliar.getAñosParaMostrar(3);
+        añoSelected = getAñoActual();
+        añosDisponibles = getAñosParaMostrar(3);
     }
 
     public void onDetalleRowSelect(SelectEvent event) {
         selected = (CitaPsicologia) event.getObject();
-        textoReserva = Auxiliar.getEstadoCita1(selected.getEstado());
+        textoReserva = getEstadoCita1(selected.getEstado());
     }
 
     public String getFechaHoraToString(Date d) {
@@ -96,7 +96,7 @@ public class citasPsHController implements Serializable {
     }
 
     public String getEstado(String e) {
-        return Auxiliar.getEstadoCita2(e);
+        return getEstadoCita2(e);
     }
 
     public boolean isEstado(String e) {
@@ -137,7 +137,7 @@ public class citasPsHController implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_INFO, est[0] + " exitosa",
                             "La  " + est[0] + " se registró con éxito."));
-            Auxiliar.persistirNotificación(
+            persistirNotificación(
                     new mensaje(0, usuario.getIdpersona(), "citasPSH<form",
                             new FacesMessage(FacesMessage.SEVERITY_INFO, est[0] + " de cita",
                                     "Usted ha " + est[1] + "o "
@@ -149,7 +149,7 @@ public class citasPsHController implements Serializable {
                                     + (E.equals("C") ? (". La razón de la " + est[0] + " es: " + selected.getComentarios()) : "")
                                     + ".")),
                     usuario, notiFL, notificacion);
-            Auxiliar.persistirNotificación(
+            persistirNotificación(
                     new mensaje(0, usuario.getIdpersona(), "admCitasPs<form",
                             new FacesMessage(FacesMessage.SEVERITY_INFO, est[0] + " de cita",
                                     "La solicitud de cita con fecha "
@@ -160,7 +160,7 @@ public class citasPsHController implements Serializable {
                                     + usuario.getPersonaApellido().split(" ")[0]
                                     + (E.equals("C") ? (". La razón de la " + est[0] + " es: " + selected.getComentarios())
                                     : "") + ".")),
-                    Auxiliar.getPersonasParaNotificar(tpFL.find(14)),
+                    getPersonasParaNotificar(tpFL.find(14)),
                     notiFL, notificacion);
             selected = null;
             PrimeFaces.current().executeScript("PF('Dcita1').hide();"
@@ -171,10 +171,6 @@ public class citasPsHController implements Serializable {
 
     public String getTextoReserva() {
         return textoReserva;
-    }
-
-    public int getAñoActual() {
-        return Auxiliar.getAñoActual();
     }
 
     public boolean getCancelado() {

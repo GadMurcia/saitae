@@ -28,8 +28,13 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.view.ViewScoped;
 import net.delsas.saitae.ax.Auxiliar;
+import net.delsas.saitae.beans.GradoFacadeLocal;
+import net.delsas.saitae.beans.HorarioFacadeLocal;
+import net.delsas.saitae.beans.MateriaFacadeLocal;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.entities.Grado;
+import net.delsas.saitae.entities.Horario;
+import net.delsas.saitae.entities.Materia;
 import net.delsas.saitae.entities.Persona;
 import org.primefaces.event.SelectEvent;
 
@@ -39,13 +44,22 @@ import org.primefaces.event.SelectEvent;
  */
 @Named
 @ViewScoped
-public class axiliarController implements Serializable {
+public class axiliarController extends Auxiliar implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private static Persona p = new Persona(0);
     private Integer tipo;
+    private List<Grado> grados;
+    private List<Materia> materias;
+    private List<Horario> horarios;
     @EJB
     private PersonaFacadeLocal pfl;
+    @EJB
+    private GradoFacadeLocal gFL;
+    @EJB
+    private MateriaFacadeLocal mFL;
+    @EJB
+    private HorarioFacadeLocal hFL;
 
     public List<String> completeText(String query) {
         List<String> results = new ArrayList<>();
@@ -128,31 +142,38 @@ public class axiliarController implements Serializable {
     }
 
     public String getGradoNombre(Grado g) {
-        return Auxiliar.getGradoNombre(g.getGradoPK());
-    }
-
-    public String getTimeToString(Date d) {
-        return new SimpleDateFormat("hh:mm a").format(d);
+        return getGradoNombre(g.getGradoPK());
     }
 
     public String getDateString(Date d) {
         return new SimpleDateFormat("dd/MM/yyyy").format(d);
     }
 
-    public String getDateTimeToString(Date d) {
-        return getDateString(d) + " " + getTimeToString(d);
-    }
-
     public String getNombreCompleto(Persona p) {
-        return Auxiliar.getNombreCompletoPersona(p);
+        return getNombreCompletoPersona(p);
     }
 
     public String getNombreCorto(Persona p) {
-        return Auxiliar.getNombreCortoPersona(p);
+        return getNombreCortoPersona(p);
     }
 
     public void onBlour(AjaxBehaviorEvent e) {
 
+    }
+
+    public List<Grado> getGrados() {
+        grados = gFL.getPorAñoYActivo(getAñoActual());
+        return grados;
+    }
+
+    public List<Materia> getMaterias() {
+        materias = mFL.findAll();
+        return materias;
+    }
+
+    public List<Horario> getHorarios() {
+        horarios = hFL.findAll();
+        return horarios;
     }
 
 }

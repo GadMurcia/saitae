@@ -53,7 +53,7 @@ import org.primefaces.event.FileUploadEvent;
  */
 @Named
 @ViewScoped
-public class infoPerfilController implements Serializable {
+public class infoPerfilController extends Auxiliar implements Serializable {
 
     private Persona usuario;
     private Matricula m;
@@ -87,7 +87,7 @@ public class infoPerfilController implements Serializable {
         contra = "";
         contra1 = "";
         contra2 = "";
-        List<Integer> tps = Auxiliar.getTiposPersonas(usuario);
+        List<Integer> tps = getTiposPersonas(usuario);
         cargos = new ArrayList<>();
         if (tps.size() > 1) {
             tps.forEach((c) -> {
@@ -99,10 +99,10 @@ public class infoPerfilController implements Serializable {
             sueldos = tsFL.findAll();
         }
         if (estudiante) {
-            matriculado = mFL.find(new MatriculaPK(usuario.getIdpersona(), Auxiliar.getAñoActual())) != null;
-            m = new Matricula(new MatriculaPK(usuario.getIdpersona(), Auxiliar.getAñoActual()));
+            matriculado = mFL.find(new MatriculaPK(usuario.getIdpersona(), getAñoActual())) != null;
+            m = new Matricula(new MatriculaPK(usuario.getIdpersona(), getAñoActual()));
             m.setEstudiante(usuario.getEstudiante());
-            m.setGrado(new Grado(new GradoPK(0, "", "", Auxiliar.getAñoActual())));
+            m.setGrado(new Grado(new GradoPK(0, "", "", getAñoActual())));
             List<Matricula> mctr = mFL.findByIdmatricula(usuario.getIdpersona());
             if (usuario.getEstudiante().getDocumentos() == null) {
                 usuario.getEstudiante().setDocumentos(new Documentos(usuario.getIdpersona()));
@@ -115,7 +115,7 @@ public class infoPerfilController implements Serializable {
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuario", usuario);
             }
             if (!matriculado) {
-                modalidades = gFL.getModalidadPorAño(Auxiliar.getAñoActual());
+                modalidades = gFL.getModalidadPorAño(getAñoActual());
                 niveles = new ArrayList<>();
             }
         }
@@ -190,10 +190,10 @@ public class infoPerfilController implements Serializable {
         switch (e.getComponent().getId()) {
             case "modal":
                 m.getGrado().getGradoPK().setIdgrado(0);
-                niveles = gFL.getIdPorAñoyModalidad(Auxiliar.getAñoActual(), m.getGrado().getGradoPK().getGradoModalidad());
+                niveles = gFL.getIdPorAñoyModalidad(getAñoActual(), m.getGrado().getGradoPK().getGradoModalidad());
                 break;
             case "niv":
-                Matricula mc = mFL.find(new MatriculaPK(usuario.getIdpersona(), Auxiliar.getAñoActual() - 1));
+                Matricula mc = mFL.find(new MatriculaPK(usuario.getIdpersona(), getAñoActual() - 1));
                 m.setMatriculaRepite(mc == null ? false
                         : (mc.getGrado().getGradoPK().getGradoModalidad().equals(m.getGrado().getGradoPK().getGradoModalidad())
                         && mc.getGrado().getGradoPK().getIdgrado() == m.getGrado().getGradoPK().getIdgrado()));
@@ -289,11 +289,11 @@ public class infoPerfilController implements Serializable {
     }
 
     public String getNombre(Persona p) {
-        return Auxiliar.getNombreCompletoPersona(p);
+        return getNombreCompletoPersona(p);
     }
 
     public String getNombreGrado(GradoPK pk) {
-        return Auxiliar.getGradoNombre(pk);
+        return getGradoNombre(pk);
     }
 
     public boolean isMatriculado() {
@@ -320,19 +320,15 @@ public class infoPerfilController implements Serializable {
         this.niveles = niveles;
     }
 
-    public String getModalidadNombre(String md) {
-        return Auxiliar.getModalidadNombre(md);
-    }
-
     public void matricular() {
-        Matricula mc = mFL.find(new MatriculaPK(usuario.getIdpersona(), Auxiliar.getAñoActual() - 1));
+        Matricula mc = mFL.find(new MatriculaPK(usuario.getIdpersona(), getAñoActual() - 1));
         boolean repite = m.getMatriculaRepite();
         m.getGrado().getGradoPK().setGradoSeccion(repite ? "A"
                 : (mc == null ? "A" : mc.getGrado().getGradoPK().getGradoSeccion()));
         m.setMatriculaComentario(repite ? "N" : (mc == null ? "N" : "R"));
         usuario.getEstudiante().getMatriculaList().add(m);
         guardarPersona();
-        if (mFL.find(new MatriculaPK(usuario.getIdpersona(), Auxiliar.getAñoActual())) == null) {
+        if (mFL.find(new MatriculaPK(usuario.getIdpersona(), getAñoActual())) == null) {
             mFL.create(mc);
             guardarPersona();
         }
@@ -379,7 +375,7 @@ public class infoPerfilController implements Serializable {
 
     public String getDocPartida() {
         return usuario.getEstudiante() == null ? ""
-                : (Auxiliar.getDoc(
+                : (getDoc(
                         usuario.getEstudiante().getDocumentos().getEstudianteDocPartida(),
                         (usuario.getEstudiante().getDocumentos().getEstudianteExtencionPartida() == null
                         || usuario.getEstudiante().getDocumentos().getEstudianteExtencionPartida().isEmpty())
@@ -398,7 +394,7 @@ public class infoPerfilController implements Serializable {
 
     public String getDocCertificado() {
         return usuario.getEstudiante() == null ? ""
-                : (Auxiliar.getDoc(
+                : (getDoc(
                         usuario.getEstudiante().getDocumentos().getEstudianteDocCertificado(),
                         (usuario.getEstudiante().getDocumentos().getEstudianteExtencionCertificado() == null
                         || usuario.getEstudiante().getDocumentos().getEstudianteExtencionCertificado().isEmpty())
@@ -417,7 +413,7 @@ public class infoPerfilController implements Serializable {
 
     public String getDocConducta() {
         return usuario.getEstudiante() == null ? ""
-                : (Auxiliar.getDoc(
+                : (getDoc(
                         usuario.getEstudiante().getDocumentos().getEstudianteDocConducta(),
                         (usuario.getEstudiante().getDocumentos().getEstudianteExtencionConducta() == null
                         || usuario.getEstudiante().getDocumentos().getEstudianteExtencionConducta().isEmpty())
@@ -436,7 +432,7 @@ public class infoPerfilController implements Serializable {
 
     public String getDocDui() {
         return usuario.getEstudiante() == null ? ""
-                : (Auxiliar.getDoc(
+                : (getDoc(
                         usuario.getEstudiante().getDocumentos().getEstudianteDocDui(),
                         (usuario.getEstudiante().getDocumentos().getEstudianteExtencionDui() == null
                         || usuario.getEstudiante().getDocumentos().getEstudianteExtencionDui().isEmpty())
@@ -455,7 +451,7 @@ public class infoPerfilController implements Serializable {
 
     public String getDocNotas() {
         return usuario.getEstudiante() == null ? ""
-                : (Auxiliar.getDoc(
+                : (getDoc(
                         usuario.getEstudiante().getDocumentos().getEstudianteDocNotas(),
                         (usuario.getEstudiante().getDocumentos().getEstudianteExtencionNotas() == null
                         || usuario.getEstudiante().getDocumentos().getEstudianteExtencionNotas().isEmpty())

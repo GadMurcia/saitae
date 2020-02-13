@@ -1,0 +1,134 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+        <cc:attribute name="evGrado" required="true" type="net.delsas.saitae.entities.GradoEvaluacion"/>
+        <cc:attribute name="editar" type="java.lang.Boolean" required="true"/>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        <h:panelGrid columns="2">
+            <p:outputLabel value="OrganizadorLimpieza:" for="organizadorLimpieza" />
+            <p:selectBooleanButton id="organizadorLimpieza" disabled="#{!cc.attrs.editar}"
+                                   value="#{cc.attrs.evGrado.organizadorLimpieza}" 
+                                   title="OrganizadorLimpieza" required="true" 
+                                   requiredMessage="The OrganizadorLimpieza field is required."
+                                   offLabel="No hay" onLabel="Sí hay">
+                <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+            </p:selectBooleanButton>
+
+            <p:outputLabel value="OrganizadorClase:" for="organizadorClase" />
+            <p:selectBooleanButton id="organizadorClase" disabled="#{!cc.attrs.editar}"
+                                   value="#{cc.attrs.evGrado.organizadorClase}" 
+                                   title="OrganizadorClase" required="true" 
+                                   requiredMessage="The OrganizadorClase field is required."
+                                   offLabel="No hay" onLabel="Sí hay">
+                <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+            </p:selectBooleanButton>
+
+            <p:outputLabel value="Normas:" for="normas" />
+            <p:selectBooleanButton id="normas" value="#{cc.attrs.evGrado.normas}" 
+                                   title="Normas" required="true" disabled="#{!cc.attrs.editar}"
+                                   requiredMessage="The Normas field is required."
+                                   offLabel="No hay" onLabel="Sí hay">
+                <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+            </p:selectBooleanButton>
+
+            <p:outputLabel value="Mision:" for="mision" />
+            <p:selectBooleanButton id="mision" value="#{cc.attrs.evGrado.mision}" 
+                                   title="Mision" required="true" disabled="#{!cc.attrs.editar}"
+                                   requiredMessage="The Mision field is required."
+                                   offLabel="No hay" onLabel="Sí hay">
+                <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+            </p:selectBooleanButton>
+
+            <p:outputLabel value="Vision:" for="vision" />
+            <p:selectBooleanButton id="vision" value="#{cc.attrs.evGrado.vision}" 
+                                   title="Vision" required="true" disabled="#{!cc.attrs.editar}"
+                                   requiredMessage="The Vision field is required."
+                                   offLabel="No hay" onLabel="Sí hay">
+                <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+            </p:selectBooleanButton>
+
+            <p:outputLabel value="MapasRiesgo:" for="mapasRiesgo" />
+            <p:selectBooleanButton id="mapasRiesgo" disabled="#{!cc.attrs.editar}"
+                                   value="#{cc.attrs.evGrado.mapasRiesgo}" 
+                                   title="MapasRiesgo" required="true" 
+                                   requiredMessage="The MapasRiesgo field is required."
+                                   offLabel="No hay" onLabel="Sí hay">
+                <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+            </p:selectBooleanButton>
+
+            <p:outputLabel value="Comites:" for="comites" />
+            <p:selectBooleanButton id="comites" disabled="#{!cc.attrs.editar}"
+                                   value="#{cc.attrs.evGrado.comites}" 
+                                   title="Comites" required="true" 
+                                   requiredMessage="The Comites field is required."
+                                   offLabel="No hay" onLabel="Sí hay">
+                <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+            </p:selectBooleanButton>
+
+            <p:outputLabel value="Bienvenidos:" for="bienvenidos" />
+            <p:selectBooleanButton id="bienvenidos" disabled="#{!cc.attrs.editar}"
+                                   value="#{cc.attrs.evGrado.bienvenidos}" 
+                                   title="Bienvenidos" required="true" 
+                                   requiredMessage="The Bienvenidos field is required."
+                                   offLabel="No hay" onLabel="Sí hay">
+                <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+            </p:selectBooleanButton>
+
+            <p:outputLabel value="Valores:" for="valores" />
+            <p:selectBooleanButton id="valores" disabled="#{!cc.attrs.editar}"
+                                   value="#{cc.attrs.evGrado.valores}" 
+                                   title="Valores" required="true" 
+                                   requiredMessage="The Valores field is required."
+                                   offLabel="No hay" onLabel="Sí hay">
+                <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+            </p:selectBooleanButton>
+
+            <p:outputLabel value="Directiva:" for="directiva" />
+            <p:selectBooleanButton id="directiva" disabled="#{!cc.attrs.editar}"
+                                   value="#{cc.attrs.evGrado.directiva}" 
+                                   title="Directiva" required="true" 
+                                   requiredMessage="The Directiva field is required."
+                                   offLabel="No hay" onLabel="Sí hay">
+                <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+            </p:selectBooleanButton>
+
+            <p:outputLabel value="Material:" for="material" />
+            <p:selectBooleanButton id="material" disabled="#{!cc.attrs.editar}"
+                                   value="#{cc.attrs.evGrado.material}" 
+                                   title="Material" required="true" 
+                                   requiredMessage="The Material field is required."
+                                   offLabel="No hay" onLabel="Sí hay">
+                <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+            </p:selectBooleanButton>
+
+            <p:outputLabel value="Observaciones Positivas:" for="observacionesPositivas" />
+            <p:inputText id="observacionesPositivas" disabled="#{!cc.attrs.editar}"
+                         value="#{cc.attrs.evGrado.observacionesPositivas}" 
+                         title="ObservacionesPositivas" />
+
+            <p:outputLabel value="Observaciones Negativas:" for="observacioneNegativas" />
+            <p:inputText id="observacioneNegativas" disabled="#{!cc.attrs.editar}"
+                         value="#{cc.attrs.evGrado.observacioneNegativas}" 
+                         title="ObservacioneNegativas" />
+
+            <p:outputLabel value="Recomendaciones:" for="recomendaciones" />
+            <p:inputText id="recomendaciones" disabled="#{!cc.attrs.editar}"
+                         value="#{cc.attrs.evGrado.recomendaciones}" 
+                         title="Recomendaciones" />
+
+            <p:outputLabel value="Comentario:" for="evaluacionGradoComentario" />
+            <p:inputText id="evaluacionGradoComentario" disabled="#{!cc.attrs.editar}"
+                         value="#{cc.attrs.evGrado.evaluacionGradoComentario}" 
+                         title="EvaluacionGradoComentario" />
+        </h:panelGrid>
+    </cc:implementation>
+</html>

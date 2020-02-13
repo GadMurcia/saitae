@@ -16,6 +16,7 @@
  */
 package net.delsas.saitae.controllers;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -37,7 +38,7 @@ import org.primefaces.event.SelectEvent;
  */
 @Named
 @RequestScoped
-public class representanteController {
+public class representanteController extends Auxiliar implements Serializable{
 
     @EJB
     private GradoFacadeLocal gFL;
@@ -50,10 +51,6 @@ public class representanteController {
         grados = gFL.getPorAñoYActivo(getAñoActual());
         representantes = new ArrayList<>();
         nombreGrado = "";
-    }
-
-    public Integer getAñoActual() {
-        return Auxiliar.getAñoActual();
     }
 
     public void selectAño(SelectEvent event) {
@@ -88,7 +85,7 @@ public class representanteController {
     }
 
     public String getLabel(GradoPK id) {
-        return Auxiliar.getGradoNombre(id);
+        return getGradoNombre(id);
     }
 
     public String getValue(GradoPK id) {

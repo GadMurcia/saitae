@@ -60,7 +60,7 @@ import org.primefaces.event.SelectEvent;
  */
 @Named
 @ViewScoped
-public class admPermisoController implements Serializable {
+public class admPermisoController extends Auxiliar implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private List<Permisos> solicitados;
@@ -105,12 +105,12 @@ public class admPermisoController implements Serializable {
             solicitados = rechazados = aceptados = new ArrayList<>();
             usuario = (Persona) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
             tps = new ArrayList<>();
-            añoSelected = Auxiliar.getAñoActual();
-            añosDisponnibles = Auxiliar.getAñosParaMostrar(5);
+            añoSelected = getAñoActual();
+            añosDisponnibles = getAñosParaMostrar(5);
             if (usuario == null) {
                 redirect();
             } else {
-                tps = Auxiliar.getTiposPersonas(usuario);
+                tps = getTiposPersonas(usuario);
                 boolean r = (tps.contains(3) || tps.contains(2) || tps.contains(1));
                 if (!r) {
                     redirect();
@@ -225,7 +225,7 @@ public class admPermisoController implements Serializable {
                         "Nueva concesión de permiso",
                         FacesMessage.SEVERITY_INFO,
                         permiso.getPermisosSolicitante().getIdpersona(), "permisoH<form");
-                Auxiliar.persistirNotificación(m, new Persona(m.getDestinatario()), notFL, notificacion);
+                persistirNotificación(m, new Persona(m.getDestinatario()), notFL, notificacion);
                 FacesContext.getCurrentInstance().addMessage(null, ms);
                 init();
                 ms = null;
@@ -259,7 +259,7 @@ public class admPermisoController implements Serializable {
                 + (w == 2 ? "Motivo del rechazo: " + getComentarioSolc() : ""),
                 (w == 1 ? "Aceptación" : "Rechado") + " de permiso",
                 FacesMessage.SEVERITY_INFO, usuario.getIdpersona(), "permiso<form<<permisoH<form");
-        Auxiliar.persistirNotificación(x, new Persona(x.getDestinatario()), notFL, notificacion);
+        persistirNotificación(x, new Persona(x.getDestinatario()), notFL, notificacion);
     }
 
     public String getGrado(Integer id) {
@@ -339,7 +339,7 @@ public class admPermisoController implements Serializable {
 
     private List<Permisos> depurar(List<Permisos> pps) {
         List<Permisos> psr = new ArrayList<>();
-        pps.stream().filter((p) -> (!Auxiliar.getTiposPersonas(p.getPersona()).contains(3))).forEachOrdered((p) -> {
+        pps.stream().filter((p) -> (!getTiposPersonas(p.getPersona()).contains(3))).forEachOrdered((p) -> {
             psr.add(p);
         });
         return psr;
@@ -494,7 +494,7 @@ public class admPermisoController implements Serializable {
 
     public String getConstanciaSelected() {
         Constancias c = acep == null ? null : acep.getConstancias();
-        return c == null ? "" : Auxiliar.getDoc(c.getDocumento(), c.getExtención().split("¿¿")[1]);
+        return c == null ? "" : getDoc(c.getDocumento(), c.getExtención().split("¿¿")[1]);
     }
 
     public Constancias getConstancia() {
@@ -515,7 +515,7 @@ public class admPermisoController implements Serializable {
     }
 
     public String getDoc() {
-        return Auxiliar.getDoc(
+        return getDoc(
                 constancia.getDocumento(),
                 (constancia.getExtención() == null || constancia.getExtención().isEmpty())
                 ? "" : constancia.getExtención().split("¿¿")[1]);

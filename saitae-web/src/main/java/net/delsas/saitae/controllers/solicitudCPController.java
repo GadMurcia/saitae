@@ -47,7 +47,7 @@ import org.primefaces.PrimeFaces;
  */
 @Named
 @ViewScoped
-public class solicitudCPController implements Serializable {
+public class solicitudCPController extends Auxiliar implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -142,13 +142,13 @@ public class solicitudCPController implements Serializable {
             }
             cita.setEstudiante1(usuario.getEstudiante());
             cpsFL.create(cita);
-            Auxiliar.persistirNotificación(
+            persistirNotificación(
                     new mensaje(0, usuario.getIdpersona(), "admCitasPs<form",
                             new FacesMessage(FacesMessage.SEVERITY_INFO, "Nueva solicitud de cita",
                                     "El estudiante " + getNombreUs() + " ha hecho una solicitud de cita. "
                                     + "Revise la administración de las citas para más detalles")),
-                    Auxiliar.getPersonasParaNotificar(tpFL.find(14)), notiFL, notificacion);
-            Auxiliar.persistirNotificación(
+                    getPersonasParaNotificar(tpFL.find(14)), notiFL, notificacion);
+            persistirNotificación(
                     new mensaje(usuario.getIdpersona(), usuario.getIdpersona(), " ",
                             new FacesMessage(FacesMessage.SEVERITY_INFO, "Solicitud exitosa",
                                     "Su solicitud de citas con el psicólogo de la institución se ha "
@@ -188,15 +188,15 @@ public class solicitudCPController implements Serializable {
     }
 
     public Date getMinHora() {
-        return getHoras(Auxiliar.getMinTimeCPs());
+        return getHoras(getMinTimeCPs());
     }
 
     public Date getMaxHora() {
-        return getHoras(Auxiliar.getMaxTimeCPs());
+        return getHoras(getMaxTimeCPs());
     }
 
     public List<Integer> getInvalidDays() {
-        return Auxiliar.getDisabledDays();
+        return getDisabledDays();
     }
 
     private Date getHoras(Date d) {

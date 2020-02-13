@@ -21,10 +21,9 @@ import org.primefaces.event.SelectEvent;
  */
 @Named
 @ViewScoped
-public class nominaAController implements Serializable {
+public class nominaAController extends Auxiliar implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    private Estudiante estudiante;
     private List<Estudiante> nomina;
     @EJB
     private GradoFacadeLocal gradoFL;
@@ -32,18 +31,17 @@ public class nominaAController implements Serializable {
 
     @PostConstruct
     public void init() {
-        estudiante = new Estudiante(0);
         grado = new GradoPK(0, "", "", 0);
         nomina = new ArrayList<>();
     }
 
     public List<SelectItem> getGrados() {
         List<SelectItem> items = new ArrayList<>();
-        gradoFL.getPorAñoYActivo(getAñoEnCurso()).stream().map((g) -> g.getGradoPK()).forEachOrdered((pk) -> {
+        gradoFL.getPorAñoYActivo(getAñoActual()).stream().map((g) -> g.getGradoPK()).forEachOrdered((pk) -> {
             items.add(new SelectItem(pk.getIdgrado() + "@"
                     + pk.getGradoModalidad() + "@" + pk.getGradoSeccion()
                     + "@" + pk.getGradoAño(),
-                    Auxiliar.getGradoNombre(pk)));
+                    getGradoNombre(pk)));
         });
         return items;
     }
@@ -58,18 +56,6 @@ public class nominaAController implements Serializable {
                 nomina.add(m.getEstudiante());
             });
         }
-    }
-
-    public int getAñoEnCurso() {
-        return Auxiliar.getAñoActual();
-    }
-
-    public Estudiante getEstudiante() {
-        return estudiante;
-    }
-
-    public void setEstudiante(Estudiante estudiante) {
-        this.estudiante = estudiante;
     }
 
     public List<Estudiante> getNomina() {

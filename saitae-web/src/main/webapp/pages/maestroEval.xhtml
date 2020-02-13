@@ -18,17 +18,15 @@
                                      converter="omnifaces.SelectItemsConverter" required="true">
                         <f:selectItem itemValue="#{null}" itemLabel="Seleccione" noSelectionOption="true"/>
                         <f:selectItems value="#{maestroEvalController.maestros}" var="ms" 
-                                       itemLabel="#{axiliarController.getNombreCorto(ms)}" itemValue="#{ms}"/>
+                                       itemLabel="#{axiliarController.getNombreCompletoPersona(ms)}" itemValue="#{ms}"/>
                         <p:ajax event="itemSelect" listener="#{maestroEvalController.onSelectEvent}" update="form"/>
                     </p:selectOneMenu>
                 </h:panelGrid>
 
                 <p:panel header="Eveluación del maestro #{axiliarController.getNombreCorto(maestroEvalController.persona)}"
                          rendered="#{maestroEvalController.persona != null}" collapsed="true" toggleable="true">
-                    <t:evMaestro editar="true" materias="#{maestroEvalController.materias}"
-                                 evMaestro="#{maestroEvalController.evMa}" 
-                                 horarios="#{maestroEvalController.horarios}"
-                                 grados="#{maestroEvalController.grados}"/>
+                    <t:evMaestro editar="true" evMaestro="#{maestroEvalController.evMa}"/>
+
                     <p:commandButton value="Guardar evaluación" update=":form" 
                                      actionListener="#{maestroEvalController.guardarEval()}"/>
                 </p:panel>
@@ -36,8 +34,11 @@
                 <p:panel header="Historial"
                          rendered="#{maestroEvalController.persona != null}" toggleable="true">
 
-                    <p:dataTable value="#{maestroEvalController.persona.maestro.evaluacionMaestroList}" var="ev"
-                                 emptyMessage="Sin evaluaciones">
+                    <p:dataTable value="#{maestroEvalController.persona.maestro.evaluacionMaestroList}" 
+                                 var="ev" emptyMessage="Sin evaluaciones" selectionMode="single" 
+                                 selection="#{maestroEvalController.evMaSelected}"
+                                 rowKey="#{ev.evaluacionMaestroPK}" id="evalm">
+                        <p:ajax event="rowSelect"/>
                         <f:facet name="header">
                             Historial de eveluaciones del maestro #{axiliarController.getNombreCorto(maestroEvalController.persona)}
                         </f:facet>
@@ -48,10 +49,25 @@
                             #{axiliarController.getNombreCorto(ev.evaluador)}
                         </p:column>
                     </p:dataTable>
-
+                    <p:contextMenu for="evalm">
+                        <p:menuitem value="Mostrat" icon="fa fa-edit"                                    
+                                    update="h0" oncomplete="PF('Deval').show();"
+                                    resetValues="true"/>
+                        <p:menuitem value="Eliminar" icon="fa fa-delete"                                    
+                                    update="h0 form" 
+                                    actionListener="#{maestroEvalController.eliminarEval()}"/>
+                    </p:contextMenu>
                 </p:panel>
             </h:panelGrid>
         </h:form>
+
+        <p:dialog modal="true" widgetVar="Deval" closeOnEscape="true">
+            <h:form id="h0">
+                <t:evMaestro editar="false" 
+                             evMaestro="#{maestroEvalController.evMaSelected}"
+                             guardar="#{maestroEvalController.guardarEval()}"/>
+            </h:form>
+        </p:dialog>
     </ui:define>
 
 </ui:composition>

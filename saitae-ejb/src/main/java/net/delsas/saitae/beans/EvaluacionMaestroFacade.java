@@ -5,6 +5,7 @@
  */
 package net.delsas.saitae.beans;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,5 +29,12 @@ public class EvaluacionMaestroFacade extends AbstractFacade<EvaluacionMaestro> i
     public EvaluacionMaestroFacade() {
         super(EvaluacionMaestro.class);
     }
-    
+
+    @Override
+    public List<EvaluacionMaestro> findByIdMaestro(Integer idMaestro) {
+        return em.createNamedQuery("EvaluacionMaestro.findByIdMaestro")
+                .setParameter("idMaestro", idMaestro)
+                .getResultList();
+    }
+
 }

@@ -95,7 +95,7 @@ import org.primefaces.model.DualListModel;
  */
 @Named
 @ViewScoped
-public class TipoController implements Serializable {
+public class TipoController extends Auxiliar implements Serializable {
 
     private static final long serialVersionUID = 1L;
     //Tipo Recurso
@@ -233,7 +233,7 @@ public class TipoController implements Serializable {
 
     public void controlUsuarios() {
         try {
-            if (!(Auxiliar.permitirAcceso(usuario, accesoTPFL.findTipoPersonaPermitidos(accesoFL.getAccesoByUrl(pagina))))) {
+            if (!(permitirAcceso(usuario, accesoTPFL.findTipoPersonaPermitidos(accesoFL.getAccesoByUrl(pagina))))) {
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("mensaje",
                         new FacesMessage(FacesMessage.SEVERITY_WARN, "Página prohibida",
                                 "Usted no tiene los permisos suficientes para ver y utilizar esa página."));
@@ -326,7 +326,7 @@ public class TipoController implements Serializable {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
                         "Eliminación exitosa.",
                         "La eliminación se llevo a cabo con éxito."));
-                Auxiliar.notificar(
+                notificar(
                         new mensaje(
                                 0,
                                 usuario.getIdpersona(),
@@ -361,7 +361,7 @@ public class TipoController implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
                     "Agregación exitosa.",
                     "La agregación se llevó a cabo con éxito."));
-            Auxiliar.notificar(
+            notificar(
                     new mensaje(
                             0,
                             usuario.getIdpersona(),
@@ -630,7 +630,7 @@ public class TipoController implements Serializable {
             }
             init();
             PrimeFaces.current().ajax().update(event.getComponent().getClientId());
-            Auxiliar.notificar(
+            notificar(
                     new mensaje(
                             0,
                             usuario.getIdpersona(),
@@ -1119,7 +1119,7 @@ public class TipoController implements Serializable {
     }
 
     public Integer getAño() {
-        return Auxiliar.getAñoActual();
+        return getAñoActual();
     }
 
     public List<Integer> getAñosG() {
