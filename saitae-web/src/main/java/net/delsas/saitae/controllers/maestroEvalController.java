@@ -149,20 +149,28 @@ public class maestroEvalController extends Auxiliar implements Serializable {
     }
 
     public void eliminarEval() {
-        persona.getMaestro().getEvaluacionMaestroList().remove(evMaSelected);
-        pFL.edit(persona);
-        emFL.remove(evMaSelected);
-        persistirNotificación(
-                new mensaje(0, usuario.getIdpersona(), "maEvalH<form",
-                        new FacesMessage(FacesMessage.SEVERITY_INFO, "Evaluación eliminada",
-                                getNombreCortoPersona(usuario)
-                                + " le ha retirado una evaluación de su desempeño. "
-                                + "Puede ver su historial de desempeño en la pestaña historiales del menú perfil.")),
-                persona, notiFL, notificacion);
-        FacesContext.getCurrentInstance().addMessage("form0:msgs",
-                new FacesMessage(FacesMessage.SEVERITY_INFO, "Evaluación eliminada con éxito",
-                        "Puede ver el historial de evaluaciones en el panel inferior \"Historial\""));
-        PrimeFaces.current().ajax().update("form0:msgs");
+        if (evMaSelected != null) {
+            persona.getMaestro().getEvaluacionMaestroList().remove(evMaSelected);
+            pFL.edit(persona);
+            emFL.remove(evMaSelected);
+            persistirNotificación(
+                    new mensaje(0, usuario.getIdpersona(), "maEvalH<form",
+                            new FacesMessage(FacesMessage.SEVERITY_INFO, "Evaluación eliminada",
+                                    getNombreCortoPersona(usuario)
+                                    + " le ha retirado una evaluación de su desempeño. "
+                                    + "Puede ver su historial de desempeño en la pestaña historiales del menú perfil.")),
+                    persona, notiFL, notificacion);
+            FacesContext.getCurrentInstance().addMessage("form0:msgs",
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Evaluación eliminada con éxito",
+                            "Puede ver el historial de evaluaciones en el panel inferior \"Historial\""));
+            PrimeFaces.current().ajax().update("form0:msgs");
+        } else {
+            FacesContext.getCurrentInstance().addMessage("form0:msgs",
+                    new FacesMessage(FacesMessage.SEVERITY_WARN, "No se selecińo nada",
+                            "Dé click sobre el item y luego clck_derecho > eliminar para "
+                            + "poder entender cual evaluación desea eliminar."));
+            PrimeFaces.current().ajax().update("form0:msgs");
+        }
         evMaSelected = null;
     }
 

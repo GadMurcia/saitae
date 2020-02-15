@@ -6,6 +6,7 @@
 package net.delsas.saitae.entities;
 
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -36,7 +37,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Matricula.findEstudiantesByGrado", query = "SELECT m.estudiante.persona FROM Matricula m WHERE m.grado.gradoPK = :gradoPK"),
     @NamedQuery(name = "Matricula.findAllNew", query = "SELECT m FROM Matricula m WHERE m.matriculaComentario = 'N' AND m.grado.gradoPK.gradoModalidad = :mod AND m.grado.gradoPK.idgrado = :idgrado"),
     @NamedQuery(name = "Matricula.findAñoByidEstudiante", query = "SELECT DISTINCT m.grado.gradoPK.gradoAño FROM Matricula m WHERE m.estudiante.idestudiante = :idEstudiante ORDER BY m.grado.gradoPK.gradoAño DESC"),
-    @NamedQuery(name = "Matricula.findGradopkByidEstudianteAndAño", query = "SELECT DISTINCT m.grado.gradoPK FROM Matricula m WHERE m.estudiante.idestudiante = :idEstudiante AND m.grado.gradoPK.gradoAño = :año")
+    @NamedQuery(name = "Matricula.findGradopkByidEstudianteAndAño", query = "SELECT DISTINCT m.grado.gradoPK FROM Matricula m WHERE m.estudiante.idestudiante = :idEstudiante AND m.grado.gradoPK.gradoAño = :año"),
+    @NamedQuery(name = "Matricula.findGradoByidEstudiante", query = "SELECT m.grado FROM Matricula m WHERE m.estudiante.idestudiante = :idEstudiante ORDER BY m.grado.gradoPK.gradoAño DESC")
 })
 public class Matricula implements Serializable {
 
@@ -119,22 +121,40 @@ public class Matricula implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (matriculaPK != null ? matriculaPK.hashCode() : 0);
+        int hash = 5;
+        hash = 71 * hash + Objects.hashCode(this.matriculaPK);
+        hash = 71 * hash + (this.matriculaRepite ? 1 : 0);
+        hash = 71 * hash + Objects.hashCode(this.matriculaComentario);
+        hash = 71 * hash + Objects.hashCode(this.estudiante);
+        hash = 71 * hash + Objects.hashCode(this.grado);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Matricula)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        Matricula other = (Matricula) object;
-        if ((this.matriculaPK == null && other.matriculaPK != null) || (this.matriculaPK != null && !this.matriculaPK.equals(other.matriculaPK))) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
-        return true;
+        final Matricula other = (Matricula) obj;
+        if (this.matriculaRepite != other.matriculaRepite) {
+            return false;
+        }
+        if (!Objects.equals(this.matriculaComentario, other.matriculaComentario)) {
+            return false;
+        }
+        if (!Objects.equals(this.matriculaPK, other.matriculaPK)) {
+            return false;
+        }
+        if (!Objects.equals(this.estudiante, other.estudiante)) {
+            return false;
+        }
+        return Objects.equals(this.grado, other.grado);
     }
 
     @Override

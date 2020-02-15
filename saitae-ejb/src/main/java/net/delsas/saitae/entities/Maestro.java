@@ -8,6 +8,7 @@ package net.delsas.saitae.entities;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -478,22 +479,121 @@ public class Maestro implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (idmaestro != null ? idmaestro.hashCode() : 0);
+        int hash = 5;
+        hash = 47 * hash + Objects.hashCode(this.idmaestro);
+        hash = 47 * hash + this.maestroNip;
+        hash = 47 * hash + this.maestroNup;
+        hash = 47 * hash + this.maestroCodigo;
+        hash = 47 * hash + this.maestroPartidas;
+        hash = 47 * hash + this.maestroSubnumeros;
+        hash = 47 * hash + this.maestroNivel;
+        hash = 47 * hash + this.maestroCategoria;
+        hash = 47 * hash + Objects.hashCode(this.maestroAfp);
+        hash = 47 * hash + this.maestroBienestar;
+        hash = 47 * hash + Objects.hashCode(this.maestrocolTelefonoResidencia);
+        hash = 47 * hash + Objects.hashCode(this.maestroFechaMagisterio);
+        hash = 47 * hash + Objects.hashCode(this.maestroFechaInstitucion);
+        hash = 47 * hash + Objects.hashCode(this.maestroFechaProximoAsenso);
+        hash = 47 * hash + Objects.hashCode(this.maestroTurno);
+        hash = 47 * hash + Objects.hashCode(this.maestroTiempoCategoria);
+        hash = 47 * hash + (this.maestroSinEscalafon ? 1 : 0);
+        hash = 47 * hash + (this.maestroUtilidadTecnologica ? 1 : 0);
+        hash = 47 * hash + this.maestroHorasUsoTecnologia;
+        hash = 47 * hash + (this.maestroUsoVideoconferencias ? 1 : 0);
+        hash = 47 * hash + (this.maestroRecursosWeb ? 1 : 0);
+        hash = 47 * hash + (this.maestroCapacitacionesVirtuales ? 1 : 0);
+        hash = 47 * hash + Objects.hashCode(this.maestroComentario);
+        hash = 47 * hash + Objects.hashCode(this.persona);
+        hash = 47 * hash + Objects.hashCode(this.maestroTipoSalario);
+        hash = 47 * hash + Objects.hashCode(this.maestroEspecialidad);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Maestro)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        Maestro other = (Maestro) object;
-        if ((this.idmaestro == null && other.idmaestro != null) || (this.idmaestro != null && !this.idmaestro.equals(other.idmaestro))) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
-        return true;
+        final Maestro other = (Maestro) obj;
+        if (this.maestroNip != other.maestroNip) {
+            return false;
+        }
+        if (this.maestroNup != other.maestroNup) {
+            return false;
+        }
+        if (this.maestroCodigo != other.maestroCodigo) {
+            return false;
+        }
+        if (this.maestroPartidas != other.maestroPartidas) {
+            return false;
+        }
+        if (this.maestroSubnumeros != other.maestroSubnumeros) {
+            return false;
+        }
+        if (this.maestroNivel != other.maestroNivel) {
+            return false;
+        }
+        if (this.maestroCategoria != other.maestroCategoria) {
+            return false;
+        }
+        if (this.maestroBienestar != other.maestroBienestar) {
+            return false;
+        }
+        if (this.maestroSinEscalafon != other.maestroSinEscalafon) {
+            return false;
+        }
+        if (this.maestroUtilidadTecnologica != other.maestroUtilidadTecnologica) {
+            return false;
+        }
+        if (this.maestroHorasUsoTecnologia != other.maestroHorasUsoTecnologia) {
+            return false;
+        }
+        if (this.maestroUsoVideoconferencias != other.maestroUsoVideoconferencias) {
+            return false;
+        }
+        if (this.maestroRecursosWeb != other.maestroRecursosWeb) {
+            return false;
+        }
+        if (this.maestroCapacitacionesVirtuales != other.maestroCapacitacionesVirtuales) {
+            return false;
+        }
+        if (!Objects.equals(this.maestroAfp, other.maestroAfp)) {
+            return false;
+        }
+        if (!Objects.equals(this.maestrocolTelefonoResidencia, other.maestrocolTelefonoResidencia)) {
+            return false;
+        }
+        if (!Objects.equals(this.maestroTurno, other.maestroTurno)) {
+            return false;
+        }
+        if (!Objects.equals(this.maestroTiempoCategoria, other.maestroTiempoCategoria)) {
+            return false;
+        }
+        if (!Objects.equals(this.maestroComentario, other.maestroComentario)) {
+            return false;
+        }
+        if (!Objects.equals(this.idmaestro, other.idmaestro)) {
+            return false;
+        }
+        if (!Objects.equals(this.maestroFechaMagisterio, other.maestroFechaMagisterio)) {
+            return false;
+        }
+        if (!Objects.equals(this.maestroFechaInstitucion, other.maestroFechaInstitucion)) {
+            return false;
+        }
+        if (!Objects.equals(this.maestroFechaProximoAsenso, other.maestroFechaProximoAsenso)) {
+            return false;
+        }
+        if (!Objects.equals(this.maestroTipoSalario, other.maestroTipoSalario)) {
+            return false;
+        }
+        return Objects.equals(this.maestroEspecialidad, other.maestroEspecialidad);
     }
 
     @Override

@@ -8,7 +8,6 @@ package net.delsas.saitae.beans;
 import java.util.List;
 import javax.ejb.Local;
 import net.delsas.saitae.entities.Grado;
-import net.delsas.saitae.entities.GradoPK;
 
 /**
  *
@@ -82,5 +81,14 @@ public interface GradoFacadeLocal {
      * @return java.util.List net.delsas.saitae.entities.Grado
      */
     public List<Grado> findByGradoAño(Integer año);
+
+    /**
+     * Devuelve ua lista de grados en los que el maestro identificado por el id
+     * proporcionado es guía.
+     *
+     * @param idMaestro
+     * @return java.util.List net.delsas.saitae.entities.Grado
+     */
+    public List<Grado> findByidMaestro(Integer idMaestro);
 
 }

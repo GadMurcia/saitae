@@ -1,12 +1,12 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="./../WEB-INF/template/plantilla1.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:t="http://xmlns.jcp.org/jsf/composite/components/autentia">
+                xmlns:t="http://xmlns.jcp.org/jsf/composite/components/autentia"
+                xmlns="http://www.w3.org/1999/xhtml">
 
     <ui:define name="content">
         <h:form id="form">
@@ -18,44 +18,44 @@
                                      converter="omnifaces.SelectItemsConverter" required="true">
                         <f:selectItem itemValue="#{null}" itemLabel="Seleccione" noSelectionOption="true"/>
                         <f:selectItems value="#{maestroEvalController.maestros}" var="ms" 
-                                       itemLabel="#{axiliarController.getNombreCompletoPersona(ms)}" itemValue="#{ms}"/>
-                        <p:ajax event="itemSelect" listener="#{maestroEvalController.onSelectEvent}" update="form"/>
+                                       itemLabel="#{axiliarController.getNombreCompletoPersona(ms)}" 
+                                       itemValue="#{ms}"/>
+                        <p:ajax event="itemSelect" listener="#{maestroEvalController.onSelectEvent}" 
+                                update="form"/>
                     </p:selectOneMenu>
                 </h:panelGrid>
-
-                <p:panel header="Eveluación del maestro #{axiliarController.getNombreCorto(maestroEvalController.persona)}"
+                <p:panel header="Eveluación del maestro 
+                         #{axiliarController.getNombreCorto(maestroEvalController.persona)}"
                          rendered="#{maestroEvalController.persona != null}" collapsed="true" toggleable="true">
                     <t:evMaestro editar="true" evMaestro="#{maestroEvalController.evMa}"/>
 
                     <p:commandButton value="Guardar evaluación" update=":form" 
                                      actionListener="#{maestroEvalController.guardarEval()}"/>
                 </p:panel>
-
                 <p:panel header="Historial"
                          rendered="#{maestroEvalController.persona != null}" toggleable="true">
 
-                    <p:dataTable value="#{maestroEvalController.persona.maestro.evaluacionMaestroList}" 
+                    <p:dataTable value="#{maestroEvalController.persona.maestro.evaluacionMaestroList}"
                                  var="ev" emptyMessage="Sin evaluaciones" selectionMode="single" 
                                  selection="#{maestroEvalController.evMaSelected}"
                                  rowKey="#{ev.evaluacionMaestroPK}" id="evalm">
                         <p:ajax event="rowSelect"/>
                         <f:facet name="header">
-                            Historial de eveluaciones del maestro #{axiliarController.getNombreCorto(maestroEvalController.persona)}
+                            Historial de evaluaciones del docente 
+                            #{maestroEvalController.getNombreCompletoPersona(maestroEvalController.persona)}
                         </f:facet>
                         <p:column headerText="Fecha y hora">
-                            #{axiliarController.getDateTimeToString(ev.evaluacionMaestroPK.fechaHora)}
+                            #{maestroEvalController.getDateTimeToString(ev.evaluacionMaestroPK.fechaHora)}
                         </p:column>
                         <p:column headerText="Evaluador">
-                            #{axiliarController.getNombreCorto(ev.evaluador)}
+                            #{maestroEvalController.getNombreCortoPersona(ev.evaluador)}
                         </p:column>
                     </p:dataTable>
                     <p:contextMenu for="evalm">
-                        <p:menuitem value="Mostrat" icon="fa fa-edit"                                    
-                                    update="h0" oncomplete="PF('Deval').show();"
-                                    resetValues="true"/>
-                        <p:menuitem value="Eliminar" icon="fa fa-delete"                                    
-                                    update="h0 form" 
-                                    actionListener="#{maestroEvalController.eliminarEval()}"/>
+                        <p:menuitem value="Mostrar" icon="fa fa-edit"                                    
+                                    update="h0" oncomplete="PF('Deval').show();"/>
+                        <p:menuitem value="eliminar" icon="fa fa-trash" immediate="true"
+                                    update="h0 form" actionListener="#{maestroEvalController.eliminarEval()}"/>
                     </p:contextMenu>
                 </p:panel>
             </h:panelGrid>

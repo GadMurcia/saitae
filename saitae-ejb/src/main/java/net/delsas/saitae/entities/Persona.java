@@ -355,8 +355,30 @@ public class Persona implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (idpersona != null ? idpersona.hashCode() : 0);
+        int hash = 7;
+        hash = 37 * hash + Objects.hashCode(this.tema);
+        hash = 37 * hash + Objects.hashCode(this.personaNombre);
+        hash = 37 * hash + Objects.hashCode(this.personaApellido);
+        hash = 37 * hash + Objects.hashCode(this.personaDireccion);
+        hash = 37 * hash + Objects.hashCode(this.personaTelefono);
+        hash = 37 * hash + Objects.hashCode(this.personaLugarNac);
+        hash = 37 * hash + Objects.hashCode(this.personaContrasenya);
+        hash = 37 * hash + Objects.hashCode(this.personaOCupacion);
+        hash = 37 * hash + (this.personaActivo ? 1 : 0);
+        hash = 37 * hash + Objects.hashCode(this.personaNit);
+        hash = 37 * hash + Objects.hashCode(this.personaNacionalidad);
+        hash = 37 * hash + Objects.hashCode(this.personaEmail);
+        hash = 37 * hash + Objects.hashCode(this.personaDiscapacidades);
+        hash = 37 * hash + Objects.hashCode(this.personaComentarios);
+        hash = 37 * hash + Objects.hashCode(this.idpersona);
+        hash = 37 * hash + Objects.hashCode(this.personaNacimiento);
+        hash = 37 * hash + Objects.hashCode(this.personaCodigoResidencia);
+        hash = 37 * hash + Objects.hashCode(this.personaZonaVivienda);
+        hash = 37 * hash + Objects.hashCode(this.personaSexo);
+        hash = 37 * hash + Objects.hashCode(this.personaEstadoFamiliar);
+        hash = 37 * hash + Objects.hashCode(this.tipoPersona);
+        hash = 37 * hash + Objects.hashCode(this.estudiante);
+        hash = 37 * hash + Objects.hashCode(this.maestro);
         return hash;
     }
 
@@ -372,7 +394,73 @@ public class Persona implements Serializable {
             return false;
         }
         final Persona other = (Persona) obj;
-        return Objects.equals(this.idpersona, other.idpersona);
+        if (this.personaActivo != other.personaActivo) {
+            return false;
+        }
+        if (!Objects.equals(this.personaNombre, other.personaNombre)) {
+            return false;
+        }
+        if (!Objects.equals(this.personaApellido, other.personaApellido)) {
+            return false;
+        }
+        if (!Objects.equals(this.personaDireccion, other.personaDireccion)) {
+            return false;
+        }
+        if (!Objects.equals(this.personaTelefono, other.personaTelefono)) {
+            return false;
+        }
+        if (!Objects.equals(this.personaLugarNac, other.personaLugarNac)) {
+            return false;
+        }
+        if (!Objects.equals(this.personaContrasenya, other.personaContrasenya)) {
+            return false;
+        }
+        if (!Objects.equals(this.personaOCupacion, other.personaOCupacion)) {
+            return false;
+        }
+        if (!Objects.equals(this.personaNit, other.personaNit)) {
+            return false;
+        }
+        if (!Objects.equals(this.personaNacionalidad, other.personaNacionalidad)) {
+            return false;
+        }
+        if (!Objects.equals(this.personaEmail, other.personaEmail)) {
+            return false;
+        }
+        if (!Objects.equals(this.personaDiscapacidades, other.personaDiscapacidades)) {
+            return false;
+        }
+        if (!Objects.equals(this.personaComentarios, other.personaComentarios)) {
+            return false;
+        }
+        if (!Objects.equals(this.tema, other.tema)) {
+            return false;
+        }
+        if (!Objects.equals(this.idpersona, other.idpersona)) {
+            return false;
+        }
+        if (!Objects.equals(this.personaNacimiento, other.personaNacimiento)) {
+            return false;
+        }
+        if (!Objects.equals(this.personaCodigoResidencia, other.personaCodigoResidencia)) {
+            return false;
+        }
+        if (!Objects.equals(this.personaZonaVivienda, other.personaZonaVivienda)) {
+            return false;
+        }
+        if (!Objects.equals(this.personaSexo, other.personaSexo)) {
+            return false;
+        }
+        if (!Objects.equals(this.personaEstadoFamiliar, other.personaEstadoFamiliar)) {
+            return false;
+        }
+        if (!Objects.equals(this.tipoPersona, other.tipoPersona)) {
+            return false;
+        }
+        if (!Objects.equals(this.estudiante, other.estudiante)) {
+            return false;
+        }
+        return Objects.equals(this.maestro, other.maestro);
     }
 
     @Override

@@ -7,6 +7,7 @@ package net.delsas.saitae.beans;
 
 import java.util.List;
 import javax.ejb.Local;
+import net.delsas.saitae.entities.Grado;
 import net.delsas.saitae.entities.GradoPK;
 import net.delsas.saitae.entities.Matricula;
 import net.delsas.saitae.entities.Persona;
@@ -68,5 +69,14 @@ public interface MatriculaFacadeLocal {
      * @return java.util.List net.delsas.saitae.entities.Matricula
      */
     public List<Matricula> findByIdmatricula(Integer idestudiante);
+
+    /**
+     * Devuelve el historial de grados en los que el alumno ha estado
+     * matriculado
+     *
+     * @param idEstudiante
+     * @return java.util.List net.delsas.saitae.entities.Grado
+     */
+    public List<Grado> findGradoByidEstudiante(Integer idEstudiante);
 
 }

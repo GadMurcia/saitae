@@ -46,6 +46,8 @@ import net.delsas.saitae.beans.GradoFacadeLocal;
 import net.delsas.saitae.beans.HorarioFacadeLocal;
 import net.delsas.saitae.beans.MaestroFacadeLocal;
 import net.delsas.saitae.beans.MateriaFacadeLocal;
+import net.delsas.saitae.beans.NotificacionesFacadeLocal;
+import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.beans.TipoCargoFacadeLocal;
 import net.delsas.saitae.beans.TipoEspecialidadesFacadeLocal;
 import net.delsas.saitae.beans.TipoMateriaFacadeLocal;
@@ -120,6 +122,8 @@ public class TipoController extends Auxiliar implements Serializable {
     private TipoPermisoFacadeLocal permisoFL;
     @EJB
     private TipoPersonaFacadeLocal personaFL;
+    @EJB
+    private PersonaFacadeLocal pFL;
     private List<TipoPersona> Personas;
     private TipoPersona tipoPersona;
     private DualListModel<String> model;
@@ -221,6 +225,8 @@ public class TipoController extends Auxiliar implements Serializable {
     @Inject
     @Push
     private PushContext notificacion;
+    @EJB
+    private NotificacionesFacadeLocal notiFL;
     String pagina;
 
     @PostConstruct
@@ -619,11 +625,57 @@ public class TipoController extends Auxiliar implements Serializable {
                     g.setGradoMaestroGuia(g.getGradoMaestroGuia() == null
                             || g.getGradoMaestroGuia().getIdmaestro() == 0
                             ? null : maestroFL.find(g.getGradoMaestroGuia().getIdmaestro()));
+                    Grado gcontrol = gradoFL.find(g.getGradoPK());
+                    if (g.getGradoMaestroGuia() != null) {
+                        Maestro mae = g.getGradoMaestroGuia();
+                        mae.setGradoList(mae.getGradoList() == null
+                                ? new ArrayList<>() : mae.getGradoList());
+                        if (!mae.getGradoList().contains(g)) {
+                            mae.getGradoList().add(g);
+                        }
+                        maestroFL.edit(mae);
+                        Persona maep = pFL.find(mae.getIdmaestro());
+                        maep.setMaestro(mae);
+                        pFL.edit(maep);
+                        persistirNotificación(
+                                new mensaje(0,
+                                        usuario.getIdpersona(),
+                                        "gradoEvalH<form",
+                                        new FacesMessage(FacesMessage.SEVERITY_INFO,
+                                                "Nuevo tutelaje",
+                                                getNombreCortoPersona(usuario)
+                                                + " le ha entregado el tutelaje del grado "
+                                                + getGradoNombre(g.getGradoPK()) + " año "
+                                                + g.getGradoPK().getGradoAño())),
+                                maep,
+                                notiFL, notificacion);
+                    }
+                    if (gcontrol != null
+                            && gcontrol.getGradoMaestroGuia() != null
+                            && ((g.getGradoMaestroGuia() != null && !g.getGradoMaestroGuia().equals(gcontrol.getGradoMaestroGuia()))
+                            || g.getGradoMaestroGuia() == null)) {
+                        Persona maep = pFL.find(gcontrol.getGradoMaestroGuia().getIdmaestro());
+                        gcontrol.getGradoMaestroGuia().getGradoList().remove(g);
+                        maep.setMaestro(gcontrol.getGradoMaestroGuia());
+                        pFL.edit(maep);
+                        persistirNotificación(
+                                new mensaje(0,
+                                        usuario.getIdpersona(),
+                                        "gradoEvalH<form",
+                                        new FacesMessage(FacesMessage.SEVERITY_INFO,
+                                                "Tutelaje removido",
+                                                getNombreCortoPersona(usuario)
+                                                + " le ha quitado el tutelaje del grado "
+                                                + getGradoNombre(g.getGradoPK()) + " año "
+                                                + g.getGradoPK().getGradoAño())),
+                                maep,
+                                notiFL, notificacion);
+                    }
                     gradoFL.edit(g);
                     titulo = "Grado";
                     mensaje = g.getGradoPK().getIdgrado() + "° " + g.getGradoPK().getGradoModalidad() + " "
                             + g.getGradoPK().getGradoSeccion() + " para el año"
-                            + g.getGradoPK().getGradoAño() + " fue agregado.";
+                            + g.getGradoPK().getGradoAño() + (gcontrol == null ? " fue agregado." : " fue modificado.");
                     break;
                 default:
                     System.out.println(id);

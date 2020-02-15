@@ -9,6 +9,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import net.delsas.saitae.entities.Grado;
 import net.delsas.saitae.entities.GradoPK;
 import net.delsas.saitae.entities.Matricula;
 import net.delsas.saitae.entities.Persona;
@@ -66,6 +67,13 @@ public class MatriculaFacade extends AbstractFacade<Matricula> implements Matric
     public List<Matricula> findByIdmatricula(Integer idestudiante) {
         return em.createNamedQuery("Matricula.findByIdmatricula")
                 .setParameter("idmatricula", idestudiante)
+                .getResultList();
+    }
+
+    @Override
+    public List<Grado> findGradoByidEstudiante(Integer idEstudiante) {
+        return em.createNamedQuery("Matricula.findGradoByidEstudiante")
+                .setParameter("idEstudiante", idEstudiante)
                 .getResultList();
     }
 

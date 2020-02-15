@@ -71,4 +71,11 @@ public class GradoFacade extends AbstractFacade<Grado> implements GradoFacadeLoc
                 .setParameter("gradoAño", año)
                 .getResultList();
     }
+
+    @Override
+    public List<Grado> findByidMaestro(Integer idMaestro) {
+        return em.createNamedQuery("Grado.findByidMaestro")
+                .setParameter("idMaestro", idMaestro)
+                .getResultList();
+    }
 }

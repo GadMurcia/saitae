@@ -25,6 +25,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
 import net.delsas.saitae.beans.GradoFacadeLocal;
 import net.delsas.saitae.beans.MestroHorarioMateriasFacadeLocal;
@@ -916,5 +917,9 @@ public class Auxiliar implements Serializable {
     
     public String getTimeToString(Date s) {
         return new SimpleDateFormat("hh:mm a").format(s);
+    }
+    
+    public void onBlour(AjaxBehaviorEvent e){
+        
     }
 }
