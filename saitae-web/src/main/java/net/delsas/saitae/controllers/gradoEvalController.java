@@ -150,8 +150,8 @@ public class gradoEvalController extends Auxiliar implements Serializable {
     public void eliminarEva() {
         if (evalSelected != null) {
             gradoSelected.getGradoEvaluacionList().remove(evalSelected);
-            gFL.edit(gradoSelected);
             gevFL.remove(evalSelected);
+            gFL.edit(gradoSelected);
             evalSelected = null;
             List<Persona> interesados = new ArrayList<>();
             gradoSelected.getMatriculaList().forEach((m) -> {
@@ -187,10 +187,6 @@ public class gradoEvalController extends Auxiliar implements Serializable {
 
     public List<Grado> getGrados() {
         return grados;
-    }
-
-    public void setGrados(List<Grado> grados) {
-        this.grados = grados;
     }
 
     public Grado getGradoSelected() {
