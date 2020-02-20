@@ -55,7 +55,7 @@ public class Auxiliar implements Serializable {
     private Persona user;
 
     public Auxiliar() {
-        user = new Persona(0, " ", " ", false);
+        user = new Persona(0, "", "", false);
         user.setPersonaContrasenya("");
         user.setPersonaNacimiento(getEdad(18));
         user.setPersonaDireccion("");
