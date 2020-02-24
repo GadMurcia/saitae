@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -93,10 +94,10 @@ public class AnuncioController extends Auxiliar implements Serializable {
                 if (!(tp == 1 || tp == 2)) {
                     List<Anuncio> actNoMios = new ArrayList<>();
                     List<Anuncio> inaNoMios = new ArrayList<>();
-                    activos.stream().filter((a) -> (a.getAnuncioAnunciante() != usuario)).forEachOrdered((a) -> {
+                    activos.stream().filter((a) -> (!Objects.equals(a.getAnuncioAnunciante().getIdpersona(), usuario.getIdpersona()))).forEachOrdered((a) -> {
                         actNoMios.add(a);
                     });
-                    inactivos.stream().filter((a) -> (a.getAnuncioAnunciante() != usuario)).forEachOrdered((a) -> {
+                    inactivos.stream().filter((a) -> (!Objects.equals(a.getAnuncioAnunciante().getIdpersona(), usuario.getIdpersona()))).forEachOrdered((a) -> {
                         inaNoMios.add(a);
                     });
                     activos.removeAll(actNoMios);

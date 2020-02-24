@@ -892,7 +892,7 @@ public class reservaSController extends Auxiliar implements Serializable {
     }
     
     public int getParametro() {
-        return (xTitulo ? 1 : (xAutor ? 2 : (xContenido ? 3 : 0)));
+        return (xTitulo ? 1 : (xAutor ? 2 : (xContenido ? 3 : 1)));
     }
     
     public void setParametro(int p) {
