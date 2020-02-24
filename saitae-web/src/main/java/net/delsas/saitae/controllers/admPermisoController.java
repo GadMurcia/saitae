@@ -212,6 +212,7 @@ public class admPermisoController extends Auxiliar implements Serializable {
                                     permiso.getPermisosPK().getPermisoFechaInicio()));
                 } else {
                     constancia = null;
+                    permiso.setConstancias(null);
                 }
                 permisosFL.create(permiso);
                 ms = new FacesMessage(FacesMessage.SEVERITY_INFO, "Concesión exitosa",
@@ -511,7 +512,7 @@ public class admPermisoController extends Auxiliar implements Serializable {
     }
 
     public boolean getHayDocumento() {
-        return constancia.getDocumento() != null;
+        return constancia==null || constancia.getDocumento() != null;
     }
 
     public String getDoc() {
