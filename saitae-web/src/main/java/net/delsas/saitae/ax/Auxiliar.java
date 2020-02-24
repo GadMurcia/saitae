@@ -43,6 +43,8 @@ import net.delsas.saitae.entities.TipoPersona;
 import net.delsas.saitae.entities.TipoSueldos;
 import org.apache.commons.codec.binary.Base64;
 import org.omnifaces.cdi.PushContext;
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.event.FlowEvent;
 
 /**
  *
@@ -76,20 +78,20 @@ public class Auxiliar implements Serializable {
     public Persona getEstudiante() {
         Persona e = (new Auxiliar()).getUser();
         e.setPersonaNacimiento(getEdad(12));
-        e.setEstudiante(new Estudiante(e.getIdpersona(), false, 0, false, ""));
+        e.setEstudiante(new Estudiante(e.getIdpersona(), true, 0, true, ""));
         e.getEstudiante().setEstudianteRiesgoVulnerabilidad("");
         e.getEstudiante().setEstudianteMedioTransporte(0);
         e.getEstudiante().setEstudianteDistanciaAlCentro(BigDecimal.valueOf(0));
         e.getEstudiante().setEstudianteTrabaja(false);
         e.getEstudiante().setEstudianteDependenciaEconomica(" ¿ ");
-        e.getEstudiante().setEstudianteParvularia(false);
+        e.getEstudiante().setEstudianteParvularia(true);
         e.getEstudiante().setEstudianteEnfermedades("");
         e.getEstudiante().setEstudianteMedicamentos("");
         e.getEstudiante().setEstudianteParentescoRepresentante("");
         e.getEstudiante().setEstudianteFormaTrabajo("");
         e.getEstudiante().setEstudianteCentroProcedencia("");
         e.getEstudiante().setEstudianteNoPartida("");
-        e.getEstudiante().setEstudianteRepresentanteFamiliar(false);
+        e.getEstudiante().setEstudianteRepresentanteFamiliar(true);
         e.getEstudiante().setEstudiantePadre(getPadre());
         e.getEstudiante().setEstudianteMadre(getMadre());
         e.getEstudiante().setMatriculaList(new ArrayList<>());
@@ -103,11 +105,11 @@ public class Auxiliar implements Serializable {
 
     public Persona getRepresentante() {
         Persona r = (new Auxiliar()).getUser();
-        r.setEstudiante(new Estudiante(r.getIdpersona(), false, 0, false, ""));
+        r.setEstudiante(new Estudiante(r.getIdpersona(), true, 0, false, ""));
         r.getEstudiante().setEstudianteRiesgoVulnerabilidad("");
         r.getEstudiante().setEstudianteMedioTransporte(null);
         r.getEstudiante().setEstudianteDistanciaAlCentro(null);
-        r.getEstudiante().setEstudianteTrabaja(false);
+        r.getEstudiante().setEstudianteTrabaja(true);
         r.getEstudiante().setEstudianteDependenciaEconomica(null);
         r.getEstudiante().setEstudianteParvularia(null);
         r.getEstudiante().setEstudianteEnfermedades(null);
@@ -116,7 +118,7 @@ public class Auxiliar implements Serializable {
         r.getEstudiante().setEstudianteFormaTrabajo("");
         r.getEstudiante().setEstudianteCentroProcedencia(null);
         r.getEstudiante().setEstudianteNoPartida("");
-        r.getEstudiante().setEstudianteRepresentanteFamiliar(false);
+        r.getEstudiante().setEstudianteRepresentanteFamiliar(true);
         r.getEstudiante().setEstudiantePadre(null);
         r.getEstudiante().setEstudianteMadre(null);
         r.getEstudiante().setEstudianteRepresentante(null);
@@ -777,7 +779,8 @@ public class Auxiliar implements Serializable {
         return gr == null ? ""
                 : (gr.getIdgrado() + "° "
                 + getModalidadNombre(gr.getGradoModalidad())
-                + " Sección " + gr.getGradoSeccion());
+                + ((gr.getGradoSeccion() == null || gr.getGradoSeccion().isEmpty())
+                ? "" : "Sección " + gr.getGradoSeccion()));
     }
 
     public String getModalidadNombre(String gr) {
@@ -910,16 +913,127 @@ public class Auxiliar implements Serializable {
     public String getDateTimeToString(Date s) {
         return new SimpleDateFormat("dd/MM/yyyy hh:mm a").format(s);
     }
-    
+
     public String getDateToString(Date s) {
         return new SimpleDateFormat("dd/MM/yyyy").format(s);
     }
-    
+
     public String getTimeToString(Date s) {
         return new SimpleDateFormat("hh:mm a").format(s);
     }
+
+    public void onBlour(AjaxBehaviorEvent e) {
+
+    }
     
-    public void onBlour(AjaxBehaviorEvent e){
-        
+    public String onFlowProcess(FlowEvent event) {
+        return event.getNewStep();
+    }
+    
+    public String[] getDependencia(Estudiante e) {
+        String d[] = e.getEstudianteDependenciaEconomica().split("¿");
+        String ot[] = d[0].split("#");
+        return ot;
+    }
+    
+    public String getOtraDependenciaEcon(Estudiante e) {
+        String d[] = e.getEstudianteDependenciaEconomica().split("¿");
+        String ot = d.length > 1 ? d[1] : " ";
+        return ot;
+    }
+    
+    public void partida(FileUploadEvent f, Estudiante e) {
+        e.getDocumentos().setEstudianteDocPartida(f.getFile().getContents());
+        e.getDocumentos().setEstudianteExtencionPartida(f.getFile().getFileName() + "¿¿" + f.getFile().getContentType());
+    }
+
+    public boolean getHayPartida(Estudiante e) {
+        return e == null || e.getDocumentos() == null
+                ? false : e.getDocumentos().getEstudianteExtencionPartida() != null;
+    }
+
+    public String getDocPartida(Estudiante e) {
+        return e == null ? ""
+                : (getDoc(
+                        e.getDocumentos().getEstudianteDocPartida(),
+                        (e.getDocumentos().getEstudianteExtencionPartida() == null
+                        || e.getDocumentos().getEstudianteExtencionPartida().isEmpty())
+                        ? "" : e.getDocumentos().getEstudianteExtencionPartida().split("¿¿")[1]));
+    }
+
+    public void certificado(FileUploadEvent f, Estudiante e) {
+        e.getDocumentos().setEstudianteDocCertificado(f.getFile().getContents());
+        e.getDocumentos().setEstudianteExtencionCertificado(f.getFile().getFileName() + "¿¿" + f.getFile().getContentType());
+    }
+
+    public boolean getHayCertifcado(Estudiante e) {
+        return e == null || e.getDocumentos() == null ? false
+                : e.getDocumentos().getEstudianteExtencionCertificado() != null;
+    }
+
+    public String getDocCertificado(Estudiante e) {
+        return e == null ? ""
+                : (getDoc(
+                        e.getDocumentos().getEstudianteDocCertificado(),
+                        (e.getDocumentos().getEstudianteExtencionCertificado() == null
+                        || e.getDocumentos().getEstudianteExtencionCertificado().isEmpty())
+                        ? "" : e.getDocumentos().getEstudianteExtencionCertificado().split("¿¿")[1]));
+    }
+
+    public void conducta(FileUploadEvent f, Estudiante e) {
+        e.getDocumentos().setEstudianteDocConducta(f.getFile().getContents());
+        e.getDocumentos().setEstudianteExtencionConducta(f.getFile().getFileName() + "¿¿" + f.getFile().getContentType());
+    }
+
+    public boolean getHayConducta(Estudiante e) {
+        return e == null || e.getDocumentos() == null
+                ? false : e.getDocumentos().getEstudianteExtencionConducta() != null;
+    }
+
+    public String getDocConducta(Estudiante e) {
+        return e == null ? ""
+                : (getDoc(
+                        e.getDocumentos().getEstudianteDocConducta(),
+                        (e.getDocumentos().getEstudianteExtencionConducta() == null
+                        || e.getDocumentos().getEstudianteExtencionConducta().isEmpty())
+                        ? "" : e.getDocumentos().getEstudianteExtencionConducta().split("¿¿")[1]));
+    }
+
+    public void dui(FileUploadEvent f, Estudiante e) {
+        e.getDocumentos().setEstudianteDocDui(f.getFile().getContents());
+        e.getDocumentos().setEstudianteExtencionDui(f.getFile().getFileName() + "¿¿" + f.getFile().getContentType());
+    }
+
+    public boolean getHayDui(Estudiante e) {
+        return e == null || e.getDocumentos() == null
+                ? false : e.getDocumentos().getEstudianteExtencionDui() != null;
+    }
+
+    public String getDocDui(Estudiante e) {
+        return e == null ? ""
+                : (getDoc(
+                        e.getDocumentos().getEstudianteDocDui(),
+                        (e.getDocumentos().getEstudianteExtencionDui() == null
+                        || e.getDocumentos().getEstudianteExtencionDui().isEmpty())
+                        ? "" : e.getDocumentos().getEstudianteExtencionDui().split("¿¿")[1]));
+    }
+
+    public void notas(FileUploadEvent f, Estudiante e) {
+        e.getDocumentos().setEstudianteDocNotas(f.getFile().getContents());
+        e.getDocumentos().setEstudianteExtencionNotas(f.getFile().getFileName() + "¿¿" + f.getFile().getContentType());
+    }
+
+    public boolean getHayNotas(Estudiante e) {
+        return e == null || e.getDocumentos() == null
+                ? false : e.getDocumentos().getEstudianteExtencionNotas() != null;
+    }
+
+    public String getDocNotas(Estudiante e) {
+        return e == null ? ""
+                : (getDoc(
+                        e.getDocumentos().getEstudianteDocNotas(),
+                        (e.getDocumentos().getEstudianteExtencionNotas() == null
+                        || e.getDocumentos().getEstudianteExtencionNotas().isEmpty())
+                        ? "" : e.getDocumentos().getEstudianteExtencionNotas().split("¿¿")[1]));
     }
 }

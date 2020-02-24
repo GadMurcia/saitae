@@ -4,7 +4,9 @@
                 template="./../WEB-INF/template/plantilla1.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://xmlns.jcp.org/jsf/core">
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:t="http://xmlns.jcp.org/jsf/composite/components/autentia">
 
     <ui:define name="content">
         <h:form id="form1">
@@ -16,34 +18,432 @@
                                      title="Seleccione el grado para mostar su nómina de estudiantes.">
                         <f:selectItem itemLabel="Seleccione" itemValue=" "/>
                         <f:selectItems value="#{nominaAController.grados}"/>
-                        <p:ajax event="itemSelect" listener="#{nominaAController.onSelectItem}" update="nom"/>
+                        <p:ajax event="itemSelect" listener="#{nominaAController.onSelectItem}" 
+                                update="nom"/>
                     </p:selectOneMenu>
                 </p:panelGrid>
 
                 <p:dataTable id="nom" var="e" value="#{nominaAController.nomina}" 
-                             widgetVar="nom1" emptyMessage="Sin registros aún.">
-                    <f:facet name="header">
-                            <p:outputLabel value="#{nominaAController.PK.idgrado == 0? '' : 'Nómina de Alumnos para el grado: '}"/>
-                            <p:outputLabel value="#{nominaAController.getModalidadNombre(nominaAController.PK)}"/>
-                    </f:facet>
+                             widgetVar="nom1" emptyMessage="Sin registros aún."
+                             selectionMode="single" selection="#{nominaAController.selected}"
+                             rowKey="#{e.idestudiante}">
 
-                  <!--  <p:ajax event="rowEdit" listener="# {tipoController.onRowEdit}" update=":form:msgs form:tw:zona" />
-                    <p:ajax event="rowEditCancel" listener="# {tipoController.onRowCancel}" update=":form:msgs" />
-                    -->
+                    <p:ajax event="rowSelect" listener="#{nominaAController.onBlour}"
+                            update="p0" oncomplete="PF('Dest').show();"/>
+
+                    <f:facet name="header">
+                        <p:outputLabel value="#{nominaAController.PK.idgrado == 0? '' : 'Nómina de Alumnos para el grado: '}"/>
+                        <p:outputLabel value="#{nominaAController.getGradoNombre(nominaAController.PK)}"/>
+                    </f:facet>
 
                     <p:column headerText="NIE" style="width: 100px">
                         <p:outputLabel value="#{e.idestudiante.toString().substring(1)}"/>
                     </p:column>
-
-                    <p:column headerText="Nombre">
-                        <p:outputLabel value="#{e.persona.personaNombre} #{e.persona.personaApellido}"/>
+                    <p:column headerText="Nombres">
+                        <p:outputLabel value="#{e.persona.personaNombre}"/>
                     </p:column>
-                    <p:column style="width:35px">
-                        <p:rowEditor />
+                    <p:column headerText="Apellidos">
+                        <p:outputLabel value="#{e.persona.personaApellido}"/>
                     </p:column>
                 </p:dataTable>
             </p:panelGrid>
         </h:form>
+
+        <p:dialog closeOnEscape="true" widgetVar="Dest" modal="true" header="Alumno Seleccionado">
+            <h:form id="p0">
+                <p:tabView id="wd" orientation="top" dynamic="true">
+                    <p:tab id="e1" title="Estudiante">
+                        <p:panel header="Datos personales del estudiante">
+
+                            <h:panelGrid columns="2" columnClasses="label, value">
+                                <p:outputLabel for="nie" value="NIE: "/>
+                                <h:outputText id="nie" value="#{nominaAController.selected.idestudiante.toString().substring(1)}"/>
+
+                                <p:outputLabel value="Nombres: " for="nom"/>
+                                <h:outputText id="nom" value="#{nominaAController.selected.persona.personaNombre}"/>
+
+                                <p:outputLabel value="Apellidos: " for="apel"/>
+                                <h:outputText id="apel" value="#{nominaAController.selected.persona.personaApellido}"/>
+
+                                <p:outputLabel for="button" value="Fecha de Nacimiento :" />
+                                <p:datePicker id="button" value="#{nominaAController.selected.persona.personaNacimiento}"
+                                              pattern="dd/MM/yyyy" locale="es" disabled="true"/>
+
+                                <p:outputLabel value="Nacionalidad: " />
+                                <p:selectBooleanButton id="nacionalidadE" value="#{inscripcionController.nacionalidad}" 
+                                                       onLabel="Salvadoreña" offLabel="Extrangera" style="width:190px"
+                                                       disabled="true"/>
+
+                                <p:outputLabel value="Partida de nacimiento?: " />
+                                <p:selectBooleanButton value="#{nominaAController.selected.estudiantePartidaNac}" 
+                                                       onLabel="Sí tengo" offLabel="No tengo" style="width: 190px"
+                                                       disabled="true"/>
+
+                                <p:outputLabel for="w" value="Porqué no tiene partida de nacimiento?: " />
+                                <h:outputText id="w" value="#{nominaAController.selected.estudianteNoPartida}"/>
+
+                                <p:outputLabel value="NIT: " />
+                                <h:outputText value="#{nominaAController.selected.persona.personaNit}"/>
+
+                                <p:outputLabel value="Sexo: " />
+                                <p:selectBooleanButton value="#{nominaAController.selected.persona.personaSexo}" disabled="true"
+                                                       onLabel="Femenino" offLabel="Masculino" style="width: 190px"/>
+
+                                <p:outputLabel for="console1" value="Estado Familiar: " />
+                                <p:selectOneMenu id="console1" value="#{nominaAController.selected.persona.personaEstadoFamiliar}" 
+                                                 style="width: 190px" disabled="true">
+                                    <f:selectItem itemLabel="Seleccione" itemValue="" noSelectionOption="true"/>
+                                    <f:selectItem itemLabel="Solter@" itemValue="0" />
+                                    <f:selectItem itemLabel="Casad@" itemValue="1" />
+                                    <f:selectItem itemLabel="Acompañad@" itemValue="2"/>
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="dep" value="Departamento de nacimiento: " />
+                                <p:selectOneMenu id="dep" value="#{nominaAController.getDepartamento(nominaAController.selected.persona)}" 
+                                                 disabled="true">
+                                    <f:selectItems value="#{nominaAController.getDepartamentoLista(nominaAController.selected.persona)}"/>
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="mun" value="Municipio de nacimiento: " />
+                                <p:selectOneMenu id="mun" value="#{nominaAController.getMunicipio(nominaAController.selected.persona)}" 
+                                                 disabled="true">
+                                    <f:selectItems value="#{nominaAController.getMunicipioLista(nominaAController.selected.persona)}"/>
+                                </p:selectOneMenu>
+
+                                <p:outputLabel value="Discapacidades: " />
+                                <h:outputText value="#{nominaAController.selected.persona.personaDiscapacidades}"
+                                              title="Si tiene alguna discapacidad, escríbalas separadas por comas"/>
+
+                                <p:outputLabel value="Enfermedades que padece: " />
+                                <h:outputText value="#{nominaAController.selected.estudianteEnfermedades}"
+                                              title="Si padece de alguna(s) enfermedad(es), escríbalas separadas por comas"/>
+
+                                <p:outputLabel value="Medicamentos prescritos de carácter permanente: " />
+                                <h:outputText value="#{nominaAController.selected.estudianteMedicamentos}"
+                                              title="Si usa permenentemente dedicamentos, escriba los nombres separados por comas"/>
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:tab>
+                    <p:tab id="e2" title="Contacto">
+                        <p:panel header="Información de contacto">
+
+                            <h:panelGrid columns="2" columnClasses="label, value">
+                                <p:outputLabel value="Teléfono: " />
+                                <h:outputText value="#{nominaAController.selected.persona.personaTelefono}"/>
+
+                                <p:outputLabel value="email: " />
+                                <h:outputText value="#{nominaAController.selected.persona.personaEmail}"/>
+
+                                <p:outputLabel value="Dirección: " />
+                                <h:outputText value="#{nominaAController.selected.persona.personaDireccion}"/>
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:tab>
+                    <p:tab title="Socioeconómico">
+                        <p:panel header="Información Socio-económica del estudiante">
+
+                            <h:panelGrid columns="2" columnClasses="label, value">
+                                <p:outputLabel for="console2" value="Zona de residencia: " />
+                                <p:selectOneMenu id="console2" value="#{nominaAController.selected.persona.personaZonaVivienda}"
+                                                 disabled="true">
+                                    <f:selectItem itemLabel="Seleccione" itemValue="" noSelectionOption="true"/>
+                                    <f:selectItem itemLabel="Rural" itemValue="1" />
+                                    <f:selectItem itemLabel="Urbana" itemValue="2" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="console3" value="Tipo de calle de donde vive: " />
+                                <p:selectOneMenu id="console3"  disabled="true"
+                                                 value="#{nominaAController.selected.estudianteTipoCalle}">
+                                    <f:selectItem itemLabel="Seleccione" itemValue=" " noSelectionOption="true"/>
+                                    <f:selectItem itemLabel="Tierra" itemValue="0" />
+                                    <f:selectItem itemLabel="Pavimentada" itemValue="1" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="console4" value="Medio de transporte: " />
+                                <p:selectOneMenu id="console4" value="#{nominaAController.selected.estudianteMedioTransporte}"
+                                                 disabled="true">
+                                    <f:selectItem itemLabel="Seleccione" itemValue=" " noSelectionOption="true"/>
+                                    <f:selectItem itemLabel="A pie" itemValue="0" />
+                                    <f:selectItem itemLabel="Bicicleta" itemValue="1" />
+                                    <f:selectItem itemLabel="Moto" itemValue="2" />
+                                    <f:selectItem itemLabel="Carro propio" itemValue="3" />
+                                    <f:selectItem itemLabel="Bus" itemValue="4" />
+                                    <f:selectItem itemLabel="Microbús" itemValue="5" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel value="Riesgo o vulnerabilidad: " />
+                                <h:outputText value="#{nominaAController.selected.estudianteRiesgoVulnerabilidad}"/>
+
+                                <p:outputLabel value="Distancia en KM que recorrería hasta al INTEX: "/>
+                                <p:inputNumber id="input1" value="#{nominaAController.selected.estudianteDistanciaAlCentro}" 
+                                               disabled="true" symbol=" Km" symbolPosition="s" decimalSeparator="." thousandSeparator=","/> 
+
+                                <p:outputLabel value="Trabaja?: " />
+                                <p:selectBooleanButton id="value2" value="#{nominaAController.selected.estudianteTrabaja}" 
+                                                       disabled="true" onLabel="Sí" offLabel="No" style="width:190px"/>
+
+                                <p:outputLabel value="¿En qué trabaja?: "/>
+                                <h:outputText id="r2" value="#{nominaAController.selected.estudianteFormaTrabajo}"/>
+
+                                <p:outputLabel for="basic" value="¿De quién depende económicamente?: " />
+                                <p:selectManyCheckbox id="basic" value="#{nominaAController.getDependencia(nominaAController.selected)}"  
+                                                      disabled="true">
+                                    <f:selectItem itemLabel="Padre" itemValue="Padre" />
+                                    <f:selectItem itemLabel="Madre" itemValue="Madre" />
+                                    <f:selectItem itemLabel="Abuelos" itemValue="Abuelo/a" />
+                                    <f:selectItem itemLabel="Hermanos" itemValue="Hermano/a" />
+                                    <f:selectItem itemLabel="Otro" itemValue="Otro"  />
+                                </p:selectManyCheckbox>
+
+                                <p:outputLabel value="Especifique: "/>
+                                <h:outputText id="ot" value="#{nominaAController.getOtraDependenciaEcon(nominaAController.selected)}"/>
+
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:tab>
+                    <p:tab title="Matrícula">
+                        <p:panel header="Datos sobre la mátricula del estudiante">
+                            <h:panelGrid columns="2" columnClasses="label, value">
+                                <h:outputLabel for="cent"  value="Centro educativo de procedencia: " />
+                                <h:outputText id="cent" 
+                                              value="#{nominaAController.selected.estudianteCentroProcedencia}"/>
+
+                                <p:outputLabel for="console6" value="Grado: " />
+                                <h:outputText id="console6" value="#{nominaAController.getGradoNombre(nominaAController.mat.grado.gradoPK)}"/>
+
+                                <p:outputLabel value="¿Repite año?: " />
+                                <p:selectBooleanButton value="#{nominaAController.mat.matriculaRepite}" disabled="true"
+                                                       onLabel="Sí" offLabel="No" style="width:190px"/>
+
+                                <p:outputLabel value="¿Cursó parvularia?: " />
+                                <p:selectBooleanButton value="#{nominaAController.selected.estudianteParvularia}" 
+                                                       disabled="true" onLabel="Sí" offLabel="No"/>
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:tab>
+                    <p:tab title="Documentos">
+                        <h:panelGrid columns="2">
+                            <p:outputLabel value="Partida de Nacimiento: " />
+                            <p:commandButton id="btnV0" value="Ver" update="h0" 
+                                             disabled="#{!nominaAController.getHayPartida(nominaAController.selected)}"
+                                             oncomplete="PF('DConstancia0').show();"/>
+
+                            <p:outputLabel value="Certificado 9° grado: " />
+                            <p:commandButton id="btnV1" value="Ver" update="h1" 
+                                             disabled="#{!nominaAController.getHayCertifcado(nominaAController.selected)}"
+                                             oncomplete="PF('DConstancia1').show();"/>
+
+                            <p:outputLabel value="Constancia de conducta: " />
+                            <p:commandButton id="btnV2" value="Ver" update="h2" 
+                                             disabled="#{!nominaAController.getHayConducta(nominaAController.selected)}"
+                                             oncomplete="PF('DConstancia2').show();"/>
+
+                            <p:outputLabel value="Copia de DUI: " />
+                            <p:commandButton id="btnV3" value="Ver" update="h3" 
+                                             disabled="#{!nominaAController.getHayDui(nominaAController.selected)}"
+                                             oncomplete="PF('DConstancia3').show();"/>
+
+                            <p:outputLabel value="Constancia de notas bachillerato: " />
+                            <p:commandButton id="btnV4" value="Ver" update="h4" 
+                                             disabled="#{!nominaAController.getHayNotas(nominaAController.selected)}"
+                                             oncomplete="PF('DConstancia4').show();"/>
+                        </h:panelGrid>
+                    </p:tab>
+                    <p:tab title="Repesentante">
+                        <p:panel header="Datos del representante.">
+
+                            <h:panelGrid columns="2">
+                                <p:outputLabel value="DUI: "/>
+                                <h:outputText value="#{nominaAController.selected.estudianteRepresentante.idestudiante.toString().substring(1)}"/>
+
+                                <p:outputLabel value="Nombres: " />
+                                <h:outputText value="#{nominaAController.selected.estudianteRepresentante.persona.personaNombre}"/>
+
+                                <p:outputLabel value="Apellidos: " />
+                                <h:outputText value="#{nominaAController.selected.estudianteRepresentante.persona.personaApellido}"/>
+
+                                <p:outputLabel for="fechaR" value="Fecha de Nacimiento :" />
+                                <p:datePicker id="fechaR" value="#{nominaAController.selected.estudianteRepresentante.persona.personaNacimiento}"
+                                              pattern="dd/MM/yyyy" locale="es" disabled="true"/>
+
+                                <p:outputLabel value="Nacionalidad: " />
+                                <h:outputText id="nacionalidad" value="#{nominaAController.selected.estudianteRepresentante.persona.personaNacionalidad}"/>
+
+                                <p:outputLabel value="¿Es familiar del estudiante?: " />
+                                <p:selectBooleanButton id="value3" value="#{nominaAController.selected.estudianteRepresentante.estudianteRepresentanteFamiliar}" 
+                                                       onLabel="Sí" offLabel="No" disabled="true"/>
+
+                                <p:outputLabel value="Parentesco con el estudiante: " />
+                                <h:outputText value="#{nominaAController.selected.estudianteRepresentante.estudianteParentescoRepresentante}"/>
+
+
+                                <p:outputLabel value="NIT: " />
+                                <h:outputText value="#{nominaAController.selected.estudianteRepresentante.persona.personaNit}"/>
+
+                                <p:outputLabel for="console7" value="Sexo: " />
+                                <p:selectBooleanButton id="console7" 
+                                                       value="#{nominaAController.selected.estudianteRepresentante.persona.personaSexo}" 
+                                                       onLabel="Femenino" offLabel="Masculino" disabled="true"/>
+
+                                <p:outputLabel for="console8" value="Estado Familiar: " />
+                                <p:selectOneMenu id="console8" value="#{nominaAController.selected.estudianteRepresentante.persona.personaEstadoFamiliar}" 
+                                                 disabled="true">
+                                    <f:selectItem itemLabel="Solter@" itemValue="0" />
+                                    <f:selectItem itemLabel="Casad@" itemValue="1" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel value="¿Posee partida de nacimiento?: " />
+                                <p:selectBooleanButton id="value4" value="#{nominaAController.selected.estudianteRepresentante.estudiantePartidaNac}" 
+                                                       onLabel="Sí" offLabel="No" disabled="true"/>
+
+                                <p:outputLabel value="¿Por qué no tiene partida de nacimiento: " />
+                                <h:outputText id="m" value="#{nominaAController.selected.estudianteRepresentante.estudianteNoPartida}"/>
+
+                                <p:outputLabel for="depR" value="Departamento de nacimiento: " />
+                                <p:selectOneMenu id="depR" value="#{nominaAController.getDepartamento(nominaAController.selected.estudianteRepresentante.persona)}" 
+                                                 disabled="true">
+                                    <f:selectItems value="#{nominaAController.getDepartamentoLista(nominaAController.selected.estudianteRepresentante.persona)}"/>
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="munR" value="Municipio de nacimiento: " />
+                                <p:selectOneMenu id="munR" value="#{nominaAController.getMunicipio(nominaAController.selected.estudianteRepresentante.persona)}" disabled="true"
+                                                 style="width: 190px" title="Seleccione el municipio de nacimiento.">
+                                    <f:selectItems value="#{nominaAController.getMunicipioLista(nominaAController.selected.estudianteRepresentante.persona)}"/>
+                                </p:selectOneMenu>
+
+                                <p:outputLabel value="Teléfono: " />
+                                <h:outputText value="#{nominaAController.selected.estudianteRepresentante.persona.personaTelefono}"/>
+
+
+                                <p:outputLabel value="email: " />
+                                <h:outputText value="#{nominaAController.selected.estudianteRepresentante.persona.personaEmail}"/>
+
+                                <p:outputLabel value="Dirección: " />
+                                <h:outputText value="#{nominaAController.selected.estudianteRepresentante.persona.personaDireccion}"/>
+
+                                <p:outputLabel for="console9" value="Zona de residencia: " />
+                                <p:selectOneMenu id="console9" value="#{nominaAController.selected.estudianteRepresentante.persona.personaZonaVivienda}" 
+                                                 disabled="true">
+                                    <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                    <f:selectItem itemLabel="Rural" itemValue="0" />
+                                    <f:selectItem itemLabel="Urbana" itemValue="1" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="console10" value="Tipo de calle de donde vive: " />
+                                <p:selectOneMenu id="console10" value="#{nominaAController.selected.estudianteRepresentante.estudianteTipoCalle}"
+                                                 disabled="true">
+                                    <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                    <f:selectItem itemLabel="Tierra" itemValue="0" />
+                                    <f:selectItem itemLabel="Pavimentada" itemValue="1" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel value="Riesgos o vulnarebilidades: " />
+                                <h:outputText value="#{nominaAController.selected.estudianteRepresentante.estudianteRiesgoVulnerabilidad}"/>
+
+                                <p:outputLabel value="Profesión u oficio: " />
+                                <h:outputText value="#{nominaAController.selected.estudianteRepresentante.estudianteFormaTrabajo}"/>
+
+                                <p:outputLabel value="Escolaridad: " />
+                                <h:outputText value="#{nominaAController.selected.estudianteRepresentante.estudianteEscolaridad}"/>
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:tab>
+                    <p:tab title="Padres">
+                        <p:panel header="Información de los padres del estudiante">
+                            <h:panelGrid >
+                                <p:panel id="papa" header="Datos del padre">
+
+                                    <h:panelGrid columns="2" columnClasses="label, value">
+                                        <p:outputLabel value="DUI del padre: "/>
+                                        <h:outputText id="dp" value="#{nominaAController.selected.estudiantePadre.idpersona.toString().substring(1)}"/>
+
+                                        <p:outputLabel value="Nombres del padre: " />
+                                        <h:outputText id="np" value="#{nominaAController.selected.estudiantePadre.personaNombre}"/>
+
+                                        <p:outputLabel value="Apellidos del padre: " />
+                                        <h:outputText id="ap" value="#{nominaAController.selected.estudiantePadre.personaApellido}"/>
+
+                                        <p:outputLabel value="Teléfono: "/>
+                                        <h:outputText id="tp" value="#{nominaAController.selected.estudiantePadre.personaTelefono}"/>
+                                    </h:panelGrid>
+                                </p:panel>
+                                <p:panel id="mama" header="Datos de la madre">
+
+                                    <h:panelGrid columns="2" columnClasses="label, value">
+                                        <p:outputLabel value="DUI de la madre: "/>
+                                        <h:outputText id="dm" value="#{nominaAController.selected.estudianteMadre.idpersona.toString().substring(1)}"/>
+
+                                        <p:outputLabel value="Nombres de la madre: " />
+                                        <h:outputText id="nm" value="#{nominaAController.selected.estudianteMadre.personaNombre}"/>
+
+                                        <p:outputLabel value="Apellidos de la madre: " />
+                                        <h:outputText id="am" value="#{nominaAController.selected.estudianteMadre.personaApellido}"/>
+
+                                        <p:outputLabel value="Teléfono: "/>
+                                        <h:outputText id="tm" value="#{nominaAController.selected.estudianteMadre.personaTelefono}"/>
+                                    </h:panelGrid>
+                                </p:panel>
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:tab> 
+                </p:tabView>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog id="dialog0" widgetVar="DConstancia0" modal="true" style="width: 60%;"
+                  showHeader="true" header="Visualización de partida de nacimiento" 
+                  closeOnEscape="true">
+            <h:form id="h0">
+                <h:panelGrid columns="1">
+                    <img src="#{nominaAController.getDocPartida(nominaAController.selected)}"
+                         width="640" height="480"/>
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog id="dialog1" widgetVar="DConstancia1" modal="true" style="width: 60%;"
+                  showHeader="true" header="Visualización de certificado de 9° grado" 
+                  closeOnEscape="true">
+            <h:form id="h1">
+                <h:panelGrid columns="1">
+                    <img src="#{nominaAController.getDocCertificado(nominaAController.selected)}"
+                         width="640" height="480"/>
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog id="dialog2" widgetVar="DConstancia2" modal="true" style="width: 60%;"
+                  showHeader="true" header="Visualización de constancia de conducta" 
+                  closeOnEscape="true">
+            <h:form id="h2">
+                <h:panelGrid columns="1">
+                    <img src="#{nominaAController.getDocConducta(nominaAController.selected)}"
+                         width="640" height="480"/>
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog id="dialog3" widgetVar="DConstancia3" modal="true" style="width: 60%;"
+                  showHeader="true" header="Visualización de copia de dui" 
+                  closeOnEscape="true">
+            <h:form id="h3">
+                <h:panelGrid columns="1">
+                    <img src="#{nominaAController.getDocDui(nominaAController.selected)}"
+                         width="640" height="480"/>
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog id="dialog4" widgetVar="DConstancia4" modal="true" style="width: 60%;"
+                  showHeader="true" header="Visualización de constancia de notas de bachillerato" 
+                  closeOnEscape="true">
+            <h:form id="h4">
+                <h:panelGrid columns="1">
+                    <img src="#{nominaAController.getDocNotas(nominaAController.selected)}"
+                         width="640" height="480"/>
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
     </ui:define>
 
 </ui:composition>

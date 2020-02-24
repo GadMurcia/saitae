@@ -6,13 +6,17 @@ import java.util.Collections;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import net.delsas.saitae.ax.Auxiliar;
 import net.delsas.saitae.beans.GradoFacadeLocal;
+import net.delsas.saitae.beans.MatriculaFacadeLocal;
 import net.delsas.saitae.entities.Estudiante;
 import net.delsas.saitae.entities.GradoPK;
+import net.delsas.saitae.entities.Matricula;
+import net.delsas.saitae.entities.MatriculaPK;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -25,9 +29,13 @@ public class nominaAController extends Auxiliar implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private List<Estudiante> nomina;
+    private Estudiante Selected;
     @EJB
     private GradoFacadeLocal gradoFL;
+    @EJB
+    private MatriculaFacadeLocal mFL;
     private GradoPK grado;
+    private Matricula mat;
 
     @PostConstruct
     public void init() {
@@ -72,6 +80,26 @@ public class nominaAController extends Auxiliar implements Serializable {
 
     public void setPK(GradoPK pk) {
         this.grado = pk;
+    }
+
+    public Estudiante getSelected() {
+        return Selected;
+    }
+
+    public void setSelected(Estudiante Selected) {
+        this.Selected = Selected;
+    }
+
+    public void onSelect(AjaxBehaviorEvent e) {
+        mat = mFL.find(new MatriculaPK(Selected.getIdestudiante(), getAñoActual()));
+    }
+
+    public Matricula getMat() {
+        return mat;
+    }
+
+    public void setMat(Matricula mat) {
+        this.mat = mat; 
     }
 
 }

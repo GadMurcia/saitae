@@ -364,98 +364,63 @@ public class infoPerfilController extends Auxiliar implements Serializable {
     }
 
     public void partida(FileUploadEvent f) {
-        usuario.getEstudiante().getDocumentos().setEstudianteDocPartida(f.getFile().getContents());
-        usuario.getEstudiante().getDocumentos().setEstudianteExtencionPartida(f.getFile().getFileName() + "¿¿" + f.getFile().getContentType());
+        partida(f, usuario.getEstudiante());
     }
 
     public boolean getHayPartida() {
-        return usuario.getEstudiante() == null || usuario.getEstudiante().getDocumentos() == null
-                ? false : usuario.getEstudiante().getDocumentos().getEstudianteExtencionPartida() != null;
+        return getHayPartida(usuario.getEstudiante());
     }
 
     public String getDocPartida() {
-        return usuario.getEstudiante() == null ? ""
-                : (getDoc(
-                        usuario.getEstudiante().getDocumentos().getEstudianteDocPartida(),
-                        (usuario.getEstudiante().getDocumentos().getEstudianteExtencionPartida() == null
-                        || usuario.getEstudiante().getDocumentos().getEstudianteExtencionPartida().isEmpty())
-                        ? "" : usuario.getEstudiante().getDocumentos().getEstudianteExtencionPartida().split("¿¿")[1]));
+        return getDocPartida(usuario.getEstudiante());
     }
 
     public void certificado(FileUploadEvent f) {
-        usuario.getEstudiante().getDocumentos().setEstudianteDocCertificado(f.getFile().getContents());
-        usuario.getEstudiante().getDocumentos().setEstudianteExtencionCertificado(f.getFile().getFileName() + "¿¿" + f.getFile().getContentType());
+        certificado(f, usuario.getEstudiante());
     }
 
     public boolean getHayCertifcado() {
-        return usuario.getEstudiante() == null || usuario.getEstudiante().getDocumentos() == null ? false
-                : usuario.getEstudiante().getDocumentos().getEstudianteExtencionCertificado() != null;
+        return getHayCertifcado(usuario.getEstudiante());
     }
 
     public String getDocCertificado() {
-        return usuario.getEstudiante() == null ? ""
-                : (getDoc(
-                        usuario.getEstudiante().getDocumentos().getEstudianteDocCertificado(),
-                        (usuario.getEstudiante().getDocumentos().getEstudianteExtencionCertificado() == null
-                        || usuario.getEstudiante().getDocumentos().getEstudianteExtencionCertificado().isEmpty())
-                        ? "" : usuario.getEstudiante().getDocumentos().getEstudianteExtencionCertificado().split("¿¿")[1]));
+        return getDocCertificado(usuario.getEstudiante());
     }
 
     public void conducta(FileUploadEvent f) {
-        usuario.getEstudiante().getDocumentos().setEstudianteDocConducta(f.getFile().getContents());
-        usuario.getEstudiante().getDocumentos().setEstudianteExtencionConducta(f.getFile().getFileName() + "¿¿" + f.getFile().getContentType());
+        conducta(f, usuario.getEstudiante());
     }
 
     public boolean getHayConducta() {
-        return usuario.getEstudiante() == null || usuario.getEstudiante().getDocumentos() == null
-                ? false : usuario.getEstudiante().getDocumentos().getEstudianteExtencionConducta() != null;
+        return getHayConducta(usuario.getEstudiante());
     }
 
     public String getDocConducta() {
-        return usuario.getEstudiante() == null ? ""
-                : (getDoc(
-                        usuario.getEstudiante().getDocumentos().getEstudianteDocConducta(),
-                        (usuario.getEstudiante().getDocumentos().getEstudianteExtencionConducta() == null
-                        || usuario.getEstudiante().getDocumentos().getEstudianteExtencionConducta().isEmpty())
-                        ? "" : usuario.getEstudiante().getDocumentos().getEstudianteExtencionConducta().split("¿¿")[1]));
+        return getDocConducta(usuario.getEstudiante());
     }
 
     public void dui(FileUploadEvent f) {
-        usuario.getEstudiante().getDocumentos().setEstudianteDocDui(f.getFile().getContents());
-        usuario.getEstudiante().getDocumentos().setEstudianteExtencionDui(f.getFile().getFileName() + "¿¿" + f.getFile().getContentType());
+        dui(f, usuario.getEstudiante());
     }
 
     public boolean getHayDui() {
-        return usuario.getEstudiante() == null || usuario.getEstudiante().getDocumentos() == null
-                ? false : usuario.getEstudiante().getDocumentos().getEstudianteExtencionDui() != null;
+        return getHayDui(usuario.getEstudiante());
     }
 
     public String getDocDui() {
-        return usuario.getEstudiante() == null ? ""
-                : (getDoc(
-                        usuario.getEstudiante().getDocumentos().getEstudianteDocDui(),
-                        (usuario.getEstudiante().getDocumentos().getEstudianteExtencionDui() == null
-                        || usuario.getEstudiante().getDocumentos().getEstudianteExtencionDui().isEmpty())
-                        ? "" : usuario.getEstudiante().getDocumentos().getEstudianteExtencionDui().split("¿¿")[1]));
+        return getDocDui(usuario.getEstudiante());
     }
 
     public void notas(FileUploadEvent f) {
-        usuario.getEstudiante().getDocumentos().setEstudianteDocNotas(f.getFile().getContents());
-        usuario.getEstudiante().getDocumentos().setEstudianteExtencionNotas(f.getFile().getFileName() + "¿¿" + f.getFile().getContentType());
+        notas(f, usuario.getEstudiante());
     }
 
     public boolean getHayNotas() {
-        return usuario.getEstudiante() == null || usuario.getEstudiante().getDocumentos() == null
-                ? false : usuario.getEstudiante().getDocumentos().getEstudianteExtencionNotas() != null;
+        return getHayNotas(usuario.getEstudiante());
     }
 
     public String getDocNotas() {
-        return usuario.getEstudiante() == null ? ""
-                : (getDoc(
-                        usuario.getEstudiante().getDocumentos().getEstudianteDocNotas(),
-                        (usuario.getEstudiante().getDocumentos().getEstudianteExtencionNotas() == null
-                        || usuario.getEstudiante().getDocumentos().getEstudianteExtencionNotas().isEmpty())
-                        ? "" : usuario.getEstudiante().getDocumentos().getEstudianteExtencionNotas().split("¿¿")[1]));
+        return getDocNotas(usuario.getEstudiante());
     }
 
 }

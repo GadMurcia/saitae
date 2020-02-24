@@ -401,6 +401,13 @@ public class matriculaController extends Auxiliar implements Serializable {
         this.seccion = seccion;
     }
 
+    @Override
+    public String getGradoNombre(GradoPK gr) {
+        return gr == null ? ""
+                : (gr.getIdgrado() + "° " + getModalidadNombre(gr.getGradoModalidad()));
+    }
+
+    @Override
     public void onBlour(AjaxBehaviorEvent e) {
         System.out.println(e);
         btnGuardarp2 = !(seccion.getGradoSeccion().isEmpty() || seccion.getGradoSeccion().equals(" "))

@@ -5,8 +5,7 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:t="http://java.sun.com/jsf/composite/components/autentia"
-      xmlns:o="http://omnifaces.org/ui"> 
+      xmlns:t="http://java.sun.com/jsf/composite/components/autentia"> 
     <h:head>
         <title>Administración de Tipos</title>
         <h:outputStylesheet library="css" name="tpp.css"/>
@@ -16,15 +15,6 @@
         <ui:composition template="./../WEB-INF/template/plantilla1.xhtml">
 
             <ui:define name="content">
-                <script>
-                    function socketListener(message, channel, event) {
-                        tipopp([{name: 'mss', value: message}]);
-                    }
-                </script>                
-                <o:socket channel="tipopp" onmessage="socketListener"/>
-                <h:form>
-                    <p:remoteCommand name="tipopp" actionListener="#{tipoController.escucha()}" update="form form0"/>
-                </h:form>
                 <h:form id="form">
                     <p:growl id="msgs" showDetail="true"/>
                     <h1 style="align-content: center;">Administración.</h1>

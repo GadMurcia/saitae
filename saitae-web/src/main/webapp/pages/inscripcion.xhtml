@@ -435,12 +435,12 @@
                                                  label="Número de Documento Único de Identiad" 
                                                  title="Ingrese el número de DUI del padre" mask="99999999-9"/>
 
-                                    <h:outputText value="Nombres del padre: *" />
+                                    <h:outputText value="Nombres del padre: " />
                                     <p:inputText id="np" value="#{inscripcionController.padreI.personaNombre}" 
                                                  label="Nombres" 
                                                  title="Ingrese los nombres del padre"/>
 
-                                    <h:outputText value="Apellidos del padre: *" />
+                                    <h:outputText value="Apellidos del padre: " />
                                     <p:inputText id="ap" value="#{inscripcionController.padreI.personaApellido}" 
                                                  label="Apellidos" 
                                                  title="Ingrese los apellidos del padre"/>
@@ -450,10 +450,10 @@
                                                  label="Número de teléfono del padre" 
                                                  title="Ingrese el número de teléfono del padre" mask="9999-9999"/>
 
-                                    <p:commandButton value="limpiar datos del padre" 
+                                    <p:commandButton value="Limpiar datos del padre" 
                                                      actionListener="#{inscripcionController.limpiarAPadres(1)}"
                                                      update="dp np ap tp"/>
-                                    <p:commandButton value="Copiar datos del repPresentanteI"
+                                    <p:commandButton value="Copiar datos del representante"
                                                      actionListener="#{inscripcionController.copiarAPadres(1)}"
                                                      update="dp np ap tp"/>
                                 </h:panelGrid>
@@ -461,19 +461,19 @@
                             <p:panel id="mama" header="Datos de la madre">
                                 <p:messages />
                                 <h:panelGrid columns="2" columnClasses="label, value">
-                                    <h:outputText value="DUI de la madre: *"/>
+                                    <h:outputText value="DUI de la madre: "/>
                                     <p:inputMask id="dm" value="#{inscripcionController.duiM}"
-                                                 label="Número de Documento Único de Identiad" 
+                                                 label="Número de Documento Único de Identiad" required="true"
                                                  title="Ingrese el número de DUI de la madre" mask="99999999-9"/>
 
                                     <h:outputText value="Nombres de la madre: " />
                                     <p:inputText id="nm" value="#{inscripcionController.madreI.personaNombre}" 
-                                                 label="Nombres" 
+                                                 label="Nombres" required="true"
                                                  title="Ingrese los nombres de la madre"/>
 
                                     <h:outputText value="Apellidos de la madre: " />
                                     <p:inputText id="am" value="#{inscripcionController.madreI.personaApellido}" 
-                                                 label="Apellidos" 
+                                                 label="Apellidos" required="true"
                                                  title="Ingrese los apellidos de la madre"/>
 
                                     <h:outputText value="Teléfono: "/>
@@ -481,10 +481,10 @@
                                                  label="Número de teléfono del madre." 
                                                  title="Ingrese el número de teléfono de la madre." mask="9999-9999"/>
 
-                                    <p:commandButton value="limpiar datos de la madre" 
+                                    <p:commandButton value="Limpiar datos de la madre" 
                                                      actionListener="#{inscripcionController.limpiarAPadres(2)}"
                                                      update="dm nm am tm"/>
-                                    <p:commandButton value="Copiar datos del repPresentanteI"
+                                    <p:commandButton value="Copiar datos del representante"
                                                      actionListener="#{inscripcionController.copiarAPadres(2)}"
                                                      update="dm nm am tm"/>
                                 </h:panelGrid>
