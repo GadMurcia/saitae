@@ -45,7 +45,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Grado.findSeccionByAñoModId", query = "SELECT DISTINCT(g.gradoPK.gradoSeccion) FROM Grado g WHERE g.gradoPK.gradoAño = :año AND g.gradoPK.gradoModalidad = :modalidad AND g.gradoPK.idgrado = :idgrado AND g.gradoActivo = true"),
     @NamedQuery(name = "Grado.findByañoAndActivo", query = "SELECT g FROM Grado g WHERE g.gradoPK.gradoAño = :año AND g.gradoActivo = true"),
     @NamedQuery(name = "Grado.findAños", query = "SELECT DISTINCT g.gradoPK.gradoAño FROM Grado g ORDER BY g.gradoPK.gradoAño DESC"),
-    @NamedQuery(name = "Grado.findByidMaestro", query = "SELECT g FROM Grado g WHERE g.gradoMaestroGuia.idmaestro = :idMaestro ORDER BY g.gradoPK.gradoAño DESC")
+    @NamedQuery(name = "Grado.findByidMaestro", query = "SELECT g FROM Grado g WHERE g.gradoMaestroGuia.idmaestro = :idMaestro ORDER BY g.gradoPK.gradoAño DESC"),
+    @NamedQuery(name = "Grado.findByidMaestroAndAño", query = "SELECT g FROM Grado g WHERE g.gradoMaestroGuia.idmaestro = :idMaestro AND g.gradoPK.gradoAño = :año")
 })
 public class Grado implements Serializable {
 

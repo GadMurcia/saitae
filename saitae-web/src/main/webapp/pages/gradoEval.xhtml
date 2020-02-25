@@ -25,7 +25,7 @@
                     </p:selectOneMenu>
                 </h:panelGrid>
 
-                <p:panel header="Eveluación del maestro #{axiliarController.getGradoNombre(gradoEvalController.gradoSelected.gradoPK)}"
+                <p:panel header="Evaluación de #{axiliarController.getGradoNombre(gradoEvalController.gradoSelected.gradoPK)}"
                          rendered="#{gradoEvalController.gradoSelected != null}" 
                          collapsed="true" toggleable="true">
                     <t:evGrado evGrado="#{gradoEvalController.eval}" editar="true"/>
@@ -43,7 +43,6 @@
                                  rowKey="#{ev.gradoEvaluacionPK}" id="evalg">
                         <p:ajax event="rowSelect"/>
                         <f:facet name="header">
-                            Historial de evaluaciones del grado 
                             #{axiliarController.getGradoNombre(gradoEvalController.gradoSelected.gradoPK)}
                         </f:facet>
                         <p:column headerText="Fecha y hora">

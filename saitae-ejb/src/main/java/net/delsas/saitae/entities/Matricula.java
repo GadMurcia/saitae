@@ -38,7 +38,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Matricula.findAllNew", query = "SELECT m FROM Matricula m WHERE m.matriculaComentario = 'N' AND m.grado.gradoPK.gradoModalidad = :mod AND m.grado.gradoPK.idgrado = :idgrado"),
     @NamedQuery(name = "Matricula.findAñoByidEstudiante", query = "SELECT DISTINCT m.grado.gradoPK.gradoAño FROM Matricula m WHERE m.estudiante.idestudiante = :idEstudiante ORDER BY m.grado.gradoPK.gradoAño DESC"),
     @NamedQuery(name = "Matricula.findGradopkByidEstudianteAndAño", query = "SELECT DISTINCT m.grado.gradoPK FROM Matricula m WHERE m.estudiante.idestudiante = :idEstudiante AND m.grado.gradoPK.gradoAño = :año"),
-    @NamedQuery(name = "Matricula.findGradoByidEstudiante", query = "SELECT m.grado FROM Matricula m WHERE m.estudiante.idestudiante = :idEstudiante ORDER BY m.grado.gradoPK.gradoAño DESC")
+    @NamedQuery(name = "Matricula.findGradoByidEstudiante", query = "SELECT m.grado FROM Matricula m WHERE m.estudiante.idestudiante = :idEstudiante ORDER BY m.grado.gradoPK.gradoAño DESC"),
+    @NamedQuery(name = "Matricula.countActivos", query = "SELECT COUNT(DISTINCT(m.estudiante.idestudiante)) FROM Matricula m WHERE m.matriculaPK.matriculaAnyo = :año AND m.estudiante.persona.personaActivo = true")
 })
 public class Matricula implements Serializable {
 

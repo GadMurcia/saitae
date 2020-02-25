@@ -252,13 +252,13 @@
                                             <f:facet name="output">
                                                 <p:outputLabel value="#{g.gradoMaestroGuia.idmaestro == 0 
                                                                         ? 'No Seleccionado' : 
-                                                                        g.gradoMaestroGuia.persona.personaNombre}" />
+                                                                        tipoController.getNombreCortoPersona(g.gradoMaestroGuia.persona)}"/>
                                             </f:facet>
                                             <f:facet name="input">
                                                 <p:selectOneMenu value="#{g.gradoMaestroGuia.idmaestro}">
                                                     <f:selectItem itemLabel="Seleccionar" itemValue="0"/>
                                                     <f:selectItems value="#{tipoController.maestros}" var="mae" 
-                                                                   itemLabel="#{mae.persona.personaNombre}"
+                                                                   itemLabel="#{tipoController.getNombreCortoPersona(mae.persona)}"
                                                                    itemValue="#{mae.idmaestro}"/>
                                                 </p:selectOneMenu>
                                             </f:facet>

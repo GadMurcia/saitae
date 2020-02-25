@@ -37,7 +37,10 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "EntregaUtiles.findByZapatos2", query = "SELECT e FROM EntregaUtiles e WHERE e.zapatos2 = :zapatos2"),
     @NamedQuery(name = "EntregaUtiles.findByUniforme2", query = "SELECT e FROM EntregaUtiles e WHERE e.uniforme2 = :uniforme2"),
     @NamedQuery(name = "EntregaUtiles.findByUtiles2", query = "SELECT e FROM EntregaUtiles e WHERE e.utiles2 = :utiles2"),
-    @NamedQuery(name = "EntregaUtiles.findByComentario", query = "SELECT e FROM EntregaUtiles e WHERE e.comentario = :comentario")})
+    @NamedQuery(name = "EntregaUtiles.findByComentario", query = "SELECT e FROM EntregaUtiles e WHERE e.comentario = :comentario"),
+    @NamedQuery(name = "EntregaUtiles.findByAño", query = "SELECT e FROM EntregaUtiles e WHERE e.entregaUtilesPK.año = :año"),
+    @NamedQuery(name = "EntregaUtiles.findByGrado", query = "SELECT e FROM EntregaUtiles e WHERE e.entregaUtilesPK.idEstudiante  IN (SELECT m.matriculaPK.idmatricula FROM Matricula m WHERE m.grado.gradoPK = :gPK)")
+})
 public class EntregaUtiles implements Serializable {
 
     private static final long serialVersionUID = 1L;

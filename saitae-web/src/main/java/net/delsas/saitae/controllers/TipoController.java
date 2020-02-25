@@ -671,6 +671,9 @@ public class TipoController extends Auxiliar implements Serializable {
                                 maep,
                                 notiFL, notificacion);
                     }
+                    if (gcontrol == null) {
+                        gradoFL.create(g);
+                    }
                     gradoFL.edit(g);
                     titulo = "Grado";
                     mensaje = g.getGradoPK().getIdgrado() + "° " + g.getGradoPK().getGradoModalidad() + " "

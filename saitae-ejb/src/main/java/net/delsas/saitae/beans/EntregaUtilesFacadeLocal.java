@@ -8,6 +8,7 @@ package net.delsas.saitae.beans;
 import java.util.List;
 import javax.ejb.Local;
 import net.delsas.saitae.entities.EntregaUtiles;
+import net.delsas.saitae.entities.GradoPK;
 
 /**
  *
@@ -29,5 +30,23 @@ public interface EntregaUtilesFacadeLocal {
     List<EntregaUtiles> findRange(int[] range);
 
     int count();
-    
+
+    /**
+     * Devuelve una Lista de las entregas que se han hecho en el año
+     * proporcionado
+     *
+     * @param año
+     * @return java.util.List net.delsas.saitae.entities.EntregaUtiles
+     */
+    public List<EntregaUtiles> findByAño(Integer año);
+
+    /**
+     * Devuelve una Lista de las entregas que se han hecho en el grado
+     * proporcionado
+     *
+     * @param gPK
+     * @return java.util.List net.delsas.saitae.entities.EntregaUtiles
+     */
+    public List<EntregaUtiles> findByGrado(GradoPK gPK);
+
 }

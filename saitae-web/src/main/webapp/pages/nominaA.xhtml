@@ -28,7 +28,7 @@
                              selectionMode="single" selection="#{nominaAController.selected}"
                              rowKey="#{e.idestudiante}">
 
-                    <p:ajax event="rowSelect" listener="#{nominaAController.onBlour}"
+                    <p:ajax event="rowSelect" listener="#{nominaAController.onSelect}"
                             update="p0" oncomplete="PF('Dest').show();"/>
 
                     <f:facet name="header">

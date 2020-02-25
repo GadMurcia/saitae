@@ -76,5 +76,12 @@ public class MatriculaFacade extends AbstractFacade<Matricula> implements Matric
                 .setParameter("idEstudiante", idEstudiante)
                 .getResultList();
     }
+    
+    @Override
+    public long countActivos(Integer año){
+        return (long) em.createNamedQuery("Matricula.countActivos")
+                .setParameter("año", año)
+                .getSingleResult();
+    }
 
 }

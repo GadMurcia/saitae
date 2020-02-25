@@ -779,8 +779,8 @@ public class Auxiliar implements Serializable {
         return gr == null ? ""
                 : (gr.getIdgrado() + "° "
                 + getModalidadNombre(gr.getGradoModalidad())
-                + ((gr.getGradoSeccion() == null || gr.getGradoSeccion().isEmpty())
-                ? "" : "Sección " + gr.getGradoSeccion()));
+                + ((gr.getGradoSeccion() == null || gr.getGradoSeccion().isEmpty() || gr.getGradoSeccion().equals(" "))
+                ? "" : " Sección " + gr.getGradoSeccion()));
     }
 
     public String getModalidadNombre(String gr) {

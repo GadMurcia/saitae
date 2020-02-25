@@ -79,4 +79,13 @@ public interface MatriculaFacadeLocal {
      */
     public List<Grado> findGradoByidEstudiante(Integer idEstudiante);
 
+    /**
+     * Devuelve la cantidad de alumnos activos y matriculados en el año
+     * proporcionado
+     *
+     * @param año
+     * @return java.lang.Integer
+     */
+    public long countActivos(Integer año);
+
 }

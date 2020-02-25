@@ -90,5 +90,7 @@ public interface GradoFacadeLocal {
      * @return java.util.List net.delsas.saitae.entities.Grado
      */
     public List<Grado> findByidMaestro(Integer idMaestro);
+    
+    public Grado findByidMaestroAndAño(Integer idMaestro, Integer año);
 
 }

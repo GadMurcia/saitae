@@ -388,12 +388,12 @@
                         <p:column/>
                         <h:panelGrid columns="3">
                             <h:outputLabel value="Buscar por: " />
-                            <p:selectOneButton value="#{reservaSController.parametro}">
+                            <p:selectOneButton id="bp" value="#{reservaSController.parametro}">
                                 <f:selectItem itemLabel="Título" itemValue="1" />
                                 <f:selectItem itemLabel="Autor" itemValue="2" />
                                 <f:selectItem itemLabel="Tema" itemValue="3" />
                                 <p:ajax event="change" listener="#{reservaSController.onBlur}"
-                                        update="pp"/>
+                                        update="pp bp"/>
                             </p:selectOneButton>
                         </h:panelGrid>
 
