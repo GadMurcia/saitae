@@ -60,7 +60,7 @@
                                    requiredMessage="The Estudiantes field is required." 
                                    emptyValue="zero" size="5" thousandSeparator="," minValue="0" 
                                    maxValue="100" decimalSeparator="." type="tel">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:inputNumber>
 
                     <p:outputLabel value="HoraInicio:" for="horaInicio" />
@@ -89,14 +89,14 @@
                     <p:inputText id="unidad" value="#{cc.attrs.evMaestro.unidad}" size="30"
                                  title="Unidad" required="true" disabled="#{!cc.attrs.editar}"
                                  requiredMessage="The Unidad field is required." maxlength="45">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:inputText>
 
                     <p:outputLabel value="Objetivo:" for="objetivo" />
                     <p:inputText id="objetivo" value="#{cc.attrs.evMaestro.objetivo}" size="30"
                                  title="Objetivo" required="true" disabled="#{!cc.attrs.editar}"
                                  requiredMessage="The Objetivo field is required." maxlength="80">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:inputText>
 
                 </h:panelGrid>
@@ -106,109 +106,109 @@
                     <p:outputLabel for="fi1" value="Plan de trabajo de grado: "/>
                     <p:selectBooleanButton id="fi1" value="#{cc.attrs.evMaestro.planGrado}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fi2" value="Jornalización del grado: "/>
                     <p:selectBooleanButton id="fi2" value="#{cc.attrs.evMaestro.jornalización}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fi3" value="Carta didáctica: "/>
                     <p:selectBooleanButton id="fi3" value="#{cc.attrs.evMaestro.cartaDidactica}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fi4" value="Guión de clase: "/>
                     <p:selectBooleanButton id="fi4" value="#{cc.attrs.evMaestro.guionClase}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fi5" value="Agenda diaria: "/>
                     <p:selectBooleanButton id="fi5" value="#{cc.attrs.evMaestro.agendaDiaria}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fi6" value="Objetivo: "/>
                     <p:selectBooleanButton id="fi6" value="#{cc.attrs.evMaestro.colocaObjetivo}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fi7" value="Ambientación: "/>
                     <p:selectBooleanButton id="fi7" value="#{cc.attrs.evMaestro.ambientacion}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fi8" value="Inició Puntualmente: "/>
                     <p:selectBooleanButton id="fi8" value="#{cc.attrs.evMaestro.puntual}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fi9" value="Diferentes Comités: "/>
                     <p:selectBooleanButton id="fi9" value="#{cc.attrs.evMaestro.comites}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fi10" value="Ejes Transversales: "/>
                     <p:selectBooleanButton id="fi10" value="#{cc.attrs.evMaestro.ejesTransversales}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fi11" value="Horario de limpieza y hornato: "/>
                     <p:selectBooleanButton id="fi11" value="#{cc.attrs.evMaestro.horarioLimpiezaHOrnato}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fi12" value="Valores: "/>
                     <p:selectBooleanButton id="fi12" value="#{cc.attrs.evMaestro.valores}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fi13" value="Control de asistencia: "/>
                     <p:selectBooleanButton id="fi13" value="#{cc.attrs.evMaestro.asistencia}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fi14" value="Revisa tareas: "/>
                     <p:selectBooleanButton id="fi14" value="#{cc.attrs.evMaestro.revisaTareas}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fi15" value="Repaso de clase anterior: "/>
                     <p:selectBooleanButton id="fi15" value="#{cc.attrs.evMaestro.repasoClaseAnterior}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fi16" value="Organiza la clase (Círculo, semicírculo, grupos): "/>
                     <p:selectBooleanButton id="fi16" value="#{cc.attrs.evMaestro.organizaClase}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fi17" value="Dispone de un ambiente adecuado para la clase: "/>
                     <p:selectBooleanButton id="fi17" value="#{cc.attrs.evMaestro.ambienteAdecuado}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fi18" value="Usa guia de clase: "/>
                     <p:selectBooleanButton id="fi18" value="#{cc.attrs.evMaestro.usaGuiaClase}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
                 </h:panelGrid>
             </p:tab>
@@ -217,157 +217,157 @@
                     <p:outputLabel for="fd1" value="Presenta agenda de clase: "/>
                     <p:selectBooleanButton id="fd1" value="#{cc.attrs.evMaestro.presentaAgenda}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fd2" value="Presenta Objetivo de clase: "/>
                     <p:selectBooleanButton id="fd2" value="#{cc.attrs.evMaestro.presentaObjetivo}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fd3" value="Presenta objetivo: "/>
                     <p:selectBooleanButton id="fd3" value="#{cc.attrs.evMaestro.presentaContenido}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fd4" value="Expone ideas con claridad: "/>
                     <p:selectBooleanButton id="fd4" value="#{cc.attrs.evMaestro.ideasClaras}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fd5" value="Clase centrada en el docente: "/>
                     <p:selectBooleanButton id="fd5" value="#{cc.attrs.evMaestro.claseCentradaDocente}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fd6" value="Hace partícipes a los alumnos: "/>
                     <p:selectBooleanButton id="fd6" value="#{cc.attrs.evMaestro.participanAlumnos}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fd7" value="Presenta recursos didácticos según el contenido: "/>
                     <p:selectBooleanButton id="fd7" value="#{cc.attrs.evMaestro.recursosDidacticos}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fd8" value="Especialidad y práctica: "/>
                     <p:selectBooleanButton id="fd8" value="#{cc.attrs.evMaestro.especialidadPractica}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fd9" value="Utiliza disciplina con dignidad: "/>
                     <p:selectBooleanButton id="fd9" value="#{cc.attrs.evMaestro.disciplinaDigna}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fd10" value="Llama a los estudiantes por su nombre: "/>
                     <p:selectBooleanButton id="fd10" value="#{cc.attrs.evMaestro.llamarEstudianteNombre}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fd11" value="Docente se desplaza por el salón de clases: "/>
                     <p:selectBooleanButton id="fd11" value="#{cc.attrs.evMaestro.despazaSalon}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fd12" value="Formula preguntas a los estudiantes: "/>
                     <p:selectBooleanButton id="fd12" value="#{cc.attrs.evMaestro.preguntaEstudiantes}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fd13" value="Aprovecha el tiempo de la clase en función del objetivo: "/>
                     <p:selectBooleanButton id="fd13" value="#{cc.attrs.evMaestro.aprovechaTiempo}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fd14" value="Verifica que los estudiantes han comprendido el contenido y/o la práctica: "/>
                     <p:selectBooleanButton id="fd14" value="#{cc.attrs.evMaestro.verificaComprensionContenido}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fd15" value="Existe un trato igual para señoritas y varones: "/>
                     <p:selectBooleanButton id="fd15" value="#{cc.attrs.evMaestro.tratoIgualitario}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fd16" value="Organiza trabajos en grupos, trios o parejas: "/>
                     <p:selectBooleanButton id="fd16" value="#{cc.attrs.evMaestro.trabajosGrupos}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fd17" value="Utiliza técnicas y/o estrategias adecuadas al contenido en desarrollo: "/>
                     <p:selectBooleanButton id="fd17" value="#{cc.attrs.evMaestro.tecnicasAdecuadas}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fd18" value="Existe creatividad e innovación para facilitar el aprendizaje: "/>
                     <p:selectBooleanButton id="fd18" value="#{cc.attrs.evMaestro.aprendizajeCreativo}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fd19" value="Toma en cuenta las diferencias individuales: "/>
                     <p:selectBooleanButton id="fd19" value="#{cc.attrs.evMaestro.diferenciasIndividuaes}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fd20" value="Utilia sólo libro de texto: "/>
                     <p:selectBooleanButton id="fd20" value="#{cc.attrs.evMaestro.soloLibro}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fd21" value="Utiliza lista de cotejo para evaluaciones: "/>
                     <p:selectBooleanButton id="fd21" value="#{cc.attrs.evMaestro.listaCotejo}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fd22" value="Utiliza sólo copia del pizarrón: "/>
                     <p:selectBooleanButton id="fd22" value="#{cc.attrs.evMaestro.copiaPizarron}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fd23" value="Realiza ejercicios y solución de problemas en el pizarrón: "/>
                     <p:selectBooleanButton id="fd23" value="#{cc.attrs.evMaestro.ejerciciosPizarron}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fd24" value="Domina el contenido con seguridad: "/>
                     <p:selectBooleanButton id="fd24" value="#{cc.attrs.evMaestro.dominaContenido}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fd25" value="Utiliza un método definido: "/>
                     <p:selectBooleanButton id="fd25" value="#{cc.attrs.evMaestro.metodoDefinido}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fd26" value="Desarrolla ejes transversales en clase: "/>
                     <p:selectBooleanButton id="fd26" value="#{cc.attrs.evMaestro.desarrollaEjezTransv}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
                 </h:panelGrid>
             </p:tab>
@@ -376,43 +376,43 @@
                     <p:outputLabel for="fc1" value="Establece porcentajes para la evaluación de tareas o trabajos ex-aula: "/>
                     <p:selectBooleanButton id="fc1" value="#{cc.attrs.evMaestro.porcentajesEvaluacion}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fc2" value="Asigna tareas a los estudiantes y da criterios de evaluación: "/>
                     <p:selectBooleanButton id="fc2" value="#{cc.attrs.evMaestro.asignaTareas}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fc3" value="Proporciona fuentes de consulta: "/>
                     <p:selectBooleanButton id="fc3" value="#{cc.attrs.evMaestro.fuentesConsulta}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fc4" value="Al alumno le queda claro cómo es evaluado: "/>
                     <p:selectBooleanButton id="fc4" value="#{cc.attrs.evMaestro.claridadEvaluacion}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fc5" value="Refuerza la utilidad del contenido desarrollado: "/>
                     <p:selectBooleanButton id="fc5" value="#{cc.attrs.evMaestro.refuerzoContenido}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fc6" value="Aclara dudas en los alumnos: "/>
                     <p:selectBooleanButton id="fc6" value="#{cc.attrs.evMaestro.aclaraDudas}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
 
                     <p:outputLabel for="fc7" value="Desarrollo de la clase de acuerdo con lo planificado: "/>
                     <p:selectBooleanButton id="fc7" value="#{cc.attrs.evMaestro.clasePlanificada}"
                                            offLabel="No" onLabel="Sí" disabled="#{!cc.attrs.editar}">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:selectBooleanButton>
                 </h:panelGrid>
             </p:tab>
@@ -423,7 +423,7 @@
                                      value="#{cc.attrs.evMaestro.actitudicionales}" 
                                      title="Actitudicionales" required="true" 
                                      requiredMessage="The Actitudicionales field is required.">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:inputTextarea>
 
                     <p:outputLabel value="Resumen:" for="resumen" />
@@ -431,7 +431,7 @@
                                      title="Resumen" disabled="#{!cc.attrs.editar}"
                                      requiredMessage="The Actitudicionales field is required."
                                      maxlength="250">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:inputTextarea>
 
                     <p:outputLabel value="Propuesta de Mejora:" for="propuestaMejora" />
@@ -439,7 +439,7 @@
                                      title="PropuestaMejora" disabled="#{!cc.attrs.editar}"
                                      requiredMessage="The Actitudicionales field is required."
                                      maxlength="145">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:inputTextarea>
 
                     <p:outputLabel value="Comentario adicional:" for="evaluacionMaestroComentario" />
@@ -448,7 +448,7 @@
                                      title="EvaluacionMaestroComentario" disabled="#{!cc.attrs.editar}"
                                      requiredMessage="The Actitudicionales field is required."
                                      maxlength="145">
-                        <p:ajax event="change" listener="#{axiliarController.onBlour}"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:inputTextarea>
                 </h:panelGrid>
             </p:tab>
