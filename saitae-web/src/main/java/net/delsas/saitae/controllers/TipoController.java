@@ -613,7 +613,7 @@ public class TipoController extends Auxiliar implements Serializable {
                     titulo = "Tipo De Especialidades";
                     mensaje = es.getTipoEspecialidadesNombre();
                     break;
-                case "sueldos:sueldos":
+                case "sueldos":
                     TipoSueldos s = (TipoSueldos) event.getObject();
                     tiposFL.edit(s);
                     titulo = "Tipo De Sueldo";

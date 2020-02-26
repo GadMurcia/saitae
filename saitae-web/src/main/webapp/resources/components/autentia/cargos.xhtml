@@ -14,10 +14,10 @@
     <cc:implementation>
         <h:panelGrid columns="2">
             <p:dataTable id="cargos" widgetVar="cargos1" var="c" 
-                         value="#{maestroController.maestro.maestoCargoList}" 
+                         value="#{maestroController.maestroM.maestoCargoList}" 
                          editable="true" style="margin-bottom:20px">
                 <f:facet name="header">
-                    Cargos que ostenta #{maestroController.maestro.persona.personaNombre}
+                    Cargos que ostenta #{maestroController.maestroM.persona.personaNombre}
                 </f:facet>
 
                 <p:ajax event="rowEdit" listener="#{maestroController.onRowEdit}" update=":form0:msgs cargos" />
