@@ -89,7 +89,7 @@
                                     <p:rowEditor />
                                 </p:column>
                             </p:dataTable>
-                            <p:commandButton value="Agregar Nuevo" 
+                            <p:commandButton value="+" title="Agregar nuevo"
                                              styleClass="ui-priority-primary" 
                                              process="@this" update=":form0:msgs aula"
                                              action="#{tipoController.onAddNew('aula')}"/>
@@ -134,7 +134,7 @@
                                          editable="true" widgetVar="cargo0" styleClass="tabla" 
                                          emptyMessage="Sin registros aún.">
                                 <f:facet name="header">
-                                    Administración de autores.
+                                    Administración de cargos institucionales
                                 </f:facet>
 
                                 <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" update=":form:msgs" />
