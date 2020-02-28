@@ -17,6 +17,7 @@ import net.delsas.saitae.entities.Estudiante;
 import net.delsas.saitae.entities.GradoPK;
 import net.delsas.saitae.entities.Matricula;
 import net.delsas.saitae.entities.MatriculaPK;
+import net.delsas.saitae.entities.Persona;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -60,7 +61,8 @@ public class nominaAController extends Auxiliar implements Serializable {
         String[] pk = event.getObject().toString().split("@");
         if (pk.length == 4) {
             grado = new GradoPK(Integer.valueOf(pk[0]), pk[1], pk[2], Integer.valueOf(pk[3]));
-            gradoFL.find(grado).getMatriculaList().forEach((m) -> {
+            List<Persona> mats = mFL.findMatriculaByGrado(grado);
+            mats.forEach((m) -> {
                 nomina.add(m.getEstudiante());
             });
         }
@@ -99,7 +101,7 @@ public class nominaAController extends Auxiliar implements Serializable {
     }
 
     public void setMat(Matricula mat) {
-        this.mat = mat; 
+        this.mat = mat;
     }
 
 }
