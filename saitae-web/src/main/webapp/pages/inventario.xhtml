@@ -9,15 +9,6 @@
                 xmlns:o="http://omnifaces.org/ui">
 
     <ui:define name="content">
-        <script>
-            function socketListener(message, channel, event) {
-                tipopp([{name: 'mss', value: message}]);
-            }
-        </script>                
-        <o:socket channel="tipopp" onmessage="socketListener"/>
-        <h:form>
-            <p:remoteCommand name="tipopp" actionListener="#{tipoController.escucha()}" update="form form0"/>
-        </h:form>
         <h:form id="form">
             <p:growl id="msgs" showDetail="true"/>
             <h1 style="align-content: center;">Administración General de Recursos.</h1>
@@ -77,10 +68,11 @@
                             <p:rowEditor />
                         </p:column>
                     </p:dataTable> 
-                    <p:commandButton value="+" styleClass="ui-priority-primary" 
+                    <!--<p:commandButton value="+" styleClass="ui-priority-primary" 
                                      process="@this" update=":form:msgs recurso"
-                                     action="#{tipoController.onAddNew('recursos')}" 
+                                     action="# {tipoController.onAddNew('recursos')}" 
                                      title="Agregar nuevo Tipo de Cargo para el inventario."/>
+                    -->
                 </p:tab>
                 <p:tab title="Tipo Reserva">
                     <p:dataTable id="reserva" var="res" value="#{tipoController.reservas}" editable="true" 

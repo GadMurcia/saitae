@@ -336,7 +336,7 @@ public class TipoController extends Auxiliar implements Serializable {
                         new mensaje(
                                 0,
                                 usuario.getIdpersona(),
-                                pagina.split(".")[0] + "<form¿¿¿tp¿¿" + usuario.getTipoPersona().getIdtipoPersona(),
+                                pagina.split(".intex")[0] + "<form¿¿¿tp¿¿" + usuario.getTipoPersona().getIdtipoPersona(),
                                 new FacesMessage(
                                         FacesMessage.SEVERITY_INFO,
                                         "Se ha eliminado un día laboral", "El día que se ha eliminado es: "
@@ -371,7 +371,7 @@ public class TipoController extends Auxiliar implements Serializable {
                     new mensaje(
                             0,
                             usuario.getIdpersona(),
-                            pagina.split(".")[0] + "<form¿¿¿tp¿¿" + usuario.getTipoPersona().getIdtipoPersona(),
+                            pagina.split(".intex")[0] + "<form¿¿¿tp¿¿" + usuario.getTipoPersona().getIdtipoPersona(),
                             new FacesMessage(
                                     FacesMessage.SEVERITY_INFO,
                                     "Se ha " + (editarDia > 0 ? "editado " : "agregado ")
@@ -459,7 +459,7 @@ public class TipoController extends Auxiliar implements Serializable {
                 }
                 break;
             case "categoria":
-                Categoria ca = new Categoria(0);
+                Categoria ca = new Categoria(-1);
                 if (!categoria.contains(ca)) {
                     categoria.add(ca);
                 }

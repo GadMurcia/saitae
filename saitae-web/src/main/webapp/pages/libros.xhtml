@@ -9,19 +9,10 @@
                 xmlns:o="http://omnifaces.org/ui">
 
     <ui:define name="content">
-        <script>
-            function socketListener(message, channel, event) {
-                tipopp([{name: 'mss', value: message}]);
-            }
-        </script>                
-        <o:socket channel="tipopp" onmessage="socketListener"/>
-        <h:form>
-            <p:remoteCommand name="tipopp" actionListener="#{tipoController.escucha()}" update="form form0"/>
-        </h:form>
         <h:form id="form">
             <p:growl id="msgs" showDetail="true"/>
             <h1 style="align-content: center;">Administración General de Libros.</h1>
-            <p:tabView id="tw" orientation="left" dynamic="true" style="height: 100%; width: 90%;">
+            <p:tabView id="tw" orientation="top" dynamic="true">
                 <p:tab title="Autor">
                     <p:dataTable id="autor" var="au" value="#{tipoController.autor}" editable="true" 
                                  widgetVar="autor1" styleClass="tabla" emptyMessage="Sin registros aún.">
@@ -60,29 +51,41 @@
                                      title="Agregar nuevo autor."/>
                 </p:tab>
 
-                <p:tab title="categoria">
-                    <p:dataTable id="categoria" var="ca" value="#{tipoController.categoria}" editable="true" 
-                                 widgetVar="categoria0" styleClass="tabla" emptyMessage="Sin registros aún.">
+                <p:tab title="Categoría">
+                    <p:dataTable id="categoria" var="ca" value="#{tipoController.categoria}" 
+                                 editable="true" 
+                                 widgetVar="categoria0" styleClass="tabla" 
+                                 emptyMessage="Sin registros aún.">
                         <f:facet name="header">
                             Administración de Categoria.
                         </f:facet>
 
-                        <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" update=":form:msgs" />
-                        <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" update=":form:msgs" />
+                        <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" 
+                                update=":form:msgs" />
+                        <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" 
+                                update=":form:msgs" />
 
                         <p:column headerText="Id" style="width: 30px">
                             <p:cellEditor>
-                                <f:facet name="output"><h:outputText value="#{ca.idcategoria}" /></f:facet>
-                                <f:facet name="input"><p:inputText value="#{ca.idcategoria}" 
-                                                                   style="width:100%" label="Id"/></f:facet>
+                                <f:facet name="output">
+                                    <h:outputText value="#{ca.idcategoria}" />
+                                </f:facet>
+                                <f:facet name="input">
+                                    <p:inputText value="#{ca.idcategoria}" 
+                                                 style="width:100%" label="Id"/>
+                                </f:facet>
                             </p:cellEditor>
                         </p:column>
 
                         <p:column headerText="Nombre">
                             <p:cellEditor>
-                                <f:facet name="output"><h:outputText value="#{ca.categoriaNombre}" /></f:facet>
-                                <f:facet name="input"><p:inputText value="#{ca.categoriaNombre}" 
-                                                                   style="width:100%" label="Nombre"/></f:facet>
+                                <f:facet name="output">
+                                    <h:outputText value="#{ca.categoriaNombre}" />
+                                </f:facet>
+                                <f:facet name="input">
+                                    <p:inputText value="#{ca.categoriaNombre}" 
+                                                                   style="width:100%" label="Nombre"/>
+                                </f:facet>
                             </p:cellEditor>
                         </p:column>
 
@@ -91,11 +94,11 @@
                         </p:column>
                     </p:dataTable>
                     <p:commandButton value="+" styleClass="ui-priority-primary" 
-                                     update=":form0:msgs categoria"
+                                     process="@this" update=":form0:msgs categoria"
                                      actionListener="#{tipoController.onAddNew('categoria')}" 
                                      title="Agregar nueva categoria."/>
                 </p:tab>
-                <p:tab title="editorial">
+                <p:tab title="Editorial">
                     <p:dataTable id="editorial" var="e" value="#{tipoController.editorial}" editable="true" 
                                  widgetVar="editorial1" styleClass="tabla" emptyMessage="Sin registros aún.">
                         <f:facet name="header">

@@ -299,9 +299,11 @@
                                     #{d.diasEstudioNombre}
                                 </p:column>
                             </p:dataTable>
-                            <p:commandButton title="Agregar nuevo" icon="pi pi-plus-circle" 
-                                             update="dias :f1 dias"
-                                             actionListener="#{tipoController.nuevoDias()}"/>
+                            <p:commandButton title="Agregar nuevo"
+                                             update="dias :f1 dias" value="+"
+                                             actionListener="#{tipoController.nuevoDias()}"
+                                             oncomplete="PF('Ddias').show()"/>
+
                             <p:contextMenu id="ctxm" for="dias">
                                 <p:menuitem value="Agregar nuevo" icon="pi pi-plus-circle" update="dias :f1"
                                             actionListener="#{tipoController.nuevoDias()}"
@@ -330,8 +332,10 @@
                                                itemLabel="#{ds.diasEstudioNombre}" itemValue="#{ds}"/>
                             </p:selectOneMenu>
                             <p:column/>
-                            <p:commandButton value="Guaradr" actionListener="#{tipoController.guardarDias()}"
-                                             update=":form:tw:dias f1" oncomplete="PF('Ddias').hide()"/>
+                            <p:commandButton value="Guaradr" 
+                                             actionListener="#{tipoController.guardarDias()}"
+                                             update=":form:tw:dias f1" 
+                                             oncomplete="PF('Ddias').hide()"/>
                         </h:panelGrid>
                     </h:form> 
                 </p:dialog>

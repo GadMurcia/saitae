@@ -18,10 +18,8 @@ package net.delsas.saitae.controllers;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -261,10 +259,6 @@ public class admRecursoController extends Auxiliar implements Serializable {
         cl = new ContenidoLibro(0, "", seleccionado);
         clControl = new ContenidoLibro(0, "", seleccionado);
         indiceCl = -1;
-    }
-
-    public String onFlowProcess(FlowEvent event) {
-        return event.getNewStep();
     }
 
     public ContenidoLibro getCl() {

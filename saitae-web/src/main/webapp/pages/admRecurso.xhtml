@@ -73,7 +73,7 @@
                     <p:contextMenu for="recurso">
                         <p:menuitem value="Modificar" update=":form0:msgs form:recurso hn h2"
                                     icon="fa fa-edit" oncomplete="PF('DrecursoN').show();"
-                                    resetValues="true"/>                            
+                                    resetValues="true"/>
                     </p:contextMenu>
                 </h:form>
 
@@ -129,7 +129,7 @@
                           showEffect="fade" hideEffect="fade" resizable="false" 
                           style="width: 90%;">
                     <h:form id="hn">
-                        <p:wizard flowListener="#{admRecursoC.onFlowProcess}" step="init"
+                        <p:wizard flowListener="#{admRecursoC.onFlowProcess}" id="ws"
                                   backLabel="Retroceder" nextLabel="Siguiente">
                             <p:tab id="init" title="Información del recursos">
                                 <p:panel header="Información del recurso">

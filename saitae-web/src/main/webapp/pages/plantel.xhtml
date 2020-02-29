@@ -11,7 +11,7 @@
         <h:form id="form">
             <p:tab  title="Listado Del plantel Institucional">
                 <p:dataTable id="plantel" var="p" value="#{administradorController.plantel}" 
-                             rowKey="#{p.idpersona}" emptyMessage="Sin registros aún." rows="12" 
+                             rowKey="#{p.idpersona}" emptyMessage="Sin registros aún." rows="14" 
                              paginator="true" selectionMode="single" paginatorAlwaysVisible="false"
                              selection="#{administradorController.selected}" paginatorPosition="top">
                     <f:facet name="header">
