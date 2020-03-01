@@ -8,14 +8,12 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="content">
-        <h:form id="form" style="width: 50%; margin: 0 auto">
-            <h:panelGrid columns="1">
-                <h1 align="center">Gráficos sobre el avance de la entrega de paquetes</h1>
+        <h:form id="form">
+            <h:panelGrid columns="1" style="width: 60%">
+                <h1 align="center">Avance en la entrega de paquetes</h1>
                 <h:panelGrid columns="2">
-                    <p:outputLabel for="gr" value="Gáfico: "/>
-                    <p:selectOneMenu id="gr" value="#{repEntregaController.sel}" 
-                                     requiredMessage="Es necesario que seleccione una opción válida."
-                                     converter="omnifaces.SelectItemsConverter" required="true">
+                    <p:outputLabel for="gr" value="Gráfico: "/>
+                    <p:selectOneMenu id="gr" value="#{repEntregaController.sel}">
                         <f:selectItem itemValue="0" itemLabel="Seleccione"/>
                         <f:selectItem itemValue="1" itemLabel="Entrega de útiles"/>
                         <f:selectItem itemValue="2" itemLabel="Entrega de Zapatos"/>
@@ -27,16 +25,16 @@
                 </h:panelGrid>
                 <p:chart type="pie" model="#{repEntregaController.utiles}" 
                          rendered="#{repEntregaController.sel == 1}"
-                         style="width:400px;height:400px"/>
+                         style="height:480px"/>
                 <p:chart type="pie" model="#{repEntregaController.uniforme1}" 
                          rendered="#{repEntregaController.sel == 3}"
-                         style="width:400px;height:400px"/>
+                         style="height:480px"/>
                 <p:chart type="pie" model="#{repEntregaController.zapatos}" 
                          rendered="#{repEntregaController.sel == 2}"
-                         style="width:400px;height:400px"/>
+                         style="height:480px"/>
                 <p:chart type="pie" model="#{repEntregaController.uniforme2}" 
                          rendered="#{repEntregaController.sel == 4}"
-                         style="width:400px;height:400px"/>
+                         style="height:480px"/>
             </h:panelGrid>
         </h:form>
     </ui:define>

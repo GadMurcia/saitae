@@ -23,6 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import javax.faces.event.AjaxBehaviorEvent;
@@ -45,6 +46,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.omnifaces.cdi.PushContext;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.FlowEvent;
+import org.primefaces.model.chart.PieChartModel;
 
 /**
  *
@@ -925,23 +927,23 @@ public class Auxiliar implements Serializable {
     public void onBlour(AjaxBehaviorEvent e) {
 
     }
-    
+
     public String onFlowProcess(FlowEvent event) {
         return event.getNewStep();
     }
-    
+
     public String[] getDependencia(Estudiante e) {
         String d[] = e.getEstudianteDependenciaEconomica().split("¿");
         String ot[] = d[0].split("#");
         return ot;
     }
-    
+
     public String getOtraDependenciaEcon(Estudiante e) {
         String d[] = e.getEstudianteDependenciaEconomica().split("¿");
         String ot = d.length > 1 ? d[1] : " ";
         return ot;
     }
-    
+
     public void partida(FileUploadEvent f, Estudiante e) {
         e.getDocumentos().setEstudianteDocPartida(f.getFile().getContents());
         e.getDocumentos().setEstudianteExtencionPartida(f.getFile().getFileName() + "¿¿" + f.getFile().getContentType());
@@ -1035,5 +1037,19 @@ public class Auxiliar implements Serializable {
                         (e.getDocumentos().getEstudianteExtencionNotas() == null
                         || e.getDocumentos().getEstudianteExtencionNotas().isEmpty())
                         ? "" : e.getDocumentos().getEstudianteExtencionNotas().split("¿¿")[1]));
+    }
+
+    public PieChartModel createPieModel(HashMap<String, Integer> vals, String tit, String lp) {
+        PieChartModel pm = new PieChartModel();
+        vals.forEach((String k, Integer v) -> {
+            pm.set(k, v);
+        });
+        pm.setTitle(tit);
+        pm.setLegendPosition(lp);
+        pm.setFill(false);
+        pm.setShowDataLabels(true);
+        pm.setDiameter(300);
+        pm.setShadow(false);
+        return pm;
     }
 }

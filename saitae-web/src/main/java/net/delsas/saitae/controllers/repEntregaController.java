@@ -19,6 +19,7 @@ package net.delsas.saitae.controllers;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -98,27 +99,26 @@ public class repEntregaController extends Auxiliar implements Serializable {
         int entun = 0;
         int entun2 = 0;
         int entz = 0;
+        HashMap<String, Integer> v1 = new HashMap<>();
+        HashMap<String, Integer> v2 = new HashMap<>();
+        HashMap<String, Integer> v3 = new HashMap<>();
+        HashMap<String, Integer> v4 = new HashMap<>();
         entu = eul.stream().map((eu) -> eu.getUtiles1() ? 1 : 0).reduce(entu, Integer::sum);
         entun = eul.stream().map((eu) -> eu.getUniforme1() ? 1 : 0).reduce(entun, Integer::sum);
         entun2 = eul.stream().map((eu) -> eu.getUniforme2() ? 1 : 0).reduce(entun2, Integer::sum);
         entz = eul.stream().map((eu) -> eu.getZapatos1() ? 1 : 0).reduce(entz, Integer::sum);
-        utiles = createPieModel(entu, (estN - entu), "Estrega de útiles", "e");
-        uniforme1 = createPieModel(entun, (estN - entun), "Primera estrega de uniformes", "e");
-        uniforme2 = createPieModel(entun2, (estN - entun2), "Segunda estrega de uniformes", "e");
-        zapatos = createPieModel(entz, (estN - entz), "Estrega de zapatos", "e");
-    }
-
-    private PieChartModel createPieModel(int ent, long pen, String tit, String lp) {
-        PieChartModel pm = new PieChartModel();
-        pm.set("Entregado (" + ent + ")", ent);
-        pm.set("Pendiente (" + pen + ")", pen);
-        pm.setTitle(tit);
-        pm.setLegendPosition(lp);
-        pm.setFill(false);
-        pm.setShowDataLabels(true);
-        pm.setDiameter(150);
-        pm.setShadow(false);
-        return pm;
+        v1.put("Entregado", entu);
+        v1.put("Faltante", ((int) estN) - entu);
+        v2.put("Entregado", entun);
+        v2.put("Faltante", ((int) estN) - entun);
+        v3.put("Entregado", entun2);
+        v3.put("Faltante", ((int) estN) - entun2);
+        v4.put("Entregado", entz);
+        v4.put("Faltante", ((int) estN) - entz);
+        utiles = createPieModel(v1, "Estrega de útiles", "e");
+        uniforme1 = createPieModel(v2, "Primera estrega de uniformes", "e");
+        uniforme2 = createPieModel(v3, "Segunda estrega de uniformes", "e");
+        zapatos = createPieModel(v4, "Estrega de zapatos", "e");
     }
 
     public PieChartModel getUtiles() {
@@ -146,7 +146,7 @@ public class repEntregaController extends Auxiliar implements Serializable {
     }
 
     public void onSelect(SelectEvent e) {
-        sel = e.getObject() != null ? Integer.valueOf(e.getObject().toString()) : 0;
+       // sel = e.getObject() != null ? Integer.valueOf(e.getObject().toString()) : 0;
     }
 
 }

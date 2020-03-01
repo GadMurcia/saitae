@@ -5,10 +5,12 @@
  */
 package net.delsas.saitae.beans;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import net.delsas.saitae.entities.Contribuciones;
+import net.delsas.saitae.entities.GradoPK;
 
 /**
  *
@@ -28,5 +30,19 @@ public class ContribucionesFacade extends AbstractFacade<Contribuciones> impleme
     public ContribucionesFacade() {
         super(Contribuciones.class);
     }
-    
+
+    @Override
+    public List<Contribuciones> findByAño(Integer año) {
+        return em.createNamedQuery("Contribuciones.findByAño")
+                .setParameter("año", año)
+                .getResultList();
+    }
+
+    @Override
+    public List<Contribuciones> findByGrado(GradoPK gpk) {
+        return em.createNamedQuery("Contribuciones.findByGrado")
+                .setParameter("gPK", gpk)
+                .getResultList();
+    }
+
 }

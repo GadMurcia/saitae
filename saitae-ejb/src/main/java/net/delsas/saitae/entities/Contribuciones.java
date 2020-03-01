@@ -28,20 +28,22 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "contribuciones", catalog = "intex", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Contribuciones.findAll", query = "SELECT c FROM Contribuciones c")
-    , @NamedQuery(name = "Contribuciones.findByIdEstudiante", query = "SELECT c FROM Contribuciones c WHERE c.contribucionesPK.idEstudiante = :idEstudiante")
-    , @NamedQuery(name = "Contribuciones.findByA\u00f1o", query = "SELECT c FROM Contribuciones c WHERE c.contribucionesPK.a\u00f1o = :a\u00f1o")
-    , @NamedQuery(name = "Contribuciones.findByEnero", query = "SELECT c FROM Contribuciones c WHERE c.enero = :enero")
-    , @NamedQuery(name = "Contribuciones.findByFebrero", query = "SELECT c FROM Contribuciones c WHERE c.febrero = :febrero")
-    , @NamedQuery(name = "Contribuciones.findByMarzo", query = "SELECT c FROM Contribuciones c WHERE c.marzo = :marzo")
-    , @NamedQuery(name = "Contribuciones.findByAbril", query = "SELECT c FROM Contribuciones c WHERE c.abril = :abril")
-    , @NamedQuery(name = "Contribuciones.findByMayo", query = "SELECT c FROM Contribuciones c WHERE c.mayo = :mayo")
-    , @NamedQuery(name = "Contribuciones.findByJunio", query = "SELECT c FROM Contribuciones c WHERE c.junio = :junio")
-    , @NamedQuery(name = "Contribuciones.findByJulio", query = "SELECT c FROM Contribuciones c WHERE c.julio = :julio")
-    , @NamedQuery(name = "Contribuciones.findByAgosto", query = "SELECT c FROM Contribuciones c WHERE c.agosto = :agosto")
-    , @NamedQuery(name = "Contribuciones.findBySeptiembre", query = "SELECT c FROM Contribuciones c WHERE c.septiembre = :septiembre")
-    , @NamedQuery(name = "Contribuciones.findByOctubre", query = "SELECT c FROM Contribuciones c WHERE c.octubre = :octubre")
-    , @NamedQuery(name = "Contribuciones.findByComentario", query = "SELECT c FROM Contribuciones c WHERE c.comentario = :comentario")})
+    @NamedQuery(name = "Contribuciones.findAll", query = "SELECT c FROM Contribuciones c"),
+    @NamedQuery(name = "Contribuciones.findByIdEstudiante", query = "SELECT c FROM Contribuciones c WHERE c.contribucionesPK.idEstudiante = :idEstudiante"),
+    @NamedQuery(name = "Contribuciones.findByAño", query = "SELECT c FROM Contribuciones c WHERE c.contribucionesPK.año = :año"),
+    @NamedQuery(name = "Contribuciones.findByEnero", query = "SELECT c FROM Contribuciones c WHERE c.enero = :enero"),
+    @NamedQuery(name = "Contribuciones.findByFebrero", query = "SELECT c FROM Contribuciones c WHERE c.febrero = :febrero"),
+    @NamedQuery(name = "Contribuciones.findByMarzo", query = "SELECT c FROM Contribuciones c WHERE c.marzo = :marzo"),
+    @NamedQuery(name = "Contribuciones.findByAbril", query = "SELECT c FROM Contribuciones c WHERE c.abril = :abril"),
+    @NamedQuery(name = "Contribuciones.findByMayo", query = "SELECT c FROM Contribuciones c WHERE c.mayo = :mayo"),
+    @NamedQuery(name = "Contribuciones.findByJunio", query = "SELECT c FROM Contribuciones c WHERE c.junio = :junio"),
+    @NamedQuery(name = "Contribuciones.findByJulio", query = "SELECT c FROM Contribuciones c WHERE c.julio = :julio"),
+    @NamedQuery(name = "Contribuciones.findByAgosto", query = "SELECT c FROM Contribuciones c WHERE c.agosto = :agosto"),
+    @NamedQuery(name = "Contribuciones.findBySeptiembre", query = "SELECT c FROM Contribuciones c WHERE c.septiembre = :septiembre"),
+    @NamedQuery(name = "Contribuciones.findByOctubre", query = "SELECT c FROM Contribuciones c WHERE c.octubre = :octubre"),
+    @NamedQuery(name = "Contribuciones.findByComentario", query = "SELECT c FROM Contribuciones c WHERE c.comentario = :comentario"),
+    @NamedQuery(name = "Contribuciones.findByGrado", query = "SELECT c FROM Contribuciones c WHERE c.contribucionesPK.idEstudiante IN (SELECT m.matriculaPK.idmatricula FROM Matricula m WHERE m.grado.gradoPK = :gPK)")
+})
 public class Contribuciones implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -197,7 +199,7 @@ public class Contribuciones implements Serializable {
 
     public void setEstudiante(Estudiante estudiante) {
         this.estudiante = estudiante;
-    }   
+    }
 
     @Override
     public int hashCode() {
@@ -257,11 +259,9 @@ public class Contribuciones implements Serializable {
         return Objects.equals(this.estudiante, other.estudiante);
     }
 
-    
-
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.Contribuciones[ contribucionesPK=" + contribucionesPK + " ]";
     }
-    
+
 }
