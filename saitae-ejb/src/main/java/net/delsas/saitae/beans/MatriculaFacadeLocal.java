@@ -88,4 +88,13 @@ public interface MatriculaFacadeLocal {
      */
     public long countActivos(Integer año);
 
+    /**
+     * Devuelve una lista con todas las matriculas que hay para el grado
+     * proporcionado.
+     *
+     * @param pk
+     * @return java.util.List net.delsas.saitae.entities.Matricula
+     */
+    public List<Matricula> findByGradoPK(GradoPK pk);
+
 }

@@ -49,7 +49,7 @@
                         </p:row>
                         <p:row>
                             <p:column rowspan="2" colspan="1" headerText="Modalidad de bachillerato" 
-                                      style="border:#000000 1px solid" width="25%"/>
+                                      style="border:#000000 1px solid" width="40%"/>
                             <p:column colspan="3" headerText="Secciones por turno" 
                                       style="border:#000000 1px solid"/>
                             <p:column colspan="2" headerText="Mañana" 
@@ -78,11 +78,11 @@
                         </p:row>                        
                     </p:columnGroup>
 
-                    <p:subTable var="sm" value="#{d.mats}">
-                        <f:facet name="header">
-                            <h:outputText value="#{d.modalidad}" />
+                    <p:subTable id="tt" var="sm" value="#{d.mats}">
+                        <f:facet name="header" >
+                            <h:outputText value="#{repMatriculaController.getModalidadNombre(d.modalidad)}" />
                         </f:facet>
-                        <p:column>
+                        <p:column width="40%">
                             <h:outputText value="#{repMatriculaController.getGradoNombre(sm.pk)}" />
                         </p:column>
                         <p:column>
@@ -134,26 +134,45 @@
                             <h:outputText value="#{ms.reprobadosF}" />
                         </p:column>
                         <p:column>
-                            <h:outputText value="#{(sm.matriculaF + sm.matriculaM)- ms.retiradosM}" />
+                            <h:outputText value="#{sm.matriculaM - (ms.retiradosM + ms.reprobadosM)}" />
                         </p:column>
                         <p:column>
-                            <h:outputText value="#{(sm.matriculaF + sm.matriculaM)- ms.retiradosF}" />
+                            <h:outputText value="#{sm.matriculaF - (ms.retiradosF + ms.reprobadosF)}" />
                         </p:column>
                         <p:column>
                             <h:outputText value="#{(sm.matriculaF + sm.matriculaM)- (ms.retiradosM+ms.retiradosF)}" />
                         </p:column>
                         <p:columnGroup type="footer">
                             <p:row>
-                                <p:column footerText="Totals: " style="text-align:right"/>
+                                <p:column footerText="Totales: " style="text-align:right"/>
+                                <p:column style="text-align:right"/>
+                                <p:column style="text-align:right"/>
+                                <p:column style="text-align:right"/>
+                                <p:column style="text-align:right"/>
+                                <p:column style="text-align:right"/>
+                                <p:column style="text-align:right"/>
+                                <p:column style="text-align:right"/>
+                                <p:column style="text-align:right"/>
+                                <p:column style="text-align:right"/>
+                                <p:column style="text-align:right"/>
+                                <p:column style="text-align:right"/>
+                                <p:column style="text-align:right"/>
+                                <p:column style="text-align:right"/>
+                                <p:column style="text-align:right"/>
+                                <p:column style="text-align:right"/>
+                                <p:column style="text-align:right"/>
+                                <p:column style="text-align:right"/>
+                                <p:column style="text-align:right"/>
+                                <p:column style="text-align:right"/>                                
                             </p:row>
                         </p:columnGroup>
                     </p:subTable>
                 </p:dataTable>
                 <h:commandLink >
                     <p:graphicImage library="img" name="xls.png" width="37px" height="32px"/>
-                    <p:dataExporter type="xls" target="matricula" 
+                    <p:dataExporter type="xls" target="matricula" pageOnly="true"
                                     options="#{axiliarController.excelOpt}"
-                                    fileName="Reporte-Estadistica-mensual-institucional-#{repMatriculaController.añoActual}"
+                                    fileName="Reporte-Matricula-Institucional-#{repMatriculaController.añoActual}"
                                     encoding="UTF-8"/>
                 </h:commandLink>
             </h:panelGrid>

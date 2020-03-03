@@ -30,6 +30,7 @@ import net.delsas.saitae.ax.ReporteMatricula;
 import net.delsas.saitae.beans.AccesoFacadeLocal;
 import net.delsas.saitae.beans.AccesoTipoPersonaFacadeLocal;
 import net.delsas.saitae.beans.GradoFacadeLocal;
+import net.delsas.saitae.beans.MatriculaFacadeLocal;
 import net.delsas.saitae.entities.Persona;
 import org.primefaces.event.SelectEvent;
 
@@ -52,6 +53,8 @@ public class repMatriculaController extends Auxiliar implements Serializable {
     private AccesoTipoPersonaFacadeLocal accesoTPFL;
     @EJB
     private AccesoFacadeLocal accesoFL;
+    @EJB
+    private MatriculaFacadeLocal mFL;
 
     @PostConstruct
     public void init() {
@@ -72,11 +75,11 @@ public class repMatriculaController extends Auxiliar implements Serializable {
                             ex.getMessage() == null ? "Error de causa desconocida." : ex.getMessage()));
         }
         añoSelected = getAñoActual();
-        datos = llenar(gFL, añoSelected);
+        datos = llenar(mFL, gFL, añoSelected);
     }
 
     public void onSelect(SelectEvent e) {
-        datos = llenar(gFL, añoSelected);
+        datos = llenar(mFL, gFL, añoSelected);
     }
 
     public Integer getAñoSelected() {

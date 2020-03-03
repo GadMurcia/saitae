@@ -29,6 +29,7 @@ import java.util.Objects;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
 import net.delsas.saitae.beans.GradoFacadeLocal;
+import net.delsas.saitae.beans.MatriculaFacadeLocal;
 import net.delsas.saitae.beans.MestroHorarioMateriasFacadeLocal;
 import net.delsas.saitae.beans.NotificacionesFacadeLocal;
 import net.delsas.saitae.entities.DiasEstudio;
@@ -1056,44 +1057,40 @@ public class Auxiliar implements Serializable {
         return pm;
     }
 
-    private List<MatriculaSeccion> llenar(GradoFacadeLocal gFL, Integer año, String m) {
+    private List<MatriculaSeccion> llenar(MatriculaFacadeLocal mFL, GradoFacadeLocal gFL, Integer año, String m) {
         List<MatriculaSeccion> i = new ArrayList<>();
         List<Integer> ns = gFL.getIdPorAñoyModalidad(año, m);
         for (Integer n : ns) {
             List<String> ss = gFL.getSeccionPorAñoModalidadyId(año, m, n);
             for (String s : ss) {
                 Grado g = gFL.find(new GradoPK(n, m, s, año));
-                for (Matricula ma : g.getMatriculaList()) {
-                    MatriculaSeccion mas = new MatriculaSeccion(ma.getGrado().getGradoPK(), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-                    if (ma.getEstudiante().getPersona().getPersonaSexo()) {
-                        mas.setMatriculaF(mas.getMatriculaF() + 1);
-                    } else {
-                        mas.setMatriculaM(mas.getMatriculaM() + 1);
-                    }
-                    if (ma.getMatriculaRepite()) {
-                        if (ma.getEstudiante().getPersona().getPersonaSexo()) {
-                            mas.setRepitenciaF(mas.getRepitenciaF() + 1);
-                        } else {
-                            mas.setRepitenciaM(mas.getRepitenciaM() + 1);
-                        }
-                    }
-                    if (ma.getEstudiante().getPersona().getPersonaActivo()) {
-                        if (ma.getEstudiante().getPersona().getPersonaSexo()) {
-                            mas.setRetiradosF(mas.getRetiradosF() + 1);
-                        } else {
-                            mas.setRetiradosM(mas.getRetiradosM() + 1);
-                        }
-                    }
-                    if (getEdad(ma.getEstudiante().getPersona().getPersonaNacimiento()) > (15 + n)) {
-                        if (ma.getEstudiante().getPersona().getPersonaSexo()) {
-                            mas.setSobreEdadF(mas.getSobreEdadF() + 1);
-                        } else {
-                            mas.setSobreEdadM(mas.getSobreEdadM() + 1);
-                        }
-                    }
-                    i.add(mas);
-                    System.out.println(mas);
-                }
+                MatriculaSeccion mas = new MatriculaSeccion(g.getGradoPK(), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+                List<Matricula> matrs = mFL.findByGradoPK(g.getGradoPK());
+                matrs.stream().map((ma) -> {
+                    mas.setMatriculaM(mas.getMatriculaM() + (ma.getEstudiante().getPersona().getPersonaSexo() ? 0 : 1));
+                    return ma;
+                }).map((ma) -> {
+                    mas.setMatriculaF(mas.getMatriculaF() + (ma.getEstudiante().getPersona().getPersonaSexo() ? 1 : 0));
+                    return ma;
+                }).map((ma) -> {
+                    mas.setRepitenciaM(mas.getRepitenciaM() + (ma.getMatriculaRepite() && ma.getEstudiante().getPersona().getPersonaSexo() ? 0 : 1));
+                    return ma;
+                }).map((ma) -> {
+                    mas.setRepitenciaF(mas.getRepitenciaF() + (ma.getMatriculaRepite() && ma.getEstudiante().getPersona().getPersonaSexo() ? 1 : 0));
+                    return ma;
+                }).map((ma) -> {
+                    mas.setRetiradosM(mas.getRetiradosM() + (!ma.getEstudiante().getPersona().getPersonaActivo() && ma.getEstudiante().getPersona().getPersonaSexo() ? 0 : 1));
+                    return ma;
+                }).map((ma) -> {
+                    mas.setRetiradosF(mas.getRetiradosF() + (!ma.getEstudiante().getPersona().getPersonaActivo() && ma.getEstudiante().getPersona().getPersonaSexo() ? 1 : 0));
+                    return ma;
+                }).map((ma) -> {
+                    mas.setSobreEdadM(mas.getSobreEdadM() + (getEdad(ma.getEstudiante().getPersona().getPersonaNacimiento()) > (15 + n) && ma.getEstudiante().getPersona().getPersonaSexo() ? 1 : 0));
+                    return ma;
+                }).forEachOrdered((ma) -> {
+                    mas.setSobreEdadF(mas.getSobreEdadF() + (getEdad(ma.getEstudiante().getPersona().getPersonaNacimiento()) > (15 + n) && ma.getEstudiante().getPersona().getPersonaSexo() ? 0 : 1));
+                });
+                i.add(mas);
             }
         }
 
@@ -1101,11 +1098,11 @@ public class Auxiliar implements Serializable {
 
     }
 
-    public List<ReporteMatricula> llenar(GradoFacadeLocal gFL, Integer año) {
+    public List<ReporteMatricula> llenar(MatriculaFacadeLocal mFL, GradoFacadeLocal gFL, Integer año) {
         List<ReporteMatricula> i = new ArrayList<>();
         List<String> mm = gFL.getModalidadPorAño(año);
         mm.forEach((m) -> {
-            i.add(new ReporteMatricula(m, llenar(gFL, año, m)));
+            i.add(new ReporteMatricula(m, llenar(mFL, gFL, año, m)));
         });
         return i;
     }

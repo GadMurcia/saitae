@@ -83,5 +83,12 @@ public class MatriculaFacade extends AbstractFacade<Matricula> implements Matric
                 .setParameter("año", año)
                 .getSingleResult();
     }
+    
+    @Override
+    public List<Matricula> findByGradoPK(GradoPK pk){
+        return em.createNamedQuery("Matricula.findByGradoPK")
+                .setParameter("pk", pk)
+                .getResultList();
+    }
 
 }
