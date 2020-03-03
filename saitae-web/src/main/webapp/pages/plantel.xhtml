@@ -11,7 +11,7 @@
         <h:form id="form">
             <p:tab  title="Listado Del plantel Institucional">
                 <p:dataTable id="plantel" var="p" value="#{administradorController.plantel}" 
-                             rowKey="#{p.idpersona}" emptyMessage="Sin registros aún." rows="14" 
+                             rowKey="#{p.idpersona}" emptyMessage="Sin registros aún." rows="12" 
                              paginator="true" selectionMode="single" paginatorAlwaysVisible="false"
                              selection="#{administradorController.selected}" paginatorPosition="top">
                     <f:facet name="header">
@@ -19,7 +19,7 @@
                     </f:facet>
                     <p:column headerText="DUI" style="width: 100px"
                               filterBy="#{p.idpersona.toString().substring(1)}">
-                        <p:outputLabel value="#{p.idpersona.toString().substring(1)}"/>
+                        <p:outputLabel value="#{administradorController.getDui(p)}"/>
                     </p:column>
                     <p:column headerText="Nombre"
                               filterBy="#{p.personaNombre} #{p.personaApellido}">
@@ -36,6 +36,13 @@
                     <p:menuitem value="Ver" update="pl" 
                                 icon="pi pi-search" oncomplete="PF('Dpld').show()"/>
                 </p:contextMenu>
+                <h:commandLink title="Descargar en formato de Excel">
+                    <p:graphicImage library="img" name="xls.png" width="37px" height="32px"/>
+                    <p:dataExporter type="xls" target="plantel" 
+                                    options="#{axiliarController.excelOpt}"
+                                    fileName="Plantel_Institucional_INTEX_#{administradorController.añoActual}"
+                                    encoding="UTF-8"/>
+                </h:commandLink>
 
                 <p:dialog header="Datos de la persona Seleccionada" widgetVar="Dpld" modal="true" 
                           showEffect="fade" hideEffect="fade" resizable="false">

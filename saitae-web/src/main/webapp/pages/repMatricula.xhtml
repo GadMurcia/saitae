@@ -1,0 +1,163 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../WEB-INF/template/plantilla.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:form id="form">
+            <h:panelGrid columns="1">
+                <h:panelGrid columns="2">
+                    <p:outputLabel for="año" value="Seleccione el año de visualización: "/>
+                    <p:selectOneMenu id="año" value="#{repMatriculaController.añoSelected}" 
+                                     converter="omnifaces.SelectItemsConverter">
+                        <f:selectItems value="#{repMatriculaController.getAñosParaMostrar(5)}" var="ad"
+                                       itemLabel="#{ad}" itemValue="#{ad}"/>
+                        <p:ajax event="itemSelect" listener="#{repMatriculaController.onSelect}"
+                                update="form"/>
+                    </p:selectOneMenu>
+                </h:panelGrid>
+                <p:dataTable id="matricula" var="d" value="#{repMatriculaController.datos}"
+                             emptyMessage="No hay datos disponibles.">
+                    <f:facet name="header">
+                        Estadística Institucional (#{repMatriculaController.añoInscripcion})
+                    </f:facet>
+                    <p:columnGroup type="header">
+                        <p:row>
+                            <p:column colspan="4" headerText="Año y número de secciones" 
+                                      style="border:#000000 1px solid"/>
+                            <p:column colspan="4" headerText="Matrícula de alumnos/as" 
+                                      style="border:#000000 1px solid"/>
+                            <p:column rowspan="3" colspan="1" headerText="Asistencia media" 
+                                      style="border:#000000 1px solid"/>
+                            <p:column colspan="2" rowspan="2" headerText="Retirados" 
+                                      style="border:#000000 1px solid"/>
+                            <p:column colspan="2" rowspan="2" headerText="Sobre edad" 
+                                      style="border:#000000 1px solid"/>
+                            <p:column colspan="2" rowspan="2" headerText="Repitencia" 
+                                      style="border:#000000 1px solid"/>
+                            <p:column colspan="2" rowspan="2" headerText="Reprobados" 
+                                      style="border:#000000 1px solid"/>
+                            <p:column colspan="2" rowspan="2" headerText="Asistencia media actual" 
+                                      style="border:#000000 1px solid"/>
+                            <p:column rowspan="3" headerText="Total" 
+                                      style="border:#000000 1px solid"/>
+                        </p:row>
+                        <p:row>
+                            <p:column rowspan="2" colspan="1" headerText="Modalidad de bachillerato" 
+                                      style="border:#000000 1px solid" width="25%"/>
+                            <p:column colspan="3" headerText="Secciones por turno" 
+                                      style="border:#000000 1px solid"/>
+                            <p:column colspan="2" headerText="Mañana" 
+                                      style="border:#000000 1px solid"/>
+                            <p:column colspan="2" headerText="Tarde" 
+                                      style="border:#000000 1px solid"/>
+                        </p:row>
+                        <p:row>
+                            <p:column headerText="Mañana" style="border:#000000 1px solid"/>
+                            <p:column headerText="Tarde" style="border:#000000 1px solid"/>
+                            <p:column headerText="Total" style="border:#000000 1px solid"/>
+                            <p:column headerText="M" style="border:#000000 1px solid"/>
+                            <p:column headerText="F" style="border:#000000 1px solid"/>
+                            <p:column headerText="M" style="border:#000000 1px solid"/>
+                            <p:column headerText="F" style="border:#000000 1px solid"/>
+                            <p:column headerText="M" style="border:#000000 1px solid"/>
+                            <p:column headerText="F" style="border:#000000 1px solid"/>
+                            <p:column headerText="M" style="border:#000000 1px solid"/>
+                            <p:column headerText="F" style="border:#000000 1px solid"/>
+                            <p:column headerText="M" style="border:#000000 1px solid"/>
+                            <p:column headerText="F" style="border:#000000 1px solid"/>
+                            <p:column headerText="M" style="border:#000000 1px solid"/>
+                            <p:column headerText="F" style="border:#000000 1px solid"/>
+                            <p:column headerText="M" style="border:#000000 1px solid"/>
+                            <p:column headerText="F" style="border:#000000 1px solid"/>
+                        </p:row>                        
+                    </p:columnGroup>
+
+                    <p:subTable var="sm" value="#{d.mats}">
+                        <f:facet name="header">
+                            <h:outputText value="#{d.modalidad}" />
+                        </f:facet>
+                        <p:column>
+                            <h:outputText value="#{repMatriculaController.getGradoNombre(sm.pk)}" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="1" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="1" />
+                        </p:column>
+                        <p:column >
+                            <h:outputText value="1" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{sm.matriculaM}" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{sm.matriculaF}" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{sm.matriculaM}" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{sm.matriculaF}" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{sm.matriculaF + sm.matriculaM}" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{ms.retiradosM}" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{ms.retiradosF}" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{ms.sobreEdadM}" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{ms.sobreEdadF}" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{ms.repitenciaM}" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{ms.repitenciaF}" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{ms.reprobadosM}" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{ms.reprobadosF}" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{(sm.matriculaF + sm.matriculaM)- ms.retiradosM}" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{(sm.matriculaF + sm.matriculaM)- ms.retiradosF}" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{(sm.matriculaF + sm.matriculaM)- (ms.retiradosM+ms.retiradosF)}" />
+                        </p:column>
+                        <p:columnGroup type="footer">
+                            <p:row>
+                                <p:column footerText="Totals: " style="text-align:right"/>
+                            </p:row>
+                        </p:columnGroup>
+                    </p:subTable>
+                </p:dataTable>
+                <h:commandLink >
+                    <p:graphicImage library="img" name="xls.png" width="37px" height="32px"/>
+                    <p:dataExporter type="xls" target="matricula" 
+                                    options="#{axiliarController.excelOpt}"
+                                    fileName="Reporte-Estadistica-mensual-institucional-#{repMatriculaController.añoActual}"
+                                    encoding="UTF-8"/>
+                </h:commandLink>
+            </h:panelGrid>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

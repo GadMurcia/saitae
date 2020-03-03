@@ -50,7 +50,7 @@
 
 .footer1 .entry-meta a {
     color: #000000;
-    
+
 }
 
 .footer1 .entry-meta .meta-in {
@@ -134,5 +134,20 @@
 
 .text-right{
     text-align:right
+}
+
+.maximizaCuerpo {
+    padding: 5px;
+    width: 100%;
+    height: 100%;
+    position: inherit;
+    padding: 5px;
+    margin: auto;
+}
+
+.mminimazarDerecha {
+    width: 10%;
+    position: inherit;
+    margin: auto;
 }
 

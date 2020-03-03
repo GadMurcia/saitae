@@ -36,6 +36,7 @@ import net.delsas.saitae.beans.NotificacionesFacadeLocal;
 import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
 import net.delsas.saitae.entities.Acceso;
 import net.delsas.saitae.entities.AccesoTipoPersona;
+import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.TipoPersona;
 import org.omnifaces.cdi.Push;
 import org.omnifaces.cdi.PushContext;
@@ -71,9 +72,11 @@ public class vistasMenuController extends Auxiliar implements Serializable {
     private PushContext notificacion;
     @EJB
     private NotificacionesFacadeLocal notiFL;
+    private Persona usuario;
 
     @PostConstruct
     public void init() {
+        usuario = (Persona) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
         tipo = new TipoPersona();
         accesos = accesoFL.findAll();
         tipoPersonas = tipoPersonaFL.findAll();
@@ -285,6 +288,10 @@ public class vistasMenuController extends Auxiliar implements Serializable {
 
     public void setModel(DualListModel<String> model) {
         this.model = model;
+    }
+
+    public boolean isAdministrador() {
+        return usuario == null ? false : usuario.getTipoPersona().getIdtipoPersona().equals(1);
     }
 
 }

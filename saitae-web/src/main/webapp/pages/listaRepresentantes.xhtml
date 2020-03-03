@@ -12,41 +12,47 @@
 
             <ui:define name="content">
                 <h:form id="form">
-                    <p:panelGrid columns="1">
-                        <p:panelGrid columns="2">
+                    <h:panelGrid columns="1">
+                        <h:panelGrid columns="2">
                             <p:outputLabel for="box" value="Seleccione el grado"/>
-                            <p:selectOneMenu id="box" dynamic="true" >
-                                <f:selectItem itemLabel="Seleccione" itemValue=""/>
+                            <p:selectOneMenu id="box" value="#{representanteController.id}"
+                                             converter="omnifaces.SelectItemsConverter">
                                 <f:selectItems value="#{representanteController.grados}" var="g"
-                                               itemLabel="#{representanteController.getLabel(g.gradoPK)}"
-                                               itemValue="#{representanteController.getValue(g.gradoPK)}"/>
-                                <p:ajax event="itemSelect" listener="#{representanteController.selectAño}"/>
+                                               itemValue="#{g.gradoPK}"
+                                               itemLabel="#{representanteController.getGradoNombre(g.gradoPK)}"/>
+                                <p:ajax event="itemSelect" listener="#{representanteController.selectAño}"
+                                        update=":form"/>
                             </p:selectOneMenu>
-                        </p:panelGrid>
-                        <p:panelGrid columns="1">
-                            <p:dataTable id="representantes" value="#{representanteController.representantes}" var="r"
-                                         scrollable="true" emptyMessage="Sin registros aún.">
+                        </h:panelGrid>
+                        <h:panelGrid columns="1">
+                            <p:dataTable id="representantes" 
+                                         value="#{representanteController.representantes}" var="r"
+                                         emptyMessage="Sin registros aún."
+                                         rows="12" paginator="true" paginatorAlwaysVisible="false">
                                 <f:facet name="header">
-                                    #{representanteController.nombreGrado}
+                                    <h:outputText value="#{representanteController.getGradoNombre(representanteController.id)}"/>
                                 </f:facet>
                                 <p:column headerText="Dui" style="width: 100px;">
-                                    #{r.estudianteRepresentante.persona.idpersona.toString().substring(1)}
+                                    <h:outputText value="#{representanteController.getDui(r.estudianteRepresentante.persona)}"/>
                                 </p:column>
-
                                 <p:column headerText="Nombre del Representante">
-                                    #{r.estudianteRepresentante.persona.personaNombre} 
-                                    #{r.estudianteRepresentante.persona.personaApellido}
-                                </p:column>                                
-
-                                <p:column headerText="Nombre del Representado">
-                                    #{r.persona.personaNombre} #{r.persona.personaApellido}
+                                    <h:outputText value="#{representanteController.getNombreCompletoPersona(r.estudianteRepresentante.persona)}"/>
                                 </p:column>
-
+                                <p:column headerText="Nombre del Estudiante">
+                                    <h:outputText value="#{representanteController.getNombreCompletoPersona(r.persona)}"/>
+                                </p:column>
                                 <p:column headerText="Firma" style="width: 25%;">
                                 </p:column>
                             </p:dataTable>
-                        </p:panelGrid>
-                    </p:panelGrid>
+                            <h:commandLink id="cl" title="Descargar en formato de Excel" >
+                                <p:graphicImage library="img" name="xls.png" width="37px" height="32px"/>
+                                <p:dataExporter type="xls" target="representantes" 
+                                                options="#{axiliarController.excelOpt}"
+                                                fileName="#{representanteController.getGradoNombre(representanteController.id)}_Listado_Representantes"
+                                                encoding="UTF-8"/>
+                            </h:commandLink>
+                        </h:panelGrid>
+                    </h:panelGrid>
                 </h:form>
             </ui:define>
 

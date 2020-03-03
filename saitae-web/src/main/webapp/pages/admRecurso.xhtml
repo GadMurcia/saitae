@@ -8,15 +8,17 @@
 
     <body>
 
-        <ui:composition template="./../WEB-INF/template/plantilla1.xhtml">
+        <ui:composition template="./../WEB-INF/template/plantilla.xhtml">
 
             <ui:define name="content">
                 <h:form id="form">
-                    <p:dataTable id="recurso" var="r" value="#{admRecursoC.recurso}" rowKey="#{r.idrecurso}"
+                    <p:dataTable id="recurso" var="r" value="#{admRecursoC.recurso}" 
+                                 rowKey="#{r.idrecurso}"
                                  widgetVar="recurso1"  emptyMessage="Sin registros aún."
                                  selection="#{admRecursoC.seleccionado}" 
-                                 selectionMode="single" rows="6" 
-                                 paginator="true" paginatorAlwaysVisible="false" paginatorPosition="top">
+                                 selectionMode="single" rows="10" 
+                                 paginator="true" paginatorAlwaysVisible="false" 
+                                 paginatorPosition="top">
                         <f:facet name="header">
                             Administración de Recursos.
                         </f:facet> 

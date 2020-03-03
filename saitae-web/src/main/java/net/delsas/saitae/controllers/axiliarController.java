@@ -36,6 +36,8 @@ import net.delsas.saitae.entities.Grado;
 import net.delsas.saitae.entities.Horario;
 import net.delsas.saitae.entities.Materia;
 import net.delsas.saitae.entities.Persona;
+import org.primefaces.component.export.ExcelOptions;
+import org.primefaces.component.export.PDFOptions;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -157,10 +159,6 @@ public class axiliarController extends Auxiliar implements Serializable {
         return getNombreCortoPersona(p);
     }
 
-    public void onBlour(AjaxBehaviorEvent e) {
-
-    }
-
     public List<Grado> getGrados() {
         grados = gFL.getPorAñoYActivo(getAñoActual());
         return grados;
@@ -174,6 +172,28 @@ public class axiliarController extends Auxiliar implements Serializable {
     public List<Horario> getHorarios() {
         horarios = hFL.findAll();
         return horarios;
+    }
+
+    public ExcelOptions getExcelOpt() {
+        ExcelOptions excelOpt = new ExcelOptions();
+        excelOpt.setFacetBgColor("#c0f588");
+        excelOpt.setFacetFontSize("14");
+        excelOpt.setFacetFontColor("#000000");
+        excelOpt.setFacetFontStyle("BOLD");
+        excelOpt.setCellFontColor("#000000");
+        excelOpt.setCellFontSize("12");
+        return excelOpt;
+    }
+
+    public PDFOptions getPDFOpt() {
+        PDFOptions excelOpt = new PDFOptions();
+        excelOpt.setFacetBgColor("#c0f588");
+        excelOpt.setFacetFontSize("14");
+        excelOpt.setFacetFontColor("#000000");
+        excelOpt.setFacetFontStyle("BOLD");
+        excelOpt.setCellFontColor("#000000");
+        excelOpt.setCellFontSize("12");
+        return excelOpt;
     }
 
 }

@@ -29,7 +29,6 @@ import net.delsas.saitae.beans.GradoFacadeLocal;
 import net.delsas.saitae.entities.Estudiante;
 import net.delsas.saitae.entities.Grado;
 import net.delsas.saitae.entities.GradoPK;
-import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -38,65 +37,45 @@ import org.primefaces.event.SelectEvent;
  */
 @Named
 @RequestScoped
-public class representanteController extends Auxiliar implements Serializable{
+public class representanteController extends Auxiliar implements Serializable {
 
     @EJB
     private GradoFacadeLocal gFL;
     private List<Grado> grados;
+    private GradoPK id;
     private List<Estudiante> representantes;
-    private String nombreGrado;
 
     @PostConstruct
     public void init() {
         grados = gFL.getPorAñoYActivo(getAñoActual());
         representantes = new ArrayList<>();
-        nombreGrado = "";
+        id = grados.isEmpty() ? null : grados.get(0).getGradoPK();
+        selectAño(null);
     }
 
     public void selectAño(SelectEvent event) {
         representantes.clear();
-        String[] id = event.getObject().toString().split("¿¿");
-        if (id.length == 3) {
-            Grado g = gFL.find(new GradoPK(Integer.valueOf(id[0]), id[1], id[2], getAñoActual()));
+        if (id != null) {
+            Grado g = gFL.find(id);
             g.getMatriculaList().forEach((m) -> {
                 representantes.add(m.getEstudiante());
             });
-            nombreGrado = getLabel(g.getGradoPK());
-        } else {
-            nombreGrado = "";
         }
-        PrimeFaces.current().ajax().update(":form:representantes");
     }
 
     public List<Grado> getGrados() {
         return Collections.unmodifiableList(grados);
     }
 
-    public void setGrados(List<Grado> grados) {
-        this.grados = grados;
-    }
-
     public List<Estudiante> getRepresentantes() {
         return Collections.unmodifiableList(representantes);
     }
 
-    public void setRepresentantes(List<Estudiante> representantes) {
-        this.representantes = representantes;
+    public GradoPK getId() {
+        return id;
     }
 
-    public String getLabel(GradoPK id) {
-        return getGradoNombre(id);
-    }
-
-    public String getValue(GradoPK id) {
-        return id.getIdgrado() + "¿¿" + id.getGradoModalidad() + "¿¿" + id.getGradoSeccion();
-    }
-
-    public String getNombreGrado() {
-        return nombreGrado;
-    }
-
-    public void setNombreGrado(String nombreGrado) {
-        this.nombreGrado = nombreGrado;
+    public void setId(GradoPK id) {
+        this.id = id;
     }
 }

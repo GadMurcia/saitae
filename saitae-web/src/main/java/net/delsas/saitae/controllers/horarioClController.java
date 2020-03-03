@@ -16,11 +16,8 @@
  */
 package net.delsas.saitae.controllers;
 
-import com.lowagie.text.BadElementException;
 import com.lowagie.text.Document;
-import com.lowagie.text.DocumentException;
 import com.lowagie.text.Rectangle;
-import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -118,10 +115,10 @@ public class horarioClController extends Auxiliar implements Serializable {
         return new SimpleDateFormat("hh:mm a").format(d);
     }
     
-    public void preProcessPDF(Object document) throws IOException, BadElementException, DocumentException {
+    public void preProcessPDF(Object document){
         Document pdf = (Document) document;
         pdf.open();
-        pdf.setPageSize(new Rectangle(842, 842));
+        pdf.setPageSize(pdf.getPageSize().rotate());
         pdf.addTitle("SAITAE-INTEX_" + getAño() + " Horario de clases de "
                 + getNombreCortoPersona(usuario));
     }

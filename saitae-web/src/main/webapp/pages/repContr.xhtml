@@ -14,7 +14,6 @@
                 <h:panelGrid columns="2">
                     <p:outputLabel for="gr" value="Seleccione el grado: "/>
                     <p:selectOneMenu id="gr" value="#{repContrController.GSelected}" 
-                                     requiredMessage="Es necesario que seleccione una opción válida."
                                      converter="omnifaces.SelectItemsConverter">
                         <f:selectItem itemValue="#{null}" itemLabel="Institucinal"/>
                         <f:selectItems value="#{repContrController.grados}" var="g" 
@@ -26,7 +25,7 @@
                 </h:panelGrid>
                 <p:chart type="pie" model="#{repContrController.contr}"
                          style="height: 480px"/>
-                <p:dataTable value="#{repContrController.moradores}" var="m" 
+                <p:dataTable id="contr" value="#{repContrController.moradores}" var="m" 
                              rendered="#{repContrController.GSelected!=null}"
                              emptyMessage="Todos los estudiantes están al día.">
                     <f:facet name="header">
@@ -42,6 +41,13 @@
                         #{repContrController.getNumeroPagosAtrasados(m)}
                     </p:column>
                 </p:dataTable>
+                <h:commandLink rendered="#{repContrController.GSelected!=null}">
+                    <p:graphicImage library="img" name="xls.png" width="37px" height="32px"/>
+                    <p:dataExporter type="xls" target="contr" 
+                                    options="#{axiliarController.excelOpt}"
+                                    fileName="Reporte-moradores-pago-contribucion-#{repMatriculaController.getGradoNombre(repContrController.GSelected.gradoPK)}-#{repContrController.añoActual}"
+                                    encoding="UTF-8"/>
+                </h:commandLink>
             </h:panelGrid>
         </h:form>
     </ui:define>

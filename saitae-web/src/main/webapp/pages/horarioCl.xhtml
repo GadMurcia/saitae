@@ -29,11 +29,20 @@
                              paginatorPosition="top">
                     <f:facet name="{Exporters}">
                         <div style="float:right;padding-top: 5px;">
+                            <h:commandLink rendered="#{repInvController.trSelected!=null}">
+                                <p:graphicImage library="img" name="xls.png" width="37px" height="32px"/>
+                                <p:dataExporter type="xls" target="inv" 
+                                                options="#{axiliarController.excelOpt}"
+                                                fileName="Horario_de_Clases"
+                                                encoding="UTF-8"/>
+                            </h:commandLink>
                             <h:commandLink>
-                                <p:graphicImage library="img" name="pdf.png" width="24"/>
+                                <p:graphicImage library="img" name="pdf.png" width="37px" height="32px"/>
                                 <p:dataExporter type="pdf" target="horario"
                                                 fileName="Horario_de_Clases"
-                                                preProcessor="#{horarioClController.preProcessPDF}"/>
+                                                options="#{axiliarController.PDFOpt}"
+                                                preProcessor="#{horarioClController.preProcessPDF}"
+                                                encoding="UTF-8"/>
                             </h:commandLink>                       
                         </div>
                     </f:facet>

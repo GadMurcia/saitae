@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../WEB-INF/template/plantilla.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns="http://www.w3.org/1999/xhtml">
+    
+    <ui:define name="content">
+        <h:form id="form">
+            <h:panelGrid columns="1">
+                <h1 align="center">Inventarios</h1>
+                <h:panelGrid columns="2">
+                    <p:outputLabel for="gr" value="Tipo de recurso: "/>
+                    <p:selectOneMenu id="gr" value="#{repInvController.trSelected}"
+                                     converter="omnifaces.SelectItemsConverter">
+                        <f:selectItem itemValue="#{null}" itemLabel="Seleccione" noSelectionOption="true"/>
+                        <f:selectItems value="#{repInvController.tipoRecursos}" var="tr" 
+                                       itemValue="#{tr}" itemLabel="#{tr.tipoRecursoNombre}"/>
+                        <p:ajax event="itemSelect" listener="#{repInvController.onTipoSelected}" 
+                                update=":form"/>
+                    </p:selectOneMenu>
+                </h:panelGrid>
+                <p:dataTable id="inv" value="#{repInvController.recursos}" var="r"
+                             emptyMessage="Sin registros"
+                             rendered="#{repInvController.trSelected!=null}">
+                    <f:facet name="header">
+                        <h:outputText value="Inventario de recursos #{repInvController.trSelected.tipoRecursoNombre}"/>
+                    </f:facet>
+                    <f:facet name="footer">
+                        <h:outputText value="Valor total estimado: $#{repInvController.totalGeneral}"/>
+                    </f:facet>
+                    <p:column headerText="Cargo">
+                        <h:outputText value="#{r.tipoCargo.nombre}" />
+                    </p:column>
+                    <p:column headerText="Código">
+                        <h:outputText value="#{r.idrecurso}"/>
+                    </p:column>
+                    <p:column headerText="Nombre">
+                        <h:outputText value="#{r.nombre}"/>
+                    </p:column>
+                    <p:column headerText="Correlativos">
+                        <h:outputText value="#{repInvController.getCorrelativos(r.ejemplarList)}"/>
+                    </p:column>
+                    <p:column headerText="Categoría"
+                              rendered="#{repInvController.trSelected.idtipoRecurso==3}">
+                        <h:outputText value="#{r.categoria.categoriaNombre}"/>
+                    </p:column>
+                    <p:column headerText="Autor"
+                              rendered="#{repInvController.trSelected.idtipoRecurso==3}">
+                        <h:outputText value="#{repInvController.getAutores(r.autorLibroList)}"/>
+                    </p:column>
+                    <p:column headerText="Editorial"
+                              rendered="#{repInvController.trSelected.idtipoRecurso==3}">
+                        <h:outputText value="#{repInvController.getEditoriales(r.editorialLibroList)}"/>
+                    </p:column>
+                    <p:column headerText="País"
+                              rendered="#{repInvController.trSelected.idtipoRecurso==3}">
+                        <h:outputText value="#{r.pais.paisNombre}"/>
+                    </p:column>
+                    <p:column headerText="Estado Físico">
+                        <h:outputText value="#{r.estadoFisico}"/>
+                    </p:column>
+                    <p:column headerText="N°. de ejemplares">
+                        <h:outputText value="#{r.ejemplarList.size()}"/>
+                    </p:column>
+                    <p:column headerText="Valor Unitario">
+                        <h:outputText value="$#{r.valorUnitario}"/>
+                    </p:column>
+                    <p:column headerText="Tipo de Valor">
+                        <h:outputText value="#{r.tipoValor}"/>
+                    </p:column>
+                    <p:column headerText="Valor Total">
+                        <h:outputText value="$#{repInvController.getTotalRecurso(r)}"/>
+                    </p:column>
+                </p:dataTable>
+                <h:commandLink rendered="#{repInvController.trSelected!=null}">
+                    <p:graphicImage library="img" name="xls.png" width="37px" height="32px"/>
+                    <p:dataExporter type="xls" target="inv" 
+                                    options="#{axiliarController.excelOpt}"
+                                    fileName="Inventario_#{repInvController.trSelected.tipoRecursoNombre}_#{repInvController.añoActual}"
+                                    encoding="UTF-8"/>
+                </h:commandLink>
+            </h:panelGrid>
+        </h:form>
+    </ui:define>
+</ui:composition>

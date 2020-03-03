@@ -14,11 +14,11 @@
                 <h:form id="form">
                     <h1 style="align-content: center;">Administración de las vistas del sistema.</h1>
                     <p:tabView id="tw" orientation="left" dynamic="true" style="height: 100%; width: 90%;">
-                        <p:tab title="Accesos">
+                        <p:tab title="Accesos" rendered="#{vistasMenuController.administrador}">
                             <p:dataTable id="accesos" var="a" value="#{vistasMenuController.accesos}" 
                                          editable="true" paginator="true" paginatorAlwaysVisible="false"
-                                         widgetVar="acceso" styleClass="tabla" rows="7" paginatorPosition="top"
-                                         emptyMessage="Sin registros aún." resizeMode="expand">
+                                         widgetVar="acceso" styleClass="tabla" rows="10" paginatorPosition="top"
+                                         emptyMessage="Sin registros aún.">
                                 <f:facet name="header">
                                     Administración de los Accesos
                                 </f:facet>
@@ -84,7 +84,8 @@
                             </div>
                         </p:tab>
                         <p:tab title="Tipos de Usuario">
-                            <p:dataTable id="tipo" var="t" value="#{vistasMenuController.tipoPersonas}" editable="true" 
+                            <p:dataTable id="tipo" var="t" value="#{vistasMenuController.tipoPersonas}" 
+                                         editable="true" rows="10" paginator="true" paginatorPosition="top" paginatorAlwaysVisible="false"
                                          widgetVar="tp" styleClass="tabla"
                                          emptyMessage="Sin registros aún.">
                                 <f:facet name="header">

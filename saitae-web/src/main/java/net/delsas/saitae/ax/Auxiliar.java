@@ -33,9 +33,11 @@ import net.delsas.saitae.beans.MestroHorarioMateriasFacadeLocal;
 import net.delsas.saitae.beans.NotificacionesFacadeLocal;
 import net.delsas.saitae.entities.DiasEstudio;
 import net.delsas.saitae.entities.Estudiante;
+import net.delsas.saitae.entities.Grado;
 import net.delsas.saitae.entities.GradoPK;
 import net.delsas.saitae.entities.Horario;
 import net.delsas.saitae.entities.Maestro;
+import net.delsas.saitae.entities.Matricula;
 import net.delsas.saitae.entities.MestroHorarioMaterias;
 import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.Reserva;
@@ -43,6 +45,7 @@ import net.delsas.saitae.entities.TipoEspecialidades;
 import net.delsas.saitae.entities.TipoPersona;
 import net.delsas.saitae.entities.TipoSueldos;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 import org.omnifaces.cdi.PushContext;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.FlowEvent;
@@ -1051,5 +1054,75 @@ public class Auxiliar implements Serializable {
         pm.setDiameter(300);
         pm.setShadow(false);
         return pm;
+    }
+
+    private List<MatriculaSeccion> llenar(GradoFacadeLocal gFL, Integer año, String m) {
+        List<MatriculaSeccion> i = new ArrayList<>();
+        List<Integer> ns = gFL.getIdPorAñoyModalidad(año, m);
+        for (Integer n : ns) {
+            List<String> ss = gFL.getSeccionPorAñoModalidadyId(año, m, n);
+            for (String s : ss) {
+                Grado g = gFL.find(new GradoPK(n, m, s, año));
+                for (Matricula ma : g.getMatriculaList()) {
+                    MatriculaSeccion mas = new MatriculaSeccion(ma.getGrado().getGradoPK(), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+                    if (ma.getEstudiante().getPersona().getPersonaSexo()) {
+                        mas.setMatriculaF(mas.getMatriculaF() + 1);
+                    } else {
+                        mas.setMatriculaM(mas.getMatriculaM() + 1);
+                    }
+                    if (ma.getMatriculaRepite()) {
+                        if (ma.getEstudiante().getPersona().getPersonaSexo()) {
+                            mas.setRepitenciaF(mas.getRepitenciaF() + 1);
+                        } else {
+                            mas.setRepitenciaM(mas.getRepitenciaM() + 1);
+                        }
+                    }
+                    if (ma.getEstudiante().getPersona().getPersonaActivo()) {
+                        if (ma.getEstudiante().getPersona().getPersonaSexo()) {
+                            mas.setRetiradosF(mas.getRetiradosF() + 1);
+                        } else {
+                            mas.setRetiradosM(mas.getRetiradosM() + 1);
+                        }
+                    }
+                    if (getEdad(ma.getEstudiante().getPersona().getPersonaNacimiento()) > (15 + n)) {
+                        if (ma.getEstudiante().getPersona().getPersonaSexo()) {
+                            mas.setSobreEdadF(mas.getSobreEdadF() + 1);
+                        } else {
+                            mas.setSobreEdadM(mas.getSobreEdadM() + 1);
+                        }
+                    }
+                    i.add(mas);
+                    System.out.println(mas);
+                }
+            }
+        }
+
+        return i;
+
+    }
+
+    public List<ReporteMatricula> llenar(GradoFacadeLocal gFL, Integer año) {
+        List<ReporteMatricula> i = new ArrayList<>();
+        List<String> mm = gFL.getModalidadPorAño(año);
+        mm.forEach((m) -> {
+            i.add(new ReporteMatricula(m, llenar(gFL, año, m)));
+        });
+        return i;
+    }
+
+    private Integer getEdad(Date d) {
+        d = d == null ? new Date() : d;
+        int aa = getAñoActual(),
+                ma = Integer.valueOf(new SimpleDateFormat("MM").format(new Date())),
+                da = Integer.valueOf(new SimpleDateFormat("dd").format(new Date())),
+                ad = Integer.valueOf(new SimpleDateFormat("yyyy").format(d)),
+                md = Integer.valueOf(new SimpleDateFormat("MM").format(d)),
+                dd = Integer.valueOf(new SimpleDateFormat("dd").format(d)),
+                e;
+        e = aa - ad;
+        if (md > ma || (md == ma && dd > da)) {
+            e -= 1;
+        }
+        return e;
     }
 }
