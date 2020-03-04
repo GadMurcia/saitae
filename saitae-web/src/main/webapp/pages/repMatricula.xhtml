@@ -173,7 +173,8 @@
                     <p:dataExporter type="xls" target="matricula" pageOnly="true"
                                     options="#{axiliarController.excelOpt}"
                                     fileName="Reporte-Matricula-Institucional-#{repMatriculaController.añoActual}"
-                                    encoding="UTF-8"/>
+                                    encoding="UTF-8"
+                                    postProcessor="#{repMatriculaController.postProcessXLSp}"/>
                 </h:commandLink>
             </h:panelGrid>
         </h:form>

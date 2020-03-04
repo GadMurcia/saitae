@@ -51,7 +51,7 @@ public class ReporteMatricula implements Serializable {
     public void setModalidad(String modalidad) {
         this.modalidad = modalidad;
     }
-
+    
     @Override
     public String toString() {
         return "ReporteMatricula{" + "modalidad=" + modalidad + '}';
