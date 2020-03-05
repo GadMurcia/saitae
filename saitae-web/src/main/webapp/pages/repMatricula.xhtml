@@ -24,7 +24,7 @@
                 <p:dataTable id="matricula" var="d" value="#{repMatriculaController.datos}"
                              emptyMessage="No hay datos disponibles.">
                     <f:facet name="header">
-                        Estadística Institucional (#{repMatriculaController.añoInscripcion})
+                        Estadística Institucional (#{repMatriculaController.añoSelected})
                     </f:facet>
                     <p:columnGroup type="header">
                         <p:row>
@@ -78,7 +78,7 @@
                         </p:row>                        
                     </p:columnGroup>
 
-                    <p:subTable id="tt" var="sm" value="#{d.mats}">
+                    <p:subTable id="tt" var="sm" value="#{d.mats}" rendered="false">
                         <f:facet name="header" >
                             <h:outputText value="#{repMatriculaController.getModalidadNombre(d.modalidad)}" />
                         </f:facet>
