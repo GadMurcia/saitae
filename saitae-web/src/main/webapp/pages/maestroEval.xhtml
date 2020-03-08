@@ -39,7 +39,7 @@
                                  var="ev" emptyMessage="Sin evaluaciones" selectionMode="single" 
                                  selection="#{maestroEvalController.evMaSelected}"
                                  rowKey="#{ev.evaluacionMaestroPK}" id="evalm">
-                        <p:ajax event="rowSelect"/>
+                        <p:ajax event="rowSelect" listener="#{maestroEvalController.onBlour}"/>
                         <f:facet name="header">
                             Historial de evaluaciones del docente 
                             #{maestroEvalController.getNombreCompletoPersona(maestroEvalController.persona)}
@@ -52,8 +52,8 @@
                         </p:column>
                     </p:dataTable>
                     <p:contextMenu for="evalm">
-                        <p:menuitem value="Mostrar" icon="fa fa-edit"                                    
-                                    update="h0" oncomplete="PF('Deval').show();"/>
+                        <p:menuitem value="Mostrar" icon="fa fa-edit" immediate="true"                                    
+                                    update="h0" actionListener="#{maestroEvalController.mostrar()}"/>
                         <p:menuitem value="eliminar" icon="fa fa-trash" immediate="true"
                                     update="h0 form" actionListener="#{maestroEvalController.eliminarEval()}"/>
                     </p:contextMenu>

@@ -92,4 +92,11 @@ public interface PersonaFacadeLocal {
      */
     public List<Persona> getPersonaByLikeNombre(String LikeNombre);
 
+    /**
+     * Devuelve una lista de personas que ostentan el tipo proporcionado
+     *
+     * @param tipo
+     * @return java.util.List net.delsas.saitae.entities.Persona
+     */
+    public List<Persona> findByIdTipo(Integer tipo);
 }

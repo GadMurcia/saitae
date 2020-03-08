@@ -16,6 +16,9 @@
  */
 package net.delsas.saitae.ax;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -47,6 +50,15 @@ import net.delsas.saitae.entities.TipoPersona;
 import net.delsas.saitae.entities.TipoSueldos;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.ClientAnchor;
+import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.Drawing;
+import org.apache.poi.ss.usermodel.Picture;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.util.IOUtils;
 import org.omnifaces.cdi.PushContext;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.FlowEvent;
@@ -1062,36 +1074,25 @@ public class Auxiliar implements Serializable {
         List<Integer> ns = gFL.getIdPorAñoyModalidad(año, m);
         for (Integer n : ns) {
             List<String> ss = gFL.getSeccionPorAñoModalidadyId(año, m, n);
-            for (String s : ss) {
-                Grado g = gFL.find(new GradoPK(n, m, s, año));
+            ss.stream().map((s) -> gFL.find(new GradoPK(n, m, s, año))).map((g) -> {
                 MatriculaSeccion mas = new MatriculaSeccion(g.getGradoPK(), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
                 List<Matricula> matrs = mFL.findByGradoPK(g.getGradoPK());
-                matrs.stream().map((ma) -> {
-                    mas.setMatriculaM(mas.getMatriculaM() + (ma.getEstudiante().getPersona().getPersonaSexo() ? 0 : 1));
-                    return ma;
-                }).map((ma) -> {
+                matrs.stream().forEachOrdered((ma) -> {
+                    mas.setMatriculaM(mas.getMatriculaM() + (!ma.getEstudiante().getPersona().getPersonaSexo() ? 1 : 0));
                     mas.setMatriculaF(mas.getMatriculaF() + (ma.getEstudiante().getPersona().getPersonaSexo() ? 1 : 0));
-                    return ma;
-                }).map((ma) -> {
-                    mas.setRepitenciaM(mas.getRepitenciaM() + (ma.getMatriculaRepite() && ma.getEstudiante().getPersona().getPersonaSexo() ? 0 : 1));
-                    return ma;
-                }).map((ma) -> {
+                    mas.setRepitenciaM(mas.getRepitenciaM() + (ma.getMatriculaRepite() && !ma.getEstudiante().getPersona().getPersonaSexo() ? 1 : 0));
                     mas.setRepitenciaF(mas.getRepitenciaF() + (ma.getMatriculaRepite() && ma.getEstudiante().getPersona().getPersonaSexo() ? 1 : 0));
-                    return ma;
-                }).map((ma) -> {
-                    mas.setRetiradosM(mas.getRetiradosM() + (!ma.getEstudiante().getPersona().getPersonaActivo() && ma.getEstudiante().getPersona().getPersonaSexo() ? 0 : 1));
-                    return ma;
-                }).map((ma) -> {
+                    mas.setRetiradosM(mas.getRetiradosM() + (!ma.getEstudiante().getPersona().getPersonaActivo() && !ma.getEstudiante().getPersona().getPersonaSexo() ? 1 : 0));
                     mas.setRetiradosF(mas.getRetiradosF() + (!ma.getEstudiante().getPersona().getPersonaActivo() && ma.getEstudiante().getPersona().getPersonaSexo() ? 1 : 0));
-                    return ma;
-                }).map((ma) -> {
-                    mas.setSobreEdadM(mas.getSobreEdadM() + (getEdad(ma.getEstudiante().getPersona().getPersonaNacimiento()) > (15 + n) && ma.getEstudiante().getPersona().getPersonaSexo() ? 1 : 0));
-                    return ma;
-                }).forEachOrdered((ma) -> {
-                    mas.setSobreEdadF(mas.getSobreEdadF() + (getEdad(ma.getEstudiante().getPersona().getPersonaNacimiento()) > (15 + n) && ma.getEstudiante().getPersona().getPersonaSexo() ? 0 : 1));
+                    mas.setSobreEdadM(mas.getSobreEdadM() + (getEdad(ma.getEstudiante().getPersona().getPersonaNacimiento()) > (15 + n) && !ma.getEstudiante().getPersona().getPersonaSexo() ? 1 : 0));
+                    mas.setSobreEdadF(mas.getSobreEdadF() + (getEdad(ma.getEstudiante().getPersona().getPersonaNacimiento()) > (15 + n) && ma.getEstudiante().getPersona().getPersonaSexo() ? 1 : 0));
+                    mas.setReprobadosM(0);
+                    mas.setReprobadosF(0);
                 });
+                return mas;
+            }).forEachOrdered((mas) -> {
                 i.add(mas);
-            }
+            });
         }
 
         return i;
@@ -1121,5 +1122,24 @@ public class Auxiliar implements Serializable {
             e -= 1;
         }
         return e;
+    }
+
+    public void agregarImagenAHojaExcel(HSSFWorkbook doc, HSSFSheet hoja, int row, int rowi, int col, int rowf, String ruta) {
+        try {
+            int index;
+            try (InputStream is = new FileInputStream(ruta)) {
+                byte[] bs = IOUtils.toByteArray(is);
+                index = doc.addPicture(bs, Workbook.PICTURE_TYPE_PNG);
+            }
+            CreationHelper ch = doc.getCreationHelper();
+            Drawing d = hoja.createDrawingPatriarch();
+            ClientAnchor c = ch.createClientAnchor();
+            c.setCol1(col);
+            c.setRow1(row);
+            Picture p = d.createPicture(c, index);
+            p.resize(rowi, rowf);
+        } catch (IOException e) {
+            System.out.println("Error en agregarImagenAHojaExcel\n\n" + e);
+        }
     }
 }

@@ -19,9 +19,6 @@ package net.delsas.saitae.controllers;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -31,24 +28,19 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import net.delsas.saitae.ax.Auxiliar;
-import net.delsas.saitae.ax.MatriculaSeccion;
 import net.delsas.saitae.ax.ReporteMatricula;
 import net.delsas.saitae.ax.XLSModel;
 import net.delsas.saitae.beans.AccesoFacadeLocal;
 import net.delsas.saitae.beans.AccesoTipoPersonaFacadeLocal;
 import net.delsas.saitae.beans.GradoFacadeLocal;
 import net.delsas.saitae.beans.MatriculaFacadeLocal;
+import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.entities.Persona;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.ss.usermodel.BorderStyle;
-import org.apache.poi.ss.usermodel.FillPatternType;
-import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.util.CellRangeAddress;
@@ -75,6 +67,8 @@ public class repMatriculaController extends Auxiliar implements Serializable {
     private AccesoFacadeLocal accesoFL;
     @EJB
     private MatriculaFacadeLocal mFL;
+    @EJB
+    private PersonaFacadeLocal pFL;
 
     @PostConstruct
     public void init() {
@@ -117,32 +111,53 @@ public class repMatriculaController extends Auxiliar implements Serializable {
     public void postProcessXLSp(Object document) {
         HSSFWorkbook wb = (HSSFWorkbook) document;
         ExternalContext ex = FacesContext.getCurrentInstance().getExternalContext();
-        String logo = ex.getRealPath("") + File.separator + "resources" + File.separator + "img" + File.separator + "mined.png";
+        String logo = ex.getRealPath("") + File.separator + "resources" + File.separator + "img" + File.separator;
         wb = new XLSModel().getReporteMAtricula(wb, datos, logo);
-        HSSFCellStyle st = wb.createCellStyle();
-        st.setAlignment(HorizontalAlignment.LEFT);
-        st.setVerticalAlignment(VerticalAlignment.CENTER);
-        HSSFSheet s = wb.getSheetAt(0);
-        int nr = s.getLastRowNum();
-        nr += 3;
-        HSSFRow r = s.createRow(nr);
-        HSSFCell c = r.createCell(1);
-        c.setCellValue("F.");
-        c.setCellStyle(st);
-        st = wb.createCellStyle();
-        st.setAlignment(HorizontalAlignment.CENTER);
-        st.setVerticalAlignment(VerticalAlignment.CENTER);
-        r = s.createRow(nr + 1);
-        c = r.createCell(1);
-        c.setCellValue("Profesora Carmen Emelina Arévalo");
-        c.setCellStyle(st);
-        r = s.createRow(nr + 2);
-        c = r.createCell(1);
-        c.setCellValue("Directora");
-        c.setCellStyle(st);
 
-        s.addMergedRegion(new CellRangeAddress(nr + 2, nr + 2, 1, 7));
-        s.addMergedRegion(new CellRangeAddress(nr + 1, nr + 1, 1, 7));
-        s.addMergedRegion(new CellRangeAddress(nr, nr, 1, 7));
+        List<Persona> directores = pFL.findByIdTipo(2);
+        if (!directores.isEmpty()) {
+            HSSFCellStyle st = wb.createCellStyle();
+            st.setAlignment(HorizontalAlignment.LEFT);
+            st.setVerticalAlignment(VerticalAlignment.CENTER);
+            HSSFSheet s = wb.getSheetAt(0);
+            int nr = s.getLastRowNum();
+            nr += 3;
+            HSSFRow r = s.createRow(nr);
+            HSSFCell c = r.createCell(1);
+            c.setCellValue("F.");
+            c.setCellStyle(st);
+            st = wb.createCellStyle();
+            st.setAlignment(HorizontalAlignment.CENTER);
+            st.setVerticalAlignment(VerticalAlignment.CENTER);
+            r = s.createRow(nr + 1);
+            c = r.createCell(1);
+            c.setCellValue(getNombreCompletoPersona(directores.get(0)));
+            c.setCellStyle(st);
+            r = s.createRow(nr + 2);
+            c = r.createCell(1);
+            c.setCellValue("Director" + (directores.get(0).getPersonaSexo() ? "a" : ""));
+            c.setCellStyle(st);
+
+            s.addMergedRegion(new CellRangeAddress(nr + 2, nr + 2, 1, 7));
+            s.addMergedRegion(new CellRangeAddress(nr + 1, nr + 1, 1, 7));
+            s.addMergedRegion(new CellRangeAddress(nr, nr, 1, 7));
+        }
+    }
+
+    public Integer[] getSubtotal(String modalidad) {
+        Integer[] vals = new Integer[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        datos.stream().filter((rm) -> (rm.getModalidad().equalsIgnoreCase(modalidad))).forEachOrdered((rm) -> {
+            new XLSModel().total(vals, rm.getMats());
+        });
+        return vals;
+    }
+
+    public Integer[] getTotal() {
+        Integer[] vals = new Integer[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        XLSModel c = new XLSModel();
+        datos.stream().forEachOrdered((rm) -> {
+            c.total(vals, rm.getMats());
+        });
+        return vals;
     }
 }

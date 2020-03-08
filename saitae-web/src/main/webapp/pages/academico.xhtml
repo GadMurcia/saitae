@@ -308,12 +308,12 @@
                                 <p:menuitem value="Agregar nuevo" icon="pi pi-plus-circle" update="dias :f1"
                                             actionListener="#{tipoController.nuevoDias()}"
                                             oncomplete="PF('Ddias').show()"/>
-                                <p:menuitem value="Editar" update="f1" icon="fa fa-edit"
+                                <!--<p:menuitem value="Editar" update="f1" icon="fa fa-edit"
                                             actionListener="#{tipoController.editarDias()}"
                                             oncomplete="PF('Ddias').show()" />
-                                <p:menuitem value="Eliminar" icon="pi pi-minus-circle" 
-                                            actionListener="#{tipoController.eliminarDias()}"
-                                            update="dias :f1"/>
+                                --><p:menuitem value="Eliminar" icon="pi pi-minus-circle" 
+                                               actionListener="#{tipoController.eliminarDias()}"
+                                               update="dias :f1"/>
                             </p:contextMenu>
                         </p:tab>
                     </p:tabView>
@@ -332,7 +332,7 @@
                                                itemLabel="#{ds.diasEstudioNombre}" itemValue="#{ds}"/>
                             </p:selectOneMenu>
                             <p:column/>
-                            <p:commandButton value="Guaradr" 
+                            <p:commandButton value="Guardar" 
                                              actionListener="#{tipoController.guardarDias()}"
                                              update=":form:tw:dias f1" 
                                              oncomplete="PF('Ddias').hide()"/>
@@ -360,15 +360,6 @@
                                          icon="pi pi-save" update="form:tw:horario form0:msgs"/>
                     </h:form>
                 </p:dialog>
-                <script>
-                    function socketListener(message, channel, event) {
-                        tipopp([{name: 'mss', value: message}]);
-                    }
-                </script>                
-                <o:socket channel="notificacion" onmessage="socketListener"/>
-                <h:form>
-                    <p:remoteCommand name="tipopp" actionListener="#{tipoController.escucha()}" update="form f1 h1 form0"/>
-                </h:form>
             </ui:define>
         </ui:composition>
     </body>

@@ -157,7 +157,7 @@ public class horaLiteController extends Auxiliar implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         if (selected != null) {
             pk = selected.getMestroHorarioMateriasPK();
-            selected.setMestroHorarioMateriasPK(new MestroHorarioMateriasPK(selected.getMaestro().getIdmaestro(), selected.getMateria().getIdmateria(), selected.getHorario().getIdhorario(), selected.getDiasEstudio().getIdDias(), selected.getGrado().getGradoPK().getIdgrado(), selected.getGrado().getGradoPK().getGradoSeccion(), selected.getGrado().getGradoPK().getGradoModalidad(), selected.getGrado().getGradoPK().getGradoAño()));
+            selected.setMestroHorarioMateriasPK(new MestroHorarioMateriasPK(selected.getMaestro().getIdmaestro(), selected.getMateria().getIdmateria(), selected.getHorario().getIdhorario(), selected.getDiasEstudio().getIdDias(), selected.getGrado().getGradoPK().getIdgrado(), selected.getGrado().getGradoPK().getGradoModalidad(), selected.getGrado().getGradoPK().getGradoSeccion(), selected.getGrado().getGradoPK().getGradoAño()));
             List<MestroHorarioMaterias> e = mhmFL.findByhorarioAndGradoPK(selected.getHorario(), selected.getGrado().getGradoPK(), selected.getDiasEstudio());
             List<MestroHorarioMaterias> x = mhmFL.findByhorarioAndMaestro(selected.getHorario(), selected.getMaestro(), selected.getDiasEstudio());
             if (!e.isEmpty() && !e.get(0).getMestroHorarioMateriasPK().equals(pk)) {
@@ -181,7 +181,16 @@ public class horaLiteController extends Auxiliar implements Serializable {
                 m.setHorario(horarioFL.find(selected.getHorario().getIdhorario()));
                 m.setMaestro(maestroFL.find(selected.getMaestro().getIdmaestro()));
                 m.setMateria(materiaFL.find(selected.getMateria().getIdmateria()));
-                m.setMestroHorarioMateriasPK(new MestroHorarioMateriasPK(m.getMaestro().getIdmaestro(), m.getMateria().getIdmateria(), m.getHorario().getIdhorario(), m.getDiasEstudio().getIdDias(), m.getGrado().getGradoPK().getIdgrado(), m.getGrado().getGradoPK().getGradoSeccion(), m.getGrado().getGradoPK().getGradoModalidad(), m.getGrado().getGradoPK().getGradoAño()));
+                m.setMestroHorarioMateriasPK(
+                        new MestroHorarioMateriasPK(
+                                m.getMaestro().getIdmaestro(),
+                                m.getMateria().getIdmateria(),
+                                m.getHorario().getIdhorario(),
+                                m.getDiasEstudio().getIdDias(),
+                                m.getGrado().getGradoPK().getIdgrado(),
+                                m.getGrado().getGradoPK().getGradoModalidad(),
+                                m.getGrado().getGradoPK().getGradoSeccion(),
+                                m.getGrado().getGradoPK().getGradoAño()));
                 if (edit) {
                     selected = mhmFL.find(pk);
                     mhmFL.remove(selected);
@@ -292,7 +301,7 @@ public class horaLiteController extends Auxiliar implements Serializable {
     }
 
     public void onAñoSelect(SelectEvent ev) {
-        horario = mhmFL.findAllOrdered(añoSelected);
+        horario = mhmFL.findAllOrdered(añoSelected == null ? 0 : añoSelected);
     }
 
     public Integer getAñoSelected() {

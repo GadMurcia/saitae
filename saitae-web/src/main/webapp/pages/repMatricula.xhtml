@@ -22,7 +22,8 @@
                     </p:selectOneMenu>
                 </h:panelGrid>
                 <p:dataTable id="matricula" var="d" value="#{repMatriculaController.datos}"
-                             emptyMessage="No hay datos disponibles.">
+                             emptyMessage="No hay datos disponibles."
+                             stickyHeader="true" stickyTopAt=".layout-topbar">
                     <f:facet name="header">
                         Estadística Institucional (#{repMatriculaController.añoSelected})
                     </f:facet>
@@ -78,95 +79,158 @@
                         </p:row>                        
                     </p:columnGroup>
 
-                    <p:subTable id="tt" var="sm" value="#{d.mats}" rendered="false">
+                    <p:subTable id="tt" var="sm" value="#{d.mats}">
                         <f:facet name="header" >
-                            <h:outputText value="#{repMatriculaController.getModalidadNombre(d.modalidad)}" />
+                            <h:outputText value="#{repMatriculaController.getModalidadNombre(d.modalidad)}" 
+                                          style="text-align: left; text-transform: uppercase;"/>
                         </f:facet>
-                        <p:column width="40%">
+                        <p:column width="40%" style="text-align: center;">
                             <h:outputText value="#{repMatriculaController.getGradoNombre(sm.pk)}" />
                         </p:column>
-                        <p:column>
+                        <p:column style="text-align: center">
                             <h:outputText value="1" />
                         </p:column>
-                        <p:column>
+                        <p:column style="text-align: center">
                             <h:outputText value="1" />
                         </p:column>
-                        <p:column >
+                        <p:column style="text-align: center">
                             <h:outputText value="1" />
                         </p:column>
-                        <p:column>
+                        <p:column style="text-align: center">
                             <h:outputText value="#{sm.matriculaM}" />
                         </p:column>
-                        <p:column>
+                        <p:column style="text-align: center">
                             <h:outputText value="#{sm.matriculaF}" />
                         </p:column>
-                        <p:column>
+                        <p:column style="text-align: center">
                             <h:outputText value="#{sm.matriculaM}" />
                         </p:column>
-                        <p:column>
+                        <p:column style="text-align: center">
                             <h:outputText value="#{sm.matriculaF}" />
                         </p:column>
-                        <p:column>
+                        <p:column style="text-align: center">
                             <h:outputText value="#{sm.matriculaF + sm.matriculaM}" />
                         </p:column>
-                        <p:column>
+                        <p:column style="text-align: center">
                             <h:outputText value="#{ms.retiradosM}" />
                         </p:column>
-                        <p:column>
+                        <p:column style="text-align: center">
                             <h:outputText value="#{ms.retiradosF}" />
                         </p:column>
-                        <p:column>
-                            <h:outputText value="#{ms.sobreEdadM}" />
+                        <p:column style="text-align: center">
+                            <h:outputText value="#{ms.sobreEdadM+0}" />
                         </p:column>
-                        <p:column>
-                            <h:outputText value="#{ms.sobreEdadF}" />
+                        <p:column style="text-align: center">
+                            <h:outputText value="#{ms.sobreEdadF+0}" />
                         </p:column>
-                        <p:column>
-                            <h:outputText value="#{ms.repitenciaM}" />
+                        <p:column style="text-align: center">
+                            <h:outputText value="#{ms.repitenciaM+0}" />
                         </p:column>
-                        <p:column>
-                            <h:outputText value="#{ms.repitenciaF}" />
+                        <p:column style="text-align: center">
+                            <h:outputText value="#{ms.repitenciaF+0}" />
                         </p:column>
-                        <p:column>
+                        <p:column style="text-align: center">
                             <h:outputText value="#{ms.reprobadosM}" />
                         </p:column>
-                        <p:column>
+                        <p:column style="text-align: center">
                             <h:outputText value="#{ms.reprobadosF}" />
                         </p:column>
-                        <p:column>
+                        <p:column style="text-align: center">
                             <h:outputText value="#{sm.matriculaM - (ms.retiradosM + ms.reprobadosM)}" />
                         </p:column>
-                        <p:column>
+                        <p:column style="text-align: center">
                             <h:outputText value="#{sm.matriculaF - (ms.retiradosF + ms.reprobadosF)}" />
                         </p:column>
-                        <p:column>
+                        <p:column style="text-align: center">
                             <h:outputText value="#{(sm.matriculaF + sm.matriculaM)- (ms.retiradosM+ms.retiradosF)}" />
                         </p:column>
                         <p:columnGroup type="footer">
                             <p:row>
-                                <p:column footerText="Totales: " style="text-align:right"/>
-                                <p:column style="text-align:right"/>
-                                <p:column style="text-align:right"/>
-                                <p:column style="text-align:right"/>
-                                <p:column style="text-align:right"/>
-                                <p:column style="text-align:right"/>
-                                <p:column style="text-align:right"/>
-                                <p:column style="text-align:right"/>
-                                <p:column style="text-align:right"/>
-                                <p:column style="text-align:right"/>
-                                <p:column style="text-align:right"/>
-                                <p:column style="text-align:right"/>
-                                <p:column style="text-align:right"/>
-                                <p:column style="text-align:right"/>
-                                <p:column style="text-align:right"/>
-                                <p:column style="text-align:right"/>
-                                <p:column style="text-align:right"/>
-                                <p:column style="text-align:right"/>
-                                <p:column style="text-align:right"/>
-                                <p:column style="text-align:right"/>                                
+                                <p:column footerText="Subtotal: " style="text-align:center"/>
+                                <p:column style="text-align:center" 
+                                          footerText="#{repMatriculaController.getSubtotal(d.modalidad)[1]}"/>
+                                <p:column style="text-align:center" 
+                                          footerText="#{repMatriculaController.getSubtotal(d.modalidad)[2]}"/>
+                                <p:column style="text-align:center" 
+                                          footerText="#{repMatriculaController.getSubtotal(d.modalidad)[3]}"/>
+                                <p:column style="text-align:center" 
+                                          footerText="#{repMatriculaController.getSubtotal(d.modalidad)[4]}"/>
+                                <p:column style="text-align:center" 
+                                          footerText="#{repMatriculaController.getSubtotal(d.modalidad)[5]}"/>
+                                <p:column style="text-align:center" 
+                                          footerText="#{repMatriculaController.getSubtotal(d.modalidad)[6]}"/>
+                                <p:column style="text-align:center" 
+                                          footerText="#{repMatriculaController.getSubtotal(d.modalidad)[7]}"/>
+                                <p:column style="text-align:center" 
+                                          footerText="#{repMatriculaController.getSubtotal(d.modalidad)[8]}"/>
+                                <p:column style="text-align:center" 
+                                          footerText="#{repMatriculaController.getSubtotal(d.modalidad)[9]}"/>
+                                <p:column style="text-align:center" 
+                                          footerText="#{repMatriculaController.getSubtotal(d.modalidad)[10]}"/>
+                                <p:column style="text-align:center" 
+                                          footerText="#{repMatriculaController.getSubtotal(d.modalidad)[11]}"/>
+                                <p:column style="text-align:center" 
+                                          footerText="#{repMatriculaController.getSubtotal(d.modalidad)[12]}"/>
+                                <p:column style="text-align:center" 
+                                          footerText="#{repMatriculaController.getSubtotal(d.modalidad)[13]}"/>
+                                <p:column style="text-align:center" 
+                                          footerText="#{repMatriculaController.getSubtotal(d.modalidad)[14]}"/>
+                                <p:column style="text-align:center" 
+                                          footerText="#{repMatriculaController.getSubtotal(d.modalidad)[15]}"/>
+                                <p:column style="text-align:center" 
+                                          footerText="#{repMatriculaController.getSubtotal(d.modalidad)[16]}"/>
+                                <p:column style="text-align:center" 
+                                          footerText="#{repMatriculaController.getSubtotal(d.modalidad)[17]}"/>
+                                <p:column style="text-align:center" 
+                                          footerText="#{repMatriculaController.getSubtotal(d.modalidad)[18]}"/>
+                                <p:column style="text-align:center" 
+                                          footerText="#{repMatriculaController.getSubtotal(d.modalidad)[19]}"/>
                             </p:row>
                         </p:columnGroup>
                     </p:subTable>
+                    <p:columnGroup type="footer">
+                        <p:row>
+                            <p:column footerText="Total General Institucional: " style="text-align:center"/>
+                            <p:column style="text-align:center" 
+                                      footerText="#{repMatriculaController.total[1]}"/>
+                            <p:column style="text-align:center" 
+                                      footerText="#{repMatriculaController.total[2]}"/>
+                            <p:column style="text-align:center" 
+                                      footerText="#{repMatriculaController.total[3]}"/>
+                            <p:column style="text-align:center" 
+                                      footerText="#{repMatriculaController.total[4]}"/>
+                            <p:column style="text-align:center" 
+                                      footerText="#{repMatriculaController.total[5]}"/>
+                            <p:column style="text-align:center" 
+                                      footerText="#{repMatriculaController.total[6]}"/>
+                            <p:column style="text-align:center" 
+                                      footerText="#{repMatriculaController.total[7]}"/>
+                            <p:column style="text-align:center" 
+                                      footerText="#{repMatriculaController.total[8]}"/>
+                            <p:column style="text-align:center" 
+                                      footerText="#{repMatriculaController.total[9]}"/>
+                            <p:column style="text-align:center" 
+                                      footerText="#{repMatriculaController.total[10]}"/>
+                            <p:column style="text-align:center" 
+                                      footerText="#{repMatriculaController.total[11]}"/>
+                            <p:column style="text-align:center" 
+                                      footerText="#{repMatriculaController.total[12]}"/>
+                            <p:column style="text-align:center" 
+                                      footerText="#{repMatriculaController.total[13]}"/>
+                            <p:column style="text-align:center" 
+                                      footerText="#{repMatriculaController.total[14]}"/>
+                            <p:column style="text-align:center" 
+                                      footerText="#{repMatriculaController.total[15]}"/>
+                            <p:column style="text-align:center" 
+                                      footerText="#{repMatriculaController.total[16]}"/>
+                            <p:column style="text-align:center" 
+                                      footerText="#{repMatriculaController.total[17]}"/>
+                            <p:column style="text-align:center" 
+                                      footerText="#{repMatriculaController.total[18]}"/>
+                            <p:column style="text-align:center" 
+                                      footerText="#{repMatriculaController.total[19]}"/>
+                        </p:row>
+                    </p:columnGroup>
                 </p:dataTable>
                 <h:commandLink >
                     <p:graphicImage library="img" name="xls.png" width="37px" height="32px"/>

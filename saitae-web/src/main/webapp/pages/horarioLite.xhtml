@@ -68,7 +68,7 @@
                         <p:column/>
                         <p:commandButton value="Guardar" 
                                          actionListener="#{horaLiteController.guardar()}"
-                                         style="width: 190px" update="form f1"/>
+                                         style="width: 190px"/>
 
                         <p:column/>
                     </h:panelGrid>
@@ -86,7 +86,7 @@
                             <f:selectItems value="#{horaLiteController.añosDisponibles}" var="ad"
                                            itemLabel="#{ad}" itemValue="#{ad}"/>
                             <p:ajax event="itemSelect" listener="#{horaLiteController.onAñoSelect}"
-                                    update=":form:horario" 
+                                    update="horario" 
                                     onstart="PF('D1').show();" oncomplete="PF('D1').hide();"/>
                         </p:selectOneMenu>
                     </h:panelGrid>

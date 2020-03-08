@@ -31,7 +31,7 @@ public class PersonaFacade extends AbstractFacade<Persona> implements PersonaFac
     public PersonaFacade() {
         super(Persona.class);
     }
-    
+
     /**
      * Devuelve una lista de objetos persona cuyos id inicien por el
      * proporcionado en el parámetro id
@@ -42,7 +42,7 @@ public class PersonaFacade extends AbstractFacade<Persona> implements PersonaFac
     @Override
     public List<Persona> getByLikeId(int id) {
         return em.createNamedQuery("Persona.findByLikeIdpersona").setParameter("idpersona", id + "").getResultList();
-}
+    }
 
     @Override
     public List<Persona> getPlantel() {
@@ -65,12 +65,12 @@ public class PersonaFacade extends AbstractFacade<Persona> implements PersonaFac
                 .setParameter("idtipoPersona", tipo)
                 .getResultList();
     }
-    
+
     @Override
     public List<Persona> getAdminsByLikeId(int id) {
         return em.createNamedQuery("Persona.findAdministratorByLikeType").setParameter("idpersona", id + "").getResultList();
     }
-    
+
     @Override
     public List<Persona> getPersonaByLikeNombreAndType(String nombre, int tipo) {
         return em.createNamedQuery("Persona.findPersonaByLikeNombreAndTipo")
@@ -78,11 +78,18 @@ public class PersonaFacade extends AbstractFacade<Persona> implements PersonaFac
                 .setParameter("idtipoPersona", tipo)
                 .getResultList();
     }
-    
+
     @Override
     public List<Persona> getPersonaByLikeNombre(String nombre) {
         return em.createNamedQuery("Persona.findPersonaByLikeNombre")
                 .setParameter("likeNombre", nombre)
+                .getResultList();
+    }
+
+    @Override
+    public List<Persona> findByIdTipo(Integer tipo) {
+        return em.createNamedQuery("Persona.findByIdTipo")
+                .setParameter("tipo", tipo)
                 .getResultList();
     }
 }

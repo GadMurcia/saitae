@@ -161,7 +161,7 @@ public class maestroEvalController extends Auxiliar implements Serializable {
         } else {
             FacesContext.getCurrentInstance().addMessage("form0:msgs",
                     new FacesMessage(FacesMessage.SEVERITY_WARN, "No se selecińo nada",
-                            "Dé click sobre el item y luego clck_derecho > eliminar para "
+                            "Haga click sobre el item y luego clck_derecho > eliminar para "
                             + "poder entender cual evaluación desea eliminar."));
             PrimeFaces.current().ajax().update("form0:msgs");
         }
@@ -170,6 +170,18 @@ public class maestroEvalController extends Auxiliar implements Serializable {
 
     public void limpiar() {
         persona = null;
+    }
+    
+    public void mostrar(){
+        if (evMaSelected != null) {
+            PrimeFaces.current().executeScript("PF('Deval').show();");
+        } else {
+            FacesContext.getCurrentInstance().addMessage("form0:msgs",
+                    new FacesMessage(FacesMessage.SEVERITY_WARN, "No se selecinó nada",
+                            "Haga click sobre el item y luego clck_derecho > Mostrar para "
+                            + "poder entender cual evaluación desea visualizar."));
+            PrimeFaces.current().ajax().update("form0:msgs");
+        }
     }
 
     public List<Persona> getMaestros() {

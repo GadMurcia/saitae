@@ -16,60 +16,52 @@
  */
 package net.delsas.saitae.ax;
 
-import com.lowagie.text.Image;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.BorderStyle;
-import org.apache.poi.ss.usermodel.ClientAnchor;
-import org.apache.poi.ss.usermodel.CreationHelper;
-import org.apache.poi.ss.usermodel.Drawing;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.ss.usermodel.Picture;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
-import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.util.IOUtils;
 
 /**
  *
  * @author delsas
  */
 public class XLSModel {
-     
-   private Auxiliar ax;
-    
+
+    private final Auxiliar ax = new Auxiliar();
+
     public XLSModel() {
-        ax = new Auxiliar();
     }
-    
+
     public HSSFWorkbook getReporteMAtricula(HSSFWorkbook doc, List<ReporteMatricula> datos, String ruta) {
         doc.removeSheetAt(0);
         HSSFSheet hoja = doc.createSheet("Reporte de matricula");
-        
+        Integer[] vals;
+
         HSSFCellStyle st = doc.createCellStyle();
         st.setAlignment(HorizontalAlignment.CENTER);
         st.setVerticalAlignment(VerticalAlignment.CENTER);
+        st.setWrapText(true);
         Font f = doc.createFont();
         f.setBold(true);
         f.setFontName("arial");
         f.setFontHeightInPoints((short) 14);
         st.setFont(f);
-        
+
         HSSFRow r = hoja.createRow(1);
         HSSFCell cel = r.createCell(0);
         cel.setCellValue("Instituto Nacional 'Texistepeque'");
         cel.setCellStyle(st);
-        
+
         r = hoja.createRow(2);
         cel = r.createCell(0);
         cel.setCellValue("Ministerio de educación");
@@ -80,7 +72,7 @@ public class XLSModel {
         cel = r.createCell(9);
         cel.setCellValue("Mes: " + new SimpleDateFormat("MMMMM").format(new Date()));
         cel.setCellStyle(st);
-        
+
         r = hoja.createRow(3);
         cel = r.createCell(0);
         cel.setCellValue("Dirección departamental de Santa Ana");
@@ -88,33 +80,18 @@ public class XLSModel {
         cel = r.createCell(4);
         cel.setCellValue("Código de infraestructura: 14753");
         cel.setCellStyle(st);
-        
+
         r = hoja.createRow(4);
-        
-        try {
-            int index;
-            System.out.println(ruta);
-            try (InputStream is = new FileInputStream(ruta)) {
-                byte[] bs = IOUtils.toByteArray(is);
-                index = doc.addPicture(bs, Workbook.PICTURE_TYPE_PNG);
-            }
-            CreationHelper ch = doc.getCreationHelper();
-            Drawing d = hoja.createDrawingPatriarch();
-            ClientAnchor c = ch.createClientAnchor();
-            c.setCol1(0);
-            c.setRow1(4);
-            Picture p = d.createPicture(c, index);
-            p.resize(5, 3);
-        } catch (IOException e) {
-            System.out.println(e);
-        }
-        
+        ax.agregarImagenAHojaExcel(doc, hoja, 4, 1, 0, 4, ruta + "mined.png");
+        ax.agregarImagenAHojaExcel(doc, hoja, 4, 2, 18, 4, ruta + "intexM.jpeg");
+
         cel = r.createCell(1);
         cel.setCellValue("ESTADÍSTICA INSTITUCIONAL");
         cel.setCellStyle(st);
-        
+
         st = doc.createCellStyle();
         st.setAlignment(HorizontalAlignment.CENTER);
+        st.setWrapText(true);
         st.setVerticalAlignment(VerticalAlignment.CENTER);
         f = doc.createFont();
         f.setBold(true);
@@ -125,7 +102,7 @@ public class XLSModel {
         st.setBorderLeft(BorderStyle.MEDIUM);
         st.setBorderRight(BorderStyle.MEDIUM);
         st.setFont(f);
-        
+
         r = hoja.createRow(9);
         cel = r.createCell(0);
         cel.setCellValue("Año y número de secciones");
@@ -154,7 +131,7 @@ public class XLSModel {
         cel = r.createCell(19);
         cel.setCellValue("Total");
         cel.setCellStyle(st);
-        
+
         r = hoja.createRow(10);
         cel = r.createCell(0);
         cel.setCellValue("Modalidad de bachillerato");
@@ -168,7 +145,7 @@ public class XLSModel {
         cel = r.createCell(6);
         cel.setCellValue("Tarde");
         cel.setCellStyle(st);
-        
+
         r = hoja.createRow(11);
         cel = r.createCell(1);
         cel.setCellValue("Mañana");
@@ -221,7 +198,7 @@ public class XLSModel {
         cel = r.createCell(18);
         cel.setCellValue("F");
         cel.setCellStyle(st);
-        
+
         hoja.addMergedRegion(new CellRangeAddress(1, 1, 0, 19));
         hoja.addMergedRegion(new CellRangeAddress(2, 2, 0, 3));
         hoja.addMergedRegion(new CellRangeAddress(2, 2, 4, 8));
@@ -242,36 +219,51 @@ public class XLSModel {
         hoja.addMergedRegion(new CellRangeAddress(10, 10, 4, 5));
         hoja.addMergedRegion(new CellRangeAddress(10, 10, 6, 7));
         hoja.addMergedRegion(new CellRangeAddress(10, 11, 0, 0));
-        
+
         hoja = doc.getSheetAt(0);
+        HSSFCellStyle st0 = doc.createCellStyle();
+        st0.setAlignment(HorizontalAlignment.LEFT);
+        st0.setVerticalAlignment(VerticalAlignment.CENTER);
+        st0.setWrapText(true);
+        HSSFFont f0 = doc.createFont();
+        f0.setBold(true);
+        f0.setFontName("arial");
+        f0.setFontHeightInPoints((short) 13);
+        st0.setBorderBottom(BorderStyle.MEDIUM);
+        st0.setBorderTop(BorderStyle.MEDIUM);
+        st0.setBorderLeft(BorderStyle.MEDIUM);
+        st0.setBorderRight(BorderStyle.MEDIUM);
+        st0.setFont(f0);
         int nr = hoja.getLastRowNum();
         for (ReporteMatricula rm : datos) {
             nr++;
             r = hoja.createRow(nr);
             HSSFCell ca = r.createCell(0);
-            
+
             st = doc.createCellStyle();
             st.setAlignment(HorizontalAlignment.LEFT);
             st.setVerticalAlignment(VerticalAlignment.CENTER);
+            st.setWrapText(true);
             st.setBorderBottom(BorderStyle.MEDIUM);
             st.setBorderTop(BorderStyle.MEDIUM);
             st.setBorderLeft(BorderStyle.MEDIUM);
             st.setBorderRight(BorderStyle.MEDIUM);
-            
+
             f = doc.createFont();
             f.setBold(true);
             f.setFontHeightInPoints((short) 13);
             f.setFontName("arial");
-            
+
             st.setFont(f);
             ca.setCellValue(ax.getModalidadNombre(rm.getModalidad()));
-            hoja.addMergedRegion(new CellRangeAddress(nr, nr, 0, 19));
             ca.setCellStyle(st);
-            
+            hoja.addMergedRegion(new CellRangeAddress(nr, nr, 0, 19));
+
             for (MatriculaSeccion ms : rm.getMats()) {
                 st = doc.createCellStyle();
                 st.setAlignment(HorizontalAlignment.CENTER);
                 st.setVerticalAlignment(VerticalAlignment.CENTER);
+                st.setWrapText(true);
                 st.setBorderBottom(BorderStyle.MEDIUM);
                 st.setBorderTop(BorderStyle.MEDIUM);
                 st.setBorderLeft(BorderStyle.MEDIUM);
@@ -330,81 +322,68 @@ public class XLSModel {
                 c0.setCellValue(0);
                 c0.setCellStyle(st);
                 c0 = r.createCell(17);
-                c0.setCellFormula(String.format("G%d-J%d-Q%d", nr + 1, nr + 1, nr + 1));
+                c0.setCellFormula(String.format("G%d-J%d-P%d", nr + 1, nr + 1, nr + 1));
                 c0.setCellStyle(st);
                 c0 = r.createCell(18);
-                c0.setCellFormula(String.format("H%d-L%d-P%d", nr + 1, nr + 1, nr + 1));
+                c0.setCellFormula(String.format("H%d-K%d-Q%d", nr + 1, nr + 1, nr + 1));
                 c0.setCellStyle(st);
                 c0 = r.createCell(19);
                 c0.setCellFormula(String.format("R%d+S%d", nr + 1, nr + 1));
                 c0.setCellStyle(st);
             }
+            Integer[] vals0 = new Integer[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+            total(vals0, rm.getMats());
+            nr++;
+            r = hoja.createRow(nr);
+            totalLinea(r, "Subtotal", st0, vals0);
         }
-        
-        Integer[] vals = new Integer[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-        for (ReporteMatricula rm : datos) {
-            rm.getMats().stream().map((ms) -> {
-                vals[0] += 0;
-                vals[1] += 1;
-                vals[2] += 1;
-                vals[3] += 1;
-                vals[4] += ms.getMatriculaM();
-                return ms;
-            }).map((ms) -> {
-                vals[5] += ms.getMatriculaF();
-                return ms;
-            }).map((ms) -> {
-                vals[6] += ms.getMatriculaM();
-                return ms;
-            }).map((ms) -> {
-                vals[7] += ms.getMatriculaF();
-                return ms;
-            }).map((ms) -> {
-                vals[8] += ms.getMatriculaF() + ms.getMatriculaM();
-                return ms;
-            }).map((ms) -> {
-                vals[9] += ms.getRetiradosM();
-                return ms;
-            }).map((ms) -> {
-                vals[10] += ms.getRetiradosF();
-                return ms;
-            }).map((ms) -> {
-                vals[11] += ms.getSobreEdadM();
-                return ms;
-            }).map((ms) -> {
-                vals[12] += ms.getSobreEdadF();
-                return ms;
-            }).map((ms) -> {
-                vals[13] += ms.getRepitenciaM();
-                return ms;
-            }).map((ms) -> {
-                vals[14] += ms.getRepitenciaF();
-                return ms;
-            }).map((_item) -> {
-                vals[15] += 0;
-                return _item;
-            }).map((_item) -> {
-                vals[16] += 0;
-                return _item;
-            }).map((_item) -> {
-                vals[17] += vals[4] - vals[9];
-                return _item;
-            }).map((_item) -> {
-                vals[18] += vals[5] - vals[10];
-                return _item;
-            }).forEachOrdered((_item) -> {
-                vals[19] += vals[17] + vals[18];
-            });
-        }
-        
+
+        vals = new Integer[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        datos.forEach((rm) -> {
+            total(vals, rm.getMats());
+        });
+
         r = hoja.createRow(hoja.getLastRowNum() + 1);
-        cel = r.createCell(0);
-        cel.setCellValue("Total General Institucional");
+        totalLinea(r, "Total General Institucional", st0, vals);
+
+        hoja.autoSizeColumn(0, true);
+        hoja.autoSizeColumn(8, true);
+        hoja.setZoom(80);
+        return doc;
+    }
+
+    public void total(Integer[] vals, List<MatriculaSeccion> rm) {
+        rm.stream().forEachOrdered((ms) -> {
+            vals[0] += 0;
+            vals[1] += 1;
+            vals[2] += 1;
+            vals[3] += 1;
+            vals[4] += ms.getMatriculaM();
+            vals[5] += ms.getMatriculaF();
+            vals[6] += ms.getMatriculaM();
+            vals[7] += ms.getMatriculaF();
+            vals[8] += ms.getMatriculaF() + ms.getMatriculaM();
+            vals[9] += ms.getRetiradosM();
+            vals[10] += ms.getRetiradosF();
+            vals[11] += ms.getSobreEdadM();
+            vals[12] += ms.getSobreEdadF();
+            vals[13] += ms.getRepitenciaM();
+            vals[14] += ms.getRepitenciaF();
+            vals[15] += 0;
+            vals[16] += 0;
+            vals[17] += ms.getMatriculaM() - ms.getRetiradosM();
+            vals[18] += ms.getMatriculaF() - ms.getRetiradosF();
+            vals[19] += (ms.getMatriculaM() + ms.getMatriculaF()) - (ms.getRetiradosM() + ms.getRetiradosF());
+        });
+    }
+
+    private void totalLinea(HSSFRow r, String titulo, HSSFCellStyle st, Integer[] vals) {
+        HSSFCell cel = r.createCell(0);
+        cel.setCellValue(titulo);
         cel.setCellStyle(st);
         cel = r.createCell(1);
         cel.setCellValue(vals[1]);
         cel.setCellStyle(st);
-        
         cel = r.createCell(2);
         cel.setCellValue(vals[2]);
         cel.setCellStyle(st);
@@ -459,11 +438,6 @@ public class XLSModel {
         cel = r.createCell(19);
         cel.setCellValue(vals[19]);
         cel.setCellStyle(st);
-        
-        hoja.autoSizeColumn(0, true);
-        hoja.autoSizeColumn(8, true);
-        hoja.setZoom(80);
-        return doc;
     }
-    
+
 }
