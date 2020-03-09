@@ -11,13 +11,16 @@ import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import net.delsas.saitae.ax.Auxiliar;
+import net.delsas.saitae.ax.XLSModel;
 import net.delsas.saitae.beans.GradoFacadeLocal;
 import net.delsas.saitae.beans.MatriculaFacadeLocal;
 import net.delsas.saitae.entities.Estudiante;
+import net.delsas.saitae.entities.Grado;
 import net.delsas.saitae.entities.GradoPK;
 import net.delsas.saitae.entities.Matricula;
 import net.delsas.saitae.entities.MatriculaPK;
 import net.delsas.saitae.entities.Persona;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -44,36 +47,23 @@ public class nominaAController extends Auxiliar implements Serializable {
         nomina = new ArrayList<>();
     }
 
-    public List<SelectItem> getGrados() {
-        List<SelectItem> items = new ArrayList<>();
-        gradoFL.getPorAñoYActivo(getAñoActual()).stream().map((g) -> g.getGradoPK()).forEachOrdered((pk) -> {
-            items.add(new SelectItem(pk.getIdgrado() + "@"
-                    + pk.getGradoModalidad() + "@" + pk.getGradoSeccion()
-                    + "@" + pk.getGradoAño(),
-                    getGradoNombre(pk)));
-        });
-        return items;
+    public List<Grado> getGrados() {
+        return gradoFL.getPorAñoYActivo(getAñoActual());
     }
 
     public void onSelectItem(SelectEvent event) {
         nomina = new ArrayList<>();
-        grado = new GradoPK(0, "", "", 0);
-        String[] pk = event.getObject().toString().split("@");
-        if (pk.length == 4) {
-            grado = new GradoPK(Integer.valueOf(pk[0]), pk[1], pk[2], Integer.valueOf(pk[3]));
-            List<Persona> mats = mFL.findMatriculaByGrado(grado);
-            mats.forEach((m) -> {
+        if (grado != null) {
+            mFL.findMatriculaByGrado(grado).forEach((m) -> {
                 nomina.add(m.getEstudiante());
             });
         }
     }
 
     public List<Estudiante> getNomina() {
+        Collections.sort(nomina, (Estudiante m1, Estudiante m2)
+                -> String.CASE_INSENSITIVE_ORDER.compare(getNombreCompletoPersona(m1.getPersona()), getNombreCompletoPersona(m2.getPersona())));
         return Collections.unmodifiableList(nomina);
-    }
-
-    public void setNomina(List<Estudiante> nomina) {
-        this.nomina = nomina;
     }
 
     public GradoPK getPK() {
@@ -104,4 +94,9 @@ public class nominaAController extends Auxiliar implements Serializable {
         this.mat = mat;
     }
 
+    public void postProcesoXLS(Object doc) {
+        HSSFWorkbook wb = (HSSFWorkbook) doc;
+        wb = new XLSModel().getReporteNominaAlumnos(wb, grado);
+
+    }
 }

@@ -32,19 +32,20 @@
                         Listado de moradores del pago de la contribución
                     </f:facet>
                     <p:column headerText="NIE" width="15%">
-                        #{m.idpersona.toString().substring(1)}
+                        <h:outputText value="#{m.idpersona.toString().substring(1)}"/>
                     </p:column>
                     <p:column headerText="Nombre">
-                        #{repContrController.getNombreCompletoPersona(m)}
+                        <h:outputText value="#{repContrController.getNombreCompletoPersona(m)}"/>
                     </p:column>
                     <p:column headerText="Pagos pendientes" width="15%">
-                        #{repContrController.getNumeroPagosAtrasados(m)}
+                        <h:outputText value="#{repContrController.getNumeroPagosAtrasados(m)}"/>
                     </p:column>
                 </p:dataTable>
                 <h:commandLink rendered="#{repContrController.GSelected!=null}">
                     <p:graphicImage library="img" name="xls.png" width="37px" height="32px"/>
                     <p:dataExporter type="xls" target="contr" 
                                     options="#{axiliarController.excelOpt}"
+                                    postProcessor="#{repContrController.postProcesoXLS}"
                                     fileName="Reporte-moradores-pago-contribucion-#{repMatriculaController.getGradoNombre(repContrController.GSelected.gradoPK)}-#{repContrController.añoActual}"
                                     encoding="UTF-8"/>
                 </h:commandLink>

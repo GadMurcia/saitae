@@ -29,12 +29,22 @@ import javax.faces.model.SelectItem;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import net.delsas.saitae.ax.Auxiliar;
+import net.delsas.saitae.ax.XLSModel;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
 import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.TipoPersona;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.primefaces.event.FlowEvent;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -127,10 +137,6 @@ public class administradorController extends Auxiliar implements Serializable {
         return Collections.unmodifiableList(tipos);
     }
 
-    public String onFlowProcess(FlowEvent event) {
-        return event.getNewStep();
-    }
-
     public void guardar() {
         try {
             adm.setPersonaContrasenya(DigestUtils.md5Hex(adm.getIdpersona().toString().substring(1)));
@@ -147,7 +153,9 @@ public class administradorController extends Auxiliar implements Serializable {
     }
 
     public List<Persona> getPlantel() {
-        return pfl.getPlantel();
+        List<Persona> pl = pfl.getPlantel();
+        Collections.sort(pl, (Persona o1, Persona o2) -> String.CASE_INSENSITIVE_ORDER.compare(getNombreCompletoPersona(o1), getNombreCompletoPersona(o2)));
+        return pl;
     }
 
     public Persona getSelected() {
@@ -165,6 +173,11 @@ public class administradorController extends Auxiliar implements Serializable {
             g += (g.isEmpty() ? "" : ", ") + tpfl.find(i).getTipoPersonaNombre();
         }
         return g;
+    }
+
+    public void postProcessEXCEL(Object document) {
+        HSSFWorkbook wb = (HSSFWorkbook) document;
+        wb = new XLSModel().getReportePlantel(wb);
     }
 
 }

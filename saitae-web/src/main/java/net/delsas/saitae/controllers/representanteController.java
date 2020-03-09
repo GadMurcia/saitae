@@ -20,15 +20,29 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 import net.delsas.saitae.ax.Auxiliar;
+import net.delsas.saitae.ax.XLSModel;
 import net.delsas.saitae.beans.GradoFacadeLocal;
+import net.delsas.saitae.beans.MatriculaFacadeLocal;
 import net.delsas.saitae.entities.Estudiante;
 import net.delsas.saitae.entities.Grado;
 import net.delsas.saitae.entities.GradoPK;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -41,6 +55,8 @@ public class representanteController extends Auxiliar implements Serializable {
 
     @EJB
     private GradoFacadeLocal gFL;
+    @EJB
+    private MatriculaFacadeLocal mFL;
     private List<Grado> grados;
     private GradoPK id;
     private List<Estudiante> representantes;
@@ -56,8 +72,7 @@ public class representanteController extends Auxiliar implements Serializable {
     public void selectAño(SelectEvent event) {
         representantes.clear();
         if (id != null) {
-            Grado g = gFL.find(id);
-            g.getMatriculaList().forEach((m) -> {
+            mFL.findByGradoPK(id).forEach((m) -> {
                 representantes.add(m.getEstudiante());
             });
         }
@@ -68,6 +83,8 @@ public class representanteController extends Auxiliar implements Serializable {
     }
 
     public List<Estudiante> getRepresentantes() {
+        Collections.sort(representantes, (Estudiante m1, Estudiante m2)
+                -> String.CASE_INSENSITIVE_ORDER.compare(getNombreCompletoPersona(m1.getEstudianteRepresentante().getPersona()), getNombreCompletoPersona(m2.getEstudianteRepresentante().getPersona())));
         return Collections.unmodifiableList(representantes);
     }
 
@@ -77,5 +94,10 @@ public class representanteController extends Auxiliar implements Serializable {
 
     public void setId(GradoPK id) {
         this.id = id;
+    }
+
+    public void postProcessXLSp(Object document) {
+        HSSFWorkbook wb = (HSSFWorkbook) document;
+        wb = new XLSModel().getReporteRepresentantes(wb, mFL.findByGradoPK(id), id);
     }
 }

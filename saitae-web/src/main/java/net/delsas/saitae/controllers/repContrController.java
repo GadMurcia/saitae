@@ -30,6 +30,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import net.delsas.saitae.ax.Auxiliar;
+import net.delsas.saitae.ax.XLSModel;
 import net.delsas.saitae.beans.AccesoFacadeLocal;
 import net.delsas.saitae.beans.AccesoTipoPersonaFacadeLocal;
 import net.delsas.saitae.beans.ContribucionesFacadeLocal;
@@ -39,6 +40,7 @@ import net.delsas.saitae.entities.Contribuciones;
 import net.delsas.saitae.entities.ContribucionesPK;
 import net.delsas.saitae.entities.Grado;
 import net.delsas.saitae.entities.Persona;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.chart.PieChartModel;
 
@@ -182,5 +184,10 @@ public class repContrController extends Auxiliar implements Serializable {
             }
         });
         return moradores;
+    }
+    
+    public void postProcesoXLS(Object doc){
+        HSSFWorkbook wb = (HSSFWorkbook) doc;
+        wb= new XLSModel().getReporteContribucion(wb, gSelected.getGradoPK());
     }
 }

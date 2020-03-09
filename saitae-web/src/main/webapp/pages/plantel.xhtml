@@ -11,9 +11,9 @@
         <h:form id="form">
             <p:tab  title="Listado Del plantel Institucional">
                 <p:dataTable id="plantel" var="p" value="#{administradorController.plantel}" 
-                             rowKey="#{p.idpersona}" emptyMessage="Sin registros aún." rows="12" 
-                             paginator="true" selectionMode="single" paginatorAlwaysVisible="false"
-                             selection="#{administradorController.selected}" paginatorPosition="top">
+                             emptyMessage="Sin registros aún." rows="12" 
+                             paginator="true" paginatorAlwaysVisible="false"
+                             paginatorPosition="top">
                     <f:facet name="header">
                         Lista del plantel institucional
                     </f:facet>
@@ -32,14 +32,15 @@
                         <p:outputLabel value="#{administradorController.getCargos(p)}"/>
                     </p:column>
                 </p:dataTable> 
-                <p:contextMenu for="plantel">
+                <!--<p:contextMenu for="plantel">
                     <p:menuitem value="Ver" update="pl" 
                                 icon="pi pi-search" oncomplete="PF('Dpld').show()"/>
                 </p:contextMenu>
-                <h:commandLink title="Descargar en formato de Excel">
+                --><h:commandLink title="Descargar en formato de Excel">
                     <p:graphicImage library="img" name="xls.png" width="37px" height="32px"/>
                     <p:dataExporter type="xls" target="plantel" 
                                     options="#{axiliarController.excelOpt}"
+                                    postProcessor="#{administradorController.postProcessEXCEL}"
                                     fileName="Plantel_Institucional_INTEX_#{administradorController.añoActual}"
                                     encoding="UTF-8"/>
                 </h:commandLink>

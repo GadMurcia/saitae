@@ -17,8 +17,11 @@
 package net.delsas.saitae.ax;
 
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import net.delsas.saitae.entities.GradoPK;
+import net.delsas.saitae.entities.Matricula;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
@@ -438,6 +441,156 @@ public class XLSModel {
         cel = r.createCell(19);
         cel.setCellValue(vals[19]);
         cel.setCellStyle(st);
+    }
+
+    public HSSFWorkbook getReporteRepresentantes(HSSFWorkbook wb, List<Matricula> datos, GradoPK id) {
+        wb.removeSheetAt(0);
+        HSSFSheet h1 = wb.createSheet(ax.getGradoNombre(id));
+
+        HSSFCellStyle st = wb.createCellStyle();
+        st.setAlignment(HorizontalAlignment.CENTER);
+        st.setVerticalAlignment(VerticalAlignment.CENTER);
+        st.setWrapText(true);
+        Font f = wb.createFont();
+        f.setBold(true);
+        f.setFontName("arial");
+        f.setFontHeightInPoints((short) 16);
+        st.setFont(f);
+
+        HSSFRow r = h1.createRow(2);
+        HSSFCell c = r.createCell(0);
+        c.setCellValue("Nómina de Representantes de " + ax.getGradoNombre(id));
+        c.setCellStyle(st);
+        h1.addMergedRegion(new CellRangeAddress(2, 3, 0, 3));
+
+        st = wb.createCellStyle();
+        st.setAlignment(HorizontalAlignment.CENTER);
+        st.setVerticalAlignment(VerticalAlignment.CENTER);
+        st.setBorderTop(BorderStyle.MEDIUM);
+        st.setBorderBottom(BorderStyle.MEDIUM);
+        st.setBorderLeft(BorderStyle.MEDIUM);
+        st.setBorderRight(BorderStyle.MEDIUM);
+        st.setWrapText(true);
+        f = wb.createFont();
+        f.setBold(true);
+        f.setFontName("arial");
+        f.setFontHeightInPoints((short) 14);
+        st.setFont(f);
+
+        r = h1.createRow(4);
+        c = r.createCell(0);
+        c.setCellValue("DUI");
+        c.setCellStyle(st);
+        c = r.createCell(1);
+        c.setCellValue("Nombre del representante");
+        c.setCellStyle(st);
+        c = r.createCell(2);
+        c.setCellValue("Nombre del alumno");
+        c.setCellStyle(st);
+        c = r.createCell(3);
+        c.setCellValue("Firma");
+        c.setCellStyle(st);
+
+        final HSSFCellStyle st0 = wb.createCellStyle();
+        st0.setAlignment(HorizontalAlignment.LEFT);
+        st0.setVerticalAlignment(VerticalAlignment.CENTER);
+        st0.setBorderTop(BorderStyle.MEDIUM);
+        st0.setBorderBottom(BorderStyle.MEDIUM);
+        st0.setBorderLeft(BorderStyle.MEDIUM);
+        st0.setBorderRight(BorderStyle.MEDIUM);
+        st0.setWrapText(true);
+        f = wb.createFont();
+        f.setBold(false);
+        f.setFontName("arial");
+        f.setFontHeightInPoints((short) 12);
+        st0.setFont(f);
+
+        Collections.sort(datos, (Matricula m1, Matricula m2)
+                -> String.CASE_INSENSITIVE_ORDER.compare(ax.getNombreCompletoPersona(m1.getEstudiante().getEstudianteRepresentante().getPersona()), ax.getNombreCompletoPersona(m2.getEstudiante().getEstudianteRepresentante().getPersona())));
+        datos.forEach((m) -> {
+            int nr = h1.getLastRowNum() + 1;
+            HSSFRow r0 = h1.createRow(nr);
+            HSSFCell c0 = r0.createCell(0);
+            c0.setCellValue(ax.getDui(m.getEstudiante().getEstudianteRepresentante().getPersona()));
+            c0.setCellStyle(st0);
+            c0 = r0.createCell(1);
+            c0.setCellValue(ax.getNombreCompletoPersona(m.getEstudiante().getEstudianteRepresentante().getPersona()));
+            c0.setCellStyle(st0);
+            c0 = r0.createCell(2);
+            c0.setCellValue(ax.getNombreCompletoPersona(m.getEstudiante().getPersona()));
+            c0.setCellStyle(st0);
+            c0 = r0.createCell(3);
+            c0.setCellValue("");
+            c0.setCellStyle(st0);
+        });
+        h1.autoSizeColumn(0);
+        h1.autoSizeColumn(1);
+        h1.autoSizeColumn(2);
+        h1.setColumnWidth(3, 9000);
+
+        return wb;
+    }
+
+    public HSSFWorkbook getReportePlantel(HSSFWorkbook wb) {
+        proceso(wb, null, "Plantel Institucional INTEX " + ax.getAñoActual(), 3);
+        return wb;
+    }
+
+    public HSSFWorkbook getReporteNominaAlumnos(HSSFWorkbook wb, GradoPK grado) {
+        proceso(wb, grado, "Nómina de alumnos", 2);
+        return wb;
+    }
+
+    private void copiarDatos(HSSFSheet h, HSSFWorkbook wb) {
+        HSSFSheet h0 = wb.getSheetAt(0);
+        h0.iterator().forEachRemaining((r0) -> {
+            int nr = h.getLastRowNum() + 1;
+            HSSFRow r1 = h.createRow(nr);
+            r0.cellIterator().forEachRemaining((c0) -> {
+                HSSFCell c1 = r1.createCell(c0.getColumnIndex());
+                c1.setCellValue(c0.getStringCellValue());
+                c1.setCellStyle(c0.getCellStyle());
+                c1.getCellStyle().setBorderTop(BorderStyle.MEDIUM);
+                c1.getCellStyle().setBorderLeft(BorderStyle.MEDIUM);
+                c1.getCellStyle().setBorderRight(BorderStyle.MEDIUM);
+                c1.getCellStyle().setBorderBottom(BorderStyle.MEDIUM);
+                c1.getCellStyle().setWrapText(true);
+                c1.getCellStyle().setVerticalAlignment(VerticalAlignment.CENTER);
+            });
+        });
+    }
+
+    public HSSFWorkbook getReporteContribucion(HSSFWorkbook wb, GradoPK PK) {
+        proceso(wb, PK, "Listado de moradores del pago de la contribución para el grado", 2);
+        return wb;
+    }
+
+    private void proceso(HSSFWorkbook wb, GradoPK pk, String nombre, int colM) {
+        HSSFSheet h = wb.createSheet(nombre);
+        HSSFRow r = h.createRow(0);
+        HSSFCell c = r.createCell(0);
+        c.setCellValue(nombre + " " + ax.getGradoNombre(pk));
+
+        HSSFCellStyle st = wb.createCellStyle();
+        st.setAlignment(HorizontalAlignment.CENTER);
+        st.setVerticalAlignment(VerticalAlignment.CENTER);
+        st.setWrapText(true);
+        Font f = wb.createFont();
+        f.setBold(true);
+        f.setFontName("arial");
+        f.setFontHeightInPoints((short) 16);
+        st.setFont(f);
+
+        c.setCellStyle(st);
+        h.createRow(1);
+
+        copiarDatos(h, wb);
+
+        h.addMergedRegion(new CellRangeAddress(0, 1, 0, colM));
+        for (int i = 0; i <= colM; i++) {
+            h.setColumnWidth(i, 10000);
+        }
+        wb.removeSheetAt(0);
     }
 
 }
