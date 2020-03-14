@@ -29,13 +29,17 @@ import javax.inject.Named;
 import net.delsas.saitae.ax.Auxiliar;
 import net.delsas.saitae.beans.AccesoFacadeLocal;
 import net.delsas.saitae.beans.AccesoTipoPersonaFacadeLocal;
+import net.delsas.saitae.beans.CategoriaFacadeLocal;
 import net.delsas.saitae.beans.RecursoFacadeLocal;
+import net.delsas.saitae.beans.TipoCargoFacadeLocal;
 import net.delsas.saitae.beans.TipoRecursoFacadeLocal;
 import net.delsas.saitae.entities.AutorLibro;
+import net.delsas.saitae.entities.Categoria;
 import net.delsas.saitae.entities.EditorialLibro;
 import net.delsas.saitae.entities.Ejemplar;
 import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.Recurso;
+import net.delsas.saitae.entities.TipoCargo;
 import net.delsas.saitae.entities.TipoRecurso;
 import org.primefaces.event.SelectEvent;
 
@@ -50,6 +54,8 @@ public class repInvController extends Auxiliar implements Serializable {
     private List<TipoRecurso> tipoRecursos;
     private TipoRecurso trSelected;
     private List<Recurso> recursos;
+    private List<TipoCargo> tipoCargos;
+    private List<Categoria> categorias;
     private FacesContext context;
     private String pagina;
     private Persona usuario;
@@ -62,6 +68,10 @@ public class repInvController extends Auxiliar implements Serializable {
     private AccesoTipoPersonaFacadeLocal accesoTPFL;
     @EJB
     private AccesoFacadeLocal accesoFL;
+    @EJB
+    private TipoCargoFacadeLocal tcFL;
+    @EJB
+    private CategoriaFacadeLocal cFL;
 
     @PostConstruct
     public void init() {
@@ -83,11 +93,14 @@ public class repInvController extends Auxiliar implements Serializable {
         }
 
         tipoRecursos = trFL.findAll();
+        tipoCargos = tcFL.findAll();
+        categorias = cFL.findAll();
         recursos = new ArrayList<>();
     }
 
     public void onTipoSelected(SelectEvent e) {
-        recursos = trSelected == null ? new ArrayList<>() : trSelected.getRecursoList();
+        recursos = trSelected == null ? new ArrayList<>()
+                : rFL.findByTipoRecurso(trSelected.getIdtipoRecurso());
     }
 
     public List<TipoRecurso> getTipoRecursos() {
@@ -147,6 +160,8 @@ public class repInvController extends Auxiliar implements Serializable {
     public Double getTotalGeneral() {
         double t = 0.0;
         t = recursos.stream().map((r) -> (getTotalRecurso(r))).reduce(t, (accumulador, valor) -> accumulador + valor);
+        t = Math.round(t * 100);
+        t = t / 100;
         return t;
     }
 
@@ -158,5 +173,13 @@ public class repInvController extends Auxiliar implements Serializable {
         t = Math.round(t * 100);
         t = t / 100;
         return t;
+    }
+
+    public List<TipoCargo> getTipoCargos() {
+        return tipoCargos;
+    }
+
+    public List<Categoria> getCategorias() {
+        return categorias;
     }
 }

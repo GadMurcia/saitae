@@ -169,6 +169,7 @@ public class historialRController extends Auxiliar implements Serializable {
         selected = (Reserva) event.getObject();
         List<ProyectoPedagogico> re = rxpFL.findProyectoByIdReserva(selected == null
                 ? 0 : selected.getIdreserva());
+        System.out.println("Id reserva seleccionada: " + (selected == null ? 0 : selected.getIdreserva()));
         if (!re.isEmpty()) {
             proyecto = re.get(0);
         } else {
@@ -449,10 +450,6 @@ public class historialRController extends Auxiliar implements Serializable {
 
     public void setAñoSelected(Integer añoSelected) {
         this.añoSelected = añoSelected;
-    }
-
-    public void onBlour(AjaxBehaviorEvent a) {
-
     }
 
 }
