@@ -20,8 +20,11 @@ import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import net.delsas.saitae.entities.Categoria;
 import net.delsas.saitae.entities.GradoPK;
 import net.delsas.saitae.entities.Matricula;
+import net.delsas.saitae.entities.TipoCargo;
+import net.delsas.saitae.entities.TipoRecurso;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
@@ -29,6 +32,7 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
@@ -591,6 +595,78 @@ public class XLSModel {
             h.setColumnWidth(i, 10000);
         }
         wb.removeSheetAt(0);
+    }
+
+    public HSSFWorkbook getReporteInventario(HSSFWorkbook wb, List<Categoria> categorias, List<TipoCargo> tipoCargos, TipoRecurso tr) {
+        HSSFSheet h = wb.createSheet("Inventario");
+
+        HSSFRow r = h.createRow(1);
+        HSSFCell c = r.createCell(0);
+        c.setCellValue("NOMBRE DEL CENTRO EDUCATIVO:");
+        c = r.createCell(2);
+        c.setCellValue("INSTITUTO NACIONAL TEXISTEPEQUE");
+        c = r.createCell(tr.getIdtipoRecurso().equals(3) ? 7 : 5);
+        c.setCellValue("DIRECCIÓN POSTAL: Colonia Mónchez y Herrera frente a Carretera Internacional CA-12N, Km. 83 12.");
+
+        r = h.createRow(2);
+        c = r.createCell(0);
+        c.setCellValue("TELEFAX:");
+        c = r.createCell(1);
+        c.setCellValue("2470-0219");
+        c = r.createCell(2);
+        c.setCellValue("MUNICIPIO: TEXISTEPEQUE");
+        c = r.createCell(3);
+        c.setCellValue("DEPARTAMENTO: SANTA ANA");
+        c = r.createCell(tr.getIdtipoRecurso().equals(3) ? 7 : 5);
+        c.setCellValue("CÓDIGO DE INSTITUCIÓN: 14753");
+
+        r = h.createRow(3);
+        c = r.createCell(0);
+        c.setCellValue("FECHA: ");
+        c = r.createCell(1);
+        c.setCellValue("Texistepeque, " + new SimpleDateFormat("dd/MMMMM/yyyy").format(new Date()));
+        c = r.createCell(3);
+        c.setCellValue("DISTRITO EDUCATIVO: 02-19");
+        c = r.createCell(tr.getIdtipoRecurso().equals(3) ? 7 : 5);
+        c.setCellValue("TIPO CARGO");
+
+        int i = 4;
+        for (TipoCargo tc : tipoCargos) {
+            r = h.createRow(i);
+            c = r.createCell(tr.getIdtipoRecurso().equals(3) ? 7 : 5);
+            c.setCellValue(tc.getNombre());
+            c = r.createCell(tr.getIdtipoRecurso().equals(3) ? 12 : 8);
+            c.setCellValue(tc.getIdtipoCargo());
+            h.addMergedRegion(new CellRangeAddress(i, i, tr.getIdtipoRecurso().equals(3) ? 7 : 5, tr.getIdtipoRecurso().equals(3) ? 11 : 7));
+            h.getRow(i).getCell(tr.getIdtipoRecurso().equals(3) ? 7 : 5).getCellStyle().setAlignment(HorizontalAlignment.LEFT);
+            i++;
+        }
+        copiarDatos(h, wb);
+        wb.removeSheetAt(0);
+
+        h.addMergedRegion(new CellRangeAddress(1, 1, 0, 1));
+        h.addMergedRegion(new CellRangeAddress(1, 1, tr.getIdtipoRecurso().equals(3) ? 7 : 5, tr.getIdtipoRecurso().equals(3) ? 12 : 8));
+        h.addMergedRegion(new CellRangeAddress(2, 2, 3, 4));
+        h.addMergedRegion(new CellRangeAddress(2, 2, tr.getIdtipoRecurso().equals(3) ? 7 : 5, tr.getIdtipoRecurso().equals(3) ? 12 : 8));
+        h.addMergedRegion(new CellRangeAddress(3, 3, 1, 2));
+        h.addMergedRegion(new CellRangeAddress(3, 3, 3, 4));
+        h.addMergedRegion(new CellRangeAddress(3, 3, tr.getIdtipoRecurso().equals(3) ? 7 : 5, tr.getIdtipoRecurso().equals(3) ? 12 : 8));
+
+        h.iterator().forEachRemaining((r0) -> {
+            r0.cellIterator().forEachRemaining((c0) -> {
+                CellStyle cs = c0.getCellStyle();
+                cs.setWrapText(true);
+            });
+        });
+
+        HSSFCellStyle cs = wb.createCellStyle();
+        cs.setAlignment(HorizontalAlignment.CENTER);
+        h.getRow(3).getCell(tr.getIdtipoRecurso().equals(3) ? 7 : 5).setCellStyle(cs);
+        cs = wb.createCellStyle();
+        cs.setAlignment(HorizontalAlignment.LEFT);
+        h.getRow(1).getCell(tr.getIdtipoRecurso().equals(3) ? 7 : 5).setCellStyle(cs);
+        h.getRow(2).getCell(tr.getIdtipoRecurso().equals(3) ? 7 : 5).setCellStyle(cs);
+        return wb;
     }
 
 }

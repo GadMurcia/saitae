@@ -106,7 +106,8 @@
                     <p:dataExporter type="xls" target="inv" 
                                     options="#{axiliarController.excelOpt}"
                                     fileName="Inventario_#{repInvController.trSelected.tipoRecursoNombre}_#{repInvController.añoActual}"
-                                    encoding="UTF-8"/>
+                                    encoding="UTF-8"
+                                    postProcessor="#{repInvController.reporte}"/>
                 </h:commandLink>
             </h:panelGrid>
         </h:form>

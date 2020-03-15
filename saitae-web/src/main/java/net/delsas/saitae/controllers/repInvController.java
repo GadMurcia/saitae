@@ -27,6 +27,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import net.delsas.saitae.ax.Auxiliar;
+import net.delsas.saitae.ax.XLSModel;
 import net.delsas.saitae.beans.AccesoFacadeLocal;
 import net.delsas.saitae.beans.AccesoTipoPersonaFacadeLocal;
 import net.delsas.saitae.beans.CategoriaFacadeLocal;
@@ -41,6 +42,12 @@ import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.Recurso;
 import net.delsas.saitae.entities.TipoCargo;
 import net.delsas.saitae.entities.TipoRecurso;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -181,5 +188,46 @@ public class repInvController extends Auxiliar implements Serializable {
 
     public List<Categoria> getCategorias() {
         return categorias;
+    }
+
+    public void reporte(Object doc) {
+        HSSFWorkbook wb = (HSSFWorkbook) doc;
+        wb = new XLSModel().getReporteInventario(wb, categorias, tipoCargos, trSelected);
+
+        HSSFSheet h = wb.getSheetAt(0);
+        int i = h.getLastRowNum();
+        i += 3;
+        HSSFRow r = h.createRow(i);
+        HSSFCell c = r.createCell(0);
+        c.setCellValue("Consejo Directivo Escolar");
+
+        r = h.createRow(i + 4);
+        c = r.createCell(2);
+        c.setCellValue("F.");
+        c = r.createCell(3);
+        c.setCellValue("F.");
+        c = r.createCell(5);
+        c.setCellValue("F.");
+        c = r.createCell(7);
+        c.setCellValue("F.");
+
+        r = h.createRow(i + 6);
+        c = r.createCell(2);
+        c.setCellValue("Presidente CDE");
+        c = r.createCell(3);
+        c.setCellValue("Secretario/a CDE");
+        c = r.createCell(5);
+        c.setCellValue("Encargado/a de compras");
+        c = r.createCell(7);
+        c.setCellValue("Coordinador de AI");
+
+        h.getRow(i + 6).cellIterator().forEachRemaining((c0) -> {
+            c0.getCellStyle().setAlignment(HorizontalAlignment.CENTER);
+        });
+
+        h.addMergedRegion(new CellRangeAddress(i, i, 0, trSelected.getIdtipoRecurso().equals(3) ? 12 : 8));
+        h.addMergedRegion(new CellRangeAddress(i + 6, i + 6, 3, 4));
+        h.addMergedRegion(new CellRangeAddress(i + 6, i + 6, 5, 6));
+        h.addMergedRegion(new CellRangeAddress(i + 6, i + 6, 7, 8));
     }
 }
