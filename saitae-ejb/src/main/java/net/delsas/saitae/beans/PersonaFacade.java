@@ -59,6 +59,12 @@ public class PersonaFacade extends AbstractFacade<Persona> implements PersonaFac
     }
 
     @Override
+    public List<Persona> getAdmins() {
+        return em.createNamedQuery("Persona.findAdministrators")
+                .getResultList();
+    }
+
+    @Override
     public List<Persona> getPersonaByLikeIdAndType(int id, int tipo) {
         return em.createNamedQuery("Persona.findPersonaByLikeIdpersona")
                 .setParameter("idpersona", id + "")

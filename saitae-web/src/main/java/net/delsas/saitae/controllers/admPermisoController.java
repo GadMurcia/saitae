@@ -97,7 +97,7 @@ public class admPermisoController extends Auxiliar implements Serializable {
         try {
             acep = solc = new Permisos(new PermisosPK());
             nombreE = "";
-            permiso = new Permisos(new PermisosPK(0, new Date(), 0, new Date()), new Date(), "", "1");
+            permiso = new Permisos(new PermisosPK(0, new Date(), 0, new Date()), new Date(), "1");
             permiso.setPermisosComentario("0¿¿ ¿¿ ¿¿ ");
             permiso.setTipoPersona(tipoPersonaFL.find(8));
             constancia = new Constancias();
@@ -192,12 +192,12 @@ public class admPermisoController extends Auxiliar implements Serializable {
                 permiso.setPermisosSolicitante(usuario);
                 permiso.getPermisosPK().setIpPersona(permiso.getPersona().getIdpersona());
                 permiso.setPermisosEstado("1");
+                permiso.setPermisosGestor(usuario);
                 Permisos pp = permisosFL.find(permiso.getPermisosPK());
                 if (pp != null) {
                     ms = new FacesMessage(FacesMessage.SEVERITY_WARN, "Imposible proceder",
-                            "En la base de datos ya hay un permiso del tipo '" + permiso.getTipoPermiso1().getTipoPermisoNombre() + "' para "
-                            + permiso.getPersona().getPersonaNombre().split(" ")[0]
-                            + " " + permiso.getPersona().getPersonaApellido().split(" ")[0] + " en el día "
+                            "Ya hay un permiso del tipo '" + permiso.getTipoPermiso1().getTipoPermisoNombre() + "' para "
+                            + getNombreCompletoPersona(permiso.getPersona()) + " en el día "
                             + (dateToString(permiso.getPermisosPK().getPermisoFechaInicio())
                             + " por lo que no se procede con la concesión del permiso"));
                     FacesContext.getCurrentInstance().addMessage(null, ms);
@@ -245,6 +245,7 @@ public class admPermisoController extends Auxiliar implements Serializable {
     public void guardar(Integer w) {
         solicitados.remove(solc);
         solc.setPermisosEstado(w + "");
+        solc.setPermisosGestor(usuario);
         permisosFL.edit(solc);
         if (w == 1) {
             aceptados.add(solc);
@@ -273,28 +274,6 @@ public class admPermisoController extends Auxiliar implements Serializable {
                     + " Sección " + gr.getGradoSeccion();
         } else {
             return " ";
-        }
-    }
-
-    public String getSolicitadoPor(Permisos s) {
-        if (s != null && s.getPermisosSolicitante() != null) {
-            Persona solicitante;
-            boolean e = s.getPermisosSolicitante().getTipoPersona().getIdtipoPersona() == 3 ? true
-                    : s.getPermisosSolicitante().getTipoPersona().getIdtipoPersona() == 2 ? true
-                    : s.getPermisosSolicitante().getTipoPersona().getIdtipoPersona() == 1;
-            if (e) {
-                solicitante = new Persona();
-                new Auxiliar().setDui(s.getPermisosComentario().split("¿¿")[0], solicitante);
-                solicitante.setPersonaNombre(s.getPermisosComentario().split("¿¿")[1]);
-                solicitante.setPersonaApellido(s.getPermisosComentario().split("¿¿")[2]);
-            } else {
-                solicitante = s.getPermisosSolicitante();
-            }
-            String h = solicitante.getPersonaNombre().split(" ")[0]
-                    + " " + solicitante.getPersonaApellido().split(" ")[0];
-            return h;
-        } else {
-            return "";
         }
     }
 
@@ -393,7 +372,9 @@ public class admPermisoController extends Auxiliar implements Serializable {
     }
 
     public void setNombreSol(String nombre) {
-        permiso.setPermisosComentario(getDuiSol() + "¿¿" + nombre + "¿¿" + getApellidoSol() + "¿¿" + getComentario());
+        permiso.setPermisosComentario(getDuiSol() + "¿¿"
+                + (nombre.split("")[0].equals(" ") ? nombre.substring(1) : nombre)
+                + "¿¿" + getApellidoSol() + "¿¿" + getComentario());
     }
 
     public String getNombreSol() {
@@ -401,7 +382,9 @@ public class admPermisoController extends Auxiliar implements Serializable {
     }
 
     public void setApellidoSol(String apellido) {
-        permiso.setPermisosComentario(getDuiSol() + "¿¿" + getNombreSol() + "¿¿" + apellido + "¿¿" + getComentario());
+        permiso.setPermisosComentario(getDuiSol() + "¿¿" + getNombreSol() + "¿¿"
+                + (apellido.split("")[0].equals(" ") ? apellido.substring(1) : apellido)
+                + "¿¿" + getComentario());
     }
 
     public String getApellidoSol() {
@@ -512,7 +495,7 @@ public class admPermisoController extends Auxiliar implements Serializable {
     }
 
     public boolean getHayDocumento() {
-        return constancia==null || constancia.getDocumento() != null;
+        return constancia == null || constancia.getDocumento() != null;
     }
 
     public String getDoc() {

@@ -53,6 +53,8 @@ public interface PersonaFacadeLocal {
      * @return java.util.List net.delsas.saitae.entities.Persona
      */
     public List<Persona> getMaestros();
+    
+    public List<Persona> getAdmins();
 
     /**
      * Devuelve una lista de personas cuyos ids inicien por el id proporcionado

@@ -25,7 +25,6 @@ import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.view.ViewScoped;
 import net.delsas.saitae.ax.Auxiliar;
 import net.delsas.saitae.beans.GradoFacadeLocal;

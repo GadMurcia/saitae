@@ -10,17 +10,60 @@
         <h:form id="form">
             <h:panelGrid columns="1">
                 <h:panelGrid columns="2">
-                    <p:outputLabel for="años" value="Seleccione el año de visualización: "/>
-                    <p:selectOneMenu id="años" value="#{adminReservas.añoSelected}" 
+                    <p:outputLabel for="menu" value="Tipo de persona: "/>
+                    <p:selectOneMenu id="menu" value="#{repPermisosController.menu}">
+                        <f:selectItem itemLabel="Alumno" itemValue="1"/>
+                        <f:selectItem itemLabel="Maestro" itemValue="2"/>
+                        <f:selectItem itemLabel="Administrador" itemValue="3"/>
+                        <p:ajax event="itemSelect" listener="#{repPermisosController.onSelect}" 
+                                update="grado fg person perm"/>
+                    </p:selectOneMenu>
+
+
+                    <p:outputLabel id="fg" for="grado" value="Grado: "/>
+                    <p:selectOneMenu id="grado" value="#{repPermisosController.GSelected}" 
                                      converter="omnifaces.SelectItemsConverter">
-                        <f:selectItem itemLabel="Seleccione" itemValue="#{0}"
-                                      noSelectionOption="true"/>
-                        <f:selectItems value="#{adminReservas.añosDisponibles}" var="ad"
-                                       itemLabel="#{ad}" itemValue="#{ad}"/>
-                        <p:ajax event="itemSelect" listener="#{adminReservas.onBlour}"
-                                update="form"/>
+                        <f:selectItems value="#{repPermisosController.grados}" var="g" 
+                                       itemLabel="#{repPermisosController.getGradoNombre(g.gradoPK)}" 
+                                       itemValue="#{g.gradoPK}"/>
+                        <p:ajax event="itemSelect" listener="#{repPermisosController.onSelect}" update="person perm"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel for="person" value="Persona: "/>
+                    <p:selectOneMenu id="person" value="#{repPermisosController.PSelected}" 
+                                     converter="omnifaces.SelectItemsConverter">
+                        <f:selectItems value="#{repPermisosController.personas}" var="p0" 
+                                       itemLabel="#{p0.idpersona.toString().substring(1)} - 
+                                       #{repPermisosController.getNombreCompletoPersona(p0)} 
+                                       #{repPermisosController.getTipoAdmin(p0)}" 
+                                       itemValue="#{p0}"/>
+                        <p:ajax event="itemSelect" listener="#{repPermisosController.onSelect}" update="perm"/>
                     </p:selectOneMenu>
                 </h:panelGrid>
+
+                <p:dataTable id="perm" value="#{repPermisosController.permisos}" var="p" 
+                             rendered="#{repPermisosController.PSelected!=null}">
+                    <p:column headerText="Fecha de solicitud">
+                        <h:outputText value="#{repPermisosController.getDateToString(p.permisosPK.permisoFechaSolicitud)}"/>
+                    </p:column>
+                    <p:column headerText="Periodo del permiso">
+                        <h:outputText value="#{repPermisosController.getPeriodoPermisos(p)}"/>
+                    </p:column>
+                    <p:column headerText="Permiso para">
+                        <h:outputText value="#{p.tipoPermiso1.tipoPermisoNombre}"/>
+                    </p:column>
+                    <p:column headerText="Motivo" 
+                              rendered="#{repPermisosController.esEstudiante}">
+                        <h:outputText value="#{p.permisosMotivo}"/>
+                    </p:column>
+                    <p:column headerText="Solicitado por" 
+                              rendered="#{repPermisosController.esEstudiante}">
+                        <h:outputText value="#{repPermisosController.getSolicitadoPor(p)}"/>
+                    </p:column>
+                    <p:column headerText="Aceptado por">
+                        <h:outputText value="#{repPermisosController.getNombreCompletoPersona(p.permisosGestor)}"/>
+                    </p:column>
+                </p:dataTable>
             </h:panelGrid>
         </h:form>
     </ui:define>

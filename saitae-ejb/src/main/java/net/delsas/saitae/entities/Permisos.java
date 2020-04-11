@@ -44,12 +44,10 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Permisos.findByPEPEs", query = "SELECT p FROM Permisos p WHERE p.permisosEstado = :permisoEstado AND p.tipoPersona.idtipoPersona = :tipo ORDER BY p.permisosPK.permisoFechaSolicitud DESC, p.permisosPK.permisoFechaInicio ASC"),
     @NamedQuery(name = "Permisos.findByEstadoAndTipos", query = "SELECT p FROM Permisos p WHERE p.permisosEstado = :permisoEstado AND p.tipoPersona.idtipoPersona IN :tipos AND FUNCTION('YEAR' , p.permisosPK.permisoFechaInicio) = :año ORDER BY p.permisosPK.permisoFechaSolicitud DESC, p.permisosPK.permisoFechaInicio ASC"),
     @NamedQuery(name = "Permisos.findAñosGlobales", query = "SELECT DISTINCT FUNCTION('YEAR' ,p.permisosPK.permisoFechaInicio) FROM Permisos p ORDER BY 1 ASC"),
-    @NamedQuery(name = "Permisos.findAñosPersona", query = "SELECT DISTINCT FUNCTION('YEAR' ,p.permisosPK.permisoFechaInicio)  FROM Permisos p WHERE p.permisosPK.ipPersona = :idPersona ORDER BY 1 ASC")
+    @NamedQuery(name = "Permisos.findAñosPersona", query = "SELECT DISTINCT FUNCTION('YEAR' ,p.permisosPK.permisoFechaInicio)  FROM Permisos p WHERE p.permisosPK.ipPersona = :idPersona ORDER BY 1 ASC"),
+    @NamedQuery(name = "Permisos.findByIpPersonaAndEstado", query = "SELECT p FROM Permisos p WHERE p.permisosPK.ipPersona = :ipPersona AND FUNCTION('YEAR' , p.permisosPK.permisoFechaInicio) = :año AND p.permisosEstado = :estado ORDER BY p.permisosPK.permisoFechaInicio ASC")
 })
 public class Permisos implements Serializable {
-
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "permisos")
-    private Constancias constancias;
 
     private static final long serialVersionUID = 1L;
     @EmbeddedId
@@ -59,8 +57,7 @@ public class Permisos implements Serializable {
     @Column(name = "permisoFechafin")
     @Temporal(TemporalType.DATE)
     private Date permisoFechafin;
-    @Basic(optional = false)
-    @Size(min = 1, max = 250)
+    @Size(max = 250)
     @Column(name = "permisosMotivo")
     private String permisosMotivo;
     @Basic(optional = false)
@@ -71,6 +68,8 @@ public class Permisos implements Serializable {
     @Size(max = 250)
     @Column(name = "permisosComentario")
     private String permisosComentario;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "permisos")
+    private Constancias constancias;
     @JoinColumn(name = "ipPersona", referencedColumnName = "idpersona", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Persona persona;
@@ -83,6 +82,9 @@ public class Permisos implements Serializable {
     @JoinColumn(name = "tipoPermiso", referencedColumnName = "idtipoPermiso", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private TipoPermiso tipoPermiso1;
+    @JoinColumn(name = "permisosGestor", referencedColumnName = "idpersona")
+    @ManyToOne
+    private Persona permisosGestor;
 
     public Permisos() {
     }
@@ -91,10 +93,9 @@ public class Permisos implements Serializable {
         this.permisosPK = permisosPK;
     }
 
-    public Permisos(PermisosPK permisosPK, Date permisoFechafin, String permisosMotivo, String permisosEstado) {
+    public Permisos(PermisosPK permisosPK, Date permisoFechafin, String permisosEstado) {
         this.permisosPK = permisosPK;
         this.permisoFechafin = permisoFechafin;
-        this.permisosMotivo = permisosMotivo;
         this.permisosEstado = permisosEstado;
     }
 
@@ -142,6 +143,14 @@ public class Permisos implements Serializable {
         this.permisosComentario = permisosComentario;
     }
 
+    public Constancias getConstancias() {
+        return constancias;
+    }
+
+    public void setConstancias(Constancias constancias) {
+        this.constancias = constancias;
+    }
+
     public Persona getPersona() {
         return persona;
     }
@@ -174,6 +183,14 @@ public class Permisos implements Serializable {
         this.tipoPermiso1 = tipoPermiso1;
     }
 
+    public Persona getPermisosGestor() {
+        return permisosGestor;
+    }
+
+    public void setPermisosGestor(Persona permisosGestor) {
+        this.permisosGestor = permisosGestor;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -197,14 +214,6 @@ public class Permisos implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.Permisos[ permisosPK=" + permisosPK + " ]";
-    }
-
-    public Constancias getConstancias() {
-        return constancias;
-    }
-
-    public void setConstancias(Constancias constancias) {
-        this.constancias = constancias;
     }
 
 }

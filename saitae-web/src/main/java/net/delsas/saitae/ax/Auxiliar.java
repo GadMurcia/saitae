@@ -37,20 +37,18 @@ import net.delsas.saitae.beans.MestroHorarioMateriasFacadeLocal;
 import net.delsas.saitae.beans.NotificacionesFacadeLocal;
 import net.delsas.saitae.entities.DiasEstudio;
 import net.delsas.saitae.entities.Estudiante;
-import net.delsas.saitae.entities.Grado;
 import net.delsas.saitae.entities.GradoPK;
 import net.delsas.saitae.entities.Horario;
 import net.delsas.saitae.entities.Maestro;
 import net.delsas.saitae.entities.Matricula;
 import net.delsas.saitae.entities.MestroHorarioMaterias;
+import net.delsas.saitae.entities.Permisos;
 import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.Reserva;
 import net.delsas.saitae.entities.TipoEspecialidades;
 import net.delsas.saitae.entities.TipoPersona;
 import net.delsas.saitae.entities.TipoSueldos;
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
-import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.ClientAnchor;
@@ -447,12 +445,12 @@ public class Auxiliar implements Serializable {
                 case "7":
                 case "8":
                 case "9":
-                    return true;
+                    break;
                 default:
                     return false;
             }
         }
-        return false;
+        return true;
     }
 
     public String getDui(Persona p) {
@@ -1140,6 +1138,40 @@ public class Auxiliar implements Serializable {
             p.resize(rowi, rowf);
         } catch (IOException e) {
             System.out.println("Error en agregarImagenAHojaExcel\n\n" + e);
+        }
+    }
+
+    public String getPeriodoPermisos(Permisos p) {
+        String h = "";
+        if (p != null) {
+            if (p.getPermisosPK().getPermisoFechaInicio().equals(p.getPermisoFechafin())) {
+                h = getDateToString(p.getPermisosPK().getPermisoFechaInicio());
+            } else {
+                h = "De " + getDateToString(p.getPermisosPK().getPermisoFechaInicio())
+                        + " a " + getDateToString(p.getPermisoFechafin());
+            }
+        }
+        return h;
+    }
+
+    public String getSolicitadoPor(Permisos s) {
+        if (s != null && s.getPermisosSolicitante() != null) {
+            Persona solicitante;
+            boolean e = s.getPermisosSolicitante().getTipoPersona().getIdtipoPersona() == 3 ? true
+                    : s.getPermisosSolicitante().getTipoPersona().getIdtipoPersona() == 2 ? true
+                    : s.getPermisosSolicitante().getTipoPersona().getIdtipoPersona() == 1;
+            if (e) {
+                solicitante = new Persona();
+                new Auxiliar().setDui(s.getPermisosComentario().split("¿¿")[0], solicitante);
+                solicitante.setPersonaNombre(s.getPermisosComentario().split("¿¿")[1]);
+                solicitante.setPersonaApellido(s.getPermisosComentario().split("¿¿")[2]);
+            } else {
+                solicitante = s.getPermisosSolicitante();
+            }
+            String h = getNombreCompletoPersona(solicitante);
+            return h;
+        } else {
+            return "";
         }
     }
 }

@@ -5,7 +5,6 @@
  */
 package net.delsas.saitae.beans;
 
-import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -74,6 +73,15 @@ public class PermisosFacade extends AbstractFacade<Permisos> implements Permisos
     public List<Integer> findAñosPersona(Integer idPersona) {
         return em.createNamedQuery("Permisos.findAñosPersona")
                 .setParameter("idPersona", idPersona)
+                .getResultList();
+    }
+
+    @Override
+    public List<Permisos> findByIpPersonaAndEstado(int idPersona, Integer año, String a) {
+        return em.createNamedQuery("Permisos.findByIpPersonaAndEstado")
+                .setParameter("ipPersona", idPersona)
+                .setParameter("año", año)
+                .setParameter("estado", a)
                 .getResultList();
     }
 }
