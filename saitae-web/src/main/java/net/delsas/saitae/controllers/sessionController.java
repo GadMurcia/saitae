@@ -90,7 +90,7 @@ public class sessionController extends Auxiliar implements Serializable {
             us = (Persona) context.getExternalContext().getSessionMap().get("usuario");
             if (us == null) {
                 context.getExternalContext().getSessionMap().put("mensaje", new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                        "Falla!", "Esa vista no le está permitida aún porque usted no se a logueado."));
+                        "Falla!", "Esa vista no le está permitida aún porque usted no se ha logueado."));
                 context.getExternalContext().redirect("./../");
             } else {
                 FacesMessage ms = (FacesMessage) context.getExternalContext().getSessionMap().get("mensaje");

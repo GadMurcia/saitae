@@ -85,13 +85,6 @@
                             <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
                         </p:selectBooleanButton>
 
-                        <p:outputLabel value="Direccion:" for="pd" />
-                        <p:inputText id="pd" 
-                                     value="#{infoPerfilController.usuario.personaDireccion}" 
-                                     title="PersonaDireccion">
-                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
-                        </p:inputText>
-
                         <p:outputLabel value="Estado Familiar:" for="pef" />
                         <p:selectOneMenu id="pef" 
                                          value="#{infoPerfilController.usuario.personaEstadoFamiliar}" 
@@ -102,21 +95,6 @@
                             <f:selectItem itemLabel="Acompañad@" itemValue="2"/>
                             <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
                         </p:selectOneMenu>
-
-                        <p:outputLabel value="Telefono personal:" for="pt" />
-                        <p:inputMask id="pt" value="#{infoPerfilController.usuario.personaTelefono}" 
-                                     title="PersonaTelefono" mask="9999-9999">
-                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
-                        </p:inputMask>
-
-                        <p:outputLabel for="telefono1" value="Teléfono de Residencia: " 
-                                       rendered="#{infoPerfilController.maestro}"/>
-                        <p:inputMask id="telefono1" value="#{infoPerfilController.usuario.maestro.maestrocolTelefonoResidencia}" 
-                                     required="true" mask="9999-9999" 
-                                     rendered="#{infoPerfilController.maestro}"
-                                     title="Ingrese el número de reléfono de la residencia de la persona">
-                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
-                        </p:inputMask>
 
                         <p:outputLabel value="Nacionalidad:" for="Nac" />
                         <p:selectOneMenu id="Nac" value="#{infoPerfilController.usuario.personaNacionalidad}" 
@@ -157,18 +135,21 @@
                             <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
                         </p:inputText>
 
-                        <p:outputLabel value="Email:" for="email" />
-                        <p:inputText id="email" value="#{infoPerfilController.usuario.personaEmail}" 
-                                     title="PersonaEmail">
-                            <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
-                        </p:inputText>
-
                         <p:outputLabel value="Discapacidades:" for="pds" />
                         <p:inputText id="pds" value="#{infoPerfilController.usuario.personaDiscapacidades}" 
                                      title="PersonaDiscapacidades">
                             <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
                         </p:inputText>
 
+                        <p:column/>
+                        <p:commandButton value="Guardar Cambios" process="@this" update="form"
+                                         actionListener="#{infoPerfilController.guardarPersona()}"/>
+                    </h:panelGrid>
+                </p:fieldset>
+                <p:fieldset legend="Información de contacto" toggleable="true" toggleSpeed="500" 
+                            collapsed="true" title="Visualice o edite su información de contacto">
+                    <h:panelGrid columns="2">
+                        <t:persona1 persona="#{infoPerfilController.usuario}"/>
                         <p:column/>
                         <p:commandButton value="Guardar Cambios" process="@this" update="form"
                                          actionListener="#{infoPerfilController.guardarPersona()}"/>

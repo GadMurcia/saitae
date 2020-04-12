@@ -128,9 +128,4 @@ public class loginController extends Auxiliar implements Serializable {
             PrimeFaces.current().ajax().update("form:msgs");
         }
     }
-    
-    public void onBlour(AjaxBehaviorEvent e){
-        
-    }
-    
 }

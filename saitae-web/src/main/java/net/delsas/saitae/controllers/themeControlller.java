@@ -39,7 +39,7 @@ public class themeControlller implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private String tema = "aristo";
+    private String tema = "hot-sneaks";
     private Map<String, String> themes;
     private Persona usuario;
     @EJB
@@ -80,7 +80,6 @@ public class themeControlller implements Serializable {
         themes.put("Luna Pink", "luna-pink");
         themes.put("Midnight", "midnight");
         themes.put("Mint Choc", "mint-choc");
-        themes.put("None", "none");
         themes.put("Overcast", "overcast");
         themes.put("Pepper Grinder", "pepper-grinder");
         themes.put("Redmond", "redmond");
@@ -121,6 +120,11 @@ public class themeControlller implements Serializable {
         }
         existe = true;
         return null;
+    }
+
+    public String getEstilo() {
+        boolean f = tema.contains("luna");
+        return f ? "background-color: #323232; color: #888888;" : "";
     }
 
 }
