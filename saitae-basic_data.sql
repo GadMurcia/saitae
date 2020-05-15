@@ -115,6 +115,16 @@ REPLACE INTO `pais` VALUES (1,'Afganistán',''),(2,'Islas Gland',''),(3,'Albania
 UNLOCK TABLES;
 
 --
+-- Dumping data for table `tipoPersona`
+--
+
+LOCK TABLES `tipoPersona` WRITE;
+/*!40000 ALTER TABLE `tipoPersona` DISABLE KEYS */;
+REPLACE INTO `tipoPersona` VALUES (1,'Administrador','fa fa-diamond'),(2,'Director','pi pi-circle-on'),(3,'Subdirector','pi pi-circle-off'),(4,'Maestro','fa fa-street-view'),(5,'Bibliotecario','fa fa-forumbee'),(6,'Administrador CRA','fa fa-transgender-alt'),(7,'Laboratorista','fa fa-android'),(8,'Estudiante','fa fa-child'),(9,'Representante','fa fa-user-secret'),(10,'Madre de familia',''),(11,'Padre de familia',''),(12,'Colector','fa fa-cc-mastercard'),(13,'Secretaria','fa fa-database'),(14,'Psicologo',''),(15,'Ordenanza','');
+/*!40000 ALTER TABLE `tipoPersona` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Dumping data for table `persona`
 --
 
@@ -174,15 +184,6 @@ REPLACE INTO `tipoPermiso` VALUES (1,'Enfermedad',8,NULL),(2,'Materindad',0,NULL
 /*!40000 ALTER TABLE `tipoPermiso` ENABLE KEYS */;
 UNLOCK TABLES;
 
---
--- Dumping data for table `tipoPersona`
---
-
-LOCK TABLES `tipoPersona` WRITE;
-/*!40000 ALTER TABLE `tipoPersona` DISABLE KEYS */;
-REPLACE INTO `tipoPersona` VALUES (1,'Administrador','fa fa-diamond'),(2,'Director','pi pi-circle-on'),(3,'Subdirector','pi pi-circle-off'),(4,'Maestro','fa fa-street-view'),(5,'Bibliotecario','fa fa-forumbee'),(6,'Administrador CRA','fa fa-transgender-alt'),(7,'Laboratorista','fa fa-android'),(8,'Estudiante','fa fa-child'),(9,'Representante','fa fa-user-secret'),(10,'Madre de familia',''),(11,'Padre de familia',''),(12,'Colector','fa fa-cc-mastercard'),(13,'Secretaria','fa fa-database'),(14,'Psicologo',''),(15,'Ordenanza','');
-/*!40000 ALTER TABLE `tipoPersona` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Dumping data for table `tipoProyecto`

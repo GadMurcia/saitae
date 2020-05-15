@@ -7,6 +7,7 @@ package net.delsas.saitae.entities;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -31,13 +32,14 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "ejemplar", catalog = "intex", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Ejemplar.findAll", query = "SELECT e FROM Ejemplar e")
-    , @NamedQuery(name = "Ejemplar.findByIdRecurso", query = "SELECT e FROM Ejemplar e WHERE e.ejemplarPK.idRecurso = :idRecurso")
-    , @NamedQuery(name = "Ejemplar.findByEjemplarCorrelativo", query = "SELECT e FROM Ejemplar e WHERE e.ejemplarPK.ejemplarCorrelativo = :ejemplarCorrelativo")
-    , @NamedQuery(name = "Ejemplar.findByEjemplarAnioDeIngreso", query = "SELECT e FROM Ejemplar e WHERE e.ejemplarAnioDeIngreso = :ejemplarAnioDeIngreso")
-    , @NamedQuery(name = "Ejemplar.findByEjemplarComentario", query = "SELECT e FROM Ejemplar e WHERE e.ejemplarComentario = :ejemplarComentario")
-    , @NamedQuery(name = "Ejemplar.findCorrelativoByIdRecurso", query = "SELECT e.ejemplarPK.ejemplarCorrelativo FROM Ejemplar e WHERE e.ejemplarPK.idRecurso = :idRecurso")
-})
+    @NamedQuery(name = "Ejemplar.findAll", query = "SELECT e FROM Ejemplar e"),
+    @NamedQuery(name = "Ejemplar.findByIdRecurso", query = "SELECT e FROM Ejemplar e WHERE e.ejemplarPK.idRecurso = :idRecurso"),
+    @NamedQuery(name = "Ejemplar.findByEjemplarCorrelativo", query = "SELECT e FROM Ejemplar e WHERE e.ejemplarPK.ejemplarCorrelativo = :ejemplarCorrelativo"),
+    @NamedQuery(name = "Ejemplar.findByEjemplarAnioDeIngreso", query = "SELECT e FROM Ejemplar e WHERE e.ejemplarAnioDeIngreso = :ejemplarAnioDeIngreso"),
+    @NamedQuery(name = "Ejemplar.findByEjemplarComentario", query = "SELECT e FROM Ejemplar e WHERE e.ejemplarComentario = :ejemplarComentario"),
+    @NamedQuery(name = "Ejemplar.findCorrelativoByIdRecurso", query = "SELECT e.ejemplarPK.ejemplarCorrelativo FROM Ejemplar e WHERE e.ejemplarPK.idRecurso = :idRecurso"),
+    @NamedQuery(name = "Ejemplar.findByEjemplarMarca", query = "SELECT e FROM Ejemplar e WHERE e.ejemplarMarca = :ejemplarMarca"),
+    @NamedQuery(name = "Ejemplar.findByEjemplarSerie", query = "SELECT e FROM Ejemplar e WHERE e.ejemplarSerie = :ejemplarSerie"),})
 public class Ejemplar implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -51,6 +53,12 @@ public class Ejemplar implements Serializable {
     @NotNull
     @Column(name = "ejemplarActivo")
     private boolean ejemplarActivo;
+    @Size(max = 150)
+    @Column(name = "ejemplarMarca")
+    private String ejemplarMarca;
+    @Size(max = 150)
+    @Column(name = "ejemplarSerie")
+    private String ejemplarSerie;
     @Size(max = 145)
     @Column(name = "ejemplarComentario")
     private String ejemplarComentario;
@@ -68,22 +76,16 @@ public class Ejemplar implements Serializable {
         this.ejemplarActivo = true;
     }
 
-    public Ejemplar(EjemplarPK ejemplarPK, int ejemplarAnioDeIngreso) {
+    public Ejemplar(EjemplarPK ejemplarPK, int ejemplarAnioDeIngreso, boolean ejemplarActivo) {
         this.ejemplarPK = ejemplarPK;
         this.ejemplarAnioDeIngreso = ejemplarAnioDeIngreso;
-        this.ejemplarActivo = true;
+        this.ejemplarActivo = ejemplarActivo;
     }
 
     public Ejemplar(int idRecurso, int ejemplarCorrelativo) {
         this.ejemplarPK = new EjemplarPK(idRecurso, ejemplarCorrelativo);
         this.ejemplarActivo = true;
     }
-
-    public Ejemplar(EjemplarPK ejemplarPK, int ejemplarAnioDeIngreso, boolean ejemplarActivo) {
-        this.ejemplarPK = ejemplarPK;
-        this.ejemplarAnioDeIngreso = ejemplarAnioDeIngreso;
-        this.ejemplarActivo = ejemplarActivo;
-    }  
 
     public EjemplarPK getEjemplarPK() {
         return ejemplarPK;
@@ -99,6 +101,30 @@ public class Ejemplar implements Serializable {
 
     public void setEjemplarAnioDeIngreso(int ejemplarAnioDeIngreso) {
         this.ejemplarAnioDeIngreso = ejemplarAnioDeIngreso;
+    }
+
+    public boolean getEjemplarActivo() {
+        return ejemplarActivo;
+    }
+
+    public void setEjemplarActivo(boolean ejemplarActivo) {
+        this.ejemplarActivo = ejemplarActivo;
+    }
+
+    public String getEjemplarMarca() {
+        return ejemplarMarca;
+    }
+
+    public void setEjemplarMarca(String ejemplarMarca) {
+        this.ejemplarMarca = ejemplarMarca;
+    }
+
+    public String getEjemplarSerie() {
+        return ejemplarSerie;
+    }
+
+    public void setEjemplarSerie(String ejemplarSerie) {
+        this.ejemplarSerie = ejemplarSerie;
     }
 
     public String getEjemplarComentario() {
@@ -119,44 +145,61 @@ public class Ejemplar implements Serializable {
 
     @XmlTransient
     public List<ReservaDetalle> getReservaDetalleList() {
-        return reservaDetalleList;
+        return this.reservaDetalleList;
     }
 
     public void setReservaDetalleList(List<ReservaDetalle> reservaDetalleList) {
         this.reservaDetalleList = reservaDetalleList;
     }
 
-    public boolean isEjemplarActivo() {
-        return ejemplarActivo;
-    }
-
-    public void setEjemplarActivo(boolean ejemplarActivo) {
-        this.ejemplarActivo = ejemplarActivo;
-    }
-
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (ejemplarPK != null ? ejemplarPK.hashCode() : 0);
+        int hash = 5;
+        hash = 41 * hash + Objects.hashCode(this.ejemplarPK);
+        hash = 41 * hash + this.ejemplarAnioDeIngreso;
+        hash = 41 * hash + (this.ejemplarActivo ? 1 : 0);
+        hash = 41 * hash + Objects.hashCode(this.ejemplarMarca);
+        hash = 41 * hash + Objects.hashCode(this.ejemplarSerie);
+        hash = 41 * hash + Objects.hashCode(this.ejemplarComentario);
+        hash = 41 * hash + Objects.hashCode(this.recurso);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Ejemplar)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        Ejemplar other = (Ejemplar) object;
-        if ((this.ejemplarPK == null && other.ejemplarPK != null) || (this.ejemplarPK != null && !this.ejemplarPK.equals(other.ejemplarPK))) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
-        return true;
+        final Ejemplar other = (Ejemplar) obj;
+        if (this.ejemplarAnioDeIngreso != other.ejemplarAnioDeIngreso) {
+            return false;
+        }
+        if (this.ejemplarActivo != other.ejemplarActivo) {
+            return false;
+        }
+        if (!Objects.equals(this.ejemplarMarca, other.ejemplarMarca)) {
+            return false;
+        }
+        if (!Objects.equals(this.ejemplarSerie, other.ejemplarSerie)) {
+            return false;
+        }
+        if (!Objects.equals(this.ejemplarComentario, other.ejemplarComentario)) {
+            return false;
+        }
+        if (!Objects.equals(this.ejemplarPK, other.ejemplarPK)) {
+            return false;
+        }
+        return Objects.equals(this.recurso, other.recurso);
     }
 
     @Override
     public String toString() {
-        return "net.delsas.saitae.entities.Ejemplar[ ejemplarPK=" + ejemplarPK + " ]";
+        return "Ejemplar{" + "ejemplarPK=" + ejemplarPK + ", ejemplarAnioDeIngreso=" + ejemplarAnioDeIngreso + ", ejemplarActivo=" + ejemplarActivo + ", ejemplarMarca=" + ejemplarMarca + ", ejemplarSerie=" + ejemplarSerie + ", ejemplarComentario=" + ejemplarComentario + ", recurso=" + recurso + '}';
     }
-
 }

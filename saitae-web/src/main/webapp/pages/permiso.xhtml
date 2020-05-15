@@ -304,16 +304,11 @@
                                                    admPermisoController.acep.permisoFechafin)}"/>
 
                             <p:outputLabel value="Estado del permiso: "/>
-                            <h:outputText value="#{admPermisoController.acep.permisosEstado.equals('1')
-                                                   ? 'Aceptado' : (admPermisoController.acep.permisosEstado.equals('2')
-                                                   ? 'Rechazado': (admPermisoController.acep.permisosEstado.equals('3')
-                                                   ? 'Cancelado': '????'))}"/>
-
-                            <p:column/>
-                            <p:commandButton id="btnV" value="Ver constancia" update="h0" 
-                                             disabled="#{!admPermisoController.hayConstancia}"
-                                             oncomplete="PF('DConstancia').show();"/>
-
+                            <h:outputText value="#{admPermisoController.getEstadoPermiso(admPermisoController.acep)}"/>
+                            
+                            <p:outputLabel value="#{admPermisoController.getEstadoPermiso(admPermisoController.acep)} por: "/>
+                            <h:outputText value="#{admPermisoController.getNombreCortoPersona(admPermisoController.acep.permisosGestor)}"/>
+                            
                             <p:outputLabel value="Motivo del rechazo: " 
                                            rendered="#{admPermisoController.acep.permisosEstado.equals('2')}"/>
                             <h:outputText value="#{admPermisoController.comentarioAcep}"
@@ -323,6 +318,11 @@
                                            rendered="#{admPermisoController.acep.permisosEstado.equals('3')}"/>
                             <h:outputText value="#{admPermisoController.comentarioAcep}"
                                           rendered="#{admPermisoController.acep.permisosEstado.equals('3')}"/>
+
+                            <p:column/>
+                            <p:commandButton id="btnV" value="Ver constancia" update="h0" 
+                                             disabled="#{!admPermisoController.hayConstancia}"
+                                             oncomplete="PF('DConstancia').show();"/>
                         </h:panelGrid>
                     </h:form>
                 </p:dialog>

@@ -529,4 +529,9 @@ public class admPermisoController extends Auxiliar implements Serializable {
     public void setAñoSelected(Integer añoSelected) {
         this.añoSelected = añoSelected;
     }
+
+    public String getEstadoPermiso(Permisos p) {
+        String e = (p == null || p.getPermisosEstado() == null) ? "" : p.getPermisosEstado();
+        return getEstadoPermisos2(e);
+    }
 }
