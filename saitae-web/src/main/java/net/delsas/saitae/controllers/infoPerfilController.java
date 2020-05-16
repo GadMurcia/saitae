@@ -186,6 +186,7 @@ public class infoPerfilController extends Auxiliar implements Serializable {
         PrimeFaces.current().ajax().update("form0:msgs");
     }
 
+    @Override
     public void onBlour(AjaxBehaviorEvent e) {
         switch (e.getComponent().getId()) {
             case "modal":

@@ -322,15 +322,15 @@ public class matriculaController extends Auxiliar implements Serializable {
         return new Auxiliar().getMunicipioLista(p);
     }
 
-    public String[] getDependencia(Estudiante e) {
-        return e.getEstudianteDependenciaEconomica().split("¿")[0].split("#");
-    }
+//    public String[] getDependencia(Estudiante e) {
+//        return e.getEstudianteDependenciaEconomica().split("¿")[0].split("#");
+//    }
 
-    public String getOtraDependenciaEcon(Estudiante e) {
-        String d[] = e.getEstudianteDependenciaEconomica().split("¿");
-        String ot = d.length > 1 ? d[1] : " ";
-        return ot;
-    }
+//    public String getOtraDependenciaEcon(Estudiante e) {
+//        String d[] = e.getEstudianteDependenciaEconomica().split("¿");
+//        String ot = d.length > 1 ? d[1] : " ";
+//        return ot;
+//    }
 
     public GradoPK getSelectedPK() {
         return selectedPK;

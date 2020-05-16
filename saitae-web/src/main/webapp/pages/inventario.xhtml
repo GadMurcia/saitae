@@ -13,36 +13,6 @@
             <p:growl id="msgs" showDetail="true"/>
             <h1 style="align-content: center;">Administración General de Recursos.</h1>
             <p:tabView id="tw" orientation="left" dynamic="true" style="height: 100%; width: 90%;">
-                <p:tab title="Tipo Cargo">
-                    <p:dataTable id="cargo" var="ca" value="#{tipoController.cargos}" editable="true" 
-                                 widgetVar="cargo1" styleClass="tabla" emptyMessage="Sin registros aún.">
-                        <f:facet name="header">
-                            Administración de los tipos de cargo al inventario.
-                        </f:facet>
-
-                        <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" update=":form:msgs" />
-                        <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" update=":form:msgs" />
-
-                        <p:column headerText="Id" style="width: 10px">
-                            <h:outputText value="#{ca.idtipoCargo}" />
-                        </p:column>
-
-                        <p:column headerText="Nombre">
-                            <p:cellEditor>
-                                <f:facet name="output"><h:outputText value="#{ca.nombre}" /></f:facet>
-                                <f:facet name="input"><p:inputText value="#{ca.nombre}" 
-                                                                   style="width:100%" label="Nombre"/></f:facet>
-                            </p:cellEditor>
-                        </p:column>
-                        <p:column style="width:35px">
-                            <p:rowEditor />
-                        </p:column>
-                    </p:dataTable> 
-                    <p:commandButton value="+" styleClass="ui-priority-primary" 
-                                     process="@this" update=":form:msgs cargo"
-                                     action="#{tipoController.onAddNew('cargo')}" 
-                                     title="Agregar nuevo Tipo de Cargo para el inventario."/>
-                </p:tab>
                 <p:tab title="Tipo Recurso">
                     <p:dataTable id="recurso" var="re" value="#{tipoController.recursos}" editable="true" 
                                  widgetVar="recurso1" styleClass="tabla" emptyMessage="Sin registros aún.">
@@ -103,6 +73,39 @@
                                      process="@this" update=":form:msgs reserva"
                                      action="#{tipoController.onAddNew('reserva')}" 
                                      title="Agregar nuevo tipo de reserva."/>
+                </p:tab>
+                <p:tab title="Tipo de Proyectos">
+                    <p:dataTable id="proyectos" var="pro" value="#{tipoController.tipopp}" 
+                                 editable="true" widgetVar="proyectos1" styleClass="tabla" 
+                                 emptyMessage="Sin registros aún.">
+                        <f:facet name="header">
+                            Administración de los tipos de Proyecto informáticos.
+                        </f:facet>
+
+                        <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" 
+                                update=":form:msgs" />
+                        <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" 
+                                update=":form:msgs" />
+
+                        <p:column headerText="Id" style="width: 10px">
+                            <h:outputText value="#{pro.idtipoProyecto}" />
+                        </p:column>
+
+                        <p:column headerText="Nombre">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{pro.tipoProyectoNombre}" /></f:facet>
+                                <f:facet name="input"><p:inputText value="#{pro.tipoProyectoNombre}" 
+                                                                   style="width:100%" label="Nombre"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        <p:column style="width:35px">
+                            <p:rowEditor />
+                        </p:column>
+                    </p:dataTable> 
+                    <p:commandButton value="+" styleClass="ui-priority-primary" 
+                                     process="@this" update=":form:msgs proyectos"
+                                     action="#{tipoController.onAddNew('proyectos')}" 
+                                     title="Agregar nuevo tipo de proyecto."/>
                 </p:tab>
             </p:tabView>
         </h:form>

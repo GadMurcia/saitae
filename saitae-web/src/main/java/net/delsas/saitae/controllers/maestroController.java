@@ -155,9 +155,9 @@ public class maestroController extends Auxiliar implements Serializable {
         return new Auxiliar().getDepartamentoLista(maestro.getPersona());
     }
 
-    public String onFlowProcess(FlowEvent event) {
-        return event.getNewStep();
-    }
+//    public String onFlowProcess(FlowEvent event) {
+//        return event.getNewStep();
+//    }
 
     public void onRowEdit(RowEditEvent event) {
         MaestoCargo mc = (MaestoCargo) event.getObject();

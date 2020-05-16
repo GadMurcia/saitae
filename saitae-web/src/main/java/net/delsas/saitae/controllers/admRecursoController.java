@@ -78,7 +78,7 @@ import org.primefaces.event.SelectEvent;
 @Named(value = "admRecursoC")
 @ViewScoped
 public class admRecursoController extends Auxiliar implements Serializable {
-
+    
     private static final long serialVersionUID = 1L;
     private Persona usuario;
     private FacesContext context;
@@ -132,7 +132,7 @@ public class admRecursoController extends Auxiliar implements Serializable {
     private EditorialLibroFacadeLocal elFL;
     @EJB
     private AutorLibroFacadeLocal alFL;
-
+    
     @PostConstruct
     public void init() {
         context = FacesContext.getCurrentInstance();
@@ -141,7 +141,7 @@ public class admRecursoController extends Auxiliar implements Serializable {
         llenarListas();
         controlUsuarios();
     }
-
+    
     private void initVariables() {
         seleccionado = new Recurso(0);
         seleccionado.setContenidoLibroList(new ArrayList<>());
@@ -156,7 +156,7 @@ public class admRecursoController extends Auxiliar implements Serializable {
         indiceCl = -1;
         tiposReservasRecurso = new ArrayList<>();
     }
-
+    
     public void llenarListas() {
         tiposRecursos = tiporecursoFL.findAll();
         categorias = catFL.findAll();
@@ -166,7 +166,7 @@ public class admRecursoController extends Auxiliar implements Serializable {
         autores = aFL.findAll();
         editoriales = edFL.findAll();
     }
-
+    
     private void llenado(int tr, boolean verPaneles) {
         seleccionado.setIdTipoRecurso(tiporecursoFL.find(tr));
         recurso.addAll(recursoFL.findByTipoRecurso(seleccionado.getIdTipoRecurso().getIdtipoRecurso()));
@@ -176,7 +176,7 @@ public class admRecursoController extends Auxiliar implements Serializable {
         verCategorias = verPaneles;
         verCategoriastabla = verPaneles;
     }
-
+    
     public void controlUsuarios() {
         try {
             recurso = new ArrayList<>();
@@ -196,7 +196,7 @@ public class admRecursoController extends Auxiliar implements Serializable {
                 if (tps.contains(5)) {
                     llenado(3, true);
                 }
-
+                
                 if (!tps.contains(7) && !tps.contains(6) && !tps.contains(5)) {
                     FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("mensaje",
                             new FacesMessage(FacesMessage.SEVERITY_WARN, "Página prohibida",
@@ -225,13 +225,13 @@ public class admRecursoController extends Auxiliar implements Serializable {
                     (ex1 != null ? ex1.getMessage() : "Error desconocido.")));
         }
     }
-
+    
     public void nuevoRecurso() {
         initVariables();
         controlUsuarios();
         PrimeFaces.current().ajax().update("dialogN", "hn", "h2");
     }
-
+    
     public void agregarContenido() {
         if (!cl.getContenidoLibroNombre().isEmpty()
                 && cl.getContenidoLibroPagina() > 0 && indiceCl == -1) {
@@ -248,23 +248,23 @@ public class admRecursoController extends Auxiliar implements Serializable {
         ordenarContenido();
         PrimeFaces.current().ajax().update("hn:h1Contenido", "h2");
     }
-
+    
     private void ordenarContenido() {
         Collections.sort(contenido, (ContenidoLibro c1, ContenidoLibro c2) -> {
             return c1.getContenidoLibroPagina() - c2.getContenidoLibroPagina();
         });
     }
-
+    
     public void nuevoContenido() {
         cl = new ContenidoLibro(0, "", seleccionado);
         clControl = new ContenidoLibro(0, "", seleccionado);
         indiceCl = -1;
     }
-
+    
     public ContenidoLibro getCl() {
         return cl;
     }
-
+    
     public void setCl(ContenidoLibro cl) {
         indiceCl = contenido.contains(cl) ? contenido.indexOf(cl) : -1;
         clControl = indiceCl != -1 ? new ContenidoLibro(
@@ -272,11 +272,11 @@ public class admRecursoController extends Auxiliar implements Serializable {
                 : new ContenidoLibro();
         this.cl = cl;
     }
-
+    
     public String getEstadoFisico(Recurso r) {
         return r.getEstadoFisico().equals("B") ? "Bueno" : "Regular";
     }
-
+    
     public String EditorialLibro(List<EditorialLibro> listeditoriallibro) {
         String edts = "";
         for (EditorialLibro el : listeditoriallibro) {
@@ -287,7 +287,7 @@ public class admRecursoController extends Auxiliar implements Serializable {
         }
         return edts;
     }
-
+    
     public String AutorLibro(List<AutorLibro> listautorlibro) {
         String auts = "";
         for (AutorLibro al : listautorlibro) {
@@ -298,7 +298,7 @@ public class admRecursoController extends Auxiliar implements Serializable {
         }
         return auts;
     }
-
+    
     public void onAdd() {
         Ejemplar ej = new Ejemplar(new EjemplarPK(seleccionado.getIdrecurso(), 0),
                 getAñoActual(), true);
@@ -306,16 +306,16 @@ public class admRecursoController extends Auxiliar implements Serializable {
             ejemplares.add(ej);
         }
     }
-
+    
     public void onRowEdit(RowEditEvent event) {
         System.out.println(event.getObject());
     }
-
+    
     public void onRowCancel(RowEditEvent event) {
         System.out.println(event.getObject());
         ejemplares.remove((Ejemplar) event.getObject());
     }
-
+    
     public Integer[] getAutoresXlibro() {
         List<AutorLibro> l = seleccionado.getAutorLibroList();
         Integer[] a;
@@ -329,7 +329,7 @@ public class admRecursoController extends Auxiliar implements Serializable {
         }
         return a;
     }
-
+    
     public void setAutoresXlibro(Integer[] a) {
         List<AutorLibro> l = new ArrayList<>();
         for (int i : a) {
@@ -341,7 +341,7 @@ public class admRecursoController extends Auxiliar implements Serializable {
         }
         seleccionado.setAutorLibroList(l);
     }
-
+    
     public Integer[] getEditorialesXlibro() {
         List<EditorialLibro> l = seleccionado.getEditorialLibroList();
         Integer[] a;
@@ -355,7 +355,7 @@ public class admRecursoController extends Auxiliar implements Serializable {
         }
         return a;
     }
-
+    
     public void setEditorialesXlibro(Integer[] a) {
         List<EditorialLibro> l = new ArrayList<>();
         for (int i : a) {
@@ -368,7 +368,7 @@ public class admRecursoController extends Auxiliar implements Serializable {
         }
         seleccionado.setEditorialLibroList(l);
     }
-
+    
     public void tipoRecursoSelect(SelectEvent event) {
         TipoRecurso tp = ((TipoRecurso) event.getObject());
         seleccionado.setIdTipoRecurso(tp);
@@ -384,14 +384,14 @@ public class admRecursoController extends Auxiliar implements Serializable {
         PrimeFaces.current().ajax().update("hn", "h2");
         System.out.println(tp == null ? "No Selection" : tp);
     }
-
+    
     public void eliminarContenido() {
         if (cl != null) {
             contenido.remove(cl);
             nuevoContenido();
         }
     }
-
+    
     public void guardar() {
         System.out.println("guardar");
         mensaje x;
@@ -438,7 +438,7 @@ public class admRecursoController extends Auxiliar implements Serializable {
                         e.setEjemplarActivo(false);
                         ejFL.edit(e);
                     } catch (Exception exxx) {
-
+                        
                     }
                 }
             });
@@ -469,6 +469,14 @@ public class admRecursoController extends Auxiliar implements Serializable {
         } else if (r == null) {
             //agregación nueva
             recursoFL.create(seleccionado);
+            contenido.stream().map((cl3) -> {
+                cl3.setContenidoLibroIndice(null);
+                clFL.create(cl3);
+                return cl3;
+            }).forEachOrdered((cl3) -> {
+                seleccionado.getContenidoLibroList().add(cl3);
+            });
+            recursoFL.edit(seleccionado);
             x = new mensaje(0, usuario.getIdpersona(), "admRecurso<<:form:recurso",
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Nuevo recurso agregado",
                             usuario.getPersonaNombre().split(" ")[0] + " "
@@ -496,32 +504,32 @@ public class admRecursoController extends Auxiliar implements Serializable {
             PrimeFaces.current().ajax().update("form0:msgs");
         }
     }
-
+    
     public List<Recurso> getRecurso() {
         return Collections.unmodifiableList(recurso);
     }
-
+    
     public void setRecurso(List<Recurso> recurso) {
         this.recurso = recurso;
     }
-
+    
     public Recurso getSeleccionado() {
         return seleccionado;
     }
-
+    
     public void eliminarEjemplar() {
         if (ejemplarSeleccionado != null) {
             ejemplares.remove(ejemplarSeleccionado);
         }
         PrimeFaces.current().ajax().update("hn:h1Contenido");
     }
-
+    
     public void nuevoEjemplar() {
         ejemplarSeleccionado = new Ejemplar(new EjemplarPK(seleccionado.getIdrecurso(), 0),
                 getAñoActual(), true);
         PrimeFaces.current().ajax().update("h3");
     }
-
+    
     public void agregarEjemplar() {
         if (ejemplarSeleccionado != null) {
             ejemplares.add(ejemplarSeleccionado);
@@ -529,7 +537,7 @@ public class admRecursoController extends Auxiliar implements Serializable {
             nuevoEjemplar();
         }
     }
-
+    
     public void setSeleccionado(Recurso seleccionado) {
         contenido.clear();
         this.seleccionado = seleccionado != null ? seleccionado : this.seleccionado;
@@ -546,149 +554,149 @@ public class admRecursoController extends Auxiliar implements Serializable {
         tipoRecursoSelect(new SelectEvent(
                 new OutputLabel(), new AjaxBehavior(), this.seleccionado.getIdTipoRecurso()));
     }
-
+    
     public boolean isVerTipos() {
         return verTipos;
     }
-
+    
     public void setVerTipos(boolean verTipos) {
         this.verTipos = verTipos;
     }
-
+    
     public boolean isVerCategoriastabla() {
         return verCategoriastabla;
     }
-
+    
     public void setVerCategoriastabla(boolean verCategoriastabla) {
         this.verCategoriastabla = verCategoriastabla;
     }
-
+    
     public boolean isVerOtrosPaneles() {
         return verOtrosPaneles;
     }
-
+    
     public void setVerOtrosPaneles(boolean verOtrosPaneles) {
         this.verOtrosPaneles = verOtrosPaneles;
     }
-
+    
     public boolean isVerBotonGuardarPanel1() {
         return verBotonGuardarPanel1;
     }
-
+    
     public void setVerBotonGuardarPanel1(boolean verBotonGuardarPanel1) {
         this.verBotonGuardarPanel1 = verBotonGuardarPanel1;
     }
-
+    
     public boolean isVerCategorias() {
         return verCategorias;
     }
-
+    
     public void setVerCategorias(boolean verCategorias) {
         this.verCategorias = verCategorias;
     }
-
+    
     public boolean isEditarTipo() {
         return editarTipo;
     }
-
+    
     public void setEditarTipo(boolean editarTipo) {
         this.editarTipo = editarTipo;
     }
-
+    
     public List<Ejemplar> getEjemplares() {
         return Collections.unmodifiableList(ejemplares);
     }
-
+    
     public void setEjemplares(List<Ejemplar> ejemplares) {
         this.ejemplares = ejemplares;
     }
-
+    
     public List<TipoRecurso> getTiposRecursos() {
         return Collections.unmodifiableList(tiposRecursos);
     }
-
+    
     public void setTiposRecursos(List<TipoRecurso> tiposRecursos) {
         this.tiposRecursos = tiposRecursos;
     }
-
+    
     public boolean isEditarID() {
         return editarID;
     }
-
+    
     public void setEditarID(boolean editarID) {
         this.editarID = editarID;
     }
-
+    
     public List<ContenidoLibro> getContenido() {
         return Collections.unmodifiableList(contenido);
     }
-
+    
     public void setContenido(List<ContenidoLibro> contenido) {
         this.contenido = contenido;
     }
-
+    
     public List<Categoria> getCategorias() {
         return Collections.unmodifiableList(categorias);
     }
-
+    
     public void setCategorias(List<Categoria> categorias) {
         this.categorias = categorias;
     }
-
+    
     public List<Pais> getPaises() {
         return Collections.unmodifiableList(paises);
     }
-
+    
     public void setPaises(List<Pais> paises) {
         this.paises = paises;
     }
-
+    
     public List<TipoCargo> getTiposCargos() {
         return Collections.unmodifiableList(tiposCargos);
     }
-
+    
     public void setTiposCargos(List<TipoCargo> tiposCargos) {
         this.tiposCargos = tiposCargos;
     }
-
+    
     public List<TipoReserva> getTiposReservas() {
         return Collections.unmodifiableList(tiposReservas);
     }
-
+    
     public void setTiposReservas(List<TipoReserva> tiposReservas) {
         this.tiposReservas = tiposReservas;
     }
-
+    
     public List<TipoReserva> getTiposReservasRecurso() {
         return tiposReservasRecurso;
     }
-
+    
     public void setTiposReservasRecurso(List<TipoReserva> tiposReservasRecurso) {
         this.tiposReservasRecurso = tiposReservasRecurso;
     }
-
+    
     public Ejemplar getEjemplarSeleccionado() {
         return ejemplarSeleccionado;
     }
-
+    
     public void setEjemplarSeleccionado(Ejemplar ejemplarSeleccionado) {
         this.ejemplarSeleccionado = ejemplarSeleccionado;
     }
-
+    
     public List<Autor> getAutores() {
         return Collections.unmodifiableList(autores);
     }
-
+    
     public void setAutores(List<Autor> autores) {
         this.autores = autores;
     }
-
+    
     public List<Editorial> getEditoriales() {
         return Collections.unmodifiableList(editoriales);
     }
-
+    
     public void setEditoriales(List<Editorial> editoriales) {
         this.editoriales = editoriales;
     }
-
+    
 }

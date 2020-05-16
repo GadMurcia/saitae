@@ -26,7 +26,6 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -210,9 +209,9 @@ public class citasPsHController extends Auxiliar implements Serializable {
         return selected == null ? false : (selected.getComentarios() != null || !selected.getComentarios().isEmpty());
     }
 
-    public void onBlour(AjaxBehaviorEvent a) {
-
-    }
+//    public void onBlour(AjaxBehaviorEvent a) {
+//
+//    }
 
     public Integer getAñoSelected() {
         return añoSelected;

@@ -58,6 +58,7 @@ import org.apache.poi.ss.usermodel.Picture;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.util.IOUtils;
 import org.omnifaces.cdi.PushContext;
+import org.primefaces.PrimeFaces;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.FlowEvent;
 import org.primefaces.model.chart.PieChartModel;
@@ -943,7 +944,12 @@ public class Auxiliar implements Serializable {
     }
 
     public String onFlowProcess(FlowEvent event) {
-        return event.getNewStep();
+        String st = event.getNewStep();
+        try {
+            PrimeFaces.current().ajax().update("hn:ws");
+        } catch (Exception e) {
+        }
+        return st;
     }
 
     public String[] getDependencia(Estudiante e) {

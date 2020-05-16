@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Constancias.findByFechaSolicitud", query = "SELECT c FROM Constancias c WHERE c.constanciasPK.fechaSolicitud = :fechaSolicitud"),
     @NamedQuery(name = "Constancias.findByTioPermiso", query = "SELECT c FROM Constancias c WHERE c.constanciasPK.tioPermiso = :tioPermiso"),
     @NamedQuery(name = "Constancias.findByFechaInicio", query = "SELECT c FROM Constancias c WHERE c.constanciasPK.fechaInicio = :fechaInicio"),
-    @NamedQuery(name = "Constancias.findByExtenci\u00f3n", query = "SELECT c FROM Constancias c WHERE c.extenci\u00f3n = :extenci\u00f3n"),
+    @NamedQuery(name = "Constancias.findByExtención", query = "SELECT c FROM Constancias c WHERE c.extención = :extencion"),
     @NamedQuery(name = "Constancias.findByComentario", query = "SELECT c FROM Constancias c WHERE c.comentario = :comentario")})
 public class Constancias implements Serializable {
 
@@ -50,7 +50,7 @@ public class Constancias implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 100)
-    @Column(name = "extenci\u00f3n")
+    @Column(name = "extención")
     private String extención;
     @Size(max = 140)
     @Column(name = "comentario")

@@ -22,28 +22,8 @@
                                 update=":form"/>
                     </p:selectOneMenu>
                 </h:panelGrid>
-                <h:panelGrid columns="2" cellspacing="25" width="100%"
-                             rendered="#{repInvController.trSelected!=null}">
-                    <h:panelGrid columns="1" dir="LTR" border="1">
-                        <h4 align="center">Tipo de Cargo</h4>
-                        <ui:repeat var="t" value="#{repInvController.tipoCargos}">
-                            <h:panelGrid columns="1">
-                                #{t.idtipoCargo} #{t.nombre}
-                            </h:panelGrid>
-                        </ui:repeat>
-                    </h:panelGrid>
-                    <h:panelGrid columns="1" dir="RTL" border="1" style="margin-right: 0"
-                                 rendered="#{repInvController.trSelected.idtipoRecurso==3}">
-                        <h4 align="center">Categoría</h4>
-                        <ui:repeat var="c" value="#{repInvController.categorias}">
-                            <h:panelGrid columns="1">
-                                #{c.idcategoria} #{c.categoriaNombre}
-                            </h:panelGrid>
-                        </ui:repeat>
-                    </h:panelGrid>
-                </h:panelGrid>
                 <p:dataTable id="inv" value="#{repInvController.recursos}" var="r"
-                             emptyMessage="Sin registros"
+                             emptyMessage="Sin registros" stickyHeader="true" 
                              rendered="#{repInvController.trSelected!=null}">
                     <f:facet name="header">
                         <h:outputText value="Inventario de recursos #{repInvController.trSelected.tipoRecursoNombre}"/>
@@ -52,6 +32,7 @@
                         <h:outputText value="Valor total estimado: $#{repInvController.totalGeneral}"/>
                     </f:facet>
                     <p:column headerText="Cargo" width="5%"
+                              rendered="#{repInvController.trSelected.idtipoRecurso==3}"
                               filterBy="#{r.tipoCargo.idtipoCargo}">
                         <h:outputText value="#{r.tipoCargo.idtipoCargo}" />
                     </p:column>
@@ -61,7 +42,7 @@
                     <p:column headerText="Nombre">
                         <h:outputText value="#{r.nombre}"/>
                     </p:column>
-                    <p:column headerText="Correlativos" width="9%">
+                    <p:column headerText="Correlativos" width="8%">
                         <h:outputText value="#{repInvController.getCorrelativos(r.ejemplarList)}"/>
                     </p:column>
                     <p:column headerText="Categoría" width="7%"
@@ -97,7 +78,7 @@
                     <p:column headerText="Tipo de Valor" width="8%">
                         <h:outputText value="#{r.tipoValor}"/>
                     </p:column>
-                    <p:column headerText="Valor Total" width="5%">
+                    <p:column headerText="Valor Total" width="8%">
                         <h:outputText value="$#{repInvController.getTotalRecurso(r)}"/>
                     </p:column>
                 </p:dataTable>

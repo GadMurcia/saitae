@@ -112,6 +112,20 @@
                                          value="#{admRecursoC.ejemplarSeleccionado.ejemplarPK.ejemplarCorrelativo}" 
                                          title="EjemplarCorrelativo" required="true" 
                                          requiredMessage="The EjemplarCorrelativo field is required."/>
+
+                            <p:outputLabel value="Marca:" for="marca"
+                                           rendered="#{!admRecursoC.verCategorias}"/>
+                            <p:inputText id="marca" 
+                                         value="#{admRecursoC.ejemplarSeleccionado.ejemplarMarca}" 
+                                         title="EjemplarMarca" required="true" rendered="#{!admRecursoC.verCategorias}"
+                                         requiredMessage="The EjemplarMarca field is required."/>
+
+                            <p:outputLabel value="Serie:" for="serie" rendered="#{!admRecursoC.verCategorias}"/>
+                            <p:inputText id="serie" 
+                                         value="#{admRecursoC.ejemplarSeleccionado.ejemplarSerie}" 
+                                         title="EjemplarSerie" required="true" rendered="#{!admRecursoC.verCategorias}"
+                                         requiredMessage="The EjemplarSerie field is required."/>
+
                             <p:outputLabel value="Año De Ingreso:" for="AnioDeIngreso"/>
                             <p:inputText id="AnioDeIngreso" 
                                          value="#{admRecursoC.ejemplarSeleccionado.ejemplarAnioDeIngreso}" 
@@ -162,9 +176,9 @@
                                                          title="Nombre" required="true" 
                                                          requiredMessage="The Nombre field is required."/>
 
-                                            <p:outputLabel value="Estado:" for="estado0" />
+                                            <p:outputLabel value="Activo:" for="estado0" />
                                             <p:selectBooleanButton id="estado0" value="#{admRecursoC.seleccionado.activo}"
-                                                                   required="true" offLabel="Inactivo" onLabel="Activo"/>
+                                                                   required="true" offLabel="No" onLabel="Sí"/>
 
                                             <p:outputLabel for="categoria" value="Categorias" rendered="#{admRecursoC.verCategorias}"/>
                                             <p:selectOneMenu id="categoria" value="#{admRecursoC.seleccionado.categoria}"
@@ -188,9 +202,10 @@
                                                 <!--<p:ajax event="itemSelect" listener="# {admRecursoC.paisSelect}"/>-->
                                             </p:selectOneMenu>
 
-                                            <p:outputLabel for="tipocargo" value="Tipo Cargo" />
+                                            <p:outputLabel for="tipocargo" value="Tipo Cargo" rendered="#{admRecursoC.verCategorias}"/>
                                             <p:selectOneMenu id="tipocargo" value="#{admRecursoC.seleccionado.tipoCargo}"
-                                                             converter="omnifaces.SelectItemsConverter">
+                                                             converter="omnifaces.SelectItemsConverter"
+                                                             rendered="#{admRecursoC.verCategorias}">
                                                 <f:selectItem itemLabel="Seleccione" itemValue=""/>
                                                 <f:selectItems var="tc" itemLabel="#{tc.nombre}" itemValue="#{tc}" 
                                                                value="#{admRecursoC.tiposCargos}"/>
@@ -203,7 +218,7 @@
                                                          title="ValorUnitario" required="true" 
                                                          requiredMessage="The ValorUnitario field is required."/>
 
-                                            <p:outputLabel value="Estado" for="estado" />
+                                            <p:outputLabel value="Estado Físico" for="estado" />
                                             <p:selectOneMenu id="estado" value="#{admRecursoC.seleccionado.estadoFisico}" 
                                                              required="true" style="width:125px"
                                                              converter="omnifaces.SelectItemsConverter">
@@ -220,9 +235,9 @@
                                                 <f:selectItem itemLabel="Estimado" itemValue="ESTIMADO" />
                                             </p:selectOneMenu>
 
-                                            <p:outputLabel value="Edición:" for="modelo" />
+                                            <p:outputLabel value="Edición:" for="modelo" rendered="#{admRecursoC.verCategorias}"/>
                                             <p:inputText id="modelo" value="#{admRecursoC.seleccionado.modelo}" 
-                                                         title="Modelo" />
+                                                         title="Modelo" rendered="#{admRecursoC.verCategorias}"/>
                                         </h:panelGrid>
                                         <h:panelGrid columns="2">
                                             <h:outputLabel for="multiple" value="Formas de Reserva"/>
@@ -262,19 +277,27 @@
                                             <p:column headerText="Estado">
                                                 #{e.ejemplarActivo? 'Activo':'Inactivo'}
                                             </p:column>
+                                            <p:column headerText="Marca"
+                                                      rendered="#{!admRecursoC.verCategorias}">
+                                                <h:outputLabel value="#{e.ejemplarMarca}"/>
+                                            </p:column>
+                                            <p:column headerText="Serie"
+                                                      rendered="#{!admRecursoC.verCategorias}">
+                                                <h:outputLabel value="#{e.ejemplarSerie}"/>
+                                            </p:column>
                                         </p:dataTable>
+                                        <p:contextMenu for="art">
+                                            <p:menuitem value="Eliminar" update="art"
+                                                        icon="pi pi-times" 
+                                                        actionListener="#{admRecursoC.eliminarEjemplar()}"/> 
+                                        </p:contextMenu>
+
                                         <h:panelGrid columns="2" cellspacing="10">
                                             <p:commandButton value="+" styleClass="ui-priority-primary"
                                                              actionListener="#{admRecursoC.nuevoEjemplar()}"
                                                              update="h3 art"
                                                              title="Agregar Ejemplar."
                                                              oncomplete="PF('DejemplarN').show();"/>
-
-                                            <p:contextMenu for="art">
-                                                <p:menuitem value="Eliminar" update="art"
-                                                            icon="pi pi-times" 
-                                                            actionListener="#{admRecursoC.eliminarEjemplar()}"/> 
-                                            </p:contextMenu>
 
                                             <p:commandButton actionListener="#{admRecursoC.guardar()}" 
                                                              oncomplete="PF('DrecursoN').hide()"
@@ -336,7 +359,7 @@
                                         </p:dataTable>
                                         <p:commandButton value="+" styleClass="ui-priority-primary" 
                                                          actionListener="#{admRecursoC.nuevoContenido()}"
-                                                         update=":form0:msgs h2"
+                                                         update=":form0:msgs"
                                                          onclick="PF('Dcontenido').show();"
                                                          title="Agregar Contenido."/>
 

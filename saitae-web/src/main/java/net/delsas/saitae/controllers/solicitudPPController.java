@@ -148,9 +148,9 @@ public class solicitudPPController extends Auxiliar implements Serializable {
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("editar");
     }
 
-    public String onFlowProcess(FlowEvent event) {
-        return event.getNewStep();
-    }
+//    public String onFlowProcess(FlowEvent event) {
+//        return event.getNewStep();
+//    }
 
     private void llenar() {
         List<Reserva> reservas = rxpFL.findReservaByIdProyecto(proyecto.getIdproyectoPedagogico());

@@ -255,6 +255,7 @@ public class AnuncioController extends Auxiliar implements Serializable {
         }
     }
 
+    @Override
     public void onBlour(AjaxBehaviorEvent ev) {
         System.out.println(ev);
     }

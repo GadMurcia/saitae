@@ -301,9 +301,9 @@ public class admCPSController extends Auxiliar implements Serializable{
                 + " " + e.getPersonaApellido().split(" ")[0];
     }
     
-    public void onBlour(AjaxBehaviorEvent a) {
-        
-    }
+//    public void onBlour(AjaxBehaviorEvent a) {
+//        
+//    }
     
     public Integer getAñoSelected() {
         return añoSelected;

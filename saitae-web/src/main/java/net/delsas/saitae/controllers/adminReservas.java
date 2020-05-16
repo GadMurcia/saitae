@@ -29,7 +29,6 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -704,9 +703,9 @@ public class adminReservas extends Auxiliar implements Serializable {
         }
     }
 
-    public void onBlour(AjaxBehaviorEvent a) {
-
-    }
+//    public void onBlour(AjaxBehaviorEvent a) {
+//
+//    }
 
     public List<Integer> getAñosDisponibles() {
         return añosDisponibles;
