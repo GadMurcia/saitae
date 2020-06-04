@@ -7,6 +7,7 @@ package net.delsas.saitae.entities;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -48,6 +49,13 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Permisos.findByIpPersonaAndEstado", query = "SELECT p FROM Permisos p WHERE p.permisosPK.ipPersona = :ipPersona AND FUNCTION('YEAR' , p.permisosPK.permisoFechaInicio) = :año AND p.permisosEstado = :estado ORDER BY p.permisosPK.permisoFechaInicio ASC")
 })
 public class Permisos implements Serializable {
+
+    @Column(name = "permisoHoraInicio")
+    @Temporal(TemporalType.TIME)
+    private Date permisoHoraInicio;
+    @Column(name = "permisoHoraFin")
+    @Temporal(TemporalType.TIME)
+    private Date permisoHoraFin;
 
     private static final long serialVersionUID = 1L;
     @EmbeddedId
@@ -193,27 +201,94 @@ public class Permisos implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (permisosPK != null ? permisosPK.hashCode() : 0);
+        int hash = 3;
+        hash = 97 * hash + Objects.hashCode(this.permisoHoraInicio);
+        hash = 97 * hash + Objects.hashCode(this.permisoHoraFin);
+        hash = 97 * hash + Objects.hashCode(this.permisosPK);
+        hash = 97 * hash + Objects.hashCode(this.permisoFechafin);
+        hash = 97 * hash + Objects.hashCode(this.permisosMotivo);
+        hash = 97 * hash + Objects.hashCode(this.permisosEstado);
+        hash = 97 * hash + Objects.hashCode(this.permisosComentario);
+        hash = 97 * hash + Objects.hashCode(this.constancias);
+        hash = 97 * hash + Objects.hashCode(this.persona);
+        hash = 97 * hash + Objects.hashCode(this.tipoPersona);
+        hash = 97 * hash + Objects.hashCode(this.permisosSolicitante);
+        hash = 97 * hash + Objects.hashCode(this.tipoPermiso1);
+        hash = 97 * hash + Objects.hashCode(this.permisosGestor);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Permisos)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        Permisos other = (Permisos) object;
-        if ((this.permisosPK == null && other.permisosPK != null) || (this.permisosPK != null && !this.permisosPK.equals(other.permisosPK))) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
-        return true;
+        final Permisos other = (Permisos) obj;
+        if (!Objects.equals(this.permisosMotivo, other.permisosMotivo)) {
+            return false;
+        }
+        if (!Objects.equals(this.permisosEstado, other.permisosEstado)) {
+            return false;
+        }
+        if (!Objects.equals(this.permisosComentario, other.permisosComentario)) {
+            return false;
+        }
+        if (!Objects.equals(this.permisoHoraInicio, other.permisoHoraInicio)) {
+            return false;
+        }
+        if (!Objects.equals(this.permisoHoraFin, other.permisoHoraFin)) {
+            return false;
+        }
+        if (!Objects.equals(this.permisosPK, other.permisosPK)) {
+            return false;
+        }
+        if (!Objects.equals(this.permisoFechafin, other.permisoFechafin)) {
+            return false;
+        }
+        if (!Objects.equals(this.constancias, other.constancias)) {
+            return false;
+        }
+        if (!Objects.equals(this.persona, other.persona)) {
+            return false;
+        }
+        if (!Objects.equals(this.tipoPersona, other.tipoPersona)) {
+            return false;
+        }
+        if (!Objects.equals(this.permisosSolicitante, other.permisosSolicitante)) {
+            return false;
+        }
+        if (!Objects.equals(this.tipoPermiso1, other.tipoPermiso1)) {
+            return false;
+        }
+        return Objects.equals(this.permisosGestor, other.permisosGestor);
     }
 
+    
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.Permisos[ permisosPK=" + permisosPK + " ]";
+    }
+
+    public Date getPermisoHoraInicio() {
+        return permisoHoraInicio;
+    }
+
+    public void setPermisoHoraInicio(Date permisoHoraInicio) {
+        this.permisoHoraInicio = permisoHoraInicio;
+    }
+
+    public Date getPermisoHoraFin() {
+        return permisoHoraFin;
+    }
+
+    public void setPermisoHoraFin(Date permisoHoraFin) {
+        this.permisoHoraFin = permisoHoraFin;
     }
 
 }

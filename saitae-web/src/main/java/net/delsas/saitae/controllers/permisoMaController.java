@@ -345,4 +345,10 @@ public class permisoMaController extends Auxiliar implements Serializable {
         constancia.setExtención("");
     }
 
+    public boolean getVerHorasPeriodo() {
+        System.out.println(p.getPermisosPK().getPermisoFechaInicio());
+        System.out.println(p.getPermisoFechafin());
+        return p.getPermisosPK().getPermisoFechaInicio().compareTo(p.getPermisoFechafin()) != 0;
+    }
+
 }

@@ -13,7 +13,7 @@
     <ui:define name="content">
         <f:event listener="#{permisoMaController.postRender()}" type="preRenderView"/>
         <h:form id="form">
-            <p:panel style="width: 50%; margin: 0 auto" >
+            <p:panel style="width: 60%; margin: 0 auto" >
                 <h1 style="text-align: center" >Solicitud de Permisos Y Licencias</h1>
 
                 <h:panelGrid columns="2" > 
@@ -27,24 +27,33 @@
                         <f:selectItem  itemLabel="Seleccione" itemValue=""/>
                         <f:selectItems value="#{permisoMaController.listaPermisos}" var="pm" itemValue="#{pm}"
                                        itemLabel="#{pm.tipoPermisoNombre}"/>
+                        <p:ajax event="itemSelect" listener="#{permisoMaController.onBlour}"/>
                     </p:selectOneMenu>
 
                     <p:outputLabel value="Solicita goce de sueldo? "/>
                     <p:selectBooleanButton value="#{permisoMaController.goceDeSueldo}" 
-                                           onLabel="Sí" offLabel="No" style="width: 190px"/>
+                                           onLabel="Sí" offLabel="No" style="width: 190px">
+                        <p:ajax event="change" update="form" 
+                                listener="#{permisoMaController.onBlour}"/>
+                    </p:selectBooleanButton>
 
                     <p:outputLabel value="Ha gozado de Licencias anteriormente? "/>
                     <p:selectBooleanButton value="#{permisoMaController.licenciasAnteriores}" 
-                                           onLabel="Si" offLabel="No" style="width: 190px"/>
+                                           onLabel="Si" offLabel="No" style="width: 190px">
+                        <p:ajax event="change" update="form" 
+                                listener="#{permisoMaController.onBlour}"/>
+                    </p:selectBooleanButton>
 
-                    <p:outputLabel for="mask" value="Fecha de inicio:" />
+                    <p:outputLabel for="mask" value="Fecha     de      inicio:" />
                     <p:datePicker id="mask" value="#{permisoMaController.p.permisosPK.permisoFechaInicio}"
                                   showIcon="true" required="true" pattern="dd/MM/yyyy" locale="es"
                                   disabledDays="#{permisoMaController.invalidDays}"
                                   requiredMessage="Debe seleccionar una fecha válida"
                                   placeholder="Selecciona la fecha de inicio del permiso" 
-                                  validatorMessage="Nunguna fecha puede ser en los días Sábado y Domingo"/>
-
+                                  validatorMessage="Nunguna fecha puede ser en los días Sábado y Domingo">
+                        <p:ajax event="dateSelect" update="form" 
+                                listener="#{permisoMaController.onBlour}"/>
+                    </p:datePicker>
 
                     <p:outputLabel for="mask1" value="Fecha de finalización: " />
                     <p:datePicker id="mask1" value="#{permisoMaController.p.permisoFechafin}"
@@ -52,7 +61,24 @@
                                   disabledDays="#{permisoMaController.invalidDays}"
                                   requiredMessage="Debe seleccionar una fecha válida"
                                   placeholder="Selecciona la fecha de finalización del permiso" 
-                                  validatorMessage="Nunguna fecha puede ser en los días Sábado y Domingo"/>
+                                  validatorMessage="Nunguna fecha puede ser en los días Sábado y Domingo">
+                        <p:ajax event="dateSelect" update="form" 
+                                listener="#{permisoMaController.onBlour}"/>
+                    </p:datePicker>
+
+                    <p:outputLabel id="hini0" for="hini" value="Hora      de      inicio: " 
+                                   rendered="#{!permisoMaController.verHorasPeriodo}"/>
+                    <p:datePicker id="hini" value="#{permisoMaController.p.permisoHoraInicio}"
+                                  showIcon="true" showTime="true" timeOnly="true" 
+                                  hourFormat="12" pattern="hh:mm a"
+                                  rendered="#{!permisoMaController.verHorasPeriodo}"/>
+
+                    <p:outputLabel id="hfin0" for="hfin" value="Hora de finalización: " 
+                                   rendered="#{!permisoMaController.verHorasPeriodo}"/>
+                    <p:datePicker id="hfin" value="#{permisoMaController.p.permisoHoraFin}"
+                                  showIcon="true" showTime="true" timeOnly="true" 
+                                  hourFormat="12" pattern="hh:mm a"
+                                  rendered="#{!permisoMaController.verHorasPeriodo}"/>
 
                     <p:outputLabel value="Constancia: " />
                     <h:panelGrid columns="3">

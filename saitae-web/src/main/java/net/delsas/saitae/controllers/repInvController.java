@@ -99,7 +99,6 @@ public class repInvController extends Auxiliar implements Serializable {
                             ex.getMessage() == null ? "Error de causa desconocida." : ex.getMessage()));
         }
 
-        tipoRecursos = trFL.findAll();
         tipoCargos = tcFL.findAll();
         categorias = cFL.findAll();
         recursos = new ArrayList<>();
@@ -111,6 +110,7 @@ public class repInvController extends Auxiliar implements Serializable {
     }
 
     public List<TipoRecurso> getTipoRecursos() {
+        tipoRecursos = trFL.findAll();
         return tipoRecursos;
     }
 
@@ -192,42 +192,46 @@ public class repInvController extends Auxiliar implements Serializable {
 
     public void reporte(Object doc) {
         HSSFWorkbook wb = (HSSFWorkbook) doc;
-        wb = new XLSModel().getReporteInventario(wb, categorias, tipoCargos, trSelected);
+        if (trSelected.getIdtipoRecurso() == 3) {
+            wb = new XLSModel().getReporteInventario(wb, categorias, tipoCargos, trSelected);
 
-        HSSFSheet h = wb.getSheetAt(0);
-        int i = h.getLastRowNum();
-        i += 3;
-        HSSFRow r = h.createRow(i);
-        HSSFCell c = r.createCell(0);
-        c.setCellValue("Consejo Directivo Escolar");
+            HSSFSheet h = wb.getSheetAt(0);
+            int i = h.getLastRowNum();
+            i += 3;
+            HSSFRow r = h.createRow(i);
+            HSSFCell c = r.createCell(0);
+            c.setCellValue("Consejo Directivo Escolar");
 
-        r = h.createRow(i + 4);
-        c = r.createCell(2);
-        c.setCellValue("F.");
-        c = r.createCell(3);
-        c.setCellValue("F.");
-        c = r.createCell(5);
-        c.setCellValue("F.");
-        c = r.createCell(7);
-        c.setCellValue("F.");
+            r = h.createRow(i + 4);
+            c = r.createCell(2);
+            c.setCellValue("F.");
+            c = r.createCell(3);
+            c.setCellValue("F.");
+            c = r.createCell(5);
+            c.setCellValue("F.");
+            c = r.createCell(7);
+            c.setCellValue("F.");
 
-        r = h.createRow(i + 6);
-        c = r.createCell(2);
-        c.setCellValue("Presidente CDE");
-        c = r.createCell(3);
-        c.setCellValue("Secretario/a CDE");
-        c = r.createCell(5);
-        c.setCellValue("Encargado/a de compras");
-        c = r.createCell(7);
-        c.setCellValue("Coordinador de AI");
+            r = h.createRow(i + 6);
+            c = r.createCell(2);
+            c.setCellValue("Presidente CDE");
+            c = r.createCell(3);
+            c.setCellValue("Secretario/a CDE");
+            c = r.createCell(5);
+            c.setCellValue("Encargado/a de compras");
+            c = r.createCell(7);
+            c.setCellValue("Coordinador de AI");
 
-        h.getRow(i + 6).cellIterator().forEachRemaining((c0) -> {
-            c0.getCellStyle().setAlignment(HorizontalAlignment.CENTER);
-        });
+            h.getRow(i + 6).cellIterator().forEachRemaining((c0) -> {
+                c0.getCellStyle().setAlignment(HorizontalAlignment.CENTER);
+            });
 
-        h.addMergedRegion(new CellRangeAddress(i, i, 0, trSelected.getIdtipoRecurso().equals(3) ? 12 : 8));
-        h.addMergedRegion(new CellRangeAddress(i + 6, i + 6, 3, 4));
-        h.addMergedRegion(new CellRangeAddress(i + 6, i + 6, 5, 6));
-        h.addMergedRegion(new CellRangeAddress(i + 6, i + 6, 7, 8));
+            h.addMergedRegion(new CellRangeAddress(i, i, 0, trSelected.getIdtipoRecurso().equals(3) ? 12 : 8));
+            h.addMergedRegion(new CellRangeAddress(i + 6, i + 6, 3, 4));
+            h.addMergedRegion(new CellRangeAddress(i + 6, i + 6, 5, 6));
+            h.addMergedRegion(new CellRangeAddress(i + 6, i + 6, 7, 8));
+        } else {
+
+        }
     }
 }

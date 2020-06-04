@@ -26,7 +26,7 @@
                             </p:selectOneMenu>
                         </h:panelGrid>
                         <p:growl id="msgs" showDetail="true" />
-                        <h1 align="center">Administración de permisos de estudiantes</h1>
+                        <h1 align="center">Administración de permisos</h1>
                         <p:accordionPanel id="ap" dynamic="true">
                             <p:tab title="Permisos Solicitados">
                                 <p:dataTable id="solicitados" value="#{admPermisoController.solicitados}" var="p"
@@ -50,7 +50,7 @@
                                     </p:column>
 
                                     <p:column headerText="Periodo del permiso">
-                                        #{admPermisoController.getFechas(p.permisosPK.permisoFechaInicio, p.permisoFechafin)}
+                                        #{admPermisoController.getFechaS(p.permisosPK.permisoFechaInicio, p.permisoFechafin)}
                                     </p:column>
 
                                     <p:column headerText="Tipo de permiso solicitado">
@@ -83,7 +83,7 @@
                                         </p:column>
 
                                         <p:column headerText="Periodo del permiso">
-                                            #{admPermisoController.getFechas(a.permisosPK.permisoFechaInicio, a.permisoFechafin)}
+                                            #{admPermisoController.getFechaS(a.permisosPK.permisoFechaInicio, a.permisoFechafin)}
                                         </p:column>
 
                                         <p:column headerText="Tipo de permiso solicitado">
@@ -116,7 +116,7 @@
                                         </p:column>
 
                                         <p:column headerText="Periodo del permiso">
-                                            #{admPermisoController.getFechas(r.permisosPK.permisoFechaInicio, r.permisoFechafin)}
+                                            #{admPermisoController.getFechaS(r.permisosPK.permisoFechaInicio, r.permisoFechafin)}
                                         </p:column>
 
                                         <p:column headerText="Tipo de permiso solicitado">
@@ -149,7 +149,7 @@
                                         </p:column>
 
                                         <p:column headerText="Periodo del permiso">
-                                            #{admPermisoController.getFechas(r.permisosPK.permisoFechaInicio, r.permisoFechafin)}
+                                            #{admPermisoController.getFechaS(r.permisosPK.permisoFechaInicio, r.permisoFechafin)}
                                         </p:column>
 
                                         <p:column headerText="Tipo de permiso solicitado">
@@ -256,9 +256,17 @@
                                           rendered="#{!admPermisoController.solc.persona.equals(admPermisoController.solc.permisosSolicitante)}"/>
 
                             <p:outputLabel value="Fechas del permiso:"/>
-                            <h:outputText value="#{admPermisoController.getFechas(
+                            <h:outputText value="#{admPermisoController.getFechaS(
                                                    admPermisoController.solc.permisosPK.permisoFechaInicio,
                                                    admPermisoController.solc.permisoFechafin)}"/>
+                            
+                            <p:outputLabel value="Período del permiso:" 
+                                           rendered="#{admPermisoController.solc.permisoHoraInicio!=null}"/>
+                            <h:outputText value="#{admPermisoController.getHoras(
+                                                   admPermisoController.solc.permisoHoraInicio,
+                                                   admPermisoController.solc.permisoHoraFin)}"
+                                          rendered="#{admPermisoController.solc.permisoHoraInicio!=null}"/>
+                            
                             <p:column/>
                             <p:commandButton id="btnV" value="Ver constancia" update="h0" 
                                              disabled="#{!admPermisoController.hayConstancia}"
@@ -299,9 +307,16 @@
                                           rendered="#{!admPermisoController.acep.persona.equals(admPermisoController.acep.permisosSolicitante)}"/>
 
                             <p:outputLabel value="Fechas del permiso:"/>
-                            <h:outputText value="#{admPermisoController.getFechas(
+                            <h:outputText value="#{admPermisoController.getFechaS(
                                                    admPermisoController.acep.permisosPK.permisoFechaInicio,
                                                    admPermisoController.acep.permisoFechafin)}"/>
+                            
+                            <p:outputLabel value="Período del permiso:" 
+                                           rendered="#{admPermisoController.acep.permisoHoraInicio!=null}"/>
+                            <h:outputText value="#{admPermisoController.getHoras(
+                                                   admPermisoController.acep.permisoHoraInicio,
+                                                   admPermisoController.acep.permisoHoraFin)}"
+                                          rendered="#{admPermisoController.acep.permisoHoraInicio!=null}"/>
 
                             <p:outputLabel value="Estado del permiso: "/>
                             <h:outputText value="#{admPermisoController.getEstadoPermiso(admPermisoController.acep)}"/>

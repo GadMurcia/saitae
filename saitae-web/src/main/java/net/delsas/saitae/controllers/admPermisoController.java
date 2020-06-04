@@ -19,6 +19,7 @@ package net.delsas.saitae.controllers;
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -156,23 +157,7 @@ public class admPermisoController extends Auxiliar implements Serializable {
         }
     }
 
-    public String getFecha(Date a) {
-        return a != null ? new SimpleDateFormat("dd/MM/yyyy").format(a) : " ";
-    }
-
-    public String getFechas(Date i, Date f) {
-        String g = "";
-        if (i != null) {
-            String in = getFecha(i);
-            String fi = getFecha(f);
-            if (in.equals(fi)) {
-                g = in;
-            } else {
-                g = "Entre " + in + " y " + fi;
-            }
-        }
-        return g;
-    }
+    
 
     public void concederPermiso() {
         FacesMessage ms = null;

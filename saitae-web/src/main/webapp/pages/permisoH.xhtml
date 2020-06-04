@@ -75,19 +75,19 @@
                                           title="PermisoFechaSolicitud">
                                 <f:convertDateTime pattern="dd/MM/yyyy" />
                             </h:outputText>
-                            <h:outputLabel value="Fecha de Inicio:" for="FI" />
+                            <h:outputLabel value="Fechas del permiso:" for="FI" />
                             <h:outputText id="FI" 
-                                          value="#{permisoHController.selected.permisosPK.permisoFechaInicio}" 
-                                          title="PermisoFechaInicio">
-                                <f:convertDateTime pattern="dd/MM/yyyy" />
-                            </h:outputText>
-
-                            <h:outputLabel value="Fecha de finalizacion:" for="FF" />
-                            <h:outputText id="FF" 
-                                          value="#{permisoHController.selected.permisoFechafin}" 
-                                          title="PermisoFechafin">
-                                <f:convertDateTime pattern="dd/MM/yyyy" />
-                            </h:outputText>
+                                          value="#{permisoHController.getFechaS(
+                                                   permisoHController.selected.permisosPK.permisoFechaInicio,
+                                                   permisoHController.selected.permisoFechafin)}" 
+                                          title="PermisoFechaInicio"/>
+                            
+                            <p:outputLabel value="Período del permiso:" 
+                                           rendered="#{permisoHController.selected.permisoHoraInicio!=null}"/>
+                            <h:outputText value="#{permisoHController.getHoras(
+                                                   permisoHController.selected.permisoHoraInicio,
+                                                   permisoHController.selected.permisoHoraFin)}"
+                                          rendered="#{permisoHController.selected.permisoHoraInicio!=null}"/>
 
                             <h:outputLabel value="Tipo de permiso:" for="TP" />
                             <h:outputText id="TP" 

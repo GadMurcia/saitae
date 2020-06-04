@@ -437,14 +437,6 @@ public class solicitudPPController extends Auxiliar implements Serializable {
         this.calendas = calendas;
     }
 
-    public String getFecha(Date d) {
-        return d == null ? " " : new SimpleDateFormat("dd/MM/yyyy").format(d);
-    }
-
-    public String getHora(Date d) {
-        return d == null ? " " : new SimpleDateFormat("hh:mm a").format(d);
-    }
-
     public void previusAdd() {
         selected2 = new Calendarizacion();
         textoDetalle = "Agregación";

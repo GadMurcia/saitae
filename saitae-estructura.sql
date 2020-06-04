@@ -2,7 +2,7 @@ CREATE DATABASE  IF NOT EXISTS `intex` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `intex`;
 -- MySQL dump 10.16  Distrib 10.1.44-MariaDB, for debian-linux-gnu (x86_64)
 --
--- Host: 127.0.0.1    Database: intex
+-- Host: localhost    Database: intex
 -- ------------------------------------------------------
 -- Server version	10.1.44-MariaDB-0+deb9u1
 
@@ -11,7 +11,7 @@ USE `intex`;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+06:00' */;
+/*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
@@ -145,7 +145,7 @@ CREATE TABLE `capacitaciones` (
   `capacitacionCertificado` bit(1) NOT NULL DEFAULT b'0',
   `capacitacionPatrocinador` varchar(80) NOT NULL,
   `capacitacionModalidad` enum('P','S','V') NOT NULL DEFAULT 'P',
-  `capacitacionComentario` varchar(145) DEFAULT NULL COMMENT 'Histórico de las capacitaciones que cada maestro de la institución ha hecho.',
+  `capacitacionComentario` varchar(145) DEFAULT NULL COMMENT 'HistÃ³rico de las capacitaciones que cada maestro de la instituciÃ³n ha hecho.',
   PRIMARY KEY (`idMaestro`,`fechaCapacitaciones`),
   CONSTRAINT `fk_capacitaciones_1` FOREIGN KEY (`idMaestro`) REFERENCES `maestro` (`idmaestro`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -160,7 +160,7 @@ DROP TABLE IF EXISTS `cargo`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `cargo` (
   `idcargo` int(30) NOT NULL AUTO_INCREMENT,
-  `cargoNombre` varchar(50) NOT NULL COMMENT 'Lista de los cargos que el personal docente puede desempeñar.',
+  `cargoNombre` varchar(50) NOT NULL COMMENT 'Lista de los cargos que el personal docente puede desempeÃ±ar.',
   `cargoTipoPersona` int(30) DEFAULT NULL,
   `cargoComentario` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idcargo`),
@@ -221,7 +221,7 @@ CREATE TABLE `constancias` (
   `comentario` varchar(140) DEFAULT NULL,
   PRIMARY KEY (`idConstancias`,`fechaSolicitud`,`tioPermiso`,`fechaInicio`),
   KEY `fk_constancias_1_idx` (`idConstancias`),
-  CONSTRAINT `fk_constancias_1` FOREIGN KEY (`idConstancias`, `fechaSolicitud`, `tioPermiso`, `fechaInicio`) REFERENCES `permisos` (`ipPersona`, `permisoFechaSolicitud`, `tipoPermiso`, `permisoFechaInicio`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_constancias_1` FOREIGN KEY (`idConstancias`, `fechaSolicitud`, `tioPermiso`, `fechaInicio`) REFERENCES `permisos` (`ipPersona`, `permisoFechaSolicitud`, `tipoPermiso`, `permisoFechaInicio`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -472,7 +472,7 @@ CREATE TABLE `estudiante` (
   `estudianteRepresentante` int(30) DEFAULT NULL,
   `estudiantePadre` int(30) DEFAULT NULL,
   `estudianteMadre` int(30) DEFAULT NULL,
-  `estudianteComentario` varchar(145) DEFAULT NULL COMMENT 'Detalle de la información de los estudiantes y sus representates.',
+  `estudianteComentario` varchar(145) DEFAULT NULL COMMENT 'Detalle de la informaciÃ³n de los estudiantes y sus representates.',
   PRIMARY KEY (`idestudiante`),
   KEY `fk_estudiante1_2_idx` (`estudiantePadre`),
   KEY `fk_estudiante1_3_idx` (`estudianteMadre`),
@@ -511,7 +511,7 @@ CREATE TABLE `evaluacionMaestro` (
   `propuestaMejora` varchar(145) DEFAULT NULL,
   `evaluacionMaestroComentario` varchar(145) DEFAULT NULL,
   `planGrado` bit(1) NOT NULL DEFAULT b'1',
-  `jornalización` bit(1) NOT NULL DEFAULT b'1',
+  `jornalizaciÃ³n` bit(1) NOT NULL DEFAULT b'1',
   `cartaDidactica` bit(1) NOT NULL DEFAULT b'1',
   `guionClase` bit(1) NOT NULL DEFAULT b'1',
   `agendaDiaria` bit(1) NOT NULL DEFAULT b'1',
@@ -620,7 +620,7 @@ CREATE TABLE `grado` (
   `aulaGrado` int(30) NOT NULL,
   `gradoActivo` bit(1) NOT NULL,
   `gradoMaestroGuia` int(30) DEFAULT NULL,
-  `gradoCoemntario` varchar(145) DEFAULT NULL COMMENT 'Historico de los grados y secciones junto a los maestros que han sido sus maestros guías.',
+  `gradoCoemntario` varchar(145) DEFAULT NULL COMMENT 'Historico de los grados y secciones junto a los maestros que han sido sus maestros guÃ­as.',
   PRIMARY KEY (`idgrado`,`gradoSeccion`,`gradoAño`,`gradoModalidad`),
   KEY `fk_grado_1` (`gradoMaestroGuia`),
   KEY `fk_grado_2` (`aulaGrado`),
@@ -641,7 +641,7 @@ CREATE TABLE `gradoEvaluacion` (
   `gradoSeccion` enum('A','B','C') NOT NULL,
   `gradoAño` int(4) NOT NULL,
   `gradoModalidad` enum('C','S','G') NOT NULL,
-  `fechaEvaluacion` date NOT NULL COMMENT 'histórico de evaluaciones a cada grado del instituto.',
+  `fechaEvaluacion` date NOT NULL COMMENT 'histÃ³rico de evaluaciones a cada grado del instituto.',
   `evaluador` int(30) NOT NULL,
   `organizadorLimpieza` bit(1) NOT NULL,
   `organizadorClase` bit(1) NOT NULL,
@@ -696,7 +696,7 @@ CREATE TABLE `maestoCargo` (
   `fechaNombramiento` date NOT NULL,
   `fechaDestitucion` date DEFAULT NULL,
   `razondestitucion` varchar(145) DEFAULT NULL,
-  `maestoCargoComentario` varchar(145) DEFAULT NULL COMMENT 'Histórico de los cargos que los maestros tienen o han tenido dentro de la institucion.',
+  `maestoCargoComentario` varchar(145) DEFAULT NULL COMMENT 'HistÃ³rico de los cargos que los maestros tienen o han tenido dentro de la institucion.',
   PRIMARY KEY (`idMaesto`,`idCargo`,`idNombramiento`,`idFinanciamiento`,`fechaNombramiento`),
   KEY `fk_maestoCargo_2_idx` (`idCargo`),
   KEY `fk_maestoCargo_3_idx` (`idNombramiento`),
@@ -740,7 +740,7 @@ CREATE TABLE `maestro` (
   `maestroUsoVideoconferencias` bit(1) NOT NULL DEFAULT b'0',
   `maestroRecursosWeb` bit(1) NOT NULL DEFAULT b'1',
   `maestroCapacitacionesVirtuales` bit(1) NOT NULL DEFAULT b'1',
-  `maestroComentario` varchar(45) DEFAULT NULL COMMENT 'Detalle de la información de todos los docentes de la institución.',
+  `maestroComentario` varchar(45) DEFAULT NULL COMMENT 'Detalle de la informaciÃ³n de todos los docentes de la instituciÃ³n.',
   PRIMARY KEY (`idmaestro`),
   KEY `fk_maestro_2_idx` (`maestroTipoSalario`),
   KEY `fk_maestro_3_idx` (`maestroEspecialidad`),
@@ -801,7 +801,7 @@ DROP TABLE IF EXISTS `mestroHorarioMaterias`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `mestroHorarioMaterias` (
   `idMaestro` int(30) NOT NULL,
-  `idMateria` int(30) NOT NULL COMMENT 'Detalle de las materias y horarios que cada docente imparte en la institución.',
+  `idMateria` int(30) NOT NULL COMMENT 'Detalle de las materias y horarios que cada docente imparte en la instituciÃ³n.',
   `idHorario` int(30) NOT NULL,
   `diaSemana` int(30) NOT NULL,
   `idGrado` int(30) NOT NULL,
@@ -843,7 +843,7 @@ CREATE TABLE `notificaciones` (
   KEY `fk_notificaciones_2_idx` (`remitente`),
   CONSTRAINT `fk_notificaciones_1` FOREIGN KEY (`destinatario`) REFERENCES `persona` (`idpersona`) ON UPDATE CASCADE,
   CONSTRAINT `fk_notificaciones_2` FOREIGN KEY (`remitente`) REFERENCES `persona` (`idpersona`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=244 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=258 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -873,7 +873,9 @@ CREATE TABLE `permisos` (
   `permisoFechaSolicitud` date NOT NULL,
   `tipoPermiso` int(30) NOT NULL,
   `permisoFechaInicio` date NOT NULL,
+  `permisoHoraInicio` time DEFAULT NULL,
   `permisoFechafin` date NOT NULL,
+  `permisoHoraFin` time DEFAULT NULL,
   `tipoPersona` int(30) NOT NULL,
   `permisosMotivo` varchar(250) DEFAULT NULL,
   `permisosEstado` enum('0','1','2','3') NOT NULL DEFAULT '0',
@@ -921,7 +923,7 @@ CREATE TABLE `persona` (
   `personaNacionalidad` varchar(45) DEFAULT NULL,
   `personaEmail` varchar(45) DEFAULT NULL,
   `personaDiscapacidades` varchar(250) DEFAULT NULL,
-  `personaComentarios` varchar(250) DEFAULT NULL COMMENT 'Detalle de la información relevante de todo el recurso humano de la institución.',
+  `personaComentarios` varchar(250) DEFAULT NULL COMMENT 'Detalle de la informaciÃ³n relevante de todo el recurso humano de la instituciÃ³n.',
   PRIMARY KEY (`idpersona`),
   KEY `fk_persona_1_idx` (`tipoPersona`),
   CONSTRAINT `fk_persona_1` FOREIGN KEY (`tipoPersona`) REFERENCES `tipoPersona` (`idtipoPersona`) ON UPDATE CASCADE
@@ -1163,7 +1165,7 @@ DROP TABLE IF EXISTS `tipoMateria`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tipoMateria` (
   `idtipoMateria` int(30) NOT NULL AUTO_INCREMENT,
-  `tipoMateriaNombre` varchar(50) NOT NULL COMMENT 'Listado de los tipos de materias que se imparten en la institución.',
+  `tipoMateriaNombre` varchar(50) NOT NULL COMMENT 'Listado de los tipos de materias que se imparten en la instituciÃ³n.',
   `tipoMateriaComentario` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idtipoMateria`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
@@ -1178,7 +1180,7 @@ DROP TABLE IF EXISTS `tipoNombramiento`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tipoNombramiento` (
   `idtipoNombramiento` int(30) NOT NULL AUTO_INCREMENT,
-  `tipoNombramientoNombre` varchar(60) NOT NULL COMMENT 'Listado de las formas en las que se uede nombrar el cargo de un docente dentro de la institución.',
+  `tipoNombramientoNombre` varchar(60) NOT NULL COMMENT 'Listado de las formas en las que se uede nombrar el cargo de un docente dentro de la instituciÃ³n.',
   `tipoNombramientoCoemntario` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idtipoNombramiento`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
@@ -1319,20 +1321,12 @@ DROP TABLE IF EXISTS `zona`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `zona` (
-  `idzona` int(30) NOT NULL AUTO_INCREMENT COMMENT 'La Identificación de la zona geográfica (1°, 2° y 3°) en la que está dividido el instituto.',
+  `idzona` int(30) NOT NULL AUTO_INCREMENT COMMENT 'La IdentificaciÃ³n de la zona geogrÃ¡fica (1Â°, 2Â° y 3Â°) en la que estÃ¡ dividido el instituto.',
   `zonaNombre` varchar(45) NOT NULL,
   `zonaCoementario` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idzona`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping events for database 'intex'
---
-
---
--- Dumping routines for database 'intex'
---
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -1343,4 +1337,4 @@ CREATE TABLE `zona` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-05-15 11:01:51
+-- Dump completed on 2020-06-03 22:02:15

@@ -23,6 +23,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -940,7 +941,44 @@ public class Auxiliar implements Serializable {
     }
 
     public void onBlour(AjaxBehaviorEvent e) {
+        System.out.println("Evento desde: " + e.getComponent().getClientId());
+    }
 
+    public String getFecha(Date a) {
+        return a != null ? new SimpleDateFormat("dd/MM/yyyy").format(a) : " ";
+    }
+
+    public String getHora(Date a) {
+        return a != null ? new SimpleDateFormat("hh:mm a").format(a) : " ";
+    }
+
+    public String getFechaS(Date i, Date f) {
+        String g = "";
+        if (i != null) {
+            String in = getFecha(i);
+            String fi = getFecha(f);
+            if (in.equals(fi)) {
+                g = in;
+            } else {
+                g = "Entre " + in + " y " + fi;
+            }
+        }
+        return g;
+    }
+
+    public String getHoras(Date i, Date f) {
+        String g = "";
+        if (i != null) {
+            String in = getHora(i);
+            String fi = getHora(f);
+            long min = Duration.between(i.toInstant(), f.toInstant()).toMinutes();
+            long hor = min / 60;
+            min = min - (hor * 60);
+            g = "Entre las " + in + " y las "
+                    + fi + " (" + hor + " horas y "
+                    + min + " minutos).";
+        }
+        return g;
     }
 
     public String onFlowProcess(FlowEvent event) {

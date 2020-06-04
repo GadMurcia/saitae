@@ -162,7 +162,7 @@ public class sessionController extends Auxiliar implements Serializable {
         mm = new DefaultMenuModel();
         DefaultMenuItem mi;
         mi = new DefaultMenuItem("Inicio");
-        mi.setIcon("pi pi-home");
+        mi.setIcon("fa fa-home");
         mi.setUrl("perfil.intex");
         mm.addElement(mi);
         List<Acceso> menusDisponibles = new ArrayList<>();
@@ -182,7 +182,7 @@ public class sessionController extends Auxiliar implements Serializable {
         }
         DefaultSubMenu s = new DefaultSubMenu(us.getPersonaNombre().split(" ")[0] + " "
                 + us.getPersonaApellido().split(" ")[0], "fa fa-user");
-        mi = new DefaultMenuItem("Cerrar Sesión", "pi pi-sign-out");
+        mi = new DefaultMenuItem("Cerrar Sesión", "fa fa-sign-out");
         mi.setCommand("#{sessionController.cerrarSesion()}");
         s.addElement(mi);
         mm.addElement(s);
