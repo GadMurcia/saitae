@@ -30,6 +30,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
 import net.delsas.saitae.beans.GradoFacadeLocal;
@@ -1217,5 +1219,21 @@ public class Auxiliar implements Serializable {
         } else {
             return "";
         }
+    }
+
+    public Date getFechaUnicamente(Date fecha) {
+        try {
+            fecha = new SimpleDateFormat("dd/MM/yyyy").parse(new SimpleDateFormat("dd/MM/yyyy").format(fecha));
+        } catch (ParseException ex) {
+        }
+        return fecha;
+    }
+
+    public Date getHoraUnicamente(Date fecha) {
+        try {
+            fecha = new SimpleDateFormat("hh:mm a").parse(new SimpleDateFormat("hh:mm a").format(fecha));
+        } catch (ParseException ex) {
+        }
+        return fecha;
     }
 }

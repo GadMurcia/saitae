@@ -12,21 +12,21 @@
                 <h:panelGrid columns="2">
                     <p:outputLabel for="menu" value="Tipo de persona: "/>
                     <p:selectOneMenu id="menu" value="#{repPermisosController.menu}">
+                        <f:selectItem itemLabel="Administrador" itemValue="3"/>
                         <f:selectItem itemLabel="Alumno" itemValue="1"/>
                         <f:selectItem itemLabel="Maestro" itemValue="2"/>
-                        <f:selectItem itemLabel="Administrador" itemValue="3"/>
                         <p:ajax event="itemSelect" listener="#{repPermisosController.onSelect}" 
-                                update="grado fg person perm"/>
+                                update="form"/>
                     </p:selectOneMenu>
 
-
-                    <p:outputLabel id="fg" for="grado" value="Grado: "/>
+                    <p:outputLabel id="fg" for="grado" value="Grado: " rendered="#{repPermisosController.GSelected!=null}"/>
                     <p:selectOneMenu id="grado" value="#{repPermisosController.GSelected}" 
-                                     converter="omnifaces.SelectItemsConverter">
+                                     converter="omnifaces.SelectItemsConverter" 
+                                     rendered="#{repPermisosController.GSelected!=null}">
                         <f:selectItems value="#{repPermisosController.grados}" var="g" 
                                        itemLabel="#{repPermisosController.getGradoNombre(g.gradoPK)}" 
                                        itemValue="#{g.gradoPK}"/>
-                        <p:ajax event="itemSelect" listener="#{repPermisosController.onSelect}" update="person perm"/>
+                        <p:ajax event="itemSelect" listener="#{repPermisosController.onSelect}" update="form"/>
                     </p:selectOneMenu>
 
                     <p:outputLabel for="person" value="Persona: "/>
@@ -37,8 +37,31 @@
                                        #{repPermisosController.getNombreCompletoPersona(p0)} 
                                        #{repPermisosController.getTipoAdmin(p0)}" 
                                        itemValue="#{p0}"/>
-                        <p:ajax event="itemSelect" listener="#{repPermisosController.onSelect}" update="perm"/>
+                        <p:ajax event="itemSelect" listener="#{repPermisosController.onSelect}" update="form"/>
                     </p:selectOneMenu>
+
+                    <h:panelGrid columns="2">
+                        <p:outputLabel for="fi" value="Desde: " rendered="#{repPermisosController.PSelected!=null}"/>
+                        <p:datePicker id="fi" value="#{repPermisosController.fechaInicio}"
+                                      showIcon="true" required="true" pattern="dd/MM/yyyy" locale="es"
+                                      disabledDays="#{repPermisosController.disabledDays}"
+                                      requiredMessage="Debe seleccionar una fecha válida"
+                                      placeholder="Fecha de inicio"  rendered="#{repPermisosController.PSelected!=null}"
+                                      validatorMessage="Nunguna fecha puede ser en los días Sábado y Domingo">
+                            <p:ajax event="dateSelect" update="form" listener="#{repPermisosController.dateSelect}"/>
+                        </p:datePicker>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2">
+                        <p:outputLabel for="ff" value="Hasta: " rendered="#{repPermisosController.PSelected!=null}"/>
+                        <p:datePicker id="ff" value="#{repPermisosController.fechaFin}"
+                                      showIcon="true" required="true" pattern="dd/MM/yyyy" locale="es"
+                                      disabledDays="#{repPermisosController.disabledDays}"
+                                      requiredMessage="Debe seleccionar una fecha válida"
+                                      placeholder="Fecha de finalización"  rendered="#{repPermisosController.PSelected!=null}"
+                                      validatorMessage="Nunguna fecha puede ser en los días Sábado y Domingo">
+                            <p:ajax event="dateSelect" update="form" listener="#{repPermisosController.dateSelect}"/>
+                        </p:datePicker>
+                    </h:panelGrid>
                 </h:panelGrid>
 
                 <p:dataTable id="perm" value="#{repPermisosController.permisos}" var="p" 

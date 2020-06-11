@@ -5,6 +5,7 @@
  */
 package net.delsas.saitae.beans;
 
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Local;
 import net.delsas.saitae.entities.Permisos;
@@ -89,4 +90,5 @@ public interface PermisosFacadeLocal {
 
     public List<Permisos> findByIpPersonaAndEstado(int i, Integer añoActual, String a);
 
+    public List<Permisos> findByIpPersonaAndEstadoAndFechas(int idPersona, Date fechaInicio, Date FechaFin, String a);
 }

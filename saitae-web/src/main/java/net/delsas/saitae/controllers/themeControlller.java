@@ -61,13 +61,13 @@ public class themeControlller implements Serializable {
         themes.put("Predeterminado", "hot-sneaks");
         themes.put("Aristo", "aristo");
         themes.put("Black Tie", "black-tie");
-        themes.put("Blitzer", "blitzer");
+//        themes.put("Blitzer", "blitzer");
         themes.put("Bluesky", "bluesky");
-        themes.put("Casablanca", "casablanca");
+//        themes.put("Casablanca", "casablanca");
         themes.put("Cupertino", "cupertino");
-        themes.put("Dark Hive", "dark-hive");
+//        themes.put("Dark Hive", "dark-hive");
         themes.put("Dot Luv", "dot-luv");
-        themes.put("Eggplant", "eggplant");
+//        themes.put("Eggplant", "eggplant");
         themes.put("Excite Bike", "excite-bike");
         themes.put("Flick", "flick");
         themes.put("Glass-x", "glass-x");
@@ -78,8 +78,8 @@ public class themeControlller implements Serializable {
         themes.put("Luna Blue", "luna-blue");
         themes.put("Luna Green", "luna-green");
         themes.put("Luna Pink", "luna-pink");
-        themes.put("Midnight", "midnight");
-        themes.put("Mint Choc", "mint-choc");
+//        themes.put("Midnight", "midnight");
+//        themes.put("Mint Choc", "mint-choc");
         themes.put("Overcast", "overcast");
         themes.put("Pepper Grinder", "pepper-grinder");
         themes.put("Redmond", "redmond");
@@ -90,10 +90,10 @@ public class themeControlller implements Serializable {
         themes.put("Start", "start");
         themes.put("Sunny", "sunny");
         themes.put("Swanky Purse", "swanky-purse");
-        themes.put("Srontastic", "trontastic");
-        themes.put("Ui Darkness", "ui-darkness");
+//        themes.put("Trontastic", "trontastic");
+//        themes.put("Ui Darkness", "ui-darkness");
         themes.put("Ui Lightness", "ui-lightness");
-        themes.put("Vader", "vader");
+//        themes.put("Vader", "vader");
         return Collections.unmodifiableMap(themes);
     }
 
@@ -124,6 +124,7 @@ public class themeControlller implements Serializable {
 
     public String getEstilo() {
         boolean f = tema.contains("luna");
+
         return f ? "background-color: #323232; color: #888888;" : "";
     }
 

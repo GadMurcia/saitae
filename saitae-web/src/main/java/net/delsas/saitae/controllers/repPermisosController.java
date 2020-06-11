@@ -18,9 +18,13 @@ package net.delsas.saitae.controllers;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import net.delsas.saitae.ax.Auxiliar;
@@ -32,6 +36,7 @@ import net.delsas.saitae.entities.Grado;
 import net.delsas.saitae.entities.GradoPK;
 import net.delsas.saitae.entities.Permisos;
 import net.delsas.saitae.entities.Persona;
+import org.primefaces.PrimeFaces;
 import org.primefaces.behavior.ajax.AjaxBehavior;
 import org.primefaces.component.selectonemenu.SelectOneMenu;
 import org.primefaces.event.SelectEvent;
@@ -50,6 +55,7 @@ public class repPermisosController extends Auxiliar implements Serializable {
     private List<Persona> personas;
     private List<Permisos> permisos;
     private Persona PSelected;
+    private Date fechaInicio, fechaFin;
 
     @EJB
     private GradoFacadeLocal gFL;
@@ -67,6 +73,22 @@ public class repPermisosController extends Auxiliar implements Serializable {
         SelectOneMenu ss = new SelectOneMenu();
         ss.setId("menu");
         onSelect(new SelectEvent(ss, new AjaxBehavior(), menu));
+        fechaInicio = getFechaUnicamente(new Date());
+        fechaFin = getFechaUnicamente(new Date());
+    }
+
+    public void dateSelect(AjaxBehaviorEvent e) {
+        if (fechaInicio.after(fechaFin)) {
+            fechaFin = getFechaUnicamente(fechaInicio);
+            FacesContext.getCurrentInstance().addMessage("Form0:msgs",
+                    new FacesMessage(FacesMessage.SEVERITY_WARN, "Error en las fechas",
+                            "La fecha de inicio del periodo del reporte no debe ser posterior "
+                            + "a la fecha de fin del mismo. Intente de nuevo."));
+            PrimeFaces.current().ajax().update("form0:msgs");
+        }
+        SelectOneMenu ss = new SelectOneMenu();
+        ss.setId("person");
+        onSelect(new SelectEvent(ss, new AjaxBehavior(), PSelected));
     }
 
     public void onSelect(SelectEvent e) {
@@ -84,15 +106,17 @@ public class repPermisosController extends Auxiliar implements Serializable {
                         grados.clear();
                         GSelected = null;
                         personas = pFL.getMaestros();
+                        PSelected = personas.isEmpty() ? null : personas.get(0);
                         ss.setId("person");
-                        onSelect(new SelectEvent(ss, new AjaxBehavior(), null));
+                        onSelect(new SelectEvent(ss, new AjaxBehavior(), PSelected));
                         break;
                     case 3:
                         grados.clear();
                         GSelected = null;
                         personas = pFL.getAdmins();
+                        PSelected = personas.isEmpty() ? null : personas.get(0);
                         ss.setId("person");
-                        onSelect(new SelectEvent(ss, new AjaxBehavior(), null));
+                        onSelect(new SelectEvent(ss, new AjaxBehavior(), PSelected));
                         break;
                     default:
                         grados.clear();
@@ -104,14 +128,16 @@ public class repPermisosController extends Auxiliar implements Serializable {
             case "grado":
                 GSelected = (GradoPK) e.getObject();
                 personas = mFL.findMatriculaByGrado(GSelected);
+                PSelected = personas.isEmpty() ? null : personas.get(0);
                 ss.setId("person");
-                onSelect(new SelectEvent(ss, new AjaxBehavior(), null));
+                onSelect(new SelectEvent(ss, new AjaxBehavior(), PSelected));
                 break;
             case "person":
-                PSelected = (Persona) e.getObject();
-                PSelected = PSelected == null ? (personas.isEmpty() ? null : personas.get(0)) : PSelected;
-                permisos = permFL.findByIpPersonaAndEstado(PSelected == null
-                        ? 0 : PSelected.getIdpersona(), getAñoActual(), "1");
+                permisos = (fechaInicio == null || fechaFin == null)
+                        ? permFL.findByIpPersonaAndEstado(PSelected == null ? 0
+                                : PSelected.getIdpersona(), getAñoActual(), "1")
+                        : permFL.findByIpPersonaAndEstadoAndFechas(PSelected == null
+                                ? 0 : PSelected.getIdpersona(), fechaInicio, fechaFin, "1");
                 break;
             default:
                 personas = new ArrayList<>();
@@ -169,4 +195,21 @@ public class repPermisosController extends Auxiliar implements Serializable {
                 ? "(" + p.getTipoPersona().getTipoPersonaNombre() + ")"
                 : "";
     }
+
+    public Date getFechaInicio() {
+        return fechaInicio;
+    }
+
+    public void setFechaInicio(Date fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
+
+    public Date getFechaFin() {
+        return fechaFin;
+    }
+
+    public void setFechaFin(Date fechaFin) {
+        this.fechaFin = fechaFin;
+    }
+
 }

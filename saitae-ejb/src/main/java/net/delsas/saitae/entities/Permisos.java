@@ -46,7 +46,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Permisos.findByEstadoAndTipos", query = "SELECT p FROM Permisos p WHERE p.permisosEstado = :permisoEstado AND p.tipoPersona.idtipoPersona IN :tipos AND FUNCTION('YEAR' , p.permisosPK.permisoFechaInicio) = :año ORDER BY p.permisosPK.permisoFechaSolicitud DESC, p.permisosPK.permisoFechaInicio ASC"),
     @NamedQuery(name = "Permisos.findAñosGlobales", query = "SELECT DISTINCT FUNCTION('YEAR' ,p.permisosPK.permisoFechaInicio) FROM Permisos p ORDER BY 1 ASC"),
     @NamedQuery(name = "Permisos.findAñosPersona", query = "SELECT DISTINCT FUNCTION('YEAR' ,p.permisosPK.permisoFechaInicio)  FROM Permisos p WHERE p.permisosPK.ipPersona = :idPersona ORDER BY 1 ASC"),
-    @NamedQuery(name = "Permisos.findByIpPersonaAndEstado", query = "SELECT p FROM Permisos p WHERE p.permisosPK.ipPersona = :ipPersona AND FUNCTION('YEAR' , p.permisosPK.permisoFechaInicio) = :año AND p.permisosEstado = :estado ORDER BY p.permisosPK.permisoFechaInicio ASC")
+    @NamedQuery(name = "Permisos.findByIpPersonaAndEstado", query = "SELECT p FROM Permisos p WHERE p.permisosPK.ipPersona = :ipPersona AND FUNCTION('YEAR' , p.permisosPK.permisoFechaInicio) = :año AND p.permisosEstado = :estado ORDER BY p.permisosPK.permisoFechaInicio ASC"),
+    @NamedQuery(name = "Permisos.findByIpPersonaAndEstadoAndFechas", query = "SELECT p FROM Permisos p WHERE p.permisosPK.ipPersona = :ipPersona AND p.permisosPK.permisoFechaInicio >= :fechaInicio AND p.permisoFechafin <= :fechaFin AND p.permisosEstado = :estado ORDER BY p.permisosPK.permisoFechaInicio ASC")
 })
 public class Permisos implements Serializable {
 
