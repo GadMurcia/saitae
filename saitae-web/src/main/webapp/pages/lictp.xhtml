@@ -16,9 +16,6 @@
                     }
                 </script>                
                 <o:socket channel="tipopp" onmessage="socketListener"/>
-                <h:form>
-                    <p:remoteCommand name="tipopp" actionListener="#{tipoController.escucha()}" update="form form0"/>
-                </h:form>
                 <h:form id="form">
                     <p:growl id="msgs" showDetail="true"/>
                     <h1 style="align-content: center;">Administración de Permisos y Licencias.</h1>
@@ -38,31 +35,41 @@
                                     <h:outputText value="#{tp.idtipoPermiso}"/>
                                 </p:column>
 
-                                <p:column headerText="Nombre">
+                                <p:column headerText="Nombre del tipo de permiso">
                                     <p:cellEditor>
-                                        <f:facet name="output"><h:outputText value="#{tp.tipoPermisoNombre}" /></f:facet>
-                                        <f:facet name="input"><p:inputText value="#{tp.tipoPermisoNombre}" style="width:100%" 
-                                                                           label="Nombre"/></f:facet>
+                                        <f:facet name="output">
+                                            <h:outputText value="#{tp.tipoPermisoNombre}" />
+                                        </f:facet>
+                                        <f:facet name="input">
+                                            <p:inputText value="#{tp.tipoPermisoNombre}" 
+                                                         style="width:100%" 
+                                                         label="Nombre"/>
+                                        </f:facet>
                                     </p:cellEditor>
                                 </p:column>
 
-                                <!--<p:column headerText="Días al mes" style="width: 30px">
+                                <p:column headerText="Días máximos al año" style="width: 15%">
                                     <p:cellEditor>
-                                        <f:facet name="output"><h:outputText value="# {tp.tipoPermisoDiasMes}" /></f:facet>
-                                        <f:facet name="input"><p:inputText value="# {tp.tipoPermisoDiasMes}" style="width:100%" 
-                                                                           label="Días permitidos al mes"/></f:facet>
+                                        <f:facet name="output">
+                                            <h:outputText value="#{tp.tipoPermisoDiasMes}" />
+                                        </f:facet>
+                                        <f:facet name="input">
+                                            <p:inputText value="#{tp.tipoPermisoDiasMes}" 
+                                                         style="width:100%" 
+                                                         label="Días permitidos al mes"/>
+                                        </f:facet>
                                     </p:cellEditor>
                                 </p:column>
 
-                                --><p:column style="width:32px">
+                                <p:column style="width:32px">
                                     <p:rowEditor />
                                 </p:column>
                             </p:dataTable>
-                                    <p:commandButton value="+" styleClass="ui-priority-primary" 
-                                                     process="@this" 
-                                                     update=":form:msgs form:tw:pers form:tw:pickList tp1" 
-                                                     action="#{tipoController.onAddNew('permiso')}"
-                                                     title="Agregar nuevo Tipo de Permiso."/>
+                            <p:commandButton value="+" styleClass="ui-priority-primary" 
+                                             process="@this" 
+                                             update=":form:msgs form:tw:pers form:tw:pickList tp1" 
+                                             action="#{tipoController.onAddNew('permiso')}"
+                                             title="Agregar nuevo Tipo de Permiso."/>
                         </p:tab>
                         <p:tab title="Tipo Usuario">
                             <p:dataTable id="persona" var="tp" value="#{tipoController.personas}" 

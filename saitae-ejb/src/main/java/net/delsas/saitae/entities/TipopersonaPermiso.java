@@ -25,10 +25,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "tipopersonaPermiso", catalog = "intex", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "TipopersonaPermiso.findAll", query = "SELECT t FROM TipopersonaPermiso t")
-    , @NamedQuery(name = "TipopersonaPermiso.findByIdtipopersona", query = "SELECT t FROM TipopersonaPermiso t WHERE t.tipopersonaPermisoPK.idtipopersona = :idtipopersona")
-    , @NamedQuery(name = "TipopersonaPermiso.findByIdtipoPermiso", query = "SELECT t FROM TipopersonaPermiso t WHERE t.tipopersonaPermisoPK.idtipoPermiso = :idtipoPermiso")
-    , @NamedQuery(name = "TipopersonaPermiso.findByTipopersonaPermisoComentario", query = "SELECT t FROM TipopersonaPermiso t WHERE t.tipopersonaPermisoComentario = :tipopersonaPermisoComentario")})
+    @NamedQuery(name = "TipopersonaPermiso.findAll", query = "SELECT t FROM TipopersonaPermiso t"),
+    @NamedQuery(name = "TipopersonaPermiso.findByIdtipopersona", query = "SELECT t FROM TipopersonaPermiso t WHERE t.tipopersonaPermisoPK.idtipopersona = :idtipopersona"),
+    @NamedQuery(name = "TipopersonaPermiso.findByIdtipoPermiso", query = "SELECT t FROM TipopersonaPermiso t WHERE t.tipopersonaPermisoPK.idtipoPermiso = :idtipoPermiso"),
+    @NamedQuery(name = "TipopersonaPermiso.findByTipopersonaPermisoComentario", query = "SELECT t FROM TipopersonaPermiso t WHERE t.tipopersonaPermisoComentario = :tipopersonaPermisoComentario"),
+    @NamedQuery(name = "TipopersonaPermiso.findTipoPermisoByIdtipopersona", query = "SELECT t.tipoPermiso FROM TipopersonaPermiso t WHERE t.tipopersonaPermisoPK.idtipopersona = :id ORDER BY t.tipopersonaPermisoPK.idtipoPermiso ASC")
+})
 public class TipopersonaPermiso implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -111,5 +113,5 @@ public class TipopersonaPermiso implements Serializable {
     public String toString() {
         return "net.delsas.saitae.entities.TipopersonaPermiso[ tipopersonaPermisoPK=" + tipopersonaPermisoPK + " ]";
     }
-    
+
 }

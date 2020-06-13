@@ -95,4 +95,14 @@ public class PermisosFacade extends AbstractFacade<Permisos> implements Permisos
                 .setParameter("estado", a)
                 .getResultList();
     }
+    
+    @Override
+    public List<Permisos> findByIpPersonaEFsTP(int idPersona, int año, String a, Integer idTipoPermiso) {
+        return em.createNamedQuery("Permisos.findByIpPEFTP")
+                .setParameter("ipPersona", idPersona)
+                .setParameter("año", año)
+                .setParameter("estado", a)
+                .setParameter("idTp", idTipoPermiso)
+                .getResultList();
+    }
 }

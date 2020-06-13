@@ -5,9 +5,11 @@
  */
 package net.delsas.saitae.beans;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import net.delsas.saitae.entities.TipoPermiso;
 import net.delsas.saitae.entities.TipopersonaPermiso;
 
 /**
@@ -28,5 +30,12 @@ public class TipopersonaPermisoFacade extends AbstractFacade<TipopersonaPermiso>
     public TipopersonaPermisoFacade() {
         super(TipopersonaPermiso.class);
     }
-    
+
+    @Override
+    public List<TipoPermiso> findTipoPermisoByIdtipopersona(int idTipoPersona) {
+        return em.createNamedQuery("TipopersonaPermiso.findTipoPermisoByIdtipopersona")
+                .setParameter("id", idTipoPersona)
+                .getResultList();
+    }
+
 }

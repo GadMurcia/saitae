@@ -285,20 +285,19 @@ public class permisoMaController extends Auxiliar implements Serializable {
     }
 
     public boolean getGoceDeSueldo() {
-        return p == null ? false : p.getPermisosComentario().split("¿¿")[0].equals("1");
-
+        return getPermisoGoceDeSueldo(p);
     }
 
     public boolean getLicenciasAnteriores() {
-        return p == null ? false : p.getPermisosComentario().split("¿¿")[1].equals("1");
+        return getPermisoLicenciasAnteriores(p);
     }
 
     public void setGoceDeSueldo(boolean goce) {
-        p.setPermisosComentario((goce ? "1" : "0") + "¿¿" + (getLicenciasAnteriores() ? "1" : "0") + "¿¿¿¿ ");
+        setPermisoGoceDeSueldo(goce, p);
     }
 
     public void setLicenciasAnteriores(boolean lic) {
-        p.setPermisosComentario((getGoceDeSueldo() ? "1" : "0") + "¿¿" + (lic ? "1" : "0") + "¿¿¿¿");
+        setPermisoLicenciasAnteriores(lic, p);
     }
 
     public void postRender() {

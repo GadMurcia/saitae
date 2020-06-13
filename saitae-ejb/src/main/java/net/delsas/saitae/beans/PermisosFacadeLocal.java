@@ -91,4 +91,16 @@ public interface PermisosFacadeLocal {
     public List<Permisos> findByIpPersonaAndEstado(int i, Integer añoActual, String a);
 
     public List<Permisos> findByIpPersonaAndEstadoAndFechas(int idPersona, Date fechaInicio, Date FechaFin, String a);
+
+    /**
+     * Devuelve una lista de permisos que le han sido aprobados a la persona
+     * indicada entre las fechas proporcionadas y del tipo de permiso indicado.
+     *
+     * @param idPersona
+     * @param año
+     * @param a
+     * @param idTipoPermiso
+     * @return java.util.List net.delsas.entities.Permisos
+     */
+    public List<Permisos> findByIpPersonaEFsTP(int idPersona, int año, String a, Integer idTipoPermiso);
 }

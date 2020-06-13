@@ -970,17 +970,25 @@ public class Auxiliar implements Serializable {
 
     public String getHoras(Date i, Date f) {
         String g = "";
-        if (i != null) {
+        long min = getMinutos(i, f);
+        if (min > 0) {
+            long hor = min / 60;
             String in = getHora(i);
             String fi = getHora(f);
-            long min = Duration.between(i.toInstant(), f.toInstant()).toMinutes();
-            long hor = min / 60;
             min = min - (hor * 60);
             g = "Entre las " + in + " y las "
                     + fi + " (" + hor + " horas y "
                     + min + " minutos).";
         }
         return g;
+    }
+
+    public long getMinutos(Date i, Date f) {
+        long min = 0;
+        if (i != null && f != null) {
+            min = Duration.between(i.toInstant(), f.toInstant()).toMinutes();
+        }
+        return min;
     }
 
     public String onFlowProcess(FlowEvent event) {
@@ -1235,5 +1243,62 @@ public class Auxiliar implements Serializable {
         } catch (ParseException ex) {
         }
         return fecha;
+    }
+
+    public long getCantidadDias(Date i, Date f) {
+        long d = 0;
+        if (i != null && f != null) {
+            d = Duration.between(i.toInstant(), f.toInstant()).toDays() + 1;
+        }
+        if (d >= 7) {
+            d = d - ((int) (d / 7)) * 2;
+        } else {
+            String ee = new SimpleDateFormat("EEE").format(i);
+            System.out.println(ee);
+            switch (ee) {
+                case "lun":
+                    if (d > 5) {
+                        d = d - 2;
+                    }
+                    break;
+                case "mar":
+                    if (d > 4) {
+                        d = d - 2;
+                    }
+                    break;
+                case "mie":
+                    if (d > 3) {
+                        d = d - 2;
+                    }
+                    break;
+                case "jue":
+                    if (d > 2) {
+                        d = d - 2;
+                    }
+                    break;
+                case "vie":
+                    if (d > 1) {
+                        d = d - 2;
+                    }
+                    break;
+            }
+        }
+        return d;
+    }
+
+    public boolean getPermisoGoceDeSueldo(Permisos p) {
+        return p == null ? false : p.getPermisosComentario().split("¿¿")[0].equals("1");
+    }
+
+    public boolean getPermisoLicenciasAnteriores(Permisos p) {
+        return p == null ? false : p.getPermisosComentario().split("¿¿")[1].equals("1");
+    }
+
+    public void setPermisoGoceDeSueldo(boolean goce, Permisos p) {
+        p.setPermisosComentario((goce ? "1" : "0") + "¿¿" + (getPermisoLicenciasAnteriores(p) ? "1" : "0") + "¿¿¿¿ ");
+    }
+
+    public void setPermisoLicenciasAnteriores(boolean lic, Permisos  p) {
+        p.setPermisosComentario((getPermisoGoceDeSueldo(p) ? "1" : "0") + "¿¿" + (lic ? "1" : "0") + "¿¿¿¿");
     }
 }

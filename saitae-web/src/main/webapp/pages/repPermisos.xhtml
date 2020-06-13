@@ -39,52 +39,42 @@
                                        itemValue="#{p0}"/>
                         <p:ajax event="itemSelect" listener="#{repPermisosController.onSelect}" update="form"/>
                     </p:selectOneMenu>
-
-                    <h:panelGrid columns="2">
-                        <p:outputLabel for="fi" value="Desde: " rendered="#{repPermisosController.PSelected!=null}"/>
-                        <p:datePicker id="fi" value="#{repPermisosController.fechaInicio}"
-                                      showIcon="true" required="true" pattern="dd/MM/yyyy" locale="es"
-                                      disabledDays="#{repPermisosController.disabledDays}"
-                                      requiredMessage="Debe seleccionar una fecha válida"
-                                      placeholder="Fecha de inicio"  rendered="#{repPermisosController.PSelected!=null}"
-                                      validatorMessage="Nunguna fecha puede ser en los días Sábado y Domingo">
-                            <p:ajax event="dateSelect" update="form" listener="#{repPermisosController.dateSelect}"/>
-                        </p:datePicker>
-                    </h:panelGrid>
-                    <h:panelGrid columns="2">
-                        <p:outputLabel for="ff" value="Hasta: " rendered="#{repPermisosController.PSelected!=null}"/>
-                        <p:datePicker id="ff" value="#{repPermisosController.fechaFin}"
-                                      showIcon="true" required="true" pattern="dd/MM/yyyy" locale="es"
-                                      disabledDays="#{repPermisosController.disabledDays}"
-                                      requiredMessage="Debe seleccionar una fecha válida"
-                                      placeholder="Fecha de finalización"  rendered="#{repPermisosController.PSelected!=null}"
-                                      validatorMessage="Nunguna fecha puede ser en los días Sábado y Domingo">
-                            <p:ajax event="dateSelect" update="form" listener="#{repPermisosController.dateSelect}"/>
-                        </p:datePicker>
-                    </h:panelGrid>
                 </h:panelGrid>
 
-                <p:dataTable id="perm" value="#{repPermisosController.permisos}" var="p" 
+                <p:dataTable id="perm" value="#{repPermisosController.rpListGoce}" var="p" 
                              rendered="#{repPermisosController.PSelected!=null}">
                     <p:column headerText="Fecha de solicitud">
-                        <h:outputText value="#{repPermisosController.getDateToString(p.permisosPK.permisoFechaSolicitud)}"/>
+                        <h:outputText value="#{repPermisosController.getDateToString(p.permiso.permisosPK.permisoFechaSolicitud)}"/>
                     </p:column>
                     <p:column headerText="Periodo del permiso">
-                        <h:outputText value="#{repPermisosController.getPeriodoPermisos(p)}"/>
+                        <h:outputText value="#{repPermisosController.getPeriodoPermisos(p.permiso)}"/>
                     </p:column>
                     <p:column headerText="Permiso para">
-                        <h:outputText value="#{p.tipoPermiso1.tipoPermisoNombre}"/>
+                        <h:outputText value="#{p.permiso.tipoPermiso1.tipoPermisoNombre}"/>
+                    </p:column>
+                    <p:column headerText="Solicita Goce de sueldo"
+                              rendered="#{!repPermisosController.esEstudiante}">
+                        <h:outputText value="#{repPermisosController.getPermisoGoceDeSueldo(p.permiso)? 'Sí' : 'No'}"/>
                     </p:column>
                     <p:column headerText="Motivo" 
                               rendered="#{repPermisosController.esEstudiante}">
-                        <h:outputText value="#{p.permisosMotivo}"/>
+                        <h:outputText value="#{p.permiso.permisosMotivo}"/>
                     </p:column>
                     <p:column headerText="Solicitado por" 
                               rendered="#{repPermisosController.esEstudiante}">
-                        <h:outputText value="#{repPermisosController.getSolicitadoPor(p)}"/>
+                        <h:outputText value="#{repPermisosController.getSolicitadoPor(p.permiso)}"/>
                     </p:column>
                     <p:column headerText="Aceptado por">
-                        <h:outputText value="#{repPermisosController.getNombreCompletoPersona(p.permisosGestor)}"/>
+                        <h:outputText value="#{repPermisosController.getNombreCompletoPersona(p.permiso.permisosGestor)}"/>
+                    </p:column>
+                    <p:column headerText="Días">
+                        <h:outputText value="#{p.numeroDias}"/>
+                    </p:column>
+                    <p:column headerText="Horas">
+                        <h:outputText value="#{p.numeroHoras}"/>
+                    </p:column>
+                    <p:column headerText="Saldo">
+                        <h:outputText value="#{p.conGoce ? p.saldo : ''}"/>
                     </p:column>
                 </p:dataTable>
             </h:panelGrid>

@@ -18,6 +18,7 @@ package net.delsas.saitae.controllers;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -28,14 +29,17 @@ import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import net.delsas.saitae.ax.Auxiliar;
+import net.delsas.saitae.ax.ReportePermisos;
 import net.delsas.saitae.beans.GradoFacadeLocal;
 import net.delsas.saitae.beans.MatriculaFacadeLocal;
 import net.delsas.saitae.beans.PermisosFacadeLocal;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
+import net.delsas.saitae.beans.TipopersonaPermisoFacadeLocal;
 import net.delsas.saitae.entities.Grado;
 import net.delsas.saitae.entities.GradoPK;
 import net.delsas.saitae.entities.Permisos;
 import net.delsas.saitae.entities.Persona;
+import net.delsas.saitae.entities.TipoPermiso;
 import org.primefaces.PrimeFaces;
 import org.primefaces.behavior.ajax.AjaxBehavior;
 import org.primefaces.component.selectonemenu.SelectOneMenu;
@@ -54,8 +58,9 @@ public class repPermisosController extends Auxiliar implements Serializable {
     private List<Grado> grados;
     private List<Persona> personas;
     private List<Permisos> permisos;
+    private List<ReportePermisos> rpListGoce;
     private Persona PSelected;
-    private Date fechaInicio, fechaFin;
+//    private Date fechaInicio, fechaFin;
 
     @EJB
     private GradoFacadeLocal gFL;
@@ -65,27 +70,29 @@ public class repPermisosController extends Auxiliar implements Serializable {
     private MatriculaFacadeLocal mFL;
     @EJB
     private PersonaFacadeLocal pFL;
+    @EJB
+    private TipopersonaPermisoFacadeLocal tppFL;
 
     @PostConstruct
     public void init() {
-        menu = 1;
+        menu = 3;
         grados = new ArrayList<>();
         SelectOneMenu ss = new SelectOneMenu();
         ss.setId("menu");
         onSelect(new SelectEvent(ss, new AjaxBehavior(), menu));
-        fechaInicio = getFechaUnicamente(new Date());
-        fechaFin = getFechaUnicamente(new Date());
+//        fechaInicio = getFechaUnicamente(new Date());
+//        fechaFin = getFechaUnicamente(new Date());
     }
 
     public void dateSelect(AjaxBehaviorEvent e) {
-        if (fechaInicio.after(fechaFin)) {
-            fechaFin = getFechaUnicamente(fechaInicio);
-            FacesContext.getCurrentInstance().addMessage("Form0:msgs",
-                    new FacesMessage(FacesMessage.SEVERITY_WARN, "Error en las fechas",
-                            "La fecha de inicio del periodo del reporte no debe ser posterior "
-                            + "a la fecha de fin del mismo. Intente de nuevo."));
-            PrimeFaces.current().ajax().update("form0:msgs");
-        }
+//        if (fechaInicio.after(fechaFin)) {
+//            fechaFin = getFechaUnicamente(fechaInicio);
+//            FacesContext.getCurrentInstance().addMessage("Form0:msgs",
+//                    new FacesMessage(FacesMessage.SEVERITY_WARN, "Error en las fechas",
+//                            "La fecha de inicio del periodo del reporte no debe ser posterior "
+//                            + "a la fecha de fin del mismo. Intente de nuevo."));
+//            PrimeFaces.current().ajax().update("form0:msgs");
+//        }
         SelectOneMenu ss = new SelectOneMenu();
         ss.setId("person");
         onSelect(new SelectEvent(ss, new AjaxBehavior(), PSelected));
@@ -132,13 +139,33 @@ public class repPermisosController extends Auxiliar implements Serializable {
                 ss.setId("person");
                 onSelect(new SelectEvent(ss, new AjaxBehavior(), PSelected));
                 break;
-            case "person":
-                permisos = (fechaInicio == null || fechaFin == null)
-                        ? permFL.findByIpPersonaAndEstado(PSelected == null ? 0
-                                : PSelected.getIdpersona(), getAñoActual(), "1")
-                        : permFL.findByIpPersonaAndEstadoAndFechas(PSelected == null
-                                ? 0 : PSelected.getIdpersona(), fechaInicio, fechaFin, "1");
+            case "person":               
+                rpListGoce = new ArrayList<>();
+                List<TipoPermiso> permisosPersona = tppFL.findTipoPermisoByIdtipopersona(
+                        PSelected == null ? 0
+                        : PSelected.getTipoPersona().getIdtipoPersona());
+                permisosPersona.forEach(tp -> {
+                    List<ReportePermisos> rep0 = new ArrayList<>();
+                    List<Permisos> ps = permFL.findByIpPersonaEFsTP(
+                            PSelected.getIdpersona(), getAñoActual(), "1", tp.getIdtipoPermiso());
+                    ps.stream().filter((p) -> (getPermisoGoceDeSueldo(p) || PSelected.getTipoPersona().getIdtipoPersona() == 8)).forEachOrdered((p) -> {
+                        int idtp = PSelected.getTipoPersona().getIdtipoPersona();
+                        rep0.add(new ReportePermisos(p,
+                                rep0.isEmpty()
+                                ? p.getTipoPermiso1().getTipoPermisoDiasMes()
+                                : rep0.get(rep0.size() - 1).getSaldo(),
+                                idtp == 8 ? 0 : (idtp == 4 ? 1 : 2)));
+                    });
+                    rpListGoce.addAll(rep0);
+                    rep0.clear();
+                    ps.stream().filter((p) -> (!getPermisoGoceDeSueldo(p))).forEachOrdered((p) -> {
+                        rep0.add(new ReportePermisos(p, -1, 0));
+                    });
+                    rpListGoce.addAll(rep0);
+                });
+                Collections.sort(rpListGoce, (r1, r2) -> r1.getFechaInicio().hashCode() - r2.getFechaInicio().hashCode());
                 break;
+
             default:
                 personas = new ArrayList<>();
                 System.out.println(e.getComponent().getId());
@@ -196,20 +223,27 @@ public class repPermisosController extends Auxiliar implements Serializable {
                 : "";
     }
 
-    public Date getFechaInicio() {
-        return fechaInicio;
+//    public Date getFechaInicio() {
+//        return fechaInicio;
+//    }
+//
+//    public void setFechaInicio(Date fechaInicio) {
+//        this.fechaInicio = fechaInicio;
+//    }
+//
+//    public Date getFechaFin() {
+//        return fechaFin;
+//    }
+//
+//    public void setFechaFin(Date fechaFin) {
+//        this.fechaFin = fechaFin;
+//    }
+    public List<ReportePermisos> getRpListGoce() {
+        return rpListGoce;
     }
 
-    public void setFechaInicio(Date fechaInicio) {
-        this.fechaInicio = fechaInicio;
-    }
-
-    public Date getFechaFin() {
-        return fechaFin;
-    }
-
-    public void setFechaFin(Date fechaFin) {
-        this.fechaFin = fechaFin;
+    public void setRpListGoce(List<ReportePermisos> rpListGoce) {
+        this.rpListGoce = rpListGoce;
     }
 
 }
