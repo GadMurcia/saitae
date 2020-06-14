@@ -24,6 +24,7 @@ import net.delsas.saitae.entities.Categoria;
 import net.delsas.saitae.entities.GradoPK;
 import net.delsas.saitae.entities.Matricula;
 import net.delsas.saitae.entities.TipoCargo;
+import net.delsas.saitae.entities.TipoPermiso;
 import net.delsas.saitae.entities.TipoRecurso;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -666,6 +667,52 @@ public class XLSModel {
         cs.setAlignment(HorizontalAlignment.LEFT);
         h.getRow(1).getCell(tr.getIdtipoRecurso().equals(3) ? 7 : 5).setCellStyle(cs);
         h.getRow(2).getCell(tr.getIdtipoRecurso().equals(3) ? 7 : 5).setCellStyle(cs);
+        return wb;
+    }
+
+    public HSSFWorkbook getReportePermisos(List<ReportePermisos> rpListGoce, HSSFWorkbook wb, List<TipoPermiso> tpermisos) {
+        wb.removeSheetAt(0);
+        HSSFSheet h = wb.createSheet("Reporte Permisos");
+
+        HSSFRow r = h.createRow(4);
+        HSSFCell c = r.createCell(0);
+        c.setCellValue("FECHA");
+        c = r.createCell(2);
+        c.setCellValue("LICENCIAS CON GOCE DE SUELDO");
+        c = r.createCell(tpermisos.size() * 3 + 1);
+        c.setCellValue("Licencias sin goce de sueldo");
+        c = r.createCell(tpermisos.size() * 3 + 3);
+        c.setCellValue("Inasistencias injustificadas");
+        c = r.createCell(tpermisos.size() * 3 + 3);
+        c.setCellValue("Licencias sin goce de sueldo");
+        c = r.createCell(tpermisos.size() * 3 + 4);
+        c.setCellValue("Llegadas tarde o retiros antes de la hora");
+
+        r = h.createRow(5);
+        HSSFRow r2 = h.createRow(6);
+        for (TipoPermiso tp : tpermisos) {
+            int i = tpermisos.indexOf(tp) * 3 + 1;
+            c = r.createCell(i);
+            c.setCellValue(tp.getTipoPermisoNombre());
+            c = r2.createCell(i);
+            c.setCellValue("Días");
+            c = r2.createCell(i + 1);
+            c.setCellValue("Horas");
+            c = r2.createCell(i + 2);
+            c.setCellValue("Saldo ("+tp.getTipoPermisoDiasMes()+" días)");
+        }
+        c = r2.createCell(tpermisos.size() * 3 + 1);
+        c.setCellValue("Días");
+        c = r2.createCell(tpermisos.size() * 3 + 2);
+        c.setCellValue("Horas");
+
+        c = r2.createCell(tpermisos.size() * 3 + 3);
+        c.setCellValue("Días");
+
+        c = r2.createCell(tpermisos.size() * 3 + 4);
+        c.setCellValue("Horas Mañana");
+        c = r2.createCell(tpermisos.size() * 3 + 5);
+        c.setCellValue("Horas Tarde");
         return wb;
     }
 

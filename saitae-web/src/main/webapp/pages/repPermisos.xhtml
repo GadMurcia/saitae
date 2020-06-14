@@ -77,6 +77,16 @@
                         <h:outputText value="#{p.conGoce ? p.saldo : ''}"/>
                     </p:column>
                 </p:dataTable>
+
+                <h:commandLink rendered="#{repPermisosController.PSelected!=null}">
+                    <p:graphicImage library="img" name="xls.png" width="37px" height="32px"/>
+                    <p:dataExporter type="xls" target="perm" 
+                                    options="#{axiliarController.excelOpt}"
+                                    fileName="Reporte individual de permisos 
+                                    #{repPermisosController.getNombreCortoPersona(repPermisosController.PSelected)}"
+                                    encoding="UTF-8"
+                                    postProcessor="#{repPermisosController.reporte}"/>
+                </h:commandLink>
             </h:panelGrid>
         </h:form>
     </ui:define>

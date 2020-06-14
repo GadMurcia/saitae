@@ -30,6 +30,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import net.delsas.saitae.ax.Auxiliar;
 import net.delsas.saitae.ax.ReportePermisos;
+import net.delsas.saitae.ax.XLSModel;
 import net.delsas.saitae.beans.GradoFacadeLocal;
 import net.delsas.saitae.beans.MatriculaFacadeLocal;
 import net.delsas.saitae.beans.PermisosFacadeLocal;
@@ -40,6 +41,7 @@ import net.delsas.saitae.entities.GradoPK;
 import net.delsas.saitae.entities.Permisos;
 import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.TipoPermiso;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.primefaces.PrimeFaces;
 import org.primefaces.behavior.ajax.AjaxBehavior;
 import org.primefaces.component.selectonemenu.SelectOneMenu;
@@ -139,11 +141,11 @@ public class repPermisosController extends Auxiliar implements Serializable {
                 ss.setId("person");
                 onSelect(new SelectEvent(ss, new AjaxBehavior(), PSelected));
                 break;
-            case "person":               
+            case "person":
                 rpListGoce = new ArrayList<>();
                 List<TipoPermiso> permisosPersona = tppFL.findTipoPermisoByIdtipopersona(
                         PSelected == null ? 0
-                        : PSelected.getTipoPersona().getIdtipoPersona());
+                                : PSelected.getTipoPersona().getIdtipoPersona());
                 permisosPersona.forEach(tp -> {
                     List<ReportePermisos> rep0 = new ArrayList<>();
                     List<Permisos> ps = permFL.findByIpPersonaEFsTP(
@@ -223,21 +225,12 @@ public class repPermisosController extends Auxiliar implements Serializable {
                 : "";
     }
 
-//    public Date getFechaInicio() {
-//        return fechaInicio;
-//    }
-//
-//    public void setFechaInicio(Date fechaInicio) {
-//        this.fechaInicio = fechaInicio;
-//    }
-//
-//    public Date getFechaFin() {
-//        return fechaFin;
-//    }
-//
-//    public void setFechaFin(Date fechaFin) {
-//        this.fechaFin = fechaFin;
-//    }
+    public void reporte(Object doc) {
+        HSSFWorkbook wb = (HSSFWorkbook) doc;
+        wb = new XLSModel().getReportePermisos(rpListGoce, wb,
+                tppFL.findTipoPermisoByIdtipopersona(PSelected.getTipoPersona().getIdtipoPersona()));
+    }
+
     public List<ReportePermisos> getRpListGoce() {
         return rpListGoce;
     }
