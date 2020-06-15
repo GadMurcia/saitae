@@ -78,12 +78,11 @@
                     </p:column>
                 </p:dataTable>
 
-                <h:commandLink rendered="#{repPermisosController.PSelected!=null}">
+                <h:commandLink rendered="#{repPermisosController.descargarDoc}">
                     <p:graphicImage library="img" name="xls.png" width="37px" height="32px"/>
                     <p:dataExporter type="xls" target="perm" 
                                     options="#{axiliarController.excelOpt}"
-                                    fileName="Reporte individual de permisos 
-                                    #{repPermisosController.getNombreCortoPersona(repPermisosController.PSelected)}"
+                                    fileName="Reporte de permisos #{repPermisosController.getNombreCortoPersona(repPermisosController.PSelected)}"
                                     encoding="UTF-8"
                                     postProcessor="#{repPermisosController.reporte}"/>
                 </h:commandLink>

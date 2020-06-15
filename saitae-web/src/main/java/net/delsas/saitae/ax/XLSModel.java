@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.List;
 import net.delsas.saitae.entities.Categoria;
 import net.delsas.saitae.entities.GradoPK;
+import net.delsas.saitae.entities.MaestoCargo;
 import net.delsas.saitae.entities.Matricula;
 import net.delsas.saitae.entities.TipoCargo;
 import net.delsas.saitae.entities.TipoPermiso;
@@ -465,7 +466,7 @@ public class XLSModel {
         HSSFRow r = h1.createRow(2);
         HSSFCell c = r.createCell(0);
         c.setCellValue("Nómina de Representantes de " + ax.getGradoNombre(id));
-        c.setCellStyle(st);
+
         h1.addMergedRegion(new CellRangeAddress(2, 3, 0, 3));
 
         st = wb.createCellStyle();
@@ -485,16 +486,15 @@ public class XLSModel {
         r = h1.createRow(4);
         c = r.createCell(0);
         c.setCellValue("DUI");
-        c.setCellStyle(st);
+
         c = r.createCell(1);
         c.setCellValue("Nombre del representante");
-        c.setCellStyle(st);
+
         c = r.createCell(2);
         c.setCellValue("Nombre del alumno");
-        c.setCellStyle(st);
+
         c = r.createCell(3);
         c.setCellValue("Firma");
-        c.setCellStyle(st);
 
         final HSSFCellStyle st0 = wb.createCellStyle();
         st0.setAlignment(HorizontalAlignment.LEFT);
@@ -586,7 +586,6 @@ public class XLSModel {
         f.setFontHeightInPoints((short) 16);
         st.setFont(f);
 
-        c.setCellStyle(st);
         h.createRow(1);
 
         copiarDatos(h, wb);
@@ -674,17 +673,71 @@ public class XLSModel {
         wb.removeSheetAt(0);
         HSSFSheet h = wb.createSheet("Reporte Permisos");
 
-        HSSFRow r = h.createRow(4);
+        HSSFCellStyle st = wb.createCellStyle();
+        st.setAlignment(HorizontalAlignment.CENTER);
+        st.setWrapText(true);
+        st.setVerticalAlignment(VerticalAlignment.CENTER);
+        HSSFFont f = wb.createFont();
+//        f.setBold(true);
+        f.setFontName("Courier 10 Pitch");
+        f.setFontHeightInPoints((short) 12);
+        st.setBorderBottom(BorderStyle.MEDIUM);
+        st.setBorderTop(BorderStyle.MEDIUM);
+        st.setBorderLeft(BorderStyle.MEDIUM);
+        st.setBorderRight(BorderStyle.MEDIUM);
+        st.setFont(f);
+
+        HSSFRow r = h.createRow(1);
         HSSFCell c = r.createCell(0);
+        c.setCellValue("INSTITUTO NACIONAL TEXISTEPEQUE");
+        h.addMergedRegion(new CellRangeAddress(1, 1, 0, tpermisos.size() * 3 + 5));
+
+        r = h.createRow(2);
+        c = r.createCell(0);
+        c.setCellValue("NOMBRE: " + new Auxiliar().getNombreCompletoPersona(rpListGoce.get(0).getPermiso().getPersona()));
+        h.addMergedRegion(new CellRangeAddress(2, 2, 0, ((int) (tpermisos.size() / 2)) * 3));
+
+        c = r.createCell(tpermisos.size() * 3 + 1);
+        String cargo = rpListGoce.get(0).getPermiso().getPersona().getTipoPersona().getTipoPersonaNombre();
+
+        if (rpListGoce.get(0).getPermiso().getPersona().getTipoPersona().getIdtipoPersona() == 4) {
+            cargo = "";
+            for (MaestoCargo mc : rpListGoce.get(0).getPermiso().getPersona().getMaestro().getMaestoCargoList()) {
+                cargo = (!cargo.isEmpty() ? ", " : "") + mc.getCargo().getCargoNombre();
+            }
+        }
+
+        c.setCellValue("CARGO: " + cargo);
+        h.addMergedRegion(new CellRangeAddress(2, 2, tpermisos.size() * 3 + 1, tpermisos.size() * 3 + 5));
+
+        if (rpListGoce.get(0).getPermiso().getPersona().getTipoPersona().getIdtipoPersona() == 4) {
+            c = r.createCell(((int) (tpermisos.size() / 2)) * 3 + 1);
+            c.setCellValue("NIP: " + rpListGoce.get(0).getPermiso().getPersona().getMaestro().getMaestroNip());
+            h.addMergedRegion(new CellRangeAddress(2, 2, ((int) (tpermisos.size() / 2)) * 3 + 1, tpermisos.size() * 3));
+
+            r = h.createRow(3);
+            c = r.createCell(0);
+            c.setCellValue("PARTIDA: " + rpListGoce.get(0).getPermiso().getPersona().getMaestro().getMaestroPartidas());
+            h.addMergedRegion(new CellRangeAddress(3, 3, 0, ((int) (tpermisos.size() / 2)) * 3));
+
+            c = r.createCell(((int) (tpermisos.size() / 2)) * 3 + 1);
+            c.setCellValue("SUBNÚMERO: " + rpListGoce.get(0).getPermiso().getPersona().getMaestro().getMaestroSubnumeros());
+            h.addMergedRegion(new CellRangeAddress(3, 3, ((int) (tpermisos.size() / 2)) * 3 + 1, tpermisos.size() * 3));
+        }
+
+        r = h.createRow(4);
+        c = r.createCell(0);
         c.setCellValue("FECHA");
-        c = r.createCell(2);
+
+        c = r.createCell(1);
         c.setCellValue("LICENCIAS CON GOCE DE SUELDO");
+
         c = r.createCell(tpermisos.size() * 3 + 1);
         c.setCellValue("Licencias sin goce de sueldo");
+
         c = r.createCell(tpermisos.size() * 3 + 3);
         c.setCellValue("Inasistencias injustificadas");
-        c = r.createCell(tpermisos.size() * 3 + 3);
-        c.setCellValue("Licencias sin goce de sueldo");
+
         c = r.createCell(tpermisos.size() * 3 + 4);
         c.setCellValue("Llegadas tarde o retiros antes de la hora");
 
@@ -694,15 +747,21 @@ public class XLSModel {
             int i = tpermisos.indexOf(tp) * 3 + 1;
             c = r.createCell(i);
             c.setCellValue(tp.getTipoPermisoNombre());
+
             c = r2.createCell(i);
             c.setCellValue("Días");
+
             c = r2.createCell(i + 1);
             c.setCellValue("Horas");
+
             c = r2.createCell(i + 2);
-            c.setCellValue("Saldo ("+tp.getTipoPermisoDiasMes()+" días)");
+            c.setCellValue("Saldo (" + tp.getTipoPermisoDiasMes() + " días)");
+
+            h.addMergedRegion(new CellRangeAddress(5, 5, i, i + 2));
         }
         c = r2.createCell(tpermisos.size() * 3 + 1);
         c.setCellValue("Días");
+
         c = r2.createCell(tpermisos.size() * 3 + 2);
         c.setCellValue("Horas");
 
@@ -711,8 +770,45 @@ public class XLSModel {
 
         c = r2.createCell(tpermisos.size() * 3 + 4);
         c.setCellValue("Horas Mañana");
+
         c = r2.createCell(tpermisos.size() * 3 + 5);
         c.setCellValue("Horas Tarde");
+
+        h.addMergedRegion(new CellRangeAddress(4, 6, 0, 0));
+        h.addMergedRegion(new CellRangeAddress(4, 4, 1, tpermisos.size() * 3));
+        h.addMergedRegion(new CellRangeAddress(4, 5, tpermisos.size() * 3 + 1, tpermisos.size() * 3 + 2));
+        h.addMergedRegion(new CellRangeAddress(4, 5, tpermisos.size() * 3 + 3, tpermisos.size() * 3 + 3));
+        h.addMergedRegion(new CellRangeAddress(4, 5, tpermisos.size() * 3 + 4, tpermisos.size() * 3 + 5));
+
+        int y = 7;
+        for (ReportePermisos rp : rpListGoce) {
+            r = h.createRow(y);
+            int i = rp.isConGoce() ? tpermisos.indexOf(rp.getPermiso().getTipoPermiso1()) * 3 + 1 : tpermisos.size() * 3 + 1;
+
+            c = r.createCell(0);
+            c.setCellValue(new SimpleDateFormat("dd/MM/yyyy").format(rp.getPermiso().getPermisosPK().getPermisoFechaInicio()));
+
+            c = r.createCell(i);
+            c.setCellValue(rp.getNumeroDias());
+
+            c = r.createCell(i + 1);
+            c.setCellValue(rp.getNumeroHoras());
+
+            if (rp.isConGoce()) {
+                c = r.createCell(i + 2);
+                c.setCellValue(rp.getSaldo());
+
+            }
+            y++;
+        }
+
+        for (int m = 4; m <= h.getLastRowNum(); m++) {
+            HSSFRow r0 = h.getRow(m);
+            r0.forEach(c0 -> {
+                c0.setCellStyle(st);
+            });
+        }
+
         return wb;
     }
 

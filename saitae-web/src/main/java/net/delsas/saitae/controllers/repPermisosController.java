@@ -239,4 +239,8 @@ public class repPermisosController extends Auxiliar implements Serializable {
         this.rpListGoce = rpListGoce;
     }
 
+    public boolean getDescargarDoc() {
+        return !rpListGoce.isEmpty();
+    }
+
 }
