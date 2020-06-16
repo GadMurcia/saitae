@@ -134,8 +134,8 @@ public class sessionController extends Auxiliar implements Serializable {
         if (not != null) {
             notificaciones.clear();
             Collections.sort(not, (Notificaciones o1, Notificaciones o2) -> o2.getFechaHora().hashCode() - o1.getFechaHora().hashCode());
-            if (not.size() > 5) {
-                for (Integer y = 0; y < 5; y++) {
+            if (not.size() > 4) {
+                for (Integer y = 0; y < 4; y++) {
                     if (y < not.size()) {
                         notificaciones.add(not.get(y));
                     }

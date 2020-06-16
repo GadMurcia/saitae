@@ -63,6 +63,7 @@ public class repInvController extends Auxiliar implements Serializable {
     private List<Recurso> recursos;
     private List<TipoCargo> tipoCargos;
     private List<Categoria> categorias;
+    private List<Ejemplar> ejemplares;
     private FacesContext context;
     private String pagina;
     private Persona usuario;
@@ -102,11 +103,18 @@ public class repInvController extends Auxiliar implements Serializable {
         tipoCargos = tcFL.findAll();
         categorias = cFL.findAll();
         recursos = new ArrayList<>();
+        ejemplares = new ArrayList<>();
     }
 
     public void onTipoSelected(SelectEvent e) {
+        ejemplares.clear();
         recursos = trSelected == null ? new ArrayList<>()
                 : rFL.findByTipoRecurso(trSelected.getIdtipoRecurso());
+        if (trSelected != null && !trSelected.getIdtipoRecurso().equals(3)) {
+            recursos.forEach(r -> {
+                ejemplares.addAll(r.getEjemplarList());
+            });
+        }
     }
 
     public List<TipoRecurso> getTipoRecursos() {
@@ -190,11 +198,23 @@ public class repInvController extends Auxiliar implements Serializable {
         return categorias;
     }
 
+    public Recurso getRecursoDelEjemplar(Ejemplar e) {
+        return e.getRecurso();
+    }
+
+    public boolean isVerInvBiblio() {
+        return trSelected != null && trSelected.getIdtipoRecurso().equals(3) && !recursos.isEmpty();
+    }
+
+    public boolean isVerInvCRA() {
+        return trSelected != null && !trSelected.getIdtipoRecurso().equals(3) && !ejemplares.isEmpty();
+    }
+
     public void reporte(Object doc) {
         HSSFWorkbook wb = (HSSFWorkbook) doc;
-        if (trSelected.getIdtipoRecurso() == 3) {
-            wb = new XLSModel().getReporteInventario(wb, categorias, tipoCargos, trSelected);
+        wb = new XLSModel().getReporteInventario(wb, categorias, tipoCargos, trSelected);
 
+        if (trSelected.getIdtipoRecurso().equals(3)) {
             HSSFSheet h = wb.getSheetAt(0);
             int i = h.getLastRowNum();
             i += 3;
@@ -230,8 +250,10 @@ public class repInvController extends Auxiliar implements Serializable {
             h.addMergedRegion(new CellRangeAddress(i + 6, i + 6, 3, 4));
             h.addMergedRegion(new CellRangeAddress(i + 6, i + 6, 5, 6));
             h.addMergedRegion(new CellRangeAddress(i + 6, i + 6, 7, 8));
-        } else {
-
         }
+    }
+
+    public List<Ejemplar> getEjemplares() {
+        return ejemplares;
     }
 }

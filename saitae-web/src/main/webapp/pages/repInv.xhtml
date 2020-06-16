@@ -24,7 +24,7 @@
                 </h:panelGrid>
                 <p:dataTable id="inv" value="#{repInvController.recursos}" var="r"
                              emptyMessage="Sin registros" stickyHeader="true" 
-                             rendered="#{repInvController.trSelected!=null}">
+                             rendered="#{repInvController.verInvBiblio}">
                     <f:facet name="header">
                         <h:outputText value="Inventario de recursos #{repInvController.trSelected.tipoRecursoNombre}"/>
                     </f:facet>
@@ -37,7 +37,7 @@
                         <h:outputText value="#{r.tipoCargo.idtipoCargo}" />
                     </p:column>
                     <p:column headerText="Código"  width="10%">
-                        <h:outputText value="#{r.idrecurso}"/>
+                        <h:outputText value="#{r.categoria.idcategoria}-#{r.idrecurso}"/>
                     </p:column>
                     <p:column headerText="Nombre">
                         <h:outputText value="#{r.nombre}"/>
@@ -82,9 +82,60 @@
                         <h:outputText value="$#{repInvController.getTotalRecurso(r)}"/>
                     </p:column>
                 </p:dataTable>
-                <h:commandLink rendered="#{repInvController.trSelected!=null}">
+                <h:commandLink rendered="#{repInvController.verInvBiblio}">
                     <p:graphicImage library="img" name="xls.png" width="37px" height="32px"/>
                     <p:dataExporter type="xls" target="inv" 
+                                    options="#{axiliarController.excelOpt}"
+                                    fileName="Inventario_#{repInvController.trSelected.tipoRecursoNombre}_#{repInvController.añoActual}"
+                                    encoding="UTF-8"
+                                    postProcessor="#{repInvController.reporte}"/>
+                </h:commandLink>
+                
+                <p:dataTable id="invCra" value="#{repInvController.ejemplares}" var="e"
+                             emptyMessage="Sin registros" stickyHeader="true" 
+                             rendered="#{repInvController.verInvCRA}">
+                    <f:facet name="header">
+                        <h:outputText value="Inventario de recursos #{repInvController.trSelected.tipoRecursoNombre}"/>
+                    </f:facet>
+                    <f:facet name="footer">
+                        <h:outputText value="Valor total estimado: $#{repInvController.totalGeneral}"/>
+                    </f:facet>
+                    <p:column headerText="Código"  width="13%"
+                              filterBy="#{e.ejemplarPK.idRecurso}#{e.ejemplarPK.ejemplarCorrelativo}">
+                        <h:outputText value="#{e.ejemplarPK.idRecurso}#{e.ejemplarPK.ejemplarCorrelativo}"/>
+                    </p:column>
+                    <p:column headerText="Nombre"
+                              filterBy="#{e.recurso.nombre}">
+                        <h:outputText value="#{e.recurso.nombre}"/>
+                    </p:column>
+                    <p:column headerText="Marca" width="7%"
+                              filterBy="#{e.ejemplarMarca}">
+                        <h:outputText value="#{e.ejemplarMarca}"/>
+                    </p:column>
+                    <p:column headerText="Serie" width="10%"
+                              filterBy="#{e.ejemplarSerie}">
+                        <h:outputText value="#{e.ejemplarSerie}"/>
+                    </p:column>
+                    <p:column headerText="Año" width="6%"
+                              filterBy="#{e.ejemplarAnioDeIngreso}">
+                        <h:outputText value="#{e.ejemplarAnioDeIngreso}"/>
+                    </p:column>
+                    <p:column headerText="Estado Físico"  width="8%"
+                              filterBy="#{e.recurso.estadoFisico.equals('B')? 'BUENO' 
+                                          : (e.recurso.estadoFisico.equals('R')? 'REGULAR': '')}">
+                        <h:outputText value="#{e.recurso.estadoFisico.equals('B')? 'BUENO' 
+                                               : (e.recurso.estadoFisico.equals('R')? 'REGULAR': '')}"/>
+                    </p:column>
+                    <p:column headerText="Valor Unitario" width="7%">
+                        <h:outputText value="$#{e.recurso.valorUnitario}"/>
+                    </p:column>
+                    <p:column headerText="Tipo de Valor" width="8%">
+                        <h:outputText value="#{e.recurso.tipoValor}"/>
+                    </p:column>
+                </p:dataTable>
+                <h:commandLink rendered="#{repInvController.verInvCRA}">
+                    <p:graphicImage library="img" name="xls.png" width="37px" height="32px"/>
+                    <p:dataExporter type="xls" target="invCra" 
                                     options="#{axiliarController.excelOpt}"
                                     fileName="Inventario_#{repInvController.trSelected.tipoRecursoNombre}_#{repInvController.añoActual}"
                                     encoding="UTF-8"

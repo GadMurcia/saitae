@@ -202,10 +202,9 @@
                                                 <!--<p:ajax event="itemSelect" listener="# {admRecursoC.paisSelect}"/>-->
                                             </p:selectOneMenu>
 
-                                            <p:outputLabel for="tipocargo" value="Tipo Cargo" rendered="#{admRecursoC.verCategorias}"/>
+                                            <p:outputLabel for="tipocargo" value="Tipo Cargo"/>
                                             <p:selectOneMenu id="tipocargo" value="#{admRecursoC.seleccionado.tipoCargo}"
-                                                             converter="omnifaces.SelectItemsConverter"
-                                                             rendered="#{admRecursoC.verCategorias}">
+                                                             converter="omnifaces.SelectItemsConverter">
                                                 <f:selectItem itemLabel="Seleccione" itemValue=""/>
                                                 <f:selectItems var="tc" itemLabel="#{tc.nombre}" itemValue="#{tc}" 
                                                                value="#{admRecursoC.tiposCargos}"/>

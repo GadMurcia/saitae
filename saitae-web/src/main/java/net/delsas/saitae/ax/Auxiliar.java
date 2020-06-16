@@ -764,31 +764,31 @@ public class Auxiliar implements Serializable {
             switch (mhm.getDiasEstudio().getIdDias()) {
                 case 1:
                     x.setLunes(mhm.getMateria());
-                    x.setNomL(" (" + getGradoNombre(mhm.getGrado().getGradoPK()) + ") ");
+                    x.setNomL(" (" + getGradoNombreCorto(mhm.getGrado().getGradoPK()) + ") ");
                     break;
                 case 2:
                     x.setMartes(mhm.getMateria());
-                    x.setNomM(" (" + getGradoNombre(mhm.getGrado().getGradoPK()) + ") ");
+                    x.setNomM(" (" + getGradoNombreCorto(mhm.getGrado().getGradoPK()) + ") ");
                     break;
                 case 3:
                     x.setMiercoles(mhm.getMateria());
-                    x.setNomX(" (" + getGradoNombre(mhm.getGrado().getGradoPK()) + ") ");
+                    x.setNomX(" (" + getGradoNombreCorto(mhm.getGrado().getGradoPK()) + ") ");
                     break;
                 case 4:
                     x.setJueves(mhm.getMateria());
-                    x.setNomJ(" (" + getGradoNombre(mhm.getGrado().getGradoPK()) + ") ");
+                    x.setNomJ(" (" + getGradoNombreCorto(mhm.getGrado().getGradoPK()) + ") ");
                     break;
                 case 5:
                     x.setViernes(mhm.getMateria());
-                    x.setNomV(" (" + getGradoNombre(mhm.getGrado().getGradoPK()) + ") ");
+                    x.setNomV(" (" + getGradoNombreCorto(mhm.getGrado().getGradoPK()) + ") ");
                     break;
                 case 6:
                     x.setSabado(mhm.getMateria());
-                    x.setNomS(" (" + getGradoNombre(mhm.getGrado().getGradoPK()) + ") ");
+                    x.setNomS(" (" + getGradoNombreCorto(mhm.getGrado().getGradoPK()) + ") ");
                     break;
                 case 7:
                     x.setDomingo(mhm.getMateria());
-                    x.setNomD(" (" + getGradoNombre(mhm.getGrado().getGradoPK()) + ") ");
+                    x.setNomD(" (" + getGradoNombreCorto(mhm.getGrado().getGradoPK()) + ") ");
                     break;
             }
         }
@@ -801,6 +801,10 @@ public class Auxiliar implements Serializable {
                 + getModalidadNombre(gr.getGradoModalidad())
                 + ((gr.getGradoSeccion() == null || gr.getGradoSeccion().isEmpty() || gr.getGradoSeccion().equals(" "))
                 ? "" : " Sección " + gr.getGradoSeccion()));
+    }
+
+    public String getGradoNombreCorto(GradoPK gr) {
+        return gr == null ? "" : (gr.getIdgrado() + gr.getGradoModalidad() + gr.getGradoSeccion());
     }
 
     public String getModalidadNombre(String gr) {
@@ -1298,7 +1302,7 @@ public class Auxiliar implements Serializable {
         p.setPermisosComentario((goce ? "1" : "0") + "¿¿" + (getPermisoLicenciasAnteriores(p) ? "1" : "0") + "¿¿¿¿ ");
     }
 
-    public void setPermisoLicenciasAnteriores(boolean lic, Permisos  p) {
+    public void setPermisoLicenciasAnteriores(boolean lic, Permisos p) {
         p.setPermisosComentario((getPermisoGoceDeSueldo(p) ? "1" : "0") + "¿¿" + (lic ? "1" : "0") + "¿¿¿¿");
     }
 }

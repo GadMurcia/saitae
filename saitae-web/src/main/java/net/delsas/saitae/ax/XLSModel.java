@@ -546,7 +546,7 @@ public class XLSModel {
         return wb;
     }
 
-    private void copiarDatos(HSSFSheet h, HSSFWorkbook wb) {
+    public void copiarDatos(HSSFSheet h, HSSFWorkbook wb) {
         HSSFSheet h0 = wb.getSheetAt(0);
         h0.iterator().forEachRemaining((r0) -> {
             int nr = h.getLastRowNum() + 1;
@@ -627,19 +627,23 @@ public class XLSModel {
         c.setCellValue("Texistepeque, " + new SimpleDateFormat("dd/MMMMM/yyyy").format(new Date()));
         c = r.createCell(3);
         c.setCellValue("DISTRITO EDUCATIVO: 02-19");
-        c = r.createCell(tr.getIdtipoRecurso().equals(3) ? 7 : 5);
-        c.setCellValue("TIPO CARGO");
-
-        int i = 4;
-        for (TipoCargo tc : tipoCargos) {
-            r = h.createRow(i);
+        if (tr.getIdtipoRecurso().equals(3)) {
             c = r.createCell(tr.getIdtipoRecurso().equals(3) ? 7 : 5);
-            c.setCellValue(tc.getNombre());
-            c = r.createCell(tr.getIdtipoRecurso().equals(3) ? 12 : 8);
-            c.setCellValue(tc.getIdtipoCargo());
-            h.addMergedRegion(new CellRangeAddress(i, i, tr.getIdtipoRecurso().equals(3) ? 7 : 5, tr.getIdtipoRecurso().equals(3) ? 11 : 7));
-            h.getRow(i).getCell(tr.getIdtipoRecurso().equals(3) ? 7 : 5).getCellStyle().setAlignment(HorizontalAlignment.LEFT);
-            i++;
+            c.setCellValue("TIPO CARGO");
+
+            int i = 4;
+            for (TipoCargo tc : tipoCargos) {
+                r = h.createRow(i);
+                c = r.createCell(tr.getIdtipoRecurso().equals(3) ? 7 : 5);
+                c.setCellValue(tc.getNombre());
+                c = r.createCell(tr.getIdtipoRecurso().equals(3) ? 12 : 8);
+                c.setCellValue(tc.getIdtipoCargo());
+                h.addMergedRegion(new CellRangeAddress(i, i, tr.getIdtipoRecurso().equals(3) ? 7
+                        : 5, tr.getIdtipoRecurso().equals(3) ? 11 : 7));
+                h.getRow(i).getCell(tr.getIdtipoRecurso().equals(3) ? 7
+                        : 5).getCellStyle().setAlignment(HorizontalAlignment.LEFT);
+                i++;
+            }
         }
         copiarDatos(h, wb);
         wb.removeSheetAt(0);
@@ -659,13 +663,15 @@ public class XLSModel {
             });
         });
 
-        HSSFCellStyle cs = wb.createCellStyle();
-        cs.setAlignment(HorizontalAlignment.CENTER);
-        h.getRow(3).getCell(tr.getIdtipoRecurso().equals(3) ? 7 : 5).setCellStyle(cs);
-        cs = wb.createCellStyle();
-        cs.setAlignment(HorizontalAlignment.LEFT);
-        h.getRow(1).getCell(tr.getIdtipoRecurso().equals(3) ? 7 : 5).setCellStyle(cs);
-        h.getRow(2).getCell(tr.getIdtipoRecurso().equals(3) ? 7 : 5).setCellStyle(cs);
+        if (tr.getIdtipoRecurso().equals(3)) {
+            HSSFCellStyle cs = wb.createCellStyle();
+            cs.setAlignment(HorizontalAlignment.CENTER);
+            h.getRow(3).getCell(tr.getIdtipoRecurso().equals(3) ? 7 : 5).setCellStyle(cs);
+            cs = wb.createCellStyle();
+            cs.setAlignment(HorizontalAlignment.LEFT);
+            h.getRow(1).getCell(tr.getIdtipoRecurso().equals(3) ? 7 : 5).setCellStyle(cs);
+            h.getRow(2).getCell(tr.getIdtipoRecurso().equals(3) ? 7 : 5).setCellStyle(cs);
+        }
         return wb;
     }
 
@@ -680,21 +686,33 @@ public class XLSModel {
         HSSFFont f = wb.createFont();
 //        f.setBold(true);
         f.setFontName("Courier 10 Pitch");
-        f.setFontHeightInPoints((short) 12);
+        f.setFontHeightInPoints((short) 10);
         st.setBorderBottom(BorderStyle.MEDIUM);
         st.setBorderTop(BorderStyle.MEDIUM);
         st.setBorderLeft(BorderStyle.MEDIUM);
         st.setBorderRight(BorderStyle.MEDIUM);
         st.setFont(f);
 
+        HSSFCellStyle st1 = wb.createCellStyle();
+        st1.setAlignment(HorizontalAlignment.LEFT);
+        st1.setWrapText(true);
+        st1.setVerticalAlignment(VerticalAlignment.CENTER);
+        st1.setFont(wb.createFont());
+        st1.getFont(wb).setFontHeightInPoints((short) 10);
+        st1.getFont(wb).setFontName("Courier 10 Pitch");
+        st1.getFont(wb).setBold(true);
+
         HSSFRow r = h.createRow(1);
         HSSFCell c = r.createCell(0);
         c.setCellValue("INSTITUTO NACIONAL TEXISTEPEQUE");
+        c.setCellStyle(st1);
+        c.getCellStyle().setAlignment(HorizontalAlignment.CENTER);
         h.addMergedRegion(new CellRangeAddress(1, 1, 0, tpermisos.size() * 3 + 5));
 
         r = h.createRow(2);
         c = r.createCell(0);
         c.setCellValue("NOMBRE: " + new Auxiliar().getNombreCompletoPersona(rpListGoce.get(0).getPermiso().getPersona()));
+        c.setCellStyle(st1);
         h.addMergedRegion(new CellRangeAddress(2, 2, 0, ((int) (tpermisos.size() / 2)) * 3));
 
         c = r.createCell(tpermisos.size() * 3 + 1);
@@ -708,20 +726,24 @@ public class XLSModel {
         }
 
         c.setCellValue("CARGO: " + cargo);
+        c.setCellStyle(st1);
         h.addMergedRegion(new CellRangeAddress(2, 2, tpermisos.size() * 3 + 1, tpermisos.size() * 3 + 5));
 
         if (rpListGoce.get(0).getPermiso().getPersona().getTipoPersona().getIdtipoPersona() == 4) {
             c = r.createCell(((int) (tpermisos.size() / 2)) * 3 + 1);
             c.setCellValue("NIP: " + rpListGoce.get(0).getPermiso().getPersona().getMaestro().getMaestroNip());
+            c.setCellStyle(st1);
             h.addMergedRegion(new CellRangeAddress(2, 2, ((int) (tpermisos.size() / 2)) * 3 + 1, tpermisos.size() * 3));
 
             r = h.createRow(3);
             c = r.createCell(0);
             c.setCellValue("PARTIDA: " + rpListGoce.get(0).getPermiso().getPersona().getMaestro().getMaestroPartidas());
+            c.setCellStyle(st1);
             h.addMergedRegion(new CellRangeAddress(3, 3, 0, ((int) (tpermisos.size() / 2)) * 3));
 
             c = r.createCell(((int) (tpermisos.size() / 2)) * 3 + 1);
             c.setCellValue("SUBNÚMERO: " + rpListGoce.get(0).getPermiso().getPersona().getMaestro().getMaestroSubnumeros());
+            c.setCellStyle(st1);
             h.addMergedRegion(new CellRangeAddress(3, 3, ((int) (tpermisos.size() / 2)) * 3 + 1, tpermisos.size() * 3));
         }
 
@@ -803,8 +825,7 @@ public class XLSModel {
         }
 
         for (int m = 4; m <= h.getLastRowNum(); m++) {
-            HSSFRow r0 = h.getRow(m);
-            r0.forEach(c0 -> {
+            h.getRow(m).forEach(c0 -> {
                 c0.setCellStyle(st);
             });
         }

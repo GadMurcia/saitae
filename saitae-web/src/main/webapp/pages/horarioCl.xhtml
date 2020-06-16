@@ -29,66 +29,51 @@
                              paginatorPosition="top">
                     <f:facet name="{Exporters}">
                         <div style="float:right;padding-top: 5px;">
-                            <h:commandLink rendered="#{repInvController.trSelected!=null}">
+                            <h:commandLink>
                                 <p:graphicImage library="img" name="xls.png" width="37px" height="32px"/>
-                                <p:dataExporter type="xls" target="inv" 
+                                <p:dataExporter type="xls" target="horario" 
                                                 options="#{axiliarController.excelOpt}"
                                                 fileName="Horario_de_Clases"
-                                                encoding="UTF-8"/>
+                                                encoding="UTF-8"
+                                                postProcessor="#{horarioClController.postProcess}"/>
                             </h:commandLink>
-                            <h:commandLink>
-                                <p:graphicImage library="img" name="pdf.png" width="37px" height="32px"/>
-                                <p:dataExporter type="pdf" target="horario"
-                                                fileName="Horario_de_Clases"
-                                                options="#{axiliarController.PDFOpt}"
-                                                preProcessor="#{horarioClController.preProcessPDF}"
-                                                encoding="UTF-8"/>
-                            </h:commandLink>                       
                         </div>
                     </f:facet>
                     <f:facet name="header">
                         Horario de clases #{horarioClController.añoSelected}
                     </f:facet>
-                    <p:column headerText="Hora" width="15%">
-                        <h:outputText value="#{horarioClController.getHoraToString(h.horas.horaInicio)} 
-                                      - #{horarioClController.getHoraToString(h.horas.horaFin)}"/>
+                    <p:column headerText="Hora" width="17%">
+                        <h:outputText value="#{horarioClController.getHoraToString(h.horas.horaInicio)} - #{horarioClController.getHoraToString(h.horas.horaFin)}"/>
                     </p:column>
 
                     <p:column headerText="Lunes" style="background-color: ##{h.lunes.materiaComentario}">
-                        <h:outputText value=" #{h.lunes.materiaNombre} "/>
-                        <p:outputLabel value=" #{h.nomL} " style="font-size: 10px;"/>
+                        <h:outputText value="#{h.lunes.materiaNombre} #{h.nomL}"/>
                     </p:column>
 
                     <p:column headerText="Martes" style="background-color: ##{h.martes.materiaComentario}">
-                        <h:outputText value=" #{h.martes.materiaNombre} "/>
-                        <p:outputLabel value=" #{h.nomM} " style="font-size: 10px;"/>
+                        <h:outputText value="#{h.martes.materiaNombre} #{h.nomM}"/>
                     </p:column>
 
                     <p:column headerText="Miércoles" style="background-color: ##{h.miercoles.materiaComentario}">
-                        <h:outputText value=" #{h.miercoles.materiaNombre} "/>
-                        <p:outputLabel value=" #{h.nomX} " style="font-size: 10px;"/>
+                        <h:outputText value="#{h.miercoles.materiaNombre} #{h.nomX}"/>
                     </p:column>
 
                     <p:column headerText="Jueves" style="background-color: ##{h.jueves.materiaComentario}">
-                        <h:outputText value=" #{h.jueves.materiaNombre} "/>
-                        <p:outputLabel value=" #{h.nomJ} " style="font-size: 10px;"/>
+                        <h:outputText value="#{h.jueves.materiaNombre} #{h.nomJ}"/>
                     </p:column>
 
                     <p:column headerText="Viernes" style="background-color: ##{h.viernes.materiaComentario}">
-                        <h:outputText value=" #{h.viernes.materiaNombre} "/>
-                        <p:outputLabel value=" #{h.nomV} " style="font-size: 10px;"/>
+                        <h:outputText value="#{h.viernes.materiaNombre} #{h.nomV}"/>
                     </p:column>
 
-                    <!--  <p:column headerText="Sábado" style="background-color: ## {h.sabado.materiaComentario}">
-                          <h:outputText value=" # {h.sabado.materiaNombre} "/>
-                          <p:outputLabel value=" # {h.nomS} " style="font-size: 10px;"/>
-                      </p:column>
-  
-                      <p:column headerText="Domingo" style="background-color: ## {h.domingo.materiaComentario}">
-                          <h:outputText value=" # {h.domingo.materiaNombre} "/>
-                          <p:outputLabel value=" # {h.nomD} " style="font-size: 10px;"/>
-                      </p:column>
-                    --></p:dataTable>
+                    <p:column headerText="Sábado" style="background-color: ##{h.sabado.materiaComentario}">
+                        <h:outputText value="#{h.sabado.materiaNombre} #{h.nomS}"/>
+                    </p:column>
+
+                    <p:column headerText="Domingo" style="background-color: ##{h.domingo.materiaComentario}">
+                        <h:outputText value="#{h.domingo.materiaNombre} #{h.nomD}"/>
+                    </p:column>
+                </p:dataTable>
             </h:panelGrid>
         </h:form>
     </ui:define>
