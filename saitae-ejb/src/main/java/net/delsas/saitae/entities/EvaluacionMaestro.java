@@ -97,6 +97,11 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "EvaluacionMaestro.findByClasePlanificada", query = "SELECT e FROM EvaluacionMaestro e WHERE e.clasePlanificada = :clasePlanificada")})
 public class EvaluacionMaestro implements Serializable {
 
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "jornalizaci\u00c3\u00b3n")
+    private boolean jornalizaciÃn;
+
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected EvaluacionMaestroPK evaluacionMaestroPK;
@@ -989,6 +994,14 @@ public class EvaluacionMaestro implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.EvaluacionMaestro[ evaluacionMaestroPK=" + evaluacionMaestroPK + " ]";
+    }
+
+    public boolean getJornalizaciÃn() {
+        return jornalizaciÃn;
+    }
+
+    public void setJornalizaciÃn(boolean jornalizaciÃn) {
+        this.jornalizaciÃn = jornalizaciÃn;
     }
     
 }

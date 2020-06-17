@@ -60,6 +60,8 @@
     <class>net.delsas.saitae.entities.TipopersonaPermiso</class>
     <class>net.delsas.saitae.entities.Zona</class>
     <class>net.delsas.saitae.entities.Constancias</class>
+    <class>net.delsas.saitae.entities.PeriodoReportePsicologia</class>
+    <class>net.delsas.saitae.entities.ReportePsicologia</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties/>
   </persistence-unit>

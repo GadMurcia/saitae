@@ -67,6 +67,9 @@ import javax.xml.bind.annotation.XmlTransient;
 })
 public class Persona implements Serializable {
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "psicologo")
+    private List<ReportePsicologia> reportePsicologiaList;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "evaluador")
     private List<EvaluacionMaestro> evaluacionMaestroList;
 
@@ -607,6 +610,15 @@ public class Persona implements Serializable {
 
     public void setEvaluacionMaestroList(List<EvaluacionMaestro> evaluacionMaestroList) {
         this.evaluacionMaestroList = evaluacionMaestroList;
+    }
+
+    @XmlTransient
+    public List<ReportePsicologia> getReportePsicologiaList() {
+        return reportePsicologiaList;
+    }
+
+    public void setReportePsicologiaList(List<ReportePsicologia> reportePsicologiaList) {
+        this.reportePsicologiaList = reportePsicologiaList;
     }
 
 }

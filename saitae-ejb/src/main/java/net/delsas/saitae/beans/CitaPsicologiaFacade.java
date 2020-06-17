@@ -5,11 +5,13 @@
  */
 package net.delsas.saitae.beans;
 
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import net.delsas.saitae.entities.CitaPsicologia;
+import net.delsas.saitae.entities.ConsultaPK;
 
 /**
  *
@@ -65,4 +67,21 @@ public class CitaPsicologiaFacade extends AbstractFacade<CitaPsicologia> impleme
                 .getResultList();
     }
 
+    @Override
+    public Integer countSolicitadas(Date fi, Date ff, Integer id) {
+        return new Integer(em.createNamedQuery("CitaPsicologia.countSolicitadas")
+                .setParameter("ff", ff)
+                .setParameter("fi", fi)
+                .setParameter("id", id)
+                .getSingleResult().toString());
+    }
+
+    @Override
+    public Integer countConsultadas(Date fi, Date ff, Integer id) {
+        return new Integer(em.createNamedQuery("CitaPsicologia.countConsultadas")
+                .setParameter("ff", ff)
+                .setParameter("fi", fi)
+                .setParameter("id", id)
+                .getSingleResult().toString());
+    }
 }

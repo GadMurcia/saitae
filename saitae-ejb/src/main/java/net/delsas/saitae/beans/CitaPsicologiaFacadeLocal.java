@@ -5,9 +5,11 @@
  */
 package net.delsas.saitae.beans;
 
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Local;
 import net.delsas.saitae.entities.CitaPsicologia;
+import net.delsas.saitae.entities.ConsultaPK;
 
 /**
  *
@@ -74,6 +76,10 @@ public interface CitaPsicologiaFacadeLocal {
      * @param idEstudiante
      * @return java.util.List java.lang.Integer
      */
-    public List<Integer> findAñosPersonales(Integer idEstudiante);
+    public List<Integer> findAñosPersonales(Integer idEstudiante);   
+
+    public Integer countSolicitadas(Date fi, Date ff, Integer id);
+
+    public Integer countConsultadas(Date fi, Date ff, Integer id);
 
 }

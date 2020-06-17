@@ -39,19 +39,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Documentos implements Serializable {
 
     @Lob
-    @Column(name = "estudianteDocPartida")
     private byte[] estudianteDocPartida;
     @Lob
-    @Column(name = "estudianteDocCertificado")
     private byte[] estudianteDocCertificado;
     @Lob
-    @Column(name = "estudianteDocConducta")
     private byte[] estudianteDocConducta;
     @Lob
-    @Column(name = "estudianteDocDui")
     private byte[] estudianteDocDui;
     @Lob
-    @Column(name = "estudianteDocNotas")
     private byte[] estudianteDocNotas;
 
     private static final long serialVersionUID = 1L;

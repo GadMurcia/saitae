@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package net.delsas.saitae.entities;
 
 import java.io.Serializable;
@@ -31,21 +30,24 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "consulta", catalog = "intex", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Consulta.findAll", query = "SELECT c FROM Consulta c ORDER BY c.consultaPK.fechaHoraConsulta DESC")
-    , @NamedQuery(name = "Consulta.findByIdestudiante", query = "SELECT c FROM Consulta c WHERE c.consultaPK.idestudiante = :idestudiante")
-    , @NamedQuery(name = "Consulta.findByFechaHoraConsulta", query = "SELECT c FROM Consulta c WHERE c.consultaPK.fechaHoraConsulta = :fechaHoraConsulta")
-    , @NamedQuery(name = "Consulta.findByIdPsicologo", query = "SELECT c FROM Consulta c WHERE c.idPsicologo = :idPsicologo")
-    , @NamedQuery(name = "Consulta.findByConsultaRemitidoPor", query = "SELECT c FROM Consulta c WHERE c.consultaRemitidoPor = :consultaRemitidoPor")
-    , @NamedQuery(name = "Consulta.findByConsultaMotivo", query = "SELECT c FROM Consulta c WHERE c.consultaMotivo = :consultaMotivo")
-    , @NamedQuery(name = "Consulta.findByConsultaAntecedentePersonal", query = "SELECT c FROM Consulta c WHERE c.consultaAntecedentePersonal = :consultaAntecedentePersonal")
-    , @NamedQuery(name = "Consulta.findByConsultaAntecedenteFamiliar", query = "SELECT c FROM Consulta c WHERE c.consultaAntecedenteFamiliar = :consultaAntecedenteFamiliar")
-    , @NamedQuery(name = "Consulta.findByConsultaAntecedentesMorbidos", query = "SELECT c FROM Consulta c WHERE c.consultaAntecedentesMorbidos = :consultaAntecedentesMorbidos")
-    , @NamedQuery(name = "Consulta.findByConsultaConductaObcerbada", query = "SELECT c FROM Consulta c WHERE c.consultaConductaObcerbada = :consultaConductaObcerbada")
-    , @NamedQuery(name = "Consulta.findByConsultaProblema", query = "SELECT c FROM Consulta c WHERE c.consultaProblema = :consultaProblema")
-    , @NamedQuery(name = "Consulta.findByConsultaDiagnostico", query = "SELECT c FROM Consulta c WHERE c.consultaDiagnostico = :consultaDiagnostico")
-    , @NamedQuery(name = "Consulta.findByConsultaEvaluacionPsicologica", query = "SELECT c FROM Consulta c WHERE c.consultaEvaluacionPsicologica = :consultaEvaluacionPsicologica")
-    , @NamedQuery(name = "Consulta.findByConsultaRemitir", query = "SELECT c FROM Consulta c WHERE c.consultaRemitir = :consultaRemitir")
-    , @NamedQuery(name = "Consulta.findByConsultaCoemntario", query = "SELECT c FROM Consulta c WHERE c.consultaCoemntario = :consultaCoemntario")})
+    @NamedQuery(name = "Consulta.findAll", query = "SELECT c FROM Consulta c ORDER BY c.consultaPK.fechaHoraConsulta DESC"),
+    @NamedQuery(name = "Consulta.findByIdestudiante", query = "SELECT c FROM Consulta c WHERE c.consultaPK.idestudiante = :idestudiante"),
+    @NamedQuery(name = "Consulta.findByFechaHoraConsulta", query = "SELECT c FROM Consulta c WHERE c.consultaPK.fechaHoraConsulta = :fechaHoraConsulta"),
+    @NamedQuery(name = "Consulta.findByIdPsicologo", query = "SELECT c FROM Consulta c WHERE c.idPsicologo = :idPsicologo"),
+    @NamedQuery(name = "Consulta.findByConsultaRemitidoPor", query = "SELECT c FROM Consulta c WHERE c.consultaRemitidoPor = :consultaRemitidoPor"),
+    @NamedQuery(name = "Consulta.findByConsultaMotivo", query = "SELECT c FROM Consulta c WHERE c.consultaMotivo = :consultaMotivo"),
+    @NamedQuery(name = "Consulta.findByConsultaAntecedentePersonal", query = "SELECT c FROM Consulta c WHERE c.consultaAntecedentePersonal = :consultaAntecedentePersonal"),
+    @NamedQuery(name = "Consulta.findByConsultaAntecedenteFamiliar", query = "SELECT c FROM Consulta c WHERE c.consultaAntecedenteFamiliar = :consultaAntecedenteFamiliar"),
+    @NamedQuery(name = "Consulta.findByConsultaAntecedentesMorbidos", query = "SELECT c FROM Consulta c WHERE c.consultaAntecedentesMorbidos = :consultaAntecedentesMorbidos"),
+    @NamedQuery(name = "Consulta.findByConsultaConductaObcerbada", query = "SELECT c FROM Consulta c WHERE c.consultaConductaObcerbada = :consultaConductaObcerbada"),
+    @NamedQuery(name = "Consulta.findByConsultaProblema", query = "SELECT c FROM Consulta c WHERE c.consultaProblema = :consultaProblema"),
+    @NamedQuery(name = "Consulta.findByConsultaDiagnostico", query = "SELECT c FROM Consulta c WHERE c.consultaDiagnostico = :consultaDiagnostico"),
+    @NamedQuery(name = "Consulta.findByConsultaEvaluacionPsicologica", query = "SELECT c FROM Consulta c WHERE c.consultaEvaluacionPsicologica = :consultaEvaluacionPsicologica"),
+    @NamedQuery(name = "Consulta.findByConsultaRemitir", query = "SELECT c FROM Consulta c WHERE c.consultaRemitir = :consultaRemitir"),
+    @NamedQuery(name = "Consulta.findByConsultaCoemntario", query = "SELECT c FROM Consulta c WHERE c.consultaCoemntario = :consultaCoemntario"),
+    @NamedQuery(name = "Consulta.findMotivosByConsulta", query = "SELECT c.consultaMotivo FROM Consulta c WHERE (c.consultaPK.fechaHoraConsulta BETWEEN :fi AND :ff) AND c.consultaPK.idestudiante = :id ORDER BY c.consultaPK.fechaHoraConsulta ASC"),
+    @NamedQuery(name = "Consulta.findIdEstudianteByPeriodo", query = "SELECT DISTINCT c.consultaPK.idestudiante FROM Consulta c WHERE (c.consultaPK.fechaHoraConsulta BETWEEN :fi AND :ff) ORDER BY 1 ASC")
+})
 public class Consulta implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -91,8 +93,8 @@ public class Consulta implements Serializable {
     @Column(name = "consultaCoemntario")
     private String consultaCoemntario;
     @JoinColumns({
-        @JoinColumn(name = "idestudiante", referencedColumnName = "estudiante", insertable = false, updatable = false)
-        , @JoinColumn(name = "fechaHoraConsulta", referencedColumnName = "fechaSolicitada", insertable = false, updatable = false)})
+        @JoinColumn(name = "idestudiante", referencedColumnName = "estudiante", insertable = false, updatable = false),
+        @JoinColumn(name = "fechaHoraConsulta", referencedColumnName = "fechaSolicitada", insertable = false, updatable = false)})
     @OneToOne(optional = false)
     private CitaPsicologia citaPsicologia;
     @JoinColumn(name = "consultaExpediente", referencedColumnName = "idEstudiante")

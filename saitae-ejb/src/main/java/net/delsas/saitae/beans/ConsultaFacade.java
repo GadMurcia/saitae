@@ -5,6 +5,8 @@
  */
 package net.delsas.saitae.beans;
 
+import java.util.Date;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,5 +30,22 @@ public class ConsultaFacade extends AbstractFacade<Consulta> implements Consulta
     public ConsultaFacade() {
         super(Consulta.class);
     }
+
+    @Override
+    public List<String> findMotivosByConsulta(Date fi, Date ff, Integer id) {
+        return em.createNamedQuery("Consulta.findMotivosByConsulta")
+                .setParameter("fi", fi)
+                .setParameter("ff", ff)
+                .setParameter("id", id)
+                .getResultList();
+    }
     
+    @Override
+    public List<Integer> findIdEstudianteByPeriodo(Date fi, Date ff) {
+        return em.createNamedQuery("Consulta.findIdEstudianteByPeriodo")
+                .setParameter("fi", fi)
+                .setParameter("ff", ff)
+                .getResultList();
+    }
+
 }

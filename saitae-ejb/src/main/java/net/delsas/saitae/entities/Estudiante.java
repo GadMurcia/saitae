@@ -55,6 +55,9 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Estudiante.findByEstudianteComentario", query = "SELECT e FROM Estudiante e WHERE e.estudianteComentario = :estudianteComentario")})
 public class Estudiante implements Serializable {
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "estudiante1")
+    private List<ReportePsicologia> reportePsicologiaList;
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -437,6 +440,15 @@ public class Estudiante implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.Estudiante[ idestudiante=" + idestudiante + " ]";
+    }
+
+    @XmlTransient
+    public List<ReportePsicologia> getReportePsicologiaList() {
+        return reportePsicologiaList;
+    }
+
+    public void setReportePsicologiaList(List<ReportePsicologia> reportePsicologiaList) {
+        this.reportePsicologiaList = reportePsicologiaList;
     }
     
 }

@@ -39,14 +39,14 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Constancias.findByComentario", query = "SELECT c FROM Constancias c WHERE c.comentario = :comentario")})
 public class Constancias implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    private ConstanciasPK constanciasPK;
     @Basic(optional = false)
     @NotNull
     @Lob
-    @Column(name = "documento")
     private byte[] documento;
+
+    private static final long serialVersionUID = 1L;
+    @EmbeddedId
+    private ConstanciasPK constanciasPK;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 100)
@@ -88,13 +88,6 @@ public class Constancias implements Serializable {
         this.constanciasPK = constanciasPK;
     }
 
-    public byte[] getDocumento() {
-        return documento;
-    }
-
-    public void setDocumento(byte[] documento) {
-        this.documento = documento;
-    }
 
     public String getExtención() {
         return extención;
@@ -143,6 +136,14 @@ public class Constancias implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.Constancias[ constanciasPK=" + constanciasPK + " ]";
+    }
+
+    public byte[] getDocumento() {
+        return documento;
+    }
+
+    public void setDocumento(byte[] documento) {
+        this.documento = documento;
     }
     
 }

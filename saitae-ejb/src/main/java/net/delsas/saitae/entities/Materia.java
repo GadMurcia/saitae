@@ -41,6 +41,11 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Materia implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "materia")
+    private List<MestroHorarioMaterias> mestroHorarioMateriasList;
+    @OneToMany(mappedBy = "maeria")
+    private List<Reserva> reservaList;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "materia")
     private List<EvaluacionMaestro> evaluacionMaestroList;
 
     private static final long serialVersionUID = 1L;
@@ -151,6 +156,24 @@ public class Materia implements Serializable {
 
     public void setEvaluacionMaestroList(List<EvaluacionMaestro> evaluacionMaestroList) {
         this.evaluacionMaestroList = evaluacionMaestroList;
+    }
+
+    @XmlTransient
+    public List<MestroHorarioMaterias> getMestroHorarioMateriasList() {
+        return mestroHorarioMateriasList;
+    }
+
+    public void setMestroHorarioMateriasList(List<MestroHorarioMaterias> mestroHorarioMateriasList) {
+        this.mestroHorarioMateriasList = mestroHorarioMateriasList;
+    }
+
+    @XmlTransient
+    public List<Reserva> getReservaList() {
+        return reservaList;
+    }
+
+    public void setReservaList(List<Reserva> reservaList) {
+        this.reservaList = reservaList;
     }
     
 }

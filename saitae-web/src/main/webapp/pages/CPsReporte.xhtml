@@ -1,10 +1,225 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="./../WEB-INF/template/plantilla1.xhtml">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../WEB-INF/template/plantilla.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="content">
-        Elaboración de reporte de citas psicológicas [En Construcción]
+        <h:form id="form">
+            <h:panelGrid columns="1">
+            <h1 style="align-content: center;">Gestor de reportes de consultas psicológicas</h1>
+            <p:tabView id="tw" orientation="top" activeIndex="2" >
+                <p:tab title="Reportes Públicos">
+                    <h:panelGrid columns="1">
+                        <h:panelGrid columns="2">
+                            <p:outputLabel for="per" value="Fechas del reporte"/>
+                            <p:selectOneMenu id="per"
+                                             value="#{repPSController.periodoSel}"
+                                             converter="omnifaces.SelectItemsConverter">
+                                <f:selectItem  itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
+                                <f:selectItems value="#{repPSController.periodos}" var="pp" itemValue="#{pp}"
+                                               itemLabel="#{repPSController.getFechasPeriodo(pp)}"/>
+                                <p:ajax event="itemSelect" listener="#{repPSController.onPeriodoSelect}" update="publicos"/>
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                        <p:dataTable id="publicos" value="#{repPSController.reportes}" var="rp"
+                                     paginator="true" rows="8"
+                                     paginatorPosition="top" paginatorAlwaysVisible="false"
+                                     emptyMessage="Aún no hay reportes que mostrar" editable="true">
+                            <p:column headerText="Alumno">
+                                #{repPSController.getNombreCortoPersona(rp.estudiante1.persona)}
+                            </p:column>
+                            <p:column headerText="Grado">
+                                #{repPSController.getGradoEstudiante(rp.estudiante1)}
+                            </p:column>
+                            <p:column headerText="Citas Solicitadas">
+                                #{rp.NCitasSolicitadas}
+                            </p:column>
+                            <p:column headerText="Consultas Realizadas">
+                                #{rp.NConsultas}
+                            </p:column>
+                            <p:column headerText="Motivos de las Consultas">
+                                #{rp.motivos}
+                            </p:column>
+                            <p:column headerText="Psicólogo">
+                                #{repPSController.getNombreCortoPersona(rp.psicologo)}
+                            </p:column>
+                            <p:column headerText="Comentarios del Psicólogo">
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <p:inputTextarea value="#{rp.diagnostico}" 
+                                                         rows="6" 
+                                                         disabled="true" maxlength="800"/>
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:inputTextarea value="#{rp.diagnostico}" 
+                                                         rows="6" 
+                                                         maxlength="800"/>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column style="width:35px">
+                                <p:rowEditor />
+                            </p:column>
+                        </p:dataTable>
+                    </h:panelGrid>
+                </p:tab>
+
+                <p:tab title="Reportes Por Publicar">
+                    <h:panelGrid columns="1">
+                        <h:panelGrid columns="2">
+                            <p:outputLabel for="pern" value="Fechas del reporte"/>
+                            <p:selectOneMenu id="pern" converter="omnifaces.SelectItemsConverter" 
+                                             value="#{repPSController.periodoNPSel}">
+                                <f:selectItem  itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
+                                <f:selectItems value="#{repPSController.periodosNoPublicos}" var="pnp" itemValue="#{pnp}"
+                                               itemLabel="#{repPSController.getFechasPeriodo(pnp)}"/>
+                                <p:ajax event="itemSelect" listener="#{repPSController.onPeriodoSelect}" update="no-publicos"/>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel for="act" value="Acción a realizar: "/>
+                            <p:selectBooleanButton id="act" value="#{repPSController.estado}" 
+                                                   onLabel="Publicar" offLabel="No Publicar"
+                                                   disabled="#{repPSController.reportesNoPublicos.size()==0}">
+                                <p:ajax event="change" 
+                                        listener="#{repPSController.onBlour}"/>
+                            </p:selectBooleanButton>
+                        </h:panelGrid>
+
+
+                        <p:commandButton id="summit" value="Guardar Cambios" 
+                                         actionListener="#{repPSController.guardar(1)}" 
+                                         update="no-publicos" disabled="#{repPSController.reportesNoPublicos.size()==0}"/>
+
+                        <p:dataTable id="no-publicos" value="#{repPSController.reportesNoPublicos}" var="rnp"
+                                     paginator="true" rows="8"
+                                     paginatorPosition="top" paginatorAlwaysVisible="false"
+                                     emptyMessage="Aún no hay reportes que mostrar" editable="true">
+                            <p:column headerText="Alumno">
+                                #{repPSController.getNombreCortoPersona(rnp.estudiante1.persona)}
+                            </p:column>
+                            <p:column headerText="Grado">
+                                #{repPSController.getGradoEstudiante(rnp.estudiante1)}
+                            </p:column>
+                            <p:column headerText="Citas Solicitadas">
+                                #{rnp.NCitasSolicitadas}
+                            </p:column>
+                            <p:column headerText="Consultas Realizadas">
+                                #{rnp.NConsultas}
+                            </p:column>
+                            <p:column headerText="Motivos de las Consultas">
+                                #{rnp.motivos}
+                            </p:column>
+                            <p:column headerText="Psicólogo">
+                                #{repPSController.getNombreCortoPersona(rnp.psicologo)}
+                            </p:column>
+                            <p:column headerText="Comentarios del Psicólogo">
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <p:inputTextarea value="#{rnp.diagnostico}" 
+                                                         rows="6" 
+                                                         disabled="true" maxlength="800"/>
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:inputTextarea value="#{rnp.diagnostico}" 
+                                                         rows="6" 
+                                                         maxlength="800"/>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column style="width:35px">
+                                <p:rowEditor />
+                            </p:column>
+                        </p:dataTable>
+                    </h:panelGrid>
+                </p:tab>
+
+                <p:tab title="Elaborar Nuevo Reporte">
+                    <h:panelGrid columns="1">
+                        <h:panelGrid columns="4">
+                            <p:outputLabel for="mask" value="Fecha de inicio:" />
+                            <p:datePicker id="mask" value="#{repPSController.fechaInicio}"
+                                          showIcon="true" required="true" pattern="dd/MM/yyyy" locale="es"
+                                          disabledDays="#{repPSController.disabledDays}"
+                                          requiredMessage="Debe seleccionar una fecha válida"
+                                          placeholder="Seleccione una fecha" 
+                                          validatorMessage="Nunguna fecha puede ser en los días Sábado y Domingo">
+                                <p:ajax event="dateSelect" update="por-publicar" 
+                                        listener="#{repPSController.onPeriodoNSelect}"/>
+                            </p:datePicker>
+
+                            <p:outputLabel for="mask1" value="Fecha de finalización: " />
+                            <p:datePicker id="mask1" value="#{repPSController.fechaFin}"
+                                          showIcon="true" required="true" pattern="dd/MM/yyyy" locale="es"
+                                          disabledDays="#{permisoMaController.disabledDays}"
+                                          requiredMessage="Debe seleccionar una fecha válida"
+                                          placeholder="Seleccione una fecha" 
+                                          validatorMessage="Nunguna fecha puede ser en los días Sábado y Domingo">
+                                <p:ajax event="dateSelect" update="por-publicar" 
+                                        listener="#{repPSController.onPeriodoNSelect}"/>
+                            </p:datePicker>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <p:outputLabel for="act1" value="Acción a realizar: "/>
+                            <p:selectBooleanButton id="act1" value="#{repPSController.estado}" 
+                                                   onLabel="Publicar" offLabel="No Publicar"
+                                                   disabled="#{repPSController.reportesPorRealizar.size()==0}">
+                                <p:ajax event="change"
+                                        listener="#{repPSController.onBlour}"/>
+                            </p:selectBooleanButton>                            
+                        </h:panelGrid>
+
+                        <p:commandButton id="summit1" value="Crear Reporte" 
+                                         actionListener="#{repPSController.guardar(0)}" 
+                                         update="por-publicar" disabled="#{repPSController.reportesPorRealizar.size()==0}"/>
+
+                        <p:dataTable id="por-publicar" value="#{repPSController.reportesPorRealizar}" var="rpp"
+                                     paginator="true" rows="8"
+                                     paginatorPosition="top" paginatorAlwaysVisible="false"
+                                     emptyMessage="Aún no hay reportes que mostrar" editable="true">
+                            <p:column headerText="Alumno">
+                                #{repPSController.getNombreCortoPersona(rpp.estudiante1.persona)}
+                            </p:column>
+                            <p:column headerText="Grado">
+                                #{repPSController.getGradoEstudiante(rpp.estudiante1)}
+                            </p:column>
+                            <p:column headerText="Citas Solicitadas">
+                                #{rpp.NCitasSolicitadas}
+                            </p:column>
+                            <p:column headerText="Consultas Realizadas">
+                                #{rpp.NConsultas}
+                            </p:column>
+                            <p:column headerText="Motivos de las Consultas">
+                                #{rpp.motivos}
+                            </p:column>
+                            <p:column headerText="Psicólogo que Reporta">
+                                #{repPSController.getNombreCortoPersona(rpp.psicologo)}
+                            </p:column>
+                            <p:column headerText="Comentarios del Psicólogo">
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <p:inputTextarea value="#{rpp.diagnostico}" 
+                                                         rows="6" 
+                                                         disabled="true" maxlength="800"/>
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:inputTextarea value="#{rpp.diagnostico}" 
+                                                         rows="6" maxlength="800"/>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column style="width:35px">
+                                <p:rowEditor />
+                            </p:column>
+                        </p:dataTable>
+                    </h:panelGrid>
+                </p:tab>
+            </p:tabView>
+            </h:panelGrid>
+        </h:form>
     </ui:define>
 
 </ui:composition>
