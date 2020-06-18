@@ -5,6 +5,7 @@
  */
 package net.delsas.saitae.beans;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -32,18 +33,28 @@ public class AccesoTipoPersonaFacade extends AbstractFacade<AccesoTipoPersona> i
         super(AccesoTipoPersona.class);
     }
 
+//    @Override
+//    public List<TipoPersona> findTipoPersonaPermitidos(Acceso a) {
+//        return em.createNamedQuery("AccesoTipoPersona.findTipoPersonaByAccesoUrl")
+//                    .setParameter("idacceso", a.getIdacceso())
+//                    .getResultList();
+//            }
     @Override
-    public List<TipoPersona> findTipoPersonaPermitidos(Acceso a) {
-        return em.createNamedQuery("AccesoTipoPersona.findTipoPersonaByAccesoUrl")
-                .setParameter("idacceso", a.getIdacceso())
-                .getResultList();
-    }
-    
-    @Override
-    public List<Acceso> findAccesoByIdTipoPersona(Integer idTipoPersona){
+    public List<Acceso> findAccesoByIdTipoPersona(Integer idTipoPersona) {
         return em.createNamedQuery("AccesoTipoPersona.findAccesoByIdTipoPersona")
                 .setParameter("idTipoPersona", idTipoPersona)
                 .getResultList();
+    }
+
+    @Override
+    public List<TipoPersona> findTipoPersonaPermitidos(List<Acceso> as) {
+        List<TipoPersona> perm = new ArrayList<>();
+        as.forEach(a -> {
+            a.getAccesoTipoPersonaList()
+                    .stream().filter(at -> !perm.contains(at.getTipoPersona()))
+                    .forEachOrdered(atp -> perm.add(atp.getTipoPersona()));
+        });
+        return perm;
     }
 
 }

@@ -31,19 +31,23 @@ public interface AccesoTipoPersonaFacadeLocal {
     List<AccesoTipoPersona> findRange(int[] range);
 
     int count();
-    
+
     /**
-     * Busca Los tipos de personas que está habilitados para ver el acceso identificado por el Id
-     * @param a
-     * @return Lista de TipoPersona
+     * Busca Los tipos de personas que están habilitados para ver los accesos
+     * proporcionados en la lista
+     *
+     * @param as
+     * @return java.util.List net.delsas.saitae.entities.Acceso
      */
-    public List<TipoPersona> findTipoPersonaPermitidos(Acceso a);
-    
+    public List<TipoPersona> findTipoPersonaPermitidos(List<Acceso> as);
+
     /**
-     * Devuelve una lista de accesos para el tipo de personas identificado pir el id proporcionado.
+     * Devuelve una lista de accesos para el tipo de personas identificado por
+     * el id proporcionado.
+     *
      * @param idTipoPersona
      * @return java.util.List net.delsas.saitae.entities.Acceso
      */
     public List<Acceso> findAccesoByIdTipoPersona(Integer idTipoPersona);
-    
+
 }

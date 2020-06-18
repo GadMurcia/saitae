@@ -37,16 +37,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class PeriodoReportePsicologia implements Serializable {
 
     @EmbeddedId
-    private PeriodoReportePsicologiaPK periodoReportePsicologiaPK;
-    
-//    @Basic(optional = false)
-//    @NotNull
-//    @Temporal(TemporalType.DATE)
-//    private Date fechaInicio;
-//    @Basic(optional = false)
-//    @NotNull
-//    @Temporal(TemporalType.DATE)
-//    private Date fechaFin;
+    private PeriodoReportePsicologiaPK periodoReportePsicologiaPK;    
     @Basic(optional = false)
     @NotNull
     private boolean estado;

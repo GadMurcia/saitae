@@ -41,9 +41,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 })
 public class Notificaciones implements Serializable {
 
-    @Size(max = 100)
-    private String irAPagina;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -78,6 +75,8 @@ public class Notificaciones implements Serializable {
     @JoinColumn(name = "remitente", referencedColumnName = "idpersona")
     @ManyToOne(optional = false)
     private Persona remitente;
+    @Size(max = 100)
+    private String irAPagina;
 
     public Notificaciones() {
     }

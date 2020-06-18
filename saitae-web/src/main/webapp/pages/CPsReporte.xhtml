@@ -35,7 +35,7 @@
                                          paginatorPosition="top" paginatorAlwaysVisible="false"
                                          emptyMessage="Aún no hay reportes que mostrar" editable="true">
                                 <p:column headerText="Alumno">
-                                    #{repPSController.getNombreCortoPersona(rp.estudiante1.persona)}
+                                    #{repPSController.getNombreCompletoPersona(rp.estudiante1.persona)}
                                 </p:column>
                                 <p:column headerText="Grado">
                                     #{repPSController.getGradoEstudiante(rp.estudiante1)}
@@ -56,6 +56,16 @@
                                     #{rp.diagnostico}
                                 </p:column>
                             </p:dataTable>
+
+                            <h:commandLink disabled="#{repPSController.reportes.size() == 0}">
+                                <p:graphicImage library="img" name="xls.png" width="37px" height="32px"/>
+                                <p:dataExporter type="xls" target="publicos" 
+                                                options="#{axiliarController.excelOpt}"
+                                                fileName="REporte de citas psicológicas"
+                                                encoding="UTF-8"
+                                                postProcessor="#{repPSController.reporte}"/>
+                            </h:commandLink>
+
                         </h:panelGrid>
                     </p:tab>
 
@@ -173,10 +183,15 @@
                                              actionListener="#{repPSController.guardar(4)}" 
                                              update=":form" disabled="#{repPSController.reportesPorRealizar.size()==0}"/>
 
-                            <p:dataTable id="por-publicar" value="#{repPSController.reportesPorRealizar}" var="rpp"
-                                         paginator="true" rows="8"
-                                         paginatorPosition="top" paginatorAlwaysVisible="false"
-                                         emptyMessage="Aún no hay reportes que mostrar" editable="true">
+                            <p:dataTable id="por-publicar"  var="rpp"
+                                         value="#{repPSController.reportesPorRealizar}"
+                                         emptyMessage="Aún no hay reportes que mostrar" 
+                                         selectionMode="single" selection="#{repPSController.repSelected}"
+                                         rowKey="#{rpp.reportePsicologiaPK}">
+
+                                <p:ajax event="rowSelect" listener="#{repPSController.onBlour}" 
+                                        update="f1" oncomplete="PF('Deditar').show();"/>
+
                                 <p:column headerText="Alumno">
                                     #{repPSController.getNombreCortoPersona(rpp.estudiante1.persona)}
                                 </p:column>
@@ -196,18 +211,7 @@
                                     #{repPSController.getNombreCortoPersona(rpp.psicologo)}
                                 </p:column>
                                 <p:column headerText="Comentarios del Psicólogo">
-                                    <p:cellEditor>
-                                        <f:facet name="output">
-                                            #{rpp.diagnostico}
-                                        </f:facet>
-                                        <f:facet name="input">
-                                            <p:inputTextarea value="#{rpp.diagnostico}" 
-                                                             maxlength="800"/>
-                                        </f:facet>
-                                    </p:cellEditor>
-                                </p:column>
-                                <p:column style="width:35px">
-                                    <p:rowEditor cancelTitle="Cancelar" editTitle="Editar" saveTitle="Guardar"/>
+                                    #{rpp.diagnostico}
                                 </p:column>
                             </p:dataTable>
                         </h:panelGrid>

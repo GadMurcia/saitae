@@ -31,10 +31,10 @@ public interface AccesoFacadeLocal {
     int count();
     
     /**
-     *Busca un acceso en la base de datos saitae por medio de su url Relativa
+     *Busca una lista de acceso en la base de datos saitae por medio de su url Relativa
      * @param url
      * @return Acceso
      */
-    public Acceso getAccesoByUrl(String url);
+    public List<Acceso> getAccesoByUrl(String url);
     
 }

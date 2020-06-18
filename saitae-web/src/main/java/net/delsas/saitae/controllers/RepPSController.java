@@ -47,12 +47,20 @@ import net.delsas.saitae.entities.PeriodoReportePsicologiaPK;
 import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.ReportePsicologia;
 import net.delsas.saitae.entities.ReportePsicologiaPK;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.omnifaces.cdi.Push;
 import org.omnifaces.cdi.PushContext;
 import org.primefaces.PrimeFaces;
 import org.primefaces.behavior.ajax.AjaxBehavior;
 import org.primefaces.component.datatable.DataTable;
-import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -116,7 +124,7 @@ public class RepPSController extends Auxiliar implements Serializable {
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("mensaje",
                         new FacesMessage(FacesMessage.SEVERITY_WARN, "Página prohibida",
                                 "Usted no tiene los permisos suficientes para ver y utilizar esa página."));
-                FacesContext.getCurrentInstance().getExternalContext().redirect("./../");
+                context.getExternalContext().redirect("/pages/perfil.intex");
                 return;
             }
         } catch (IOException ex) {
@@ -194,10 +202,6 @@ public class RepPSController extends Auxiliar implements Serializable {
     }
 
     public List<ReportePsicologia> getReportes() {
-//        reportes = periodoSel == null
-//                ? new ArrayList<>()
-//                : rpsFL.findByPeriodo(periodoSel.getPeriodoReportePsicologiaPK().getFechaInicio(),
-//                        periodoSel.getPeriodoReportePsicologiaPK().getFechaFin(), true);
         return reportes;
     }
 
@@ -420,37 +424,127 @@ public class RepPSController extends Auxiliar implements Serializable {
                 notiFL, notificacion);
     }
 
-//    public void onRowEdit(RowEditEvent event) {
-//        ReportePsicologia n = (ReportePsicologia) event.getObject();
-//        int ind;
-//        if (reportesNoPublicos.contains(n)) {
-//            System.out.println("lo tiene");
-//            ind = reportesNoPublicos.indexOf(n);
-//            reportesNoPublicos.remove(n);
-//            reportesNoPublicos.add(ind, n);
-//        } else {
-//            System.out.println("No lo tiene");
-//            ReportePsicologia a = rpsFL.find(n.getReportePsicologiaPK());
-//            ind = reportesNoPublicos.indexOf(a);
-//            reportesNoPublicos.remove(a);
-//            reportesNoPublicos.add(ind, n);
-//        }
-//    }
-//
-//    public void guardarRegistro() {
-//        if (repSelected != null) {
-////            ReportePsicologia a = rpsFL.find(repSelected.getReportePsicologiaPK());
-////            int ind = reportesNoPublicos.indexOf(a);
-////            reportesNoPublicos.remove(a);
-////            reportesNoPublicos.add(ind, repSelected);
-//            repSelected = null;
-//        }
-//    }
     public ReportePsicologia getRepSelected() {
         return repSelected;
     }
 
     public void setRepSelected(ReportePsicologia repSelected) {
         this.repSelected = repSelected;
+    }
+
+    public void reporte(Object doc) {
+        HSSFWorkbook wb = (HSSFWorkbook) doc;
+        wb.removeSheetAt(0);
+        HSSFSheet h = wb.createSheet("Reporte área psicológica");
+        int tam = h.getColumnWidth(0);
+
+        HSSFRow r = h.createRow(0);
+        HSSFCell c = r.createCell(0);
+        c.setCellValue("Instituto Nacional Texistepeque");
+        c.setCellStyle(getStyle(wb, 16, true, false, true));
+        h.addMergedRegion(new CellRangeAddress(0, 0, 0, 2));
+
+        r = h.createRow(1);
+        c = r.createCell(0);
+        c.setCellValue("Reporte de las atenciones realizadas en el área psicológica");
+        c.setCellStyle(getStyle(wb, 14, true, false, true));
+        h.addMergedRegion(new CellRangeAddress(1, 1, 0, 2));
+
+        r = h.createRow(3);
+        c = r.createCell(0);
+        c.setCellValue("Periodo del reporte");
+        c.setCellStyle(getStyle(wb, 12, false, false, false));
+        h.addMergedRegion(new CellRangeAddress(3, 3, 0, 1));
+        c = r.createCell(2);
+        c.setCellValue(getFechasPeriodo(periodoSel));
+        c.setCellStyle(getStyle(wb, 12, false, false, false));
+
+        r = h.createRow(4);
+        c = r.createCell(0);
+        c.setCellValue("Fecha de Impresión");
+        c.setCellStyle(getStyle(wb, 12, false, false, false));
+        h.addMergedRegion(new CellRangeAddress(4, 4, 0, 1));
+        c = r.createCell(2);
+        c.setCellValue((new SimpleDateFormat("EEEEE  dd/MM/yyyy").format(new Date())).toUpperCase());
+        c.setCellStyle(getStyle(wb, 12, false, false, false));
+
+        r = h.createRow(5);
+        c = r.createCell(0);
+        c.setCellValue("Psicólogo");
+        c.setCellStyle(getStyle(wb, 12, false, false, false));
+        h.addMergedRegion(new CellRangeAddress(5, 5, 0, 1));
+        c = r.createCell(2);
+        c.setCellValue(getNombreCompletoPersona(reportes.get(0).getPsicologo()));
+        c.setCellStyle(getStyle(wb, 12, false, false, false));
+
+        int nr = 7;
+        for (ReportePsicologia rp : reportes) {
+            r = h.createRow(nr);
+            c = r.createCell(0);
+            c.setCellValue(getNombreCompletoPersona(rp.getEstudiante1().getPersona()));
+            h.addMergedRegion(new CellRangeAddress(nr, nr, 0, 2));
+            c.setCellStyle(getStyle(wb, 13, true, true, false));
+
+            r = h.createRow(nr + 1);
+            c = r.createCell(1);
+            c.setCellValue("Grado");
+            c.setCellStyle(getStyle(wb, 12, true, true, false));
+            c = r.createCell(2);
+            c.setCellValue(getGradoEstudiante(rp.getEstudiante1()));
+            c.setCellStyle(getStyle(wb, 12, false, true, false));
+
+            r = h.createRow(nr + 2);
+            c = r.createCell(1);
+            c.setCellValue("Citas solicitadas");
+            c.setCellStyle(getStyle(wb, 12, true, true, false));
+            c = r.createCell(2);
+            c.setCellValue(rp.getNCitasSolicitadas());
+            c.setCellStyle(getStyle(wb, 12, false, true, false));
+
+            r = h.createRow(nr + 3);
+            c = r.createCell(1);
+            c.setCellValue("Consultas realizadas");
+            c.setCellStyle(getStyle(wb, 12, true, true, false));
+            c = r.createCell(2);
+            c.setCellValue(rp.getNConsultas());
+            c.setCellStyle(getStyle(wb, 12, false, true, false));
+
+            r = h.createRow(nr + 4);
+            c = r.createCell(1);
+            c.setCellValue("Motivos de las consultas");
+            c.setCellStyle(getStyle(wb, 12, true, true, false));
+            c = r.createCell(2);
+            c.setCellValue(rp.getMotivos());
+            c.setCellStyle(getStyle(wb, 12, false, true, false));
+
+            r = h.createRow(nr + 5);
+            c = r.createCell(1);
+            c.setCellValue("Comentarios del psicólogo");
+            c.setCellStyle(getStyle(wb, 12, true, true, false));
+            c = r.createCell(2);
+            c.setCellValue(rp.getDiagnostico());
+            c.setCellStyle(getStyle(wb, 12, false, true, false));
+
+            nr += 6;
+        }
+        h.setColumnWidth(1, tam * 3);
+        h.setColumnWidth(2, tam * 7);
+    }
+
+    private HSSFCellStyle getStyle(HSSFWorkbook wb, int tamaño, boolean negrita, boolean bordes, boolean centrado) {
+        HSSFCellStyle st = wb.createCellStyle();
+        HSSFFont f = wb.createFont();
+        f.setFontHeightInPoints((short) tamaño);
+        f.setFontName("courier 10 pitch");
+        f.setBold(negrita);
+        st.setAlignment(centrado ? HorizontalAlignment.CENTER : HorizontalAlignment.LEFT);
+        if (bordes) {
+            st.setBorderBottom(BorderStyle.THIN);
+            st.setBorderLeft(BorderStyle.THIN);
+            st.setBorderRight(BorderStyle.THIN);
+            st.setBorderTop(BorderStyle.THIN);
+        }
+        st.setFont(f);
+        return st;
     }
 }

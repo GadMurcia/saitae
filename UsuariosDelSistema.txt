@@ -16,6 +16,6 @@ DUI		Nombre					Rol				Contraseña
 6018		Francisco Antonio Regalado Cruz		Estudiante (1CA)
 6019		Rigoberto Alexander Cárcamo Murga	Estudiante (1GA)
 6020		Andrea Johana Pleitez Alcántara		Estudiante (2CA)
-045367070	Jorge Agustín Regalado Pereira		Representante (6018)
-045367072	Ana Lidia Cárcamo Flores		Representante (6019)
+R045367070	Jorge Agustín Regalado Pereira		Representante (6018)
+045367072	Ana Lidia Cárcamo Murga			Representante (6019)
 045367075	Pablo José Martínez Córdova		Representante (6020)

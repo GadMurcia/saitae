@@ -7,6 +7,7 @@ package net.delsas.saitae.entities;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -45,7 +46,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "EvaluacionMaestro.findByPropuestaMejora", query = "SELECT e FROM EvaluacionMaestro e WHERE e.propuestaMejora = :propuestaMejora"),
     @NamedQuery(name = "EvaluacionMaestro.findByEvaluacionMaestroComentario", query = "SELECT e FROM EvaluacionMaestro e WHERE e.evaluacionMaestroComentario = :evaluacionMaestroComentario"),
     @NamedQuery(name = "EvaluacionMaestro.findByPlanGrado", query = "SELECT e FROM EvaluacionMaestro e WHERE e.planGrado = :planGrado"),
-    @NamedQuery(name = "EvaluacionMaestro.findByJornalizaci\u00f3n", query = "SELECT e FROM EvaluacionMaestro e WHERE e.jornalizaci\u00f3n = :jornalizaci\u00f3n"),
+    @NamedQuery(name = "EvaluacionMaestro.findByJornalizacion", query = "SELECT e FROM EvaluacionMaestro e WHERE e.jornalizacion = :jornalizacion"),
     @NamedQuery(name = "EvaluacionMaestro.findByCartaDidactica", query = "SELECT e FROM EvaluacionMaestro e WHERE e.cartaDidactica = :cartaDidactica"),
     @NamedQuery(name = "EvaluacionMaestro.findByGuionClase", query = "SELECT e FROM EvaluacionMaestro e WHERE e.guionClase = :guionClase"),
     @NamedQuery(name = "EvaluacionMaestro.findByAgendaDiaria", query = "SELECT e FROM EvaluacionMaestro e WHERE e.agendaDiaria = :agendaDiaria"),
@@ -96,11 +97,6 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "EvaluacionMaestro.findByAclaraDudas", query = "SELECT e FROM EvaluacionMaestro e WHERE e.aclaraDudas = :aclaraDudas"),
     @NamedQuery(name = "EvaluacionMaestro.findByClasePlanificada", query = "SELECT e FROM EvaluacionMaestro e WHERE e.clasePlanificada = :clasePlanificada")})
 public class EvaluacionMaestro implements Serializable {
-
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "jornalizaci\u00c3\u00b3n")
-    private boolean jornalizaciÃn;
 
     private static final long serialVersionUID = 1L;
     @EmbeddedId
@@ -155,8 +151,8 @@ public class EvaluacionMaestro implements Serializable {
     private boolean planGrado;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "jornalizaci\u00f3n")
-    private boolean jornalización;
+    @Column(name = "jornalizacion")
+    private boolean jornalizacion;
     @Basic(optional = false)
     @NotNull
     @Column(name = "cartaDidactica")
@@ -377,7 +373,7 @@ public class EvaluacionMaestro implements Serializable {
         this.evaluacionMaestroPK = evaluacionMaestroPK;
     }
 
-    public EvaluacionMaestro(EvaluacionMaestroPK evaluacionMaestroPK, String turno, int estudiantes, Date horaInicio, Date horaFin, String unidad, String objetivo, String actitudicionales, boolean planGrado, boolean jornalización, boolean cartaDidactica, boolean guionClase, boolean agendaDiaria, boolean colocaObjetivo, boolean ambientacion, boolean puntual, boolean comites, boolean ejesTransversales, boolean horarioLimpiezaHOrnato, boolean valores, boolean asistencia, boolean revisaTareas, boolean repasoClaseAnterior, boolean organizaClase, boolean ambienteAdecuado, boolean usaGuiaClase, boolean presentaAgenda, boolean presentaObjetivo, boolean presentaContenido, boolean ideasClaras, boolean claseCentradaDocente, boolean participanAlumnos, boolean recursosDidacticos, boolean especialidadPractica, boolean disciplinaDigna, boolean llamarEstudianteNombre, boolean despazaSalon, boolean preguntaEstudiantes, boolean aprovechaTiempo, boolean verificaComprensionContenido, boolean tratoIgualitario, boolean trabajosGrupos, boolean tecnicasAdecuadas, boolean aprendizajeCreativo, boolean diferenciasIndividuaes, boolean soloLibro, boolean listaCotejo, boolean copiaPizarron, boolean ejerciciosPizarron, boolean dominaContenido, boolean metodoDefinido, boolean desarrollaEjezTransv, boolean porcentajesEvaluacion, boolean asignaTareas, boolean fuentesConsulta, boolean claridadEvaluacion, boolean refuerzoContenido, boolean aclaraDudas, boolean clasePlanificada) {
+    public EvaluacionMaestro(EvaluacionMaestroPK evaluacionMaestroPK, String turno, int estudiantes, Date horaInicio, Date horaFin, String unidad, String objetivo, String actitudicionales, boolean planGrado, boolean jornalizacion, boolean cartaDidactica, boolean guionClase, boolean agendaDiaria, boolean colocaObjetivo, boolean ambientacion, boolean puntual, boolean comites, boolean ejesTransversales, boolean horarioLimpiezaHOrnato, boolean valores, boolean asistencia, boolean revisaTareas, boolean repasoClaseAnterior, boolean organizaClase, boolean ambienteAdecuado, boolean usaGuiaClase, boolean presentaAgenda, boolean presentaObjetivo, boolean presentaContenido, boolean ideasClaras, boolean claseCentradaDocente, boolean participanAlumnos, boolean recursosDidacticos, boolean especialidadPractica, boolean disciplinaDigna, boolean llamarEstudianteNombre, boolean despazaSalon, boolean preguntaEstudiantes, boolean aprovechaTiempo, boolean verificaComprensionContenido, boolean tratoIgualitario, boolean trabajosGrupos, boolean tecnicasAdecuadas, boolean aprendizajeCreativo, boolean diferenciasIndividuaes, boolean soloLibro, boolean listaCotejo, boolean copiaPizarron, boolean ejerciciosPizarron, boolean dominaContenido, boolean metodoDefinido, boolean desarrollaEjezTransv, boolean porcentajesEvaluacion, boolean asignaTareas, boolean fuentesConsulta, boolean claridadEvaluacion, boolean refuerzoContenido, boolean aclaraDudas, boolean clasePlanificada) {
         this.evaluacionMaestroPK = evaluacionMaestroPK;
         this.turno = turno;
         this.estudiantes = estudiantes;
@@ -387,7 +383,7 @@ public class EvaluacionMaestro implements Serializable {
         this.objetivo = objetivo;
         this.actitudicionales = actitudicionales;
         this.planGrado = planGrado;
-        this.jornalización = jornalización;
+        this.jornalizacion = jornalizacion;
         this.cartaDidactica = cartaDidactica;
         this.guionClase = guionClase;
         this.agendaDiaria = agendaDiaria;
@@ -539,12 +535,12 @@ public class EvaluacionMaestro implements Serializable {
         this.planGrado = planGrado;
     }
 
-    public boolean getJornalización() {
-        return jornalización;
+    public boolean getJornalizacion() {
+        return jornalizacion;
     }
 
-    public void setJornalización(boolean jornalización) {
-        this.jornalización = jornalización;
+    public void setJornalizacion(boolean jornalizacion) {
+        this.jornalizacion = jornalizacion;
     }
 
     public boolean getCartaDidactica() {
@@ -973,35 +969,289 @@ public class EvaluacionMaestro implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (evaluacionMaestroPK != null ? evaluacionMaestroPK.hashCode() : 0);
+        int hash = 7;
+        hash = 71 * hash + Objects.hashCode(this.evaluacionMaestroPK);
+        hash = 71 * hash + Objects.hashCode(this.turno);
+        hash = 71 * hash + this.estudiantes;
+        hash = 71 * hash + Objects.hashCode(this.horaInicio);
+        hash = 71 * hash + Objects.hashCode(this.horaFin);
+        hash = 71 * hash + Objects.hashCode(this.unidad);
+        hash = 71 * hash + Objects.hashCode(this.objetivo);
+        hash = 71 * hash + Objects.hashCode(this.actitudicionales);
+        hash = 71 * hash + Objects.hashCode(this.resumen);
+        hash = 71 * hash + Objects.hashCode(this.propuestaMejora);
+        hash = 71 * hash + Objects.hashCode(this.evaluacionMaestroComentario);
+        hash = 71 * hash + (this.planGrado ? 1 : 0);
+        hash = 71 * hash + (this.jornalizacion ? 1 : 0);
+        hash = 71 * hash + (this.cartaDidactica ? 1 : 0);
+        hash = 71 * hash + (this.guionClase ? 1 : 0);
+        hash = 71 * hash + (this.agendaDiaria ? 1 : 0);
+        hash = 71 * hash + (this.colocaObjetivo ? 1 : 0);
+        hash = 71 * hash + (this.ambientacion ? 1 : 0);
+        hash = 71 * hash + (this.puntual ? 1 : 0);
+        hash = 71 * hash + (this.comites ? 1 : 0);
+        hash = 71 * hash + (this.ejesTransversales ? 1 : 0);
+        hash = 71 * hash + (this.horarioLimpiezaHOrnato ? 1 : 0);
+        hash = 71 * hash + (this.valores ? 1 : 0);
+        hash = 71 * hash + (this.asistencia ? 1 : 0);
+        hash = 71 * hash + (this.revisaTareas ? 1 : 0);
+        hash = 71 * hash + (this.repasoClaseAnterior ? 1 : 0);
+        hash = 71 * hash + (this.organizaClase ? 1 : 0);
+        hash = 71 * hash + (this.ambienteAdecuado ? 1 : 0);
+        hash = 71 * hash + (this.usaGuiaClase ? 1 : 0);
+        hash = 71 * hash + (this.presentaAgenda ? 1 : 0);
+        hash = 71 * hash + (this.presentaObjetivo ? 1 : 0);
+        hash = 71 * hash + (this.presentaContenido ? 1 : 0);
+        hash = 71 * hash + (this.ideasClaras ? 1 : 0);
+        hash = 71 * hash + (this.claseCentradaDocente ? 1 : 0);
+        hash = 71 * hash + (this.participanAlumnos ? 1 : 0);
+        hash = 71 * hash + (this.recursosDidacticos ? 1 : 0);
+        hash = 71 * hash + (this.especialidadPractica ? 1 : 0);
+        hash = 71 * hash + (this.disciplinaDigna ? 1 : 0);
+        hash = 71 * hash + (this.llamarEstudianteNombre ? 1 : 0);
+        hash = 71 * hash + (this.despazaSalon ? 1 : 0);
+        hash = 71 * hash + (this.preguntaEstudiantes ? 1 : 0);
+        hash = 71 * hash + (this.aprovechaTiempo ? 1 : 0);
+        hash = 71 * hash + (this.verificaComprensionContenido ? 1 : 0);
+        hash = 71 * hash + (this.tratoIgualitario ? 1 : 0);
+        hash = 71 * hash + (this.trabajosGrupos ? 1 : 0);
+        hash = 71 * hash + (this.tecnicasAdecuadas ? 1 : 0);
+        hash = 71 * hash + (this.aprendizajeCreativo ? 1 : 0);
+        hash = 71 * hash + (this.diferenciasIndividuaes ? 1 : 0);
+        hash = 71 * hash + (this.soloLibro ? 1 : 0);
+        hash = 71 * hash + (this.listaCotejo ? 1 : 0);
+        hash = 71 * hash + (this.copiaPizarron ? 1 : 0);
+        hash = 71 * hash + (this.ejerciciosPizarron ? 1 : 0);
+        hash = 71 * hash + (this.dominaContenido ? 1 : 0);
+        hash = 71 * hash + (this.metodoDefinido ? 1 : 0);
+        hash = 71 * hash + (this.desarrollaEjezTransv ? 1 : 0);
+        hash = 71 * hash + (this.porcentajesEvaluacion ? 1 : 0);
+        hash = 71 * hash + (this.asignaTareas ? 1 : 0);
+        hash = 71 * hash + (this.fuentesConsulta ? 1 : 0);
+        hash = 71 * hash + (this.claridadEvaluacion ? 1 : 0);
+        hash = 71 * hash + (this.refuerzoContenido ? 1 : 0);
+        hash = 71 * hash + (this.aclaraDudas ? 1 : 0);
+        hash = 71 * hash + (this.clasePlanificada ? 1 : 0);
+        hash = 71 * hash + Objects.hashCode(this.maestro);
+        hash = 71 * hash + Objects.hashCode(this.grado);
+        hash = 71 * hash + Objects.hashCode(this.evaluador);
+        hash = 71 * hash + Objects.hashCode(this.materia);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof EvaluacionMaestro)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        EvaluacionMaestro other = (EvaluacionMaestro) object;
-        if ((this.evaluacionMaestroPK == null && other.evaluacionMaestroPK != null) || (this.evaluacionMaestroPK != null && !this.evaluacionMaestroPK.equals(other.evaluacionMaestroPK))) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
-        return true;
+        final EvaluacionMaestro other = (EvaluacionMaestro) obj;
+        if (this.estudiantes != other.estudiantes) {
+            return false;
+        }
+        if (this.planGrado != other.planGrado) {
+            return false;
+        }
+        if (this.jornalizacion != other.jornalizacion) {
+            return false;
+        }
+        if (this.cartaDidactica != other.cartaDidactica) {
+            return false;
+        }
+        if (this.guionClase != other.guionClase) {
+            return false;
+        }
+        if (this.agendaDiaria != other.agendaDiaria) {
+            return false;
+        }
+        if (this.colocaObjetivo != other.colocaObjetivo) {
+            return false;
+        }
+        if (this.ambientacion != other.ambientacion) {
+            return false;
+        }
+        if (this.puntual != other.puntual) {
+            return false;
+        }
+        if (this.comites != other.comites) {
+            return false;
+        }
+        if (this.ejesTransversales != other.ejesTransversales) {
+            return false;
+        }
+        if (this.horarioLimpiezaHOrnato != other.horarioLimpiezaHOrnato) {
+            return false;
+        }
+        if (this.valores != other.valores) {
+            return false;
+        }
+        if (this.asistencia != other.asistencia) {
+            return false;
+        }
+        if (this.revisaTareas != other.revisaTareas) {
+            return false;
+        }
+        if (this.repasoClaseAnterior != other.repasoClaseAnterior) {
+            return false;
+        }
+        if (this.organizaClase != other.organizaClase) {
+            return false;
+        }
+        if (this.ambienteAdecuado != other.ambienteAdecuado) {
+            return false;
+        }
+        if (this.usaGuiaClase != other.usaGuiaClase) {
+            return false;
+        }
+        if (this.presentaAgenda != other.presentaAgenda) {
+            return false;
+        }
+        if (this.presentaObjetivo != other.presentaObjetivo) {
+            return false;
+        }
+        if (this.presentaContenido != other.presentaContenido) {
+            return false;
+        }
+        if (this.ideasClaras != other.ideasClaras) {
+            return false;
+        }
+        if (this.claseCentradaDocente != other.claseCentradaDocente) {
+            return false;
+        }
+        if (this.participanAlumnos != other.participanAlumnos) {
+            return false;
+        }
+        if (this.recursosDidacticos != other.recursosDidacticos) {
+            return false;
+        }
+        if (this.especialidadPractica != other.especialidadPractica) {
+            return false;
+        }
+        if (this.disciplinaDigna != other.disciplinaDigna) {
+            return false;
+        }
+        if (this.llamarEstudianteNombre != other.llamarEstudianteNombre) {
+            return false;
+        }
+        if (this.despazaSalon != other.despazaSalon) {
+            return false;
+        }
+        if (this.preguntaEstudiantes != other.preguntaEstudiantes) {
+            return false;
+        }
+        if (this.aprovechaTiempo != other.aprovechaTiempo) {
+            return false;
+        }
+        if (this.verificaComprensionContenido != other.verificaComprensionContenido) {
+            return false;
+        }
+        if (this.tratoIgualitario != other.tratoIgualitario) {
+            return false;
+        }
+        if (this.trabajosGrupos != other.trabajosGrupos) {
+            return false;
+        }
+        if (this.tecnicasAdecuadas != other.tecnicasAdecuadas) {
+            return false;
+        }
+        if (this.aprendizajeCreativo != other.aprendizajeCreativo) {
+            return false;
+        }
+        if (this.diferenciasIndividuaes != other.diferenciasIndividuaes) {
+            return false;
+        }
+        if (this.soloLibro != other.soloLibro) {
+            return false;
+        }
+        if (this.listaCotejo != other.listaCotejo) {
+            return false;
+        }
+        if (this.copiaPizarron != other.copiaPizarron) {
+            return false;
+        }
+        if (this.ejerciciosPizarron != other.ejerciciosPizarron) {
+            return false;
+        }
+        if (this.dominaContenido != other.dominaContenido) {
+            return false;
+        }
+        if (this.metodoDefinido != other.metodoDefinido) {
+            return false;
+        }
+        if (this.desarrollaEjezTransv != other.desarrollaEjezTransv) {
+            return false;
+        }
+        if (this.porcentajesEvaluacion != other.porcentajesEvaluacion) {
+            return false;
+        }
+        if (this.asignaTareas != other.asignaTareas) {
+            return false;
+        }
+        if (this.fuentesConsulta != other.fuentesConsulta) {
+            return false;
+        }
+        if (this.claridadEvaluacion != other.claridadEvaluacion) {
+            return false;
+        }
+        if (this.refuerzoContenido != other.refuerzoContenido) {
+            return false;
+        }
+        if (this.aclaraDudas != other.aclaraDudas) {
+            return false;
+        }
+        if (this.clasePlanificada != other.clasePlanificada) {
+            return false;
+        }
+        if (!Objects.equals(this.turno, other.turno)) {
+            return false;
+        }
+        if (!Objects.equals(this.unidad, other.unidad)) {
+            return false;
+        }
+        if (!Objects.equals(this.objetivo, other.objetivo)) {
+            return false;
+        }
+        if (!Objects.equals(this.actitudicionales, other.actitudicionales)) {
+            return false;
+        }
+        if (!Objects.equals(this.resumen, other.resumen)) {
+            return false;
+        }
+        if (!Objects.equals(this.propuestaMejora, other.propuestaMejora)) {
+            return false;
+        }
+        if (!Objects.equals(this.evaluacionMaestroComentario, other.evaluacionMaestroComentario)) {
+            return false;
+        }
+        if (!Objects.equals(this.evaluacionMaestroPK, other.evaluacionMaestroPK)) {
+            return false;
+        }
+        if (!Objects.equals(this.horaInicio, other.horaInicio)) {
+            return false;
+        }
+        if (!Objects.equals(this.horaFin, other.horaFin)) {
+            return false;
+        }
+        if (!Objects.equals(this.maestro, other.maestro)) {
+            return false;
+        }
+        if (!Objects.equals(this.grado, other.grado)) {
+            return false;
+        }
+        if (!Objects.equals(this.evaluador, other.evaluador)) {
+            return false;
+        }
+        return Objects.equals(this.materia, other.materia);
     }
 
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.EvaluacionMaestro[ evaluacionMaestroPK=" + evaluacionMaestroPK + " ]";
-    }
-
-    public boolean getJornalizaciÃn() {
-        return jornalizaciÃn;
-    }
-
-    public void setJornalizaciÃn(boolean jornalizaciÃn) {
-        this.jornalizaciÃn = jornalizaciÃn;
     }
     
 }

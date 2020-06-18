@@ -511,7 +511,7 @@ CREATE TABLE `evaluacionMaestro` (
   `propuestaMejora` varchar(145) DEFAULT NULL,
   `evaluacionMaestroComentario` varchar(145) DEFAULT NULL,
   `planGrado` bit(1) NOT NULL DEFAULT b'1',
-  `jornalizaciÃ³n` bit(1) NOT NULL DEFAULT b'1',
+  `jornalizacion` bit(1) NOT NULL DEFAULT b'1',
   `cartaDidactica` bit(1) NOT NULL DEFAULT b'1',
   `guionClase` bit(1) NOT NULL DEFAULT b'1',
   `agendaDiaria` bit(1) NOT NULL DEFAULT b'1',
@@ -844,7 +844,7 @@ CREATE TABLE `notificaciones` (
   KEY `fk_notificaciones_2_idx` (`remitente`),
   CONSTRAINT `fk_notificaciones_1` FOREIGN KEY (`destinatario`) REFERENCES `persona` (`idpersona`) ON UPDATE CASCADE,
   CONSTRAINT `fk_notificaciones_2` FOREIGN KEY (`remitente`) REFERENCES `persona` (`idpersona`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=323 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1406,4 +1406,4 @@ CREATE TABLE `zona` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-06-18  0:25:44
+-- Dump completed on 2020-06-18 15:13:49

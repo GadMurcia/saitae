@@ -517,6 +517,7 @@ public class Auxiliar implements Serializable {
         for (Integer i : tps) {
             if (permitidos.contains(i)) {
                 r = true;
+                break;
             }
         }
         return r;
@@ -996,12 +997,7 @@ public class Auxiliar implements Serializable {
     }
 
     public String onFlowProcess(FlowEvent event) {
-        String st = event.getNewStep();
-        try {
-            PrimeFaces.current().ajax().update("hn:ws");
-        } catch (Exception e) {
-        }
-        return st;
+        return event.getNewStep();
     }
 
     public String[] getDependencia(Estudiante e) {

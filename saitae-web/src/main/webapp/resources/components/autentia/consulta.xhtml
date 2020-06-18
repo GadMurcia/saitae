@@ -29,13 +29,16 @@
                     <p:inputText id="consultaRemitidoPor" size="80" disabled="#{cc.attrs.desactivado}"
                                  value="#{cc.attrs.selected.consultaRemitidoPor}">
                         <f:validateLength maximum="45"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:inputText>
 
                     <p:outputLabel value="Motivo de consulta:" for="consultaMotivo" />
                     <p:inputTextarea id="consultaMotivo" cols="80" rows="2" disabled="#{cc.attrs.desactivado}"
                                      value="#{cc.attrs.selected.consultaMotivo}" required="true" 
                                      requiredMessage="Debe indicar el motivo de la consuta antes de guardar los datos."
-                                     maxlength="80"/>
+                                     maxlength="80">
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
+                    </p:inputTextarea>
                 </h:panelGrid>
             </p:tab>
             <p:tab title="Antecedentes">
@@ -43,17 +46,23 @@
                     <p:outputLabel value="Antecedentes Personales:" for="consultaAntecedentePersonal" />
                     <p:inputTextarea id="consultaAntecedentePersonal" cols="80" rows="2" disabled="#{cc.attrs.desactivado}"
                                      value="#{cc.attrs.selected.consultaAntecedentePersonal}"
-                                     maxlength="140"/>
+                                     maxlength="140">
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
+                    </p:inputTextarea>
 
                     <p:outputLabel value="Antecedentes Familiares:" for="consultaAntecedenteFamiliar" />
                     <p:inputTextarea id="consultaAntecedenteFamiliar" cols="80" rows="2" disabled="#{cc.attrs.desactivado}"
                                      value="#{cc.attrs.selected.consultaAntecedenteFamiliar}"
-                                     maxlength="140"/>
+                                     maxlength="140">
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
+                    </p:inputTextarea>
 
                     <p:outputLabel value="Antecedentes Morbidos:" for="consultaAntecedentesMorbidos" />
                     <p:inputTextarea id="consultaAntecedentesMorbidos" cols="80" rows="2" disabled="#{cc.attrs.desactivado}"
                                      value="#{cc.attrs.selected.consultaAntecedentesMorbidos}"
-                                     maxlength="140"/>
+                                     maxlength="140">
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
+                    </p:inputTextarea>
                 </h:panelGrid>
             </p:tab>
             <p:tab title="Anáisis">
@@ -61,17 +70,23 @@
                     <p:outputLabel value="Conducta Observada:" for="consultaConductaObcerbada" />
                     <p:inputTextarea id="consultaConductaObcerbada" cols="80" rows="2" disabled="#{cc.attrs.desactivado}"
                                      value="#{cc.attrs.selected.consultaConductaObcerbada}"
-                                     maxlength="140"/>
+                                     maxlength="140">
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
+                    </p:inputTextarea>
 
                     <p:outputLabel value="Problema:" for="consultaProblema" />
                     <p:inputTextarea id="consultaProblema" cols="80" rows="2" disabled="#{cc.attrs.desactivado}"
                                      value="#{cc.attrs.selected.consultaProblema}"
-                                     maxlength="250"/>
+                                     maxlength="250">
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
+                    </p:inputTextarea>
 
                     <p:outputLabel value="Diagnostico:" for="consultaDiagnostico" />
                     <p:inputTextarea id="consultaDiagnostico" cols="80" rows="2" disabled="#{cc.attrs.desactivado}"
                                      value="#{cc.attrs.selected.consultaDiagnostico}"
-                                     maxlength="150"/>
+                                     maxlength="150">
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
+                    </p:inputTextarea>
                 </h:panelGrid>
             </p:tab>
             <p:tab title="Etapa de finalización">
@@ -79,17 +94,22 @@
                     <p:outputLabel value="Evaluacion Psicologica:" for="consultaEvaluacionPsicologica" />
                     <p:inputTextarea id="consultaEvaluacionPsicologica" cols="80" rows="2" disabled="#{cc.attrs.desactivado}"
                                      value="#{cc.attrs.selected.consultaEvaluacionPsicologica}"
-                                     maxlength="250"/>
+                                     maxlength="250">
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
+                    </p:inputTextarea>
 
                     <p:outputLabel value="Remitir a:" for="consultaRemitir" />
                     <p:inputTextarea id="consultaRemitir" cols="80" rows="2" disabled="#{cc.attrs.desactivado}"
                                      value="#{cc.attrs.selected.consultaRemitir}"
-                                     maxlength="80"/>
+                                     maxlength="80">
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
+                    </p:inputTextarea>
 
                     <p:outputLabel value="Comentario adicional:" for="consultaCoemntario" />
                     <p:inputText id="consultaCoemntario" size="80" disabled="#{cc.attrs.desactivado}"
                                  value="#{cc.attrs.selected.consultaCoemntario}">
-                        <f:validateLength maximum="45"/>
+                        <f:validateLength maximum="145"/>
+                        <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:inputText>
                 </h:panelGrid>
             </p:tab>

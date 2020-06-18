@@ -31,9 +31,8 @@ public class AccesoFacade extends AbstractFacade<Acceso> implements AccesoFacade
     }
 
     @Override
-    public Acceso getAccesoByUrl(String url) {
-        List<Acceso> a = em.createNamedQuery("Acceso.findByAccesourl").setParameter("url", url).getResultList();
-        return a.isEmpty() ? null : a.get(0);
+    public List<Acceso> getAccesoByUrl(String url) {
+        return em.createNamedQuery("Acceso.findByAccesourl").setParameter("url", url).getResultList();
     }
 
 }
