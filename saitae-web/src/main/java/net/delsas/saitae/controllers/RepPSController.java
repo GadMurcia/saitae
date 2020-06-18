@@ -28,21 +28,31 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 import net.delsas.saitae.ax.Auxiliar;
+import net.delsas.saitae.ax.mensaje;
 import net.delsas.saitae.beans.AccesoFacadeLocal;
 import net.delsas.saitae.beans.AccesoTipoPersonaFacadeLocal;
 import net.delsas.saitae.beans.CitaPsicologiaFacadeLocal;
 import net.delsas.saitae.beans.ConsultaFacadeLocal;
+import net.delsas.saitae.beans.NotificacionesFacadeLocal;
 import net.delsas.saitae.beans.PeriodoReportePsicologiaFacadeLocal;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.beans.ReportePsicologiaFacadeLocal;
+import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
 import net.delsas.saitae.entities.Estudiante;
 import net.delsas.saitae.entities.PeriodoReportePsicologia;
+import net.delsas.saitae.entities.PeriodoReportePsicologiaPK;
 import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.ReportePsicologia;
 import net.delsas.saitae.entities.ReportePsicologiaPK;
+import org.omnifaces.cdi.Push;
+import org.omnifaces.cdi.PushContext;
 import org.primefaces.PrimeFaces;
+import org.primefaces.behavior.ajax.AjaxBehavior;
+import org.primefaces.component.datatable.DataTable;
+import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -68,6 +78,13 @@ public class RepPSController extends Auxiliar implements Serializable {
     private AccesoTipoPersonaFacadeLocal accesoTPFL;
     @EJB
     private AccesoFacadeLocal accesoFL;
+    @Inject
+    @Push
+    private PushContext notificacion;
+    @EJB
+    private NotificacionesFacadeLocal notiFL;
+    @EJB
+    private TipoPersonaFacadeLocal tpFL;
 
     //listas
     private List<PeriodoReportePsicologia> periodos;
@@ -80,7 +97,6 @@ public class RepPSController extends Auxiliar implements Serializable {
     private Integer año;
     private PeriodoReportePsicologia periodoSel;
     private PeriodoReportePsicologia periodoNPSel;
-    private ReportePsicologia reporteSel;
     private Date fechaInicio;
     private Date fechaFin;
     private boolean estado;
@@ -88,6 +104,7 @@ public class RepPSController extends Auxiliar implements Serializable {
     private String pagina;
     private String motivos = "";
     private FacesContext context;
+    private ReportePsicologia repSelected;
 
     @PostConstruct
     public void init() {
@@ -113,8 +130,6 @@ public class RepPSController extends Auxiliar implements Serializable {
         reportes = new ArrayList<>();
         reportesNoPublicos = new ArrayList<>();
         reportesPorRealizar = new ArrayList<>();
-//        fechaInicio = new Date();
-//        fechaFin = new Date();
         estado = false;
     }
 
@@ -123,19 +138,22 @@ public class RepPSController extends Auxiliar implements Serializable {
             case "pern"://no publicos
                 reportesNoPublicos = periodoNPSel == null
                         ? new ArrayList<>()
-                        : rpsFL.findByPeriodo(periodoNPSel.getFechaInicio(), periodoNPSel.getFechaFin(), false);
-                estado = false;
+                        : rpsFL.findByPeriodo(
+                                periodoNPSel.getPeriodoReportePsicologiaPK().getFechaInicio(),
+                                periodoNPSel.getPeriodoReportePsicologiaPK().getFechaFin(),
+                                false);
                 break;
             case "per"://publicos
                 reportes = periodoSel == null
                         ? new ArrayList<>()
-                        : rpsFL.findByPeriodo(periodoSel.getFechaInicio(), periodoSel.getFechaInicio(), true);
+                        : rpsFL.findByPeriodo(
+                                periodoSel.getPeriodoReportePsicologiaPK().getFechaInicio(),
+                                periodoSel.getPeriodoReportePsicologiaPK().getFechaFin(),
+                                true);
                 break;
             default:
-                System.out.println(e.getComponent().getClientId());
-                reportes.clear();
-                reportesNoPublicos.clear();
         }
+        System.out.println(e.getComponent().getClientId());
     }
 
     public void onPeriodoNSelect(AjaxBehaviorEvent e) {
@@ -150,9 +168,10 @@ public class RepPSController extends Auxiliar implements Serializable {
                         cpsFL.countConsultadas(fechaInicio, fechaFin, id),
                         cpsFL.countSolicitadas(fechaInicio, fechaFin, id),
                         motivos);
-                rp.setEstudiante1(pFL.find(id).getEstudiante());
-                rp.setPsicologo(usuario);
                 if (rpsFL.find(rp.getReportePsicologiaPK()) == null) {
+                    rp.setEstudiante1(pFL.find(id).getEstudiante());
+                    rp.setPsicologo(usuario);
+                    rp.setDiagnostico("");
                     reportesPorRealizar.add(rp);
                 }
             });
@@ -167,25 +186,34 @@ public class RepPSController extends Auxiliar implements Serializable {
     }
 
     public List<PeriodoReportePsicologia> getPeriodos() {
-        periodos = prpsFL.findPeriodoByAño(año);
+        periodos.clear();
+        prpsFL.findPeriodoByAño(año).stream().filter((pe) -> (!periodos.contains(pe))).forEachOrdered((pe) -> {
+            periodos.add(pe);
+        });
         return periodos;
     }
 
     public List<ReportePsicologia> getReportes() {
 //        reportes = periodoSel == null
 //                ? new ArrayList<>()
-//                : rpsFL.findByPeriodo(periodoSel.getFechaInicio(), periodoSel.getFechaInicio(), true);
+//                : rpsFL.findByPeriodo(periodoSel.getPeriodoReportePsicologiaPK().getFechaInicio(),
+//                        periodoSel.getPeriodoReportePsicologiaPK().getFechaFin(), true);
         return reportes;
     }
 
     public List<ReportePsicologia> getReportesNoPublicos() {
-//        reportesNoPublicos = periodoNPSel == null
-//                ? new ArrayList<>()
-//                : rpsFL.findByPeriodo(periodoNPSel.getFechaInicio(), periodoNPSel.getFechaInicio(), false);
         return reportesNoPublicos;
     }
 
     public PeriodoReportePsicologia getPeriodoSel() {
+        if (periodoSel != null && !periodos.contains(periodoSel)) {
+            periodoSel = null;
+            DataTable dt = new DataTable();
+            dt.setId("per");
+            onPeriodoSelect(new SelectEvent(dt,
+                    new AjaxBehavior(), periodoSel
+            ));
+        }
         return periodoSel;
     }
 
@@ -210,11 +238,22 @@ public class RepPSController extends Auxiliar implements Serializable {
     }
 
     public List<PeriodoReportePsicologia> getPeriodosNoPublicos() {
-//        periodosNoPublicos = prpsFL.findPeriodosNoPublicosByaño(año);
+        periodosNoPublicos.clear();
+        prpsFL.findPeriodosNoPublicosByaño(año).stream().filter((pe) -> (!periodosNoPublicos.contains(pe))).forEachOrdered((pe) -> {
+            periodosNoPublicos.add(pe);
+        });
         return periodosNoPublicos;
     }
 
     public PeriodoReportePsicologia getPeriodoNPSel() {
+        if (periodoNPSel != null && !periodosNoPublicos.contains(periodoNPSel)) {
+            periodoNPSel = null;
+            DataTable dt = new DataTable();
+            dt.setId("pern");
+            onPeriodoSelect(new SelectEvent(dt,
+                    new AjaxBehavior(), periodoNPSel
+            ));
+        }
         return periodoNPSel;
     }
 
@@ -224,16 +263,8 @@ public class RepPSController extends Auxiliar implements Serializable {
 
     public String getFechasPeriodo(PeriodoReportePsicologia ps) {
         return ps == null ? ""
-                : "Desde " + new SimpleDateFormat("dd/MM/yyyy").format(ps.getFechaInicio())
-                + " hasta " + new SimpleDateFormat("dd/MM/yyyy").format(ps.getFechaFin());
-    }
-
-    public ReportePsicologia getReporteSel() {
-        return reporteSel;
-    }
-
-    public void setReporteSel(ReportePsicologia reporteSel) {
-        this.reporteSel = reporteSel;
+                : "Desde " + new SimpleDateFormat("dd/MM/yyyy").format(ps.getPeriodoReportePsicologiaPK().getFechaInicio())
+                + " hasta " + new SimpleDateFormat("dd/MM/yyyy").format(ps.getPeriodoReportePsicologiaPK().getFechaFin());
     }
 
     public String getGradoEstudiante(Estudiante e) {
@@ -246,11 +277,41 @@ public class RepPSController extends Auxiliar implements Serializable {
 
     public void guardar(int i) {
         switch (i) {
-            case 0: //crear reportes
+            case 0: //crear reportes                
+                PeriodoReportePsicologia pnr = new PeriodoReportePsicologia(
+                        new PeriodoReportePsicologiaPK(fechaInicio, fechaFin), false);
                 reportesPorRealizar.forEach(rp -> {
                     rp.setReportePublico(estado);
-                    rpsFL.create(rp);
+                    try {
+                        rpsFL.create(rp);
+                    } catch (Exception e) {
+                        FacesContext.getCurrentInstance().addMessage("form0",
+                                new FacesMessage(FacesMessage.SEVERITY_WARN, "Choque de reportes",
+                                        "Los datos ingresados para el estudiante "
+                                        + getNombreCortoPersona(rp.getEstudiante1().getPersona())
+                                        + " para el periodo comprendido "
+                                        + getFechasPeriodo(pnr) + " ya han sido agregados "
+                                        + "por otro usuario, por lo que no se incluyen en este reporte."));
+                        PrimeFaces.current().ajax().update("form0");
+                    }
                 });
+                if (!reportesPorRealizar.isEmpty()) {
+                    if (estado) {
+                        notificarReporteCitas(new FacesMessage(FacesMessage.SEVERITY_INFO,
+                                "nuevo reporte de citas psicológicas",
+                                getNombreCortoPersona(usuario) + " ha publicado un nuevo reporte sobre las citas"
+                                + " atendidas en el consultorio de psicología."
+                                + " Reporte " + getFechasPeriodo(pnr)),
+                                new Integer[]{2, 14});
+                    } else {
+                        notificarReporteCitas(new FacesMessage(FacesMessage.SEVERITY_INFO,
+                                "nuevo reporte de citas psicológicas",
+                                getNombreCortoPersona(usuario) + " ha creado un nuevo reporte sobre las citas"
+                                + " atendidas en el consultorio de psicología. Este reporte aun no es público."
+                                + " Reporte " + getFechasPeriodo(pnr)),
+                                new Integer[]{14});
+                    }
+                }
                 reportesPorRealizar.clear();
                 fechaFin = null;
                 fechaInicio = null;
@@ -258,16 +319,42 @@ public class RepPSController extends Auxiliar implements Serializable {
             case 1://reportes por publicar
                 reportesNoPublicos.forEach(np -> {
                     np.setReportePublico(estado);
+                    np.setPsicologo(usuario);
                     rpsFL.edit(np);
                 });
+                if (!reportesNoPublicos.isEmpty()) {
+                    if (estado) {
+                        notificarReporteCitas(new FacesMessage(FacesMessage.SEVERITY_INFO,
+                                "nuevo reporte de citas psicológicas",
+                                getNombreCortoPersona(usuario) + " ha publicado un nuevo reporte sobre las citas"
+                                + " atendidas en el consultorio de psicología."
+                                + " Reporte " + getFechasPeriodo(periodoNPSel)), new Integer[]{2, 14});
+                    } else {
+                        notificarReporteCitas(new FacesMessage(FacesMessage.SEVERITY_INFO,
+                                "nuevo reporte de citas psicológicas",
+                                getNombreCortoPersona(usuario) + " ha modificado un reporte sobre las citas"
+                                + " atendidas en el consultorio de psicología. Este reporte aun no es público."
+                                + " Reporte " + getFechasPeriodo(periodoNPSel)),
+                                new Integer[]{14});
+                    }
+                }
                 reportesNoPublicos.clear();
                 periodoNPSel = null;
                 break;
+
             case 2://eliminarReporteNoPublico
                 if (periodoNPSel != null) {
                     reportesNoPublicos.forEach(np -> {
                         rpsFL.remove(np);
                     });
+                    if (!reportesNoPublicos.isEmpty()) {
+                        notificarReporteCitas(new FacesMessage(FacesMessage.SEVERITY_INFO,
+                                "Reporte de citas psicológicas eliminado",
+                                getNombreCortoPersona(usuario) + " ha eliminado un reporte sobre las citas"
+                                + " atendidas en el consultorio de psicología. Este reporte no era público."
+                                + " Reporte " + getFechasPeriodo(periodoNPSel)),
+                                new Integer[]{14});
+                    }
                 }
                 reportesNoPublicos.clear();
                 periodoNPSel = null;
@@ -278,8 +365,24 @@ public class RepPSController extends Auxiliar implements Serializable {
                         rpsFL.remove(rp);
                     });
                 }
+                if (!reportes.isEmpty()) {
+                    notificarReporteCitas(new FacesMessage(FacesMessage.SEVERITY_INFO,
+                            "Reporte de citas psicológicas eliminado",
+                            getNombreCortoPersona(usuario) + " ha eliminado un reporte sobre las citas"
+                            + " atendidas en el consultorio de psicología."
+                            + " Reporte " + getFechasPeriodo(periodoSel)),
+                            new Integer[]{2, 14});
+                }
                 reportes.clear();
                 periodoSel = null;
+                break;
+            case 4:
+                reportesPorRealizar.clear();
+                fechaFin = null;
+                fechaInicio = null;
+                FacesContext.getCurrentInstance().addMessage("form0",
+                        new FacesMessage(FacesMessage.SEVERITY_INFO, "Edición cancelada", "Los datos no se guardaron"));
+                PrimeFaces.current().ajax().update("form0");
                 break;
             default: //sin acción
         }
@@ -296,5 +399,58 @@ public class RepPSController extends Auxiliar implements Serializable {
 
     public List<ReportePsicologia> getReportesPorRealizar() {
         return reportesPorRealizar;
+    }
+
+    public boolean getEsDoctor() {
+        return usuario == null ? false
+                : (usuario.getTipoPersona().getIdtipoPersona().equals(1) ? true
+                : (new Integer(14)).equals(usuario.getTipoPersona().getIdtipoPersona()));
+    }
+
+    private void notificarReporteCitas(FacesMessage fm, Integer[] tp) {
+        List<Persona> ppn = new ArrayList<>();
+        for (Integer t : tp) {
+            getPersonasParaNotificar(tpFL.find(t))
+                    .stream().filter(p -> !ppn.contains(p))
+                    .forEachOrdered(ppn::add);
+        }
+        persistirNotificación(
+                new mensaje(0, usuario.getIdpersona(), "CPsReporte<form", fm),
+                ppn,
+                notiFL, notificacion);
+    }
+
+//    public void onRowEdit(RowEditEvent event) {
+//        ReportePsicologia n = (ReportePsicologia) event.getObject();
+//        int ind;
+//        if (reportesNoPublicos.contains(n)) {
+//            System.out.println("lo tiene");
+//            ind = reportesNoPublicos.indexOf(n);
+//            reportesNoPublicos.remove(n);
+//            reportesNoPublicos.add(ind, n);
+//        } else {
+//            System.out.println("No lo tiene");
+//            ReportePsicologia a = rpsFL.find(n.getReportePsicologiaPK());
+//            ind = reportesNoPublicos.indexOf(a);
+//            reportesNoPublicos.remove(a);
+//            reportesNoPublicos.add(ind, n);
+//        }
+//    }
+//
+//    public void guardarRegistro() {
+//        if (repSelected != null) {
+////            ReportePsicologia a = rpsFL.find(repSelected.getReportePsicologiaPK());
+////            int ind = reportesNoPublicos.indexOf(a);
+////            reportesNoPublicos.remove(a);
+////            reportesNoPublicos.add(ind, repSelected);
+//            repSelected = null;
+//        }
+//    }
+    public ReportePsicologia getRepSelected() {
+        return repSelected;
+    }
+
+    public void setRepSelected(ReportePsicologia repSelected) {
+        this.repSelected = repSelected;
     }
 }

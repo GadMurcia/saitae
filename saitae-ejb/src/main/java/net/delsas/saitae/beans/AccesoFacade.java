@@ -5,6 +5,7 @@
  */
 package net.delsas.saitae.beans;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,10 +29,11 @@ public class AccesoFacade extends AbstractFacade<Acceso> implements AccesoFacade
     public AccesoFacade() {
         super(Acceso.class);
     }
-    
+
     @Override
-    public Acceso getAccesoByUrl(String url){
-        return (Acceso) em.createNamedQuery("Acceso.findByAccesourl").setParameter("url", url).getSingleResult();
-}
-    
+    public Acceso getAccesoByUrl(String url) {
+        List<Acceso> a = em.createNamedQuery("Acceso.findByAccesourl").setParameter("url", url).getResultList();
+        return a.isEmpty() ? null : a.get(0);
+    }
+
 }

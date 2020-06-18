@@ -16,8 +16,6 @@
  */
 package net.delsas.saitae.controllers;
 
-import com.lowagie.text.Document;
-import com.lowagie.text.Rectangle;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

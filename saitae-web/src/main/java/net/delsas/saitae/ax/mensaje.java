@@ -39,6 +39,7 @@ public class mensaje implements Serializable {
     private String cadenaAccion;
     private FacesMessage facesmessage;
     private Notificaciones notificacion;
+    private String irAPagina;
 
     public mensaje(Integer destinatario, String cuerpoMensaje, String tituloMensaje,
             Severity severidad, Integer remitente, String cadenaAccion) {
@@ -51,6 +52,21 @@ public class mensaje implements Serializable {
         this.facesmessage = new FacesMessage(severidad, tituloMensaje, cuerpoMensaje);
         this.notificacion = new Notificaciones(new Date(), tituloMensaje, cuerpoMensaje,
                 false, " ", new Persona(destinatario), new Persona(remitente));
+        this.irAPagina = " ";
+    }
+
+    public mensaje(Integer destinatario, String cuerpoMensaje, String tituloMensaje,
+            Severity severidad, Integer remitente, String cadenaAccion, String irPagina) {
+        this.destinatario = destinatario;
+        this.cuerpoMensaje = cuerpoMensaje;
+        this.tituloMensaje = tituloMensaje;
+        this.severidad = severidad;
+        this.remitente = remitente;
+        this.cadenaAccion = cadenaAccion;
+        this.facesmessage = new FacesMessage(severidad, tituloMensaje, cuerpoMensaje);
+        this.notificacion = new Notificaciones(new Date(), tituloMensaje, cuerpoMensaje,
+                false, " ", new Persona(destinatario), new Persona(remitente));
+        this.irAPagina = irPagina;
     }
 
     public mensaje(Integer destinatario, Integer remitente, String cadenaAccion, FacesMessage facesmessage) {
@@ -63,11 +79,25 @@ public class mensaje implements Serializable {
         this.severidad = facesmessage.getSeverity();
         this.notificacion = new Notificaciones(new Date(), facesmessage.getSummary(),
                 facesmessage.getDetail(), false, " ", new Persona(destinatario), new Persona(remitente));
+        this.irAPagina = " ";
+    }
+
+    public mensaje(Integer destinatario, Integer remitente, String cadenaAccion, FacesMessage facesmessage, String irPagina) {
+        this.destinatario = destinatario;
+        this.remitente = remitente;
+        this.cadenaAccion = cadenaAccion;
+        this.facesmessage = facesmessage;
+        this.cuerpoMensaje = facesmessage.getDetail();
+        this.tituloMensaje = facesmessage.getSummary();
+        this.severidad = facesmessage.getSeverity();
+        this.notificacion = new Notificaciones(new Date(), facesmessage.getSummary(),
+                facesmessage.getDetail(), false, " ", new Persona(destinatario), new Persona(remitente));
+        this.irAPagina = irPagina;
     }
 
     public mensaje(String mensajePush) throws Exception {
         String[] msj = mensajePush.split("::");
-        if (msj.length == 6) {
+        if (msj.length == 7) {
             this.destinatario = Integer.valueOf(msj[0]);
             this.cuerpoMensaje = msj[1];
             this.tituloMensaje = msj[2];
@@ -77,6 +107,7 @@ public class mensaje implements Serializable {
             this.facesmessage = new FacesMessage(severidad, tituloMensaje, cuerpoMensaje);
             this.notificacion = new Notificaciones(new Date(), tituloMensaje, cuerpoMensaje,
                     false, "", new Persona(destinatario), new Persona(remitente));
+            irAPagina = msj.length == 7 ? msj[6] : " ";
         } else {
             throw new Exception("La cadena ingresada no tiene el formato indicado para la conversión.");
         }
@@ -166,7 +197,8 @@ public class mensaje implements Serializable {
     @Override
     public String toString() {
         return destinatario + "::" + cuerpoMensaje + "::" + tituloMensaje + "::"
-                + getSeverityOrdinal(severidad) + "::" + remitente + "::" + cadenaAccion;
+                + getSeverityOrdinal(severidad) + "::" + remitente + "::"
+                + cadenaAccion + "::" + irAPagina;
     }
 
     public FacesMessage getFacesmessage() {
@@ -185,11 +217,19 @@ public class mensaje implements Serializable {
         this.notificacion = notificacion;
         this.destinatario = notificacion.getDestinatario().getIdpersona();
         this.remitente = notificacion.getRemitente().getIdpersona();
-        this.cadenaAccion = " ";
+        this.cadenaAccion = "";
         this.cuerpoMensaje = notificacion.getNotificacionCuerpo();
         this.tituloMensaje = notificacion.getNotificacionTitulo();
         this.severidad = FacesMessage.SEVERITY_INFO;
         this.facesmessage = new FacesMessage(severidad, tituloMensaje, cuerpoMensaje);
+    }
+
+    public String getIrAPagina() {
+        return irAPagina;
+    }
+
+    public void setIrAPagina(String irAPagina) {
+        this.irAPagina = irAPagina;
     }
 
 }

@@ -151,18 +151,26 @@ public class ReportePsicologia implements Serializable {
         this.psicologo = psicologo;
     }
 
+    public boolean getReportePublico() {
+        return reportePublico;
+    }
+
+    public void setReportePublico(boolean reportePublico) {
+        this.reportePublico = reportePublico;
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 31 * hash + this.nConsultas;
-        hash = 31 * hash + this.nCitasSolicitadas;
-        hash = 31 * hash + Objects.hashCode(this.motivos);
-        hash = 31 * hash + Objects.hashCode(this.diagnostico);
-        hash = 31 * hash + (this.reportePublico ? 1 : 0);
-        hash = 31 * hash + Objects.hashCode(this.comentarios);
-        hash = 31 * hash + Objects.hashCode(this.reportePsicologiaPK);
-        hash = 31 * hash + Objects.hashCode(this.estudiante1);
-        hash = 31 * hash + Objects.hashCode(this.psicologo);
+        hash = 23 * hash + this.nConsultas;
+        hash = 23 * hash + this.nCitasSolicitadas;
+        hash = 23 * hash + Objects.hashCode(this.motivos);
+        hash = 23 * hash + Objects.hashCode(this.diagnostico);
+        hash = 23 * hash + (this.reportePublico ? 1 : 0);
+        hash = 23 * hash + Objects.hashCode(this.comentarios);
+        hash = 23 * hash + Objects.hashCode(this.reportePsicologiaPK);
+        hash = 23 * hash + Objects.hashCode(this.estudiante1);
+        hash = 23 * hash + Objects.hashCode(this.psicologo);
         return hash;
     }
 
@@ -207,15 +215,7 @@ public class ReportePsicologia implements Serializable {
 
     @Override
     public String toString() {
-        return "net.delsas.saitae.entities.ReportePsicologia[ reportePsicologiaPK=" + reportePsicologiaPK + " ]";
-    }
-
-    public boolean getReportePublico() {
-        return reportePublico;
-    }
-
-    public void setReportePublico(boolean reportePublico) {
-        this.reportePublico = reportePublico;
+        return "ReportePsicologia{" + "nConsultas=" + nConsultas + ", nCitasSolicitadas=" + nCitasSolicitadas + ", motivos=" + motivos + ", diagnostico=" + diagnostico + ", reportePublico=" + reportePublico + ", comentarios=" + comentarios + ", reportePsicologiaPK=" + reportePsicologiaPK + ", estudiante1=" + estudiante1 + ", psicologo=" + psicologo + '}';
     }
 
 }
