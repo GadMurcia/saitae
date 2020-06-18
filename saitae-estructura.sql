@@ -837,6 +837,7 @@ CREATE TABLE `notificaciones` (
   `notificacionTitulo` varchar(140) NOT NULL,
   `notificacionCuerpo` varchar(300) NOT NULL,
   `vista` bit(1) NOT NULL,
+  `irAPagina` varchar(100) DEFAULT NULL,
   `notificacionComentario` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idnotificacion`),
   KEY `fk_notificaciones_1_idx` (`destinatario`,`remitente`),
@@ -1405,4 +1406,4 @@ CREATE TABLE `zona` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-06-18  0:17:48
+-- Dump completed on 2020-06-18  0:25:44

@@ -41,6 +41,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 })
 public class Notificaciones implements Serializable {
 
+    @Size(max = 100)
+    private String irAPagina;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -231,6 +234,14 @@ public class Notificaciones implements Serializable {
     @Override
     public String toString() {
         return "Notificaciones{" + "idnotificacion=" + idnotificacion + ", fechaHora=" + fechaHora + ", notificacionTitulo=" + notificacionTitulo + ", notificacionCuerpo=" + notificacionCuerpo + ", vista=" + vista + ", notificacionComentario=" + notificacionComentario + ", destinatario=" + destinatario + ", remitente=" + remitente + '}';
+    }
+
+    public String getIrAPagina() {
+        return irAPagina;
+    }
+
+    public void setIrAPagina(String irAPagina) {
+        this.irAPagina = irAPagina;
     }
 
 }
