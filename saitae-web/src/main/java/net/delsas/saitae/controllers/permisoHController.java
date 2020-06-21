@@ -110,7 +110,7 @@ public class permisoHController extends Auxiliar implements Serializable {
                 conFL.remove(c);
             }
             psFL.edit(selected);
-            mensaje x = new mensaje(usuario.getIdpersona(), usuario.getIdpersona(), "permiso<form",
+            mensaje x = new mensaje(usuario.getIdpersona(), usuario.getIdpersona(), "permiso<form<<permisoH<form",
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Cancelación exitosa",
                             "Ha cancelado la solicitud de permiso con fechas: "
                             + getFechas(selected.getPermisosPK().getPermisoFechaInicio(), selected.getPermisoFechafin())

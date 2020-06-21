@@ -38,6 +38,7 @@ import net.delsas.saitae.entities.AutorLibro;
 import net.delsas.saitae.entities.Categoria;
 import net.delsas.saitae.entities.EditorialLibro;
 import net.delsas.saitae.entities.Ejemplar;
+import net.delsas.saitae.entities.EjemplarPK;
 import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.Recurso;
 import net.delsas.saitae.entities.TipoCargo;
@@ -213,9 +214,9 @@ public class repInvController extends Auxiliar implements Serializable {
     public void reporte(Object doc) {
         HSSFWorkbook wb = (HSSFWorkbook) doc;
         wb = new XLSModel().getReporteInventario(wb, categorias, tipoCargos, trSelected);
+        HSSFSheet h = wb.getSheetAt(0);
 
         if (trSelected.getIdtipoRecurso().equals(3)) {
-            HSSFSheet h = wb.getSheetAt(0);
             int i = h.getLastRowNum();
             i += 3;
             HSSFRow r = h.createRow(i);
@@ -250,10 +251,43 @@ public class repInvController extends Auxiliar implements Serializable {
             h.addMergedRegion(new CellRangeAddress(i + 6, i + 6, 3, 4));
             h.addMergedRegion(new CellRangeAddress(i + 6, i + 6, 5, 6));
             h.addMergedRegion(new CellRangeAddress(i + 6, i + 6, 7, 8));
+
+        }
+        int g = h.getColumnWidth(0);
+        h.setColumnWidth(0, g * 2);
+        h.setColumnWidth(1, g * (trSelected.getIdtipoRecurso().equals(3) ? 3 : 4));
+        h.setColumnWidth(2, g * 4);
+        h.setColumnWidth(3, g * (trSelected.getIdtipoRecurso().equals(3) ? 4 : 2));
+        h.setColumnWidth(4, g * 2);
+        h.setColumnWidth(5, g * 2);
+        h.setColumnWidth(6, g * 2);
+        h.setColumnWidth(7, g * 2);
+        if (trSelected.getIdtipoRecurso().equals(3)) {
+            h.setColumnWidth(8, g * 2);
+            h.setColumnWidth(9, g * 2);
         }
     }
 
     public List<Ejemplar> getEjemplares() {
         return ejemplares;
+    }
+
+    public String CodToString(Object i, int a, boolean recurrente) {
+        String r[] = i.toString().split("");
+        String s = "";
+        int y = a;
+        for (int q = 0; q < r.length; q++) {
+            s += (recurrente
+                    ? (q == 0 ? ""
+                            : (q % y == 0 ? "-" : ""))
+                    : ((s.split("").length == y
+                    ? "-" : ""))) + r[q];
+            y = recurrente ? (q == 0 ? y : (q % y == 0 ? y + a : y)) : y;
+        }
+        return s;
+    }
+
+    public String ejemplarCod(EjemplarPK pk) {
+        return pk == null ? "" : pk.getIdRecurso() + "" + pk.getEjemplarCorrelativo() + "";
     }
 }

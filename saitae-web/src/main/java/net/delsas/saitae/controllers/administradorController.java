@@ -28,8 +28,11 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import net.delsas.saitae.ax.Auxiliar;
 import net.delsas.saitae.ax.XLSModel;
+import net.delsas.saitae.ax.mensaje;
+import net.delsas.saitae.beans.NotificacionesFacadeLocal;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
 import net.delsas.saitae.entities.Persona;
@@ -45,6 +48,8 @@ import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.omnifaces.cdi.Push;
+import org.omnifaces.cdi.PushContext;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -65,6 +70,11 @@ public class administradorController extends Auxiliar implements Serializable {
     private TipoPersonaFacadeLocal tpfl;
     private List<TipoPersona> tipos;
     private Auxiliar aux;
+    @Inject
+    @Push
+    private PushContext notificacion;
+    @EJB
+    private NotificacionesFacadeLocal notiFL;
 
     @PostConstruct
     public void init() {
@@ -147,6 +157,16 @@ public class administradorController extends Auxiliar implements Serializable {
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("mensaje",
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Agregación Exitosa", a));
             FacesContext.getCurrentInstance().getExternalContext().redirect("agAdm.intex");
+            List<Persona> ps = new ArrayList<>();
+            for (Integer ids : new Integer[]{1, 2, 3}) {
+                getPersonasParaNotificar(tpfl.find(ids)).stream().filter(p -> !ps.contains(p)).forEachOrdered(ps::add);
+            }
+            persistirNotificación(new mensaje(0, 1045367073, "agAdm<form1<<plantel<form",
+                    new FacesMessage(
+                            FacesMessage.SEVERITY_INFO,
+                            "MOdificación del plantel",
+                            "Se ha detectado una modificación al plantel institucional.")),
+                    ps, notiFL, notificacion);
         } catch (IOException e) {
             System.out.println("Error en adminitrador.Guaradr:" + e.getMessage());
         }
@@ -176,8 +196,7 @@ public class administradorController extends Auxiliar implements Serializable {
     }
 
     public void postProcessEXCEL(Object document) {
-        HSSFWorkbook wb = (HSSFWorkbook) document;
-        wb = new XLSModel().getReportePlantel(wb);
+        HSSFWorkbook wb = new XLSModel().getReportePlantel((HSSFWorkbook) document);
     }
 
 }

@@ -48,7 +48,7 @@
                                     </p:cellEditor>
                                 </p:column>
                                 <p:column style="width:35px">
-                                    <p:rowEditor />
+                                    <p:rowEditor cancelTitle="Cancelar" editTitle="Editar" saveTitle="Guardar"/>
                                 </p:column>
                             </p:dataTable>
                             <p:commandButton value="+" styleClass="ui-priority-primary" 
@@ -106,7 +106,7 @@
                                     </p:cellEditor>
                                 </p:column>
                                 <p:column style="width:35px">
-                                    <p:rowEditor />
+                                    <p:rowEditor cancelTitle="Cancelar" editTitle="Editar" saveTitle="Guardar"/>
                                 </p:column>
                             </p:dataTable>
                             <p:commandButton value="Agregar Nuevo" styleClass="ui-priority-primary" 
@@ -190,7 +190,7 @@
                                                                         : 'General'}"/>
                                             </f:facet>
                                             <f:facet name="input">
-                                                <p:selectOneMenu value="#{g.gradoPK.gradoModalidad}">
+                                                <p:selectOneMenu value="#{g.gradoPK.gradoModalidad}" filter="true" filterMatchMode="contains">
                                                     <f:selectItem itemLabel="Seleccione" itemValue=""/>
                                                     <f:selectItem itemLabel="T.V.C. Contador" itemValue="C"/>                                                
                                                     <f:selectItem itemLabel="T.V.C. Secretariado" itemValue="S"/>
@@ -221,7 +221,7 @@
                                                 <p:outputLabel value="Aula #{g.aulaGrado.idaula} - #{g.aulaGrado.zonaAula.zonaNombre}" />
                                             </f:facet>
                                             <f:facet name="input">
-                                                <p:selectOneMenu value="#{g.aulaGrado.idaula}">
+                                                <p:selectOneMenu value="#{g.aulaGrado.idaula}" filter="true" filterMatchMode="contains">
                                                     <f:selectItem itemLabel="Seleccione" itemValue=""/>
                                                     <f:selectItems value="#{tipoController.aulas}"
                                                                    var="au" itemLabel=" Aula #{au.idaula} - #{au.zonaAula.zonaNombre}" 
@@ -254,7 +254,7 @@
                                                                         tipoController.getNombreCortoPersona(g.gradoMaestroGuia.persona)}"/>
                                             </f:facet>
                                             <f:facet name="input">
-                                                <p:selectOneMenu value="#{g.gradoMaestroGuia.idmaestro}">
+                                                <p:selectOneMenu value="#{g.gradoMaestroGuia.idmaestro}" filter="true" filterMatchMode="contains">
                                                     <f:selectItem itemLabel="Seleccionar" itemValue="0"/>
                                                     <f:selectItems value="#{tipoController.maestros}" var="mae" 
                                                                    itemLabel="#{tipoController.getNombreCortoPersona(mae.persona)}"
@@ -276,7 +276,7 @@
                                         </p:cellEditor>
                                     </p:column>
                                     <p:column style="width:35px">
-                                        <p:rowEditor />
+                                        <p:rowEditor cancelTitle="Cancelar" editTitle="Editar" saveTitle="Guardar"/>
                                     </p:column>
                                 </p:dataTable>
                                 <p:commandButton value="+" styleClass="ui-priority-primary" 

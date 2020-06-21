@@ -28,7 +28,6 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -207,7 +206,7 @@ public class admCPSController extends Auxiliar implements Serializable{
         selected.setComentarios("");
         cpsFL.edit(selected);
         persistirNotificación(
-                new mensaje(0, usuario.getIdpersona(), "citasPSH<form",
+                new mensaje(0, usuario.getIdpersona(), "citasPSH<form<<admCitasPs<form",
                         new FacesMessage(FacesMessage.SEVERITY_INFO, "Solicitud de cita aceptada",
                                 "Su solicitud para una cita con el psicólogo institucional fue aprobada por "
                                 + usuario.getPersonaNombre().split(" ")[0] + " " + usuario.getPersonaApellido().split(" ")[0]
@@ -238,7 +237,7 @@ public class admCPSController extends Auxiliar implements Serializable{
         cpsFL.remove(ctr);
         cpsFL.create(selected);
         persistirNotificación(
-                new mensaje(0, usuario.getIdpersona(), "citasPSH<form",
+                new mensaje(0, usuario.getIdpersona(), "citasPSH<form<<admCitasPs<form",
                         new FacesMessage(FacesMessage.SEVERITY_WARN, "Solicitud de cita pospuesta",
                                 "Su solicitud para una cita con el psicólogo institucional fue aplazada por "
                                 + usuario.getPersonaNombre().split(" ")[0] + " " + usuario.getPersonaApellido().split(" ")[0]

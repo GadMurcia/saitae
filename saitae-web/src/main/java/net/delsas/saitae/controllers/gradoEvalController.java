@@ -57,6 +57,7 @@ public class gradoEvalController extends Auxiliar implements Serializable {
     private FacesContext context;
     private Persona usuario;
     private String pagina;
+    private List<GradoEvaluacion> evaluaciones;
 
     @EJB
     private GradoFacadeLocal gFL;
@@ -83,14 +84,12 @@ public class gradoEvalController extends Auxiliar implements Serializable {
                         new FacesMessage(FacesMessage.SEVERITY_WARN, "Página prohibida",
                                 "Usted no tiene los permisos suficientes para ver y utilizar esa página."));
                 FacesContext.getCurrentInstance().getExternalContext().redirect("./../");
-                return;
             }
         } catch (IOException ex) {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error Inesperado",
                             ex.getMessage() == null ? "Error de causa desconocida." : ex.getMessage()));
         }
-        grados = gFL.getPorAñoYActivo(getAñoActual());
     }
 
     public void onSelect(SelectEvent e) {
@@ -120,7 +119,7 @@ public class gradoEvalController extends Auxiliar implements Serializable {
                 interesados.add(m.getEstudiante().getPersona());
             });
             persistirNotificación(
-                    new mensaje(0, usuario.getIdpersona(), "gradoEvalH<form",
+                    new mensaje(0, usuario.getIdpersona(), "gradoEvalH<form<<gradoEval<form",
                             new FacesMessage(FacesMessage.SEVERITY_INFO,
                                     "Hay una nueva evaluación de su grado",
                                     "El grado en el que usted está inscrito ha "
@@ -130,7 +129,7 @@ public class gradoEvalController extends Auxiliar implements Serializable {
                     notiFL, notificacion);
             if (gradoSelected.getGradoMaestroGuia() != null) {
                 persistirNotificación(
-                        new mensaje(0, usuario.getIdpersona(), "gradoEvalH<form",
+                        new mensaje(0, usuario.getIdpersona(), "gradoEvalH<form<<gradoEval<form",
                                 new FacesMessage(FacesMessage.SEVERITY_INFO,
                                         "Hay una nueva evaluación del su grado",
                                         "El grado del que usted guía ha "
@@ -158,7 +157,7 @@ public class gradoEvalController extends Auxiliar implements Serializable {
                 interesados.add(m.getEstudiante().getPersona());
             });
             persistirNotificación(
-                    new mensaje(0, usuario.getIdpersona(), "gradoEvalH<form",
+                    new mensaje(0, usuario.getIdpersona(), "gradoEvalH<form<<gradoEval<form",
                             new FacesMessage(FacesMessage.SEVERITY_INFO,
                                     "Se ha eliminado una evaluación de su grado",
                                     getNombreCortoPersona(usuario)
@@ -168,12 +167,12 @@ public class gradoEvalController extends Auxiliar implements Serializable {
                     notiFL, notificacion);
             if (gradoSelected.getGradoMaestroGuia() != null) {
                 persistirNotificación(
-                        new mensaje(0, usuario.getIdpersona(), "gradoEvalH<form",
-                            new FacesMessage(FacesMessage.SEVERITY_INFO,
-                                    "Se ha eliminado una evaluación de su grado",
-                                    getNombreCortoPersona(usuario)
-                                    + " ha eliminado una evaluación del grado "
-                                    + "que usted es guía.")),
+                        new mensaje(0, usuario.getIdpersona(), "gradoEvalH<form<<gradoEval<form",
+                                new FacesMessage(FacesMessage.SEVERITY_INFO,
+                                        "Se ha eliminado una evaluación de su grado",
+                                        getNombreCortoPersona(usuario)
+                                        + " ha eliminado una evaluación del grado "
+                                        + "que usted es guía.")),
                         gradoSelected.getGradoMaestroGuia().getPersona(),
                         notiFL, notificacion);
             }
@@ -186,6 +185,8 @@ public class gradoEvalController extends Auxiliar implements Serializable {
     }
 
     public List<Grado> getGrados() {
+        grados = gFL.getPorAñoYActivo(getAñoActual());
+        gradoSelected = grados.isEmpty() ? null : grados.get(0);
         return grados;
     }
 
@@ -211,6 +212,12 @@ public class gradoEvalController extends Auxiliar implements Serializable {
 
     public void setEvalSelected(GradoEvaluacion evalSelected) {
         this.evalSelected = evalSelected;
+    }
+
+    public List<GradoEvaluacion> getEvaluaciones() {
+        evaluaciones = gradoSelected == null ? new ArrayList<>()
+                : gevFL.findByGradoPK(gradoSelected.getGradoPK());
+        return evaluaciones;
     }
 
 }

@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -58,6 +59,7 @@ public class maestroEvalController extends Auxiliar implements Serializable {
     private Persona usuario;
     private Persona persona;
     private EvaluacionMaestro evMa, evMaSelected;
+    private List<EvaluacionMaestro> evaluaciones;
 
     @EJB
     private PersonaFacadeLocal pFL;
@@ -89,9 +91,7 @@ public class maestroEvalController extends Auxiliar implements Serializable {
             } catch (IOException ex) {
                 Logger.getLogger(paquetesController.class.getName()).log(Level.SEVERE, null, ex);
             }
-            return;
         }
-        maestros = pFL.getMaestros();
     }
 
     private void prepararEval() {
@@ -106,7 +106,7 @@ public class maestroEvalController extends Auxiliar implements Serializable {
         MestroHorarioMaterias h = mhmFL.finHorarioActual(
                 persona.getIdpersona(),
                 evMa.getEvaluacionMaestroPK().getFechaHora(), getAñoActual());
-        if (h != null) {
+        if (Optional.ofNullable(h).isPresent()) {
             evMa.setHoraInicio(h.getHorario().getHoraInicio());
             evMa.setHoraFin(h.getHorario().getHoraFin());
             evMa.setGrado(h.getGrado());
@@ -129,7 +129,7 @@ public class maestroEvalController extends Auxiliar implements Serializable {
         persona.getMaestro().getEvaluacionMaestroList().add(evMa);
         pFL.edit(persona);
         persistirNotificación(
-                new mensaje(0, usuario.getIdpersona(), "maEvalH<form",
+                new mensaje(0, usuario.getIdpersona(), "maEvalH<form<<maestroEval<form",
                         new FacesMessage(FacesMessage.SEVERITY_INFO, "Evaluación nueva",
                                 getNombreCortoPersona(usuario)
                                 + " ha realizado una nueva evaluación de su desempeño. "
@@ -143,12 +143,12 @@ public class maestroEvalController extends Auxiliar implements Serializable {
     }
 
     public void eliminarEval() {
-        if (evMaSelected != null) {
+        if (Optional.ofNullable(evMaSelected).isPresent()) {
             persona.getMaestro().getEvaluacionMaestroList().remove(evMaSelected);
             pFL.edit(persona);
             emFL.remove(evMaSelected);
             persistirNotificación(
-                    new mensaje(0, usuario.getIdpersona(), "maEvalH<form",
+                    new mensaje(0, usuario.getIdpersona(), "maEvalH<form<<maestroEval<form",
                             new FacesMessage(FacesMessage.SEVERITY_INFO, "Evaluación eliminada",
                                     getNombreCortoPersona(usuario)
                                     + " le ha retirado una evaluación de su desempeño. "
@@ -171,9 +171,9 @@ public class maestroEvalController extends Auxiliar implements Serializable {
     public void limpiar() {
         persona = null;
     }
-    
-    public void mostrar(){
-        if (evMaSelected != null) {
+
+    public void mostrar() {
+        if (Optional.ofNullable(evMaSelected).isPresent()) {
             PrimeFaces.current().executeScript("PF('Deval').show();");
         } else {
             FacesContext.getCurrentInstance().addMessage("form0:msgs",
@@ -185,11 +185,15 @@ public class maestroEvalController extends Auxiliar implements Serializable {
     }
 
     public List<Persona> getMaestros() {
+        maestros = pFL.getMaestros();
+        Optional.ofNullable(persona)
+                .ifPresent(p -> {
+                    if (!maestros.contains(p)) {
+                        maestros.remove(p);
+                        persona = null;
+                    }
+                });
         return maestros;
-    }
-
-    public void setMaestros(List<Persona> maestros) {
-        this.maestros = maestros;
     }
 
     public Persona getPersona() {
@@ -214,5 +218,14 @@ public class maestroEvalController extends Auxiliar implements Serializable {
 
     public void setEvMaSelected(EvaluacionMaestro evMaSelected) {
         this.evMaSelected = evMaSelected;
+    }
+
+    public List<EvaluacionMaestro> getEvaluaciones() {
+        Optional.ofNullable(persona).ifPresent(
+                p -> Optional.ofNullable(p.getIdpersona()).ifPresent(
+                        id -> {
+                            evaluaciones = emFL.findByIdMaestro(id);
+                        }));
+        return evaluaciones == null ? new ArrayList<>() : evaluaciones;
     }
 }

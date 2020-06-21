@@ -201,12 +201,7 @@ public class admRecursoController extends Auxiliar implements Serializable {
                     FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("mensaje",
                             new FacesMessage(FacesMessage.SEVERITY_WARN, "Página prohibida",
                                     "Usted no tiene los permisos suficientes para ver y utilizar esa página."));
-                    try {
-                        FacesContext.getCurrentInstance().getExternalContext().redirect("./../");
-                    } catch (IOException ex0) {
-                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error iniesperado",
-                                (ex0 != null ? ex0.getMessage() : "Error desconocido.")));
-                    }
+                    redireccionarPagina("./../");
                 } else if ((tps.contains(6) && tps.contains(5)) || ((tps.contains(7) && tps.contains(5)))) {
                     verTipos = true;
                     verCategorias = true;
@@ -485,13 +480,14 @@ public class admRecursoController extends Auxiliar implements Serializable {
                             + ", NOMBRE: " + seleccionado.getNombre()));
             persistirNotificación(x,
                     getPersonasParaNotificar(tperFL.find(tp)), notiFL, notificacion);
-            FacesContext.getCurrentInstance().addMessage("form0:msgs",
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("mensaje",
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Creación exitosa",
                             "El recurso con el id: " + seleccionado.getIdrecurso()
                             + " y nombre: " + seleccionado.getNombre()
                             + " se ha guardado con éxito."));
             init();
-            PrimeFaces.current().ajax().update("form0:msgs", "form", "dialogN");
+            PrimeFaces.current().ajax().update("form", "dialogN");
+            redireccionarPagina("admRecurso.intex");
         } else {
             //intento de agregación de un id existente
             FacesContext.getCurrentInstance().addMessage("form0:msgs",
@@ -705,5 +701,4 @@ public class admRecursoController extends Auxiliar implements Serializable {
         PrimeFaces.current().ajax().update("hn:ws");
         return st;
     }
-
 }

@@ -43,7 +43,7 @@
                                     </p:cellEditor>
                                 </p:column>
                                 <p:column style="width:35px">
-                                    <p:rowEditor />
+                                    <p:rowEditor cancelTitle="Cancelar" editTitle="Editar" saveTitle="Guardar"/>
                                 </p:column>
                             </p:dataTable>
                             <p:commandButton value="+" styleClass="ui-priority-primary" 
@@ -86,7 +86,7 @@
                                     </p:cellEditor>
                                 </p:column>
                                 <p:column style="width:35px">
-                                    <p:rowEditor />
+                                    <p:rowEditor cancelTitle="Cancelar" editTitle="Editar" saveTitle="Guardar"/>
                                 </p:column>
                             </p:dataTable>
                             <p:commandButton value="+" title="Agregar nuevo"
@@ -116,7 +116,7 @@
                                     </p:cellEditor>
                                 </p:column>
                                 <p:column style="width:35px">
-                                    <p:rowEditor />
+                                    <p:rowEditor cancelTitle="Cancelar" editTitle="Editar" saveTitle="Guardar"/>
                                 </p:column>
                             </p:dataTable> 
                             <p:commandButton value="+" styleClass="ui-priority-primary" 
@@ -126,7 +126,7 @@
                         </p:tab>
                         <p:tab title="Tipo de Financionamiento">
                             <t:tablasTipos id="tabla1" Lista="#{tipoController.financiamientos}" 
-                                           NombreTabla="financiamiento" 
+                                           NombreTabla="financiamiento" textoAgregar=" tipos de financiamiento"
                                            zid="#{z.idfinanciamiento}" znombre="#{z.financiamientoNombre}"/>
                         </p:tab>
                         <p:tab title="Cargos Institucionales">
@@ -162,7 +162,7 @@
                                         </f:facet>
                                         <f:facet name="input">
                                             <p:selectOneMenu converter="omnifaces.SelectItemsConverter"
-                                                             value="#{c.cargoTipoPersona}">
+                                                             value="#{c.cargoTipoPersona}" filter="true">
                                                 <f:selectItem itemLabel="Seleccione" itemValue="#{null}"/>
                                                 <f:selectItems value="#{tipoController.personas}" var="tpc"
                                                                itemLabel="#{tpc.tipoPersonaNombre}"
@@ -172,7 +172,7 @@
                                     </p:cellEditor>
                                 </p:column>
                                 <p:column style="width:35px">
-                                    <p:rowEditor />
+                                    <p:rowEditor cancelTitle="Cancelar" editTitle="Editar" saveTitle="Guardar"/>
                                 </p:column>
                             </p:dataTable>
                             <p:commandButton value="+" styleClass="ui-priority-primary" 
@@ -182,7 +182,7 @@
                         </p:tab>
                         <p:tab title="Tipo de Especialidades">
                             <t:tablasTipos id="especialidades" Lista="#{tipoController.tipoE}" 
-                                           NombreTabla="especialidades" textoAgregar=" tipo de especialdades"
+                                           NombreTabla="especialidades" textoAgregar=" tipos de especialdades"
                                            zid="#{z.idtipoEspecialidades}" 
                                            znombre="#{z.tipoEspecialidadesNombre}"/>
                         </p:tab>

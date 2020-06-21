@@ -8,6 +8,7 @@ package net.delsas.saitae.beans;
 import java.util.List;
 import javax.ejb.Local;
 import net.delsas.saitae.entities.GradoEvaluacion;
+import net.delsas.saitae.entities.GradoPK;
 
 /**
  *
@@ -29,5 +30,7 @@ public interface GradoEvaluacionFacadeLocal {
     List<GradoEvaluacion> findRange(int[] range);
 
     int count();
+    
+    public List<GradoEvaluacion> findByGradoPK(GradoPK pk);
     
 }

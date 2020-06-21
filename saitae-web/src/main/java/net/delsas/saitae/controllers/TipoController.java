@@ -47,6 +47,7 @@ import net.delsas.saitae.beans.HorarioFacadeLocal;
 import net.delsas.saitae.beans.MaestroFacadeLocal;
 import net.delsas.saitae.beans.MateriaFacadeLocal;
 import net.delsas.saitae.beans.NotificacionesFacadeLocal;
+import net.delsas.saitae.beans.PaisFacadeLocal;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.beans.TipoCargoFacadeLocal;
 import net.delsas.saitae.beans.TipoEspecialidadesFacadeLocal;
@@ -72,6 +73,7 @@ import net.delsas.saitae.entities.GradoPK;
 import net.delsas.saitae.entities.Horario;
 import net.delsas.saitae.entities.Maestro;
 import net.delsas.saitae.entities.Materia;
+import net.delsas.saitae.entities.Pais;
 import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.TipoCargo;
 import net.delsas.saitae.entities.TipoEspecialidades;
@@ -222,6 +224,11 @@ public class TipoController extends Auxiliar implements Serializable {
     private TipoProyectoFacadeLocal tipoProyectoFL;
     private List<TipoProyecto> tipopp;
 
+    //paises
+    @EJB
+    private PaisFacadeLocal paisFL;
+    private List<Pais> paises;
+
     //controlde usuarios    
     private FacesContext context;
     private Persona usuario;
@@ -269,14 +276,16 @@ public class TipoController extends Auxiliar implements Serializable {
                 zonas = zfl.findAll();
                 nombramientos = tipoNombramientoFL.findAll();
                 financiamientos = financiamientoFL.findAll();
-                Personas = personaFL.findAll();
+                Personas = new ArrayList<>();
+                personaFL.findAll().stream().filter(tp -> !tp.getIdtipoPersona().equals(1)).forEach(Personas::add);
                 tipoS = tiposFL.findAll();
                 tipoE = tipoeFL.findAll();
                 break;
             case "lictp.intex":
                 model = new DualListModel<>(new ArrayList<>(), new ArrayList<>());
                 tipoPersona = new TipoPersona(0);
-                Personas = personaFL.findAll();
+                Personas = new ArrayList<>();
+                personaFL.findAll().stream().filter(tp -> !tp.getIdtipoPersona().equals(1)).forEach(Personas::add);
                 all = tpfl.findAll();
                 break;
             case "academico.intex":
@@ -310,6 +319,7 @@ public class TipoController extends Auxiliar implements Serializable {
                 autor = autorFL.findAll();
                 categoria = categoriaFL.findAll();
                 editorial = editorialFL.findAll();
+                paises = paisFL.findAll();
                 break;
         }
     }
@@ -508,6 +518,12 @@ public class TipoController extends Auxiliar implements Serializable {
                     tipoS.add(ts);
                 }
                 break;
+            case "pais":
+                Pais pa = new Pais(0);
+                if (!paises.contains(pa)) {
+                    paises.add(pa);
+                }
+                break;
             case "grado":
                 Grado g = new Grado(new GradoPK(0, "", "",
                         Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date()))), true);
@@ -639,6 +655,12 @@ public class TipoController extends Auxiliar implements Serializable {
                     tiposFL.edit(s);
                     titulo = "Tipo De Sueldo";
                     mensaje = s.getTipoSueldoNombre();
+                    break;
+                case "pais":
+                    Pais p = (Pais) event.getObject();
+                    paisFL.edit(p);
+                    titulo = "Pais";
+                    mensaje = p.getPaisNombre();
                     break;
                 case "grado":
                     Grado g = (Grado) event.getObject();
@@ -856,6 +878,13 @@ public class TipoController extends Auxiliar implements Serializable {
                 }
                 mensaje = "Tipo De Sueldo";
                 break;
+                case "pais":
+                Pais p = (Pais)event.getObject();
+                if (p.getPaisNombre() == null || p.getPaisNombre().isEmpty()) {
+                    paises.remove(p);
+                }
+                mensaje = "Pais";
+                break;
             case "grado":
                 Grado g = (Grado) event.getObject();
                 if (g.getGradoPK().getIdgrado() == 0 | g.getGradoPK().getGradoModalidad().isEmpty()
@@ -998,32 +1027,16 @@ public class TipoController extends Auxiliar implements Serializable {
         return Collections.unmodifiableList(recursos);
     }
 
-    public void setRecursos(List<TipoRecurso> recursos) {
-        this.recursos = recursos;
-    }
-
     public List<TipoPermiso> getAll() {
         return Collections.unmodifiableList(all);
-    }
-
-    public void setAll(List<TipoPermiso> all) {
-        this.all = all;
     }
 
     public List<TipoCargo> getCargos() {
         return Collections.unmodifiableList(cargos);
     }
 
-    public void setCargos(List<TipoCargo> cargos) {
-        this.cargos = cargos;
-    }
-
     public List<TipoPersona> getPersonas() {
         return Collections.unmodifiableList(Personas);
-    }
-
-    public void setPersonas(List<TipoPersona> Personas) {
-        this.Personas = Personas;
     }
 
     public TipoPersona getTipoPersona() {
@@ -1046,96 +1059,48 @@ public class TipoController extends Auxiliar implements Serializable {
         return Collections.unmodifiableList(zonas);
     }
 
-    public void setZonas(List<Zona> zonas) {
-        this.zonas = zonas;
-    }
-
     public List<TipoReserva> getReservas() {
         return Collections.unmodifiableList(reservas);
-    }
-
-    public void setReservas(List<TipoReserva> reservas) {
-        this.reservas = reservas;
     }
 
     public List<TipoNombramiento> getNombramientos() {
         return Collections.unmodifiableList(nombramientos);
     }
 
-    public void setNombramientos(List<TipoNombramiento> nombramientos) {
-        this.nombramientos = nombramientos;
-    }
-
     public List<Materia> getMaterias() {
         return Collections.unmodifiableList(materias);
-    }
-
-    public void setMaterias(List<Materia> materias) {
-        this.materias = materias;
     }
 
     public List<TipoMateria> getTipoMaterias() {
         return Collections.unmodifiableList(tipoMaterias);
     }
 
-    public void setTipoMaterias(List<TipoMateria> tipoMaterias) {
-        this.tipoMaterias = tipoMaterias;
-    }
-
     public List<Aula> getAulas() {
         return Collections.unmodifiableList(aulas);
-    }
-
-    public void setAulas(List<Aula> aulas) {
-        this.aulas = aulas;
     }
 
     public List<Autor> getAutor() {
         return Collections.unmodifiableList(autor);
     }
 
-    public void setAutor(List<Autor> autor) {
-        this.autor = autor;
-    }
-
     public List<Cargo> getCargo() {
         return Collections.unmodifiableList(cargo);
-    }
-
-    public void setCargo(List<Cargo> cargo) {
-        this.cargo = cargo;
     }
 
     public List<Categoria> getCategoria() {
         return Collections.unmodifiableList(categoria);
     }
 
-    public void setCategoria(List<Categoria> categoria) {
-        this.categoria = categoria;
-    }
-
     public List<Editorial> getEditorial() {
         return Collections.unmodifiableList(editorial);
-    }
-
-    public void setEditorial(List<Editorial> editorial) {
-        this.editorial = editorial;
     }
 
     public List<Horario> getHorario() {
         return Collections.unmodifiableList(horario);
     }
 
-    public void setHorario(List<Horario> horario) {
-        this.horario = horario;
-    }
-
     public List<Financiamiento> getFinanciamientos() {
         return Collections.unmodifiableList(financiamientos);
-    }
-
-    public void setFinanciamientos(List<Financiamiento> financiamientos) {
-        this.financiamientos = financiamientos;
     }
 
     public List<Grado> getGrados() {
@@ -1150,10 +1115,6 @@ public class TipoController extends Auxiliar implements Serializable {
             i.add(g);
         });
         return i;
-    }
-
-    public void setGrados(List<Grado> grados) {
-        this.grados = grados;
     }
 
     public List<Maestro> getMaestros() {
@@ -1172,10 +1133,6 @@ public class TipoController extends Auxiliar implements Serializable {
         return Collections.unmodifiableList(dias);
     }
 
-    public void setDias(List<DiasEstudio> dias) {
-        this.dias = dias;
-    }
-
     public DiasEstudio getDiasSelected() {
         return diasSelected;
     }
@@ -1186,10 +1143,6 @@ public class TipoController extends Auxiliar implements Serializable {
 
     public List<DiasEstudio> getDiasSeleccionables() {
         return Collections.unmodifiableList(diasSeleccionables);
-    }
-
-    public void setDiasSeleccionables(List<DiasEstudio> diasSeleccionables) {
-        this.diasSeleccionables = diasSeleccionables;
     }
 
     public List<Integer> getAñosGrados(Grado g) {
@@ -1216,16 +1169,8 @@ public class TipoController extends Auxiliar implements Serializable {
         return Collections.unmodifiableList(tipoE);
     }
 
-    public void setTipoE(List<TipoEspecialidades> tipoE) {
-        this.tipoE = tipoE;
-    }
-
     public List<TipoSueldos> getTipoS() {
         return Collections.unmodifiableList(tipoS);
-    }
-
-    public void setTipoS(List<TipoSueldos> tipoS) {
-        this.tipoS = tipoS;
     }
 
     public void onSelectAños(SelectEvent ev) {
@@ -1244,15 +1189,11 @@ public class TipoController extends Auxiliar implements Serializable {
         return añosDisponibles;
     }
 
-    public void setAñosDisponibles(List<Integer> añosDisponibles) {
-        this.añosDisponibles = añosDisponibles;
-    }
-
     public List<TipoProyecto> getTipopp() {
         return tipopp;
     }
 
-    public void setTipopp(List<TipoProyecto> tipopp) {
-        this.tipopp = tipopp;
+    public List<Pais> getPaises() {
+        return paises;
     }
 }

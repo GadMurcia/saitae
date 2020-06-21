@@ -24,14 +24,14 @@
                                 update="form"/>
                     </p:selectOneMenu>
                 </h:panelGrid>
-                <p:dataTable value="#{gradoEvalHController.GSelected.gradoEvaluacionList}"
+                <p:dataTable value="#{gradoEvalHController.evaluaciones}"
                              var="ev" emptyMessage="Sin evaluaciones" selectionMode="single" 
                              selection="#{gradoEvalHController.evalSelected}"
                              rowKey="#{ev.gradoEvaluacionPK}">
                     <p:ajax event="rowSelect" update="h0" oncomplete="PF('Deval').show();"/>
                     <f:facet name="header">
                         Historial de evaluaciones del grado 
-                        #{gradoEvalHController.getGradoNombre(gradoEvalHController.GSelected.gradoPK)} año #{gradoEvalHController.GSelected.gradoPK.gradoAño}
+                        #{gradoEvalHController.getGradoNombre(ev.grado.gradoPK)} año #{ev.gradoEvaluacionPK.gradoAño}
                     </f:facet>
                     <p:column headerText="Fecha y hora">
                         #{gradoEvalHController.getDateTimeToString(ev.gradoEvaluacionPK.fechaEvaluacion)}

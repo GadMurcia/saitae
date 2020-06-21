@@ -32,6 +32,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
 import net.delsas.saitae.beans.GradoFacadeLocal;
@@ -1300,5 +1302,14 @@ public class Auxiliar implements Serializable {
 
     public void setPermisoLicenciasAnteriores(boolean lic, Permisos p) {
         p.setPermisosComentario((getPermisoGoceDeSueldo(p) ? "1" : "0") + "¿¿" + (lic ? "1" : "0") + "¿¿¿¿");
+    }
+    
+    public void redireccionarPagina(String pag) {
+        try {
+            FacesContext.getCurrentInstance().getExternalContext().redirect(pag);
+        } catch (IOException ex0) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error iniesperado",
+                    (ex0 != null ? ex0.getMessage() : "Error desconocido.")));
+        }
     }
 }

@@ -6,81 +6,24 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:o="http://omnifaces.org/ui">
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:t="http://xmlns.jcp.org/jsf/composite/components/autentia">
 
     <ui:define name="content">
         <h:form id="form">
             <p:growl id="msgs" showDetail="true"/>
             <h1 style="align-content: center;">Administración General de Libros.</h1>
             <p:tabView id="tw" orientation="left" dynamic="true">
-                <p:tab title="Tipo de Cargos al inventario">
-                    <p:dataTable id="cargo" var="ca" value="#{tipoController.cargos}" editable="true" 
-                                 widgetVar="cargo1" styleClass="tabla" emptyMessage="Sin registros aún.">
-                        <f:facet name="header">
-                            Administración de los tipos de cargo al inventario.
-                        </f:facet>
-
-                        <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" update=":form:msgs" />
-                        <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" update=":form:msgs" />
-
-                        <p:column headerText="Id" style="width: 10px">
-                            <h:outputText value="#{ca.idtipoCargo}" />
-                        </p:column>
-
-                        <p:column headerText="Nombre">
-                            <p:cellEditor>
-                                <f:facet name="output"><h:outputText value="#{ca.nombre}" /></f:facet>
-                                <f:facet name="input"><p:inputText value="#{ca.nombre}" 
-                                                                   style="width:100%" label="Nombre"/></f:facet>
-                            </p:cellEditor>
-                        </p:column>
-                        <p:column style="width:35px">
-                            <p:rowEditor />
-                        </p:column>
-                    </p:dataTable> 
-                    <p:commandButton value="+" styleClass="ui-priority-primary" 
-                                     process="@this" update=":form:msgs cargo"
-                                     action="#{tipoController.onAddNew('cargo')}" 
-                                     title="Agregar nuevo Tipo de Cargo para el inventario."/>
+                <p:tab title="Tipos de Cargos al inventario">
+                    <t:tablasTipos id="cargo" Lista="#{tipoController.cargos}" 
+                                   NombreTabla="cargo" textoAgregar=" cargo"
+                                   zid="#{z.idtipoCargo}" znombre="#{z.nombre}"/>
                 </p:tab>
                 <p:tab title="Autor">
-                    <p:dataTable id="autor" var="au" value="#{tipoController.autor}" editable="true" 
-                                 widgetVar="autor1" styleClass="tabla" emptyMessage="Sin registros aún.">
-                        <f:facet name="header">
-                            Administración de autores.
-                        </f:facet>
-
-                        <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" update=":form:msgs" />
-                        <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" update=":form:msgs" />
-
-                        <p:column headerText="Id" style="width: 10px">
-                            <h:outputText value="#{au.idautor}" />
-                        </p:column>
-
-                        <p:column headerText="Nombre">
-                            <p:cellEditor>
-                                <f:facet name="output"><h:outputText value="#{au.autorNombre}" /></f:facet>
-                                <f:facet name="input"><p:inputText value="#{au.autorNombre}" 
-                                                                   style="width:100%" label="Nombre"/></f:facet>
-                            </p:cellEditor>
-                        </p:column>
-                        <!-- <p:column headerText="Comentario">
-                             <p:cellEditor>
-                                 <f:facet name="output"><h:outputText value="# {au.autorComentario}" /></f:facet>
-                                 <f:facet name="input"><p:inputText value="# {au.autorComentario}" 
-                                                                    style="width:100%" label="Comentario"/></f:facet>
-                             </p:cellEditor>
-                         </p:column>
-                        --><p:column style="width:35px">
-                            <p:rowEditor />
-                        </p:column>
-                    </p:dataTable>
-                    <p:commandButton value="+" styleClass="ui-priority-primary" 
-                                     process="@this" update=":form0:msgs autor"
-                                     action="#{tipoController.onAddNew('autor')}" 
-                                     title="Agregar nuevo autor."/>
+                    <t:tablasTipos id="autor" Lista="#{tipoController.autor}" 
+                                   NombreTabla="autor" textoAgregar=" autor"
+                                   zid="#{z.idautor}" znombre="#{z.autorNombre}"/>
                 </p:tab>
-
                 <p:tab title="Categoría">
                     <p:dataTable id="categoria" var="ca" value="#{tipoController.categoria}" 
                                  editable="true" 
@@ -120,7 +63,7 @@
                         </p:column>
 
                         <p:column style="width:35px">
-                            <p:rowEditor />
+                            <p:rowEditor cancelTitle="Cancelar" editTitle="Editar" saveTitle="Guardar"/>
                         </p:column>
                     </p:dataTable>
                     <p:commandButton value="+" styleClass="ui-priority-primary" 
@@ -129,35 +72,14 @@
                                      title="Agregar nueva categoria."/>
                 </p:tab>
                 <p:tab title="Editorial">
-                    <p:dataTable id="editorial" var="e" value="#{tipoController.editorial}" editable="true" 
-                                 widgetVar="editorial1" styleClass="tabla" emptyMessage="Sin registros aún.">
-                        <f:facet name="header">
-                            Administración de editoriales.
-                        </f:facet>
-
-                        <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" update=":form:msgs" />
-                        <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" update=":form:msgs" />
-
-                        <p:column headerText="Id" style="width: 10px">
-                            <h:outputText value="#{e.ideditorial}" />
-                        </p:column>
-
-                        <p:column headerText="Nombre">
-                            <p:cellEditor>
-                                <f:facet name="output"><h:outputText value="#{e.editorialNombre}" /></f:facet>
-                                <f:facet name="input"><p:inputText value="#{e.editorialNombre}" 
-                                                                   style="width:100%" label="Nombre"/></f:facet>
-                            </p:cellEditor>
-                        </p:column>
-
-                        <p:column style="width:35px">
-                            <p:rowEditor />
-                        </p:column>
-                    </p:dataTable>
-                    <p:commandButton value="+" styleClass="ui-priority-primary" 
-                                     process="@this" update=":form0:msgs editorial"
-                                     action="#{tipoController.onAddNew('editorial')}" 
-                                     title="Agregar nueva editorial."/>
+                    <t:tablasTipos id="editorial" Lista="#{tipoController.editorial}" 
+                                   NombreTabla="editorial" textoAgregar=" editorial"
+                                   zid="#{z.ideditorial}" znombre="#{z.editorialNombre}"/>
+                </p:tab>
+                <p:tab title="Paises">
+                    <t:tablasTipos id="pais" Lista="#{tipoController.paises}" 
+                                   NombreTabla="pais" textoAgregar=" pais"
+                                   zid="#{z.idpais}" znombre="#{z.paisNombre}"/>
                 </p:tab>
             </p:tabView>
         </h:form>

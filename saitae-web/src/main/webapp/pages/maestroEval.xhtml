@@ -15,7 +15,8 @@
                     <p:outputLabel for="mae" value="Maestro: "/>
                     <p:selectOneMenu id="mae" value="#{maestroEvalController.persona}" 
                                      requiredMessage="Es necesario que seleccione una opción válida."
-                                     converter="omnifaces.SelectItemsConverter" required="true">
+                                     converter="omnifaces.SelectItemsConverter" 
+                                     required="true" filter="true">
                         <f:selectItem itemValue="#{null}" itemLabel="Seleccione" noSelectionOption="true"/>
                         <f:selectItems value="#{maestroEvalController.maestros}" var="ms" 
                                        itemLabel="#{axiliarController.getNombreCompletoPersona(ms)}" 
@@ -35,14 +36,14 @@
                 <p:panel header="Historial"
                          rendered="#{maestroEvalController.persona != null}" toggleable="true">
 
-                    <p:dataTable value="#{maestroEvalController.persona.maestro.evaluacionMaestroList}"
+                    <p:dataTable value="#{maestroEvalController.evaluaciones}"
                                  var="ev" emptyMessage="Sin evaluaciones" selectionMode="single" 
                                  selection="#{maestroEvalController.evMaSelected}"
                                  rowKey="#{ev.evaluacionMaestroPK}" id="evalm">
                         <p:ajax event="rowSelect" listener="#{maestroEvalController.onBlour}"/>
                         <f:facet name="header">
                             Historial de evaluaciones del docente 
-                            #{maestroEvalController.getNombreCompletoPersona(maestroEvalController.persona)}
+                            #{maestroEvalController.getNombreCompletoPersona(ev.maestro.persona)}
                         </f:facet>
                         <p:column headerText="Fecha y hora">
                             #{maestroEvalController.getDateTimeToString(ev.evaluacionMaestroPK.fechaHora)}

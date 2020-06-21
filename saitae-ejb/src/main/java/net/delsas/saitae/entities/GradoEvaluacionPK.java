@@ -33,7 +33,7 @@ public class GradoEvaluacionPK implements Serializable {
     private String gradoSeccion;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "gradoA\u00f1o")
+    @Column(name = "gradoAño")
     private int gradoAño;
     @Basic(optional = false)
     @NotNull
@@ -43,7 +43,7 @@ public class GradoEvaluacionPK implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "fechaEvaluacion")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fechaEvaluacion;
 
     public GradoEvaluacionPK() {
@@ -127,10 +127,7 @@ public class GradoEvaluacionPK implements Serializable {
         if ((this.gradoModalidad == null && other.gradoModalidad != null) || (this.gradoModalidad != null && !this.gradoModalidad.equals(other.gradoModalidad))) {
             return false;
         }
-        if ((this.fechaEvaluacion == null && other.fechaEvaluacion != null) || (this.fechaEvaluacion != null && !this.fechaEvaluacion.equals(other.fechaEvaluacion))) {
-            return false;
-        }
-        return true;
+        return !((this.fechaEvaluacion == null && other.fechaEvaluacion != null) || (this.fechaEvaluacion != null && !this.fechaEvaluacion.equals(other.fechaEvaluacion)));
     }
 
     @Override

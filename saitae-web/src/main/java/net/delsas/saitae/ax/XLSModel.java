@@ -628,18 +628,18 @@ public class XLSModel {
         c = r.createCell(3);
         c.setCellValue("DISTRITO EDUCATIVO: 02-19");
         if (tr.getIdtipoRecurso().equals(3)) {
-            c = r.createCell(tr.getIdtipoRecurso().equals(3) ? 7 : 5);
+            c = r.createCell(7);
             c.setCellValue("TIPO CARGO");
 
             int i = 4;
             for (TipoCargo tc : tipoCargos) {
                 r = h.createRow(i);
-                c = r.createCell(tr.getIdtipoRecurso().equals(3) ? 7 : 5);
+                c = r.createCell(7);
                 c.setCellValue(tc.getNombre());
-                c = r.createCell(tr.getIdtipoRecurso().equals(3) ? 12 : 8);
-                c.setCellValue(tc.getIdtipoCargo());
+                c = r.createCell(11);
+                c.setCellValue("1-" + tc.getIdtipoCargo());
                 h.addMergedRegion(new CellRangeAddress(i, i, tr.getIdtipoRecurso().equals(3) ? 7
-                        : 5, tr.getIdtipoRecurso().equals(3) ? 11 : 7));
+                        : 5, tr.getIdtipoRecurso().equals(3) ? 10 : 6));
                 h.getRow(i).getCell(tr.getIdtipoRecurso().equals(3) ? 7
                         : 5).getCellStyle().setAlignment(HorizontalAlignment.LEFT);
                 i++;
@@ -649,12 +649,13 @@ public class XLSModel {
         wb.removeSheetAt(0);
 
         h.addMergedRegion(new CellRangeAddress(1, 1, 0, 1));
-        h.addMergedRegion(new CellRangeAddress(1, 1, tr.getIdtipoRecurso().equals(3) ? 7 : 5, tr.getIdtipoRecurso().equals(3) ? 12 : 8));
+        h.addMergedRegion(new CellRangeAddress(1, 1, 2, 3));
+        h.addMergedRegion(new CellRangeAddress(1, 1, tr.getIdtipoRecurso().equals(3) ? 7 : 5, tr.getIdtipoRecurso().equals(3) ? 11 : 7));
         h.addMergedRegion(new CellRangeAddress(2, 2, 3, 4));
-        h.addMergedRegion(new CellRangeAddress(2, 2, tr.getIdtipoRecurso().equals(3) ? 7 : 5, tr.getIdtipoRecurso().equals(3) ? 12 : 8));
+        h.addMergedRegion(new CellRangeAddress(2, 2, tr.getIdtipoRecurso().equals(3) ? 7 : 5, tr.getIdtipoRecurso().equals(3) ? 11 : 7));
         h.addMergedRegion(new CellRangeAddress(3, 3, 1, 2));
         h.addMergedRegion(new CellRangeAddress(3, 3, 3, 4));
-        h.addMergedRegion(new CellRangeAddress(3, 3, tr.getIdtipoRecurso().equals(3) ? 7 : 5, tr.getIdtipoRecurso().equals(3) ? 12 : 8));
+        h.addMergedRegion(new CellRangeAddress(3, 3, tr.getIdtipoRecurso().equals(3) ? 7 : 5, tr.getIdtipoRecurso().equals(3) ? 11 : 7));
 
         h.iterator().forEachRemaining((r0) -> {
             r0.cellIterator().forEachRemaining((c0) -> {

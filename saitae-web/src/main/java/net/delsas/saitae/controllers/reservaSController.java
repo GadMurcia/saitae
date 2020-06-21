@@ -280,14 +280,12 @@ public class reservaSController extends Auxiliar implements Serializable {
             bib = false;
         }
         alumnos = false;
-        System.out.println(tp == null ? "No Selection" : tp);
     }
 
     public void usosSelect(SelectEvent event) {
         usos = event.getObject() != null ? Integer.valueOf(event.getObject().toString()) : 0;
         setUsadoPor(usos + "");
         alumnos = usos == 3;
-        System.out.println(usos == 0 ? "No Selection" : usos);
     }
 
     public void tipoReservaSelect(SelectEvent event) {
@@ -314,7 +312,6 @@ public class reservaSController extends Auxiliar implements Serializable {
                             + reserva.getTipoReserva().getTipoReservaNombre() + "."));
             PrimeFaces.current().ajax().update(":form", ":form0:msgs");
         }
-        System.out.println("" + reserva.getTipoReserva());
     }
 
     public void gradoSelect(SelectEvent event) {
@@ -322,7 +319,6 @@ public class reservaSController extends Auxiliar implements Serializable {
         if (grado != null) {
             maestros = mhmFL.findMaestroByGradopk(grado.getGradoPK());
         }
-        System.out.println(grado);
     }
 
     public void maestroSelect(SelectEvent event) {
@@ -330,23 +326,19 @@ public class reservaSController extends Auxiliar implements Serializable {
         if (maestro != null && grado != null) {
             materias = mhmFL.findMateriaByIdMaestroAndGradoPK(grado.getGradoPK(), maestro.getIdmaestro());
         }
-        System.out.println(maestro);
     }
 
     public void materiaSelect(SelectEvent event) {
         Materia m = (Materia) event.getObject();
         reserva.setMaeria(m);
-        System.out.println(m == null ? "no selection" : m.getMateriaNombre());
     }
 
     public void tipoProyectoSelect(SelectEvent event) {
         TipoProyecto p = (TipoProyecto) event.getObject();
         reserva.setTipoProyecto(p);
-        System.out.println(p == null ? "no selection" : p.getTipoProyectoNombre());
     }
 
     public void onBlur(AjaxBehaviorEvent event) {
-        System.out.println(event.getComponent().getId());
         xTitulo = getParametro() == 1;
     }
 
@@ -363,7 +355,6 @@ public class reservaSController extends Auxiliar implements Serializable {
                 solicitud.add(s);
                 break;
             default:
-                System.out.println("def");
         }
 
     }
@@ -432,9 +423,7 @@ public class reservaSController extends Auxiliar implements Serializable {
                 PrimeFaces.current().ajax().update(event.getComponent().getClientId());
                 break;
             default:
-                System.out.println("def");
         }
-        System.out.println(event.getComponent().getClientId());
 
     }
 
@@ -458,10 +447,7 @@ public class reservaSController extends Auxiliar implements Serializable {
                 eliminarDeLista();
                 break;
             default:
-                System.out.println("def");
         }
-
-        System.out.println(event.getComponent().getClientId());
     }
 
     void limpia() {
@@ -476,7 +462,6 @@ public class reservaSController extends Auxiliar implements Serializable {
     }
 
     public void guardar() {
-        System.out.println(reserva);
         if (fecha == null || (bib ? fechaf : fecha) == null || hi == null || hf == null) {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_WARN, "Error en la reserva",
@@ -564,7 +549,6 @@ public class reservaSController extends Auxiliar implements Serializable {
                     try {
                         srFL.create(s);
                     } catch (Exception ex) {
-                        System.out.println("Error en guardar la solicitud de reserva");
                     }
                 });
                 Integer id = tp.getIdtipoRecurso();
@@ -844,7 +828,6 @@ public class reservaSController extends Auxiliar implements Serializable {
 
     public void onItemSelect(SelectEvent event) {
         if (event.getComponent().getId().equals("tres")) {
-            System.out.println("eliminando los recursos que no concuerden");
             reserva.setTipoReserva((TipoReserva) event.getObject());
             List<SolicitudReserva> listaEliminar = new ArrayList<>();
             int d = solicitud.size();
@@ -864,12 +847,9 @@ public class reservaSController extends Auxiliar implements Serializable {
         } else {
             if (!event.getObject().toString().equals("No se han encontrado resultados.")) {
                 String[] x = event.getObject().toString().split("   ");
-                System.out.println("Libro seleccionado " + x[2]);
                 Integer id = Integer.valueOf(x[2].split(": ")[1]);
                 libroSeleccionado = recursoFL.find(id);
-                System.out.println("Seleccionado con éxito.");
             } else {
-                System.out.println(event.getObject().toString());
             }
             busqueda = "";
         }
@@ -996,8 +976,7 @@ public class reservaSController extends Auxiliar implements Serializable {
         if (srtabla != null && solicitud.contains(srtabla)) {
             solicitud.remove(srtabla);
         }
-        srtabla = new SolicitudReserva();
-        PrimeFaces.current().ajax().update(":form:libros");
+        srtabla = null;
     }
 
     public boolean getMst() {

@@ -21,9 +21,11 @@
                      value="#{cc.attrs.Lista}" editable="true" 
                      widgetVar="#{cc.attrs.NombreTabla}1" 
                      styleClass="tabla"
-                     emptyMessage="Sin registros aún.">
+                     emptyMessage="Sin registros aún."
+                     paginator="true" paginatorAlwaysVisible="false" paginatorPosition="to"
+                     rows="8">
             <f:facet name="header">
-                Administración de #{cc.attrs.NombreTabla}
+                Administración de #{cc.attrs.textoAgregar}
             </f:facet>
 
             <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" 
@@ -31,11 +33,11 @@
             <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" 
                     update=":form:msgs #{cc.attrs.NombreTabla}" />
 
-            <p:column headerText="Id" style="width: 10px">
+            <p:column headerText="Id" style="width: 20px" filterBy="#{cc.attrs.zid}">
                 <h:outputText value="#{cc.attrs.zid}"/>
             </p:column>
 
-            <p:column headerText="Nombre">
+            <p:column headerText="Nombre" filterBy="#{cc.attrs.znombre}" filterMatchMode="contains">
                 <p:cellEditor>
                     <f:facet name="output"><h:outputText value="#{cc.attrs.znombre}" /></f:facet>
                     <f:facet name="input"><p:inputText value="#{cc.attrs.znombre}" 
@@ -43,7 +45,7 @@
                 </p:cellEditor>
             </p:column>
             <p:column style="width:35px">
-                <p:rowEditor />
+                <p:rowEditor cancelTitle="Cancelar" editTitle="Editar" saveTitle="Guardar"/>
             </p:column>
         </p:dataTable>
         <p:commandButton value="+" styleClass="ui-priority-primary" 

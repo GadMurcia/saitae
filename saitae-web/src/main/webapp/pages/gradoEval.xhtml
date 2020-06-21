@@ -37,13 +37,13 @@
                 <p:panel header="Historial"
                          rendered="#{gradoEvalController.gradoSelected != null}" toggleable="true">
 
-                    <p:dataTable value="#{gradoEvalController.gradoSelected.gradoEvaluacionList}"
+                    <p:dataTable value="#{gradoEvalController.evaluaciones}"
                                  var="ev" emptyMessage="Sin evaluaciones" selectionMode="single" 
                                  selection="#{gradoEvalController.evalSelected}"
                                  rowKey="#{ev.gradoEvaluacionPK}" id="evalg">
                         <p:ajax event="rowSelect"/>
                         <f:facet name="header">
-                            #{axiliarController.getGradoNombre(gradoEvalController.gradoSelected.gradoPK)}
+                            #{axiliarController.getGradoNombre(ev.grado.gradoPK)}
                         </f:facet>
                         <p:column headerText="Fecha y hora">
                             #{gradoEvalController.getDateTimeToString(ev.gradoEvaluacionPK.fechaEvaluacion)}

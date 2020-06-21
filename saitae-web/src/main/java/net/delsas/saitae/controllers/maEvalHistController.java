@@ -41,7 +41,7 @@ import net.delsas.saitae.entities.Persona;
 public class maEvalHistController extends Auxiliar implements Serializable {
 
     private List<EvaluacionMaestro> evaluaciones;
-    private EvaluacionMaestro evSelected;    
+    private EvaluacionMaestro evSelected;
     private Persona usuario;
     @EJB
     private EvaluacionMaestroFacadeLocal emFL;
@@ -62,12 +62,11 @@ public class maEvalHistController extends Auxiliar implements Serializable {
             } catch (IOException ex) {
                 Logger.getLogger(paquetesController.class.getName()).log(Level.SEVERE, null, ex);
             }
-            return;
         }
-        evaluaciones = emFL.findByIdMaestro(usuario.getIdpersona());
     }
 
     public List<EvaluacionMaestro> getEvaluaciones() {
+        evaluaciones = emFL.findByIdMaestro(usuario == null ? 0 : usuario.getIdpersona());
         return evaluaciones;
     }
 

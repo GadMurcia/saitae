@@ -29,6 +29,7 @@ import javax.inject.Named;
 import net.delsas.saitae.ax.Auxiliar;
 import net.delsas.saitae.beans.AccesoFacadeLocal;
 import net.delsas.saitae.beans.AccesoTipoPersonaFacadeLocal;
+import net.delsas.saitae.beans.GradoEvaluacionFacadeLocal;
 import net.delsas.saitae.beans.GradoFacadeLocal;
 import net.delsas.saitae.beans.MatriculaFacadeLocal;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
@@ -50,6 +51,7 @@ public class gradoEvalHController extends Auxiliar implements Serializable {
     private List<Grado> grados;
     private Grado gSelected;
     private String pagina;
+    private List<GradoEvaluacion> evaluaciones;
 
     @EJB
     private AccesoTipoPersonaFacadeLocal accesoTPFL;
@@ -61,6 +63,8 @@ public class gradoEvalHController extends Auxiliar implements Serializable {
     private MatriculaFacadeLocal mFL;
     @EJB
     private PersonaFacadeLocal pFL;
+    @EJB
+    private GradoEvaluacionFacadeLocal geFL;
 
     @PostConstruct
     public void init() {
@@ -115,6 +119,12 @@ public class gradoEvalHController extends Auxiliar implements Serializable {
 
     public void setEvalSelected(GradoEvaluacion evalSelected) {
         this.evalSelected = evalSelected;
+    }
+
+    public List<GradoEvaluacion> getEvaluaciones() {
+        evaluaciones = gSelected == null ? new ArrayList<>()
+                : geFL.findByGradoPK(gSelected.getGradoPK());
+        return evaluaciones;
     }
 
 }

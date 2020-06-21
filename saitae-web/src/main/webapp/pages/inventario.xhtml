@@ -6,7 +6,8 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:o="http://omnifaces.org/ui">
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:t="http://xmlns.jcp.org/jsf/composite/components/autentia">
 
     <ui:define name="content">
         <h:form id="form">
@@ -35,7 +36,7 @@
                             </p:cellEditor>
                         </p:column>
                         <p:column style="width:35px">
-                            <p:rowEditor />
+                            <p:rowEditor cancelTitle="Cancelar" editTitle="Editar" saveTitle="Guardar"/>
                         </p:column>
                     </p:dataTable> 
                     <!--<p:commandButton value="+" styleClass="ui-priority-primary" 
@@ -44,68 +45,15 @@
                                      title="Agregar nuevo Tipo de Cargo para el inventario."/>
                     -->
                 </p:tab>
-                <p:tab title="Tipo Reserva">
-                    <p:dataTable id="reserva" var="res" value="#{tipoController.reservas}" editable="true" 
-                                 widgetVar="reserva1" styleClass="tabla" emptyMessage="Sin registros aún.">
-                        <f:facet name="header">
-                            Administración de los tipos de Reserva.
-                        </f:facet>
-
-                        <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" update=":form:msgs" />
-                        <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" update=":form:msgs" />
-
-                        <p:column headerText="Id" style="width: 10px">
-                            <h:outputText value="#{res.idtipoReserva}" />
-                        </p:column>
-
-                        <p:column headerText="Nombre">
-                            <p:cellEditor>
-                                <f:facet name="output"><h:outputText value="#{res.tipoReservaNombre}" /></f:facet>
-                                <f:facet name="input"><p:inputText value="#{res.tipoReservaNombre}" 
-                                                                   style="width:100%" label="Nombre"/></f:facet>
-                            </p:cellEditor>
-                        </p:column>
-                        <p:column style="width:35px">
-                            <p:rowEditor />
-                        </p:column>
-                    </p:dataTable> 
-                    <p:commandButton value="+" styleClass="ui-priority-primary" 
-                                     process="@this" update=":form:msgs reserva"
-                                     action="#{tipoController.onAddNew('reserva')}" 
-                                     title="Agregar nuevo tipo de reserva."/>
+                <p:tab title="Tipos de Reserva">
+                    <t:tablasTipos id="reserva" Lista="#{tipoController.reservas}" 
+                                   NombreTabla="reserva" textoAgregar=" tipo de reserva"
+                                   zid="#{z.idtipoReserva}" znombre="#{z.tipoReservaNombre}"/>
                 </p:tab>
-                <p:tab title="Tipo de Proyectos">
-                    <p:dataTable id="proyectos" var="pro" value="#{tipoController.tipopp}" 
-                                 editable="true" widgetVar="proyectos1" styleClass="tabla" 
-                                 emptyMessage="Sin registros aún.">
-                        <f:facet name="header">
-                            Administración de los tipos de Proyecto informáticos.
-                        </f:facet>
-
-                        <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" 
-                                update=":form:msgs" />
-                        <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" 
-                                update=":form:msgs" />
-
-                        <p:column headerText="Id" style="width: 10px">
-                            <h:outputText value="#{pro.idtipoProyecto}" />
-                        </p:column>
-
-                        <p:column headerText="Nombre">
-                            <p:cellEditor>
-                                <f:facet name="output"><h:outputText value="#{pro.tipoProyectoNombre}" /></f:facet>
-                                <f:facet name="input"><p:inputText value="#{pro.tipoProyectoNombre}" 
-                                                                   style="width:100%" label="Nombre"/></f:facet>
-                            </p:cellEditor>
-                        </p:column>
-                        <p:column style="width:35px">
-                            <p:rowEditor />
-                        </p:column>
-                    </p:dataTable> 
-                    <p:commandButton value="+" styleClass="ui-priority-primary" 
-                                     process="@this" update=":form:msgs proyectos"
-                                     action="#{tipoController.onAddNew('proyectos')}" 
-                                     title="Agregar nuevo tipo de proyecto."/>
+                <p:tab title="Tipos de Proyecto">
+                    <t:tablasTipos id="proyectos" Lista="#{tipoController.tipopp}" 
+                                   NombreTabla="proyectos" textoAgregar=" tipo de proyectos"
+                                   zid="#{z.idtipoProyecto}" znombre="#{z.tipoProyectoNombre}"/>
                 </p:tab>
             </p:tabView>
         </h:form>

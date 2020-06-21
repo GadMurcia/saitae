@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "GradoEvaluacion.findAll", query = "SELECT g FROM GradoEvaluacion g"),
     @NamedQuery(name = "GradoEvaluacion.findByIdGrado", query = "SELECT g FROM GradoEvaluacion g WHERE g.gradoEvaluacionPK.idGrado = :idGrado"),
     @NamedQuery(name = "GradoEvaluacion.findByGradoSeccion", query = "SELECT g FROM GradoEvaluacion g WHERE g.gradoEvaluacionPK.gradoSeccion = :gradoSeccion"),
-    @NamedQuery(name = "GradoEvaluacion.findByGradoA\u00f1o", query = "SELECT g FROM GradoEvaluacion g WHERE g.gradoEvaluacionPK.gradoA\u00f1o = :gradoA\u00f1o"),
+    @NamedQuery(name = "GradoEvaluacion.findByGradoAño", query = "SELECT g FROM GradoEvaluacion g WHERE g.gradoEvaluacionPK.gradoAño = :gradoAño"),
     @NamedQuery(name = "GradoEvaluacion.findByGradoModalidad", query = "SELECT g FROM GradoEvaluacion g WHERE g.gradoEvaluacionPK.gradoModalidad = :gradoModalidad"),
     @NamedQuery(name = "GradoEvaluacion.findByFechaEvaluacion", query = "SELECT g FROM GradoEvaluacion g WHERE g.gradoEvaluacionPK.fechaEvaluacion = :fechaEvaluacion"),
     @NamedQuery(name = "GradoEvaluacion.findByOrganizadorLimpieza", query = "SELECT g FROM GradoEvaluacion g WHERE g.organizadorLimpieza = :organizadorLimpieza"),
@@ -49,7 +49,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "GradoEvaluacion.findByObservacionesPositivas", query = "SELECT g FROM GradoEvaluacion g WHERE g.observacionesPositivas = :observacionesPositivas"),
     @NamedQuery(name = "GradoEvaluacion.findByObservacioneNegativas", query = "SELECT g FROM GradoEvaluacion g WHERE g.observacioneNegativas = :observacioneNegativas"),
     @NamedQuery(name = "GradoEvaluacion.findByRecomendaciones", query = "SELECT g FROM GradoEvaluacion g WHERE g.recomendaciones = :recomendaciones"),
-    @NamedQuery(name = "GradoEvaluacion.findByEvaluacionGradoComentario", query = "SELECT g FROM GradoEvaluacion g WHERE g.evaluacionGradoComentario = :evaluacionGradoComentario")})
+    @NamedQuery(name = "GradoEvaluacion.findByEvaluacionGradoComentario", query = "SELECT g FROM GradoEvaluacion g WHERE g.evaluacionGradoComentario = :evaluacionGradoComentario"),
+    @NamedQuery(name = "GradoEvaluacion.findByGradoPK", query = "SELECT g FROM GradoEvaluacion g WHERE g.grado.gradoPK = :pk")
+})
 public class GradoEvaluacion implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -114,7 +116,7 @@ public class GradoEvaluacion implements Serializable {
     @JoinColumns({
         @JoinColumn(name = "idGrado", referencedColumnName = "idgrado", insertable = false, updatable = false),
         @JoinColumn(name = "gradoSeccion", referencedColumnName = "gradoSeccion", insertable = false, updatable = false),
-        @JoinColumn(name = "gradoA\u00f1o", referencedColumnName = "gradoA\u00f1o", insertable = false, updatable = false),
+        @JoinColumn(name = "gradoAño", referencedColumnName = "gradoAño", insertable = false, updatable = false),
         @JoinColumn(name = "gradoModalidad", referencedColumnName = "gradoModalidad", insertable = false, updatable = false)})
     @ManyToOne(optional = false)
     private Grado grado;
@@ -136,7 +138,7 @@ public class GradoEvaluacion implements Serializable {
                         g.getGradoPK().getGradoSeccion(),
                         g.getGradoPK().getGradoAño(),
                         g.getGradoPK().getGradoModalidad(),
-                         new Date());
+                        new Date());
     }
 
     public GradoEvaluacion(GradoEvaluacionPK gradoEvaluacionPK, boolean organizadorLimpieza, boolean organizadorClase, boolean normas, boolean mision, boolean vision, boolean mapasRiesgo, boolean comites, boolean bienvenidos, boolean valores, boolean directiva, boolean material) {

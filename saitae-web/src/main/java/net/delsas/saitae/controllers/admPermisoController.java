@@ -209,7 +209,7 @@ public class admPermisoController extends Auxiliar implements Serializable {
                         + getNombreSol() + " " + getApellidoSol() + ".",
                         "Nueva concesión de permiso",
                         FacesMessage.SEVERITY_INFO,
-                        permiso.getPermisosSolicitante().getIdpersona(), "permisoH<form");
+                        permiso.getPermisosSolicitante().getIdpersona(), "permisoH<form<<permiso<form");
                 persistirNotificación(m, new Persona(m.getDestinatario()), notFL, notificacion);
                 FacesContext.getCurrentInstance().addMessage(null, ms);
                 init();

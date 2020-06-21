@@ -107,16 +107,6 @@ INSERT INTO `tipoPersona` VALUES (1,'Administrador','fa fa-diamond'),(2,'Directo
 UNLOCK TABLES;
 
 --
--- Dumping data for table `tipoRecurso`
---
-
-LOCK TABLES `tipoRecurso` WRITE;
-/*!40000 ALTER TABLE `tipoRecurso` DISABLE KEYS */;
-INSERT INTO `tipoRecurso` VALUES (1,'Tecnológico CRA',NULL),(2,'Laboratorio de Ciencias Naturales',NULL),(3,'Bibliográfico',NULL);
-/*!40000 ALTER TABLE `tipoRecurso` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Dumping events for database 'intex'
 --
 
@@ -132,4 +122,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-06-18  0:19:40
+-- Dump completed on 2020-06-19 18:45:26

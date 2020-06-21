@@ -468,7 +468,7 @@ public class adminReservas extends Auxiliar implements Serializable {
                             "El rechazo de la solicitud de reserva de equipo se ha llevado a cabo con éxito."
                             + "Se notificarán a las personas solicitantes del rechazo."));
             persistirNotificación(
-                    new mensaje(0, usuario.getIdpersona(), "solicitudH<form",
+                    new mensaje(0, usuario.getIdpersona(), "solicitudH<form<<srCra<form",
                             new FacesMessage(FacesMessage.SEVERITY_WARN, "Rechazo de reserva",
                                     "Su solicitud de reserva de equipo con fecha "
                                     + (new SimpleDateFormat("dd/MM/yyyy").format(selected.getReservaFecha()))
@@ -530,7 +530,7 @@ public class adminReservas extends Auxiliar implements Serializable {
                             "La asignación de recursos para la solicitud de reserva de equipo se ha llevado a cabo con éxito."
                             + "Se notificarán a las personas solicitantes de la aceptación de su solicitud."));
             persistirNotificación(
-                    new mensaje(0, usuario.getIdpersona(), "solicitudH<form",
+                    new mensaje(0, usuario.getIdpersona(), "solicitudH<form<<srCra<form",
                             new FacesMessage(FacesMessage.SEVERITY_INFO, "Aceptación de reserva",
                                     "Su solicitud de reserva de equipo con fecha "
                                     + (new SimpleDateFormat("dd/MM/yyyy").format(selected.getReservaFecha()))
@@ -562,7 +562,7 @@ public class adminReservas extends Auxiliar implements Serializable {
                             "La entrega de los recursos solicitados se ha llevado a cabo con éxito."
                             + "Se notificarán a las personas solicitantes."));
             persistirNotificación(
-                    new mensaje(0, usuario.getIdpersona(), "solicitudH<form",
+                    new mensaje(0, usuario.getIdpersona(), "solicitudH<form<<srCra<form",
                             new FacesMessage(FacesMessage.SEVERITY_INFO, "Entrega de equipo reservado",
                                     "Los recursos que solicitó el día "
                                     + (new SimpleDateFormat("dd/MM/yyyy").format(selected.getReservaFecha()))
@@ -590,7 +590,7 @@ public class adminReservas extends Auxiliar implements Serializable {
                             "La devolución de los recursos solicitados se ha llevado a cabo con éxito."
                             + "Se notificarán a las personas solicitantes."));
             persistirNotificación(
-                    new mensaje(0, usuario.getIdpersona(), "solicitudH<form",
+                    new mensaje(0, usuario.getIdpersona(), "solicitudH<form<<srCra<form",
                             new FacesMessage(FacesMessage.SEVERITY_INFO, "Devolución de equipo reservado",
                                     "Los recursos que solicitó el día "
                                     + (new SimpleDateFormat("dd/MM/yyyy").format(selected.getReservaFecha()))

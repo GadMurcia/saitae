@@ -5,10 +5,12 @@
  */
 package net.delsas.saitae.beans;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import net.delsas.saitae.entities.GradoEvaluacion;
+import net.delsas.saitae.entities.GradoPK;
 
 /**
  *
@@ -28,5 +30,12 @@ public class GradoEvaluacionFacade extends AbstractFacade<GradoEvaluacion> imple
     public GradoEvaluacionFacade() {
         super(GradoEvaluacion.class);
     }
-    
+
+    @Override
+    public List<GradoEvaluacion> findByGradoPK(GradoPK pk) {
+        return em.createNamedQuery("GradoEvaluacion.findByGradoPK")
+                .setParameter("pk", pk)
+                .getResultList();
+    }
+
 }

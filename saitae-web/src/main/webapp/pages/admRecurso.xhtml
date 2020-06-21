@@ -16,7 +16,7 @@
                                  rowKey="#{r.idrecurso}"
                                  widgetVar="recurso1"  emptyMessage="Sin registros aún."
                                  selection="#{admRecursoC.seleccionado}" 
-                                 selectionMode="single" rows="10" 
+                                 selectionMode="single" rows="7" 
                                  paginator="true" paginatorAlwaysVisible="false" 
                                  paginatorPosition="top">
                         <f:facet name="header">
@@ -143,8 +143,9 @@
                 <p:dialog id="dialogN" header="Administración de recursos" 
                           widgetVar="DrecursoN" modal="true"
                           showEffect="fade" hideEffect="fade" resizable="false" 
-                          style="width: 90%;">
+                          style="width: 90%;" onHide="redireccionar();">
                     <h:form id="hn">
+                        <p:remoteCommand name="redireccionar" actionListener="#{admRecursoC.redireccionarPagina('admRecurso.intex')}"/>
                         <p:wizard flowListener="#{admRecursoC.onFlowProcess}" id="ws"
                                   backLabel="Retroceder" nextLabel="Siguiente">
                             <p:tab id="init" title="Información del recursos">
@@ -183,7 +184,8 @@
                                             <p:outputLabel for="categoria" value="Categorias" rendered="#{admRecursoC.verCategorias}"/>
                                             <p:selectOneMenu id="categoria" value="#{admRecursoC.seleccionado.categoria}"
                                                              rendered="#{admRecursoC.verCategorias}" 
-                                                             converter="omnifaces.SelectItemsConverter">
+                                                             converter="omnifaces.SelectItemsConverter"
+                                                             filter="true">
                                                 <f:selectItem itemLabel="Seleccione" itemValue="#{null}"/>
                                                 <f:selectItems var="c" itemLabel="#{c.categoriaNombre}" 
                                                                itemValue="#{c}"  
@@ -194,7 +196,7 @@
 
                                             <p:outputLabel for="pais" value="Pais" rendered="#{admRecursoC.verCategorias}"/>
                                             <p:selectOneMenu id="pais" value="#{admRecursoC.seleccionado.pais}"
-                                                             rendered="#{admRecursoC.verCategorias}"
+                                                             rendered="#{admRecursoC.verCategorias}" filter="true"
                                                              converter="omnifaces.SelectItemsConverter">
                                                 <f:selectItem itemLabel="Seleccione" itemValue="#{null}"/>
                                                 <f:selectItems var="p" itemLabel="#{p.paisNombre}" itemValue="#{p}" 
@@ -204,7 +206,7 @@
 
                                             <p:outputLabel for="tipocargo" value="Tipo Cargo"/>
                                             <p:selectOneMenu id="tipocargo" value="#{admRecursoC.seleccionado.tipoCargo}"
-                                                             converter="omnifaces.SelectItemsConverter">
+                                                             converter="omnifaces.SelectItemsConverter" filter="true">
                                                 <f:selectItem itemLabel="Seleccione" itemValue=""/>
                                                 <f:selectItems var="tc" itemLabel="#{tc.nombre}" itemValue="#{tc}" 
                                                                value="#{admRecursoC.tiposCargos}"/>
@@ -242,7 +244,7 @@
                                             <h:outputLabel for="multiple" value="Formas de Reserva"/>
                                             <p:selectCheckboxMenu id="multiple" value="#{admRecursoC.tiposReservasRecurso}" 
                                                                   label="Tipos de Reserva" multiple="true"
-                                                                  panelStyle="width:250px" 
+                                                                  panelStyle="width:250px" filter="true" 
                                                                   required="true" converter="omnifaces.SelectItemsConverter"
                                                                   requiredMessage="Debe seleccionar al menos un tipo">
                                                 <f:selectItems value="#{admRecursoC.tiposReservas}" var="trr" 
@@ -313,7 +315,7 @@
                                         <h:outputLabel for="autor" value="Autores"/>
                                         <p:selectCheckboxMenu id="autor" value="#{admRecursoC.autoresXlibro}" 
                                                               label="autores" multiple="true" filter="true" 
-                                                              filterMatchMode="startsWith" panelStyle="width:250px" 
+                                                              panelStyle="width:250px" 
                                                               required="true" converter="omnifaces.SelectItemsConverter"
                                                               requiredMessage="Debe seleccionar al menos un autor">
                                             <f:selectItems value="#{admRecursoC.autores}" var="a" 
@@ -324,7 +326,7 @@
                                         <h:outputLabel for="editorial" value="Editoriales"/>
                                         <p:selectCheckboxMenu id="editorial" value="#{admRecursoC.editorialesXlibro}" 
                                                               label="autores" multiple="true" filter="true" 
-                                                              filterMatchMode="startsWith" panelStyle="width:250px" 
+                                                              panelStyle="width:250px" 
                                                               required="true" converter="omnifaces.SelectItemsConverter"
                                                               requiredMessage="Debe seleccionar al menos una editorial">
                                             <f:selectItems value="#{admRecursoC.editoriales}" var="e" 
