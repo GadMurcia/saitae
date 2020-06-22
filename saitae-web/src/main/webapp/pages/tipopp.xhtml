@@ -18,38 +18,11 @@
                 <h:form id="form">
                     <p:growl id="msgs" showDetail="true"/>
                     <h1 style="align-content: center;">Administración.</h1>
-                    <p:tabView id="tw" orientation="left" dynamic="true" style="height: 100%; width: 90%;">
+                    <p:tabView id="tw" orientation="left" dynamic="true">
                         <p:tab title="Zonas">
-                            <p:dataTable id="zona" var="z" value="#{tipoController.zonas}" 
-                                         editable="true" 
-                                         widgetVar="zona1" styleClass="tabla"
-                                         emptyMessage="Sin registros aún.">
-                                <f:facet name="header">
-                                    Administración de Zonas
-                                </f:facet>
-
-                                <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" update=":form:msgs form:tw:zona" />
-                                <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" update=":form:msgs" />
-
-                                <p:column headerText="Id" style="width: 10px">
-                                    <h:outputText value="#{z.idzona}"/>
-                                </p:column>
-
-                                <p:column headerText="Nombre">
-                                    <p:cellEditor>
-                                        <f:facet name="output"><h:outputText value="#{z.zonaNombre}" /></f:facet>
-                                        <f:facet name="input"><p:inputText value="#{z.zonaNombre}" 
-                                                                           style="width:100%" label="Nombre"/></f:facet>
-                                    </p:cellEditor>
-                                </p:column>
-                                <p:column style="width:35px">
-                                    <p:rowEditor cancelTitle="Cancelar" editTitle="Editar" saveTitle="Guardar"/>
-                                </p:column>
-                            </p:dataTable>
-                            <p:commandButton value="+" styleClass="ui-priority-primary" 
-                                             process="@this" update=":form:msgs zona"
-                                             action="#{tipoController.onAddNew('zona')}"
-                                             title="Agregar nueva Zona."/>
+                            <t:tablasTipos id="zona" Lista="#{tipoController.zonas}" 
+                                           NombreTabla="zona" textoAgregar=" zona"
+                                           zid="#{z.idzona}" znombre="#{z.zonaNombre}"/>
                         </p:tab>
                         <p:tab title="Aulas">
                             <p:dataTable id="aula" var="a" value="#{tipoController.aulas}" 
@@ -89,40 +62,17 @@
                                     <p:rowEditor cancelTitle="Cancelar" editTitle="Editar" saveTitle="Guardar"/>
                                 </p:column>
                             </p:dataTable>
-                            <p:commandButton value="+" title="Agregar nuevo"
-                                             styleClass="ui-priority-primary" 
-                                             process="@this" update=":form0:msgs aula"
-                                             action="#{tipoController.onAddNew('aula')}"/>
+                            <h:panelGrid columns="1" style="width: 5%; margin-left: 92%">
+                                <p:commandButton value="+" title="Agregar nuevo"
+                                                 styleClass="ui-priority-primary" 
+                                                 process="@this" update=":form0:msgs aula"
+                                                 action="#{tipoController.onAddNew('aula')}"/>
+                            </h:panelGrid>
                         </p:tab>
                         <p:tab title="Tipo Nombramiento">
-                            <p:dataTable id="nombramiento" var="nom" value="#{tipoController.nombramientos}" editable="true" 
-                                         widgetVar="nombra1" styleClass="tabla" emptyMessage="Sin registros aún.">
-                                <f:facet name="header">
-                                    Administración de los tipos de Nombramiento.
-                                </f:facet>
-
-                                <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" update=":form:msgs" />
-                                <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" update=":form:msgs" />
-
-                                <p:column headerText="Id" style="width: 10px">
-                                    <h:outputText value="#{nom.idtipoNombramiento}" />
-                                </p:column>
-
-                                <p:column headerText="Nombre">
-                                    <p:cellEditor>
-                                        <f:facet name="output"><h:outputText value="#{nom.tipoNombramientoNombre}" /></f:facet>
-                                        <f:facet name="input"><p:inputText value="#{nom.tipoNombramientoNombre}" 
-                                                                           style="width:100%" label="Nombre"/></f:facet>
-                                    </p:cellEditor>
-                                </p:column>
-                                <p:column style="width:35px">
-                                    <p:rowEditor cancelTitle="Cancelar" editTitle="Editar" saveTitle="Guardar"/>
-                                </p:column>
-                            </p:dataTable> 
-                            <p:commandButton value="+" styleClass="ui-priority-primary" 
-                                             process="@this" update=":form:msgs nombramiento"
-                                             action="#{tipoController.onAddNew('nombramiento')}"
-                                             title="Agregar nuevo tipo de Nombramiento."/>
+                            <t:tablasTipos id="nombramiento" Lista="#{tipoController.nombramientos}" 
+                                           NombreTabla="nombramiento" textoAgregar=" tipo de nombramiento"
+                                           zid="#{z.idtipoNombramiento}" znombre="#{z.tipoNombramientoNombre}"/>
                         </p:tab>
                         <p:tab title="Tipo de Financionamiento">
                             <t:tablasTipos id="tabla1" Lista="#{tipoController.financiamientos}" 
@@ -175,10 +125,12 @@
                                     <p:rowEditor cancelTitle="Cancelar" editTitle="Editar" saveTitle="Guardar"/>
                                 </p:column>
                             </p:dataTable>
-                            <p:commandButton value="+" styleClass="ui-priority-primary" 
-                                             process="@this" update=":form0:msgs cargo1"
-                                             action="#{tipoController.onAddNew('cargo1')}" 
-                                             title="Agregar nuevo autor."/>
+                            <h:panelGrid columns="1" style="width: 5%; margin-left: 92%">
+                                <p:commandButton value="+" styleClass="ui-priority-primary" 
+                                                 process="@this" update=":form0:msgs cargo1"
+                                                 action="#{tipoController.onAddNew('cargo1')}" 
+                                                 title="Agregar nuevo autor."/>
+                            </h:panelGrid>
                         </p:tab>
                         <p:tab title="Tipo de Especialidades">
                             <t:tablasTipos id="especialidades" Lista="#{tipoController.tipoE}" 

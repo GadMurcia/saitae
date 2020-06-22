@@ -9,7 +9,7 @@
 
     <ui:define name="content">
         <h:form id="form1">
-            <h:panelGrid columns="1">
+            <h:panelGrid columns="1" style="margin: 0 auto;">
                 <p:wizard flowListener="#{administradorController.onFlowProcess}" showStepStatus="true" 
                           backLabel="Atrás" nextLabel="Siguiente">
                     <p:tab title="Personal">
@@ -44,8 +44,8 @@
                                             update="form0:msgs form1" />
                                 </p:selectOneMenu>
                                 <p:message for="tipo"/>
-                                <p:column/>
-                                <p:column/>
+                            </h:panelGrid>
+                            <h:panelGrid style="margin: 0 auto;">
                                 <p:commandButton actionListener="#{administradorController.guardar()}" 
                                                  icon="pi pi-save" process="@this" value="Guardar" 
                                                  update="form1 :form0:msgs" />

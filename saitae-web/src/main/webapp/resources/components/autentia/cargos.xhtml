@@ -12,10 +12,10 @@
 
     <!-- IMPLEMENTATION -->
     <cc:implementation>
-        <h:panelGrid columns="2">
+        <h:panelGrid columns="1">
             <p:dataTable id="cargos" widgetVar="cargos1" var="c" 
                          value="#{maestroController.maestroM.maestoCargoList}" 
-                         editable="true" style="margin-bottom:20px">
+                         editable="true">
                 <f:facet name="header">
                     Cargos que ostenta #{maestroController.maestroM.persona.personaNombre}
                 </f:facet>
@@ -25,7 +25,9 @@
 
                 <p:column headerText="cargo">
                     <p:cellEditor>
-                        <f:facet name="output"><h:outputText value="#{c.cargo.cargoNombre}" /></f:facet>
+                        <f:facet name="output">
+                            #{c.cargo.cargoNombre}
+                        </f:facet>
                         <f:facet name="input">
                             <p:selectOneMenu value="#{c.cargo}" style="width:100%"
                                              converter="omnifaces.SelectItemsConverter">
@@ -39,25 +41,29 @@
 
                 <p:column headerText="Tipo de Nombramiento">
                     <p:cellEditor>
-                        <f:facet name="output"><h:outputText value="#{c.tipoNombramiento.tipoNombramientoNombre}" /></f:facet>
+                        <f:facet name="output">
+                            #{c.tipoNombramiento.tipoNombramientoNombre}
+                        </f:facet>
                         <f:facet name="input">
                             <p:selectOneMenu value="#{c.tipoNombramiento}" style="width:100%"
                                              converter="omnifaces.SelectItemsConverter">
-                                <f:selectItem itemValue="#{null}" itemLabel="Seleccione"/>
+                                <f:selectItem itemValue="#{null}" itemLabel="Seleccione" noSelectionOption="true"/>
                                 <f:selectItems value="#{maestroController.nombramientos}" 
                                                var="n" itemLabel="#{n.tipoNombramientoNombre}" itemValue="#{n}" />
                             </p:selectOneMenu>
                         </f:facet>
                     </p:cellEditor>
                 </p:column>
-                
+
                 <p:column headerText="Fuente de financiamiento">
                     <p:cellEditor>
-                        <f:facet name="output"><h:outputText value="#{c.financiamiento.financiamientoNombre}" /></f:facet>
+                        <f:facet name="output">
+                            #{c.financiamiento.financiamientoNombre}
+                        </f:facet>
                         <f:facet name="input">
                             <p:selectOneMenu value="#{c.financiamiento}" style="width:100%"
                                              converter="omnifaces.SelectItemsConverter">
-                                <f:selectItem itemValue="#{null}" itemLabel="Seleccione"/>
+                                <f:selectItem itemValue="#{null}" itemLabel="Seleccione" noSelectionOption="true"/>
                                 <f:selectItems value="#{maestroController.financiamientos}" 
                                                var="f" itemLabel="#{f.financiamientoNombre}" itemValue="#{f}"/>
                             </p:selectOneMenu>
@@ -66,17 +72,14 @@
                 </p:column>
 
                 <p:column style="width:32px">
-                    <p:rowEditor />
+                    <p:rowEditor editTitle="Modificar" cancelTitle="Eliminar cargo" saveTitle="Guardar cambios"/>
                 </p:column>
             </p:dataTable>
-
-            <div class="ui-g">
-                <div class="ui-g-12">
-                    <p:commandButton value="+" styleClass="ui-priority-primary" process="@this" 
-                                     update=":form0:msgs" action="#{maestroController.onAddNew}" 
-                                     oncomplete="PF('cargos1').addRow();"/>
-                </div>
-            </div>
+            <h:panelGrid style="margin-left: 92%">
+                <p:commandButton value="+" styleClass="ui-priority-primary" process="@this" 
+                                 update=":form0:msgs" action="#{maestroController.onAddNew}" 
+                                 oncomplete="PF('cargos1').addRow();" title="Agregar nuevo cargo a la lista"/>
+            </h:panelGrid>
         </h:panelGrid>
     </cc:implementation>
 </html>

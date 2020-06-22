@@ -454,13 +454,12 @@ public class admRecursoController extends Auxiliar implements Serializable {
                             + ", NOMBRE: " + seleccionado.getNombre()));
             persistirNotificación(x,
                     getPersonasParaNotificar(tperFL.find(tp)), notiFL, notificacion);
-            FacesContext.getCurrentInstance().addMessage("form0:msgs",
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("mensaje",
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Edición exitosa",
                             "El recurso con el id: " + seleccionado.getIdrecurso()
                             + " y nombre: " + seleccionado.getNombre()
                             + " se ha editado con éxito."));
-            init();
-            PrimeFaces.current().ajax().update("form0:msgs", "form", "dialogN");
+            redireccionarPagina("admRecurso.intex");
         } else if (r == null) {
             //agregación nueva
             recursoFL.create(seleccionado);
@@ -485,8 +484,6 @@ public class admRecursoController extends Auxiliar implements Serializable {
                             "El recurso con el id: " + seleccionado.getIdrecurso()
                             + " y nombre: " + seleccionado.getNombre()
                             + " se ha guardado con éxito."));
-            init();
-            PrimeFaces.current().ajax().update("form", "dialogN");
             redireccionarPagina("admRecurso.intex");
         } else {
             //intento de agregación de un id existente

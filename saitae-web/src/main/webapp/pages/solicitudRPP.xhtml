@@ -138,8 +138,7 @@
                                 <p:panel header="Planificación de fechas y horas en las que hará uso del equipo">
                                     <p:remoteCommand name="edit" update=":pp1 :form" oncomplete="PF('Dpp1').show();"
                                                      actionListener="#{solicitudPPController.setTextoDetalle('Edición')}"/>
-                                    <h:panelGrid columns="2" cellspacing="5">
-                                        <p:column/>
+                                    <h:panelGrid columns="1" cellspacing="5">
                                         <p:dataTable id="fechas" var="f" value="#{solicitudPPController.calendas}" 
                                                      editable="true" widgetVar="fechas1" selectionMode="single"
                                                      selection="#{solicitudPPController.selected}" rowKey="#{f.numero}"
@@ -167,12 +166,14 @@
                                                 #{solicitudPPController.getHora(f.horaf.horaFin)}
                                             </p:column>
                                         </p:dataTable>
-                                        <p:commandButton value="+" styleClass="ui-priority-primary" 
-                                                         process="@this" oncomplete="PF('Dpp1').show();"
-                                                         action="#{solicitudPPController.previusAdd()}" 
-                                                         title="Agregar una nueva fecha."
-                                                         update="fechas :pp1"
-                                                         disabled="#{solicitudPPController.desactivarVistas}"/>
+                                        <h:panelGrid style="margin: 0 auto">
+                                            <p:commandButton value="+" styleClass="ui-priority-primary" 
+                                                             process="@this" oncomplete="PF('Dpp1').show();"
+                                                             action="#{solicitudPPController.previusAdd()}" 
+                                                             title="Agregar una nueva fecha."
+                                                             update="fechas :pp1"
+                                                             disabled="#{solicitudPPController.desactivarVistas}"/>
+                                        </h:panelGrid>
                                     </h:panelGrid>
                                 </p:panel>
                             </p:tab>
@@ -198,7 +199,7 @@
                             </p:tab>
                             <p:tab id="recursos" title="Recursos">
                                 <p:panel header="Recursos del CRA a utilizar en cada sesión">
-                                    <h:panelGrid columns="1" cellspacing="5">
+                                    <h:panelGrid columns="1">
                                         <p:dataTable id="art" var="i" value="#{solicitudPPController.solicitud}" 
                                                      editable="true" widgetVar="inte1" styleClass="tabla"
                                                      emptyMessage="Aún no ha especificado recursos a reservar.">
@@ -244,21 +245,23 @@
 
                                             <p:column style="width:35px"
                                                       rendered="#{!solicitudPPController.desactivarVistas}">
-                                                <p:rowEditor />
+                                                <p:rowEditor cancelTitle="Quitar" editTitle="Mofdificar" saveTitle="Guardar"/>
                                             </p:column>
                                         </p:dataTable> 
-
-                                        <p:commandButton value="+" styleClass="ui-priority-primary" 
-                                                         process="@this"
-                                                         action="#{solicitudPPController.onAddNew()}" 
-                                                         title="Recursos a la lista."
-                                                         update="art"
-                                                         disabled="#{solicitudPPController.desactivarVistas}"/>
-                                        <p:column/>
-                                        <p:commandButton id="Solicitar2" value="Solicitar Reserva de equipo" 
-                                                         actionListener="#{solicitudPPController.guardar()}"
-                                                         rendered="#{!solicitudPPController.variasJornadas}"
-                                                         disabled="#{solicitudPPController.desactivarVistas}"/>
+                                        <h:panelGrid style="margin-left: 93%">
+                                            <p:commandButton value="+" styleClass="ui-priority-primary" 
+                                                             process="@this"
+                                                             action="#{solicitudPPController.onAddNew()}" 
+                                                             title="Recursos a la lista."
+                                                             update="art"
+                                                             disabled="#{solicitudPPController.desactivarVistas}"/>
+                                        </h:panelGrid>
+                                        <h:panelGrid style="margin: 0 auto">
+                                            <p:commandButton id="Solicitar2" value="Solicitar Reserva de equipo" 
+                                                             actionListener="#{solicitudPPController.guardar()}"
+                                                             rendered="#{!solicitudPPController.variasJornadas}"
+                                                             disabled="#{solicitudPPController.desactivarVistas}"/>
+                                        </h:panelGrid>                                        
                                     </h:panelGrid>
                                 </p:panel>
                             </p:tab>
@@ -285,44 +288,42 @@
                         </p:wizard>
                     </h:panelGrid>
                 </h:form>
-                <p:dialog id="dialog1" widgetVar="Dpp1" modal="true">
+                <p:dialog id="dialog1" widgetVar="Dpp1" modal="true" height="80%">
                     <h:form id="pp1">
                         <p:remoteCommand name="onshow" update="pp1"/>
-                        <h:panelGrid columns="2">
-                            <p:column/>
-                            <h1 align="center">
-                                #{solicitudPPController.textoDetalle} de fecha-hora para la calendarización.
-                            </h1>
+                        <h:panelGrid>
+                            <h1 align="center">#{solicitudPPController.textoDetalle} de fecha-hora para la calendarización.</h1>
+                            <h:panelGrid columns="2">
+                                <p:outputLabel for="fpp" value="Fecha: "/>
+                                <p:datePicker id="fpp" value="#{solicitudPPController.selected2.fecha}" 
+                                              locale="es" required="true" pattern="dd/MM/yyyy"
+                                              monthNavigator="true" showIcon="true"
+                                              placeholder="Seleccione la fecha"
+                                              disabledDays="#{solicitudPPController.disabledDays}"/>
 
-                            <p:outputLabel for="fpp" value="Fecha: "/>
-                            <p:datePicker id="fpp" value="#{solicitudPPController.selected2.fecha}" 
-                                          locale="es" required="true" pattern="dd/MM/yyyy"
-                                          monthNavigator="true" showIcon="true"
-                                          placeholder="Seleccione la fecha"
-                                          disabledDays="#{solicitudPPController.disabledDays}"/>
+                                <p:outputLabel for="hipp" value="Hora de inicio del uso"/>
+                                <p:selectOneMenu id="hipp" value="#{solicitudPPController.selected2.horai}" 
+                                                 converter="omnifaces.SelectItemsConverter"
+                                                 required="true" style="width: 190px;">
+                                    <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
+                                    <f:selectItems value="#{solicitudPPController.horarios}" var="h"
+                                                   itemLabel="#{solicitudPPController.getHoras(h.horaInicio)}" 
+                                                   itemValue="#{h}"/>
+                                </p:selectOneMenu>
 
-                            <p:outputLabel for="hipp" value="Hora de inicio del uso"/>
-                            <p:selectOneMenu id="hipp" value="#{solicitudPPController.selected2.horai}" 
-                                             converter="omnifaces.SelectItemsConverter"
-                                             required="true" style="width: 190px;">
-                                <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
-                                <f:selectItems value="#{solicitudPPController.horarios}" var="h"
-                                               itemLabel="#{solicitudPPController.getHoras(h.horaInicio)}" 
-                                               itemValue="#{h}"/>
-                            </p:selectOneMenu>
+                                <p:outputLabel for="hfpp" value="Hora de fin del uso"/>
+                                <p:selectOneMenu id="hfpp" value="#{solicitudPPController.selected2.horaf}" 
+                                                 converter="omnifaces.SelectItemsConverter"
+                                                 required="true" style="width: 190px;">
+                                    <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
+                                    <f:selectItems value="#{solicitudPPController.horarios}" var="h"
+                                                   itemLabel="#{solicitudPPController.getHoras(h.horaFin)}" 
+                                                   itemValue="#{h}"/>
+                                </p:selectOneMenu>
 
-                            <p:outputLabel for="hfpp" value="Hora de fin del uso"/>
-                            <p:selectOneMenu id="hfpp" value="#{solicitudPPController.selected2.horaf}" 
-                                             converter="omnifaces.SelectItemsConverter"
-                                             required="true" style="width: 190px;">
-                                <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
-                                <f:selectItems value="#{solicitudPPController.horarios}" var="h"
-                                               itemLabel="#{solicitudPPController.getHoras(h.horaFin)}" 
-                                               itemValue="#{h}"/>
-                            </p:selectOneMenu>
 
-                            <p:column/>
-                            <h:panelGrid columns="3">
+                            </h:panelGrid>
+                            <h:panelGrid columns="3" style="margin: 0 auto">
                                 <p:commandButton value="agregar" 
                                                  actionListener="#{solicitudPPController.agregar()}"
                                                  update="pp1 form"

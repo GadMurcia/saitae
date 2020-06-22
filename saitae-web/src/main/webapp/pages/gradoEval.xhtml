@@ -10,22 +10,25 @@
 
     <ui:define name="content">
         <h:form id="form">
-            <h:panelGrid columns="1">
-                <h:panelGrid columns="2">
+            <h:panelGrid columns="1" style="margin: 0 auto;">
+                <h:panelGrid columns="2" style="margin: 0 auto;">
                     <p:outputLabel for="gr" value="Grado: "/>
                     <p:selectOneMenu id="gr" value="#{gradoEvalController.gradoSelected}" 
                                      requiredMessage="Es necesario que seleccione una opción válida."
                                      converter="omnifaces.SelectItemsConverter" required="true">
                         <f:selectItem itemValue="#{null}" itemLabel="Seleccione" noSelectionOption="true"/>
                         <f:selectItems value="#{gradoEvalController.grados}" var="gs" 
-                                       itemLabel="#{axiliarController.getGradoNombre(gs.gradoPK)}" 
+                                       itemLabel="#{gradoEvalController.getGradoNombre(gs.gradoPK)}" 
                                        itemValue="#{gs}"/>
                         <p:ajax event="itemSelect" listener="#{gradoEvalController.onSelect}" 
                                 update="form"/>
                     </p:selectOneMenu>
                 </h:panelGrid>
+                <h:panelGrid style="margin: 0 auto">
+                    <p:message for="gr"/>
+                </h:panelGrid>
 
-                <p:panel header="Evaluación de #{axiliarController.getGradoNombre(gradoEvalController.gradoSelected.gradoPK)}"
+                <p:panel header="Evaluación de #{gradoEvalController.getGradoNombre(gradoEvalController.gradoSelected.gradoPK)}"
                          rendered="#{gradoEvalController.gradoSelected != null}" 
                          collapsed="true" toggleable="true">
                     <t:evGrado evGrado="#{gradoEvalController.eval}" editar="true"/>
@@ -43,7 +46,7 @@
                                  rowKey="#{ev.gradoEvaluacionPK}" id="evalg">
                         <p:ajax event="rowSelect"/>
                         <f:facet name="header">
-                            #{axiliarController.getGradoNombre(ev.grado.gradoPK)}
+                            #{gradoEvalController.getGradoNombre(ev.grado.gradoPK)}
                         </f:facet>
                         <p:column headerText="Fecha y hora">
                             #{gradoEvalController.getDateTimeToString(ev.gradoEvaluacionPK.fechaEvaluacion)}

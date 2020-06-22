@@ -66,10 +66,12 @@
                             <p:rowEditor cancelTitle="Cancelar" editTitle="Editar" saveTitle="Guardar"/>
                         </p:column>
                     </p:dataTable>
-                    <p:commandButton value="+" styleClass="ui-priority-primary" 
-                                     process="@this" update=":form0:msgs categoria"
-                                     actionListener="#{tipoController.onAddNew('categoria')}" 
-                                     title="Agregar nueva categoria."/>
+                    <h:panelGrid columns="1" style="width: 5%; margin-left: 92%;">
+                        <p:commandButton value="+" styleClass="ui-priority-primary" 
+                                         process="@this" update=":form0:msgs categoria"
+                                         actionListener="#{tipoController.onAddNew('categoria')}" 
+                                         title="Agregar nueva categoria."/>
+                    </h:panelGrid>
                 </p:tab>
                 <p:tab title="Editorial">
                     <t:tablasTipos id="editorial" Lista="#{tipoController.editorial}" 

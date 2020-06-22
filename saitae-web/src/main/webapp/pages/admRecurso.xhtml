@@ -67,11 +67,13 @@
                             #{r.valorUnitario}
                         </p:column>
                     </p:dataTable>
-                    <p:commandButton value="+" styleClass="ui-priority-primary"
-                                     actionListener="#{admRecursoC.nuevoRecurso()}"
-                                     update=":form0:msgs form:recurso hn h2"
-                                     oncomplete="PF('DrecursoN').show();"
-                                     title="Agregar Recurso."/>
+                    <h:panelGrid style="margin: 0 auto">
+                        <p:commandButton value="+" styleClass="ui-priority-primary"
+                                         actionListener="#{admRecursoC.nuevoRecurso()}"
+                                         update=":form0:msgs form:recurso hn h2"
+                                         oncomplete="PF('DrecursoN').show();"
+                                         title="Agregar Recurso."/>
+                    </h:panelGrid>
                     <p:contextMenu for="recurso">
                         <p:menuitem value="Modificar" update=":form0:msgs form:recurso hn h2"
                                     icon="fa fa-edit" oncomplete="PF('DrecursoN').show();"
@@ -80,7 +82,7 @@
                 </h:form>
 
                 <p:dialog header="Administración de contenido" 
-                          widgetVar="Dcontenido" modal="true" 
+                          widgetVar="Dcontenido" modal="true" closeOnEscape="true"
                           showEffect="fade" hideEffect="fade">
                     <h:form id="h2">
                         <h:panelGrid columns="2" cellspacing="10px">
@@ -95,13 +97,15 @@
                                          value="#{admRecursoC.cl.contenidoLibroPagina}" 
                                          title="Nombre" required="true" 
                                          requiredMessage="The Nombre field is required."/>
+                        </h:panelGrid>
+                        <h:panelGrid style="margin: 0 auto;">
                             <p:commandButton value="agregar Tema" 
                                              actionListener="#{admRecursoC.agregarContenido()}"/>
                         </h:panelGrid>
                     </h:form>
                 </p:dialog>
                 <p:dialog id="Dejemplar" header="Agregación/Modificación de ejemplares" 
-                          widgetVar="DejemplarN" modal="true"
+                          widgetVar="DejemplarN" modal="true" closeOnEscape="true"
                           showEffect="fade" hideEffect="fade" resizable="false" 
                           style="width: 90%;">
                     <h:form id="h3">
@@ -134,16 +138,15 @@
                             <p:outputLabel value="Estado:" for="estadoE"/>
                             <p:selectBooleanButton id="estadoE" value="#{admRecursoC.ejemplarSeleccionado.ejemplarActivo}"
                                                    offLabel="Inactivo" onLabel="Activo"/>
-                            <p:column/>
+                        </h:panelGrid>
+                        <h:panelGrid style="margin: 0 auto;">
                             <p:commandButton value="Agregar" update="hn:art"
                                              actionListener="#{admRecursoC.agregarEjemplar()}"/>
                         </h:panelGrid>
                     </h:form>
                 </p:dialog>
-                <p:dialog id="dialogN" header="Administración de recursos" 
-                          widgetVar="DrecursoN" modal="true"
-                          showEffect="fade" hideEffect="fade" resizable="false" 
-                          style="width: 90%;" onHide="redireccionar();">
+                <p:dialog id="dialogN" header="Administración de recursos" closeOnEscape="true"
+                          widgetVar="DrecursoN" modal="true" onHide="PF('Despere').show(); redireccionar();">
                     <h:form id="hn">
                         <p:remoteCommand name="redireccionar" actionListener="#{admRecursoC.redireccionarPagina('admRecurso.intex')}"/>
                         <p:wizard flowListener="#{admRecursoC.onFlowProcess}" id="ws"
@@ -240,7 +243,7 @@
                                             <p:inputText id="modelo" value="#{admRecursoC.seleccionado.modelo}" 
                                                          title="Modelo" rendered="#{admRecursoC.verCategorias}"/>
                                         </h:panelGrid>
-                                        <h:panelGrid columns="2">
+                                        <h:panelGrid columns="2" style="width: 70%; margin: 0 auto;">
                                             <h:outputLabel for="multiple" value="Formas de Reserva"/>
                                             <p:selectCheckboxMenu id="multiple" value="#{admRecursoC.tiposReservasRecurso}" 
                                                                   label="Tipos de Reserva" multiple="true"
@@ -293,14 +296,18 @@
                                                         actionListener="#{admRecursoC.eliminarEjemplar()}"/> 
                                         </p:contextMenu>
 
-                                        <h:panelGrid columns="2" cellspacing="10">
-                                            <p:commandButton value="+" styleClass="ui-priority-primary"
-                                                             actionListener="#{admRecursoC.nuevoEjemplar()}"
-                                                             update="h3 art"
-                                                             title="Agregar Ejemplar."
-                                                             oncomplete="PF('DejemplarN').show();"/>
+                                        <h:panelGrid columns="1" cellspacing="10" style="margin: 0 auto;">
+                                            <h:panelGrid style="margin: 0 auto;">
+                                                <p:commandButton value="+" styleClass="ui-priority-primary"
+                                                                 actionListener="#{admRecursoC.nuevoEjemplar()}"
+                                                                 update="h3 art"
+                                                                 title="Agregar Ejemplar."
+                                                                 oncomplete="PF('DejemplarN').show();"/>
+                                            </h:panelGrid>
 
-                                            <p:commandButton actionListener="#{admRecursoC.guardar()}" 
+                                            <p:commandButton actionListener="#{admRecursoC.guardar()}"
+                                                             onstart="PF('Despere').show();"
+                                                             onerror="PF('Despere').hide();"
                                                              oncomplete="PF('DrecursoN').hide()"
                                                              value="Agregar al inventario" icon="pi pi-save" 
                                                              update="form:recurso form0:msgs"
@@ -311,7 +318,7 @@
                             </p:tab>
                             <p:tab title="Autores y Editoriales" rendered="#{admRecursoC.verOtrosPaneles}">
                                 <p:panel header="Información de los autores y Editoriales del libro">
-                                    <h:panelGrid columns="2">
+                                    <h:panelGrid columns="2" style="margin: 0 auto;">
                                         <h:outputLabel for="autor" value="Autores"/>
                                         <p:selectCheckboxMenu id="autor" value="#{admRecursoC.autoresXlibro}" 
                                                               label="autores" multiple="true" filter="true" 
@@ -337,8 +344,8 @@
                                 </p:panel>
                             </p:tab>                                
                             <p:tab  title="Temario" rendered="#{admRecursoC.verOtrosPaneles}">
-                                <p:panel header="Temario">
-                                    <h:panelGrid columns="1" cellspacing="10px">
+                                <h:panelGrid columns="1" style="width: 70%; margin: 0 auto;">
+                                    <h:panelGrid>
                                         <p:dataTable id="h1Contenido" value="#{admRecursoC.contenido}" var="item"
                                                      paginator="true" paginatorAlwaysVisible="false"
                                                      rows="5" selectionMode="single" selection="#{admRecursoC.cl}"
@@ -353,30 +360,43 @@
                                             </p:column>  
                                             <p:column>
                                                 <f:facet name="header">
-                                                    <h:outputText value="Nombre Contenido"/>
+                                                    <h:outputText value="Nombre del contenido"/>
                                                 </f:facet>
                                                 <h:outputText value="#{item.contenidoLibroNombre}"/>
                                             </p:column>                                          
                                         </p:dataTable>
-                                        <p:commandButton value="+" styleClass="ui-priority-primary" 
-                                                         actionListener="#{admRecursoC.nuevoContenido()}"
-                                                         update=":form0:msgs"
-                                                         onclick="PF('Dcontenido').show();"
-                                                         title="Agregar Contenido."/>
 
-                                        <p:commandButton actionListener="#{admRecursoC.guardar()}" 
-                                                         oncomplete="PF('DrecursoN').hide()"
-                                                         value="Agregar al inventario" icon="pi pi-save" 
-                                                         update="form:recurso form0:msgs"/>
                                         <p:contextMenu for="h1Contenido">
                                             <p:menuitem value="Eliminar" update="h1Contenido h2"
                                                         icon="pi pi-times" actionListener="#{admRecursoC.eliminarContenido()}"/> 
                                         </p:contextMenu>
                                     </h:panelGrid>
-                                </p:panel>
+                                    <h:panelGrid columns="1" style="margin: 0 auto;">
+                                        <h:panelGrid columns="1" style="margin: 0 auto;">
+                                            <p:commandButton value="+" styleClass="ui-priority-primary" 
+                                                             actionListener="#{admRecursoC.nuevoContenido()}"
+                                                             update=":form0:msgs"
+                                                             onclick="PF('Dcontenido').show();"
+                                                             title="Agregar Contenido."/>
+                                        </h:panelGrid>
+
+                                        <p:commandButton actionListener="#{admRecursoC.guardar()}"
+                                                         onstart="PF('Despere').show();"
+                                                         onerror="PF('Despere').hide();" 
+                                                         oncomplete="PF('DrecursoN').hide()"
+                                                         value="Agregar al inventario" icon="pi pi-save" 
+                                                         update="form:recurso form0:msgs"/>
+                                    </h:panelGrid>
+                                </h:panelGrid>
                             </p:tab>
                         </p:wizard>
                     </h:form>
+                </p:dialog>
+                <p:dialog id="espere" widgetVar="Despere" closable="false" height="10%" modal="true" width="25%">
+                    <h:form>
+                        Aguarde un momento...
+                    </h:form>
+
                 </p:dialog>
             </ui:define>
 

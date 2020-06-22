@@ -9,9 +9,9 @@
 
     <ui:define name="content">
         <h:form id="form">
-            <h:panelGrid columns="1" style="width: 60%">
+            <h:panelGrid columns="1" style="width: 60%; margin: 0 auto;">
                 <h1 align="center">Avance en la entrega de paquetes</h1>
-                <h:panelGrid columns="2">
+                <h:panelGrid columns="2" style="margin: 0 auto;">
                     <p:outputLabel for="gr" value="Gráfico: "/>
                     <p:selectOneMenu id="gr" value="#{repEntregaController.sel}">
                         <f:selectItem itemValue="0" itemLabel="Seleccione"/>

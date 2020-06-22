@@ -6,9 +6,10 @@
     xmlns:h="http://xmlns.jcp.org/jsf/html"
     xmlns:p="http://primefaces.org/ui"
     xmlns:f="http://xmlns.jcp.org/jsf/core"
-    xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:t="http://xmlns.jcp.org/jsf/composite/components/autentia">
     <body>
-        <ui:composition template="./../WEB-INF/template/plantilla1.xhtml">
+        <ui:composition template="./../WEB-INF/template/plantilla.xhtml">
             <ui:define name="content">
                 <script type="text/javascript">
                     //<![CDATA[
@@ -27,39 +28,15 @@
                     <h1 style="align-content: center;">Administración Académica.</h1>
                     <p:tabView id="tw" orientation="top" dynamic="true">
                         <p:tab title="Tipo Materia">
-                            <p:dataTable id="tipomateria" var="tima" value="#{tipoController.tipoMaterias}" editable="true" 
-                                         widgetVar="materia1" styleClass="tabla" emptyMessage="Sin registros aún.">
-                                <f:facet name="header">
-                                    Administración de los tipos de Materias.
-                                </f:facet>
-                                <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" 
-                                        update=":form:msgs" />
-                                <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" 
-                                        update=":form:msgs" />
-                                <p:column headerText="Id" style="width: 10px">
-                                    <p:outputLabel value="#{tima.idtipoMateria}"/>
-                                </p:column>
-
-                                <p:column headerText="Nombre">
-                                    <p:cellEditor>
-                                        <f:facet name="output"><p:outputLabel value="#{tima.tipoMateriaNombre}" /></f:facet>
-                                        <f:facet name="input"><p:inputText value="#{tima.tipoMateriaNombre}" 
-                                                                           style="width:100%" label="Nombre"/></f:facet>
-                                    </p:cellEditor>
-                                </p:column>
-                                <p:column style="width:35px">
-                                    <p:rowEditor cancelTitle="Cancelar" editTitle="Editar" saveTitle="Guardar"/>
-                                </p:column>
-                            </p:dataTable>
-                            <p:commandButton value="+" styleClass="ui-priority-primary" 
-                                             process="@this" update=":form:msgs tipomateria"
-                                             action="#{tipoController.onAddNew('tipomateria')}"
-                                             title="Agregar nuevo Tipo de Materia."/>
+                            <t:tablasTipos id="tipomateria" Lista="#{tipoController.tipoMaterias}" 
+                                           NombreTabla="tipomateria" textoAgregar=" tipo de materia"
+                                           zid="#{z.idtipoMateria}" znombre="#{z.tipoMateriaNombre}"/>
                         </p:tab>
                         <p:tab title="Materias">
                             <p:dataTable id="materia" var="m" value="#{tipoController.materias}" 
-                                         editable="true" rows="7" paginator="true" styleClass="tabla"
-                                         widgetVar="materia1" >
+                                         editable="true" rows="9" paginator="true" styleClass="tabla"
+                                         widgetVar="materia1"  paginatorAlwaysVisible="false" 
+                                         paginatorPosition="top">
                                 <f:facet name="header">
                                     Administración de Materias
                                 </f:facet>
@@ -67,10 +44,10 @@
                                         update=":form:msgs" />
                                 <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" 
                                         update=":form:msgs" />
-                                <p:column headerText="Id" style="width: 10px;">
+                                <!--<p:column headerText="Id" style="width: 10px;">
                                     <p:outputLabel value="#{m.idmateria}" />
                                 </p:column>
-                                <p:column headerText="Nombre Materia">
+                                --><p:column headerText="Nombre Materia" filterBy="#{m.materiaNombre}">
                                     <p:cellEditor>
                                         <f:facet name="output"><p:outputLabel value="#{m.materiaNombre}" /></f:facet>
                                         <f:facet name="input"><p:inputText value="#{m.materiaNombre}" style="width:100%" label="Nombre"/>
@@ -85,7 +62,7 @@
                                         </f:facet>
                                     </p:cellEditor>
                                 </p:column>
-                                <p:column headerText="Tipo Materia">
+                                <p:column headerText="Tipo Materia" filterBy="#{m.tipoMateria.tipoMateriaNombre}">
                                     <p:cellEditor>
                                         <f:facet name="output"><p:outputLabel value="#{m.tipoMateria.tipoMateriaNombre}" />
                                         </f:facet>
@@ -109,36 +86,40 @@
                                     <p:rowEditor cancelTitle="Cancelar" editTitle="Editar" saveTitle="Guardar"/>
                                 </p:column>
                             </p:dataTable>
-                            <p:commandButton value="Agregar Nuevo" styleClass="ui-priority-primary" 
-                                             process="@this" update=":form:msgs materia"
-                                             action="#{tipoController.onAddNew('materia')}"/>
+                            <h:panelGrid columns="1" style="width: 5%; margin-left: 94%;">
+                                <p:commandButton value="+" styleClass="ui-priority-primary" 
+                                                 process="@this" update=":form:msgs materia"
+                                                 title="Agregar nueva materia"
+                                                 action="#{tipoController.onAddNew('materia')}"/>
+                            </h:panelGrid>
                         </p:tab>
                         <p:tab title="Horas Clase">
                             <p:dataTable id="horario" var="h" value="#{tipoController.horario}" rowKey="#{h.idhorario}"
                                          widgetVar="horario1" styleClass="tabla" emptyMessage="Sin registros aún."
-                                         selection="#{tipoController.hora}" selectionMode="single" rows="5" 
-                                         paginator="true" style="width: 70%;">
+                                         selection="#{tipoController.hora}" selectionMode="single" rows="6" 
+                                         paginator="true" paginatorAlwaysVisible="false" paginatorPosition="top"
+                                         style="width: 50%">
                                 <f:facet name="header">
                                     Administración de Horarios.
                                 </f:facet>
 
-                                <p:column headerText="Id" style="width: 20px;">
+                                <!--<p:column headerText="Id" style="width: 20px;">
                                     <p:outputLabel value="#{h.idhorario}" />
                                 </p:column>
 
-                                <p:column headerText="Hora Inicio">
-                                    <p:datePicker  value="#{h.horaInicio}" timeOnly="true" hourFormat="12"
-                                                   disabled="true" pattern="hh:mm a"/>
+                                --><p:column headerText="Hora Inicio">
+                                    #{tipoController.getHora(h.horaInicio)}
                                 </p:column>
                                 <p:column headerText="Hora Fin">
-                                    <p:datePicker  value="#{h.horaFin}" timeOnly="true" hourFormat="12"
-                                                   disabled="true" pattern="hh:mm a"/>
+                                    #{tipoController.getHora(h.horaFin)}
                                 </p:column>
                             </p:dataTable>
-                            <p:commandButton value="+" styleClass="ui-priority-primary" 
-                                             update=":form0:msgs h1 horario"
-                                             onclick="PF('Dhorario').show();"
-                                             title="Agregar Horario."/>
+                            <h:panelGrid style="width: 10%; margin-left: 20%">
+                                <p:commandButton value="+" styleClass="ui-priority-primary" 
+                                                 update=":form0:msgs h1 horario"
+                                                 onclick="PF('Dhorario').show();"
+                                                 title="Agregar Horario."/>
+                            </h:panelGrid>
                             <p:contextMenu for="horario">
                                 <p:menuitem value="Modificar" update="h1 form0:msgs form:tw:horario"
                                             icon="fa fa-edit" onclick="PF('Dhorario').show()"/>
@@ -170,7 +151,7 @@
                                             update=":form:msgs" />
                                     <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}"
                                             update=":form:msgs" />
-                                    <p:column headerText="Nivel">
+                                    <p:column headerText="Nivel" width="5%">
                                         <p:cellEditor>
                                             <f:facet name="output">
                                                 <p:outputLabel value="#{g.gradoPK.idgrado}" />
@@ -203,7 +184,7 @@
                                     <p:column headerText="Sección" >
                                         <p:cellEditor>
                                             <f:facet name="output">
-                                                <p:outputLabel value="#{g.gradoPK.gradoSeccion}" /></f:facet>
+                                                <p:outputLabel value="Sección #{g.gradoPK.gradoSeccion}" /></f:facet>
                                             <f:facet name="input">
                                                 <p:selectOneMenu value="#{g.gradoPK.gradoSeccion}">
                                                     <f:selectItem itemLabel="Seleccione" itemValue=""/>
@@ -231,27 +212,27 @@
                                             </f:facet>
                                         </p:cellEditor>
                                     </p:column>
-                                    <p:column headerText="Año">
-                                        <p:cellEditor>
-                                            <f:facet name="output">
-                                                <p:outputLabel value="#{g.gradoPK.gradoAño}" />
-                                            </f:facet>
-                                            <f:facet name="input">
-                                                <p:selectOneMenu value="#{g.gradoPK.gradoAño}">
-                                                    <f:selectItems value="#{tipoController.getAñosGrados(g)}"
-                                                                   var="ag"
-                                                                   itemLabel="#{ag}"
-                                                                   itemValue="#{ag}"/>
-                                                </p:selectOneMenu>
-                                            </f:facet>
-                                        </p:cellEditor>
-                                    </p:column>
-                                    <p:column headerText="Maestro Guía">
+                                    <!-- <p:column headerText="Año" width="5%">
+                                         <p:cellEditor>
+                                             <f:facet name="output">
+                                                 <p:outputLabel value="#{g.gradoPK.gradoAño}" />
+                                             </f:facet>
+                                             <f:facet name="input">
+                                                 <p:selectOneMenu value="#{g.gradoPK.gradoAño}">
+                                                     <f:selectItems value="#{tipoController.getAñosGrados(g)}"
+                                                                    var="ag"
+                                                                    itemLabel="#{ag}"
+                                                                    itemValue="#{ag}"/>
+                                                 </p:selectOneMenu>
+                                             </f:facet>
+                                         </p:cellEditor>
+                                     </p:column>
+                                    --><p:column headerText="Maestro Guía" width="35%">
                                         <p:cellEditor>
                                             <f:facet name="output">
                                                 <p:outputLabel value="#{g.gradoMaestroGuia.idmaestro == 0 
                                                                         ? 'No Seleccionado' : 
-                                                                        tipoController.getNombreCortoPersona(g.gradoMaestroGuia.persona)}"/>
+                                                                        tipoController.getNombreCompletoPersona(g.gradoMaestroGuia.persona)}"/>
                                             </f:facet>
                                             <f:facet name="input">
                                                 <p:selectOneMenu value="#{g.gradoMaestroGuia.idmaestro}" filter="true" filterMatchMode="contains">
@@ -263,7 +244,7 @@
                                             </f:facet>
                                         </p:cellEditor>
                                     </p:column>
-                                    <p:column headerText="Activo">
+                                    <p:column headerText="Activo" width="8%">
                                         <p:cellEditor>
                                             <f:facet name="output">
                                                 <p:selectBooleanButton offLabel="Inactivo" onLabel="Activo" 
@@ -279,10 +260,12 @@
                                         <p:rowEditor cancelTitle="Cancelar" editTitle="Editar" saveTitle="Guardar"/>
                                     </p:column>
                                 </p:dataTable>
-                                <p:commandButton value="+" styleClass="ui-priority-primary" 
-                                                 process="@this" update=":form:msgs grado"
-                                                 action="#{tipoController.onAddNew('grado')}"
-                                                 title="Agregar Nuevo Grado"/>
+                                <h:panelGrid style="width: 5%; margin-left: 95%;">
+                                    <p:commandButton value="+" styleClass="ui-priority-primary" 
+                                                     process="@this" update=":form:msgs grado"
+                                                     action="#{tipoController.onAddNew('grado')}"
+                                                     title="Agregar Nuevo Grado"/>
+                                </h:panelGrid>
                             </h:panelGrid>
                         </p:tab>
                         <p:tab title="Días Laborales">
@@ -308,8 +291,8 @@
                                             actionListener="#{tipoController.nuevoDias()}"
                                             oncomplete="PF('Ddias').show()"/>
                                 <p:menuitem value="Eliminar" icon="pi pi-minus-circle" 
-                                               actionListener="#{tipoController.eliminarDias()}"
-                                               update="dias :f1"/>
+                                            actionListener="#{tipoController.eliminarDias()}"
+                                            update="dias :f1"/>
                             </p:contextMenu>
                         </p:tab>
                     </p:tabView>
@@ -328,10 +311,12 @@
                                                itemLabel="#{ds.diasEstudioNombre}" itemValue="#{ds}"/>
                             </p:selectOneMenu>
                             <p:column/>
-                            <p:commandButton value="Guardar" 
-                                             actionListener="#{tipoController.guardarDias()}"
-                                             update=":form:tw:dias f1" 
-                                             oncomplete="PF('Ddias').hide()"/>
+                            <h:panelGrid style="margin: 0 auto;">
+                                <p:commandButton value="Guardar" 
+                                                 actionListener="#{tipoController.guardarDias()}"
+                                                 update=":form:tw:dias f1" 
+                                                 oncomplete="PF('Ddias').hide()"/>
+                            </h:panelGrid>
                         </h:panelGrid>
                     </h:form> 
                 </p:dialog>
@@ -351,9 +336,11 @@
                             <p:datePicker id="fin"  value="#{tipoController.hora.horaFin}" 
                                           timeOnly="true" pattern="hh:mm a" showIcon="true"/>
                         </h:panelGrid>
-                        <p:commandButton actionListener="#{tipoController.agregarHorario()}" 
-                                         value="Guardar"
-                                         icon="pi pi-save" update="form:tw:horario form0:msgs"/>
+                        <h:panelGrid style="margin: 0 auto;">
+                            <p:commandButton actionListener="#{tipoController.agregarHorario()}" 
+                                             value="Guardar"
+                                             icon="pi pi-save" update="form:tw:horario form0:msgs"/>
+                        </h:panelGrid>
                     </h:form>
                 </p:dialog>
             </ui:define>

@@ -3,14 +3,15 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="./../WEB-INF/template/plantilla1.xhtml"
+                template="./../WEB-INF/template/plantilla.xhtml"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="content">
         <h:form id="form">
-            <h:panelGrid columns="1">
+            <p:remoteCommand name="actualizapag" update="form"/>
+            <h:panelGrid columns="1" style="margin: 0 auto">
                 <h:panelGrid columns="2">
                     <p:outputLabel for="años" value="Seleccione el año de visualización: "/>
                     <p:selectOneMenu id="años" value="#{adminReservas.añoSelected}" 
@@ -269,8 +270,8 @@
                 </p:accordionPanel>
             </h:panelGrid>
         </h:form>
-        <p:dialog id="dialog" widgetVar="Dreserva" modal="true" style="width: 60%;"
-                  showHeader="true" header="Solicitud de reserva">
+        <p:dialog id="dialog" widgetVar="Dreserva" modal="true" style="width: 60%;" onHide="actualizapag();"
+                  showHeader="true" header="Solicitud de reserva" closeOnEscape="true">
             <h:form id="d1">
                 <h1 align="center">Detalle de solicitud de reserva #{adminReservas.textoReserva}a</h1>
                 <h:panelGrid columns="1">
@@ -346,7 +347,7 @@
                         </h:panelGrid>
                     </p:panel>
                     <p:panel header="Detalle del equipo #{adminReservas.textoReserva}o"
-                             toggleable="true">
+                             toggleable="true" collapsed="true">
                         <h:panelGrid columns="2" cellspacing="10" 
                                      rendered="#{!adminReservas.verEquipoDetalle}">
                             <h:outputText value="Cantidad"/>
@@ -382,7 +383,20 @@
                             </ui:repeat>
                         </h:panelGrid>
                     </p:panel>
-                    <h:panelGrid columns="5">
+                    <p:panel header="Información adicional del equipo #{adminReservas.textoReserva}o"
+                             toggleable="true" rendered="#{adminReservas.verComentarios}" collapsed="true">
+                        <h:panelGrid columns="2" cellspacing="10">
+                            <h:outputText value="Comentarios a la entrega: " 
+                                          rendered="#{!adminReservas.selected.observacionEntrega.equalsIgnoreCase('')}"/>
+                            <p:inputTextarea value="#{adminReservas.selected.observacionEntrega}" disabled="true"
+                                             rendered="#{!adminReservas.selected.observacionEntrega.equalsIgnoreCase('')}"/>
+                            <h:outputText value="Comentarios en la devolución: "
+                                          rendered="#{!adminReservas.selected.observacionDevolucion.equalsIgnoreCase('')}"/>
+                            <p:inputTextarea value="#{adminReservas.selected.observacionDevolucion}" disabled="true"
+                                             rendered="#{!adminReservas.selected.observacionDevolucion.equalsIgnoreCase('')}"/>
+                        </h:panelGrid>
+                    </p:panel>
+                    <h:panelGrid columns="4" style="margin: 0 auto">
                         <p:commandButton value="Rechazar Solicitud" onclick="PF('Dreserva1').show();"
                                          update="d2" rendered="#{adminReservas.verRechazo}"/>
                         <p:commandButton value="Aceptar Solicitud" rendered="#{adminReservas.verAceptar}"
@@ -405,9 +419,8 @@
                     <p:outputLabel for="rh" value="Razón de rechazo: "/>
                     <p:inputTextarea id="rh" value="#{adminReservas.razonRechazo}" autoResize="true"
                                      cols="50" rows="5" required="true"/>
-
-
-                    <p:column/>
+                </h:panelGrid>
+                <h:panelGrid columns="1" style="margin: 0 auto">
                     <p:commandButton value="Rechazar" actionListener="#{adminReservas.rechazar()}"
                                      update="d2 d1 form"/>                    
                 </h:panelGrid>
@@ -476,11 +489,13 @@
                             </p:cellEditor>
                         </p:column>
                         <p:column style="width:35px">
-                            <p:rowEditor />
+                            <p:rowEditor cancelTitle="Quitar" editTitle="Modificar" saveTitle="Guardar"/>
                         </p:column>
                     </p:dataTable>
-                    <p:commandButton value="Aceptar" actionListener="#{adminReservas.aceptar()}"
-                                     update="d3 d1 form"/>
+                    <h:panelGrid columns="1" style="margin: 0 auto">
+                        <p:commandButton value="Aceptar" actionListener="#{adminReservas.aceptar()}"
+                                         update="d3 d1 form"/>
+                    </h:panelGrid>
                 </h:panelGrid>
             </h:form>
         </p:dialog>
@@ -495,7 +510,8 @@
                     <p:inputTextarea id="rh" value="#{adminReservas.selected.observacionEntrega}" 
                                      autoResize="true"
                                      cols="40" rows="5"/>
-                    <p:column/>
+                </h:panelGrid>
+                <h:panelGrid columns="1" style="margin: 0 auto">
                     <p:commandButton value="entregar" actionListener="#{adminReservas.entregar()}"
                                      update="d4 d1 form"/>                    
                 </h:panelGrid>
@@ -512,7 +528,8 @@
                     <p:inputTextarea id="rh" value="#{adminReservas.selected.observacionDevolucion}" 
                                      autoResize="true"
                                      cols="40" rows="5"/>
-                    <p:column/>
+                </h:panelGrid>
+                <h:panelGrid columns="1" style="margin: 0 auto">
                     <p:commandButton value="recibir" actionListener="#{adminReservas.recibir()}"
                                      update="d5 d1 form"/>                    
                 </h:panelGrid>

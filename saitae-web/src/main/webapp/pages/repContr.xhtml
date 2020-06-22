@@ -9,9 +9,9 @@
 
     <ui:define name="content">
         <h:form id="form">
-            <h:panelGrid columns="1" style="width: 70%">
+            <h:panelGrid columns="1" style="width: 70%; margin: 0 auto;">
                 <h1 align="center">Estadísicas del pago de la contribución a la preparación de alimentos.</h1>
-                <h:panelGrid columns="2">
+                <h:panelGrid columns="2" style="margin: 0 auto;">
                     <p:outputLabel for="gr" value="Seleccione el grado: "/>
                     <p:selectOneMenu id="gr" value="#{repContrController.GSelected}" 
                                      converter="omnifaces.SelectItemsConverter">

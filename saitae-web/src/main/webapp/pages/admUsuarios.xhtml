@@ -9,10 +9,10 @@
 
     <ui:define name="content">
         <h:form id="form">
-            <h:panelGrid columns="1">
+            <h:panelGrid columns="1" style="margin: 0 auto;">
                 <h1 align="center">Gestión de usuarios</h1>
 
-                <h:panelGrid columns="3">
+                <h:panelGrid columns="3" style="margin: 0 auto;">
                     <p:outputLabel value="Ingrese el nombre del usuario: "/>
                     <p:autoComplete value="#{admUsuariosController.query}" 
                                     completeMethod="#{admUsuariosController.autoComplete}">
@@ -24,9 +24,9 @@
                                      actionListener="#{admUsuariosController.setPersona(null)}"/>
                 </h:panelGrid>
 
-                <p:panel header="Cambiar Contraseña" toggleable="true"
+                <p:panel header="Cambiar Contraseña" toggleable="true" style="width: 40%; margin: 0 auto;"
                          rendered="#{admUsuariosController.persona != null}">
-                    <h:panelGrid columns="2">
+                    <h:panelGrid columns="2" style="margin: 0 auto;">
                         <p:outputLabel value="Usuario (DUI/NIE) :" for="idp" />
                         <h:outputText id="idp" 
                                       value="#{admUsuariosController.persona.idpersona.toString().substring(1)}"/>
@@ -49,29 +49,25 @@
                     </h:panelGrid>
                 </p:panel>
 
-                <p:panel header="Cambio de estado" toggleable="true"
+                <p:panel header="Cambio de estado" toggleable="true" style="width: 40%; margin: 0 auto;"
                          rendered="#{admUsuariosController.persona != null}">
-                    <h:panelGrid columns="2">
+                    <h:panelGrid columns="2" style="margin: 0 auto;">
                         <p:outputLabel value="Estado actual del usuario"/>
                         <p:selectBooleanButton value="#{admUsuariosController.persona.personaActivo}"
                                                offLabel="Inactivo" onLabel="Activo" immediate="true"
                                                title="Cambia el estado del usuario">
-                            <p:ajax event="change" listener="#{loginController.onBlour}" update="btn0"/>
+                            <p:ajax event="change" listener="#{loginController.onBlour}" 
+                                    oncomplete="PF('Dcu').show();" update="wq"/>
                         </p:selectBooleanButton>
-
-                        <p:column/>
-                        <p:commandButton id="btn0" 
-                                         value="#{(admUsuariosController.persona.personaActivo? 'Habilitar':'Desabilitar')} usuario"
-                                         onclick="PF('Dcu').show();"/>
                     </h:panelGrid>
                 </p:panel>
 
-                <p:panel header="Delegación de cargos" toggleable="true"
+                <p:panel header="Delegación de cargos" toggleable="true" style="width: 40%; margin: 0 auto;"
                          rendered="#{admUsuariosController.verDelegaciones}">
                     <h:panelGrid columns="1">
                         <p:dataTable id="cargos" var="cs" 
                                      value="#{admUsuariosController.persona.delagacionCargoList}" 
-                                     editable="true" 
+                                     editable="true"
                                      widgetVar="cargos1" 
                                      styleClass="tabla" emptyMessage="Sin cargos delegados.">
                             <f:facet name="header">
@@ -102,9 +98,11 @@
                                 </p:cellEditor>
                             </p:column>
                             <p:column style="width:35px">
-                                <p:rowEditor />
+                                <p:rowEditor cancelTitle="Quitar Cargo" editTitle="Modificar" saveTitle="Guardar cambios"/>
                             </p:column>
                         </p:dataTable>
+                    </h:panelGrid>
+                    <h:panelGrid  style="margin-left: 90%;">
                         <p:commandButton value="+" styleClass="ui-priority-primary" 
                                          process="@this" update="cargos"
                                          action="#{admUsuariosController.onAddNew()}"
@@ -115,14 +113,20 @@
         </h:form>
 
         <p:dialog header="Cambio del estado del usuario" 
-                  widgetVar="Dcu" modal="true" closeOnEscape="true"
+                  widgetVar="Dcu" modal="true" closable="false"
                   showEffect="fade" hideEffect="fade">
-            <h:form>
-                <h:panelGrid columns="1">
-                    Al cambiar el estado de un usuario, el usuario no acceder a su perfil 
-                    si coloca su estado como inactivo.
-                    <p:commandButton value="proceder" 
+            <h:form id="wq">
+                <h:panelGrid columns="1" style="margin: 0 auto">
+                    <h:outputText value="#{admUsuariosController.persona.personaActivo
+                      ?'Al activar el usuario, éste podrá hacer uso de todas sun funciones de forma inmediata.'
+                      :'Al desactivar el usuario, éste no podra iniciar sesión la próxima vez que lo intente.'}"/>
+                </h:panelGrid>
+                <h:panelGrid columns="2" style="margin: 0 auto">
+                    <p:commandButton value="Cambiar estado" 
                                      actionListener="#{admUsuariosController.guardarPersona()}"
+                                     update="form" oncomplete="PF('Dcu').hide();"/>
+                    <p:commandButton value="Cancelar" 
+                                     actionListener="#{admUsuariosController.persona.setPersonaActivo(!admUsuariosController.persona.personaActivo)}"
                                      update="form" oncomplete="PF('Dcu').hide();"/>
                 </h:panelGrid>
             </h:form>

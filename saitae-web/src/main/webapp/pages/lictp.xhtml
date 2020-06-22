@@ -67,11 +67,13 @@
                                     <p:rowEditor cancelTitle="Cancelar" editTitle="Editar" saveTitle="Guardar"/>
                                 </p:column>
                             </p:dataTable>
-                            <p:commandButton value="+" styleClass="ui-priority-primary" 
-                                             process="@this" 
-                                             update=":form:msgs form:tw:pers form:tw:pickList tp1" 
-                                             action="#{tipoController.onAddNew('permiso')}"
-                                             title="Agregar nuevo Tipo de Permiso."/>
+                            <h:panelGrid columns="1" style="width: 5%; margin-left: 92%">
+                                <p:commandButton value="+" styleClass="ui-priority-primary" 
+                                                 process="@this" 
+                                                 update=":form:msgs form:tw:pers form:tw:pickList tp1" 
+                                                 action="#{tipoController.onAddNew('permiso')}"
+                                                 title="Agregar nuevo Tipo de Permiso."/>
+                            </h:panelGrid>
                         </p:tab>
                         <p:tab title="Tipo Usuario">
                             <p:dataTable id="persona" var="tp" value="#{tipoController.personas}" 

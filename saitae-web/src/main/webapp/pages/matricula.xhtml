@@ -51,11 +51,12 @@
                                     <p:outputLabel value="Número de aspirantes masculinos por sección: "/>
                                     <p:outputLabel value="#{matriculaController.nuevasMatriculasM.size()/matriculaController.secciones.size()}" />
 
-                                    <p:column/>
-                                    <p:commandButton id="summit" value="Proceder con la Matrícula automática" 
-                                                     actionListener="#{matriculaController.guardar()}" 
-                                                     disabled="#{!matriculaController.btnGuardar}" process="@this"
-                                                     update="tw:ia tw:imd box summit :form0:msgs"/>
+                                </h:panelGrid>
+                                <h:panelGrid style="margin: 0 auto;">
+                                             <p:commandButton id="summit" value="Proceder con la Matrícula automática" 
+                                                 actionListener="#{matriculaController.guardar()}" 
+                                                 disabled="#{!matriculaController.btnGuardar}" process="@this"
+                                                 update="tw:ia tw:imd box summit :form0:msgs"/>
                                 </h:panelGrid>
                             </p:panel>
                         </h:panelGrid>
@@ -75,7 +76,7 @@
 
                             <p:outputLabel value="Apellidos: "/>
                             <h:outputText id="ape" value="#{matriculaController.buscado.personaApellido}"/>
-                            
+
                             <p:outputLabel for="console5" value="Modalidad de bachillerato a la que aplica: " />
                             <p:selectOneMenu id="console5" value="#{matriculaController.seccion.gradoModalidad}"
                                              required="true"
@@ -92,7 +93,7 @@
                                              requiredMessage="Debe elegir un año de bachillerato.">
                                 <f:selectItems value="#{matriculaController.niveles}"/>
                                 <p:ajax event="change" listener="#{matriculaController.onBlour}" 
-                                         update="secc summit1"/>
+                                        update="secc summit1"/>
                             </p:selectOneMenu>
 
                             <p:outputLabel for="secc" value="Sección a la que aplica: " />
@@ -103,7 +104,7 @@
                                 <f:selectItem itemValue="" itemLabel="Seleccione" noSelectionOption="true"/>
                                 <f:selectItems value="#{matriculaController.seccionesCambio}"/>
                                 <p:ajax event="change" listener="#{matriculaController.onBlour}" 
-                                         update="summit1"/>
+                                        update="summit1"/>
                             </p:selectOneMenu>
                             <p:column/>
                             <p:commandButton id="summit1" value="Guardar cambios" 

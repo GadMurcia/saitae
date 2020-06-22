@@ -24,11 +24,11 @@
                         <p:ajax event="rowEdit" listener="#{tipoController.onRowEdit}" update=":form:msgs" />
                         <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" update=":form:msgs" />
 
-                        <p:column headerText="Id" style="width: 10px">
+                        <!--<p:column headerText="Id" style="width: 10px">
                             <h:outputText value="#{re.idtipoRecurso}" />
                         </p:column>
 
-                        <p:column headerText="Nombre">
+                        --><p:column headerText="Nombre">
                             <p:cellEditor>
                                 <f:facet name="output"><h:outputText value="#{re.tipoRecursoNombre}" /></f:facet>
                                 <f:facet name="input"><p:inputText value="#{re.tipoRecursoNombre}" 

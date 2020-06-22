@@ -10,8 +10,8 @@
     <ui:define name="content">
         <h:form id="form">  
             <p:growl id="msgs" showDetail="true" />
-            <h2>Administración de Anuncios del sistema</h2>
-            <p:tabView id="tv" effect="fold">
+            <h2 align="center">Administración de Anuncios del sistema</h2>
+            <p:tabView id="tv" effect="fold" activeIndex="1">
                 <p:tab title="Crear anuncio">
                     <h:panelGrid columns="2">
                         <p:outputLabel for="tit" value="Título: "/>
@@ -36,7 +36,8 @@
                                            itemLabel="#{tp.tipoPersonaNombre}" itemValue="#{tp}"/>
                         </p:selectOneMenu>
 
-                        <p:column/>
+                    </h:panelGrid>
+                    <h:panelGrid style="margin: 0 auto">
                         <p:commandButton value="Anunciar" actionListener="#{anuncioController.guardar()}"
                                          update="form"/>
                     </h:panelGrid>
@@ -142,17 +143,15 @@
                                    rendered="#{anuncioController.verComentario}"/>
                     <p:outputLabel id="comen" value="#{anuncioController.anuncio.anuncioComentario}"
                                    rendered="#{anuncioController.verComentario}"/>
+                </h:panelGrid>
+                <h:panelGrid columns="1" style="margin: 0 auto">
+                    <p:commandButton value="Modificar"
+                                     actionListener="#{anuncioController.modificar(1)}"
+                                     rendered="#{anuncioController.getAnuncioActivo(anuncioController.anuncio)}"/>
 
-                    <p:column/>
-                    <h:panelGrid columns="2" cellspacing="5">
-                        <p:commandButton value="Modificar"
-                                         actionListener="#{anuncioController.modificar(1)}"
-                                         rendered="#{anuncioController.getAnuncioActivo(anuncioController.anuncio)}"/>
-
-                        <p:commandButton value="Desabilitar" 
-                                         action="#{anuncioController.modificar(2)}"
-                                         rendered="#{anuncioController.getAnuncioActivo(anuncioController.anuncio)}"/>
-                    </h:panelGrid>
+                    <p:commandButton value="Desabilitar" 
+                                     action="#{anuncioController.modificar(2)}"
+                                     rendered="#{anuncioController.getAnuncioActivo(anuncioController.anuncio)}"/>
                 </h:panelGrid>
                 <p:remoteCommand name="onHide" actionListener="#{anuncioController.onHide()}" update=":form"/>
             </h:form>

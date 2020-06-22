@@ -9,7 +9,7 @@
         <ui:composition template="./../WEB-INF/template/plantilla1.xhtml">
             <ui:define name="content">
                 <h:form id="form1">
-                    <h:panelGrid columns="1">
+                    <h:panelGrid columns="1" style="margin: 0 auto;">
                         <p:wizard flowListener="#{maestroController.onFlowProcess}" 
                                   backLabel="Atrás" nextLabel="Siguiente">
                             <p:tab id="personal" title="Personal">
@@ -43,8 +43,10 @@
                             </p:tab>
                             <p:tab title="Cargos Ostentados">
                                 <t:cargos id="cargos"/>
-                                <p:commandButton value="Guardar" update=":form0:msgs" process="@this"
-                                                 actionListener="#{maestroController.guardar()}"/>
+                                <h:panelGrid style="margin: 0 auto">
+                                    <p:commandButton value="Guardar" update=":form0:msgs" process="@this"
+                                                     actionListener="#{maestroController.guardar()}"/>
+                                </h:panelGrid>
                             </p:tab>
                         </p:wizard>
                     </h:panelGrid>

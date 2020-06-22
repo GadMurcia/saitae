@@ -177,15 +177,16 @@
                   showEffect="fade" hideEffect="fade">
             <h:form id="h1">
                 <h:panelGrid columns="1">
-                    <p:outputLabel for="nombus" value="Nombre del alumno"/>
-                    <p:autoComplete id="nombus" value="#{consultasPSController.nomEs}" 
-                                    queryDelay="1000" size="60"
-                                    completeMethod="#{consultasPSController.completeText}">
-                        <p:ajax event="itemSelect" listener="#{consultasPSController.onItemSelect}"
-                                update="con exp"/>
-                    </p:autoComplete>
-
-                    <h:panelGrid columns="3">
+                    <h:panelGrid columns="1">
+                        <p:outputLabel for="nombus" value="Nombre del alumno"/>
+                        <p:autoComplete id="nombus" value="#{consultasPSController.nomEs}" 
+                                        queryDelay="1000" size="60"
+                                        completeMethod="#{consultasPSController.completeText}">
+                            <p:ajax event="itemSelect" listener="#{consultasPSController.onItemSelect}"
+                                    update="con exp"/>
+                        </p:autoComplete>
+                    </h:panelGrid>
+                    <h:panelGrid columns="3" style="margin: 0 auto">
                         <p:commandButton value="Cancelar" id="can" 
                                          actionListener="#{consultasPSController.cancelar()}"/>
 
@@ -196,7 +197,7 @@
                         <p:commandButton value="Consultar" id="con" update="form"
                                          disabled="#{!consultasPSController.verBotones}"
                                          actionListener="#{consultasPSController.continuar()}"/>
-                    </h:panelGrid>
+                    </h:panelGrid>                    
                 </h:panelGrid>
             </h:form>
         </p:dialog>

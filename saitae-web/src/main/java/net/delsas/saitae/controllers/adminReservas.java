@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -242,8 +243,8 @@ public class adminReservas extends Auxiliar implements Serializable {
 
     public void onRowSelect(SelectEvent event) {
         selected = (Reserva) event.getObject();
-        List<ProyectoPedagogico> re = rxpFL.findProyectoByIdReserva(selected == null
-                ? 0 : selected.getIdreserva());
+        List<ProyectoPedagogico> re = rxpFL.findProyectoByIdReserva(
+                Optional.ofNullable(selected).orElseGet(() -> new Reserva(0)).getIdreserva());
         if (!re.isEmpty()) {
             proyecto = re.get(0);
         } else {
@@ -457,6 +458,21 @@ public class adminReservas extends Auxiliar implements Serializable {
         return m;
     }
 
+    private boolean v;
+
+    public boolean getVerComentarios() {
+        v = false;
+        Optional.ofNullable(selected).ifPresent(res -> {
+            List<String> vals = new ArrayList<>();
+            vals.add("S");
+            vals.add("A");
+            vals.add("C");
+            vals.add("R");
+            v = !vals.contains(res.getReservaEstado());
+        });
+        return v;
+    }
+
     public void rechazar() {
         System.out.println(getRazonRechazo());
         if (selected != null) {
@@ -641,8 +657,9 @@ public class adminReservas extends Auxiliar implements Serializable {
 
     public List<Integer> getCorrelativos(Ejemplar e) {
         List<Integer> co = ejFL.findCorrelativosByIdRecurso(
-                e == null ? 0 : e.getRecurso().getIdrecurso());
-        co = co == null ? new ArrayList<>() : co;
+                Optional.ofNullable(e).orElseGet(
+                        () -> new Ejemplar(0, 0))
+                        .getEjemplarPK().getIdRecurso());
         return co;
     }
 
@@ -678,9 +695,15 @@ public class adminReservas extends Auxiliar implements Serializable {
     }
 
     public boolean getCancelado() {
-        boolean ra = selected == null ? false : !getRazonRechazo().isEmpty();
-        boolean v = selected != null ? selected.getReservaEstado().equals("C") : false;
-        return (ra && v);
+        boolean ra = !Optional.ofNullable(selected).isPresent() ? false : !getRazonRechazo().isEmpty();
+        boolean vv = Optional.ofNullable(selected).orElseGet(
+                () -> {
+                    Reserva t = new Reserva(0);
+                    t.setReservaEstado("");
+                    return t;
+                }
+        ).getReservaEstado().equals("C");
+        return (ra && vv);
     }
 
     public boolean getHayProyecto() {
@@ -701,12 +724,8 @@ public class adminReservas extends Auxiliar implements Serializable {
             context.getExternalContext().redirect("solicitudRPP.intex");
         } catch (IOException ex) {
         }
-    }
-
-//    public void onBlour(AjaxBehaviorEvent a) {
-//
-//    }
-
+    }    
+    
     public List<Integer> getAñosDisponibles() {
         return añosDisponibles;
     }

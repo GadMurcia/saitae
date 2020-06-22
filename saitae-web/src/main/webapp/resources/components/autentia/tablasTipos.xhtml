@@ -22,7 +22,7 @@
                      widgetVar="#{cc.attrs.NombreTabla}1" 
                      styleClass="tabla"
                      emptyMessage="Sin registros aún."
-                     paginator="true" paginatorAlwaysVisible="false" paginatorPosition="to"
+                     paginator="true" paginatorAlwaysVisible="false" paginatorPosition="top"
                      rows="8">
             <f:facet name="header">
                 Administración de #{cc.attrs.textoAgregar}
@@ -33,11 +33,11 @@
             <p:ajax event="rowEditCancel" listener="#{tipoController.onRowCancel}" 
                     update=":form:msgs #{cc.attrs.NombreTabla}" />
 
-            <p:column headerText="Id" style="width: 20px" filterBy="#{cc.attrs.zid}">
+        <!--    <p:column headerText="Id" style="width: 20px" filterBy="#{cc.attrs.zid}">
                 <h:outputText value="#{cc.attrs.zid}"/>
             </p:column>
 
-            <p:column headerText="Nombre" filterBy="#{cc.attrs.znombre}" filterMatchMode="contains">
+            --><p:column headerText="Nombre" filterBy="#{cc.attrs.znombre}">
                 <p:cellEditor>
                     <f:facet name="output"><h:outputText value="#{cc.attrs.znombre}" /></f:facet>
                     <f:facet name="input"><p:inputText value="#{cc.attrs.znombre}" 
@@ -48,9 +48,11 @@
                 <p:rowEditor cancelTitle="Cancelar" editTitle="Editar" saveTitle="Guardar"/>
             </p:column>
         </p:dataTable>
+        <h:panelGrid columns="1" style="width: 5%; margin-left: 92%;">
         <p:commandButton value="+" styleClass="ui-priority-primary" 
                          process="@this" update=":form0:msgs form"
                          action="#{tipoController.onAddNew(cc.attrs.NombreTabla)}"
                          title="Agregar #{cc.attrs.textoAgregar}."/>
+        </h:panelGrid>
     </cc:implementation>
 </html>
