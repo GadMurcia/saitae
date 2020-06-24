@@ -146,9 +146,12 @@
                     </h:form>
                 </p:dialog>
                 <p:dialog id="dialogN" header="Administración de recursos" closeOnEscape="true"
-                          widgetVar="DrecursoN" modal="true" onHide="PF('Despere').show(); redireccionar();">
+                          widgetVar="DrecursoN" modal="true" 
+                          onHide="redireccionar();">
                     <h:form id="hn">
-                        <p:remoteCommand name="redireccionar" actionListener="#{admRecursoC.redireccionarPagina('admRecurso.intex')}"/>
+                        <p:remoteCommand name="redireccionar" onstart="PF('Despere').show();"
+                                         actionListener="#{admRecursoC.redireccionarPagina('admRecurso.intex')}"
+                                         oncomplete="PF('Despere').hide();"/>
                         <p:wizard flowListener="#{admRecursoC.onFlowProcess}" id="ws"
                                   backLabel="Retroceder" nextLabel="Siguiente">
                             <p:tab id="init" title="Información del recursos">

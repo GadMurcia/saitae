@@ -40,6 +40,10 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Acceso.findByAccesoComentario", query = "SELECT a FROM Acceso a WHERE a.accesoComentario = :accesoComentario")})
 public class Acceso implements Serializable {
 
+    @Size(max = 100)
+    @Column(name = "youTubeUrl")
+    private String youTubeUrl;
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -161,6 +165,14 @@ public class Acceso implements Serializable {
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.Acceso[ idacceso=" + idacceso + " ]";
+    }
+
+    public String getYouTubeUrl() {
+        return youTubeUrl;
+    }
+
+    public void setYouTubeUrl(String youTubeUrl) {
+        this.youTubeUrl = youTubeUrl;
     }
     
 }

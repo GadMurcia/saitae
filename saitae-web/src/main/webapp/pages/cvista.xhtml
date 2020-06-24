@@ -13,7 +13,7 @@
             <ui:define name="content">
                 <h:form id="form">
                     <h1 style="align-content: center;">Administración de las vistas del sistema.</h1>
-                    <p:tabView id="tw" orientation="left" dynamic="true" style="height: 100%; width: 90%;">
+                    <p:tabView id="tw" orientation="top" dynamic="true">
                         <p:tab title="Accesos" rendered="#{vistasMenuController.administrador}">
                             <p:dataTable id="accesos" var="a" value="#{vistasMenuController.accesos}" 
                                          editable="true" paginator="true" paginatorAlwaysVisible="false"
@@ -60,6 +60,17 @@
                                         <f:facet name="output"><h:outputText value="#{a.accesourl}" /></f:facet>
                                         <f:facet name="input"><p:inputText value="#{a.accesourl}" 
                                                                            style="width:100%" label="url"/></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                <p:column headerText="URL del tutorial">
+                                    <p:cellEditor>
+                                        <f:facet name="output">
+                                            <h:outputText value="#{a.youTubeUrl}" />
+                                        </f:facet>
+                                        <f:facet name="input">
+                                            <p:inputText value="#{a.youTubeUrl}" 
+                                                         style="width:100%" label="youTubeUrl"/>
+                                        </f:facet>
                                     </p:cellEditor>
                                 </p:column>
                                 <p:column headerText="Comentario">

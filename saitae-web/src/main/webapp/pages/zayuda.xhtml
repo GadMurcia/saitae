@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../WEB-INF/template/plantilla1.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns="http://www.w3.org/1999/xhtml">
+
+    <ui:define name="content">
+        <h:form id="form">
+            <h1 align="center">Video tutoriales de sus funciones dentro del sistema</h1>
+            <h:panelGrid columns="1" style="width: 50%; margin: 0 auto;">
+                <h2 align="center">Sus tutoriales</h2>
+                <h:panelGrid columns="2">
+                    <p:outputLabel for="vs" value="Seleccione un video-tutorial para ver"/>
+                    <p:selectOneMenu id="vs" value="#{ayudaController.selected}" 
+                                     converter="omnifaces.SelectItemsConverter"
+                                     filter="#{ac.accesoIndice.accesoNombre} -> #{ac.accesoNombre}"
+                                     filterMatchMode="contains">
+                        <f:selectItems value="#{ayudaController.accesos}" var="ac"
+                                       itemLabel="#{ac.accesoIndice.accesoNombre} -> #{ac.accesoNombre}" itemValue="#{ac}"/>
+                        <p:ajax event="itemSelect" listener="#{ayudaController.onSelectTutorial}"
+                                update=":form"/>
+                    </p:selectOneMenu>
+
+                </h:panelGrid>
+                <h:panelGrid columns="1" cellspacing="15">
+                    <ui:repeat var="s" value="#{ayudaController.videos}">
+                        <iframe id="video" width="660" height="372" 
+                                src="https://www.youtube.com/embed/#{s}" 
+                                frameborder="0"
+                                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen="false">no se puede ver el video</iframe>
+                    </ui:repeat>
+                </h:panelGrid>
+            </h:panelGrid>
+        </h:form>
+    </ui:define>
+</ui:composition>

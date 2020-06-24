@@ -21,6 +21,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -697,5 +698,18 @@ public class admRecursoController extends Auxiliar implements Serializable {
         String st = event.getNewStep();
         PrimeFaces.current().ajax().update("hn:ws");
         return st;
+    }
+
+    @Override
+    public void redireccionarPagina(String pag) {
+        try {
+            FacesContext.getCurrentInstance().getExternalContext().redirect(pag);
+        } catch (IOException ex0) {
+            FacesContext.getCurrentInstance().addMessage("form0:msgs",
+                    new FacesMessage(
+                            FacesMessage.SEVERITY_FATAL,
+                            "Error iniesperado",
+                            ""));
+        }
     }
 }

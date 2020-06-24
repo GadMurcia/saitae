@@ -185,6 +185,9 @@ public class sessionController extends Auxiliar implements Serializable {
         mi = new DefaultMenuItem("Cerrar Sesión", "fa fa-sign-out");
         mi.setCommand("#{sessionController.cerrarSesion()}");
         s.addElement(mi);
+        mi = new DefaultMenuItem("Tutoriales", "fa fa-youtube-play");
+        mi.setUrl("zayuda.intex");
+        s.addElement(mi);
         mm.addElement(s);
     }
 
