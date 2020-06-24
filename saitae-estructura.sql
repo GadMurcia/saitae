@@ -29,13 +29,14 @@ CREATE TABLE `acceso` (
   `accesoNombre` varchar(30) NOT NULL,
   `accesourl` varchar(100) NOT NULL,
   `accesoIndice` int(30) DEFAULT '0',
+  `youTubeUrl` varchar(100) DEFAULT NULL,
   `accesoComentario` varchar(140) DEFAULT NULL,
   PRIMARY KEY (`idacceso`),
   UNIQUE KEY `accesoNombre_UNIQUE` (`accesoNombre`),
   UNIQUE KEY `idacceso_UNIQUE` (`idacceso`),
   KEY `fk_acceso_1_idx` (`accesoIndice`),
   CONSTRAINT `fk_acceso_1` FOREIGN KEY (`accesoIndice`) REFERENCES `acceso` (`idacceso`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=69 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -51,7 +52,7 @@ CREATE TABLE `accesoTipoPersona` (
   `accesoTipoPersonaComentario` varchar(140) DEFAULT NULL,
   PRIMARY KEY (`idacceso`,`idTipoPersona`),
   KEY `fk_accesoTipoPersona_2_idx` (`idTipoPersona`),
-  CONSTRAINT `fk_accesoTipoPersona_1` FOREIGN KEY (`idacceso`) REFERENCES `acceso` (`idacceso`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  CONSTRAINT `fk_accesoTipoPersona_1` FOREIGN KEY (`idacceso`) REFERENCES `acceso` (`idacceso`) ON UPDATE CASCADE,
   CONSTRAINT `fk_accesoTipoPersona_2` FOREIGN KEY (`idTipoPersona`) REFERENCES `tipoPersona` (`idtipoPersona`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -76,7 +77,7 @@ CREATE TABLE `anuncio` (
   KEY `fk_anuncio_2_idx` (`anuncioTipoPersona`),
   CONSTRAINT `fk_anuncio_1` FOREIGN KEY (`anuncioAnunciante`) REFERENCES `persona` (`idpersona`) ON UPDATE CASCADE,
   CONSTRAINT `fk_anuncio_2` FOREIGN KEY (`anuncioTipoPersona`) REFERENCES `tipoPersona` (`idtipoPersona`) ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -93,7 +94,7 @@ CREATE TABLE `aula` (
   PRIMARY KEY (`idaula`),
   KEY `fk_aula_1_idx` (`zonaAula`),
   CONSTRAINT `fk_aula_1` FOREIGN KEY (`zonaAula`) REFERENCES `zona` (`idzona`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -108,7 +109,7 @@ CREATE TABLE `autor` (
   `autorNombre` varchar(30) NOT NULL,
   `autorComentario` varchar(140) DEFAULT NULL,
   PRIMARY KEY (`idautor`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -166,7 +167,7 @@ CREATE TABLE `cargo` (
   PRIMARY KEY (`idcargo`),
   KEY `fk_cargo_1_idx` (`cargoTipoPersona`),
   CONSTRAINT `fk_cargo_1` FOREIGN KEY (`cargoTipoPersona`) REFERENCES `tipoPersona` (`idtipoPersona`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -374,7 +375,7 @@ CREATE TABLE `editorial` (
   `editorialNombre` varchar(50) NOT NULL,
   `editorialComentarios` varchar(140) DEFAULT NULL,
   PRIMARY KEY (`ideditorial`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -602,7 +603,7 @@ CREATE TABLE `financiamiento` (
   `financiamientoNombre` varchar(45) NOT NULL,
   `financiamientoComentario` varchar(145) DEFAULT NULL COMMENT 'Lista de las formas en las que se fiancea el pago de los cargos de los docentes.',
   PRIMARY KEY (`idfinanciamiento`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -641,7 +642,7 @@ CREATE TABLE `gradoEvaluacion` (
   `gradoSeccion` enum('A','B','C') NOT NULL,
   `gradoAño` int(4) NOT NULL,
   `gradoModalidad` enum('C','S','G') NOT NULL,
-  `fechaEvaluacion` date NOT NULL COMMENT 'histÃ³rico de evaluaciones a cada grado del instituto.',
+  `fechaEvaluacion` datetime NOT NULL COMMENT 'histÃ³rico de evaluaciones a cada grado del instituto.',
   `evaluador` int(30) NOT NULL,
   `organizadorLimpieza` bit(1) NOT NULL,
   `organizadorClase` bit(1) NOT NULL,
@@ -767,7 +768,7 @@ CREATE TABLE `materia` (
   UNIQUE KEY `materiaAbreviacion_UNIQUE` (`materiaAbreviacion`),
   KEY `fk_materia_1_idx` (`tipoMateria`),
   CONSTRAINT `fk_materia_1` FOREIGN KEY (`tipoMateria`) REFERENCES `tipoMateria` (`idtipoMateria`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -844,7 +845,7 @@ CREATE TABLE `notificaciones` (
   KEY `fk_notificaciones_2_idx` (`remitente`),
   CONSTRAINT `fk_notificaciones_1` FOREIGN KEY (`destinatario`) REFERENCES `persona` (`idpersona`) ON UPDATE CASCADE,
   CONSTRAINT `fk_notificaciones_2` FOREIGN KEY (`remitente`) REFERENCES `persona` (`idpersona`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1091,7 +1092,7 @@ CREATE TABLE `reserva` (
   CONSTRAINT `fk_reserva_5` FOREIGN KEY (`entregante`) REFERENCES `persona` (`idpersona`) ON DELETE NO ACTION ON UPDATE CASCADE,
   CONSTRAINT `fk_reserva_6` FOREIGN KEY (`recibe`) REFERENCES `persona` (`idpersona`) ON DELETE NO ACTION ON UPDATE CASCADE,
   CONSTRAINT `fk_reserva_7` FOREIGN KEY (`tipoRecurso`) REFERENCES `tipoRecurso` (`idtipoRecurso`) ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1180,7 +1181,7 @@ CREATE TABLE `tipoCargo` (
   `tipoCargoComentario` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idtipoCargo`),
   UNIQUE KEY `idtipoCargo_UNIQUE` (`idtipoCargo`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1195,7 +1196,7 @@ CREATE TABLE `tipoEspecialidades` (
   `tipoEspecialidadesNombre` varchar(70) NOT NULL,
   `tipoEspecialidadesComentario` varchar(145) DEFAULT '',
   PRIMARY KEY (`idtipoEspecialidades`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1210,7 +1211,7 @@ CREATE TABLE `tipoMateria` (
   `tipoMateriaNombre` varchar(50) NOT NULL COMMENT 'Listado de los tipos de materias que se imparten en la instituciÃ³n.',
   `tipoMateriaComentario` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idtipoMateria`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1225,7 +1226,7 @@ CREATE TABLE `tipoNombramiento` (
   `tipoNombramientoNombre` varchar(60) NOT NULL COMMENT 'Listado de las formas en las que se uede nombrar el cargo de un docente dentro de la instituciÃ³n.',
   `tipoNombramientoCoemntario` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idtipoNombramiento`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1241,7 +1242,7 @@ CREATE TABLE `tipoPermiso` (
   `tipoPermisoDiasMes` int(2) NOT NULL,
   `tipoPermisoComentarios` varchar(250) DEFAULT NULL,
   PRIMARY KEY (`idtipoPermiso`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1256,7 +1257,7 @@ CREATE TABLE `tipoPersona` (
   `tipoPersonaNombre` varchar(45) NOT NULL,
   `tipoPersonaComentario` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idtipoPersona`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1271,7 +1272,7 @@ CREATE TABLE `tipoProyecto` (
   `tipoProyectoNombre` varchar(45) NOT NULL,
   `tipoProyectoComentario` varchar(140) DEFAULT NULL,
   PRIMARY KEY (`idtipoProyecto`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1286,7 +1287,7 @@ CREATE TABLE `tipoRecurso` (
   `tipoRecursoNombre` varchar(50) NOT NULL,
   `tipoRecursoComentario` varchar(140) DEFAULT NULL,
   PRIMARY KEY (`idtipoRecurso`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1301,7 +1302,7 @@ CREATE TABLE `tipoReserva` (
   `tipoReservaNombre` varchar(30) NOT NULL,
   `tipoReservaComentario` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`idtipoReserva`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1334,7 +1335,7 @@ CREATE TABLE `tipoSueldos` (
   `tipoSueldoNombre` varchar(50) NOT NULL,
   `tipoSueldosComentario` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idtipoSueldo`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1367,7 +1368,7 @@ CREATE TABLE `zona` (
   `zonaNombre` varchar(45) NOT NULL,
   `zonaCoementario` varchar(145) DEFAULT NULL,
   PRIMARY KEY (`idzona`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1387,9 +1388,9 @@ CREATE TABLE `zona` (
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
 /*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8 */;
-/*!50001 SET character_set_results     = utf8 */;
-/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
 /*!50001 VIEW `periodoReportePsicologia` AS select distinct `reportePsicologia`.`fechaInicio` AS `fechaInicio`,`reportePsicologia`.`fechaFin` AS `fechaFin`,`reportePsicologia`.`reportePublico` AS `estado` from `reportePsicologia` */;
@@ -1406,4 +1407,4 @@ CREATE TABLE `zona` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-06-19 18:43:29
+-- Dump completed on 2020-06-24  0:16:03

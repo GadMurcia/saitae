@@ -9,7 +9,7 @@
         <ui:composition template="./../WEB-INF/template/plantilla1.xhtml">
             <ui:define name="content">
                 <f:event listener="#{permisoEstController.postRender()}" type="preRenderView"/>
-                <h:form id="frm">
+                <h:form id="frm" style="width: 70%; margin: 0 auto">
                     <p:growl id="msgs" showDetail="true" life="20000"/>
                     <h1 align="center"> Solicitud de Permisos</h1>
                     <h:panelGrid columns="3">

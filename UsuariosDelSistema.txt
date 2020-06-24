@@ -2,16 +2,16 @@ Lista del plantel institucional
 DUI		Nombre					Rol				Contraseña
 045367080	María Carmen Peña Cárcamo		Administrador CRA				ok
 045367081	Hugo Daniel Flores Diaz	Abogado		Bibliotecario					ok
-045367090	Pablo Alejandro Martínez Santos		Colector
+045367090	Pablo Alejandro Martínez Santos		Colector					ok
 045367083	Laura María López Suñiga		Maestro, Director				ok
-045367082	José Antonio Murcia Pérez		Laboratorista
-045367085	Francisco Javier Magaña Arriola		Maestro, Subdirector
-045367086	Juan Manuel Bartanes Pilar		Maestro
+045367082	José Antonio Murcia Pérez		Maestro, Laboratorista				ok
+045367085	Francisco Javier Magaña Arriola		Maestro, Subdirector				ok
+045367086	Juan Manuel Bartanes Pilar		Maestro						ok
 045367087	María Dolores Pineda Mata		Maestro
 045367084	María Pilar Dolores ALvarado		Maestro, Subdirector
 045367089	Álvaro Mateo Cienfuegos Altamirano	Ordenanza
-045367088	Laura Isabel Pneda Rosell		Psicologo
-045367091	Alba Lucía Aybara Campos		Secretaria
+045367088	Laura Isabel Pneda Rosell		Psicologo					ok
+045367091	Alba Lucía Aybara Campos		Secretaria					ok
 045367073	Guillermo Aldolfo Delsas Murcia		Administrador Global		delsas		ok
 6018		Francisco Antonio Regalado Cruz		Estudiante (1CA)				ok
 6019		Rigoberto Alexander Cárcamo Murga	Estudiante (1GA)
