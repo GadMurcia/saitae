@@ -27,9 +27,9 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import net.delsas.saitae.ax.Auxiliar;
 import net.delsas.saitae.beans.AnuncioFacadeLocal;
 import net.delsas.saitae.entities.Anuncio;
-import net.delsas.saitae.entities.MaestoCargo;
 import net.delsas.saitae.entities.Persona;
 
 /**
@@ -59,31 +59,25 @@ public class perfilController implements Serializable {
                         new FacesMessage(FacesMessage.SEVERITY_ERROR,
                                 "Falla!", "Esa vista no le está permitida."));
                 context.getExternalContext().redirect("./../");
-            } else {
-                activos = anuncioFL.getAnunciosActivos();
-                Integer tp = usuario.getTipoPersona().getIdtipoPersona();
-                individual = (tp == 1 || tp == 2) ? activos
-                        : anuncioFL.getAnunciosActivosParaUnTipo(usuario.getTipoPersona());
-                individual = individual == null ? new ArrayList<>() : individual;
-                if (!(tp == 1 || tp == 2)) {
-                    activos.stream().filter((an) -> (an.getAnuncioTipoPersona() == null || an.getAnuncioTipoPersona() == usuario.getTipoPersona())).forEachOrdered((an) -> {
-                        individual.add(an);
-                    });
-                }
-                if (usuario.getMaestro() != null) {
-                    List<MaestoCargo> mcl = usuario.getMaestro().getMaestoCargoList();
-                    mcl.forEach((mc) -> {
-                        individual.addAll(anuncioFL.getAnunciosActivosParaUnTipo(mc.getCargo().getCargoTipoPersona()));
-                    });
-                }
-
             }
         } catch (IOException e) {
 
         }
     }
-    
+
     public List<Anuncio> getIndividual() {
+        individual.clear();
+        Integer tp = usuario.getTipoPersona().getIdtipoPersona();
+        individual = anuncioFL.getAnunciosActivos();
+        activos = new ArrayList<>();
+        if (!(tp == 1 || tp == 2)) {
+            List<Integer> tps = new Auxiliar().getTiposPersonas(usuario);
+            individual.stream()
+                    .filter(a -> a.getAnuncioTipoPersona() != null)
+                    .filter(a -> !tps.contains(a.getAnuncioTipoPersona().getIdtipoPersona()))
+                    .forEach(activos::add);
+            individual.removeAll(activos);
+        }
         return Collections.unmodifiableList(individual);
     }
 

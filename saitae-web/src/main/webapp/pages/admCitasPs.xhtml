@@ -8,10 +8,10 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:define name="content">
 
-        <h:form id="form">
+        <h:form id="form" style="margin: 0 auto">
             <f:event listener="#{admCPSController.postRender()}" type="preRenderView"/>
-            <h:panelGrid columns="1">
-                <h:panelGrid columns="2">
+            <h:panelGrid columns="1" style="margin: 0 auto">
+                <h:panelGrid columns="2" style="margin: 0 auto">
                     <p:outputLabel for="años" value="Seleccione el año de visualización: "/>
                     <p:selectOneMenu id="años" value="#{admCPSController.añoSelected}" 
                                      converter="omnifaces.SelectItemsConverter">
@@ -23,8 +23,8 @@
                                 update="form"/>
                     </p:selectOneMenu>
                 </h:panelGrid>
-                <h1 align="center">Administración de solicitudes de reservas de equipo</h1>
-                <p:accordionPanel id="ap">
+                <h1 align="center">Administración de solicitudes de citas para consultas psicológicas</h1>
+                <p:accordionPanel id="ap" style="margin: 0 auto">
                     <p:tab title="Solicitudes de Citas Pendientes">
                         <p:dataTable id="solicitados" value="#{admCPSController.solicitados}" var="c"
                                      paginator="true" rows="7" selection="#{admCPSController.selected}" 

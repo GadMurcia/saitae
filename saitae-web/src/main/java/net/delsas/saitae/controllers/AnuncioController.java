@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -128,8 +129,7 @@ public class AnuncioController extends Auxiliar implements Serializable {
                     new mensaje(0, "Nuevo auncio publicado recientemente por "
                             + getNombreCortoPersona(anuncio.getAnuncioAnunciante()),
                             "Nuevo anuncio disponible", FacesMessage.SEVERITY_INFO, usuario.getIdpersona(),
-                            " ¿¿¿tp¿¿" + (anuncio.getAnuncioTipoPersona() == null ? 0
-                            : anuncio.getAnuncioTipoPersona().getIdtipoPersona())),
+                            "perfil<form¿¿¿tp¿¿" + (Optional.ofNullable(anuncio.getAnuncioTipoPersona()).orElseGet(() -> new TipoPersona(0))).getIdtipoPersona()),
                     getPersonasParaNotificar(anuncio.getAnuncioTipoPersona()),
                     notiFL, notificacion);
             init();
@@ -224,6 +224,13 @@ public class AnuncioController extends Auxiliar implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, ms);
             PrimeFaces.current().executeScript("PF('Danuncio').hide()");
             PrimeFaces.current().ajax().update("form:tv", "da", "form0:msgs");
+            sendMessage(new mensaje(0, "Un anunciopara usted ha sido " + com,
+                    "Anuncio " + (o == 1 ? "Modificado" : (0 == 2 ? "Eliminado" : "")),
+                    FacesMessage.SEVERITY_INFO, usuario.getIdpersona(),
+                    "perfil<form¿¿¿tp¿¿"
+                    + (Optional.ofNullable(anuncio.getAnuncioTipoPersona())
+                            .orElseGet(() -> new TipoPersona(0)))
+                            .getIdtipoPersona()).toString(), notificacion);
         }
     }
 

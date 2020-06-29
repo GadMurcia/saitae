@@ -42,7 +42,6 @@ import org.primefaces.event.SelectEvent;
 @ViewScoped
 public class ayudaController implements Serializable {
 
-    private final String prefijo = "https://www.youtube.com/watch?v=";
     private List<Acceso> accesos;
     private List<String> videos;
     private Acceso Selected;
@@ -54,10 +53,9 @@ public class ayudaController implements Serializable {
     public void init() {
         accesos = new ArrayList<>();
         videos = new ArrayList<>();
-        Acceso a = new Acceso(0, "Introducción a SAITAE", "#");
-        a.setYouTubeUrl("zu4mpRJzd58");
-        accesos.add(a);
-        Selected = a;
+        Selected = new Acceso(0, "Introducción a SAITAE", "#");
+        Selected.setYouTubeUrl("zu4mpRJzd58");
+        accesos.add(Selected);
         onSelectTutorial(null);
         try {
             FacesContext context = FacesContext.getCurrentInstance();
@@ -67,19 +65,6 @@ public class ayudaController implements Serializable {
                         "Falla!", "Esa vista no le está permitida aún porque usted no se ha logueado."));
                 context.getExternalContext().redirect("./../");
             }
-            Optional.ofNullable(us).ifPresent(u -> {
-                u.getTipoPersona().getAccesoTipoPersonaList().stream()
-                        .map(z -> z.getAcceso())
-                        .filter(z -> z.getYouTubeUrl() != null
-                        && !z.getYouTubeUrl().isEmpty()
-                        && !accesos.contains(z))
-                        .forEachOrdered(accesos::add);
-            });
-            Collections.sort(accesos, (Acceso a0, Acceso a1) -> {
-                String c1 = Optional.ofNullable(a0.getAccesoIndice()).orElseGet(() -> new Acceso(0, "", "")).getAccesoNombre() + " -> " + a0.getAccesoNombre();
-                String c2 = Optional.ofNullable(a1.getAccesoIndice()).orElseGet(() -> new Acceso(0, "", "")).getAccesoNombre() + " -> " + a1.getAccesoNombre();
-                return c1.hashCode() - c2.hashCode();
-            });
         } catch (IOException e) {
         }
     }
@@ -94,6 +79,22 @@ public class ayudaController implements Serializable {
     }
 
     public List<Acceso> getAccesos() {
+        Optional.ofNullable(us).ifPresent(u -> {
+            u.getTipoPersona().getAccesoTipoPersonaList().stream()
+                    .map(z -> z.getAcceso())
+                    .filter(z -> z.getYouTubeUrl() != null
+                    && !z.getYouTubeUrl().isEmpty()
+                    && !accesos.contains(z))
+                    .forEachOrdered(c -> {
+                        Acceso b = new Acceso(c.getIdacceso());
+                        b.setAccesoNombre(c.getAccesoIndice().getAccesoNombre() + " - " + c.getAccesoNombre());
+                        b.setYouTubeUrl(c.getYouTubeUrl());
+                        accesos.add(b);
+                    });
+        });
+        Collections.sort(accesos, (Acceso a0, Acceso a1) -> {
+            return String.CASE_INSENSITIVE_ORDER.compare(a0.getAccesoNombre(), a1.getAccesoNombre());
+        });
         return accesos;
     }
 

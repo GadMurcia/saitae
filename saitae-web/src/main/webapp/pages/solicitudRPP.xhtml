@@ -109,11 +109,10 @@
                                                          rendered="#{solicitudPPController.variasJornadas}"
                                                          disabled="#{solicitudPPController.desactivarVistas}"/>
 
-                                        <p:outputLabel for="jusp" value="Diagnóstico" rendered="#{solicitudPPController.variasJornadas}"/>
+                                        <p:outputLabel for="jusp" value="Justificación" rendered="#{solicitudPPController.variasJornadas}"/>
                                         <p:inputTextarea id="jusp" value="#{solicitudPPController.proyecto.justificacion}"
                                                          required="true" cols="80" rows="5" 
                                                          rendered="#{solicitudPPController.variasJornadas}"
-                                                         placeholder="Ingrese la justificación del proyecto"
                                                          requiredMessage="Es necesario que ingrese su justificación antes de continuar"
                                                          disabled="#{solicitudPPController.desactivarVistas}"/>
                                     </h:panelGrid>

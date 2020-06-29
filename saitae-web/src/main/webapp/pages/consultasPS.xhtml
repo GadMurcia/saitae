@@ -8,9 +8,9 @@
                 xmlns:t="http://java.sun.com/jsf/composite/components/autentia">
     <ui:define name="content">
         <f:event listener="#{consultasPSController.postRender()}" type="preRenderView"/>
-        <h:form id="form">
-            <h:panelGrid>
-                <p:accordionPanel dynamic="true" style="width: 100%;">
+        <h:form id="form" style="margin: 0 auto">
+            <h:panelGrid style="margin: 0 auto">
+                <p:accordionPanel dynamic="true" style="margin: 0 auto">
                     <p:tab title="Expediente" rendered="#{consultasPSController.renderizar}">
                         <p:tabView id="tw0" orientation="left">
                             <p:tab title="Información general">

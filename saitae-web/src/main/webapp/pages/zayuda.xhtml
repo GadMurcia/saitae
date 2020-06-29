@@ -10,7 +10,7 @@
     <ui:define name="content">
         <h:form id="form">
             <h1 align="center">Video tutoriales de sus funciones dentro del sistema</h1>
-            <h:panelGrid columns="1" style="width: 50%; margin: 0 auto;">
+            <h:panelGrid columns="1" style="width: 65%; margin: 0 auto;">
                 <h2 align="center">Sus tutoriales</h2>
                 <h:panelGrid columns="2">
                     <p:outputLabel for="vs" value="Seleccione un video-tutorial para ver"/>
@@ -19,19 +19,19 @@
                                      filter="#{ac.accesoIndice.accesoNombre} -> #{ac.accesoNombre}"
                                      filterMatchMode="contains">
                         <f:selectItems value="#{ayudaController.accesos}" var="ac"
-                                       itemLabel="#{ac.accesoIndice.accesoNombre} -> #{ac.accesoNombre}" itemValue="#{ac}"/>
+                                       itemLabel="#{ac.accesoNombre}" itemValue="#{ac}"/>
                         <p:ajax event="itemSelect" listener="#{ayudaController.onSelectTutorial}"
                                 update=":form"/>
                     </p:selectOneMenu>
 
                 </h:panelGrid>
-                <h:panelGrid columns="1" cellspacing="15">
+                <h:panelGrid columns="1" cellpadding="25">
                     <ui:repeat var="s" value="#{ayudaController.videos}">
-                        <iframe id="video" width="660" height="372" 
+                        <iframe id="video#{s}" width="660" height="372" 
                                 src="https://www.youtube.com/embed/#{s}" 
-                                frameborder="0"
+                                frameborder="25"
                                 allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
-                                allowfullscreen="false">no se puede ver el video</iframe>
+                                allowfullscreen="true">no se puede ver el video</iframe>
                     </ui:repeat>
                 </h:panelGrid>
             </h:panelGrid>

@@ -41,7 +41,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Anuncio.findByAnuncioComentario", query = "SELECT a FROM Anuncio a WHERE a.anuncioComentario = :anuncioComentario")
     , @NamedQuery(name = "Anuncio.findAnunciosInactivos", query = "SELECT a FROM Anuncio a WHERE a.anuncioFechaFin < :fecha ORDER BY a.anuncioFechaFin DESC")
     , @NamedQuery(name = "Anuncio.findAnunciosActivos", query = "SELECT a FROM Anuncio a WHERE a.anuncioFechaFin >= :fecha ORDER BY a.anuncioFechaFin DESC")
-    , @NamedQuery(name = "Anuncio.findAnunciosParaTodos", query = "SELECT a FROM Anuncio a WHERE a.anuncioFechaFin >= :fecha AND a.anuncioTipoPersona = :tipo  ORDER BY a.anuncioFechaFin DESC")
+    , @NamedQuery(name = "Anuncio.findAnunciosParaTodos", query = "SELECT a FROM Anuncio a WHERE a.anuncioFechaFin >= :fecha AND a.anuncioTipoPersona.idtipoPersona = :tipo  ORDER BY a.anuncioFechaFin ASC")
 })
 public class Anuncio implements Serializable {
 

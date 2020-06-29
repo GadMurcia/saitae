@@ -36,13 +36,13 @@
                 }
             </style>
             <h:panelGrid columns="1">
-                <h1>Historial de notificaciones</h1>
+                <h1 align="center">Historial de notificaciones</h1>
 
                 <p:dataTable var="n" value="#{notifhController.notificaciones}" 
                              widgetVar="not1"
-                             emptyMessage="Ninguna notificación aún." 
-                             filteredValue="#{notifhController.notifFilradas}"
-                             rows="10" paginator="true" paginatorAlwaysVisible="false">
+                             emptyMessage="Ninguna notificación aún."
+                             paginatorPosition="top"
+                             rows="5" paginator="true" paginatorAlwaysVisible="false">
 
                     <p:column filterBy="#{n.fecha}" 
                               headerText="Fecha/Hora" 
@@ -50,13 +50,13 @@
                         <h:outputText value="#{n.fecha}"/>
                     </p:column>
 
-                    <p:column filterBy="#{n.remitente}" 
+                    <!--<p:column filterBy="#{n.remitente}" 
                               headerText="Remitente" 
                               filterMatchMode="contains">
                         <h:outputText value="#{n.remitente}" />
                     </p:column>
 
-                    <p:column headerText="Título de la notificación">
+                    --><p:column headerText="Título de la notificación" filterBy="#{n.titulo}" filterMatchMode="contains">
                         <h:outputText value="#{n.titulo}" />
                     </p:column>
 

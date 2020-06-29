@@ -136,9 +136,7 @@ public class sessionController extends Auxiliar implements Serializable {
             Collections.sort(not, (Notificaciones o1, Notificaciones o2) -> o2.getFechaHora().hashCode() - o1.getFechaHora().hashCode());
             if (not.size() > 4) {
                 for (Integer y = 0; y < 4; y++) {
-                    if (y < not.size()) {
-                        notificaciones.add(not.get(y));
-                    }
+                    notificaciones.add(not.get(y));
                 }
             } else {
                 notificaciones.addAll(not);
@@ -253,6 +251,7 @@ public class sessionController extends Auxiliar implements Serializable {
     public void escucha() {
         try {
             mensaje m = new mensaje(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("mss"));
+            System.out.println(m.toString());
             String[] ac0 = m.getCadenaAccion().split("¿¿¿")[0].split("<<");
             String[] tp0 = m.getCadenaAccion().split("¿¿¿").length > 1
                     ? m.getCadenaAccion().split("¿¿¿")[1].split("¿¿") : new String[]{};
@@ -273,6 +272,9 @@ public class sessionController extends Auxiliar implements Serializable {
                             || x == 1 || x == 2
                             || Objects.equals(tp, us.getTipoPersona().getIdtipoPersona()))) {
                         PrimeFaces.current().ajax().update(acid);
+                        if (m.getDestinatario().equals(0)) {
+                            m.setDestinatario(us.getIdpersona());
+                        }
                     }
                 }
             }

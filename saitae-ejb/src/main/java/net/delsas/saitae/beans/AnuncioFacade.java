@@ -7,11 +7,8 @@ package net.delsas.saitae.beans;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -86,7 +83,7 @@ public class AnuncioFacade extends AbstractFacade<Anuncio> implements AnuncioFac
             d = new Date();
         }
         return em.createNamedQuery("Anuncio.findAnunciosParaTodos")
-                .setParameter("tipo", tipo)
+                .setParameter("tipo", tipo.getIdtipoPersona())
                 .setParameter("fecha", d)
                 .getResultList();
     }
