@@ -54,14 +54,12 @@ public class ReportePermisos implements Serializable {
                 ? (new Auxiliar()).getCantidadDias(p.getPermisosPK().getPermisoFechaInicio(), p.getPermisoFechafin())
                 : 0;
         this.saldo = saldo < 0 ? 0.0
-                : saldo - (numeroDias + (pp == 0 ? 0.0
-                        : (numeroHoras / (pp == 0 ? 1.0
-                                : (pp == 1 ? 5.0 : 8.0)))));
+                : saldo - (numeroDias + numeroHoras / (pp == 0 ? 10.0
+                        : (pp == 1 ? 5.0 : 8.0)));
         this.saldo *= 100;
         this.saldo = Math.round(this.saldo);
         this.saldo /= 100;
-        this.conGoce = p.getPersona().getTipoPersona().getIdtipoPersona() == 8 ? false
-                : new Auxiliar().getPermisoGoceDeSueldo(p);
+        this.conGoce = new Auxiliar().getPermisoGoceDeSueldo(p);
     }
 
     @Override

@@ -1012,7 +1012,7 @@ public class Auxiliar implements Serializable {
     }
 
     public void partida(FileUploadEvent f, Estudiante e) {
-        e.getDocumentos().setEstudianteDocPartida(f.getFile().getContents());
+        e.getDocumentos().setEstudianteDocPartida(f.getFile().getContent());
         e.getDocumentos().setEstudianteExtencionPartida(f.getFile().getFileName() + "¿¿" + f.getFile().getContentType());
     }
 
@@ -1031,7 +1031,7 @@ public class Auxiliar implements Serializable {
     }
 
     public void certificado(FileUploadEvent f, Estudiante e) {
-        e.getDocumentos().setEstudianteDocCertificado(f.getFile().getContents());
+        e.getDocumentos().setEstudianteDocCertificado(f.getFile().getContent());
         e.getDocumentos().setEstudianteExtencionCertificado(f.getFile().getFileName() + "¿¿" + f.getFile().getContentType());
     }
 
@@ -1050,7 +1050,7 @@ public class Auxiliar implements Serializable {
     }
 
     public void conducta(FileUploadEvent f, Estudiante e) {
-        e.getDocumentos().setEstudianteDocConducta(f.getFile().getContents());
+        e.getDocumentos().setEstudianteDocConducta(f.getFile().getContent());
         e.getDocumentos().setEstudianteExtencionConducta(f.getFile().getFileName() + "¿¿" + f.getFile().getContentType());
     }
 
@@ -1069,7 +1069,7 @@ public class Auxiliar implements Serializable {
     }
 
     public void dui(FileUploadEvent f, Estudiante e) {
-        e.getDocumentos().setEstudianteDocDui(f.getFile().getContents());
+        e.getDocumentos().setEstudianteDocDui(f.getFile().getContent());
         e.getDocumentos().setEstudianteExtencionDui(f.getFile().getFileName() + "¿¿" + f.getFile().getContentType());
     }
 
@@ -1088,7 +1088,7 @@ public class Auxiliar implements Serializable {
     }
 
     public void notas(FileUploadEvent f, Estudiante e) {
-        e.getDocumentos().setEstudianteDocNotas(f.getFile().getContents());
+        e.getDocumentos().setEstudianteDocNotas(f.getFile().getContent());
         e.getDocumentos().setEstudianteExtencionNotas(f.getFile().getFileName() + "¿¿" + f.getFile().getContentType());
     }
 
@@ -1286,7 +1286,9 @@ public class Auxiliar implements Serializable {
     }
 
     public boolean getPermisoGoceDeSueldo(Permisos p) {
-        return p == null ? false : p.getPermisosComentario().split("¿¿")[0].equals("1");
+        return p == null ? false
+                : (p.getPersona().getTipoPersona().getIdtipoPersona().equals(8) ? true
+                : p.getPermisosComentario().split("¿¿")[0].equals("1"));
     }
 
     public boolean getPermisoLicenciasAnteriores(Permisos p) {
@@ -1300,7 +1302,7 @@ public class Auxiliar implements Serializable {
     public void setPermisoLicenciasAnteriores(boolean lic, Permisos p) {
         p.setPermisosComentario((getPermisoGoceDeSueldo(p) ? "1" : "0") + "¿¿" + (lic ? "1" : "0") + "¿¿¿¿");
     }
-    
+
     public void redireccionarPagina(String pag) {
         try {
             FacesContext.getCurrentInstance().getExternalContext().redirect(pag);

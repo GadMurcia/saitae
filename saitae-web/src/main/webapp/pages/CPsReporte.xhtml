@@ -9,6 +9,8 @@
 
     <ui:define name="content">
         <h:form id="form">
+            <p:remoteCommand name="noedita" actionListener="#{repPSController.setPuedeEditar(false)}" update="f1"/>
+            <p:remoteCommand name="edita" actionListener="#{repPSController.setPuedeEditar(true)}" update="f1"/>
             <h:panelGrid columns="1">
                 <h1 align="center">Reportes de consultas psicológicas</h1>
                 <p:tabView id="tw" dynamic="true">
@@ -31,9 +33,14 @@
                                              rendered="#{repPSController.esDoctor}"/>
 
                             <p:dataTable id="publicos" value="#{repPSController.reportes}" var="rp"
-                                         paginator="true" rows="8"
+                                         paginator="true" rows="8" selectionMode="single"
+                                         selection="#{repPSController.repSelected}" rowKey="#{rp.reportePsicologiaPK}"
                                          paginatorPosition="top" paginatorAlwaysVisible="false"
                                          emptyMessage="Aún no hay reportes que mostrar" editable="true">
+
+                                <p:ajax event="rowSelect" onstart="noedita();" listener="#{repPSController.onBlour}" 
+                                        update="f1" oncomplete="PF('Deditar').show();"/>
+
                                 <p:column headerText="Alumno">
                                     #{repPSController.getNombreCompletoPersona(rp.estudiante1.persona)}
                                 </p:column>
@@ -52,10 +59,10 @@
                                 <p:column headerText="Psicólogo">
                                     #{repPSController.getNombreCortoPersona(rp.psicologo)}
                                 </p:column>
-                                <p:column headerText="Comentarios del Psicólogo">
-                                    #{rp.diagnostico}
-                                </p:column>
-                            </p:dataTable>
+                                <!-- <p:column headerText="Comentarios del Psicólogo">
+                                     # {rp.diagnostico}
+                                 </p:column>
+                                --></p:dataTable>
 
                             <h:commandLink disabled="#{repPSController.reportes.size() == 0}">
                                 <p:graphicImage library="img" name="xls.png" width="37px" height="32px"/>
@@ -108,7 +115,7 @@
                                          value="#{repPSController.reportesNoPublicos}" 
                                          emptyMessage="Sin registros aún.">
 
-                                <p:ajax event="rowSelect" listener="#{repPSController.onBlour}" 
+                                <p:ajax event="rowSelect" onstart="edita();" listener="#{repPSController.onBlour}" 
                                         update="f1" oncomplete="PF('Deditar').show();"/>
 
                                 <f:facet name="header">
@@ -132,10 +139,10 @@
                                 <p:column headerText="Psicólogo que Reporta">
                                     #{repPSController.getNombreCortoPersona(np.psicologo)}
                                 </p:column>
-                                <p:column headerText="Diagnóstico">
-                                    #{np.diagnostico}
-                                </p:column>
-                            </p:dataTable>
+                                <!-- <p:column headerText="Diagnóstico">
+                                     # {np.diagnostico}
+                                 </p:column>
+                                --></p:dataTable>
                         </h:panelGrid>
                     </p:tab>
 
@@ -182,6 +189,7 @@
                             <p:commandButton id="elim2" value="Cancelar" 
                                              actionListener="#{repPSController.guardar(4)}" 
                                              update=":form" disabled="#{repPSController.reportesPorRealizar.size()==0}"/>
+                            
 
                             <p:dataTable id="por-publicar"  var="rpp"
                                          value="#{repPSController.reportesPorRealizar}"
@@ -189,7 +197,7 @@
                                          selectionMode="single" selection="#{repPSController.repSelected}"
                                          rowKey="#{rpp.reportePsicologiaPK}">
 
-                                <p:ajax event="rowSelect" listener="#{repPSController.onBlour}" 
+                                <p:ajax event="rowSelect" onstart="edita();" listener="#{repPSController.onBlour}" 
                                         update="f1" oncomplete="PF('Deditar').show();"/>
 
                                 <p:column headerText="Alumno">
@@ -210,10 +218,10 @@
                                 <p:column headerText="Psicólogo que Reporta">
                                     #{repPSController.getNombreCortoPersona(rpp.psicologo)}
                                 </p:column>
-                                <p:column headerText="Comentarios del Psicólogo">
-                                    #{rpp.diagnostico}
+                                <!--<p:column headerText="Comentarios del Psicólogo">
+                                    # {rpp.diagnostico}
                                 </p:column>
-                            </p:dataTable>
+                                --></p:dataTable>
                         </h:panelGrid>
                     </p:tab>
                 </p:tabView>
@@ -252,13 +260,13 @@
 
                     <p:outputLabel value="Diagnostico:"/>
                     <p:inputTextarea value="#{repPSController.repSelected.diagnostico}"
-                                     rows="5" cols="50" maxlength="800"
+                                     rows="5" cols="50" maxlength="800" disabled="#{!repPSController.puedeEditar}"
                                      title="Opinión general del psicólogo sobre el estudiante">
                         <p:ajax event="change" listener="#{repPSController.onBlour}"/>
                     </p:inputTextarea>
                 </h:panelGrid>
 
-                <p:commandButton value="Guardar" 
+                <p:commandButton value="Guardar" rendered="#{repPSController.puedeEditar}"
                                  onsuccess="PF('Deditar').hide();" update=":form"/>
             </h:form>
         </p:dialog>

@@ -418,10 +418,10 @@
             </p:tab>
             <p:tab title="Finalización">
                 <h:panelGrid columns="2">
-                    <p:outputLabel value="Actitudicionales:" for="actitudicionales" />
+                    <p:outputLabel value="Actitudinales:" for="actitudicionales" />
                     <p:inputTextarea rows="4" cols="30" id="actitudicionales" disabled="#{!cc.attrs.editar}"
                                      value="#{cc.attrs.evMaestro.actitudicionales}" 
-                                     title="Actitudicionales" required="true" 
+                                     title="Actitudinales" required="true" 
                                      requiredMessage="The Actitudicionales field is required.">
                         <p:ajax event="change" listener="#{loginController.onBlour}"/>
                     </p:inputTextarea>

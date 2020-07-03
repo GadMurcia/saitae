@@ -31,7 +31,8 @@
 
                     <p:outputLabel for="person" value="Persona: "/>
                     <p:selectOneMenu id="person" value="#{repPermisosController.PSelected}" 
-                                     converter="omnifaces.SelectItemsConverter">
+                                     converter="omnifaces.SelectItemsConverter" 
+                                     filter="true" filterMatchMode="contains">
                         <f:selectItems value="#{repPermisosController.personas}" var="p0" 
                                        itemLabel="#{p0.idpersona.toString().substring(1)} - 
                                        #{repPermisosController.getNombreCompletoPersona(p0)} 
@@ -74,7 +75,7 @@
                         <h:outputText value="#{p.numeroHoras}"/>
                     </p:column>
                     <p:column headerText="Saldo">
-                        <h:outputText value="#{p.conGoce ? p.saldo : ''}"/>
+                        <h:outputText value="#{p.saldo}"/>
                     </p:column>
                 </p:dataTable>
 

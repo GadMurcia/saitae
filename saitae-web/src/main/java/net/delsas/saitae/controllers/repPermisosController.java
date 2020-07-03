@@ -19,12 +19,9 @@ package net.delsas.saitae.controllers;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
@@ -32,6 +29,7 @@ import net.delsas.saitae.ax.Auxiliar;
 import net.delsas.saitae.ax.ReportePermisos;
 import net.delsas.saitae.ax.XLSModel;
 import net.delsas.saitae.beans.GradoFacadeLocal;
+import net.delsas.saitae.beans.MaestoCargoFacadeLocal;
 import net.delsas.saitae.beans.MatriculaFacadeLocal;
 import net.delsas.saitae.beans.PermisosFacadeLocal;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
@@ -42,7 +40,6 @@ import net.delsas.saitae.entities.Permisos;
 import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.TipoPermiso;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.primefaces.PrimeFaces;
 import org.primefaces.behavior.ajax.AjaxBehavior;
 import org.primefaces.component.selectonemenu.SelectOneMenu;
 import org.primefaces.event.SelectEvent;
@@ -74,6 +71,8 @@ public class repPermisosController extends Auxiliar implements Serializable {
     private PersonaFacadeLocal pFL;
     @EJB
     private TipopersonaPermisoFacadeLocal tppFL;
+    @EJB
+    private MaestoCargoFacadeLocal mcFL;
 
     @PostConstruct
     public void init() {
@@ -226,9 +225,10 @@ public class repPermisosController extends Auxiliar implements Serializable {
     }
 
     public void reporte(Object doc) {
-        HSSFWorkbook wb = (HSSFWorkbook) doc;
-        wb = new XLSModel().getReportePermisos(rpListGoce, wb,
-                tppFL.findTipoPermisoByIdtipopersona(PSelected.getTipoPersona().getIdtipoPersona()));
+        rpListGoce.get(0).getPermiso().setPersona(PSelected);
+        HSSFWorkbook wb = new XLSModel().getReportePermisos(rpListGoce, (HSSFWorkbook) doc,
+                tppFL.findTipoPermisoByIdtipopersona(PSelected.getTipoPersona().getIdtipoPersona()),
+                 mcFL, pFL);
     }
 
     public List<ReportePermisos> getRpListGoce() {

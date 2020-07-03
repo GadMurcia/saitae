@@ -212,8 +212,7 @@ public class repInvController extends Auxiliar implements Serializable {
     }
 
     public void reporte(Object doc) {
-        HSSFWorkbook wb = (HSSFWorkbook) doc;
-        wb = new XLSModel().getReporteInventario(wb, categorias, tipoCargos, trSelected);
+        HSSFWorkbook wb = new XLSModel().getReporteInventario((HSSFWorkbook) doc, categorias, tipoCargos, trSelected);
         HSSFSheet h = wb.getSheetAt(0);
 
         if (trSelected.getIdtipoRecurso().equals(3)) {
@@ -266,6 +265,8 @@ public class repInvController extends Auxiliar implements Serializable {
             h.setColumnWidth(8, g * 2);
             h.setColumnWidth(9, g * 2);
         }
+        h.setZoom(75, 100);
+        h.setVerticallyCenter(true);
     }
 
     public List<Ejemplar> getEjemplares() {

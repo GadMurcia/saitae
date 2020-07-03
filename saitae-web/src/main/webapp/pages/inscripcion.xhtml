@@ -6,6 +6,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>Nuevo Ingreso #{inscripcionController.año}</title>
+        <link rel="shortcut icon" href="../resources/img/intexM.jpeg"/>
         <h:outputScript library="js" name="locales.js"/>
     </h:head>
     <h:body>
@@ -269,35 +270,35 @@
                         <p:messages />
                         <h:panelGrid columns="4" columnClasses="label, value">
                             <p:outputLabel value="partida de nacimiento: " />
-                            <p:fileUpload id="partida" fileUploadListener="#{inscripcionController.partida}" mode="advanced"
+                            <p:fileUpload id="partida" listener="#{inscripcionController.partida}" mode="advanced"
                                           update="messagesp p"  sizeLimit="10000000" label="Elejir"
                                           allowTypes="/(\.|\/)(jpe?g|png)$/" auto="true"/>
                             <p:outputLabel id="p" value="Documento subido: #{inscripcionController.documentos.estudianteExtencionPartida.split('¿¿')[0]}" />
                             <p:growl id="messagesp" showDetail="true" for="partida"/> 
 
                             <p:outputLabel value="Certificado de 9° Grado: " />
-                            <p:fileUpload fileUploadListener="#{inscripcionController.noveno}" mode="advanced"
+                            <p:fileUpload listener="#{inscripcionController.noveno}" mode="advanced"
                                           update="messagesc9 c9"  sizeLimit="10000000" label="Elejir" 
                                           allowTypes="/(\.|\/)(jpe?g|png)$/" auto="true"/>
                             <p:outputLabel id="c9" value="Documento subido: #{inscripcionController.documentos.estudianteExtencionCertificado.split('¿¿')[0]}" />
                             <p:growl id="messagesc9" showDetail="true" />
 
                             <p:outputLabel value="Constancia de conducta: " />
-                            <p:fileUpload fileUploadListener="#{inscripcionController.conducta}" mode="advanced"
+                            <p:fileUpload listener="#{inscripcionController.conducta}" mode="advanced"
                                           update="messagescc cc"  sizeLimit="10000000" label="Elejir"
                                           allowTypes="/(\.|\/)(jpe?g|png)$/" auto="true"/>
                             <p:outputLabel id="cc" value="Documento subido: #{inscripcionController.documentos.estudianteExtencionConducta.split('¿¿')[0]}" />
                             <p:growl id="messagescc" showDetail="true" />
 
                             <p:outputLabel value="Certificado de notas de bachillerato: " />
-                            <p:fileUpload fileUploadListener="#{inscripcionController.notas}" mode="advanced"
+                            <p:fileUpload listener="#{inscripcionController.notas}" mode="advanced"
                                           update="messagescn cn"  sizeLimit="10000000" label="Elejir"
                                           allowTypes="/(\.|\/)(jpe?g|png)$/" auto="true"/>
                             <p:outputLabel id="cn" value="Documento subido: #{inscripcionController.documentos.estudianteExtencionNotas.split('¿¿')[0]}" />
                             <p:growl id="messagescn" showDetail="true" />
 
                             <p:outputLabel value="Fotocopia de DUI: " />
-                            <p:fileUpload fileUploadListener="#{inscripcionController.dui}" mode="advanced"
+                            <p:fileUpload listener="#{inscripcionController.dui}" mode="advanced"
                                           update="messagesd d"  sizeLimit="10000000" label="Elejir"
                                           allowTypes="/(\.|\/)(jpe?g|png)$/" auto="true"/>
                             <p:outputLabel id="d" value="Documento subido: #{inscripcionController.documentos.estudianteExtencionDui.split('¿¿')[0]}" />

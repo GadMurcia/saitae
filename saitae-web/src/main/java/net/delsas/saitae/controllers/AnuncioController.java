@@ -220,7 +220,6 @@ public class AnuncioController extends Auxiliar implements Serializable {
         } else {
             anuncio.setAnuncioComentario(com);
             anuncioFL.edit(anuncio);
-            init();
             FacesContext.getCurrentInstance().addMessage(null, ms);
             PrimeFaces.current().executeScript("PF('Danuncio').hide()");
             PrimeFaces.current().ajax().update("form:tv", "da", "form0:msgs");
@@ -230,7 +229,8 @@ public class AnuncioController extends Auxiliar implements Serializable {
                     "perfil<form¿¿¿tp¿¿"
                     + (Optional.ofNullable(anuncio.getAnuncioTipoPersona())
                             .orElseGet(() -> new TipoPersona(0)))
-                            .getIdtipoPersona()).toString(), notificacion);
+                            .getIdtipoPersona()).toString(), notificacion);            
+            init();
         }
     }
 

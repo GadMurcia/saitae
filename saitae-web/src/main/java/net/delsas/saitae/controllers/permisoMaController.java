@@ -324,7 +324,7 @@ public class permisoMaController extends Auxiliar implements Serializable {
     }
 
     public void notas(FileUploadEvent f) {
-        constancia.setDocumento(f.getFile().getContents());
+        constancia.setDocumento(f.getFile().getContent());
         constancia.setExtención(f.getFile().getFileName() + "¿¿" + f.getFile().getContentType());
     }
 

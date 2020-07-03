@@ -82,7 +82,7 @@
 
                     <p:outputLabel value="Constancia: " />
                     <h:panelGrid columns="3">
-                        <p:fileUpload id="partida" fileUploadListener="#{permisoMaController.notas}" 
+                        <p:fileUpload id="partida" listener="#{permisoMaController.notas}" 
                                       mode="advanced" invalidSizeMessage="El archivo sobrepasa el límited de 1MB."
                                       invalidFileMessage="El archivo seleccionado no es válido"
                                       update="messagesp"  sizeLimit="1000000" label="Elejir"

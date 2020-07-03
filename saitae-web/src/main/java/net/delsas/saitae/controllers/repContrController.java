@@ -185,9 +185,8 @@ public class repContrController extends Auxiliar implements Serializable {
         });
         return moradores;
     }
-    
-    public void postProcesoXLS(Object doc){
-        HSSFWorkbook wb = (HSSFWorkbook) doc;
-        wb= new XLSModel().getReporteContribucion(wb, gSelected.getGradoPK());
+
+    public void postProcesoXLS(Object doc) {
+        HSSFWorkbook wb = new XLSModel().getReporteContribucion((HSSFWorkbook) doc, gSelected.getGradoPK());
     }
 }

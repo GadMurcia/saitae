@@ -20,10 +20,15 @@ import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+import javax.ejb.EJB;
+import net.delsas.saitae.beans.MaestoCargoFacadeLocal;
+import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.entities.Categoria;
 import net.delsas.saitae.entities.GradoPK;
 import net.delsas.saitae.entities.MaestoCargo;
 import net.delsas.saitae.entities.Matricula;
+import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.TipoCargo;
 import net.delsas.saitae.entities.TipoPermiso;
 import net.delsas.saitae.entities.TipoRecurso;
@@ -47,6 +52,7 @@ import org.apache.poi.ss.util.CellRangeAddress;
 public class XLSModel {
 
     private final Auxiliar ax = new Auxiliar();
+    HSSFCellStyle st;
 
     public XLSModel() {
     }
@@ -56,7 +62,7 @@ public class XLSModel {
         HSSFSheet hoja = doc.createSheet("Reporte de matricula");
         Integer[] vals;
 
-        HSSFCellStyle st = doc.createCellStyle();
+        st = doc.createCellStyle();
         st.setAlignment(HorizontalAlignment.CENTER);
         st.setVerticalAlignment(VerticalAlignment.CENTER);
         st.setWrapText(true);
@@ -106,10 +112,10 @@ public class XLSModel {
         f.setBold(true);
         f.setFontName("arial");
         f.setFontHeightInPoints((short) 12);
-        st.setBorderBottom(BorderStyle.MEDIUM);
-        st.setBorderTop(BorderStyle.MEDIUM);
-        st.setBorderLeft(BorderStyle.MEDIUM);
-        st.setBorderRight(BorderStyle.MEDIUM);
+        st.setBorderBottom(BorderStyle.THIN);
+        st.setBorderTop(BorderStyle.THIN);
+        st.setBorderLeft(BorderStyle.THIN);
+        st.setBorderRight(BorderStyle.THIN);
         st.setFont(f);
 
         r = hoja.createRow(9);
@@ -238,10 +244,10 @@ public class XLSModel {
         f0.setBold(true);
         f0.setFontName("arial");
         f0.setFontHeightInPoints((short) 13);
-        st0.setBorderBottom(BorderStyle.MEDIUM);
-        st0.setBorderTop(BorderStyle.MEDIUM);
-        st0.setBorderLeft(BorderStyle.MEDIUM);
-        st0.setBorderRight(BorderStyle.MEDIUM);
+        st0.setBorderBottom(BorderStyle.THIN);
+        st0.setBorderTop(BorderStyle.THIN);
+        st0.setBorderLeft(BorderStyle.THIN);
+        st0.setBorderRight(BorderStyle.THIN);
         st0.setFont(f0);
         int nr = hoja.getLastRowNum();
         for (ReporteMatricula rm : datos) {
@@ -253,10 +259,10 @@ public class XLSModel {
             st.setAlignment(HorizontalAlignment.LEFT);
             st.setVerticalAlignment(VerticalAlignment.CENTER);
             st.setWrapText(true);
-            st.setBorderBottom(BorderStyle.MEDIUM);
-            st.setBorderTop(BorderStyle.MEDIUM);
-            st.setBorderLeft(BorderStyle.MEDIUM);
-            st.setBorderRight(BorderStyle.MEDIUM);
+            st.setBorderBottom(BorderStyle.THIN);
+            st.setBorderTop(BorderStyle.THIN);
+            st.setBorderLeft(BorderStyle.THIN);
+            st.setBorderRight(BorderStyle.THIN);
 
             f = doc.createFont();
             f.setBold(true);
@@ -273,10 +279,10 @@ public class XLSModel {
                 st.setAlignment(HorizontalAlignment.CENTER);
                 st.setVerticalAlignment(VerticalAlignment.CENTER);
                 st.setWrapText(true);
-                st.setBorderBottom(BorderStyle.MEDIUM);
-                st.setBorderTop(BorderStyle.MEDIUM);
-                st.setBorderLeft(BorderStyle.MEDIUM);
-                st.setBorderRight(BorderStyle.MEDIUM);
+                st.setBorderBottom(BorderStyle.THIN);
+                st.setBorderTop(BorderStyle.THIN);
+                st.setBorderLeft(BorderStyle.THIN);
+                st.setBorderRight(BorderStyle.THIN);
                 nr++;
                 r = hoja.createRow(nr);
                 HSSFCell c0 = r.createCell(0);
@@ -453,7 +459,7 @@ public class XLSModel {
         wb.removeSheetAt(0);
         HSSFSheet h1 = wb.createSheet(ax.getGradoNombre(id));
 
-        HSSFCellStyle st = wb.createCellStyle();
+        st = wb.createCellStyle();
         st.setAlignment(HorizontalAlignment.CENTER);
         st.setVerticalAlignment(VerticalAlignment.CENTER);
         st.setWrapText(true);
@@ -472,10 +478,10 @@ public class XLSModel {
         st = wb.createCellStyle();
         st.setAlignment(HorizontalAlignment.CENTER);
         st.setVerticalAlignment(VerticalAlignment.CENTER);
-        st.setBorderTop(BorderStyle.MEDIUM);
-        st.setBorderBottom(BorderStyle.MEDIUM);
-        st.setBorderLeft(BorderStyle.MEDIUM);
-        st.setBorderRight(BorderStyle.MEDIUM);
+        st.setBorderTop(BorderStyle.THIN);
+        st.setBorderBottom(BorderStyle.THIN);
+        st.setBorderLeft(BorderStyle.THIN);
+        st.setBorderRight(BorderStyle.THIN);
         st.setWrapText(true);
         f = wb.createFont();
         f.setBold(true);
@@ -499,10 +505,10 @@ public class XLSModel {
         final HSSFCellStyle st0 = wb.createCellStyle();
         st0.setAlignment(HorizontalAlignment.LEFT);
         st0.setVerticalAlignment(VerticalAlignment.CENTER);
-        st0.setBorderTop(BorderStyle.MEDIUM);
-        st0.setBorderBottom(BorderStyle.MEDIUM);
-        st0.setBorderLeft(BorderStyle.MEDIUM);
-        st0.setBorderRight(BorderStyle.MEDIUM);
+        st0.setBorderTop(BorderStyle.THIN);
+        st0.setBorderBottom(BorderStyle.THIN);
+        st0.setBorderLeft(BorderStyle.THIN);
+        st0.setBorderRight(BorderStyle.THIN);
         st0.setWrapText(true);
         f = wb.createFont();
         f.setBold(false);
@@ -555,10 +561,10 @@ public class XLSModel {
                 HSSFCell c1 = r1.createCell(c0.getColumnIndex());
                 c1.setCellValue(c0.getStringCellValue());
                 c1.setCellStyle(c0.getCellStyle());
-                c1.getCellStyle().setBorderTop(BorderStyle.MEDIUM);
-                c1.getCellStyle().setBorderLeft(BorderStyle.MEDIUM);
-                c1.getCellStyle().setBorderRight(BorderStyle.MEDIUM);
-                c1.getCellStyle().setBorderBottom(BorderStyle.MEDIUM);
+                c1.getCellStyle().setBorderTop(BorderStyle.THIN);
+                c1.getCellStyle().setBorderLeft(BorderStyle.THIN);
+                c1.getCellStyle().setBorderRight(BorderStyle.THIN);
+                c1.getCellStyle().setBorderBottom(BorderStyle.THIN);
                 c1.getCellStyle().setWrapText(true);
                 c1.getCellStyle().setVerticalAlignment(VerticalAlignment.CENTER);
             });
@@ -566,17 +572,24 @@ public class XLSModel {
     }
 
     public HSSFWorkbook getReporteContribucion(HSSFWorkbook wb, GradoPK PK) {
-        proceso(wb, PK, "Listado de moradores del pago de la contribución para el grado", 2);
+        proceso(wb, PK, "Listado de moradores del pago de la contribución para el grado", 3);
+        HSSFSheet h = wb.getSheetAt(0);
+        int cw = h.getColumnWidth(0);
+        h.setColumnWidth(1, cw * 4);
+        h.setColumnWidth(2, cw * 2);
         return wb;
     }
 
     private void proceso(HSSFWorkbook wb, GradoPK pk, String nombre, int colM) {
-        HSSFSheet h = wb.createSheet(nombre);
+        HSSFSheet h = wb.createSheet(nombre.substring(0, nombre.length() / 3));
         HSSFRow r = h.createRow(0);
         HSSFCell c = r.createCell(0);
         c.setCellValue(nombre + " " + ax.getGradoNombre(pk));
+        c.getCellStyle().setAlignment(HorizontalAlignment.CENTER);
+        c.getCellStyle().getFont(wb).setBold(true);
+        c.getCellStyle().getFont(wb).setFontHeightInPoints((short) 14);
 
-        HSSFCellStyle st = wb.createCellStyle();
+        st = wb.createCellStyle();
         st.setAlignment(HorizontalAlignment.CENTER);
         st.setVerticalAlignment(VerticalAlignment.CENTER);
         st.setWrapText(true);
@@ -586,14 +599,12 @@ public class XLSModel {
         f.setFontHeightInPoints((short) 16);
         st.setFont(f);
 
-        h.createRow(1);
-
+        for (int i = 1; i < colM; i++) {
+            h.createRow(i);
+        }
         copiarDatos(h, wb);
 
         h.addMergedRegion(new CellRangeAddress(0, 1, 0, colM));
-        for (int i = 0; i <= colM; i++) {
-            h.setColumnWidth(i, 10000);
-        }
         wb.removeSheetAt(0);
     }
 
@@ -676,11 +687,13 @@ public class XLSModel {
         return wb;
     }
 
-    public HSSFWorkbook getReportePermisos(List<ReportePermisos> rpListGoce, HSSFWorkbook wb, List<TipoPermiso> tpermisos) {
+    public HSSFWorkbook getReportePermisos(List<ReportePermisos> rpListGoce, HSSFWorkbook wb, List<TipoPermiso> tpermisos, MaestoCargoFacadeLocal mcFL, PersonaFacadeLocal pFL) {
         wb.removeSheetAt(0);
         HSSFSheet h = wb.createSheet("Reporte Permisos");
+        Integer tp = rpListGoce.get(0).getPermiso().getTipoPersona().getIdtipoPersona();
+        boolean esEstudiante = tp.equals(8);
 
-        HSSFCellStyle st = wb.createCellStyle();
+        st = wb.createCellStyle();
         st.setAlignment(HorizontalAlignment.CENTER);
         st.setWrapText(true);
         st.setVerticalAlignment(VerticalAlignment.CENTER);
@@ -688,10 +701,10 @@ public class XLSModel {
 //        f.setBold(true);
         f.setFontName("Courier 10 Pitch");
         f.setFontHeightInPoints((short) 10);
-        st.setBorderBottom(BorderStyle.MEDIUM);
-        st.setBorderTop(BorderStyle.MEDIUM);
-        st.setBorderLeft(BorderStyle.MEDIUM);
-        st.setBorderRight(BorderStyle.MEDIUM);
+        st.setBorderBottom(BorderStyle.THIN);
+        st.setBorderTop(BorderStyle.THIN);
+        st.setBorderLeft(BorderStyle.THIN);
+        st.setBorderRight(BorderStyle.THIN);
         st.setFont(f);
 
         HSSFCellStyle st1 = wb.createCellStyle();
@@ -708,7 +721,7 @@ public class XLSModel {
         c.setCellValue("INSTITUTO NACIONAL TEXISTEPEQUE");
         c.setCellStyle(st1);
         c.getCellStyle().setAlignment(HorizontalAlignment.CENTER);
-        h.addMergedRegion(new CellRangeAddress(1, 1, 0, tpermisos.size() * 3 + 5));
+        h.addMergedRegion(new CellRangeAddress(1, 1, 0, tpermisos.size() * 3 + (esEstudiante ? 3 : 5)));
 
         r = h.createRow(2);
         c = r.createCell(0);
@@ -719,16 +732,19 @@ public class XLSModel {
         c = r.createCell(tpermisos.size() * 3 + 1);
         String cargo = rpListGoce.get(0).getPermiso().getPersona().getTipoPersona().getTipoPersonaNombre();
 
-        if (rpListGoce.get(0).getPermiso().getPersona().getTipoPersona().getIdtipoPersona() == 4) {
+        if (tp.equals(4)) {
             cargo = "";
-            for (MaestoCargo mc : rpListGoce.get(0).getPermiso().getPersona().getMaestro().getMaestoCargoList()) {
+            Persona p = Optional
+                    .ofNullable(pFL.find(rpListGoce.get(0).getPermiso().getPersona().getIdpersona()))
+                    .orElseGet(() -> rpListGoce.get(0).getPermiso().getPersona());
+            for (MaestoCargo mc : mcFL.getMaestroCargoByIdMaestro(p.getIdpersona())) {
                 cargo = (!cargo.isEmpty() ? ", " : "") + mc.getCargo().getCargoNombre();
             }
         }
 
-        c.setCellValue("CARGO: " + cargo);
+        c.setCellValue((esEstudiante ? "" : "CARGO: ") + cargo);
         c.setCellStyle(st1);
-        h.addMergedRegion(new CellRangeAddress(2, 2, tpermisos.size() * 3 + 1, tpermisos.size() * 3 + 5));
+        h.addMergedRegion(new CellRangeAddress(2, 2, tpermisos.size() * 3 + 1, tpermisos.size() * 3 + (esEstudiante ? 3 : 5)));
 
         if (rpListGoce.get(0).getPermiso().getPersona().getTipoPersona().getIdtipoPersona() == 4) {
             c = r.createCell(((int) (tpermisos.size() / 2)) * 3 + 1);
@@ -753,23 +769,25 @@ public class XLSModel {
         c.setCellValue("FECHA");
 
         c = r.createCell(1);
-        c.setCellValue("LICENCIAS CON GOCE DE SUELDO");
+        c.setCellValue(esEstudiante ? "PERMISOS SOLICITADOS" : "LICENCIAS CON GOCE DE SUELDO");
 
-        c = r.createCell(tpermisos.size() * 3 + 1);
-        c.setCellValue("Licencias sin goce de sueldo");
+        if (!esEstudiante) {
+            c = r.createCell(tpermisos.size() * 3 + 1);
+            c.setCellValue("Licencias sin goce de sueldo");
+        }
 
-        c = r.createCell(tpermisos.size() * 3 + 3);
+        c = r.createCell(tpermisos.size() * 3 + (esEstudiante ? 1 : 3));
         c.setCellValue("Inasistencias injustificadas");
 
-        c = r.createCell(tpermisos.size() * 3 + 4);
+        c = r.createCell(tpermisos.size() * 3 + (esEstudiante ? 2 : 4));
         c.setCellValue("Llegadas tarde o retiros antes de la hora");
 
         r = h.createRow(5);
         HSSFRow r2 = h.createRow(6);
-        for (TipoPermiso tp : tpermisos) {
-            int i = tpermisos.indexOf(tp) * 3 + 1;
+        for (TipoPermiso tps : tpermisos) {
+            int i = tpermisos.indexOf(tps) * 3 + 1;
             c = r.createCell(i);
-            c.setCellValue(tp.getTipoPermisoNombre());
+            c.setCellValue(tps.getTipoPermisoNombre());
 
             c = r2.createCell(i);
             c.setCellValue("Días");
@@ -778,34 +796,39 @@ public class XLSModel {
             c.setCellValue("Horas");
 
             c = r2.createCell(i + 2);
-            c.setCellValue("Saldo (" + tp.getTipoPermisoDiasMes() + " días)");
+            c.setCellValue("Saldo (" + tps.getTipoPermisoDiasMes() + " días)");
 
             h.addMergedRegion(new CellRangeAddress(5, 5, i, i + 2));
         }
-        c = r2.createCell(tpermisos.size() * 3 + 1);
+        if (!esEstudiante) {
+            c = r2.createCell(tpermisos.size() * 3 + 1);
+            c.setCellValue("Días");
+
+            c = r2.createCell(tpermisos.size() * 3 + 2);
+            c.setCellValue("Horas");
+        }
+
+        c = r2.createCell(tpermisos.size() * 3 + (esEstudiante ? 1 : 3));
         c.setCellValue("Días");
 
-        c = r2.createCell(tpermisos.size() * 3 + 2);
-        c.setCellValue("Horas");
-
-        c = r2.createCell(tpermisos.size() * 3 + 3);
-        c.setCellValue("Días");
-
-        c = r2.createCell(tpermisos.size() * 3 + 4);
+        c = r2.createCell(tpermisos.size() * 3 + (esEstudiante ? 2 : 4));
         c.setCellValue("Horas Mañana");
 
-        c = r2.createCell(tpermisos.size() * 3 + 5);
+        c = r2.createCell(tpermisos.size() * 3 + (esEstudiante ? 3 : 5));
         c.setCellValue("Horas Tarde");
 
         h.addMergedRegion(new CellRangeAddress(4, 6, 0, 0));
         h.addMergedRegion(new CellRangeAddress(4, 4, 1, tpermisos.size() * 3));
-        h.addMergedRegion(new CellRangeAddress(4, 5, tpermisos.size() * 3 + 1, tpermisos.size() * 3 + 2));
-        h.addMergedRegion(new CellRangeAddress(4, 5, tpermisos.size() * 3 + 3, tpermisos.size() * 3 + 3));
-        h.addMergedRegion(new CellRangeAddress(4, 5, tpermisos.size() * 3 + 4, tpermisos.size() * 3 + 5));
+        if (!esEstudiante) {
+            h.addMergedRegion(new CellRangeAddress(4, 5, tpermisos.size() * 3 + 1, tpermisos.size() * 3 + 2));
+        }
+        h.addMergedRegion(new CellRangeAddress(4, 5, tpermisos.size() * 3 + (esEstudiante ? 1 : 3), tpermisos.size() * 3 + (esEstudiante ? 1 : 3)));
+        h.addMergedRegion(new CellRangeAddress(4, 5, tpermisos.size() * 3 + (esEstudiante ? 2 : 4), tpermisos.size() * 3 + (esEstudiante ? 3 : 5)));
 
         int y = 7;
         for (ReportePermisos rp : rpListGoce) {
             r = h.createRow(y);
+            rp.setConGoce(esEstudiante ? true : rp.isConGoce());
             int i = rp.isConGoce() ? tpermisos.indexOf(rp.getPermiso().getTipoPermiso1()) * 3 + 1 : tpermisos.size() * 3 + 1;
 
             c = r.createCell(0);
@@ -826,11 +849,21 @@ public class XLSModel {
         }
 
         for (int m = 4; m <= h.getLastRowNum(); m++) {
-            h.getRow(m).forEach(c0 -> {
-                c0.setCellStyle(st);
-            });
+            HSSFRow ñ = h.getRow(m);
+            for (int n = 0; n <= tpermisos.size() * 3 + (esEstudiante ? 3 : 5); n++) {
+                final int g = n;
+                Optional.ofNullable(ñ.getCell(g)).orElseGet(() -> ñ.createCell(g)).setCellStyle(st);
+            }
         }
-
+        h.iterator().forEachRemaining(ro -> ro.forEach(ce -> ce.getCellStyle().setWrapText(true)));
+        float alt = h.getRow(2).getHeightInPoints();
+        h.getRow(2).setHeightInPoints(alt * 3);
+        h.getRow(5).setHeightInPoints(alt * 3);
+        h.getRow(6).setHeightInPoints(alt * 3);
+        int anc = h.getColumnWidth(0);
+        h.setColumnWidth(0, anc * 2);
+        h.setColumnWidth(tpermisos.size() * 3 + (esEstudiante ? 1 : 3), anc * 2);
+        h.setZoom(esEstudiante ? 100 : 70, 100);
         return wb;
     }
 

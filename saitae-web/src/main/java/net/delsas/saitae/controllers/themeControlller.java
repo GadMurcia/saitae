@@ -39,7 +39,7 @@ public class themeControlller implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private String tema = "hot-sneaks";
+    private String tema = "luna-amber";
     private Map<String, String> themes;
     private Persona usuario;
     @EJB
@@ -52,13 +52,13 @@ public class themeControlller implements Serializable {
         if (usuario != null) {
             Tema t = tFL.find(usuario.getIdpersona());
             existe = t != null;
-            tema = existe ? t.getTemaNombre() : "hot-sneaks";
+            tema = existe ? t.getTemaNombre() : tema;
         }
     }
 
     public Map<String, String> getThemes() {
         themes = new TreeMap<>();
-        themes.put("Predeterminado", "hot-sneaks");
+        themes.put("Predeterminado", "excite-bike");
         themes.put("Aristo", "aristo");
         themes.put("Black Tie", "black-tie");
 //        themes.put("Blitzer", "blitzer");

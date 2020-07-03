@@ -5,6 +5,8 @@
  */
 package net.delsas.saitae.beans;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -69,19 +71,33 @@ public class CitaPsicologiaFacade extends AbstractFacade<CitaPsicologia> impleme
 
     @Override
     public Integer countSolicitadas(Date fi, Date ff, Integer id) {
+        Date f = formatearFEchas(ff, 1), i = formatearFEchas(fi, 0);
         return new Integer(em.createNamedQuery("CitaPsicologia.countSolicitadas")
-                .setParameter("ff", ff)
-                .setParameter("fi", fi)
+                .setParameter("ff", f)
+                .setParameter("fi", i)
                 .setParameter("id", id)
                 .getSingleResult().toString());
     }
 
     @Override
     public Integer countConsultadas(Date fi, Date ff, Integer id) {
+        Date f = formatearFEchas(ff, 1), i = formatearFEchas(fi, 0);
         return new Integer(em.createNamedQuery("CitaPsicologia.countConsultadas")
-                .setParameter("ff", ff)
-                .setParameter("fi", fi)
+                .setParameter("ff", f)
+                .setParameter("fi", i)
                 .setParameter("id", id)
                 .getSingleResult().toString());
+    }
+
+    private Date formatearFEchas(Date a, int m) {
+        Date i;
+        try {
+            i = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
+                    .parse(new SimpleDateFormat("dd/MM/yyyy").format(a)
+                            + (m == 1 ? " 23:59:59" : " 00:00:00"));
+        } catch (ParseException ex) {
+            i = a;
+        }
+        return i;
     }
 }

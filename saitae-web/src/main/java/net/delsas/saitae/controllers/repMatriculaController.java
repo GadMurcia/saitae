@@ -109,10 +109,9 @@ public class repMatriculaController extends Auxiliar implements Serializable {
     }
 
     public void postProcessXLSp(Object document) {
-        HSSFWorkbook wb = (HSSFWorkbook) document;
         ExternalContext ex = FacesContext.getCurrentInstance().getExternalContext();
         String logo = ex.getRealPath("") + File.separator + "resources" + File.separator + "img" + File.separator;
-        wb = new XLSModel().getReporteMAtricula(wb, datos, logo);
+        HSSFWorkbook wb = new XLSModel().getReporteMAtricula((HSSFWorkbook) document, datos, logo);
 
         List<Persona> directores = pFL.findByIdTipo(2);
         if (!directores.isEmpty()) {
@@ -141,6 +140,7 @@ public class repMatriculaController extends Auxiliar implements Serializable {
             s.addMergedRegion(new CellRangeAddress(nr + 2, nr + 2, 1, 7));
             s.addMergedRegion(new CellRangeAddress(nr + 1, nr + 1, 1, 7));
             s.addMergedRegion(new CellRangeAddress(nr, nr, 1, 7));
+            s.setZoom(75, 100);
         }
     }
 

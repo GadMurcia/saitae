@@ -46,8 +46,7 @@ import net.delsas.saitae.entities.MatriculaPK;
 import net.delsas.saitae.entities.Persona;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.primefaces.event.FileUploadEvent;
-import org.primefaces.event.FlowEvent;
-import org.primefaces.model.UploadedFile;
+import org.primefaces.model.file.UploadedFile;
 
 /**
  *
@@ -204,7 +203,7 @@ public class inscripcionController extends Auxiliar implements Serializable {
     }
     
     public void partida(FileUploadEvent event) {
-        this.doc.setEstudianteDocPartida(event.getFile().getContents());
+        this.doc.setEstudianteDocPartida(event.getFile().getContent());
         this.doc.setEstudianteExtencionPartida(this.getExtencion(event.getFile()));
     }
     
@@ -213,22 +212,22 @@ public class inscripcionController extends Auxiliar implements Serializable {
     }
     
     public void noveno(FileUploadEvent event) {
-        this.doc.setEstudianteDocCertificado(event.getFile().getContents());
+        this.doc.setEstudianteDocCertificado(event.getFile().getContent());
         this.doc.setEstudianteExtencionCertificado(this.getExtencion(event.getFile()));
     }
     
     public void conducta(FileUploadEvent event) {
-        this.doc.setEstudianteDocConducta(event.getFile().getContents());
+        this.doc.setEstudianteDocConducta(event.getFile().getContent());
         this.doc.setEstudianteExtencionConducta(this.getExtencion(event.getFile()));
     }
     
     public void dui(FileUploadEvent event) {
-        this.doc.setEstudianteDocDui(event.getFile().getContents());
+        this.doc.setEstudianteDocDui(event.getFile().getContent());
         this.doc.setEstudianteExtencionDui(this.getExtencion(event.getFile()));
     }
     
     public void notas(FileUploadEvent event) {
-        this.doc.setEstudianteDocNotas(event.getFile().getContents());
+        this.doc.setEstudianteDocNotas(event.getFile().getContent());
         this.doc.setEstudianteExtencionNotas(this.getExtencion(event.getFile()));
     }
     

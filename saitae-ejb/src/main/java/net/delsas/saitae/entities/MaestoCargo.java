@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "MaestoCargo.findAll", query = "SELECT m FROM MaestoCargo m")
-    , @NamedQuery(name = "MaestoCargo.findByIdMaesto", query = "SELECT m FROM MaestoCargo m WHERE m.maestoCargoPK.idMaesto = :idMaesto")
+    , @NamedQuery(name = "MaestoCargo.findByIdMaesto", query = "SELECT m FROM MaestoCargo m WHERE m.maestro.idmaestro = :idMaesto")
     , @NamedQuery(name = "MaestoCargo.findByIdCargo", query = "SELECT m FROM MaestoCargo m WHERE m.maestoCargoPK.idCargo = :idCargo")
     , @NamedQuery(name = "MaestoCargo.findByIdNombramiento", query = "SELECT m FROM MaestoCargo m WHERE m.maestoCargoPK.idNombramiento = :idNombramiento")
     , @NamedQuery(name = "MaestoCargo.findByIdFinanciamiento", query = "SELECT m FROM MaestoCargo m WHERE m.maestoCargoPK.idFinanciamiento = :idFinanciamiento")

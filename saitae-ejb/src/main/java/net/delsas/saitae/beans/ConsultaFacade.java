@@ -5,8 +5,12 @@
  */
 package net.delsas.saitae.beans;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -33,19 +37,33 @@ public class ConsultaFacade extends AbstractFacade<Consulta> implements Consulta
 
     @Override
     public List<String> findMotivosByConsulta(Date fi, Date ff, Integer id) {
+        Date f = formatearFEchas(ff, 1), i = formatearFEchas(fi, 0);
         return em.createNamedQuery("Consulta.findMotivosByConsulta")
-                .setParameter("fi", fi)
-                .setParameter("ff", ff)
+                .setParameter("fi", i)
+                .setParameter("ff", f)
                 .setParameter("id", id)
                 .getResultList();
     }
-    
+
     @Override
     public List<Integer> findIdEstudianteByPeriodo(Date fi, Date ff) {
+        Date f = formatearFEchas(ff, 1), i = formatearFEchas(fi, 0);
         return em.createNamedQuery("Consulta.findIdEstudianteByPeriodo")
-                .setParameter("fi", fi)
-                .setParameter("ff", ff)
+                .setParameter("fi", i)
+                .setParameter("ff", f)
                 .getResultList();
+    }
+
+    private Date formatearFEchas(Date a, int m) {
+        Date i;
+        try {
+            i = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
+                    .parse(new SimpleDateFormat("dd/MM/yyyy").format(a)
+                            + (m == 1 ? " 23:59:59" : " 00:00:00"));
+        } catch (ParseException ex) {
+            i = a;
+        }
+        return i;
     }
 
 }

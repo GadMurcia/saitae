@@ -107,7 +107,7 @@ public class RepPSController extends Auxiliar implements Serializable {
     private PeriodoReportePsicologia periodoNPSel;
     private Date fechaInicio;
     private Date fechaFin;
-    private boolean estado;
+    private boolean estado, puedeEditar;
     private Persona usuario;
     private String pagina;
     private String motivos = "";
@@ -547,4 +547,13 @@ public class RepPSController extends Auxiliar implements Serializable {
         st.setFont(f);
         return st;
     }
+
+    public boolean isPuedeEditar() {
+        return puedeEditar;
+    }
+
+    public void setPuedeEditar(boolean puedeEditar) {
+        this.puedeEditar = puedeEditar;
+    }
+
 }

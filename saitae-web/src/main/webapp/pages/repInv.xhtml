@@ -9,9 +9,9 @@
 
     <ui:define name="content">
         <h:form id="form">
-            <h:panelGrid columns="1">
-                <h1 align="center">Inventarios</h1>
-                <h:panelGrid columns="2">
+            <h:panelGrid columns="1" style="margin: 0 auto">
+                <h1 align="center">Reporte de inventario</h1>
+                <h:panelGrid columns="2" style="margin: 0 auto">
                     <p:outputLabel for="gr" value="Tipo de recurso: "/>
                     <p:selectOneMenu id="gr" value="#{repInvController.trSelected}"
                                      converter="omnifaces.SelectItemsConverter">
@@ -34,7 +34,6 @@
                         <h:outputText value="Valor total estimado: $#{repInvController.totalGeneral}"/>
                     </f:facet>
                     <p:column headerText="Cargo" width="5%"
-                              rendered="#{repInvController.trSelected.idtipoRecurso==3}"
                               filterBy="1-#{r.tipoCargo.idtipoCargo}">
                         <h:outputText value="1-#{r.tipoCargo.idtipoCargo}" />
                     </p:column>
@@ -49,18 +48,15 @@
                         <h:outputText value="#{r.nombre}"/>
                     </p:column>
                     <p:column headerText="Autor"
-                              filterBy="#{repInvController.getAutores(r.autorLibroList)}"
-                              rendered="#{repInvController.trSelected.idtipoRecurso==3}">
+                              filterBy="#{repInvController.getAutores(r.autorLibroList)}">
                         <h:outputText value="#{repInvController.getAutores(r.autorLibroList)}"/>
                     </p:column>
                     <p:column headerText="Editorial"
-                              filterBy="#{repInvController.getEditoriales(r.editorialLibroList)}"
-                              rendered="#{repInvController.trSelected.idtipoRecurso==3}">
+                              filterBy="#{repInvController.getEditoriales(r.editorialLibroList)}">
                         <h:outputText value="#{repInvController.getEditoriales(r.editorialLibroList)}"/>
                     </p:column>
                     <p:column headerText="País"
-                              filterBy="#{r.pais.paisNombre}"
-                              rendered="#{repInvController.trSelected.idtipoRecurso==3}">
+                              filterBy="#{r.pais.paisNombre}">
                         <h:outputText value="#{r.pais.paisNombre}"/>
                     </p:column>
                     <p:column headerText="Estado Físico"  width="8%"
