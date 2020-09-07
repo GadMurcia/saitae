@@ -251,7 +251,7 @@ public class sessionController extends Auxiliar implements Serializable {
     public void escucha() {
         try {
             mensaje m = new mensaje(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("mss"));
-            System.out.println(m.toString());
+            //System.out.println(m.toString());
             String[] ac0 = m.getCadenaAccion().split("¿¿¿")[0].split("<<");
             String[] tp0 = m.getCadenaAccion().split("¿¿¿").length > 1
                     ? m.getCadenaAccion().split("¿¿¿")[1].split("¿¿") : new String[]{};

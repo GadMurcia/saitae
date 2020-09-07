@@ -53,10 +53,9 @@ public class ayudaController implements Serializable {
     public void init() {
         accesos = new ArrayList<>();
         videos = new ArrayList<>();
-        Selected = new Acceso(0, "Introducción a SAITAE", "#");
-        Selected.setYouTubeUrl("zu4mpRJzd58");
-        accesos.add(Selected);
-        onSelectTutorial(null);
+//        Selected = new Acceso(0, "Introducción a SAITAE", "#");
+//        Selected.setYouTubeUrl("zu4mpRJzd58");
+//        accesos.add(Selected);
         try {
             FacesContext context = FacesContext.getCurrentInstance();
             us = (Persona) context.getExternalContext().getSessionMap().get("usuario");
@@ -87,9 +86,13 @@ public class ayudaController implements Serializable {
                     && !accesos.contains(z))
                     .forEachOrdered(c -> {
                         Acceso b = new Acceso(c.getIdacceso());
-                        b.setAccesoNombre(c.getAccesoIndice().getAccesoNombre() + " - " + c.getAccesoNombre());
+                        b.setAccesoNombre(((c.getIdacceso() != 1) ? c.getAccesoIndice().getAccesoNombre() + " - " : "") + c.getAccesoNombre());
                         b.setYouTubeUrl(c.getYouTubeUrl());
                         accesos.add(b);
+                        if (c.getIdacceso() == 1) {
+                            Selected = b;
+                            onSelectTutorial(null);
+                        }
                     });
         });
         Collections.sort(accesos, (Acceso a0, Acceso a1) -> {
