@@ -131,12 +131,11 @@ public class adminReservas extends Auxiliar implements Serializable {
     }
 
     public List<Reserva> getSolicitados() {
-        solicitados = tipos.contains(1) || tipos.contains(2)
-                ? resFL.getReservaByEstado("S", añoSelected)
-                : resFL.findByEstadoAndIdTipoRecurso("S",
-                        (tipos.contains(5) ? 3
-                        : (tipos.contains(6) ? 1
-                        : (tipos.contains(7) ? 2 : 0))), añoSelected);
+        solicitados = tipos.contains(1) || tipos.contains(2) ? resFL.getReservaByEstado("S", añoSelected) : new ArrayList<>();
+        solicitados.addAll(resFL.findByEstadoAndIdTipoRecurso("S", (tipos.contains(5) ? 3 : 0), añoSelected));
+        solicitados.addAll(resFL.findByEstadoAndIdTipoRecurso("S", (tipos.contains(6) ? 1 : 0), añoSelected));
+        solicitados.addAll(resFL.findByEstadoAndIdTipoRecurso("S", (tipos.contains(7) ? 2 : 0), añoSelected));
+        //llenarReservas(solicitados, "S", añoSelected);
         solicitados.stream().map((s) -> {
             s.setSolicitudReservaList(srFL.findByIdReserva(s.getIdreserva()));
             return s;
@@ -147,12 +146,11 @@ public class adminReservas extends Auxiliar implements Serializable {
     }
 
     public List<Reserva> getEntregados() {
-        entregados = tipos.contains(1) || tipos.contains(2)
-                ? resFL.getReservaByEstado("E", añoSelected)
-                : resFL.findByEstadoAndIdTipoRecurso("E",
-                        (tipos.contains(5) ? 3
-                        : (tipos.contains(6) ? 1
-                        : (tipos.contains(7) ? 2 : 0))), añoSelected);
+        entregados = tipos.contains(1) || tipos.contains(2) ? resFL.getReservaByEstado("E", añoSelected) : new ArrayList<>();
+        entregados.addAll(resFL.findByEstadoAndIdTipoRecurso("E", (tipos.contains(5) ? 3 : 0), añoSelected));
+        entregados.addAll(resFL.findByEstadoAndIdTipoRecurso("E", (tipos.contains(6) ? 1 : 0), añoSelected));
+        entregados.addAll(resFL.findByEstadoAndIdTipoRecurso("E", (tipos.contains(7) ? 2 : 0), añoSelected));
+        llenarReservas(entregados, "E", añoSelected);
         entregados.stream().map((s) -> {
             s.setSolicitudReservaList(srFL.findByIdReserva(s.getIdreserva()));
             return s;
@@ -163,12 +161,11 @@ public class adminReservas extends Auxiliar implements Serializable {
     }
 
     public List<Reserva> getDevueltos() {
-        devueltos = tipos.contains(1) || tipos.contains(2)
-                ? resFL.getReservaByEstado("D", añoSelected)
-                : resFL.findByEstadoAndIdTipoRecurso("D",
-                        (tipos.contains(5) ? 3
-                        : (tipos.contains(6) ? 1
-                        : (tipos.contains(7) ? 2 : 0))), añoSelected);
+        devueltos = tipos.contains(1) || tipos.contains(2) ? resFL.getReservaByEstado("D", añoSelected) : new ArrayList<>();
+        devueltos.addAll(resFL.findByEstadoAndIdTipoRecurso("D", (tipos.contains(5) ? 3 : 0), añoSelected));
+        devueltos.addAll(resFL.findByEstadoAndIdTipoRecurso("D", (tipos.contains(6) ? 1 : 0), añoSelected));
+        devueltos.addAll(resFL.findByEstadoAndIdTipoRecurso("D", (tipos.contains(7) ? 2 : 0), añoSelected));
+        //llenarReservas(devueltos, "D", añoSelected);
         devueltos.stream().map((s) -> {
             s.setSolicitudReservaList(srFL.findByIdReserva(s.getIdreserva()));
             return s;
@@ -179,12 +176,11 @@ public class adminReservas extends Auxiliar implements Serializable {
     }
 
     public List<Reserva> getRechazados() {
-        rechazados = tipos.contains(1) || tipos.contains(2)
-                ? resFL.getReservaByEstado("R", añoSelected)
-                : resFL.findByEstadoAndIdTipoRecurso("R",
-                        (tipos.contains(5) ? 3
-                        : (tipos.contains(6) ? 1
-                        : (tipos.contains(7) ? 2 : 0))), añoSelected);
+        rechazados = tipos.contains(1) || tipos.contains(2) ? resFL.getReservaByEstado("R", añoSelected) : new ArrayList<>();
+        rechazados.addAll(resFL.findByEstadoAndIdTipoRecurso("R", (tipos.contains(5) ? 3 : 0), añoSelected));
+        rechazados.addAll(resFL.findByEstadoAndIdTipoRecurso("R", (tipos.contains(6) ? 1 : 0), añoSelected));
+        rechazados.addAll(resFL.findByEstadoAndIdTipoRecurso("R", (tipos.contains(7) ? 2 : 0), añoSelected));
+        //llenarReservas(rechazados, "R", añoSelected);
         rechazados.stream().map((s) -> {
             s.setSolicitudReservaList(srFL.findByIdReserva(s.getIdreserva()));
             return s;
@@ -203,12 +199,11 @@ public class adminReservas extends Auxiliar implements Serializable {
     }
 
     public List<Reserva> getCancelados() {
-        cancelados = tipos.contains(1) || tipos.contains(2)
-                ? resFL.getReservaByEstado("C", añoSelected)
-                : resFL.findByEstadoAndIdTipoRecurso("C",
-                        (tipos.contains(5) ? 3
-                        : (tipos.contains(6) ? 1
-                        : (tipos.contains(7) ? 2 : 0))), añoSelected);
+        cancelados = tipos.contains(1) || tipos.contains(2) ? resFL.getReservaByEstado("C", añoSelected) : new ArrayList<>();
+        cancelados.addAll(resFL.findByEstadoAndIdTipoRecurso("C", (tipos.contains(5) ? 3 : 0), añoSelected));
+        cancelados.addAll(resFL.findByEstadoAndIdTipoRecurso("C", (tipos.contains(6) ? 1 : 0), añoSelected));
+        cancelados.addAll(resFL.findByEstadoAndIdTipoRecurso("C", (tipos.contains(7) ? 2 : 0), añoSelected));
+        //llenarReservas(cancelados, "C", añoSelected);
         cancelados.stream().map((s) -> {
             s.setSolicitudReservaList(srFL.findByIdReserva(s.getIdreserva()));
             return s;
@@ -219,12 +214,10 @@ public class adminReservas extends Auxiliar implements Serializable {
     }
 
     public List<Reserva> getAceptados() {
-        aceptados = tipos.contains(1) || tipos.contains(2)
-                ? resFL.getReservaByEstado("A", añoSelected)
-                : resFL.findByEstadoAndIdTipoRecurso("A",
-                        (tipos.contains(5) ? 3
-                        : (tipos.contains(6) ? 1
-                        : (tipos.contains(7) ? 2 : 0))), añoSelected);
+        aceptados = tipos.contains(1) || tipos.contains(2) ? resFL.getReservaByEstado("A", añoSelected) : new ArrayList<>();
+        aceptados.addAll(resFL.findByEstadoAndIdTipoRecurso("A", (tipos.contains(5) ? 3 : 0), añoSelected));
+        aceptados.addAll(resFL.findByEstadoAndIdTipoRecurso("A", (tipos.contains(6) ? 1 : 0), añoSelected));
+        aceptados.addAll(resFL.findByEstadoAndIdTipoRecurso("A", (tipos.contains(7) ? 2 : 0), añoSelected));
         aceptados.stream().map((s) -> {
             s.setSolicitudReservaList(srFL.findByIdReserva(s.getIdreserva()));
             return s;
@@ -251,8 +244,8 @@ public class adminReservas extends Auxiliar implements Serializable {
             proyecto = null;
         }
         procesoDetalle();
-        rechazo = false;
-        textoReserva = getEstadoCita1(selected.getReservaEstado());
+        rechazo = selected.getReservaEstado().equalsIgnoreCase("R");
+        setTextoReserva(getEstadoReservas1(selected.getReservaEstado()));
     }
 
     public String getTextoReserva() {
@@ -436,7 +429,10 @@ public class adminReservas extends Auxiliar implements Serializable {
     }
 
     public boolean isadmin() {
-        return (tipos.contains(1) || tipos.contains(2));
+        return (tipos.contains(1) || tipos.contains(2)
+                || (tipos.contains(5) && tipos.contains(6))
+                || (tipos.contains(5) && tipos.contains(7))
+                || (tipos.contains(6) && tipos.contains(7)));
     }
 
     public String getTipoRecurso(Reserva r) {
@@ -724,8 +720,8 @@ public class adminReservas extends Auxiliar implements Serializable {
             context.getExternalContext().redirect("solicitudRPP.intex");
         } catch (IOException ex) {
         }
-    }    
-    
+    }
+
     public List<Integer> getAñosDisponibles() {
         return añosDisponibles;
     }
@@ -740,6 +736,13 @@ public class adminReservas extends Auxiliar implements Serializable {
 
     public void setAñoSelected(Integer añoSelected) {
         this.añoSelected = añoSelected;
+    }
+
+    private void llenarReservas(List<Reserva> res, String est, Integer año) {
+        res = tipos.contains(1) || tipos.contains(2) ? resFL.getReservaByEstado(est, año) : new ArrayList<>();
+        res.addAll(resFL.findByEstadoAndIdTipoRecurso(est, (tipos.contains(5) ? 3 : 0), año));
+        res.addAll(resFL.findByEstadoAndIdTipoRecurso(est, (tipos.contains(6) ? 1 : 0), año));
+        res.addAll(resFL.findByEstadoAndIdTipoRecurso(est, (tipos.contains(7) ? 2 : 0), año));
     }
 
 }

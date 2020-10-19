@@ -406,7 +406,7 @@
                     <h:panelGrid columns="2">
                         <p:outputLabel value="Partida de Nacimiento: " />
                         <h:panelGrid columns="3">
-                            <p:fileUpload id="partida" fileUploadListener="#{infoPerfilController.partida}"
+                            <p:fileUpload id="partida" listener="#{infoPerfilController.partida}"
                                           mode="advanced" invalidSizeMessage="El archivo sobrepasa el límited de 1MB."
                                           invalidFileMessage="El archivo seleccionado no es válido"
                                           update="messagesp0 btnV0"  sizeLimit="1000000" label="Elejir"
@@ -419,7 +419,7 @@
 
                         <p:outputLabel value="Certificado 9° grado: " />
                         <h:panelGrid columns="3">
-                            <p:fileUpload id="nov" fileUploadListener="#{infoPerfilController.certificado}"
+                            <p:fileUpload id="nov" listener="#{infoPerfilController.certificado}"
                                           mode="advanced" invalidSizeMessage="El archivo sobrepasa el límited de 1MB."
                                           invalidFileMessage="El archivo seleccionado no es válido"
                                           update="messagesp1 btnV1"  sizeLimit="1000000" label="Elejir"
@@ -432,7 +432,7 @@
 
                         <p:outputLabel value="Constancia de conducta: " />
                         <h:panelGrid columns="3">
-                            <p:fileUpload id="con" fileUploadListener="#{infoPerfilController.conducta}"
+                            <p:fileUpload id="con"  listener="#{infoPerfilController.conducta}"
                                           mode="advanced" invalidSizeMessage="El archivo sobrepasa el límited de 1MB."
                                           invalidFileMessage="El archivo seleccionado no es válido"
                                           update="messagesp2 btnV2"  sizeLimit="1000000" label="Elejir"
@@ -445,7 +445,7 @@
 
                         <p:outputLabel value="Copia de DUI: " />
                         <h:panelGrid columns="3">
-                            <p:fileUpload id="duis" fileUploadListener="#{infoPerfilController.dui}"
+                            <p:fileUpload id="duis" listener="#{infoPerfilController.dui}"
                                           mode="advanced" invalidSizeMessage="El archivo sobrepasa el límited de 1MB."
                                           invalidFileMessage="El archivo seleccionado no es válido"
                                           update="messagesp3 btnV3"  sizeLimit="1000000" label="Elejir"
@@ -458,7 +458,7 @@
 
                         <p:outputLabel value="Constancia de notas bachillerato: " />
                         <h:panelGrid columns="3">
-                            <p:fileUpload id="not" fileUploadListener="#{infoPerfilController.notas}"
+                            <p:fileUpload id="not" listener="#{infoPerfilController.notas}"
                                           mode="advanced" invalidSizeMessage="El archivo sobrepasa el límited de 1MB."
                                           invalidFileMessage="El archivo seleccionado no es válido"
                                           update="messagesp4 btnV4"  sizeLimit="1000000" label="Elejir"

@@ -20,36 +20,46 @@
                 align-items: center;
             }
         </style>
-        <h:form id="frm" style="width: 400px; height: 90%;" styleClass="centred-form"
-                transient="true">
-            <div class="ui-fluid">
-                <p:growl id="growl" showDetail="true" life="15000"/>
-                <p:focus context="panel"/>
-                <h:panelGrid id="panel" columns="3" summary="Inicio de sesión">
-                    <p:column/>
-                    <h:outputLabel value="SAITAE-INTEX #{loginController.year}"/>
-                    <p:column/>
+        <h:form id="frm"  style="width: 480px;" styleClass="centred-form"
+                        transient="true">
+            <h:panelGrid columns="1" >
+                <h:panelGrid  style="margin: 0 auto;">
+                    <div class="ui-fluid">
+                        <p:growl id="growl" showDetail="true" life="15000"/>
+                        <p:focus context="panel"/>
+                        <h:panelGrid id="panel" columns="3" summary="Inicio de sesión">
+                            <p:column/>
+                            <h:outputLabel value="SAITAE-INTEX #{loginController.year}"/>
+                            <p:column/>
 
-                    <h:outputLabel for="user" id="t1" value="Usuario: "/>
-                    <p:inputText id="user" value="#{loginController.userL}" required="true"
-                                 requiredMessage="No deje vacío el campo usuario." alt="ingrese su NIE/DUI"/>
-                    <p:message for="user" showSummary="true"/>
+                            <h:outputLabel for="user" id="t1" value="Usuario: "/>
+                            <p:inputText id="user" value="#{loginController.userL}" required="true"
+                                         requiredMessage="No deje vacío el campo usuario." alt="ingrese su NIE/DUI"/>
+                            <p:message for="user" showSummary="true"/>
 
-                    <h:outputLabel for="pass" value="Contraseña: "/>
-                    <p:password id="pass" value="#{loginController.pass}" required="true" 
-                                requiredMessage="No deje vacío el campo contraseña."/>
-                    <p:message for="pass" showSummary="true"/>
+                            <h:outputLabel for="pass" value="Contraseña: "/>
+                            <p:password id="pass" value="#{loginController.pass}" required="true" 
+                                        requiredMessage="No deje vacío el campo contraseña."/>
+                            <p:message for="pass" showSummary="true"/>
 
-                    <p:column/>
-                    <p:commandButton actionListener="#{loginController.login()}" value="Ingresar"/>
-                    <p:column/>
-                    <f:facet name="footer">
-                        <h:link value="Nuevo ingreso" outcome="pages/inscripcion.intex"
-                                rendered="#{inscripcionController.time}"/>
-                    </f:facet>
-                    <p:focus context="frm:user"/>
+                            <p:column/>
+                            <p:commandButton actionListener="#{loginController.login()}" value="Ingresar"/>
+                            <p:column/>
+                            <f:facet name="footer">
+                                <h:link value="Nuevo ingreso" outcome="pages/inscripcion.intex"
+                                        rendered="#{inscripcionController.time}"/>
+                            </f:facet>
+                            <p:focus context="frm:user"/>
+                        </h:panelGrid>
+                    </div>
                 </h:panelGrid>
-            </div>
+                <iframe width="426" height="240" 
+                        src="https://www.youtube-nocookie.com/embed/vvIoCS0OHgI" 
+                        frameborder="10" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen="true"
+                        style="margin: 0 auto;"></iframe>
+            </h:panelGrid>
         </h:form>
         <div class="ui-fluid">
             <div id="footer" class="top-space">
@@ -113,6 +123,6 @@
             </div>
         </div>
         <br />
-       <!-- <h:link outcome="welcomePrimefaces" value="Primefaces welcome page" />-->
+        <!-- <h:link outcome="welcomePrimefaces" value="Primefaces welcome page" />-->
     </h:body>   
 </html>

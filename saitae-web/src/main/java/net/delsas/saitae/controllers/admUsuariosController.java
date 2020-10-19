@@ -36,6 +36,7 @@ import net.delsas.saitae.beans.DelagacionCargoFacadeLocal;
 import net.delsas.saitae.beans.NotificacionesFacadeLocal;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
+import net.delsas.saitae.entities.Acceso;
 import net.delsas.saitae.entities.DelagacionCargo;
 import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.TipoPersona;
@@ -230,7 +231,7 @@ public class admUsuariosController extends Auxiliar implements Serializable {
         persona.getDelagacionCargoList().add(dl);
         guardarPersona();
         persistirNotificación(
-                new mensaje(0, usuario.getIdpersona(), "admUsuarios<form",
+                new mensaje(0, usuario.getIdpersona(), getActualizaciones(persona.getTipoPersona().getIdtipoPersona(), dl.getIdTipoPersona().getIdtipoPersona())/*"admUsuarios<form"*/,
                         new FacesMessage(FacesMessage.SEVERITY_WARN,
                                 "Asignación de cargo",
                                 getNombreCortoPersona(usuario)
@@ -248,7 +249,7 @@ public class admUsuariosController extends Auxiliar implements Serializable {
         if (!dl.getIddelagacionCargo().equals(-1)) {
             dcFL.remove(dl);
             persistirNotificación(
-                    new mensaje(0, usuario.getIdpersona(), "admUsuarios<form",
+                    new mensaje(0, usuario.getIdpersona(), getActualizaciones(persona.getTipoPersona().getIdtipoPersona(), dl.getIdTipoPersona().getIdtipoPersona())/*"admUsuarios<form"*/,
                             new FacesMessage(FacesMessage.SEVERITY_WARN,
                                     "Relevación de cargo",
                                     getNombreCortoPersona(usuario)
@@ -274,5 +275,19 @@ public class admUsuariosController extends Auxiliar implements Serializable {
             cargos.remove(tpFL.find(i));
         });
         return cargos;
+    }
+    String cat = "";
+
+    private String getActualizaciones(int id0, int id1) {
+        cat = "";
+        for (int id : new int[]{id0, id1}) {
+            tpFL.find(id).getAccesoTipoPersonaList().forEach(atp -> {
+                Acceso a = atp.getAcceso();
+                if (!cat.contains(a.getAccesourl().split(".in")[0])) {
+                    cat += (cat.isEmpty() ? "" : "<<") + a.getAccesourl().split(".in")[0] + "<form>form0";
+                }
+            });
+        }
+        return cat;
     }
 }

@@ -10,7 +10,6 @@
 
     <ui:define name="content">
         <h:form id="form">
-            <p:remoteCommand name="actualizapag" update="form"/>
             <h:panelGrid columns="1" style="margin: 0 auto">
                 <h:panelGrid columns="2">
                     <p:outputLabel for="años" value="Seleccione el año de visualización: "/>
@@ -270,7 +269,7 @@
                 </p:accordionPanel>
             </h:panelGrid>
         </h:form>
-        <p:dialog id="dialog" widgetVar="Dreserva" modal="true" style="width: 60%;" onHide="actualizapag();"
+        <p:dialog id="dialog" widgetVar="Dreserva" modal="true" style="width: 60%;"
                   showHeader="true" header="Solicitud de reserva" closeOnEscape="true">
             <h:form id="d1">
                 <h1 align="center">Detalle de solicitud de reserva #{adminReservas.textoReserva}a</h1>
@@ -348,40 +347,34 @@
                     </p:panel>
                     <p:panel header="Detalle del equipo #{adminReservas.textoReserva}o"
                              toggleable="true" collapsed="true">
-                        <h:panelGrid columns="2" cellspacing="10" 
+                        <p:dataTable value="#{adminReservas.solicitudReservaDetalle}" var="s" style="width: 500px"
+                                     rows="5" paginator="true" paginatorAlwaysVisible="false" paginatorPosition="top"
                                      rendered="#{!adminReservas.verEquipoDetalle}">
-                            <h:outputText value="Cantidad"/>
-                            <h:outputText value="Recurso"/>
 
-                            <ui:repeat var="s" value="#{adminReservas.solicitudReservaDetalle}">
-                                <h:panelGrid columns="1" cellspacing="10">
-                                    <h:outputText value="#{s.solicitudReservaComentario}"/>
-                                </h:panelGrid>
-                            </ui:repeat>
+                            <p:column headerText="Cantidad" width="20%">
+                                #{s.solicitudReservaComentario}
+                            </p:column>
 
-                            <ui:repeat var="s" value="#{adminReservas.solicitudReservaDetalle}">
-                                <h:panelGrid columns="1" cellspacing="10">
-                                    <h:outputText value="#{s.recurso.nombre}"/>  
-                                </h:panelGrid>
-                            </ui:repeat>
-                        </h:panelGrid>
-                        <h:panelGrid columns="2" cellspacing="10" 
+                            <p:column headerText="Nombre de recurso">
+                                #{s.recurso.nombre}
+                            </p:column>
+                        </p:dataTable>
+                        <p:dataTable value="#{adminReservas.reservaDetalle}" var="s" style="width: 500px"
+                                     rows="5" paginator="true" paginatorAlwaysVisible="false" paginatorPosition="top"
                                      rendered="#{adminReservas.verEquipoDetalle}">
-                            <h:outputText value="Correlativo"/>
-                            <h:outputText value="Nombre de recurso"/>
 
-                            <ui:repeat var="s" value="#{adminReservas.reservaDetalle}">
-                                <h:panelGrid columns="1" cellspacing="10">
-                                    <h:outputText value="#{s.ejemplarPK.ejemplarCorrelativo}"/>
-                                </h:panelGrid>
-                            </ui:repeat>
+                            <p:column headerText="Código" width="30%">
+                                #{s.ejemplarPK.idRecurso}
+                            </p:column>
 
-                            <ui:repeat var="s" value="#{adminReservas.reservaDetalle}">
-                                <h:panelGrid columns="1" cellspacing="10">
-                                    <h:outputText value="#{s.recurso.nombre}"/>  
-                                </h:panelGrid>
-                            </ui:repeat>
-                        </h:panelGrid>
+                            <p:column headerText="Correlativo" width="20%">
+                                #{s.ejemplarPK.ejemplarCorrelativo}
+                            </p:column>
+
+                            <p:column headerText="Nombre de recurso">
+                                #{s.recurso.nombre}
+                            </p:column>
+                        </p:dataTable>
                     </p:panel>
                     <p:panel header="Información adicional del equipo #{adminReservas.textoReserva}o"
                              toggleable="true" rendered="#{adminReservas.verComentarios}" collapsed="true">

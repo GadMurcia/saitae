@@ -30,9 +30,10 @@
                         <p:accordionPanel id="ap" dynamic="true">
                             <p:tab title="Permisos Solicitados">
                                 <p:dataTable id="solicitados" value="#{admPermisoController.solicitados}" var="p"
-                                             paginator="true" rows="7" selection="#{admPermisoController.acep}" 
+                                             paginator="true" rows="8" selection="#{admPermisoController.acep}" 
                                              selectionMode="single" rowKey="#{p.permisosPK}" 
-                                             emptyMessage="Sin nuevos permisos solicitados aún.">
+                                             emptyMessage="Sin nuevos permisos solicitados aún."
+                                             paginatorAlwaysVisible="false" paginatorPosition="top">
                                     <p:ajax event="rowSelect" listener="#{admPermisoController.onRowSelect}" 
                                             update="sol" oncomplete="PF('Dsol').show();"/>
                                     <p:column headerText="Fecha de solicitud" 
@@ -61,9 +62,10 @@
                             <p:tab title="Permisos Aceptados">
                                 <h:panelGrid columns="2" cellpadding="10">
                                     <p:dataTable id="aceptados" value="#{admPermisoController.aceptados}" var="a"
-                                                 paginator="true" rows="7" selection="#{admPermisoController.acep}" 
+                                                 paginator="true" rows="8" selection="#{admPermisoController.acep}" 
                                                  selectionMode="single" rowKey="#{a.permisosPK}" 
-                                                 emptyMessage="Sin registros aún.">
+                                                 emptyMessage="Sin registros aún."
+                                                 paginatorAlwaysVisible="false" paginatorPosition="top">
                                         <p:ajax event="rowSelect" listener="#{admPermisoController.onRowSelect}" 
                                                 update="ace" oncomplete="PF('Dotro').show();"/>
 
@@ -95,9 +97,10 @@
                             <p:tab title="Permisos Rechazados">
                                 <h:panelGrid columns="2" cellpadding="10">
                                     <p:dataTable id="rachazados" value="#{admPermisoController.rechazados}" var="r"
-                                                 paginator="true" rows="7" selection="#{admPermisoController.acep}" 
+                                                 paginator="true" rows="8" selection="#{admPermisoController.acep}" 
                                                  selectionMode="single" rowKey="#{r.permisosPK}" 
-                                                 emptyMessage="Sin registros aún.">
+                                                 emptyMessage="Sin registros aún."
+                                                 paginatorAlwaysVisible="false" paginatorPosition="top">
                                         <p:ajax event="rowSelect" listener="#{admPermisoController.onRowSelect}" 
                                                 update="ace" oncomplete="PF('Dotro').show();"/>
                                         <p:column headerText="Fecha de solicitud"
@@ -128,9 +131,10 @@
                             <p:tab title="Permisos Cancelados">
                                 <h:panelGrid columns="2" cellpadding="10">
                                     <p:dataTable id="cancelados" value="#{admPermisoController.cancelados}" var="r"
-                                                 paginator="true" rows="7" selection="#{admPermisoController.acep}" 
+                                                 paginator="true" rows="8" selection="#{admPermisoController.acep}" 
                                                  selectionMode="single" rowKey="#{r.permisosPK}" 
-                                                 emptyMessage="Sin registros aún.">
+                                                 emptyMessage="Sin registros aún."
+                                                 paginatorAlwaysVisible="false" paginatorPosition="top">
                                         <p:ajax event="rowSelect" listener="#{admPermisoController.onRowSelect}" 
                                                 update="ace" oncomplete="PF('Dotro').show();"/>
                                         <p:column headerText="Fecha de solicitud"
@@ -191,7 +195,7 @@
 
                                     <p:outputLabel value="Constancia: " />
                                     <h:panelGrid columns="3">
-                                        <p:fileUpload id="partida" fileUploadListener="#{admPermisoController.notas}" 
+                                        <p:fileUpload id="partida" listener="#{admPermisoController.notas}" 
                                                       mode="advanced" invalidSizeMessage="El archivo sobrepasa el límited de 1MB."
                                                       invalidFileMessage="El archivo seleccionado no es válido"
                                                       update="messagesp"  sizeLimit="1000000" label="Elejir"

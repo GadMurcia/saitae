@@ -87,13 +87,7 @@ public class infoPerfilController extends Auxiliar implements Serializable {
         contra = "";
         contra1 = "";
         contra2 = "";
-        List<Integer> tps = getTiposPersonas(usuario);
-        cargos = new ArrayList<>();
-        if (tps.size() > 1) {
-            tps.forEach((c) -> {
-                cargos.add(tpFL.find(c));
-            });
-        }
+
         if (maestro) {
             especialidades = teFL.findAll();
             sueldos = tsFL.findAll();
@@ -361,6 +355,13 @@ public class infoPerfilController extends Auxiliar implements Serializable {
     }
 
     public List<TipoPersona> getCargos() {
+        List<Integer> tps = getTiposPersonas(usuario);
+        cargos = new ArrayList<>();
+        if (tps.size() > 1) {
+            tps.forEach((c) -> {
+                cargos.add(tpFL.find(c));
+            });
+        }
         return cargos;
     }
 
