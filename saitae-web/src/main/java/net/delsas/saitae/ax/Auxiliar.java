@@ -385,7 +385,7 @@ public class Auxiliar implements Serializable {
         SelectItem u = new SelectItem(" ", "Seleccione");
         u.setNoSelectionOption(true);
         items.add(u);
-        switch (p == null ? " " : p.getPersonaNacionalidad()) {
+        switch (p == null || p.getPersonaNacionalidad() == null ? " " : p.getPersonaNacionalidad()) {
             case "Salvadoreña":
                 Integer t = 1;
                 for (String f : new String[]{"Ahuachapán", "Santa Ana", "Sonsonate", "Chalatenango",
@@ -412,11 +412,15 @@ public class Auxiliar implements Serializable {
     }
 
     public String getDepartamento(Persona p) {
-        return p != null ? p.getPersonaLugarNac().split("#").length > 1 ? p.getPersonaLugarNac().split("#")[0] : " " : " ";
+        return p != null && p.getPersonaLugarNac() != null
+                ? p.getPersonaLugarNac().split("#").length > 1 ? p.getPersonaLugarNac().split("#")[0]
+                : " " : " ";
     }
 
     public String getMunicipio(Persona p) {
-        return p != null ? p.getPersonaLugarNac().split("#").length > 1 ? p.getPersonaLugarNac().split("#")[1] : " " : " ";
+        return p != null && p.getPersonaLugarNac() != null
+                ? p.getPersonaLugarNac().split("#").length > 1 ? p.getPersonaLugarNac().split("#")[1]
+                : " " : " ";
     }
 
     public void setMunicipio(String mun, Persona p) {
@@ -493,14 +497,42 @@ public class Auxiliar implements Serializable {
         if (p != null && p.getTipoPersona() != null) {
             items.add(p.getTipoPersona().getIdtipoPersona());
             if (p.getDelagacionCargoList() != null) {
-                p.getDelagacionCargoList().stream().filter((dl) -> (dl.getIdTipoPersona() != null)).forEachOrdered((dl) -> {
-                    items.add(dl.getIdTipoPersona().getIdtipoPersona());
-                });
+                p.getDelagacionCargoList().stream()
+                        .filter((dl) -> (dl.getIdTipoPersona() != null && !items.contains(dl.getIdTipoPersona().getIdtipoPersona())))
+                        .forEachOrdered((dl) -> {
+                            items.add(dl.getIdTipoPersona().getIdtipoPersona());
+                        });
             }
             if (p.getMaestro() != null && p.getMaestro().getMaestoCargoList() != null) {
-                p.getMaestro().getMaestoCargoList().forEach((mc) -> {
-                    items.add(mc.getCargo().getCargoTipoPersona().getIdtipoPersona());
-                });
+                p.getMaestro().getMaestoCargoList().stream()
+                        .filter(mc -> (!items.contains(mc.getCargo().getCargoTipoPersona().getIdtipoPersona())))
+                        .forEach((mc) -> {
+                            items.add(mc.getCargo().getCargoTipoPersona().getIdtipoPersona());
+                        });
+            }
+        }
+        return items;
+    }
+
+    public List<String> getCargos(Persona p) {
+        List<String> items = new ArrayList<>();
+        if (p != null) {
+            if (p.getTipoPersona() != null && !p.getTipoPersona().getIdtipoPersona().equals(4)) {
+                items.add(p.getTipoPersona().getTipoPersonaNombre());
+            }
+            if (p.getDelagacionCargoList() != null) {
+                p.getDelagacionCargoList().stream()
+                        .filter((dl) -> (dl.getIdTipoPersona() != null && !items.contains(dl.getIdTipoPersona().getTipoPersonaNombre())))
+                        .forEachOrdered((dl) -> {
+                            items.add(dl.getIdTipoPersona().getTipoPersonaNombre());
+                        });
+            }
+            if (p.getMaestro() != null && p.getMaestro().getMaestoCargoList() != null) {
+                p.getMaestro().getMaestoCargoList().stream()
+                        .filter(mc -> (!items.contains(mc.getCargo().getCargoNombre())))
+                        .forEach((mc) -> {
+                            items.add(mc.getCargo().getCargoNombre());
+                        });
             }
         }
         return items;

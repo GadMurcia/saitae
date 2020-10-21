@@ -8,7 +8,6 @@ package net.delsas.saitae.entities;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
-import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -23,11 +22,9 @@ public class CapacitacionesPK implements Serializable {
 
     @Basic(optional = false)
     @NotNull
-    @Column(name = "idMaestro")
     private int idMaestro;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "fechaCapacitaciones")
     @Temporal(TemporalType.DATE)
     private Date fechaCapacitaciones;
 

@@ -29,5 +29,7 @@ public interface CapacitacionesFacadeLocal {
     List<Capacitaciones> findRange(int[] range);
 
     int count();
+
+    public List<Capacitaciones> findByIdPersona(Integer idpersona);
     
 }

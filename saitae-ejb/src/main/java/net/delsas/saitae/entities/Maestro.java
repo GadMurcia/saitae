@@ -169,8 +169,6 @@ public class Maestro implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "maestro")
     private List<MaestoCargo> maestoCargoList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "maestro")
-    private List<Capacitaciones> capacitacionesList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "maestro")
     private List<EvaluacionMaestro> evaluacionMaestroList;
     @OneToMany(mappedBy = "docente")
     private List<Reserva> reservaList;
@@ -424,15 +422,6 @@ public class Maestro implements Serializable {
 
     public void setMaestoCargoList(List<MaestoCargo> maestoCargoList) {
         this.maestoCargoList = maestoCargoList;
-    }
-
-    @XmlTransient
-    public List<Capacitaciones> getCapacitacionesList() {
-        return capacitacionesList;
-    }
-
-    public void setCapacitacionesList(List<Capacitaciones> capacitacionesList) {
-        this.capacitacionesList = capacitacionesList;
     }
 
     @XmlTransient

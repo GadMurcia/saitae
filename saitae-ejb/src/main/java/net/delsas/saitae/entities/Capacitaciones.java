@@ -7,8 +7,8 @@ package net.delsas.saitae.entities;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 import javax.persistence.Basic;
-import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -28,16 +28,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "capacitaciones", catalog = "intex", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Capacitaciones.findAll", query = "SELECT c FROM Capacitaciones c")
-    , @NamedQuery(name = "Capacitaciones.findByIdMaestro", query = "SELECT c FROM Capacitaciones c WHERE c.capacitacionesPK.idMaestro = :idMaestro")
-    , @NamedQuery(name = "Capacitaciones.findByFechaCapacitaciones", query = "SELECT c FROM Capacitaciones c WHERE c.capacitacionesPK.fechaCapacitaciones = :fechaCapacitaciones")
-    , @NamedQuery(name = "Capacitaciones.findByCapacitacionCategoria", query = "SELECT c FROM Capacitaciones c WHERE c.capacitacionCategoria = :capacitacionCategoria")
-    , @NamedQuery(name = "Capacitaciones.findByCapacitacionArea", query = "SELECT c FROM Capacitaciones c WHERE c.capacitacionArea = :capacitacionArea")
-    , @NamedQuery(name = "Capacitaciones.findByCapacitacionNombre", query = "SELECT c FROM Capacitaciones c WHERE c.capacitacionNombre = :capacitacionNombre")
-    , @NamedQuery(name = "Capacitaciones.findByCapacitacionCertificado", query = "SELECT c FROM Capacitaciones c WHERE c.capacitacionCertificado = :capacitacionCertificado")
-    , @NamedQuery(name = "Capacitaciones.findByCapacitacionPatrocinador", query = "SELECT c FROM Capacitaciones c WHERE c.capacitacionPatrocinador = :capacitacionPatrocinador")
-    , @NamedQuery(name = "Capacitaciones.findByCapacitacionModalidad", query = "SELECT c FROM Capacitaciones c WHERE c.capacitacionModalidad = :capacitacionModalidad")
-    , @NamedQuery(name = "Capacitaciones.findByCapacitacionComentario", query = "SELECT c FROM Capacitaciones c WHERE c.capacitacionComentario = :capacitacionComentario")})
+    @NamedQuery(name = "Capacitaciones.findAll", query = "SELECT c FROM Capacitaciones c"),
+    @NamedQuery(name = "Capacitaciones.findByIdMaestro", query = "SELECT c FROM Capacitaciones c WHERE c.capacitacionesPK.idMaestro = :idMaestro"),
+    @NamedQuery(name = "Capacitaciones.findByFechaCapacitaciones", query = "SELECT c FROM Capacitaciones c WHERE c.capacitacionesPK.fechaCapacitaciones = :fechaCapacitaciones"),
+    @NamedQuery(name = "Capacitaciones.findByCapacitacionCategoria", query = "SELECT c FROM Capacitaciones c WHERE c.capacitacionCategoria = :capacitacionCategoria"),
+    @NamedQuery(name = "Capacitaciones.findByCapacitacionArea", query = "SELECT c FROM Capacitaciones c WHERE c.capacitacionArea = :capacitacionArea"),
+    @NamedQuery(name = "Capacitaciones.findByCapacitacionNombre", query = "SELECT c FROM Capacitaciones c WHERE c.capacitacionNombre = :capacitacionNombre"),
+    @NamedQuery(name = "Capacitaciones.findByCapacitacionCertificado", query = "SELECT c FROM Capacitaciones c WHERE c.capacitacionCertificado = :capacitacionCertificado"),
+    @NamedQuery(name = "Capacitaciones.findByCapacitacionPatrocinador", query = "SELECT c FROM Capacitaciones c WHERE c.capacitacionPatrocinador = :capacitacionPatrocinador"),
+    @NamedQuery(name = "Capacitaciones.findByCapacitacionModalidad", query = "SELECT c FROM Capacitaciones c WHERE c.capacitacionModalidad = :capacitacionModalidad"),
+    @NamedQuery(name = "Capacitaciones.findByCapacitacionComentario", query = "SELECT c FROM Capacitaciones c WHERE c.capacitacionComentario = :capacitacionComentario")})
 public class Capacitaciones implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -46,38 +46,31 @@ public class Capacitaciones implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
-    @Column(name = "capacitacionCategoria")
     private String capacitacionCategoria;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
-    @Column(name = "capacitacionArea")
     private String capacitacionArea;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
-    @Column(name = "capacitacionNombre")
     private String capacitacionNombre;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "capacitacionCertificado")
     private boolean capacitacionCertificado;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 80)
-    @Column(name = "capacitacionPatrocinador")
     private String capacitacionPatrocinador;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 2)
-    @Column(name = "capacitacionModalidad")
     private String capacitacionModalidad;
     @Size(max = 145)
-    @Column(name = "capacitacionComentario")
     private String capacitacionComentario;
-    @JoinColumn(name = "idMaestro", referencedColumnName = "idmaestro", insertable = false, updatable = false)
+    @JoinColumn(name = "idMaestro", referencedColumnName = "idpersona", insertable = false, updatable = false)
     @ManyToOne(optional = false)
-    private Maestro maestro;
+    private Persona persona;
 
     public Capacitaciones() {
     }
@@ -164,37 +157,85 @@ public class Capacitaciones implements Serializable {
         this.capacitacionComentario = capacitacionComentario;
     }
 
-    public Maestro getMaestro() {
-        return maestro;
+    public Persona getPersona() {
+        return persona;
     }
 
-    public void setMaestro(Maestro maestro) {
-        this.maestro = maestro;
+    public void setPersona(Persona persona) {
+        this.persona = persona;
     }
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (capacitacionesPK != null ? capacitacionesPK.hashCode() : 0);
+        int hash = 3;
+        hash = 17 * hash + Objects.hashCode(this.capacitacionesPK);
+        hash = 17 * hash + Objects.hashCode(this.capacitacionCategoria);
+        hash = 17 * hash + Objects.hashCode(this.capacitacionArea);
+        hash = 17 * hash + Objects.hashCode(this.capacitacionNombre);
+        hash = 17 * hash + (this.capacitacionCertificado ? 1 : 0);
+        hash = 17 * hash + Objects.hashCode(this.capacitacionPatrocinador);
+        hash = 17 * hash + Objects.hashCode(this.capacitacionModalidad);
+        hash = 17 * hash + Objects.hashCode(this.capacitacionComentario);
+        hash = 17 * hash + Objects.hashCode(this.persona);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Capacitaciones)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        Capacitaciones other = (Capacitaciones) object;
-        if ((this.capacitacionesPK == null && other.capacitacionesPK != null) || (this.capacitacionesPK != null && !this.capacitacionesPK.equals(other.capacitacionesPK))) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
-        return true;
+        final Capacitaciones other = (Capacitaciones) obj;
+        if (this.capacitacionCertificado != other.capacitacionCertificado) {
+            return false;
+        }
+        if (!Objects.equals(this.capacitacionCategoria, other.capacitacionCategoria)) {
+            return false;
+        }
+        if (!Objects.equals(this.capacitacionArea, other.capacitacionArea)) {
+            return false;
+        }
+        if (!Objects.equals(this.capacitacionNombre, other.capacitacionNombre)) {
+            return false;
+        }
+        if (!Objects.equals(this.capacitacionPatrocinador, other.capacitacionPatrocinador)) {
+            return false;
+        }
+        if (!Objects.equals(this.capacitacionModalidad, other.capacitacionModalidad)) {
+            return false;
+        }
+        if (!Objects.equals(this.capacitacionComentario, other.capacitacionComentario)) {
+            return false;
+        }
+        if (!Objects.equals(this.capacitacionesPK, other.capacitacionesPK)) {
+            return false;
+        }
+        return Objects.equals(this.persona, other.persona);
+    }
+
+    public boolean equals2(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Capacitaciones other = (Capacitaciones) obj;
+        return Objects.equals(this.capacitacionesPK, other.capacitacionesPK);
     }
 
     @Override
     public String toString() {
         return "net.delsas.saitae.entities.Capacitaciones[ capacitacionesPK=" + capacitacionesPK + " ]";
     }
-    
+
 }

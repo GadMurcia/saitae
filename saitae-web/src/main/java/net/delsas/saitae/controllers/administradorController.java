@@ -32,22 +32,17 @@ import javax.inject.Inject;
 import net.delsas.saitae.ax.Auxiliar;
 import net.delsas.saitae.ax.XLSModel;
 import net.delsas.saitae.ax.mensaje;
+import net.delsas.saitae.beans.AccesoFacadeLocal;
+import net.delsas.saitae.beans.AccesoTipoPersonaFacadeLocal;
+import net.delsas.saitae.beans.CapacitacionesFacadeLocal;
 import net.delsas.saitae.beans.NotificacionesFacadeLocal;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
+import net.delsas.saitae.entities.Capacitaciones;
 import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.TipoPersona;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.BorderStyle;
-import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.ss.usermodel.VerticalAlignment;
-import org.apache.poi.ss.util.CellRangeAddress;
 import org.omnifaces.cdi.Push;
 import org.omnifaces.cdi.PushContext;
 import org.primefaces.event.SelectEvent;
@@ -64,6 +59,10 @@ public class administradorController extends Auxiliar implements Serializable {
 
     private Persona adm;
     private Persona selected;
+    private Capacitaciones cap;
+    private FacesContext context;
+    private String pagina;
+    private Persona usuario;
     @EJB
     private PersonaFacadeLocal pfl;
     @EJB
@@ -75,11 +74,32 @@ public class administradorController extends Auxiliar implements Serializable {
     private PushContext notificacion;
     @EJB
     private NotificacionesFacadeLocal notiFL;
+    @EJB
+    private CapacitacionesFacadeLocal capFL;
+    @EJB
+    private AccesoTipoPersonaFacadeLocal accesoTPFL;
+    @EJB
+    private AccesoFacadeLocal accesoFL;
 
     @PostConstruct
     public void init() {
+        context = FacesContext.getCurrentInstance();
+        usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
+        pagina = context.getExternalContext().getRequestServletPath().split("/")[2];
+        try {
+            if (!(permitirAcceso(usuario, accesoTPFL.findTipoPersonaPermitidos(accesoFL.getAccesoByUrl(pagina))))) {
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("mensaje",
+                        new FacesMessage(FacesMessage.SEVERITY_WARN, "Página prohibida",
+                                "Usted no tiene los permisos suficientes para ver y utilizar esa página."));
+                FacesContext.getCurrentInstance().getExternalContext().redirect("./../");
+                return;
+            }
+        } catch (IOException ex) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error Inesperado",
+                            ex.getMessage() == null ? "Error de causa desconocida." : ex.getMessage()));
+        }
         aux = new Auxiliar();
-        selected = new Persona();
         adm = aux.getAdministradorCra();
         adm.setTipoPersona(new TipoPersona());
         int q[] = new int[]{1, 4, 8, 9, 10, 11};
@@ -186,17 +206,38 @@ public class administradorController extends Auxiliar implements Serializable {
         this.selected = selected;
     }
 
-    public String getCargos(Persona p) {
+    public String getCargosTxt(Persona p) {
         String g = "";
-        List<Integer> tps = getTiposPersonas(p);
-        for (Integer i : tps) {
-            g += (g.isEmpty() ? "" : ", ") + tpfl.find(i).getTipoPersonaNombre();
+        for (String i : getCargos(p)) {
+            g += (g.isEmpty() ? "" : ", ") + i;
         }
         return g;
     }
 
     public void postProcessEXCEL(Object document) {
         HSSFWorkbook wb = new XLSModel().getReportePlantel((HSSFWorkbook) document);
+    }
+
+    public List<Capacitaciones> getCapacitacionesSelected() {
+        return capFL.findByIdPersona(selected == null ? 0 : selected.getIdpersona());
+    }
+
+    public Capacitaciones getCap() {
+        return cap;
+    }
+
+    public void setCap(Capacitaciones cap) {
+        this.cap = cap;
+    }
+
+    public boolean getVerDatos() {
+        return usuario != null
+                && (usuario.getTipoPersona().getIdtipoPersona().equals(1)
+                || getTiposPersonas(usuario).contains(2));
+    }
+
+    public boolean getVerPaneles() {
+        return selected != null && selected.getTipoPersona().getIdtipoPersona().equals(4);
     }
 
 }

@@ -19,19 +19,19 @@
                         <h:outputText id="idp" value="#{infoPerfilController.usuario.idpersona.toString().substring(1)}"/>
 
                         <p:outputLabel for="c0" value="Contraseña Anterior"/>
-                        <p:password id="c0" required="true" value="#{infoPerfilController.contra}"
+                        <p:password id="c0" value="#{infoPerfilController.contra}"
                                     placeholder="Contraseña anterior">
                             <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
                         </p:password>
 
                         <p:outputLabel for="c1" value="Contraseña Nueva"/>
-                        <p:password id="c1" required="true" value="#{infoPerfilController.contra1}"
+                        <p:password id="c1" value="#{infoPerfilController.contra1}"
                                     placeholder="Contraseña nueva">
                             <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
                         </p:password>
 
                         <p:outputLabel for="c2" value="Repita la Contraseña"/>
-                        <p:password id="c2" required="true" value="#{infoPerfilController.contra2}"
+                        <p:password id="c2" value="#{infoPerfilController.contra2}"
                                     placeholder="Repetir la contraseña nueva">
                             <p:ajax event="change" listener="#{infoPerfilController.onBlour}"/>
                         </p:password>
@@ -389,16 +389,51 @@
                     </h:panelGrid>
                 </p:fieldset>
                 <p:fieldset legend="Cargos" toggleable="true" toggleSpeed="500" 
-                            collapsed="true" title="Edite su información de representante"
-                            rendered="#{infoPerfilController.cargos.size() > 1}">
-                    <p:dataTable value="#{infoPerfilController.cargos}" var="cs">
+                            collapsed="true" title="Viualice sus cargos"
+                            rendered="#{infoPerfilController.getCargos(infoPerfilController.usuario).size() > 1}">
+                    <p:dataTable value="#{infoPerfilController.getCargos(infoPerfilController.usuario)}" 
+                                 var="cs">
                         <f:facet name="header">
                             Lista de su asignación de cargos
                         </f:facet>
                         <p:column headerText="Cargo">
-                            #{cs.tipoPersonaNombre}
+                            <h:outputLabel value="#{cs}" style="margin: 0 auto;"/>
                         </p:column>
                     </p:dataTable>
+                </p:fieldset>
+                <p:fieldset legend="Capacitaciones" toggleable="true" toggleSpeed="500" 
+                            collapsed="true" title="Edite su información de capacitaciones"
+                            rendered="#{infoPerfilController.verCap}">
+
+                    <p:dataTable id="capacitaciones" var="c" 
+                                 value="#{infoPerfilController.capacitaciones}"
+                                 editable="true" 
+                                 widgetVar="cap1" 
+                                 emptyMessage="Sin capacitaciones."
+                                 paginator="true" paginatorAlwaysVisible="false" paginatorPosition="top"
+                                 rows="8" selection="#{infoPerfilController.cap}" 
+                                 selectionMode="single" rowKey="#{c.capacitacionesPK}">
+                        <p:ajax event="rowSelect" listener="#{infoPerfilController.onSelectRow}"
+                                update="h5" oncomplete="PF('Dcap0').show();"/>
+                        <f:facet name="header">
+                            Administración de capacitaciones
+                        </f:facet>
+                        <p:column headerText="Fecha" 
+                                  filterBy="#{infoPerfilController.getDateToString(c.capacitacionesPK.fechaCapacitaciones)}">
+                            <h:outputText value="#{infoPerfilController.getDateToString(c.capacitacionesPK.fechaCapacitaciones)}"/>
+                        </p:column>
+                        <p:column headerText="Área" filterBy="#{c.capacitacionArea}">
+                            <h:outputText value="#{c.capacitacionArea}" />
+                        </p:column>
+                        <p:column headerText="Patrocinador" filterBy="#{c.capacitacionPatrocinador}">
+                            <h:outputText value="#{c.capacitacionPatrocinador}" />
+                        </p:column>
+                    </p:dataTable>
+                    <h:panelGrid columns="1" style="width: 5%; margin-left: 92%;">
+                        <p:commandButton value="+" process="@this" update="h5"
+                                         actionListener="#{infoPerfilController.onAddNew()}"
+                                         onclick="PF('Dcap0').show();"/>
+                    </h:panelGrid>
                 </p:fieldset>
                 <p:fieldset legend="Documentos personales" toggleable="true" collapsed="true" 
                             title="Información de sus matriculas"
@@ -529,6 +564,28 @@
                          width="640" height="480"/>
                 </h:panelGrid>
             </h:form>
+        </p:dialog>
+
+        <p:dialog id="Dcap0" widgetVar="Dcap0" modal="true" showHeader="true" header="Capacitaciones"
+                  closeOnEscape="true">
+            <h:form id="h5">
+                <h:panelGrid columns="1">
+                    <t:capacitaciones cap="#{infoPerfilController.cap}" editable="#{infoPerfilController.editCap}"/>
+                    <h:panelGrid columns="2">
+                        <p:commandButton value="Guardar" 
+                                         actionListener="#{infoPerfilController.guardar(0)}"
+                                         rendered="#{infoPerfilController.editCap}"
+                                         update="form"/>
+                        <p:commandButton value="Cancelar" 
+                                         actionListener="#{infoPerfilController.guardar(8)}"
+                                         oncomplete="PF('Dcap0').hide();"/>
+                        <p:commandButton value="Borrar" 
+                                         actionListener="#{infoPerfilController.guardar(1)}"
+                                         rendered="#{!infoPerfilController.editCap}"
+                                         update="form"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </h:form>                
         </p:dialog>
     </ui:define>
 

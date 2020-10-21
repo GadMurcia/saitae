@@ -9,6 +9,7 @@
     <cc:interface>
         <cc:attribute name="persona" type="net.delsas.saitae.entities.Persona" required="true"/>
         <cc:attribute name="maestro" type="net.delsas.saitae.entities.Maestro"/>
+        <cc:attribute name="desabilitar" type="java.lang.Boolean" default="false"/>
     </cc:interface>
 
     <!-- IMPLEMENTATION -->
@@ -16,14 +17,15 @@
         <h:panelGrid columns="3">
             <p:outputLabel for="direcion" value="Dirección: "/>
             <p:inputText id="direcion" value="#{cc.attrs.persona.personaDireccion}" 
-                         required="true" title="Ingrese la dirección de residencia de la persona">
+                         required="true" title="Ingrese la dirección de residencia de la persona"
+                         disabled="#{cc.attrs.desabilitar}">
                 <p:ajax event="change" listener="#{loginController.onBlour}"/>
             </p:inputText>
             <p:message for="direcion" showSummary="true" />
 
             <p:outputLabel for="telefono" value="Teléfono Personal: "/>
             <p:inputMask id="telefono" value="#{cc.attrs.persona.personaTelefono}" 
-                         required="true" mask="9999-9999" 
+                         required="true" mask="9999-9999" disabled="#{cc.attrs.desabilitar}"
                          title="Ingrese el número de reléfono personal de la persona">
                 <p:ajax event="change" listener="#{loginController.onBlour}"/>
             </p:inputMask>
@@ -32,7 +34,7 @@
             <p:outputLabel for="telefono1" value="Teléfono de Residencia: " 
                            rendered="#{cc.attrs.persona.tipoPersona.idtipoPersona==4}"/>
             <p:inputMask id="telefono1" value="#{cc.attrs.maestro.maestrocolTelefonoResidencia}" 
-                         required="true" mask="9999-9999" 
+                         required="true" mask="9999-9999" disabled="#{cc.attrs.desabilitar}"
                          rendered="#{cc.attrs.persona.tipoPersona.idtipoPersona==4}"
                          title="Ingrese el número de reléfono de la residencia de la persona">
                 <p:ajax event="change" listener="#{loginController.onBlour}"/>
@@ -41,7 +43,8 @@
                        rendered="#{cc.attrs.persona.tipoPersona.idtipoPersona==4}"/>
 
             <p:outputLabel for="email" value="Correo electrónico: "/>
-            <p:inputText id="email" value="#{cc.attrs.persona.personaEmail}" type="email">
+            <p:inputText id="email" value="#{cc.attrs.persona.personaEmail}" type="email"
+                         disabled="#{cc.attrs.desabilitar}">
                 <p:ajax event="change" listener="#{loginController.onBlour}"/>
             </p:inputText>
             <p:column/>

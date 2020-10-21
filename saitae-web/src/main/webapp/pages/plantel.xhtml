@@ -5,15 +5,21 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:t='http://xmlns.jcp.org/jsf/composite/components/autentia'
                 xmlns="http://www.w3.org/1999/xhtml">
 
     <ui:define name="content">
-        <h:form id="form">
+        <h:form id="form1">
             <p:tab  title="Listado Del plantel Institucional">
                 <p:dataTable id="plantel" var="p" value="#{administradorController.plantel}" 
                              emptyMessage="Sin registros aún." rows="12" 
                              paginator="true" paginatorAlwaysVisible="false"
-                             paginatorPosition="top">
+                             paginatorPosition="top" selectionMode="single" 
+                             selection="#{administradorController.selected}"
+                             rowKey="#{p.idpersona}">
+                    <p:ajax event="rowSelect" listener="#{administradorController.onBlour}"
+                            update="h0" oncomplete="PF('Dpld').show();" 
+                            disabled="#{!administradorController.verDatos}"/>
                     <f:facet name="header">
                         Lista del plantel institucional
                     </f:facet>
@@ -29,14 +35,10 @@
                         <p:outputLabel value="#{p.personaOCupacion}"/>
                     </p:column>                    
                     <p:column headerText="Cargos">
-                        <p:outputLabel value="#{administradorController.getCargos(p)}"/>
+                        <p:outputLabel value="#{administradorController.getCargosTxt(p)}"/>
                     </p:column>
                 </p:dataTable> 
-                <!--<p:contextMenu for="plantel">
-                    <p:menuitem value="Ver" update="pl" 
-                                icon="pi pi-search" oncomplete="PF('Dpld').show()"/>
-                </p:contextMenu>
-                --><h:commandLink title="Descargar en formato de Excel">
+                <h:commandLink title="Descargar en formato de Excel">
                     <p:graphicImage library="img" name="xls.png" width="37px" height="32px"/>
                     <p:dataExporter type="xls" target="plantel" 
                                     options="#{axiliarController.excelOpt}"
@@ -44,33 +46,91 @@
                                     fileName="Plantel_Institucional_INTEX_#{administradorController.añoActual}"
                                     encoding="UTF-8"/>
                 </h:commandLink>
-
-                <p:dialog header="Datos de la persona Seleccionada" widgetVar="Dpld" modal="true" 
-                          showEffect="fade" hideEffect="fade" resizable="false">
-                    <p:outputPanel id="pl" style="text-align:center;">
-                        <p:panelGrid  columns="2" rendered="#{not empty administradorController.selected}" 
-                                      columnClasses="label,value">
-                            <f:facet name="header">
-                                <p:outputLabel value="#{administradorController.selected.personaNombre} 
-                                               #{administradorController.selected.personaApellido}"/> 
-                            </f:facet>
-
-                            <h:outputText value="DUI:" />
-                            <h:outputText value="#{administradorController.selected.idpersona}" />
-
-                            <h:outputText value="Ocupación" />
-                            <h:outputText value="#{administradorController.selected.personaOCupacion}" />
-
-                            <h:outputText value="Cargos:" />
-                            <h:outputText value="#{administradorController.getCargos(administradorController.selected)}"/>
-
-                            <h:outputText value="Es maestro?"/>
-                            <h:outputText value="#{administradorController.selected.maestro!=null? 'Es Maestro' : 'No es Maestro'}"/>
-                        </p:panelGrid>
-                    </p:outputPanel>
-                </p:dialog>
             </p:tab>
         </h:form>
+        <p:dialog header="Datos de la persona Seleccionada" widgetVar="Dpld" modal="true" 
+                  showEffect="fade" hideEffect="fade" closeOnEscape="true">
+            <h:form id="h0">
+                <p:tabView id="tw" orientation="top" dynamic="true">
+                    <p:tab id="personal" title="Personal">
+                        <p:panel header="Información Personal.">
+                            <t:persona departamento="#{administradorController.getDepartamento(administradorController.selected)}"
+                                       departamentoLista="#{administradorController.getDepartamentoLista(administradorController.selected)}" 
+                                       dui="#{administradorController.selected.idpersona.toString().substring(1)}" 
+                                       municipio="#{administradorController.getMunicipio(administradorController.selected)}" 
+                                       municipioLista="#{administradorController.getMunicipioLista(administradorController.selected)}" 
+                                       persona="#{administradorController.selected}"
+                                       onItemSelect="#{maestroController.setChange()}"
+                                       t="100" onComplete="#{axiliarController.completeTextMae}"
+                                       desabilitar="true"/>
+                            <h:panelGrid columns="2">
+                                <h:outputLabel value="Cargos:"/>
+                                <h:outputLabel value="#{administradorController.getCargosTxt(administradorController.selected)}"/>
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:tab>
+                    <p:tab id="address" title="Contacto">
+                        <p:panel header="Información de Constacto.">
+                            <t:persona1 persona="#{administradorController.selected}"                                            
+                                        maestro="#{administradorController.selected.maestro}"
+                                        desabilitar="true"/>
+                        </p:panel>
+                    </p:tab>
+                    <p:tab id="contact" title="Profesional" 
+                           rendered="#{administradorController.verPaneles}">
+                        <p:panel header="Información Profesional.">
+                            <t:maestro maestro="#{administradorController.selected.maestro}"
+                                       desabilitar="true"/>
+                        </p:panel>
+                    </p:tab>
+                    <p:tab id="confirm" title="Contratación"
+                           rendered="#{administradorController.verPaneles}">
+                        <p:panel header="Información de Contratación.">
+                            <t:maestro1 maestro="#{administradorController.selected.maestro}"
+                                        desabilitar="true"/>
+                        </p:panel>
+                    </p:tab>
+                    <p:tab title="Capacitaciones">
+                        <h:panelGrid>
+                            <p:dataTable id="capacitaciones" var="c" 
+                                         value="#{administradorController.capacitacionesSelected}"
+                                         editable="true" 
+                                         widgetVar="cap1" style="width: 60%"
+                                         emptyMessage="Sin capacitaciones."
+                                         paginator="true" paginatorAlwaysVisible="false" paginatorPosition="top"
+                                         rows="8" selection="#{administradorController.cap}" 
+                                         selectionMode="single" rowKey="#{c.capacitacionesPK}">
+                                <p:ajax event="rowSelect" listener="#{administradorController.onBlour}"
+                                        update="h5" oncomplete="PF('Dcap0').show();"/>
+                                <f:facet name="header">
+                                    Capacitaciones de #{administradorController.getNombreCortoPersona(administradorController.selected)}
+                                </f:facet>
+                                <p:column headerText="Fecha" 
+                                          filterBy="#{infoPerfilController.getDateToString(c.capacitacionesPK.fechaCapacitaciones)}">
+                                    <h:outputText value="#{infoPerfilController.getDateToString(c.capacitacionesPK.fechaCapacitaciones)}"/>
+                                </p:column>
+                                <p:column headerText="Área" filterBy="#{c.capacitacionArea}">
+                                    <h:outputText value="#{c.capacitacionArea}" />
+                                </p:column>
+                                <p:column headerText="Patrocinador" filterBy="#{c.capacitacionPatrocinador}">
+                                    <h:outputText value="#{c.capacitacionPatrocinador}" />
+                                </p:column>
+                            </p:dataTable>
+                        </h:panelGrid>
+                    </p:tab>
+                </p:tabView>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog id="Dcap0" widgetVar="Dcap0" modal="true" showHeader="true" header="Capacitaciones"
+                  closeOnEscape="true">
+            <h:form id="h5">
+                <h:panelGrid columns="1">
+                    <t:capacitaciones cap="#{administradorController.cap}" 
+                                      editable="false"/>
+                </h:panelGrid>
+            </h:form>                
+        </p:dialog>
     </ui:define>
 
 </ui:composition>
