@@ -365,7 +365,7 @@ public class infoPerfilController extends Auxiliar implements Serializable {
     }
     
     public List<TipoPersona> getCargos() {
-        List<Integer> tps = getTiposPersonas(usuario);
+        List<Integer> tps = getTiposPersonas(usuario, pFL);
         cargos = new ArrayList<>();
         if (tps.size() > 1) {
             tps.forEach((c) -> {

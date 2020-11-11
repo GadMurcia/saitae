@@ -41,6 +41,7 @@ import net.delsas.saitae.beans.EditorialLibroFacadeLocal;
 import net.delsas.saitae.beans.EjemplarFacadeLocal;
 import net.delsas.saitae.beans.NotificacionesFacadeLocal;
 import net.delsas.saitae.beans.PaisFacadeLocal;
+import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.beans.RecursoFacadeLocal;
 import net.delsas.saitae.beans.TipoCargoFacadeLocal;
 import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
@@ -133,6 +134,8 @@ public class admRecursoController extends Auxiliar implements Serializable {
     private EditorialLibroFacadeLocal elFL;
     @EJB
     private AutorLibroFacadeLocal alFL;
+    @EJB
+    private PersonaFacadeLocal persFL;
 
     @PostConstruct
     public void init() {
@@ -181,7 +184,7 @@ public class admRecursoController extends Auxiliar implements Serializable {
     public void controlUsuarios() {
         try {
             recurso = new ArrayList<>();
-            List<Integer> tps = getTiposPersonas(usuario);
+            List<Integer> tps = getTiposPersonas(usuario, persFL);
             if (tps.contains(1) || tps.contains(2)) {
                 verTipos = true;
                 verCategorias = true;

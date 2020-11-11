@@ -29,6 +29,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import net.delsas.saitae.ax.Auxiliar;
 import net.delsas.saitae.beans.AnuncioFacadeLocal;
+import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.entities.Anuncio;
 import net.delsas.saitae.entities.Persona;
 
@@ -43,6 +44,8 @@ public class perfilController implements Serializable {
     private static final long serialVersionUID = 1L;
     @EJB
     private AnuncioFacadeLocal anuncioFL;
+    @EJB
+    private PersonaFacadeLocal pFL;
 
     private Persona usuario;
     private List<Anuncio> activos;
@@ -71,7 +74,7 @@ public class perfilController implements Serializable {
         individual = anuncioFL.getAnunciosActivos();
         activos = new ArrayList<>();
         if (!(tp == 1 || tp == 2)) {
-            List<Integer> tps = new Auxiliar().getTiposPersonas(usuario);
+            List<Integer> tps = new Auxiliar().getTiposPersonas(usuario, pFL);
             individual.stream()
                     .filter(a -> a.getAnuncioTipoPersona() != null)
                     .filter(a -> !tps.contains(a.getAnuncioTipoPersona().getIdtipoPersona()))

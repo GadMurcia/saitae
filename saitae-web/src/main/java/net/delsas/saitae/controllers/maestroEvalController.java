@@ -77,7 +77,7 @@ public class maestroEvalController extends Auxiliar implements Serializable {
     public void init() {
         usuario = (Persona) FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
                 .get("usuario");
-        List<Integer> tps = getTiposPersonas(usuario);
+        List<Integer> tps = getTiposPersonas(usuario, pFL);
         boolean r = (tps.contains(1) || tps.contains(2));
         if (!r) {
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap()

@@ -31,6 +31,7 @@ import net.delsas.saitae.ax.XLSModel;
 import net.delsas.saitae.beans.AccesoFacadeLocal;
 import net.delsas.saitae.beans.AccesoTipoPersonaFacadeLocal;
 import net.delsas.saitae.beans.CategoriaFacadeLocal;
+import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.beans.RecursoFacadeLocal;
 import net.delsas.saitae.beans.TipoCargoFacadeLocal;
 import net.delsas.saitae.beans.TipoRecursoFacadeLocal;
@@ -81,6 +82,8 @@ public class repInvController extends Auxiliar implements Serializable {
     private TipoCargoFacadeLocal tcFL;
     @EJB
     private CategoriaFacadeLocal cFL;
+    @EJB
+    private PersonaFacadeLocal pFL;
 
     @PostConstruct
     public void init() {
@@ -88,7 +91,7 @@ public class repInvController extends Auxiliar implements Serializable {
         usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
         pagina = context.getExternalContext().getRequestServletPath().split("/")[2];
         try {
-            if (!(permitirAcceso(usuario, accesoTPFL.findTipoPersonaPermitidos(accesoFL.getAccesoByUrl(pagina))))) {
+            if (!(permitirAcceso(usuario, accesoTPFL.findTipoPersonaPermitidos(accesoFL.getAccesoByUrl(pagina)), pFL))) {
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("mensaje",
                         new FacesMessage(FacesMessage.SEVERITY_WARN, "Página prohibida",
                                 "Usted no tiene los permisos suficientes para ver y utilizar esa página."));

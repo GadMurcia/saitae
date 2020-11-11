@@ -30,6 +30,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
@@ -38,6 +40,8 @@ import net.delsas.saitae.beans.GradoFacadeLocal;
 import net.delsas.saitae.beans.MatriculaFacadeLocal;
 import net.delsas.saitae.beans.MestroHorarioMateriasFacadeLocal;
 import net.delsas.saitae.beans.NotificacionesFacadeLocal;
+import net.delsas.saitae.beans.PersonaFacadeLocal;
+import net.delsas.saitae.controllers.paquetesController;
 import net.delsas.saitae.entities.DiasEstudio;
 import net.delsas.saitae.entities.Estudiante;
 import net.delsas.saitae.entities.GradoPK;
@@ -61,6 +65,7 @@ import org.apache.poi.ss.usermodel.Picture;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.util.IOUtils;
 import org.omnifaces.cdi.PushContext;
+import org.primefaces.PrimeFaces;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.FlowEvent;
 import org.primefaces.model.chart.PieChartModel;
@@ -492,8 +497,9 @@ public class Auxiliar implements Serializable {
         return d;
     }
 
-    public List<Integer> getTiposPersonas(Persona p) {
+    public List<Integer> getTiposPersonas(Persona p, PersonaFacadeLocal pFL) {
         List<Integer> items = new ArrayList<>();
+        p = pFL.find(p.getIdpersona());
         if (p != null && p.getTipoPersona() != null) {
             items.add(p.getTipoPersona().getIdtipoPersona());
             if (p.getDelagacionCargoList() != null) {
@@ -538,9 +544,9 @@ public class Auxiliar implements Serializable {
         return items;
     }
 
-    public boolean permitirAcceso(Persona p, List<TipoPersona> lista) {
+    public boolean permitirAcceso(Persona p, List<TipoPersona> lista, PersonaFacadeLocal pFL) {
         List<Integer> permitidos = new ArrayList<>();
-        List<Integer> tps = getTiposPersonas(p);
+        List<Integer> tps = getTiposPersonas(p, pFL);
         lista.forEach((tp) -> {
             permitidos.add(tp.getIdtipoPersona());
         });
@@ -1338,7 +1344,7 @@ public class Auxiliar implements Serializable {
     public void redireccionarPagina(String pag) {
         try {
             FacesContext.getCurrentInstance().getExternalContext().redirect(pag);
-        } catch (IOException ex0) {
+        } catch (Exception ex0) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error iniesperado",
                     (ex0 != null ? ex0.getMessage() : "Error desconocido.")));
         }

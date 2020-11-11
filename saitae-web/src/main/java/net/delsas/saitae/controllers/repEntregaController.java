@@ -33,6 +33,7 @@ import net.delsas.saitae.beans.AccesoTipoPersonaFacadeLocal;
 import net.delsas.saitae.beans.EntregaUtilesFacadeLocal;
 import net.delsas.saitae.beans.GradoFacadeLocal;
 import net.delsas.saitae.beans.MatriculaFacadeLocal;
+import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.entities.EntregaUtiles;
 import net.delsas.saitae.entities.Grado;
 import net.delsas.saitae.entities.Persona;
@@ -66,6 +67,8 @@ public class repEntregaController extends Auxiliar implements Serializable {
     private Persona usuario;
     private String pagina;
     private Integer sel;
+    @EJB
+    private PersonaFacadeLocal pFL;
 
     @PostConstruct
     public void init() {
@@ -74,7 +77,7 @@ public class repEntregaController extends Auxiliar implements Serializable {
         usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
         pagina = context.getExternalContext().getRequestServletPath().split("/")[2];
         try {
-            if (!(permitirAcceso(usuario, accesoTPFL.findTipoPersonaPermitidos(accesoFL.getAccesoByUrl(pagina))))) {
+            if (!(permitirAcceso(usuario, accesoTPFL.findTipoPersonaPermitidos(accesoFL.getAccesoByUrl(pagina)), pFL))) {
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("mensaje",
                         new FacesMessage(FacesMessage.SEVERITY_WARN, "Página prohibida",
                                 "Usted no tiene los permisos suficientes para ver y utilizar esa página."));
@@ -86,7 +89,7 @@ public class repEntregaController extends Auxiliar implements Serializable {
                     new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error Inesperado",
                             ex.getMessage() == null ? "Error de causa desconocida." : ex.getMessage()));
         }
-        List<Integer> tps = getTiposPersonas(usuario);
+        List<Integer> tps = getTiposPersonas(usuario, pFL);
         Grado gm = tps.contains(4) ? gFL.findByidMaestroAndAño(usuario.getIdpersona(), getAñoActual()) : null;
         boolean global = (tps.contains(1) || tps.contains(2) || tps.contains(3) || tps.contains(12));
         List<EntregaUtiles> eul = global

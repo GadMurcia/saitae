@@ -16,7 +16,6 @@
  */
 package net.delsas.saitae.controllers;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -36,8 +35,11 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import net.delsas.saitae.ax.Auxiliar;
 import net.delsas.saitae.ax.mensaje;
+import net.delsas.saitae.beans.AccesoFacadeLocal;
+import net.delsas.saitae.beans.AccesoTipoPersonaFacadeLocal;
 import net.delsas.saitae.beans.AnuncioFacadeLocal;
 import net.delsas.saitae.beans.NotificacionesFacadeLocal;
+import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
 import net.delsas.saitae.entities.Anuncio;
 import net.delsas.saitae.entities.Persona;
@@ -72,16 +74,27 @@ public class AnuncioController extends Auxiliar implements Serializable {
     private List<Anuncio> activos;
     private List<Anuncio> inactivos;
 
+    @EJB
+    private AccesoTipoPersonaFacadeLocal accesoTPFL;
+    @EJB
+    private AccesoFacadeLocal accesoFL;
+    @EJB
+    private PersonaFacadeLocal pFL;    
+    private String pagina;
+    private FacesContext context;
+
     @PostConstruct
     public void init() {
-        FacesContext context = FacesContext.getCurrentInstance();
+        context=FacesContext.getCurrentInstance();
+        usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
+        context = FacesContext.getCurrentInstance();
+        pagina = context.getExternalContext().getRequestServletPath().split("/")[2];
         try {
-            usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
-            if (usuario == null) {
-                context.getExternalContext().getSessionMap().put("mensaje",
-                        new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                                "Falla!", "Esa vista no le está permitida."));
-                context.getExternalContext().redirect("./../");
+            if (!(permitirAcceso(usuario, accesoTPFL.findTipoPersonaPermitidos(accesoFL.getAccesoByUrl(pagina)), pFL))) {
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("mensaje",
+                        new FacesMessage(FacesMessage.SEVERITY_WARN, "Página prohibida",
+                                "Usted no tiene los permisos suficientes para ver y utilizar esa página."));
+                context.getExternalContext().redirect("perfil.intex");
             } else {
                 anuncio = new Anuncio();
                 anuncio.setAnuncioAnunciante(usuario);
@@ -105,8 +118,10 @@ public class AnuncioController extends Auxiliar implements Serializable {
                     inactivos.removeAll(inaNoMios);
                 }
             }
-        } catch (IOException e) {
-
+        } catch (Exception ex) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error Inesperado",
+                            ex.getMessage() == null ? "Error de causa desconocida." : ex.getMessage()));
         }
     }
 
@@ -229,7 +244,7 @@ public class AnuncioController extends Auxiliar implements Serializable {
                     "perfil<form¿¿¿tp¿¿"
                     + (Optional.ofNullable(anuncio.getAnuncioTipoPersona())
                             .orElseGet(() -> new TipoPersona(0)))
-                            .getIdtipoPersona()).toString(), notificacion);            
+                            .getIdtipoPersona()).toString(), notificacion);
             init();
         }
     }

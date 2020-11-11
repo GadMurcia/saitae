@@ -87,7 +87,7 @@ public class administradorController extends Auxiliar implements Serializable {
         usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
         pagina = context.getExternalContext().getRequestServletPath().split("/")[2];
         try {
-            if (!(permitirAcceso(usuario, accesoTPFL.findTipoPersonaPermitidos(accesoFL.getAccesoByUrl(pagina))))) {
+            if (!(permitirAcceso(usuario, accesoTPFL.findTipoPersonaPermitidos(accesoFL.getAccesoByUrl(pagina)), pfl))) {
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("mensaje",
                         new FacesMessage(FacesMessage.SEVERITY_WARN, "Página prohibida",
                                 "Usted no tiene los permisos suficientes para ver y utilizar esa página."));
@@ -233,7 +233,7 @@ public class administradorController extends Auxiliar implements Serializable {
     public boolean getVerDatos() {
         return usuario != null
                 && (usuario.getTipoPersona().getIdtipoPersona().equals(1)
-                || getTiposPersonas(usuario).contains(2));
+                || getTiposPersonas(usuario, pfl).contains(2));
     }
 
     public boolean getVerPaneles() {

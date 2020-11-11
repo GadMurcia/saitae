@@ -110,7 +110,7 @@ public class admPermisoController extends Auxiliar implements Serializable {
             if (usuario == null) {
                 redirect();
             } else {
-                tps = getTiposPersonas(usuario);
+                tps = getTiposPersonas(usuario, pFL);
                 boolean r = (tps.contains(3) || tps.contains(2) || tps.contains(1));
                 if (!r) {
                     redirect();
@@ -155,8 +155,6 @@ public class admPermisoController extends Auxiliar implements Serializable {
                 acep = (Permisos) event.getObject();
         }
     }
-
-    
 
     public void concederPermiso() {
         FacesMessage ms = null;
@@ -303,7 +301,7 @@ public class admPermisoController extends Auxiliar implements Serializable {
 
     private List<Permisos> depurar(List<Permisos> pps) {
         List<Permisos> psr = new ArrayList<>();
-        pps.stream().filter((p) -> (!getTiposPersonas(p.getPersona()).contains(3))).forEachOrdered((p) -> {
+        pps.stream().filter((p) -> (!getTiposPersonas(p.getPersona(), pFL).contains(3))).forEachOrdered((p) -> {
             psr.add(p);
         });
         return psr;

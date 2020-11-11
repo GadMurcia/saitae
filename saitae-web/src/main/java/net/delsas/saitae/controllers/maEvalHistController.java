@@ -29,6 +29,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import net.delsas.saitae.ax.Auxiliar;
 import net.delsas.saitae.beans.EvaluacionMaestroFacadeLocal;
+import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.entities.EvaluacionMaestro;
 import net.delsas.saitae.entities.Persona;
 
@@ -45,11 +46,13 @@ public class maEvalHistController extends Auxiliar implements Serializable {
     private Persona usuario;
     @EJB
     private EvaluacionMaestroFacadeLocal emFL;
+    @EJB
+    private PersonaFacadeLocal pFL;
 
     @PostConstruct
     public void init() {
         usuario = (Persona) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
-        List<Integer> tps = getTiposPersonas(usuario);
+        List<Integer> tps = getTiposPersonas(usuario, pFL);
         if (!tps.contains(4)) {
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
                     .put("mensaje",

@@ -52,6 +52,10 @@ import javax.xml.bind.annotation.XmlTransient;
 })
 public class Reserva implements Serializable {
 
+    @JoinColumn(name = "acepta", referencedColumnName = "idpersona")
+    @ManyToOne
+    private Persona acepta;
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -422,6 +426,14 @@ public class Reserva implements Serializable {
                 + ", docente=" + docente + ", tipoRecurso=" + tipoRecurso + ", maeria=" + maeria
                 + ", tipoProyecto=" + tipoProyecto + ", entregante=" + entregante + ", recibe="
                 + recibe + '}';
+    }
+
+    public Persona getAcepta() {
+        return acepta;
+    }
+
+    public void setAcepta(Persona acepta) {
+        this.acepta = acepta;
     }
 
 }

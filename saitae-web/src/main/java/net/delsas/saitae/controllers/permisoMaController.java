@@ -34,6 +34,7 @@ import net.delsas.saitae.ax.mensaje;
 import net.delsas.saitae.beans.ConstanciasFacadeLocal;
 import net.delsas.saitae.beans.NotificacionesFacadeLocal;
 import net.delsas.saitae.beans.PermisosFacadeLocal;
+import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
 import net.delsas.saitae.entities.Constancias;
 import net.delsas.saitae.entities.ConstanciasPK;
@@ -76,6 +77,9 @@ public class permisoMaController extends Auxiliar implements Serializable {
     private boolean editar;
     private FacesMessage ms;
     private List<Integer> tps;
+    @EJB
+    private PersonaFacadeLocal pFL;
+    
 
     @PostConstruct
     public void init() {
@@ -103,7 +107,7 @@ public class permisoMaController extends Auxiliar implements Serializable {
         permisos = usuario.getTipoPersona().getTipopersonaPermisoList();
         editar = false;
         p = (Permisos) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("permiso");
-        tps = getTiposPersonas(usuario);
+        tps = getTiposPersonas(usuario, pFL);
         if (p == null) {
             p = new Permisos();
             constancia = new Constancias(new ConstanciasPK());

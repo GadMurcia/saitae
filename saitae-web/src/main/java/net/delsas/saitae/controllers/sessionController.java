@@ -164,7 +164,7 @@ public class sessionController extends Auxiliar implements Serializable {
         mi.setUrl("perfil.intex");
         mm.getElements().add(mi);
         List<Acceso> menusDisponibles = new ArrayList<>();
-        List<Integer> tps = getTiposPersonas(us);
+        List<Integer> tps = getTiposPersonas(us, personaFL);
         tps.stream().map((i) -> atpFL.findAccesoByIdTipoPersona(i)).forEachOrdered((actps) -> {
             actps.stream().filter((a) -> (!menusDisponibles.contains(a))).forEachOrdered((a) -> {
                 menusDisponibles.add(a);

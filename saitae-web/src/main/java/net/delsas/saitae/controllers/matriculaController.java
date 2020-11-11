@@ -83,7 +83,7 @@ public class matriculaController extends Auxiliar implements Serializable {
     public void init() {
         FacesContext context = FacesContext.getCurrentInstance();
         usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
-        List<Integer> tps = getTiposPersonas(usuario);
+        List<Integer> tps = getTiposPersonas(usuario, personaFL);
         boolean r = (tps.contains(1) || tps.contains(2) || tps.contains(13));
         if (!r) {
             context.getExternalContext().getSessionMap().put("mensaje", new FacesMessage(FacesMessage.SEVERITY_FATAL,

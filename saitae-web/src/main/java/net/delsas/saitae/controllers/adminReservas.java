@@ -37,6 +37,7 @@ import net.delsas.saitae.ax.Auxiliar;
 import net.delsas.saitae.ax.mensaje;
 import net.delsas.saitae.beans.EjemplarFacadeLocal;
 import net.delsas.saitae.beans.NotificacionesFacadeLocal;
+import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.beans.PersonasReservaFacadeLocal;
 import net.delsas.saitae.beans.ReservaDetalleFacadeLocal;
 import net.delsas.saitae.beans.ReservaFacadeLocal;
@@ -101,12 +102,14 @@ public class adminReservas extends Auxiliar implements Serializable {
     private Ejemplar ejemplar;
     private ProyectoPedagogico proyecto;
     private Integer añoSelected;
+    @EJB
+    private PersonaFacadeLocal pFL;
 
     @PostConstruct
     public void init() {
         usuario = (Persona) FacesContext.getCurrentInstance()
                 .getExternalContext().getSessionMap().get("usuario");
-        tipos = getTiposPersonas(usuario);
+        tipos = getTiposPersonas(usuario, pFL);
         boolean tr = (tipos.contains(1) || tipos.contains(2) || tipos.contains(5) || tipos.contains(6) || tipos.contains(7));
         if (!tr) {
             solicitados = entregados = devueltos = rechazados = cancelados = aceptados = new ArrayList<>();
@@ -474,6 +477,7 @@ public class adminReservas extends Auxiliar implements Serializable {
         if (selected != null) {
             String e1 = selected.getReservaEstado();
             selected.setReservaEstado("R");
+            selected.setAcepta(usuario);
             resFL.edit(selected);
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Rechazo exitoso",
@@ -515,6 +519,7 @@ public class adminReservas extends Auxiliar implements Serializable {
         }
         if (selected != null && lleno) {
             selected.setReservaEstado("A");
+            selected.setAcepta(usuario);
             resFL.edit(selected);
             Reserva res;
             if (!getEslaboratorio()) {
@@ -743,6 +748,18 @@ public class adminReservas extends Auxiliar implements Serializable {
         res.addAll(resFL.findByEstadoAndIdTipoRecurso(est, (tipos.contains(5) ? 3 : 0), año));
         res.addAll(resFL.findByEstadoAndIdTipoRecurso(est, (tipos.contains(6) ? 1 : 0), año));
         res.addAll(resFL.findByEstadoAndIdTipoRecurso(est, (tipos.contains(7) ? 2 : 0), año));
+    }
+
+    public boolean getVerPersonaCambioEstado(Reserva r) {
+        return r == null ? false : !(r.getReservaEstado().equals("S") || r.getReservaEstado().equals("C"));
+    }
+
+    public String getPersonaCambioEstado(Reserva r) {
+        return getNombreCortoPersona(
+                (r.getReservaEstado().equals("A") || r.getReservaEstado().equals("R"))
+                ? r.getAcepta()
+                : (r.getReservaEstado().equals("E") ? r.getEntregante()
+                : (r.getReservaEstado().equals("D") ? r.getRecibe() : null)));
     }
 
 }

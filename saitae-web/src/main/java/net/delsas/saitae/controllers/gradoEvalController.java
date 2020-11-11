@@ -34,6 +34,7 @@ import net.delsas.saitae.beans.AccesoTipoPersonaFacadeLocal;
 import net.delsas.saitae.beans.GradoEvaluacionFacadeLocal;
 import net.delsas.saitae.beans.GradoFacadeLocal;
 import net.delsas.saitae.beans.NotificacionesFacadeLocal;
+import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.entities.Grado;
 import net.delsas.saitae.entities.GradoEvaluacion;
 import net.delsas.saitae.entities.Persona;
@@ -72,6 +73,8 @@ public class gradoEvalController extends Auxiliar implements Serializable {
     private NotificacionesFacadeLocal notiFL;
     @EJB
     private GradoEvaluacionFacadeLocal gevFL;
+    @EJB
+    private PersonaFacadeLocal pFL;
 
     @PostConstruct
     public void init() {
@@ -79,7 +82,7 @@ public class gradoEvalController extends Auxiliar implements Serializable {
         usuario = (Persona) context.getExternalContext().getSessionMap().get("usuario");
         pagina = context.getExternalContext().getRequestServletPath().split("/")[2];
         try {
-            if (!(permitirAcceso(usuario, accesoTPFL.findTipoPersonaPermitidos(accesoFL.getAccesoByUrl(pagina))))) {
+            if (!(permitirAcceso(usuario, accesoTPFL.findTipoPersonaPermitidos(accesoFL.getAccesoByUrl(pagina)), pFL))) {
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("mensaje",
                         new FacesMessage(FacesMessage.SEVERITY_WARN, "Página prohibida",
                                 "Usted no tiene los permisos suficientes para ver y utilizar esa página."));

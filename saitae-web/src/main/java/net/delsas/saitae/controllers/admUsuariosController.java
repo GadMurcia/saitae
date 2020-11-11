@@ -21,8 +21,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -32,6 +30,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import net.delsas.saitae.ax.Auxiliar;
 import net.delsas.saitae.ax.mensaje;
+import net.delsas.saitae.beans.AccesoFacadeLocal;
+import net.delsas.saitae.beans.AccesoTipoPersonaFacadeLocal;
 import net.delsas.saitae.beans.DelagacionCargoFacadeLocal;
 import net.delsas.saitae.beans.NotificacionesFacadeLocal;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
@@ -66,6 +66,12 @@ public class admUsuariosController extends Auxiliar implements Serializable {
     private PushContext notificacion;
     @EJB
     private NotificacionesFacadeLocal notiFL;
+    @EJB
+    private AccesoTipoPersonaFacadeLocal accesoTPFL;
+    @EJB
+    private AccesoFacadeLocal accesoFL;
+    private String pagina;
+    private FacesContext context;
     private Persona persona;
     private Persona usuario;
     private boolean secret;
@@ -76,23 +82,23 @@ public class admUsuariosController extends Auxiliar implements Serializable {
     public void init() {
         usuario = (Persona) FacesContext.getCurrentInstance()
                 .getExternalContext().getSessionMap().get("usuario");
-        List<Integer> tps = getTiposPersonas(usuario);
-        boolean v = tps.contains(1) || tps.contains(2) || tps.contains(13);
-        if (!v) {
-            FacesContext context = FacesContext.getCurrentInstance();
-            context.getExternalContext().getSessionMap().put("mensaje",
-                    new FacesMessage(FacesMessage.SEVERITY_FATAL,
-                            "Acceso denegado",
-                            "Usted no tiene los privilegios suficientes para "
-                            + "acceder a esa funcionalidad."));
-            try {
-                context.getExternalContext().redirect("./../");
-            } catch (IOException ex) {
-                Logger.getLogger(paquetesController.class.getName()).log(Level.SEVERE, null, ex);
+        context = FacesContext.getCurrentInstance();
+        pagina = context.getExternalContext().getRequestServletPath().split("/")[2];
+        try {
+            if (!(permitirAcceso(usuario, accesoTPFL.findTipoPersonaPermitidos(accesoFL.getAccesoByUrl(pagina)), pFL))) {
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("mensaje",
+                        new FacesMessage(FacesMessage.SEVERITY_WARN, "Página prohibida",
+                                "Usted no tiene los permisos suficientes para ver y utilizar esa página."));
+                FacesContext.getCurrentInstance().getExternalContext().redirect("perfil.intex");
+                return;
             }
-            return;
+        } catch (IOException ex) {
+            FacesContext.getCurrentInstance().addMessage("form0:msgs",
+                    new FacesMessage(FacesMessage.SEVERITY_WARN, "Página prohibida",
+                            "Usted no tiene los permisos suficientes para ver y utilizar esa página."));
+            PrimeFaces.current().ajax().update("form0:msgs");
         }
-        secret = tps.contains(13);
+        secret = getTiposPersonas(usuario, pFL).contains(13);
         query = "";
         init2();
     }
@@ -105,11 +111,14 @@ public class admUsuariosController extends Auxiliar implements Serializable {
     public List<String> autoComplete(String q) {
         persona = null;
         List<String> i = new ArrayList<>();
-        List<Persona> ps = secret ? pFL.getPersonaByLikeNombreAndType(q, 8)
-                : pFL.getPersonaByLikeNombre(q);
-        ps.stream().filter((p) -> (!p.getTipoPersona().getIdtipoPersona().equals(1))).forEachOrdered((p) -> {
-            i.add(getNombreCompletoPersona(p) + " ID: " + p.getIdpersona().toString().substring(1));
-        });
+        List<Persona> ps = /*secret ? pFL.getPersonaByLikeNombreAndType(q, 8)
+                : */ pFL.getPersonaByLikeNombre(q);
+        ps.stream()
+                .filter((p) -> (!(getTiposPersonas(p, pFL).contains(1) || getTiposPersonas(p, pFL).contains(2))))
+                .forEachOrdered((p) -> {
+                    i.add(getNombreCompletoPersona(p) + " ID: "
+                            + p.getIdpersona().toString().substring(1));
+                });
         if (i.size() < 1) {
             i.add("No hay resultados");
         }
@@ -265,8 +274,8 @@ public class admUsuariosController extends Auxiliar implements Serializable {
 
     public List<TipoPersona> getCargos() {
         cargos = tpFL.findAll();
-        List<Integer> tps = getTiposPersonas(persona);
-        for (Integer i : new Integer[]{1, 2, 3, 4, 8, 9, 10, 11}) {
+        List<Integer> tps = getTiposPersonas(persona, pFL);
+        for (Integer i : new Integer[]{1, 14, 3, 4, 8, 9, 10, 11}) {
             if (!tps.contains(i)) {
                 tps.add(i);
             }

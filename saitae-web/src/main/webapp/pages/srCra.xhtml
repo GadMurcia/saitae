@@ -324,6 +324,11 @@
                             <p:outputLabel value="El equipo será usado por: "/>
                             <h:outputText value="#{adminReservas.usos}"/>
 
+                            <p:outputLabel value="Reserva #{adminReservas.textoReserva}a por: "
+                                           rendered="#{adminReservas.getVerPersonaCambioEstado(adminReservas.selected)}"/>
+                            <h:outputText value="#{adminReservas.getPersonaCambioEstado(adminReservas.selected)}"
+                                          rendered="#{adminReservas.getVerPersonaCambioEstado(adminReservas.selected)}"/>
+
                             <p:outputLabel value="Grupo de estudiantes: " 
                                            rendered="#{adminReservas.usadoPor == 3}"/>
                             <p:inputTextarea value="#{adminReservas.personasEnSolicitudTexto}" 
