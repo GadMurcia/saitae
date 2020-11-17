@@ -65,12 +65,11 @@
                                 --></p:dataTable>
 
                             <h:commandLink disabled="#{repPSController.reportes.size() == 0}">
-                                <p:graphicImage library="img" name="xls.png" width="37px" height="32px"/>
-                                <p:dataExporter type="xls" target="publicos" 
-                                                options="#{axiliarController.excelOpt}"
-                                                fileName="REporte de citas psicológicas"
+                                <p:graphicImage library="img" name="pdf.png" width="37px" height="32px"/>
+                                <p:dataExporter type="pdf" target="publicos"
+                                                fileName="Reporte de citas psicológicas"
                                                 encoding="UTF-8"
-                                                postProcessor="#{repPSController.reporte}"/>
+                                                exporter="#{repPSController.pdfExporter}"/>
                             </h:commandLink>
 
                         </h:panelGrid>

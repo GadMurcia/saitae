@@ -94,7 +94,7 @@ public class AnuncioController extends Auxiliar implements Serializable {
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("mensaje",
                         new FacesMessage(FacesMessage.SEVERITY_WARN, "Página prohibida",
                                 "Usted no tiene los permisos suficientes para ver y utilizar esa página."));
-                context.getExternalContext().redirect("perfil.intex");
+                FacesContext.getCurrentInstance().getExternalContext().redirect("./../");
             } else {
                 anuncio = new Anuncio();
                 anuncio.setAnuncioAnunciante(usuario);

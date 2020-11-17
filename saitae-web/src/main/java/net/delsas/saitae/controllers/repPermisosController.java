@@ -16,18 +16,25 @@
  */
 package net.delsas.saitae.controllers;
 
+import com.lowagie.text.pdf.PdfWriter;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import net.delsas.saitae.ax.Auxiliar;
 import net.delsas.saitae.ax.ReportePermisos;
 import net.delsas.saitae.ax.XLSModel;
+import net.delsas.saitae.ax.convExToPDF;
 import net.delsas.saitae.beans.GradoFacadeLocal;
 import net.delsas.saitae.beans.MaestoCargoFacadeLocal;
 import net.delsas.saitae.beans.MatriculaFacadeLocal;
@@ -41,8 +48,13 @@ import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.TipoPermiso;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.primefaces.behavior.ajax.AjaxBehavior;
+import org.primefaces.component.datatable.DataTable;
+import org.primefaces.component.export.ExportConfiguration;
+import org.primefaces.component.export.Exporter;
 import org.primefaces.component.selectonemenu.SelectOneMenu;
 import org.primefaces.event.SelectEvent;
+import org.primefaces.util.ComponentUtils;
+import org.primefaces.util.Constants;
 
 /**
  *
@@ -226,9 +238,16 @@ public class repPermisosController extends Auxiliar implements Serializable {
 
     public void reporte(Object doc) {
         rpListGoce.get(0).getPermiso().setPersona(PSelected);
-        HSSFWorkbook wb = new XLSModel().getReportePermisos(rpListGoce, (HSSFWorkbook) doc,
+        HSSFWorkbook wb = new HSSFWorkbook();
+        wb.createSheet();
+        wb = new XLSModel().getReportePermisos(rpListGoce, wb,
                 tppFL.findTipoPermisoByIdtipopersona(PSelected.getTipoPersona().getIdtipoPersona()),
-                 mcFL, pFL);
+                mcFL, pFL);
+        try {
+            doc = new convExToPDF().conv(wb, wb.getSheetName(0), FacesContext.getCurrentInstance());
+        } catch (Exception ex) {
+            Logger.getLogger(repPermisosController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public List<ReportePermisos> getRpListGoce() {
@@ -241,6 +260,40 @@ public class repPermisosController extends Auxiliar implements Serializable {
 
     public boolean getDescargarDoc() {
         return !rpListGoce.isEmpty();
+    }
+
+    private Exporter<DataTable> textExporter;
+
+    public Exporter<DataTable> getTextExporter() {
+        textExporter = textExporter != null
+                ? textExporter
+                : (FacesContext fc, List<DataTable> list, ExportConfiguration ec) -> {
+                    rpListGoce.get(0).getPermiso().setPersona(PSelected);
+                    HSSFWorkbook wb = new HSSFWorkbook();
+                    wb.createSheet();
+                    wb = new XLSModel().getReportePermisos(rpListGoce, wb,
+                            tppFL.findTipoPermisoByIdtipopersona(PSelected.getTipoPersona().getIdtipoPersona()),
+                            mcFL, pFL);
+                    try {
+                        fc.getExternalContext().setResponseContentType("application/x-google-chrome-pdf");
+                        fc.getExternalContext().setResponseHeader("Expires", "0");
+                        fc.getExternalContext().setResponseHeader("Cache-Control", "must-revalidate, post-check=0, pre-check=0");
+                        fc.getExternalContext().setResponseHeader("Pragma", "public");
+                        fc.getExternalContext().setResponseHeader("Content-disposition", ComponentUtils.createContentDisposition("attachment", wb.getSheetName(0) + ".pdf"));
+                        fc.getExternalContext().addResponseCookie(Constants.DOWNLOAD_COOKIE, "true", Collections.<String, Object>emptyMap());
+                        OutputStream os = fc.getExternalContext().getResponseOutputStream();
+                        PdfWriter writer = PdfWriter.getInstance(new convExToPDF().conv(wb, wb.getSheetName(0), fc), os);
+                        System.out.println(Arrays.toString(writer.getDirectContent().toPdf(writer)));
+                        writer.flush();
+                    } catch (Exception ex) {
+                        Logger.getLogger(repPermisosController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                };
+        return textExporter;
+    }
+
+    public void setTextExporter(Exporter<DataTable> ex) {
+        this.textExporter = ex;
     }
 
 }

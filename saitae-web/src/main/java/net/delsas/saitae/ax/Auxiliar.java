@@ -19,6 +19,7 @@ package net.delsas.saitae.ax;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -26,6 +27,7 @@ import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -66,9 +68,12 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.util.IOUtils;
 import org.omnifaces.cdi.PushContext;
 import org.primefaces.PrimeFaces;
+import org.primefaces.component.export.ExportConfiguration;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.FlowEvent;
 import org.primefaces.model.chart.PieChartModel;
+import org.primefaces.util.ComponentUtils;
+import org.primefaces.util.Constants;
 
 /**
  *
@@ -1348,5 +1353,15 @@ public class Auxiliar implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error iniesperado",
                     (ex0 != null ? ex0.getMessage() : "Error desconocido.")));
         }
+    }
+    
+    public OutputStream getOutputStream(FacesContext fc, ExportConfiguration ec, String tipoArchivo) throws IOException {
+        fc.getExternalContext().setResponseContentType(tipoArchivo);
+        fc.getExternalContext().setResponseHeader("Expires", "0");
+        fc.getExternalContext().setResponseHeader("Cache-Control", "must-revalidate, post-check=0, pre-check=0");
+        fc.getExternalContext().setResponseHeader("Pragma", "public");
+        fc.getExternalContext().setResponseHeader("Content-disposition", ComponentUtils.createContentDisposition("attachment", ec.getOutputFileName() + ".pdf"));
+        fc.getExternalContext().addResponseCookie(Constants.DOWNLOAD_COOKIE, "true", Collections.<String, Object>emptyMap());
+        return fc.getExternalContext().getResponseOutputStream();
     }
 }

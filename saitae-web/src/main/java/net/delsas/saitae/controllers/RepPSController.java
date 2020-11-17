@@ -16,12 +16,29 @@
  */
 package net.delsas.saitae.controllers;
 
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Font;
+import com.lowagie.text.Image;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.Phrase;
+import com.lowagie.text.pdf.PdfCell;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfWriter;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
+import java.net.MalformedURLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -56,11 +73,14 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.util.IOUtils;
 import org.omnifaces.cdi.Push;
 import org.omnifaces.cdi.PushContext;
 import org.primefaces.PrimeFaces;
 import org.primefaces.behavior.ajax.AjaxBehavior;
 import org.primefaces.component.datatable.DataTable;
+import org.primefaces.component.export.ExportConfiguration;
+import org.primefaces.component.export.Exporter;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -113,6 +133,7 @@ public class RepPSController extends Auxiliar implements Serializable {
     private String motivos = "";
     private FacesContext context;
     private ReportePsicologia repSelected;
+    private Exporter<DataTable> pdfExporter;
 
     @PostConstruct
     public void init() {
@@ -124,13 +145,14 @@ public class RepPSController extends Auxiliar implements Serializable {
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("mensaje",
                         new FacesMessage(FacesMessage.SEVERITY_WARN, "Página prohibida",
                                 "Usted no tiene los permisos suficientes para ver y utilizar esa página."));
-                context.getExternalContext().redirect("perfil.intex");
+                context.getExternalContext().redirect("./../");
                 return;
             }
         } catch (Exception ex) {
-            FacesContext.getCurrentInstance().addMessage(null,
+            FacesContext.getCurrentInstance().addMessage("form0:msgs",
                     new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error Inesperado",
                             ex.getMessage() == null ? "Error de causa desconocida." : ex.getMessage()));
+            PrimeFaces.current().ajax().update("form0:msgs");
         }
         año = new Auxiliar().getAñoActual();
         periodos = new ArrayList<>();
@@ -554,6 +576,174 @@ public class RepPSController extends Auxiliar implements Serializable {
 
     public void setPuedeEditar(boolean puedeEditar) {
         this.puedeEditar = puedeEditar;
+    }
+
+    public Exporter<DataTable> getPdfExporter() {
+        pdfExporter = pdfExporter != null
+                ? pdfExporter
+                : (FacesContext fc, List<DataTable> list, ExportConfiguration ec) -> {
+                    try {
+                        OutputStream os = getOutputStream(fc, ec, "application/pdf");
+                        Document pdf = new Document(PageSize.LETTER);
+                        PdfWriter writer = PdfWriter.getInstance(pdf, os);
+                        pdf.open();
+                        PdfPTable t = new PdfPTable(8);
+
+                        PdfPCell c1;
+                        String logo = fc.getExternalContext().getRealPath("") + File.separator + "resources" + File.separator + "img" + File.separator + "intexM.jpeg";
+                        try (InputStream is = new FileInputStream(logo)) {
+                            Image i = Image.getInstance(IOUtils.toByteArray(is));
+                            i.scalePercent(20);
+                            c1 = new PdfPCell(i);
+                            c1.setColspan(8);
+                            c1.setBorder(0);
+                            c1.setHorizontalAlignment(PdfCell.ALIGN_CENTER);
+                            t.addCell(c1);
+                        } catch (MalformedURLException e) {
+                        }
+
+                        c1 = new PdfPCell(new Phrase("Instituto Nacional Texistepeque"));
+                        c1.setColspan(8);
+                        c1.setNoWrap(false);
+                        c1.setBorder(0);
+                        c1.getPhrase().getFont().setSize(24);
+                        c1.getPhrase().getFont().setStyle(Font.BOLD);
+                        c1.setHorizontalAlignment(PdfCell.ALIGN_CENTER);
+                        t.addCell(c1);
+
+                        c1 = new PdfPCell(new Phrase("Reporte de las atenciones realizadas en el área de psicología"));
+                        c1.setColspan(8);
+                        c1.setNoWrap(false);
+                        c1.setBorder(0);
+                        c1.getPhrase().getFont().setSize(18);
+                        c1.setHorizontalAlignment(PdfCell.ALIGN_CENTER);
+                        t.addCell(c1);
+                        c1 = new PdfPCell(new Phrase("\n\n"));
+                        c1.setColspan(8);
+                        c1.setNoWrap(false);
+                        c1.setBorder(0);
+                        t.addCell(c1);
+
+                        c1 = new PdfPCell(new Phrase("Periodo del reporte"));
+                        c1.setColspan(3);
+                        c1.setNoWrap(false);
+                        c1.setBorder(0);
+                        t.addCell(c1);
+                        c1 = new PdfPCell(new Phrase(getFechasPeriodo(periodoSel)));
+                        c1.setColspan(5);
+                        c1.setNoWrap(false);
+                        c1.setBorder(0);
+                        t.addCell(c1);
+
+                        c1 = new PdfPCell(new Phrase("Fecha de Impresión"));
+                        c1.setColspan(3);
+                        c1.setNoWrap(false);
+                        c1.setBorder(0);
+                        t.addCell(c1);
+                        c1 = new PdfPCell(new Phrase((new SimpleDateFormat("dd / MM / yyyy").format(new Date())).toUpperCase()));
+                        c1.setColspan(5);
+                        c1.setNoWrap(false);
+                        c1.setBorder(0);
+                        t.addCell(c1);
+
+                        c1 = new PdfPCell(new Phrase("Psicólogo"));
+                        c1.setColspan(3);
+                        c1.setNoWrap(false);
+                        c1.setBorder(0);
+                        t.addCell(c1);
+                        c1 = new PdfPCell(new Phrase(getNombreCompletoPersona(reportes.get(0).getPsicologo())));
+                        c1.setColspan(5);
+                        c1.setNoWrap(false);
+                        c1.setBorder(0);
+                        t.addCell(c1);
+
+                        c1 = new PdfPCell(new Phrase("\n\n"));
+                        c1.setColspan(8);
+                        c1.setNoWrap(false);
+                        c1.setBorder(0);
+                        t.addCell(c1);
+
+                        for (ReportePsicologia rp : reportes) {
+                            c1 = new PdfPCell(new Phrase(getNombreCompletoPersona(rp.getEstudiante1().getPersona())));
+                            c1.setColspan(8);
+                            c1.setNoWrap(false);
+                            c1.setVerticalAlignment(PdfCell.ALIGN_MIDDLE);
+                            c1.getPhrase().getFont().setStyle(Font.BOLD);
+                            t.addCell(c1);
+
+                            c1 = new PdfPCell(new Phrase(""));
+                            c1.setRowspan(5);
+                            c1.setNoWrap(false);
+                            t.addCell(c1);
+
+                            c1 = new PdfPCell(new Phrase("Grado"));
+                            c1.setColspan(2);
+                            c1.setNoWrap(false);
+                            c1.setVerticalAlignment(PdfCell.ALIGN_MIDDLE);
+                            t.addCell(c1);
+                            c1 = new PdfPCell(new Phrase(getGradoEstudiante(rp.getEstudiante1())));
+                            c1.setColspan(5);
+                            c1.setNoWrap(false);
+                            c1.setVerticalAlignment(PdfCell.ALIGN_MIDDLE);
+                            t.addCell(c1);
+
+                            c1 = new PdfPCell(new Phrase("Citas Solicitadas"));
+                            c1.setColspan(2);
+                            c1.setNoWrap(false);
+                            c1.setVerticalAlignment(PdfCell.ALIGN_MIDDLE);
+                            t.addCell(c1);
+                            c1 = new PdfPCell(new Phrase(rp.getNCitasSolicitadas() + ""));
+                            c1.setColspan(5);
+                            c1.setNoWrap(false);
+                            c1.setVerticalAlignment(PdfCell.ALIGN_MIDDLE);
+                            t.addCell(c1);
+
+                            c1 = new PdfPCell(new Phrase("Consultas Realizadas"));
+                            c1.setColspan(2);
+                            c1.setNoWrap(false);
+                            c1.setVerticalAlignment(PdfCell.ALIGN_MIDDLE);
+                            t.addCell(c1);
+                            c1 = new PdfPCell(new Phrase(rp.getNConsultas() + ""));
+                            c1.setColspan(5);
+                            c1.setNoWrap(false);
+                            c1.setVerticalAlignment(PdfCell.ALIGN_MIDDLE);
+                            t.addCell(c1);
+
+                            c1 = new PdfPCell(new Phrase("Motivos de las Consultas"));
+                            c1.setColspan(2);
+                            c1.setNoWrap(false);
+                            c1.setVerticalAlignment(PdfCell.ALIGN_MIDDLE);
+                            t.addCell(c1);
+                            c1 = new PdfPCell(new Phrase(rp.getMotivos()));
+                            c1.setColspan(5);
+                            c1.setNoWrap(false);
+                            c1.setVerticalAlignment(PdfCell.ALIGN_MIDDLE);
+                            t.addCell(c1);
+
+                            c1 = new PdfPCell(new Phrase("Comentarios del Psicólogo"));
+                            c1.setColspan(2);
+                            c1.setNoWrap(false);
+                            c1.setVerticalAlignment(PdfCell.ALIGN_MIDDLE);
+                            t.addCell(c1);
+                            c1 = new PdfPCell(new Phrase(rp.getDiagnostico()));
+                            c1.setColspan(5);
+                            c1.setNoWrap(false);
+                            c1.setVerticalAlignment(PdfCell.ALIGN_MIDDLE);
+                            t.addCell(c1);
+
+                        }
+                        pdf.add(t);
+                        pdf.close();
+                        writer.flush();
+                    } catch (DocumentException | IOException ex) {
+                        Logger.getLogger(RepPSController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                };
+        return pdfExporter;
+    }
+
+    public void setPdfExporter(Exporter<DataTable> ex) {
+        this.pdfExporter = ex;
     }
 
 }
