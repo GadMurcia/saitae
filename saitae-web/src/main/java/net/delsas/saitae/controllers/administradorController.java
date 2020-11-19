@@ -16,11 +16,21 @@
  */
 package net.delsas.saitae.controllers;
 
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Font;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfWriter;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -45,6 +55,9 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.omnifaces.cdi.Push;
 import org.omnifaces.cdi.PushContext;
+import org.primefaces.component.datatable.DataTable;
+import org.primefaces.component.export.ExportConfiguration;
+import org.primefaces.component.export.Exporter;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -238,6 +251,40 @@ public class administradorController extends Auxiliar implements Serializable {
 
     public boolean getVerPaneles() {
         return selected != null && selected.getTipoPersona().getIdtipoPersona().equals(4);
+    }
+
+    public Exporter<DataTable> getPdfExporter() {
+        return (FacesContext fc, List<DataTable> list, ExportConfiguration ec) -> {
+            try {
+                PdfPTable t = new PdfPTable(6);
+                t.setWidthPercentage(100);
+                t.addCell(getTextCell("Listado del plantel institucional", 5, 1, false, false, 18, Font.BOLD, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getCellWithImagen(fc, "intexM.jpeg", 1, 1, false, 15, PdfPCell.ALIGN_CENTER));
+
+                t.addCell(getTextCell("DUI", 1, 1, false, true, 13, Font.BOLD, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("Nombre", 3, 1, false, true, 13, Font.BOLD, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("Ocupación", 1, 1, false, true, 13, Font.BOLD, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("Cargos", 1, 1, false, true, 13, Font.BOLD, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+
+                getPlantel().forEach(p -> {
+                    t.addCell(getTextCell(p.getIdpersona().toString().substring(1), 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                    t.addCell(getTextCell(getNombreCompletoPersona(p), 3, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_LEFT, PdfPCell.ALIGN_MIDDLE));
+                    t.addCell(getTextCell(p.getPersonaOCupacion(), 1, 1, false, true, 13, Font.NORMAL, PdfPCell.ALIGN_LEFT, PdfPCell.ALIGN_MIDDLE));
+                    t.addCell(getTextCell(getCargosTxt(p), 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_LEFT, PdfPCell.ALIGN_MIDDLE));
+                });
+                OutputStream os = getOutputStream(fc, ec, "application/pdf");
+                Document pdf = new Document(PageSize.LEGAL);
+                PdfWriter writer = PdfWriter.getInstance(pdf, os);
+                pdf.open();
+                t.setWidthPercentage(100);
+                pdf.add(t);
+                pdf.setMargins(1, 1, 1, 1);
+                pdf.close();
+                writer.flush();
+            } catch (DocumentException | IOException e) {
+                Logger.getLogger(repInvController.class.getName()).log(Level.SEVERE, null, e);
+            }
+        };
     }
 
 }

@@ -16,13 +16,34 @@
  */
 package net.delsas.saitae.controllers;
 
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Element;
+import com.lowagie.text.ExceptionConverter;
+import com.lowagie.text.Font;
+import com.lowagie.text.Header;
+import com.lowagie.text.HeaderFooter;
+import com.lowagie.text.Image;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.Phrase;
+import com.lowagie.text.Rectangle;
+import com.lowagie.text.pdf.ColumnText;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfPageEvent;
+import com.lowagie.text.pdf.PdfPageEventHelper;
+import com.lowagie.text.pdf.PdfTemplate;
+import com.lowagie.text.pdf.PdfWriter;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -42,6 +63,9 @@ import net.delsas.saitae.entities.ContribucionesPK;
 import net.delsas.saitae.entities.Grado;
 import net.delsas.saitae.entities.Persona;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.primefaces.component.datatable.DataTable;
+import org.primefaces.component.export.ExportConfiguration;
+import org.primefaces.component.export.Exporter;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.chart.PieChartModel;
 
@@ -191,5 +215,38 @@ public class repContrController extends Auxiliar implements Serializable {
 
     public void postProcesoXLS(Object doc) {
         HSSFWorkbook wb = new XLSModel().getReporteContribucion((HSSFWorkbook) doc, gSelected.getGradoPK());
+    }
+
+    public Exporter<DataTable> getPdfExporter() {
+        return (FacesContext fc, List<DataTable> list, ExportConfiguration ec) -> {
+            try {
+                PdfPTable t = new PdfPTable(6);
+                t.setWidthPercentage(100);
+                t.addCell(getCellWithImagen(fc, "intexM.jpeg", 6, 1, false, 25, PdfPCell.ALIGN_CENTER));
+                t.addCell(getTextCell("Listado de moradores del pago de la contribución para el grado " + getGradoNombre(gSelected.getGradoPK()), 6, 1, false, false, 18, Font.BOLD, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("\n\n", 6, 1, false, false, 12, Font.NORMAL, PdfPCell.ALIGN_LEFT, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("Fecha de impresión: " + (new SimpleDateFormat("dd / MM / YYY").format(new Date())), 6, 1, false, false, 12, Font.BOLDITALIC, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("\n\n", 6, 1, false, false, 12, Font.NORMAL, PdfPCell.ALIGN_LEFT, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("NIE", 1, 1, false, true, 13, Font.BOLD, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("Nombre del estudiante", 4, 1, false, true, 13, Font.BOLD, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("Pagos Pendientes", 1, 1, false, true, 13, Font.BOLD, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                moradores.forEach(m -> {
+                    t.addCell(getTextCell(m.getIdpersona().toString().substring(1), 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                    t.addCell(getTextCell(getNombreCompletoPersona(m), 4, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_LEFT, PdfPCell.ALIGN_MIDDLE));
+                    t.addCell(getTextCell("" + getNumeroPagosAtrasados(m), 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                });
+                OutputStream os = getOutputStream(fc, ec, "application/pdf");
+                Document pdf = new Document(PageSize.LETTER);
+                PdfWriter writer = PdfWriter.getInstance(pdf, os);
+                pdf.open();
+                t.setWidthPercentage(100);
+                pdf.add(t);
+                pdf.setMargins(1, 1, 1, 1);
+                pdf.close();
+                writer.flush();
+            } catch (DocumentException | IOException e) {
+                Logger.getLogger(repInvController.class.getName()).log(Level.SEVERE, null, e);
+            }
+        };
     }
 }

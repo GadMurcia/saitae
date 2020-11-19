@@ -16,10 +16,23 @@
  */
 package net.delsas.saitae.controllers;
 
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Font;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.pdf.PdfDocument;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfWriter;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -31,6 +44,7 @@ import net.delsas.saitae.ax.XLSModel;
 import net.delsas.saitae.beans.AccesoFacadeLocal;
 import net.delsas.saitae.beans.AccesoTipoPersonaFacadeLocal;
 import net.delsas.saitae.beans.CategoriaFacadeLocal;
+import net.delsas.saitae.beans.EjemplarFacadeLocal;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
 import net.delsas.saitae.beans.RecursoFacadeLocal;
 import net.delsas.saitae.beans.TipoCargoFacadeLocal;
@@ -50,6 +64,9 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.primefaces.component.datatable.DataTable;
+import org.primefaces.component.export.ExportConfiguration;
+import org.primefaces.component.export.Exporter;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -84,6 +101,8 @@ public class repInvController extends Auxiliar implements Serializable {
     private CategoriaFacadeLocal cFL;
     @EJB
     private PersonaFacadeLocal pFL;
+    @EJB
+    private EjemplarFacadeLocal eFL;
 
     @PostConstruct
     public void init() {
@@ -116,6 +135,10 @@ public class repInvController extends Auxiliar implements Serializable {
                 : rFL.findByTipoRecurso(trSelected.getIdtipoRecurso());
         if (trSelected != null && !trSelected.getIdtipoRecurso().equals(3)) {
             recursos.forEach(r -> {
+                r.setEjemplarList(eFL.findEjemplaresByIdRecurso(r.getIdrecurso()));
+                r.getEjemplarList().forEach(e0 -> {
+                    e0.setRecurso(r);
+                });
                 ejemplares.addAll(r.getEjemplarList());
             });
         }
@@ -293,5 +316,170 @@ public class repInvController extends Auxiliar implements Serializable {
 
     public String ejemplarCod(EjemplarPK pk) {
         return pk == null ? "" : pk.getIdRecurso() + "" + pk.getEjemplarCorrelativo() + "";
+    }
+
+    public Exporter<DataTable> getPdfExporterCra() {
+        return (FacesContext fc, List<DataTable> list, ExportConfiguration ec) -> {
+            try {
+                PdfPTable t = new PdfPTable(10);
+
+                t.addCell(getCellWithImagen(fc, "mined.png", 2, 1, false, 8, PdfPCell.ALIGN_CENTER));
+                t.addCell(getTextCell("Inventario de Equipo \n" + ((trSelected == null) ? "" : trSelected.getTipoRecursoNombre()), 6, 1, false, false, 24, Font.BOLD, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getCellWithImagen(fc, "intexM.jpeg", 2, 1, false, 25, PdfPCell.ALIGN_CENTER));
+
+                t.addCell(getTextCell("Nombre del Centro Educativo:", 3, 1, false, false, 12, Font.NORMAL, PdfPCell.ALIGN_LEFT, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("Instituto Nacional \"Texistepeque\"", 4, 1, false, false, 12, Font.BOLD, PdfPCell.ALIGN_LEFT, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("Dirección Postal: Colonia Mónchez y Herrera frente a Carretera Internacional CA-12N, Km. 83 12.", 3, 1, false, false, 12, Font.NORMAL, PdfPCell.ALIGN_JUSTIFIED, PdfPCell.ALIGN_MIDDLE));
+
+                t.addCell(getTextCell("TELEFAX:", 1, 1, false, false, 12, Font.NORMAL, PdfPCell.ALIGN_LEFT, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("2470-0219", 2, 1, false, false, 12, Font.NORMAL, PdfPCell.ALIGN_LEFT, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("Municipio: Texistepeque", 2, 1, false, false, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("Departamento: Santa Ana", 2, 1, false, false, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("Código de la Institución: 14753", 3, 2, false, false, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+
+                t.addCell(getTextCell("FECHA: ", 1, 1, false, false, 12, Font.NORMAL, PdfPCell.ALIGN_LEFT, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("Texistepeque, " + new SimpleDateFormat("dd/MM/YYYY").format(new Date()), 4, 1, false, false, 12, Font.NORMAL, PdfPCell.ALIGN_LEFT, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("Distrito Educativo: 02-19", 2, 1, false, false, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+
+                t.addCell(getTextCell("\n\n", 10, 1, false, false, 12, Font.NORMAL, PdfPCell.ALIGN_LEFT, PdfPCell.ALIGN_MIDDLE));
+
+                t.addCell(getTextCell("Código", 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("Nombre", 2, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("Marca", 2, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("Serie", 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("Año", 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("Estado Físico", 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("Valor unitario (US$)", 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("Tipo de Valor", 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+
+                ejemplares.stream().map((e) -> {
+                    t.addCell(getTextCell(e.getEjemplarPK().getIdRecurso() + "-" + e.getEjemplarPK().getEjemplarCorrelativo(), 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_LEFT, PdfPCell.ALIGN_MIDDLE));
+                    return e;
+                }).map((e) -> {
+                    t.addCell(getTextCell(e.getRecurso().getNombre(), 2, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_LEFT, PdfPCell.ALIGN_MIDDLE));
+                    return e;
+                }).map((e) -> {
+                    t.addCell(getTextCell(e.getEjemplarMarca(), 2, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                    return e;
+                }).map((e) -> {
+                    t.addCell(getTextCell(e.getEjemplarSerie(), 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                    return e;
+                }).map((e) -> {
+                    t.addCell(getTextCell(e.getEjemplarAnioDeIngreso() + "", 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                    return e;
+                }).map((e) -> {
+                    t.addCell(getTextCell((e.getRecurso().getEstadoFisico().equals("B") ? "BUENO" : (e.getRecurso().getEstadoFisico().equals("R") ? "REGULAR" : "")), 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                    return e;
+                }).map((e) -> {
+                    t.addCell(getTextCell(e.getRecurso().getValorUnitario() + "", 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                    return e;
+                }).forEachOrdered((e) -> {
+                    t.addCell(getTextCell(e.getRecurso().getTipoValor(), 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                });
+
+                OutputStream os = getOutputStream(fc, ec, "application/pdf");
+                Document pdf = new Document(PageSize.LEGAL.rotate());
+                PdfWriter writer = PdfWriter.getInstance(pdf, os);
+                pdf.open();
+                t.setWidthPercentage(100);
+                pdf.add(t);
+                pdf.setMargins(1, 1, 1, 1);
+                pdf.close();
+                writer.flush();
+            } catch (DocumentException | IOException e) {
+                Logger.getLogger(repInvController.class.getName()).log(Level.SEVERE, null, e);
+            }
+        };
+    }
+
+    public Exporter<DataTable> getPdfExporterBib() {
+        return (FacesContext fc, List<DataTable> list, ExportConfiguration ec) -> {
+            Document pdf;
+            PdfWriter writer;
+            try {
+                PdfPTable t = new PdfPTable(16);
+
+                t.addCell(getCellWithImagen(fc, "mined.png", 2, 1, false, 8, PdfPCell.ALIGN_CENTER));
+                t.addCell(getTextCell("Inventario de Equipo \n" + ((trSelected == null) ? "" : trSelected.getTipoRecursoNombre()), 12, 1, false, false, 24, Font.BOLD, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getCellWithImagen(fc, "intexM.jpeg", 2, 1, false, 25, PdfPCell.ALIGN_CENTER));
+
+                t.addCell(getTextCell("Nombre del Centro Educativo:", 4, 1, false, false, 12, Font.NORMAL, PdfPCell.ALIGN_LEFT, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("Instituto Nacional \"Texistepeque\"", 7, 1, false, false, 12, Font.BOLD, PdfPCell.ALIGN_LEFT, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("Dirección Postal: Colonia Mónchez y Herrera frente a Carretera Internacional CA-12N, Km. 83 12.", 5, 1, false, false, 12, Font.NORMAL, PdfPCell.ALIGN_LEFT, PdfPCell.ALIGN_MIDDLE));
+
+                t.addCell(getTextCell("Telefax:", 1, 1, false, false, 12, Font.NORMAL, PdfPCell.ALIGN_LEFT, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("2470-0219", 2, 1, false, false, 12, Font.NORMAL, PdfPCell.ALIGN_LEFT, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("Municipio: Texistepeque", 4, 1, false, false, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("Departamento: Santa Ana", 4, 1, false, false, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("", 5, 1, false, false, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+
+                t.addCell(getTextCell("FECHA: ", 1, 1, false, false, 12, Font.NORMAL, PdfPCell.ALIGN_LEFT, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("Texistepeque, " + new SimpleDateFormat("dd/MM/YYYY").format(new Date()), 5, 1, false, false, 12, Font.NORMAL, PdfPCell.ALIGN_LEFT, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("Distrito Educativo: 02-19", 5, 1, false, false, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("Código de la Institución: 14753", 5, 1, false, false, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+
+                t.addCell(getTextCell("", 11, 1, false, false, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("TIPOS DE CARGOS", 5, 1, false, false, 12, Font.BOLD, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                tipoCargos.forEach(tc -> {
+                    t.addCell(getTextCell("", 11, 1, false, false, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                    t.addCell(getTextCell(tc.getNombre(), 4, 1, false, false, 12, Font.NORMAL, PdfPCell.ALIGN_LEFT, PdfPCell.ALIGN_MIDDLE));
+                    t.addCell(getTextCell("1-" + tc.getIdtipoCargo(), 1, 1, false, false, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                });
+
+                t.addCell(getTextCell("\n\n", 16, 1, false, false, 12, Font.NORMAL, PdfPCell.ALIGN_LEFT, PdfPCell.ALIGN_MIDDLE));
+
+                t.addCell(getTextCell("Cargo", 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("Código", 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("Correlativos", 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("Nombre", 3, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("Autor", 2, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("Editorial", 2, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("País", 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("Estado Físico", 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("N° de ejemplares", 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("Valor unitario (USD)", 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("Valor Total (USD)", 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("Tipo de Valor", 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+
+                recursos.forEach(r -> {
+                    t.addCell(getTextCell("1-" + r.getTipoCargo().getIdtipoCargo(), 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                    t.addCell(getTextCell("" + r.getIdrecurso(), 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                    t.addCell(getTextCell(getCorrelativos(r.getEjemplarList()), 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                    t.addCell(getTextCell(r.getNombre(), 3, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_LEFT, PdfPCell.ALIGN_MIDDLE));
+                    t.addCell(getTextCell(getAutores(r.getAutorLibroList()), 2, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_LEFT, PdfPCell.ALIGN_MIDDLE));
+                    t.addCell(getTextCell(getEditoriales(r.getEditorialLibroList()), 2, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_LEFT, PdfPCell.ALIGN_MIDDLE));
+                    t.addCell(getTextCell(r.getPais().getPaisNombre(), 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                    t.addCell(getTextCell(r.getEstadoFisico().equals("B") ? "Bueno" : (r.getEstadoFisico().equals("R") ? "Regular" : ""), 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                    t.addCell(getTextCell("" + r.getEjemplarList().size(), 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                    t.addCell(getTextCell("" + r.getValorUnitario(), 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                    t.addCell(getTextCell("" + (r.getEjemplarList().size() * r.getValorUnitario()), 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                    t.addCell(getTextCell(r.getTipoValor(), 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                });
+                t.addCell(getTextCell("VALOR TOTAL DEL INVENTARIO", 14, 1, false, true, 13, Font.BOLD, PdfPCell.ALIGN_RIGHT, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("USD $" + getTotalGeneral(), 2, 1, false, true, 12, Font.BOLD, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+
+                t.addCell(getTextCell("\n\n\n\n", 16, 1, false, false, 12, Font.NORMAL, PdfPCell.ALIGN_LEFT, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("Consejo Directivo Escolar", 16, 1, false, false, 12, Font.BOLD, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("\n\n\n\n", 16, 1, false, false, 12, Font.NORMAL, PdfPCell.ALIGN_LEFT, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("\n\n\n\n", 16, 1, false, false, 12, Font.NORMAL, PdfPCell.ALIGN_LEFT, PdfPCell.ALIGN_MIDDLE));
+
+                t.addCell(getTextCell("Presidente CDE", 4, 1, false, false, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("Secretaria CDE", 4, 1, false, false, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("Encargada/o de compras", 4, 1, false, false, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("Coordinador AI", 4, 1, false, false, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+
+                OutputStream os = getOutputStream(fc, ec, "application/pdf");
+                pdf = new Document(PageSize.LEGAL.rotate());
+                writer = PdfWriter.getInstance(pdf, os);
+                pdf.open();
+                t.setWidthPercentage(100);
+                pdf.add(t);
+                pdf.setMargins(1, 1, 1, 1);
+                pdf.close();
+                writer.flush();
+            } catch (DocumentException | IOException e) {
+                Logger.getLogger(repInvController.class.getName()).log(Level.SEVERE, null, e);
+            }
+        };
     }
 }

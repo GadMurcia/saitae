@@ -29,12 +29,19 @@ public class EjemplarFacade extends AbstractFacade<Ejemplar> implements Ejemplar
     public EjemplarFacade() {
         super(Ejemplar.class);
     }
-    
+
     @Override
-    public List<Integer> findCorrelativosByIdRecurso(int idRecurso){
+    public List<Integer> findCorrelativosByIdRecurso(int idRecurso) {
         return em.createNamedQuery("Ejemplar.findCorrelativoByIdRecurso")
                 .setParameter("idRecurso", idRecurso)
                 .getResultList();
     }
-    
+
+    @Override
+    public List<Ejemplar> findEjemplaresByIdRecurso(Integer idrecurso) {
+        return em.createNamedQuery("Ejemplar.findByIdRecurso")
+                .setParameter("idRecurso", idrecurso)
+                .getResultList();
+    }
+
 }

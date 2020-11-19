@@ -42,13 +42,13 @@
                                     <h:outputText value="#{representanteController.getNombreCompletoPersona(r.persona)}"/>
                                 </p:column>
                             </p:dataTable>
-                            <h:commandLink id="cl" title="Descargar en formato de Excel" >
-                                <p:graphicImage library="img" name="xls.png" width="37px" height="32px"/>
-                                <p:dataExporter type="xls" target="representantes" 
-                                                options="#{axiliarController.excelOpt}"
-                                                postProcessor="#{representanteController.postProcessXLSp}"
+                            <h:commandLink id="cl" title="Descargar en formato PDF" 
+                                           rendered="#{representanteController.representantes.size()>0}">
+                                <p:graphicImage library="img" name="pdf.png" width="37px" height="32px"/>
+                                <p:dataExporter type="pdf" target="representantes" 
                                                 fileName="#{representanteController.getGradoNombre(representanteController.id)}_Listado_Representantes"
-                                                encoding="UTF-8"/>
+                                                encoding="UTF-8"
+                                                exporter="#{representanteController.pdfExporter}"/>
                             </h:commandLink>
                         </h:panelGrid>
                     </h:panelGrid>

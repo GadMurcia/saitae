@@ -38,13 +38,13 @@
                         <p:outputLabel value="#{administradorController.getCargosTxt(p)}"/>
                     </p:column>
                 </p:dataTable> 
-                <h:commandLink title="Descargar en formato de Excel">
-                    <p:graphicImage library="img" name="xls.png" width="37px" height="32px"/>
-                    <p:dataExporter type="xls" target="plantel" 
-                                    options="#{axiliarController.excelOpt}"
-                                    postProcessor="#{administradorController.postProcessEXCEL}"
+                <h:commandLink title="Descargar en formato PDF" 
+                               rendered="#{administradorController.plantel.size()>0}">
+                    <p:graphicImage library="img" name="pdf.png" width="37px" height="32px"/>
+                    <p:dataExporter type="pdf" target="plantel"
                                     fileName="Plantel_Institucional_INTEX_#{administradorController.añoActual}"
-                                    encoding="UTF-8"/>
+                                    encoding="UTF-8"
+                                    exporter="#{administradorController.pdfExporter}"/>
                 </h:commandLink>
             </p:tab>
         </h:form>

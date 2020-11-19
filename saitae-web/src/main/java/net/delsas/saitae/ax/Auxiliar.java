@@ -16,12 +16,20 @@
  */
 package net.delsas.saitae.ax;
 
+import com.lowagie.text.BadElementException;
+import com.lowagie.text.Image;
+import com.lowagie.text.Phrase;
+import com.lowagie.text.pdf.PdfCell;
+import com.lowagie.text.pdf.PdfPCell;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.net.MalformedURLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
@@ -1354,7 +1362,7 @@ public class Auxiliar implements Serializable {
                     (ex0 != null ? ex0.getMessage() : "Error desconocido.")));
         }
     }
-    
+
     public OutputStream getOutputStream(FacesContext fc, ExportConfiguration ec, String tipoArchivo) throws IOException {
         fc.getExternalContext().setResponseContentType(tipoArchivo);
         fc.getExternalContext().setResponseHeader("Expires", "0");
@@ -1363,5 +1371,40 @@ public class Auxiliar implements Serializable {
         fc.getExternalContext().setResponseHeader("Content-disposition", ComponentUtils.createContentDisposition("attachment", ec.getOutputFileName() + ".pdf"));
         fc.getExternalContext().addResponseCookie(Constants.DOWNLOAD_COOKIE, "true", Collections.<String, Object>emptyMap());
         return fc.getExternalContext().getResponseOutputStream();
+    }
+
+    public PdfPCell getCellWithImagen(FacesContext fc, String nombreImg, int colSpan, int rowSpan, boolean borde, int imgScale, int aligment) {
+        PdfPCell c1;
+        String logo = fc.getExternalContext().getRealPath("") + File.separator + "resources" + File.separator + "img" + File.separator + nombreImg;
+        try {
+            InputStream is = new FileInputStream(logo);
+            Image i = Image.getInstance(IOUtils.toByteArray(is));
+            i.scalePercent(imgScale);
+            c1 = new PdfPCell(i);
+        } catch (BadElementException | IOException ex) {
+            c1 = new PdfPCell(new Phrase(""));
+        }
+        c1.setColspan(colSpan);
+        c1.setRowspan(rowSpan);
+        if (!borde) {
+            c1.setBorder(0);
+        }
+        c1.setHorizontalAlignment(aligment);
+        return c1;
+    }
+
+    public PdfPCell getTextCell(String txt, int cSpan, int rSpan, boolean nWrap, boolean borde, int tSize, int tStyle, int hAligmnet, int vAligment) {
+        PdfPCell c1 = new PdfPCell(new Phrase(txt));
+        c1.setRowspan(rSpan);
+        c1.setColspan(cSpan);
+        c1.setNoWrap(nWrap);
+        if (!borde) {
+            c1.setBorder(0);
+        }
+        c1.getPhrase().getFont().setSize(tSize);
+        c1.getPhrase().getFont().setStyle(tStyle);
+        c1.setHorizontalAlignment(hAligmnet);
+        c1.setVerticalAlignment(vAligment);
+        return c1;
     }
 }

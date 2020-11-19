@@ -5,6 +5,7 @@
  */
 package net.delsas.saitae.beans;
 
+import java.util.Collection;
 import java.util.List;
 import javax.ejb.Local;
 import net.delsas.saitae.entities.Ejemplar;
@@ -36,5 +37,7 @@ public interface EjemplarFacadeLocal {
      * @return java.util.List java.lang.Integer
      */
     public List<Integer> findCorrelativosByIdRecurso(int idRecurso);
+
+    public List<Ejemplar> findEjemplaresByIdRecurso(Integer idrecurso);
     
 }

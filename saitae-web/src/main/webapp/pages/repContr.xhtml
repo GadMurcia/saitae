@@ -41,13 +41,12 @@
                         <h:outputText value="#{repContrController.getNumeroPagosAtrasados(m)}"/>
                     </p:column>
                 </p:dataTable>
-                <h:commandLink rendered="#{repContrController.GSelected!=null}">
-                    <p:graphicImage library="img" name="xls.png" width="37px" height="32px"/>
-                    <p:dataExporter type="xls" target="contr" 
-                                    options="#{axiliarController.excelOpt}"
-                                    postProcessor="#{repContrController.postProcesoXLS}"
+                <h:commandLink rendered="#{repContrController.moradores.size()>0 }">
+                    <p:graphicImage library="img" name="pdf.png" width="37px" height="32px"/>
+                    <p:dataExporter type="pdf" target="contr"
                                     fileName="Reporte-moradores-pago-contribucion-#{repMatriculaController.getGradoNombre(repContrController.GSelected.gradoPK)}-#{repContrController.añoActual}"
-                                    encoding="UTF-8"/>
+                                    encoding="UTF-8"
+                                    exporter="#{repContrController.pdfExporter}"/>
                 </h:commandLink>
             </h:panelGrid>
         </h:form>

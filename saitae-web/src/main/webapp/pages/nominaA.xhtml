@@ -22,7 +22,7 @@
                                        itemValue="#{g.gradoPK}" 
                                        itemLabel="#{nominaAController.getGradoNombre(g.gradoPK)}"/>
                         <p:ajax event="itemSelect" listener="#{nominaAController.onSelectItem}" 
-                                update="nom"/>
+                                update="form1"/>
                     </p:selectOneMenu>
                 </p:panelGrid>
 
@@ -49,13 +49,13 @@
                         <p:outputLabel value="#{e.persona.personaApellido}"/>
                     </p:column>
                 </p:dataTable>
-                <h:commandLink id="cl" title="Descargar en formato de Excel" >
-                    <p:graphicImage library="img" name="xls.png" width="37px" height="32px"/>
-                    <p:dataExporter type="xls" target="nom" 
-                                    options="#{axiliarController.excelOpt}"
-                                    postProcessor="#{nominaAController.postProcesoXLS}"
+                <h:commandLink id="cl" title="Descargar en formato PDF" 
+                               rendered="#{nominaAController.nomina.size()>0}">
+                    <p:graphicImage library="img" name="pdf.png" width="37px" height="32px"/>
+                    <p:dataExporter type="pdf" target="nom" 
                                     fileName="#{nominaAController.getGradoNombre(nominaAController.PK)}_Nomina_Alumnos"
-                                    encoding="UTF-8"/>
+                                    encoding="UTF-8"
+                                    exporter="#{nominaAController.pdfExporter}"/>
                 </h:commandLink>
             </p:panelGrid>
         </h:form>
