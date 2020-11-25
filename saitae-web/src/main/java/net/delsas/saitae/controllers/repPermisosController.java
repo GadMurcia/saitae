@@ -16,11 +16,17 @@
  */
 package net.delsas.saitae.controllers;
 
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Font;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
@@ -34,7 +40,6 @@ import javax.inject.Named;
 import net.delsas.saitae.ax.Auxiliar;
 import net.delsas.saitae.ax.ReportePermisos;
 import net.delsas.saitae.ax.XLSModel;
-import net.delsas.saitae.ax.convExToPDF;
 import net.delsas.saitae.beans.GradoFacadeLocal;
 import net.delsas.saitae.beans.MaestoCargoFacadeLocal;
 import net.delsas.saitae.beans.MatriculaFacadeLocal;
@@ -53,8 +58,6 @@ import org.primefaces.component.export.ExportConfiguration;
 import org.primefaces.component.export.Exporter;
 import org.primefaces.component.selectonemenu.SelectOneMenu;
 import org.primefaces.event.SelectEvent;
-import org.primefaces.util.ComponentUtils;
-import org.primefaces.util.Constants;
 
 /**
  *
@@ -238,16 +241,13 @@ public class repPermisosController extends Auxiliar implements Serializable {
 
     public void reporte(Object doc) {
         rpListGoce.get(0).getPermiso().setPersona(PSelected);
-        HSSFWorkbook wb = new HSSFWorkbook();
-        wb.createSheet();
+        HSSFWorkbook wb = (HSSFWorkbook) doc;
         wb = new XLSModel().getReportePermisos(rpListGoce, wb,
                 tppFL.findTipoPermisoByIdtipopersona(PSelected.getTipoPersona().getIdtipoPersona()),
                 mcFL, pFL);
-        try {
-            doc = new convExToPDF().conv(wb, wb.getSheetName(0), FacesContext.getCurrentInstance());
-        } catch (Exception ex) {
-            Logger.getLogger(repPermisosController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
+//        Workbook workbook = wb;
+//        workbook.SaveToFile("result.pdf", FileFormat.PDF);
     }
 
     public List<ReportePermisos> getRpListGoce() {
@@ -262,38 +262,69 @@ public class repPermisosController extends Auxiliar implements Serializable {
         return !rpListGoce.isEmpty();
     }
 
-    private Exporter<DataTable> textExporter;
+    public Exporter<DataTable> getPdfExporterCra() {
+        return (FacesContext fc, List<DataTable> list, ExportConfiguration ec) -> {
+            try {
+                List<TipoPermiso> ps = tppFL.findTipoPermisoByIdtipopersona(PSelected.getTipoPersona().getIdtipoPersona());
+                PdfPTable t = new PdfPTable(ps.size() + 3);
+                PdfPTable t0 = new PdfPTable((ps.size() * 3) + 1);
+                PdfPTable t1 = new PdfPTable(6);
 
-    public Exporter<DataTable> getTextExporter() {
-        textExporter = textExporter != null
-                ? textExporter
-                : (FacesContext fc, List<DataTable> list, ExportConfiguration ec) -> {
-                    rpListGoce.get(0).getPermiso().setPersona(PSelected);
-                    HSSFWorkbook wb = new HSSFWorkbook();
-                    wb.createSheet();
-                    wb = new XLSModel().getReportePermisos(rpListGoce, wb,
-                            tppFL.findTipoPermisoByIdtipopersona(PSelected.getTipoPersona().getIdtipoPersona()),
-                            mcFL, pFL);
-                    try {
-                        fc.getExternalContext().setResponseContentType("application/x-google-chrome-pdf");
-                        fc.getExternalContext().setResponseHeader("Expires", "0");
-                        fc.getExternalContext().setResponseHeader("Cache-Control", "must-revalidate, post-check=0, pre-check=0");
-                        fc.getExternalContext().setResponseHeader("Pragma", "public");
-                        fc.getExternalContext().setResponseHeader("Content-disposition", ComponentUtils.createContentDisposition("attachment", wb.getSheetName(0) + ".pdf"));
-                        fc.getExternalContext().addResponseCookie(Constants.DOWNLOAD_COOKIE, "true", Collections.<String, Object>emptyMap());
-                        OutputStream os = fc.getExternalContext().getResponseOutputStream();
-                        PdfWriter writer = PdfWriter.getInstance(new convExToPDF().conv(wb, wb.getSheetName(0), fc), os);
-                        System.out.println(Arrays.toString(writer.getDirectContent().toPdf(writer)));
-                        writer.flush();
-                    } catch (Exception ex) {
-                        Logger.getLogger(repPermisosController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                };
-        return textExporter;
-    }
+                t0.addCell(getTextCell("FECHA", 1, 3, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
 
-    public void setTextExporter(Exporter<DataTable> ex) {
-        this.textExporter = ex;
+                if (!ps.isEmpty()) {
+                    t0.addCell(getTextCell("LICENCIAS CON GOCE DE SUELDO", ps.size() * 3, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                }
+
+                if (!ps.isEmpty()) {
+                    ps.forEach(p -> {
+                        t0.addCell(getTextCell(p.getTipoPermisoNombre(), 3, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                    });
+
+                    ps.forEach(p -> {
+                        t0.addCell(getTextCell("Días", 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                        t0.addCell(getTextCell("Horas", 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                        t0.addCell(getTextCell("Saldo (" + p.getTipoPermisoDiasMes() + " días)", 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                    });
+                }
+
+                t1.addCell(getTextCell("LICENCIAS SIN GOCE DE SUELDO", 2, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t1.addCell(getTextCell("INASISTENCIAS INJUSTIFICADAS", 2, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t1.addCell(getTextCell("LLEGADAS TARDE O RETIROS ANTES DE LA HORA", 2, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+
+                t1.addCell(getTextCell("Días", 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t1.addCell(getTextCell("Horas", 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t1.addCell(getTextCell("Días", 2, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t1.addCell(getTextCell("Horas en la mañana", 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t1.addCell(getTextCell("Horas en la tarde", 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+
+                PdfPCell c1 = new PdfPCell();
+                t0.setWidthPercentage(100);
+                c1.addElement(t0);
+                c1.setBorder(0);
+                c1.setColspan(ps.size() + 1);
+                t.addCell(c1);
+
+                c1 = new PdfPCell();
+                t1.setWidthPercentage(100);
+                c1.addElement(t1);
+                c1.setBorder(0);
+                c1.setColspan(2);
+                t.addCell(c1);
+
+                OutputStream os = getOutputStream(fc, ec, "application/pdf");
+                Document pdf = new Document(PageSize.LEGAL.rotate());
+                PdfWriter writer = PdfWriter.getInstance(pdf, os);
+                pdf.open();
+                t.setWidthPercentage(100);
+                pdf.add(t);
+                pdf.setMargins(1, 1, 1, 1);
+                pdf.close();
+                writer.flush();
+            } catch (DocumentException | IOException e) {
+                Logger.getLogger(repPermisosController.class.getName()).log(Level.SEVERE, null, e);
+            }
+        };
     }
 
 }

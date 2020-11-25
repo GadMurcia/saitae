@@ -22,23 +22,7 @@
                                 update="horario"/>
                     </p:selectOneMenu>
                 </h:panelGrid>
-                <p:dataTable id="horario" var="h" value="#{horarioClController.horario}"
-                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} 
-                             {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
-                             paginator="true"
-                             paginatorPosition="top">
-                    <f:facet name="{Exporters}">
-                        <div style="float:right;padding-top: 5px;">
-                            <h:commandLink>
-                                <p:graphicImage library="img" name="xls.png" width="37px" height="32px"/>
-                                <p:dataExporter type="xls" target="horario" 
-                                                options="#{axiliarController.excelOpt}"
-                                                fileName="Horario_de_Clases"
-                                                encoding="UTF-8"
-                                                postProcessor="#{horarioClController.postProcess}"/>
-                            </h:commandLink>
-                        </div>
-                    </f:facet>
+                <p:dataTable id="horario" var="h" value="#{horarioClController.horario}">
                     <f:facet name="header">
                         Horario de clases #{horarioClController.añoSelected}
                     </f:facet>
@@ -74,6 +58,13 @@
                         <h:outputText value="#{h.domingo.materiaNombre} #{h.nomD}"/>
                     </p:column>
                 </p:dataTable>
+                <h:commandLink title="Descargar horario de clases">
+                    <p:graphicImage library="img" name="pdf.png" width="37px" height="32px"/>
+                    <p:dataExporter type="pdf" target="horario" 
+                                    fileName="Horario_de_Clases"
+                                    encoding="UTF-8"
+                                    exporter="#{horarioClController.pdfExporter}"/>
+                </h:commandLink>
             </h:panelGrid>
         </h:form>
     </ui:define>

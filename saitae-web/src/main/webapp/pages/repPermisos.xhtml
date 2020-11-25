@@ -81,11 +81,10 @@
 
                 <h:commandLink rendered="#{repPermisosController.descargarDoc}">
                     <p:graphicImage library="img" name="xls.png" width="37px" height="32px"/>
-                    <p:dataExporter type="pdf" target="perm" 
-                                    options="#{axiliarController.PDFOpt}"
+                    <p:dataExporter type="xls" target="perm"
                                     fileName="Reporte de permisos #{repPermisosController.getNombreCortoPersona(repPermisosController.PSelected)}"
                                     encoding="UTF-8"
-                                    exporter="#{repPermisosController.textExporter}"/>
+                                    postProcessor="#{repPermisosController.reporte}"/>
                 </h:commandLink>
             </h:panelGrid>
         </h:form>

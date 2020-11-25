@@ -10,8 +10,10 @@ import com.lowagie.text.pdf.PdfWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,6 +24,7 @@ import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import net.delsas.saitae.ax.Auxiliar;
+import net.delsas.saitae.ax.Meses;
 import net.delsas.saitae.ax.XLSModel;
 import net.delsas.saitae.beans.GradoFacadeLocal;
 import net.delsas.saitae.beans.MatriculaFacadeLocal;
@@ -121,9 +124,16 @@ public class nominaAController extends Auxiliar implements Serializable {
                 t.addCell(getTextCell("Nómina de alumnos. \t" + getGradoNombre(grado), 40, 1, false, false, 14, Font.BOLD, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
                 t.addCell(getCellWithImagen(fc, "intexM.jpeg", 2, 1, false, 15, PdfPCell.ALIGN_CENTER));
 
+                t.addCell(getTextCell(
+                        Meses.getNombreByNumero(Integer.valueOf(new SimpleDateFormat("MM").format(new Date())))
+                        + " " + new SimpleDateFormat("YYYY").format(new Date()),
+                         42, 1, false, false, 13, Font.BOLD, PdfPCell.ALIGN_RIGHT, PdfPCell.ALIGN_MIDDLE));
+
                 t.addCell(getTextCell("NIE", 5, 1, false, true, 13, Font.BOLD, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
                 t.addCell(getTextCell("Nombre del estudiante", 15, 1, false, true, 13, Font.BOLD, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
-                t.addCell(getTextCell("", 22, 1, false, true, 13, Font.BOLD, PdfPCell.ALIGN_LEFT, PdfPCell.ALIGN_MIDDLE));
+                for (int i = 0; i < 22; i++) {
+                    t.addCell(getTextCell("", 1, 1, false, true, 13, Font.NORMAL, PdfPCell.ALIGN_LEFT, PdfPCell.ALIGN_MIDDLE));
+                }
 
                 nomina.forEach(n -> {
                     t.addCell(getTextCell(n.getIdestudiante().toString().substring(1), 5, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));

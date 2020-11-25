@@ -16,12 +16,23 @@
  */
 package net.delsas.saitae.controllers;
 
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Font;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfWriter;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
@@ -41,6 +52,9 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.primefaces.component.datatable.DataTable;
+import org.primefaces.component.export.ExportConfiguration;
+import org.primefaces.component.export.Exporter;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -128,6 +142,48 @@ public class horarioClController extends Auxiliar implements Serializable {
         h.addMergedRegion(new CellRangeAddress(1, 1, 0, 7));
         new XLSModel().copiarDatos(h, wb);
         wb.removeSheetAt(0);
+    }
+
+    public Exporter<DataTable> getPdfExporter() {
+        return (FacesContext fc, List<DataTable> list, ExportConfiguration ec) -> {
+            try {
+                PdfPTable t = new PdfPTable(9);
+                t.setWidthPercentage(100);
+                t.addCell(getTextCell("Horario de clases " + getAñoSelected() + "\n" + getNombreCortoPersona(usuario), 9, 1, false, false, 14, Font.BOLD, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+
+                t.addCell(getTextCell("Hora", 2, 1, false, true, 13, Font.BOLD, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("Lunes", 1, 1, false, true, 13, Font.BOLD, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("Martes", 1, 1, false, true, 13, Font.BOLD, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("Miércoles", 1, 1, false, true, 13, Font.BOLD, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("Jueves", 1, 1, false, true, 13, Font.BOLD, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("Viernes", 1, 1, false, true, 13, Font.BOLD, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("Sábado", 1, 1, false, true, 13, Font.BOLD, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                t.addCell(getTextCell("Domingo", 1, 1, false, true, 13, Font.BOLD, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+
+                horario.forEach(h -> {
+                    t.addCell(getTextCell(getHoraToString(h.getHoras().getHoraInicio()) + " - " + getHoraToString(h.getHoras().getHoraFin()), 2, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_MIDDLE));
+                    t.addCell(getTextCell(h.getLunes() == null ? "Hora Libre" : (h.getLunes().getMateriaNombre() + "\n" + h.getNomL()), 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_LEFT, PdfPCell.ALIGN_MIDDLE));
+                    t.addCell(getTextCell(h.getMartes() == null ? "Hora Libre" : (h.getMartes().getMateriaNombre() + "\n" + h.getNomM()), 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_LEFT, PdfPCell.ALIGN_MIDDLE));
+                    t.addCell(getTextCell(h.getMiercoles() == null ? "Hora Libre" : (h.getMiercoles().getMateriaNombre() + "\n" + h.getNomX()), 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_LEFT, PdfPCell.ALIGN_MIDDLE));
+                    t.addCell(getTextCell(h.getJueves() == null ? "Hora Libre" : (h.getJueves().getMateriaNombre() + "\n" + h.getNomJ()), 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_LEFT, PdfPCell.ALIGN_MIDDLE));
+                    t.addCell(getTextCell(h.getViernes() == null ? "Hora Libre" : (h.getViernes().getMateriaNombre() + "\n" + h.getNomV()), 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_LEFT, PdfPCell.ALIGN_MIDDLE));
+                    t.addCell(getTextCell(h.getSabado() == null ? "Hora Libre" : (h.getSabado().getMateriaNombre() + "\n" + h.getNomS()), 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_LEFT, PdfPCell.ALIGN_MIDDLE));
+                    t.addCell(getTextCell(h.getDomingo() == null ? "Hora Libre" : (h.getDomingo().getMateriaNombre() + "\n" + h.getNomD()), 1, 1, false, true, 12, Font.NORMAL, PdfPCell.ALIGN_LEFT, PdfPCell.ALIGN_MIDDLE));
+                });
+
+                OutputStream os = getOutputStream(fc, ec, "application/pdf");
+                Document pdf = new Document(PageSize.LETTER.rotate());
+                PdfWriter writer = PdfWriter.getInstance(pdf, os);
+                pdf.open();
+                t.setWidthPercentage(100);
+                pdf.add(t);
+                pdf.setMargins(1, 1, 1, 1);
+                pdf.close();
+                writer.flush();
+            } catch (DocumentException | IOException e) {
+                Logger.getLogger(repInvController.class.getName()).log(Level.SEVERE, null, e);
+            }
+        };
     }
 
 }
