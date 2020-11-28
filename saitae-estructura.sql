@@ -1,10 +1,10 @@
 CREATE DATABASE  IF NOT EXISTS `intex` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_spanish2_ci */;
 USE `intex`;
--- MariaDB dump 10.18  Distrib 10.5.7-MariaDB, for debian-linux-gnu (x86_64)
+-- MariaDB dump 10.18  Distrib 10.5.8-MariaDB, for debian-linux-gnu (x86_64)
 --
 -- Host: 127.0.0.1    Database: intex
 -- ------------------------------------------------------
--- Server version	10.5.7-MariaDB-1:10.5.7+maria~stretch
+-- Server version	10.5.8-MariaDB-1:10.5.8+maria~stretch
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -846,7 +846,7 @@ CREATE TABLE `notificaciones` (
   KEY `fk_notificaciones_2_idx` (`remitente`),
   CONSTRAINT `fk_notificaciones_1` FOREIGN KEY (`destinatario`) REFERENCES `persona` (`idpersona`) ON UPDATE CASCADE,
   CONSTRAINT `fk_notificaciones_2` FOREIGN KEY (`remitente`) REFERENCES `persona` (`idpersona`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=244 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=269 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -896,7 +896,7 @@ CREATE TABLE `permisos` (
   `permisoHoraFin` time DEFAULT NULL,
   `tipoPersona` int(30) NOT NULL,
   `permisosMotivo` varchar(250) DEFAULT NULL,
-  `permisosEstado` enum('0','1','2','3') NOT NULL DEFAULT '0',
+  `permisosEstado` enum('0','1','2','3','4','5') NOT NULL DEFAULT '0',
   `permisosSolicitante` int(30) NOT NULL,
   `permisosGestor` int(30) DEFAULT NULL,
   `permisosComentario` varchar(250) DEFAULT NULL,
@@ -1411,4 +1411,4 @@ CREATE TABLE `zona` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-11-10  8:25:01
+-- Dump completed on 2020-11-28 11:52:24

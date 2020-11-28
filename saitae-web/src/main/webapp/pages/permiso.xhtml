@@ -94,6 +94,38 @@
                                     </p:dataTable>
                                 </h:panelGrid>
                             </p:tab>
+                            <p:tab title="Inasistencias e impuntualidades">
+                                <h:panelGrid columns="2" cellpadding="10">
+                                    <p:dataTable id="inasistencias" value="#{admPermisoController.inasistencias}" var="a"
+                                                 paginator="true" rows="8" selection="#{admPermisoController.acep}" 
+                                                 selectionMode="single" rowKey="#{a.permisosPK}" 
+                                                 emptyMessage="Sin registros aún."
+                                                 paginatorAlwaysVisible="false" paginatorPosition="top">
+                                        <p:ajax event="rowSelect" listener="#{admPermisoController.onRowSelect}" 
+                                                update="imp" oncomplete="PF('Dimp').show();"/>
+                                        <p:column headerText="Fecha de solicitud"
+                                                  filterMatchMode="contains" 
+                                                  filterBy="#{admPermisoController.dateToString(a.permisosPK.permisoFechaSolicitud)}">
+                                            #{admPermisoController.dateToString(a.permisosPK.permisoFechaSolicitud)}
+                                        </p:column>
+
+                                        <p:column headerText="Persona"
+                                                  filterMatchMode="contains" 
+                                                  filterBy="#{admPermisoController.getNombreCortoPersona(a.persona)}">
+                                            #{admPermisoController.getNombreCortoPersona(a.persona)} 
+                                            (#{a.persona.tipoPersona.tipoPersonaNombre})
+                                        </p:column>
+
+                                        <p:column headerText="Periodo del reporte">
+                                            #{admPermisoController.getFechaS(a.permisosPK.permisoFechaInicio, a.permisoFechafin)}
+                                        </p:column>
+
+                                        <p:column headerText="Tipo de reporte">
+                                            #{a.tipoPermiso1.tipoPermisoNombre}
+                                        </p:column>
+                                    </p:dataTable>
+                                </h:panelGrid>
+                            </p:tab>
                             <p:tab title="Permisos Rechazados">
                                 <h:panelGrid columns="2" cellpadding="10">
                                     <p:dataTable id="rachazados" value="#{admPermisoController.rechazados}" var="r"
@@ -162,72 +194,140 @@
                                     </p:dataTable>
                                 </h:panelGrid>
                             </p:tab>
-                            <p:tab title="Conceder Permiso A Estudiantes">
-                                <h:panelGrid columns="2">
-                                    <p:outputLabel for="nombus" value="Nombre del alumno:"/>
-                                    <p:autoComplete id="nombus" value="#{admPermisoController.nombreE}" 
-                                                    queryDelay="500" size="50"
-                                                    completeMethod="#{admPermisoController.completeText}">
-                                        <p:ajax event="itemSelect" listener="#{admPermisoController.onItemSelect}"
-                                                update="nombus summit"/>
-                                    </p:autoComplete>
+                            <p:tab title="Registro de permisos o inasistencias">
+                                <p:tabView id="tw" orientation="left" dynamic="true">
+                                    <p:tab title="Conceder Permiso A Estudiantes">
+                                        <h:panelGrid columns="2">
+                                            <p:outputLabel for="nombus" value="Nombre del alumno:"/>
+                                            <p:autoComplete id="nombus" value="#{admPermisoController.nombreE}" 
+                                                            queryDelay="500" size="50"
+                                                            completeMethod="#{admPermisoController.completeText}">
+                                                <p:ajax event="itemSelect" listener="#{admPermisoController.onItemSelect}"
+                                                        update="nombus summit"/>
+                                            </p:autoComplete>
 
-                                    <p:outputLabel for="tp" value="Tipo de permiso a conceder: "/>
-                                    <p:selectOneMenu id="tp" immediate="true" required="true" style="width: 400px;"
-                                                     value="#{admPermisoController.permiso.tipoPermiso1}"
-                                                     converter="omnifaces.SelectItemsConverter">
-                                        <f:selectItem itemValue="null" itemLabel="Seleccione" noSelectionOption="true"/>
-                                        <f:selectItems value="#{admPermisoController.tipoPermiso}" var="tpe"
-                                                       itemValue="#{tpe}" itemLabel="#{tpe.tipoPermisoNombre}"/>
-                                    </p:selectOneMenu>
+                                            <p:outputLabel for="tp" value="Tipo de permiso a conceder: "/>
+                                            <p:selectOneMenu id="tp" required="true" style="width: 400px;"
+                                                             value="#{admPermisoController.permiso.tipoPermiso1}"
+                                                             converter="omnifaces.SelectItemsConverter">
+                                                <f:selectItem itemValue="null" itemLabel="Seleccione" noSelectionOption="true"/>
+                                                <f:selectItems value="#{admPermisoController.tipoPermiso}" var="tpe"
+                                                               itemValue="#{tpe}" itemLabel="#{tpe.tipoPermisoNombre}"/>
+                                            </p:selectOneMenu>
 
-                                    <p:outputLabel for="mot" value="Motivo de la solicitud: "/>
-                                    <p:inputText id="mot" value="#{admPermisoController.permiso.permisosMotivo}" 
-                                                 required="true" style="width: 400px;"/>
+                                            <p:outputLabel for="mot" value="Motivo de la solicitud: "/>
+                                            <p:inputText id="mot" value="#{admPermisoController.permiso.permisosMotivo}" 
+                                                         required="true" style="width: 400px;"/>
 
-                                    <p:outputLabel for="mask" value="Fecha de inicio:" />
-                                    <p:datePicker id="mask" value="#{admPermisoController.permiso.permisosPK.permisoFechaInicio}"
-                                                  showIcon="true" required="true" pattern="dd/MM/yyyy"/>
+                                            <p:outputLabel for="mask" value="Fecha de inicio:" />
+                                            <p:datePicker id="mask" value="#{admPermisoController.permiso.permisosPK.permisoFechaInicio}"
+                                                          showIcon="true" required="true" pattern="dd/MM/yyyy"/>
 
-                                    <p:outputLabel for="mask1" value="Fecha de finalización: " />
-                                    <p:datePicker id="mask1" value="#{admPermisoController.permiso.permisoFechafin}"
-                                                  showIcon="true" required="true" pattern="dd/MM/yyyy" />
+                                            <p:outputLabel for="mask1" value="Fecha de finalización: " />
+                                            <p:datePicker id="mask1" value="#{admPermisoController.permiso.permisoFechafin}"
+                                                          showIcon="true" required="true" pattern="dd/MM/yyyy" />
 
-                                    <p:outputLabel value="Constancia: " />
-                                    <h:panelGrid columns="3">
-                                        <p:fileUpload id="partida" listener="#{admPermisoController.notas}" 
-                                                      mode="advanced" invalidSizeMessage="El archivo sobrepasa el límited de 1MB."
-                                                      invalidFileMessage="El archivo seleccionado no es válido"
-                                                      update="messagesp"  sizeLimit="1000000" label="Elejir"
-                                                      allowTypes="/(\.|\/)(jpe?g|png)$/" auto="true"
-                                                      oncomplete="update();"/>
-                                        <p:remoteCommand name="update" update="btnV"/>
-                                        <p:commandButton id="btnV" value="Ver constancia" update="h1" 
-                                                         disabled="#{!admPermisoController.hayDocumento}"
-                                                         oncomplete="PF('DConstancia1').show();"/>                        
-                                        <p:growl id="messagesp" showDetail="true" for="partida"/> 
-                                    </h:panelGrid>
+                                            <p:outputLabel value="Constancia: " />
+                                            <h:panelGrid columns="3">
+                                                <p:fileUpload id="partida" listener="#{admPermisoController.notas}" 
+                                                              mode="advanced" invalidSizeMessage="El archivo sobrepasa el límited de 1MB."
+                                                              invalidFileMessage="El archivo seleccionado no es válido"
+                                                              update="messagesp"  sizeLimit="1000000" label="Elejir"
+                                                              allowTypes="/(\.|\/)(jpe?g|png)$/" auto="true"
+                                                              oncomplete="update();"/>
+                                                <p:remoteCommand name="update" update="btnV"/>
+                                                <p:commandButton id="btnV" value="Ver constancia" update="h1" 
+                                                                 disabled="#{!admPermisoController.hayDocumento}"
+                                                                 oncomplete="PF('DConstancia1').show();"/>                        
+                                                <p:growl id="messagesp" showDetail="true" for="partida"/> 
+                                            </h:panelGrid>
 
-                                    <p:outputLabel for="dui" value="Dui del solicitante: "/>
-                                    <p:inputMask id="dui" value="#{admPermisoController.duiSol}" mask="99999999-9"
-                                                 required="true" style="width: 400px;">
-                                        <p:ajax event="change" listener="#{admPermisoController.onblour}" update="dui"/>
-                                    </p:inputMask>
+                                            <p:outputLabel for="dui" value="Dui del solicitante: "/>
+                                            <p:inputMask id="dui" value="#{admPermisoController.duiSol}" mask="99999999-9"
+                                                         required="true" style="width: 400px;">
+                                                <p:ajax event="change" listener="#{admPermisoController.onblour}" update="dui"/>
+                                            </p:inputMask>
 
-                                    <p:outputLabel for="nomb" value="Nombres del solicitante: "/>
-                                    <p:inputText id="nomb" value="#{admPermisoController.nombreSol}" 
-                                                 required="true" style="width: 400px;"/>
+                                            <p:outputLabel for="nomb" value="Nombres del solicitante: "/>
+                                            <p:inputText id="nomb" value="#{admPermisoController.nombreSol}" 
+                                                         required="true" style="width: 400px;"/>
 
-                                    <p:outputLabel for="apel" value="Apellidos del solicitante: "/>
-                                    <p:inputText id="apel" value="#{admPermisoController.apellidoSol}" 
-                                                 required="true" style="width: 400px;"/>
+                                            <p:outputLabel for="apel" value="Apellidos del solicitante: "/>
+                                            <p:inputText id="apel" value="#{admPermisoController.apellidoSol}" 
+                                                         required="true" style="width: 400px;"/>
 
-                                    <p:column/>
-                                    <p:commandButton id="summit" value="Conceder" 
-                                                     disabled="#{admPermisoController.permiso.persona==null}"
-                                                     actionListener="#{admPermisoController.concederPermiso()}" 
-                                                     update="form"/>
-                                </h:panelGrid>
+                                            <p:column/>
+                                            <p:commandButton value="Conceder" 
+                                                             disabled="#{admPermisoController.permiso.persona==null}"
+                                                             actionListener="#{admPermisoController.concederPermiso()}" 
+                                                             update="form"/>
+                                        </h:panelGrid>
+                                    </p:tab>
+                                    <p:tab title="Registrar inasistencias o impuntualidades">
+                                        <h:panelGrid columns="2">
+                                            <p:outputLabel for="nombus1" value="Nombre de la persona:"/>
+                                            <p:autoComplete id="nombus1" value="#{admPermisoController.nombreT}" 
+                                                            queryDelay="500" size="50"
+                                                            completeMethod="#{admPermisoController.completeText2}">
+                                                <p:ajax event="itemSelect" listener="#{admPermisoController.onItemSelect2}"
+                                                        update="nombus1 summit2"/>
+                                            </p:autoComplete>
+
+                                            <p:outputLabel for="tp0" value="Tipo de registro: "/>
+                                            <p:selectOneMenu id="tp0" required="true" style="width: 400px;"
+                                                             value="#{admPermisoController.permiso2.tipoPermiso1}"
+                                                             converter="omnifaces.SelectItemsConverter">
+                                                <f:selectItem itemValue="null" itemLabel="Seleccione" noSelectionOption="true"/>
+                                                <f:selectItems value="#{admPermisoController.tipoPermiso2}" var="tpe"
+                                                               itemValue="#{tpe}" itemLabel="#{tpe.tipoPermisoNombre}"/>
+                                                <p:ajax event="itemSelect" listener="#{admPermisoController.onBlour}"
+                                                        update="mask2 hini0 hfin0"/>
+                                            </p:selectOneMenu>
+
+                                            <p:outputLabel for="mask3" value="Fecha de inicio:" />
+                                            <p:datePicker id="mask3" value="#{admPermisoController.permiso2.permisosPK.permisoFechaInicio}"
+                                                          showIcon="true" required="true" pattern="dd/MM/yyyy" locale="es"
+                                                          disabledDays="#{admPermisoController.disabledDays}"
+                                                          requiredMessage="Debe seleccionar una fecha válida"
+                                                          placeholder="Selecciona la fecha de inicio del permiso" 
+                                                          validatorMessage="Ninguna fecha puede ser en los días Sábado y Domingo">
+                                                <p:ajax event="dateSelect" update="form" 
+                                                        listener="#{admPermisoController.onBlour}"/>
+                                            </p:datePicker>
+
+                                            <p:outputLabel for="mask2" value="Fecha de finalización: " />
+                                            <p:datePicker id="mask2" value="#{admPermisoController.permiso2.permisoFechafin}"
+                                                          showIcon="true" required="true" pattern="dd/MM/yyyy" locale="es"
+                                                          disabledDays="#{permisoMaController.disabledDays}"
+                                                          requiredMessage="Debe seleccionar una fecha válida"
+                                                          placeholder="Selecciona la fecha de finalización del permiso" 
+                                                          validatorMessage="Nunguna fecha puede ser en los días Sábado y Domingo"
+                                                          disabled="#{!admPermisoController.verFechaFin}">
+                                                <p:ajax event="dateSelect" update="form" 
+                                                        listener="#{admPermisoController.onBlour}"/>
+                                            </p:datePicker>
+
+                                            <p:outputLabel for="hini0" value="Hora en la que debería entrar/salir: "/>
+                                            <p:datePicker id="hini0" value="#{admPermisoController.permiso2.permisoHoraInicio}"
+                                                          showIcon="true" showTime="true" timeOnly="true" 
+                                                          hourFormat="12" pattern="hh:mm a"
+                                                          disabled="#{admPermisoController.verFechaFin}"/>
+
+                                            <p:outputLabel for="hfin0" value="Hora en la que entró/salió: "/>
+                                            <p:datePicker id="hfin0" value="#{admPermisoController.permiso2.permisoHoraFin}"
+                                                          showIcon="true" showTime="true" timeOnly="true" 
+                                                          hourFormat="12" pattern="hh:mm a"
+                                                          disabled="#{admPermisoController.verFechaFin}"/>
+
+                                            <p:column/>
+                                            <p:commandButton value="Registrar" 
+                                                             disabled="#{admPermisoController.permiso2.persona==null}"
+                                                             actionListener="#{admPermisoController.registroInasistencia()}" 
+                                                             update="form"/>
+                                        </h:panelGrid>
+                                    </p:tab>
+                                </p:tabView>
+
                             </p:tab>
                         </p:accordionPanel>
                     </h:panelGrid>
@@ -263,14 +363,14 @@
                             <h:outputText value="#{admPermisoController.getFechaS(
                                                    admPermisoController.solc.permisosPK.permisoFechaInicio,
                                                    admPermisoController.solc.permisoFechafin)}"/>
-                            
+
                             <p:outputLabel value="Período del permiso:" 
                                            rendered="#{admPermisoController.solc.permisoHoraInicio!=null}"/>
                             <h:outputText value="#{admPermisoController.getHoras(
                                                    admPermisoController.solc.permisoHoraInicio,
                                                    admPermisoController.solc.permisoHoraFin)}"
                                           rendered="#{admPermisoController.solc.permisoHoraInicio!=null}"/>
-                            
+
                             <p:column/>
                             <p:commandButton id="btnV" value="Ver constancia" update="h0" 
                                              disabled="#{!admPermisoController.hayConstancia}"
@@ -314,7 +414,7 @@
                             <h:outputText value="#{admPermisoController.getFechaS(
                                                    admPermisoController.acep.permisosPK.permisoFechaInicio,
                                                    admPermisoController.acep.permisoFechafin)}"/>
-                            
+
                             <p:outputLabel value="Período del permiso:" 
                                            rendered="#{admPermisoController.acep.permisoHoraInicio!=null}"/>
                             <h:outputText value="#{admPermisoController.getHoras(
@@ -324,10 +424,10 @@
 
                             <p:outputLabel value="Estado del permiso: "/>
                             <h:outputText value="#{admPermisoController.getEstadoPermiso(admPermisoController.acep)}"/>
-                            
+
                             <p:outputLabel value="#{admPermisoController.getEstadoPermiso(admPermisoController.acep)} por: "/>
                             <h:outputText value="#{admPermisoController.getNombreCortoPersona(admPermisoController.acep.permisosGestor)}"/>
-                            
+
                             <p:outputLabel value="Motivo del rechazo: " 
                                            rendered="#{admPermisoController.acep.permisosEstado.equals('2')}"/>
                             <h:outputText value="#{admPermisoController.comentarioAcep}"
@@ -342,6 +442,13 @@
                             <p:commandButton id="btnV" value="Ver constancia" update="h0" 
                                              disabled="#{!admPermisoController.hayConstancia}"
                                              oncomplete="PF('DConstancia').show();"/>
+                            
+                            <p:column/>
+                            <p:commandButton value="Revertir aceptación del permiso" 
+                                             actionListener="#{admPermisoController.guardar(3)}"
+                                             oncomplete="PF('Dotro').hide();" 
+                                             update="form ace :form0:msgs"
+                                             rendered="#{admPermisoController.acep.permisosEstado.equals('1')}"/>
                         </h:panelGrid>
                     </h:form>
                 </p:dialog>
@@ -380,6 +487,44 @@
                     </h:form>
                 </p:dialog>
 
+                <p:dialog widgetVar="Dimp" closeOnEscape="true" header="Detalle del registro de impuntualidad o inasistencia"
+                          modal="true" responsive="true" >
+                    <h:form id="imp">
+                        <h:panelGrid columns="2" cellpadding="10" cellspacing="10">
+                            <p:outputLabel value="Fecha del reporte: "/>
+                            <h:outputText value="#{admPermisoController
+                                                   .getFecha(admPermisoController.acep.permisosPK.permisoFechaSolicitud)}"/>
+
+                            <p:outputLabel value="Tipo del reporte: "/>
+                            <h:outputText value="#{admPermisoController.acep.tipoPermiso1.tipoPermisoNombre}"/>
+
+                            <p:outputLabel value="Nombre de la persona: "/>
+                            <h:outputText value="#{admPermisoController.getNombreCompletoPersona(admPermisoController.acep.persona)} 
+                                          (#{admPermisoController.acep.persona.tipoPersona.tipoPersonaNombre})"/>
+
+                            <p:outputLabel value="Fechas del permiso:"/>
+                            <h:outputText value="#{admPermisoController.getFechaS(
+                                                   admPermisoController.acep.permisosPK.permisoFechaInicio,
+                                                   admPermisoController.acep.permisoFechafin)}"/>
+
+                            <p:outputLabel value="Período del permiso:" 
+                                           rendered="#{admPermisoController.acep.permisoHoraInicio!=null}"/>
+                            <h:outputText value="#{admPermisoController.getHoras(
+                                                   admPermisoController.acep.permisoHoraInicio,
+                                                   admPermisoController.acep.permisoHoraFin)}"
+                                          rendered="#{admPermisoController.acep.permisoHoraInicio!=null}"/>
+
+                            <p:outputLabel value="Registro hecho por: "/>
+                            <h:outputText value="#{admPermisoController.getNombreCortoPersona(admPermisoController.acep.permisosGestor)}"/>
+                            
+                            <p:column/>
+                            <p:commandButton value="Revertir reporte de inasistencia o impuntualidad" 
+                                             actionListener="#{admPermisoController.guardar(3)}"
+                                             oncomplete="PF('Dimp').hide();" 
+                                             update="form imp :form0:msgs"/>
+                        </h:panelGrid>
+                    </h:form>
+                </p:dialog>
             </ui:define>
         </ui:composition>
     </body>

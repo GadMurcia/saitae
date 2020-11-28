@@ -37,6 +37,7 @@ import net.delsas.saitae.beans.MatriculaFacadeLocal;
 import net.delsas.saitae.beans.NotificacionesFacadeLocal;
 import net.delsas.saitae.beans.PermisosFacadeLocal;
 import net.delsas.saitae.beans.PersonaFacadeLocal;
+import net.delsas.saitae.beans.TipoPermisoFacadeLocal;
 import net.delsas.saitae.beans.TipoPersonaFacadeLocal;
 import net.delsas.saitae.entities.Constancias;
 import net.delsas.saitae.entities.ConstanciasPK;
@@ -47,7 +48,6 @@ import net.delsas.saitae.entities.Permisos;
 import net.delsas.saitae.entities.PermisosPK;
 import net.delsas.saitae.entities.Persona;
 import net.delsas.saitae.entities.TipoPermiso;
-import net.delsas.saitae.entities.TipopersonaPermiso;
 import org.omnifaces.cdi.Push;
 import org.omnifaces.cdi.PushContext;
 import org.primefaces.PrimeFaces;
@@ -67,11 +67,12 @@ public class admPermisoController extends Auxiliar implements Serializable {
     private List<Permisos> aceptados;
     private List<Permisos> rechazados;
     private List<Permisos> cancelados;
-    private Permisos permiso;
+    private List<Permisos> inasistencias;
+    private Permisos permiso, permiso2;
     private Constancias constancia;
     private Permisos acep;
     private Permisos solc;
-    private String nombreE, duiS;
+    private String nombreE, nombreT, duiS;
     private Persona usuario;
     private List<Integer> tps;
     private List<Integer> tipos;
@@ -91,18 +92,20 @@ public class admPermisoController extends Auxiliar implements Serializable {
     private NotificacionesFacadeLocal notFL;
     @EJB
     private PersonaFacadeLocal pFL;
+    @EJB
+    private TipoPermisoFacadeLocal tpFL;
 
     @PostConstruct
     public void init() {
         try {
             acep = solc = new Permisos(new PermisosPK());
             nombreE = "";
-            permiso = new Permisos(new PermisosPK(0, new Date(), 0, new Date()), new Date(), "1");
-            permiso.setPermisosComentario("0¿¿ ¿¿ ¿¿ ");
-            permiso.setTipoPersona(tipoPersonaFL.find(8));
+            nombreT = "";
+            permiso = getnuevoPermiso(8);
             constancia = new Constancias();
             permiso.setConstancias(constancia);
-            solicitados = rechazados = aceptados = new ArrayList<>();
+            permiso2 = getnuevoPermiso(0);
+            solicitados = rechazados = aceptados = inasistencias = new ArrayList<>();
             usuario = (Persona) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
             tps = new ArrayList<>();
             añoSelected = getAñoActual();
@@ -138,10 +141,17 @@ public class admPermisoController extends Auxiliar implements Serializable {
 
     public List<TipoPermiso> getTipoPermiso() {
         List<TipoPermiso> items = new ArrayList<>();
-        List<TipopersonaPermiso> tt = tipoPersonaFL.find(8).getTipopersonaPermisoList();
-        tt.forEach((t) -> {
+        tipoPersonaFL.find(8).getTipopersonaPermisoList().forEach((t) -> {
             items.add(t.getTipoPermiso());
         });
+        return items;
+    }
+
+    public List<TipoPermiso> getTipoPermiso2() {
+        List<TipoPermiso> items = new ArrayList<>();
+        items.add(tpFL.find(1));
+        items.add(tpFL.find(2));
+        items.add(tpFL.find(3));
         return items;
     }
 
@@ -225,23 +235,33 @@ public class admPermisoController extends Auxiliar implements Serializable {
     }
 
     public void guardar(Integer w) {
-        solicitados.remove(solc);
-        solc.setPermisosEstado(w + "");
-        solc.setPermisosGestor(usuario);
-        permisosFL.edit(solc);
-        if (w == 1) {
-            aceptados.add(solc);
-        } else if (w == 2) {
-            rechazados.add(solc);
+        if (w == 3) {
+            acep.setPermisosEstado(0 + "");
+            acep.setPermisosGestor(usuario);
+            permisosFL.edit(acep);
+            solicitados.add(acep);
+            aceptados.remove(acep);
+            inasistencias.remove(acep);
+        } else {
+            solicitados.remove(solc);
+            solc.setPermisosEstado(w + "");
+            solc.setPermisosGestor(usuario);
+            permisosFL.edit(solc);
+            if (w == 1) {
+                aceptados.add(solc);
+            } else if (w == 2) {
+                rechazados.add(solc);
+            }
         }
-        FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_INFO, "Cambios gurdados", "el permiso ha sido "
-                + (w == 1 ? "aceptado" : (w == 2 ? "rechazado" : "")));
+        FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_INFO, "Cambios guardados", "el permiso ha sido "
+                + (w == 1 ? "aceptado" : (w == 2 ? "rechazado" : (w == 3 ? "Devuelto a los solicitados" : ""))));
         FacesContext.getCurrentInstance().addMessage(null, m);
         mensaje x = new mensaje(solc.getPermisosPK().getIpPersona(),
                 usuario.getPersonaNombre() + " " + usuario.getPersonaApellido()
-                + " ha " + (w == 1 ? "aceptado" : "rechazado") + " su solicitud de permiso. "
+                + " ha " + (w == 1 ? "aceptado" : (w == 2 ? "rechazado" : (w == 3 ? "Devuelto a los solicitados" : "")))
+                + " su solicitud de permiso. "
                 + (w == 2 ? "Motivo del rechazo: " + getComentarioSolc() : ""),
-                (w == 1 ? "Aceptación" : "Rechado") + " de permiso",
+                (w == 1 ? "Aceptación" : (w == 2 ? "Rechazo" : (w == 3 ? "Solicitud" : ""))) + " de permiso",
                 FacesMessage.SEVERITY_INFO, usuario.getIdpersona(), "permiso<form<<permisoH<form");
         persistirNotificación(x, new Persona(x.getDestinatario()), notFL, notificacion);
     }
@@ -271,10 +291,23 @@ public class admPermisoController extends Auxiliar implements Serializable {
     }
 
     public List<Permisos> getAceptados() {
-        aceptados = (tps.contains(1) || tps.contains(2))
+        aceptados = new ArrayList<>();
+        ((tps.contains(1) || tps.contains(2))
                 ? permisosFL.getPermisosPorEstado("1", añoSelected)
-                : depurar(permisosFL.findByEstadoAndTipos("1", tipos, añoSelected));
+                : depurar(permisosFL.findByEstadoAndTipos("1", tipos, añoSelected)))
+                .stream().filter(p -> p.getTipoPermiso1().getIdtipoPermiso() > 4)
+                .forEachOrdered(aceptados::add);
         return Collections.unmodifiableList(aceptados);
+    }
+
+    public List<Permisos> getInasistencias() {
+        inasistencias = new ArrayList<>();
+        ((tps.contains(1) || tps.contains(2))
+                ? permisosFL.getPermisosPorEstado("1", añoSelected)
+                : depurar(permisosFL.findByEstadoAndTipos("1", tipos, añoSelected)))
+                .stream().filter(p -> p.getTipoPermiso1().getIdtipoPermiso() < 4)
+                .forEachOrdered(inasistencias::add);
+        return inasistencias;
     }
 
     public void setAceptados(List<Permisos> aceptados) {
@@ -421,6 +454,7 @@ public class admPermisoController extends Auxiliar implements Serializable {
     }
 
     public List<String> completeText(String query) {
+        permiso.setPersona(null);
         List<String> results = new ArrayList<>();
         List<Persona> list = pFL.getPersonaByLikeNombreAndType(query, 8);
         list.forEach((p) -> {
@@ -430,6 +464,30 @@ public class admPermisoController extends Auxiliar implements Serializable {
             results.add("No hay resultados.");
         }
         return results;
+    }
+
+    public List<String> completeText2(String query) {
+        permiso2.setPersona(null);
+        List<String> results = new ArrayList<>();
+        List<Persona> list = pFL.getPersonaByLikeNombre(query);
+        list.forEach((p) -> {
+            results.add(p.getPersonaNombre() + " " + p.getPersonaApellido() + ", DUI/NIE:  " + p.getIdpersona());
+        });
+        if (results.isEmpty()) {
+            results.add("No hay resultados.");
+        }
+        return results;
+    }
+
+    public void onItemSelect2(SelectEvent event) {
+        String[] tt = event.getObject().toString().split(", DUI/NIE:  ");
+        Persona est = null;
+        if (tt.length == 2) {
+            est = pFL.find(Integer.valueOf(tt[1]));
+        }
+        permiso2.setPersona(est);
+        permiso2.setTipoPersona(est != null ? est.getTipoPersona() : null);
+        nombreT = tt[0];
     }
 
     public void onItemSelect(SelectEvent event) {
@@ -516,4 +574,90 @@ public class admPermisoController extends Auxiliar implements Serializable {
         String e = (p == null || p.getPermisosEstado() == null) ? "" : p.getPermisosEstado();
         return getEstadoPermisos2(e);
     }
+
+    public String getNombreT() {
+        return nombreT;
+    }
+
+    public void setNombreT(String nombreT) {
+        this.nombreT = nombreT;
+    }
+
+    public boolean getVerFechaFin() {
+        return permiso2.getTipoPermiso1() != null && permiso2.getTipoPermiso1().getIdtipoPermiso().equals(1);
+    }
+
+    private Permisos getnuevoPermiso(int tp) {
+        Permisos p3 = new Permisos(new PermisosPK(0, new Date(), 0, new Date()), new Date(), "1");
+        p3.setPermisosComentario("0¿¿ ¿¿ ¿¿ ");
+        p3.setTipoPersona(tipoPersonaFL.find(tp));
+        p3.setConstancias(null);
+        return p3;
+    }
+
+    public Permisos getPermiso2() {
+        return permiso2;
+    }
+
+    public void setPermiso2(Permisos permiso2) {
+        this.permiso2 = permiso2;
+    }
+
+    public void registroInasistencia() {
+        FacesMessage ms = null;
+        try {
+            permiso2.setPermisoFechafin(
+                    permiso2.getTipoPermiso1().getIdtipoPermiso() > 1
+                    ? permiso2.getPermisosPK().getPermisoFechaInicio()
+                    : permiso2.getPermisoFechafin());
+
+            if (permiso2.getPermisoFechafin().before(permiso2.getPermisosPK().getPermisoFechaInicio())) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
+                        "Error en la fecha de fin del permiso",
+                        "No debe seleccionar una fecha para el final del periodo del permiso anterior a la fecha en la que inicia éste."));
+                permiso2.setPermisoFechafin(permiso2.getPermisosPK().getPermisoFechaInicio());
+            } else {
+                permiso2.getPermisosPK().setTipoPermiso(permiso2.getTipoPermiso1().getIdtipoPermiso());
+                permiso2.setPermisosSolicitante(usuario);
+                permiso2.getPermisosPK().setIpPersona(permiso2.getPersona().getIdpersona());
+                permiso2.setPermisosEstado("1");
+                permiso2.setPermisosGestor(usuario);
+                Permisos pp = permisosFL.find(permiso2.getPermisosPK());
+                if (pp != null) {
+                    ms = new FacesMessage(FacesMessage.SEVERITY_WARN, "Imposible proceder",
+                            "Ya hay un permiso del tipo '" + permiso2.getTipoPermiso1().getTipoPermisoNombre() + "' para "
+                            + getNombreCompletoPersona(permiso2.getPersona()) + " en el día "
+                            + (dateToString(permiso2.getPermisosPK().getPermisoFechaInicio())
+                            + " por lo que no se procede con la concesión del permiso"));
+                    FacesContext.getCurrentInstance().addMessage(null, ms);
+                    return;
+                }
+                permiso2.setConstancias(null);
+                permisosFL.create(permiso2);
+                ms = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro exitoso",
+                        "El registro de inasistencia o impuntualidad se ha realizado para las fechas: "
+                        + getPeriodoPermisos(permiso2));
+                mensaje m = new mensaje(permiso2.getPermisosPK().getIpPersona(),
+                        getNombreCompletoPersona(usuario)
+                        + " ha hecho un registro de inasistencia o impuntualidad suya. "
+                        + "Revise su historial para más información",
+                        "Nuevo registro de inasistencia o impuntualidad",
+                        FacesMessage.SEVERITY_INFO,
+                        permiso2.getPermisosSolicitante().getIdpersona(), "permisoH<form<<permiso<form");
+                persistirNotificación(m, new Persona(m.getDestinatario()), notFL, notificacion);
+                FacesContext.getCurrentInstance().addMessage(null, ms);
+                init();
+                ms = null;
+            }
+            if (ms != null) {
+                FacesContext.getCurrentInstance().addMessage(null, ms);
+                PrimeFaces.current().ajax().update("form:msgs");
+            }
+        } catch (Exception e) {
+            ms = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage());
+            FacesContext.getCurrentInstance().addMessage(null, ms);
+            PrimeFaces.current().ajax().update("form:msgs");
+        }
+    }
+
 }

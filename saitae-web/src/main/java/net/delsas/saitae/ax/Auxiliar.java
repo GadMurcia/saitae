@@ -697,7 +697,9 @@ public class Auxiliar implements Serializable {
         return e.equals("0") ? "Solicitado"
                 : (e.equals("1") ? "Aceptado"
                 : (e.equals("2") ? "Rechazado"
-                : (e.equals("3") ? "Cancelado" : "")));
+                : (e.equals("3") ? "Cancelado" 
+                : (e.equals("4") ? "Inasistencia injustificada"
+                : (e.equals("5") ? "impuntualidad" : "")))));
     }
 
     public String getEstadoPermisos1(String estado) {
@@ -714,6 +716,12 @@ public class Auxiliar implements Serializable {
                 break;
             case "3":
                 textoReserva = "cancelad";
+                break;
+            case "4":
+                textoReserva = "injustificad";
+                break;
+            case "5":
+                textoReserva = "impuntualidad";
                 break;
             default:
                 textoReserva = "";

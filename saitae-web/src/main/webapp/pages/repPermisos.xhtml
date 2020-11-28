@@ -65,7 +65,7 @@
                               rendered="#{repPermisosController.esEstudiante}">
                         <h:outputText value="#{repPermisosController.getSolicitadoPor(p.permiso)}"/>
                     </p:column>
-                    <p:column headerText="Aceptado por">
+                    <p:column headerText="Procesado por">
                         <h:outputText value="#{repPermisosController.getNombreCompletoPersona(p.permiso.permisosGestor)}"/>
                     </p:column>
                     <p:column headerText="Días">
@@ -80,11 +80,11 @@
                 </p:dataTable>
 
                 <h:commandLink rendered="#{repPermisosController.descargarDoc}">
-                    <p:graphicImage library="img" name="xls.png" width="37px" height="32px"/>
-                    <p:dataExporter type="xls" target="perm"
+                    <p:graphicImage library="img" name="pdf.png" width="37px" height="32px"/>
+                    <p:dataExporter type="pdf" target="perm"
                                     fileName="Reporte de permisos #{repPermisosController.getNombreCortoPersona(repPermisosController.PSelected)}"
                                     encoding="UTF-8"
-                                    postProcessor="#{repPermisosController.reporte}"/>
+                                    exporter="#{repPermisosController.pdfExporterCra}"/>
                 </h:commandLink>
             </h:panelGrid>
         </h:form>
