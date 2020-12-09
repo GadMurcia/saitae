@@ -24,7 +24,7 @@
                     </p:selectOneMenu>
                 </h:panelGrid>
                 <h1 align="center">Administración de solicitudes de reservas de equipo</h1>
-                <p:accordionPanel id="ap">
+                <p:tabView id="ap" orientation="left">
                     <p:tab title="Solicitudes de Recursos pendientes">
                         <p:dataTable id="solicitados" value="#{adminReservas.solicitados}" var="s"
                                      paginator="true" rows="5" selection="#{adminReservas.selected}" 
@@ -266,7 +266,7 @@
                             </p:column>
                         </p:dataTable>
                     </p:tab>
-                </p:accordionPanel>
+                </p:tabView>
             </h:panelGrid>
         </h:form>
         <p:dialog id="dialog" widgetVar="Dreserva" modal="true" style="width: 60%;"

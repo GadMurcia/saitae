@@ -159,7 +159,8 @@ public class sessionController extends Auxiliar implements Serializable {
     public void menu() {
         mm = new DefaultMenuModel();
         DefaultMenuItem mi;
-        mi = new DefaultMenuItem("Inicio");
+        mi = new DefaultMenuItem();
+        mi.setValue("Inicio");
         mi.setIcon("fa fa-home");
         mi.setUrl("perfil.intex");
         mm.getElements().add(mi);
@@ -174,26 +175,39 @@ public class sessionController extends Auxiliar implements Serializable {
             mm.getElements().add(menu3(a, menusDisponibles));
         });
         if (us.getTipoPersona().getIdtipoPersona() == 1) {
-            mi = new DefaultMenuItem("Control de vistas", "fa fa-cogs");
+            mi = new DefaultMenuItem();
+            mi.setValue("Control de vistas");
+            mi.setIcon("fa fa-cogs");
             mi.setUrl("cvista.intex");
             mm.getElements().add(mi);
         }
-        DefaultSubMenu s = new DefaultSubMenu(us.getPersonaNombre().split(" ")[0] + " "
-                + us.getPersonaApellido().split(" ")[0], "fa fa-user");
-        mi = new DefaultMenuItem("Cerrar Sesión", "fa fa-sign-out");
+        DefaultSubMenu s = new DefaultSubMenu();
+        s.setLabel(getNombreCortoPersona(us));
+        s.setIcon("fa fa-user");
+        mi = new DefaultMenuItem();
+        mi.setValue("Cerrar Sesión");
+        mi.setIcon("fa fa-sign-out");
         mi.setCommand("#{sessionController.cerrarSesion()}");
         s.getElements().add(mi);
-        mi = new DefaultMenuItem("Tutoriales", "fa fa-youtube-play");
+        mi = new DefaultMenuItem();
+        mi.setValue("Tutoriales");
+        mi.setIcon("fa fa-youtube-play");
         mi.setUrl("zayuda.intex");
         s.getElements().add(mi);
         mm.getElements().add(s);
     }
 
     private MenuElement menu3(Acceso a, List<Acceso> ac) {
-        DefaultSubMenu s = new DefaultSubMenu(a.getAccesoNombre(), a.getAccesoComentario());
+        DefaultSubMenu s = new DefaultSubMenu();
+        s.setLabel(a.getAccesoNombre());
+        s.setIcon(a.getAccesoComentario());
         a.getAccesoList().stream().filter((b) -> (ac.contains(b))).forEachOrdered((b) -> {
             if (b.getAccesoList() == null || b.getAccesoList().isEmpty()) {
-                s.getElements().add(new DefaultMenuItem(b.getAccesoNombre(), b.getAccesoComentario(), b.getAccesourl()));
+                DefaultMenuItem mi = new DefaultMenuItem();
+                mi.setValue(b.getAccesoNombre());
+                mi.setIcon(b.getAccesoComentario());
+                mi.setUrl(b.getAccesourl());
+                s.getElements().add(mi);
             } else {
                 s.getElements().add(menu3(b, ac));
             }

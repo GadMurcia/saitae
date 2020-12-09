@@ -10,11 +10,11 @@
         <f:event listener="#{consultasPSController.postRender()}" type="preRenderView"/>
         <h:form id="form" style="margin: 0 auto">
             <h:panelGrid style="margin: 0 auto">
-                <p:accordionPanel dynamic="true" style="margin: 0 auto">
+                <p:tabView style="margin: 0 auto" orientation="left">
                     <p:tab title="Expediente" rendered="#{consultasPSController.renderizar}">
-                        <p:tabView id="tw0" orientation="left">
+                        <p:tabView id="tw0" orientation="top">
                             <p:tab title="Información general">
-                                <h:panelGrid columns="4">
+                                <p:panelGrid columns="4">
                                     <p:outputLabel for="dui" value="NIE: "/>
                                     <h:outputText id="dui" 
                                                   value="#{consultasPSController.expediente.estudiante.persona.idpersona}"/>
@@ -86,7 +86,7 @@
                                     <p:outputLabel for="med" value="Medicamentos permanentes: "/>
                                     <h:outputText id="med" 
                                                   value="#{consultasPSController.expediente.estudiante.estudianteMedicamentos}"/>
-                                </h:panelGrid> 
+                                </p:panelGrid> 
                             </p:tab>
                             <p:tab title="Contacto y matricula">
                                 <h:panelGrid columns="2">
@@ -158,7 +158,7 @@
                                              actionListener="#{consultasPSController.guardarConsulta()}"/>
                         </h:panelGrid>
                     </p:tab>
-                </p:accordionPanel>
+                </p:tabView>
             </h:panelGrid>
         </h:form>
 

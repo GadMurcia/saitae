@@ -24,7 +24,7 @@
                     </p:selectOneMenu>
                 </h:panelGrid>
                 <h1 align="center">Administración de solicitudes de citas para consultas psicológicas</h1>
-                <p:accordionPanel id="ap" style="margin: 0 auto">
+                <p:tabView id="ap" style="margin: 0 auto" orientation="left">
                     <p:tab title="Solicitudes de Citas Pendientes">
                         <p:dataTable id="solicitados" value="#{admCPSController.solicitados}" var="c"
                                      paginator="true" rows="7" selection="#{admCPSController.selected}" 
@@ -134,7 +134,7 @@
                             </p:dataTable>
                         </h:panelGrid>
                     </p:tab>
-                </p:accordionPanel>
+                </p:tabView>
             </h:panelGrid>
         </h:form>
 

@@ -27,7 +27,7 @@
                         </h:panelGrid>
                         <p:growl id="msgs" showDetail="true" />
                         <h1 align="center">Administración de permisos</h1>
-                        <p:accordionPanel id="ap" dynamic="true">
+                        <p:tabView id="ap" dynamic="true" orientation="left">
                             <p:tab title="Permisos Solicitados">
                                 <p:dataTable id="solicitados" value="#{admPermisoController.solicitados}" var="p"
                                              paginator="true" rows="8" selection="#{admPermisoController.acep}" 
@@ -195,7 +195,7 @@
                                 </h:panelGrid>
                             </p:tab>
                             <p:tab title="Registro de permisos o inasistencias">
-                                <p:tabView id="tw" orientation="left" dynamic="true">
+                                <p:tabView id="tw" orientation="top" dynamic="true">
                                     <p:tab title="Conceder Permiso A Estudiantes">
                                         <h:panelGrid columns="2">
                                             <p:outputLabel for="nombus" value="Nombre del alumno:"/>
@@ -257,7 +257,7 @@
                                                          required="true" style="width: 400px;"/>
 
                                             <p:column/>
-                                            <p:commandButton value="Conceder" 
+                                            <p:commandButton value="Conceder" id="summit"
                                                              disabled="#{admPermisoController.permiso.persona==null}"
                                                              actionListener="#{admPermisoController.concederPermiso()}" 
                                                              update="form"/>
@@ -320,7 +320,7 @@
                                                           disabled="#{admPermisoController.verFechaFin}"/>
 
                                             <p:column/>
-                                            <p:commandButton value="Registrar" 
+                                            <p:commandButton value="Registrar" id="summit2"
                                                              disabled="#{admPermisoController.permiso2.persona==null}"
                                                              actionListener="#{admPermisoController.registroInasistencia()}" 
                                                              update="form"/>
@@ -329,7 +329,7 @@
                                 </p:tabView>
 
                             </p:tab>
-                        </p:accordionPanel>
+                        </p:tabView>
                     </h:panelGrid>
                 </h:form>
 

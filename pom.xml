@@ -3,9 +3,21 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.delsas</groupId>
   <artifactId>saitae</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1</version>
   <packaging>pom</packaging>
   <name>saitae</name>
+  <developers>
+      <developer>
+          <id>GadMurcia</id>
+          <name>Guillermo Aldolfo Delsas</name>
+          <email>guillermox020@gmail.com</email>
+      </developer>
+      <developer>
+          <id>Gabii nath</id>
+          <name>Gabriela Nathalie Menéndes</name>
+          <email>gmenendez08@gmail.com</email>
+      </developer>
+  </developers>
     <build>
         <plugins>
             <plugin>

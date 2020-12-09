@@ -1,10 +1,5 @@
 package net.delsas.saitae.ax;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.codec.digest.DigestUtils;
 
 /**
@@ -19,14 +14,14 @@ public class delsas {
     public static void main(String[] args) {
         // TODO code application logic here
 //        Integer g=6018;
-//        String a=DigestUtils.md5Hex("delsas");
+        String a=DigestUtils.md5Hex("delsas");
 //        System.out.println("contrseña sin encriptar: "+g);
-//        System.out.println("contraseña encriptada: "+a);
-//        System.out.println("longitud contrseña encriptada: "+a.toCharArray().length);
-        System.out.println("Nu: "+Meses.Agosto.getNumero());
-        System.out.println("No: "+Meses.Enero.getNombre());
-        System.out.println("1No: "+Meses.getNombreByNumero(1));
-        System.out.println("12Nu: "+Meses.getNumeroByNombre("diciembre"));
+        System.out.println("contraseña encriptada: "+a);
+        System.out.println("longitud contrseña encriptada: "+a.toCharArray().length);
+//        System.out.println("Nu: "+Meses.Agosto.getNumero());
+//        System.out.println("No: "+Meses.Enero.getNombre());
+//        System.out.println("1No: "+Meses.getNombreByNumero(1));
+//        System.out.println("12Nu: "+Meses.getNumeroByNombre("diciembre"));
 
     }
 
